@@ -1,0 +1,45 @@
+name: nexus_science
+description: "NEXUS - Grade 10 Science Trivia Mobile Application with Clean Architecture and Supabase Backend"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Supabase & Backend
+  supabase_flutter: ^2.5.0
+  
+  # State Management & Routing
+  flutter_riverpod: ^2.5.1
+  go_router: ^13.2.0
+
+  # Storage & Offline Caching
+  flutter_secure_storage: ^9.0.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Network & Utilities
+  connectivity_plus: ^5.0.2
+  uuid: ^4.3.3
+  intl: ^0.19.0
+  csv: ^5.1.0
+  flutter_dotenv: ^5.1.0
+  image_picker: ^1.0.7
+  cached_network_image: ^3.3.1
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  build_runner: ^2.4.8
+  hive_generator: ^2.0.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - .env

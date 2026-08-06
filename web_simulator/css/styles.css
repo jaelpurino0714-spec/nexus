@@ -1,0 +1,326 @@
+/* ==========================================================================
+   NEXUS DESIGN SYSTEM & GLOBAL STYLES
+   Light Purple Theme (#EDE7F6 / #F3E5F5) with Dark Purple Science Elements
+   ========================================================================== */
+
+:root {
+  /* Color Palette - Vibrant Deep Purple Theme */
+  --bg-main: #F4F0FF;
+  --bg-card: #FFFFFF;
+  --bg-subtle: #EDE9FE;
+  --primary-purple: #8B5CF6;
+  --primary-purple-dark: #5B21B6;
+  --primary-purple-gradient: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+  --accent-purple: #A855F7;
+  --accent-light: #DDD6FE;
+  --purple-glow: rgba(139, 92, 246, 0.35);
+  
+  /* Navigation Button Colors per PRD */
+  --play-green: #10B981;
+  --play-green-hover: #059669;
+  --settings-gray: #6B7280;
+  --settings-gray-hover: #4B5563;
+  --custom-purple: #9333EA;
+  --custom-purple-hover: #7E22CE;
+
+  /* Term Button Colors per PRD */
+  --term-1-red: #EF4444;
+  --term-2-blue: #3B82F6;
+  --term-3-yellow: #F59E0B;
+  --term-3-text: #FFFFFF;
+
+  /* Text & Neutral */
+  --text-dark: #1F2937;
+  --text-muted: #6B7280;
+  --text-light: #FFFFFF;
+  --border-color: #E5E7EB;
+  --shadow-color: rgba(91, 33, 182, 0.15);
+
+  /* Functional Status */
+  --success-green: #10B981;
+  --error-red: #EF4444;
+  --warning-orange: #F59E0B;
+
+  /* Typography */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+
+  /* Borders & Radius */
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --radius-full: 9999px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-body);
+  background: radial-gradient(circle at 50% 20%, #4C1D95 0%, #1E1B4B 60%, #0F172A 100%);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Floating Science Background Elements */
+.science-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.science-background .symbol {
+  position: absolute;
+  font-size: 2.5rem;
+  opacity: 0.28;
+  color: #C4B5FD;
+  filter: drop-shadow(0 0 12px rgba(167, 139, 250, 0.6));
+  animation: floatAnim 10s ease-in-out infinite alternate;
+}
+
+@keyframes floatAnim {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translateY(-15px) rotate(10deg) scale(1.08);
+  }
+  100% {
+    transform: translateY(-30px) rotate(-15deg) scale(0.95);
+  }
+}
+
+/* Container Frame - Mobile Simulator View */
+.app-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  height: 92vh;
+  max-height: 880px;
+  background-color: var(--bg-main);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 0 8px rgba(167, 139, 250, 0.4), 0 0 35px var(--purple-glow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Fullscreen toggle class for standalone viewing */
+body.fullscreen-mode .app-container {
+  max-width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* App Header */
+.app-header {
+  height: 68px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F5F3FF 100%);
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid var(--accent-light);
+  box-shadow: 0 4px 15px rgba(91, 33, 182, 0.06);
+}
+
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-logo-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.app-name {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--primary-purple-dark);
+  letter-spacing: 0.5px;
+  line-height: 1.1;
+}
+
+.app-subtitle {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: block;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-badge {
+  background-color: var(--accent-light);
+  color: var(--primary-purple-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.icon-btn {
+  background: var(--bg-subtle);
+  border: none;
+  font-size: 1.1rem;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.icon-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Main Content Area */
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Screen Management */
+.screen {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  padding: 20px 16px;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.screen.active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Generic Buttons & Inputs */
+.primary-btn {
+  background-color: var(--primary-purple);
+  color: white;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  transition: all 0.2s ease;
+}
+
+.primary-btn:hover {
+  background-color: var(--primary-purple-dark);
+  transform: translateY(-2px);
+}
+
+.primary-btn:disabled {
+  background-color: #BDBDBD !important;
+  color: #757575 !important;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.secondary-btn {
+  background-color: white;
+  color: var(--primary-purple-dark);
+  border: 2px solid var(--accent-light);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.secondary-btn:hover {
+  background-color: var(--bg-subtle);
+}
+
+.back-link {
+  background: none;
+  border: none;
+  color: var(--primary-purple-dark);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-bottom: 12px;
+  padding: 4px 8px 4px 0;
+}
+
+.warning-msg {
+  color: var(--error-red);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-dark);
+}
+
+.form-group label .required {
+  color: var(--error-red);
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  background-color: white;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus, .form-group select:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.15);
+}

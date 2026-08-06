@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NEXUS - Grade 10 Science Trivia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <!-- Floating Science Background Symbols -->
+  <div class="science-background" id="scienceBg">
+    <div class="symbol atom" style="top: 10%; left: 8%;">⚛</div>
+    <div class="symbol microscope" style="top: 25%; right: 12%;">🔬</div>
+    <div class="symbol dna" style="top: 45%; left: 15%;">🧬</div>
+    <div class="symbol flask" style="top: 65%; right: 10%;">🧪</div>
+    <div class="symbol planet" style="top: 80%; left: 8%;">🪐</div>
+    <div class="symbol magnet" style="top: 18%; left: 75%;">🧲</div>
+    <div class="symbol wave" style="top: 88%; right: 25%;">🌊</div>
+    <div class="symbol lightning" style="top: 38%; right: 80%;">⚡</div>
+  </div>
+
+  <div class="app-container">
+    <!-- Header Bar -->
+    <header class="app-header">
+      <div class="logo-group">
+        <span class="app-logo-icon">🧬</span>
+        <div class="app-title-group">
+          <h1 class="app-name">NEXUS</h1>
+          <span class="app-subtitle">DepEd Grade 10 Science</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span id="userBadge" class="user-badge" style="display: none;">Student</span>
+        <button id="toggleFrameBtn" class="icon-btn" title="Toggle Mobile Frame View">📱</button>
+      </div>
+    </header>
+
+    <!-- Main Content View Container -->
+    <main class="app-content" id="mainContent">
+
+      <!-- ================= 1. LOGIN SELECTION MODAL / SCREEN ================= -->
+      <section id="loginSelectionScreen" class="screen active">
+        <div class="modal-card">
+          <div class="modal-header">
+            <span class="modal-icon">👋</span>
+            <h2>Welcome to NEXUS</h2>
+            <p>How do you want to log in?</p>
+          </div>
+          <div class="role-options">
+            <button class="role-card student-role" onclick="Auth.selectRole('student')">
+              <span class="role-icon">👨‍🎓</span>
+              <div class="role-info">
+                <h3>Student</h3>
+                <p>Join trivia warm-ups, earn badges, track score stats</p>
+              </div>
+              <span class="arrow">➔</span>
+            </button>
+
+            <button class="role-card teacher-role" onclick="Auth.selectRole('teacher')">
+              <span class="role-icon">👩‍🏫</span>
+              <div class="role-info">
+                <h3>Teacher</h3>
+                <p>Manage quizzes, view class analytics & export data</p>
+              </div>
+              <span class="arrow">➔</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 2. STUDENT PROFILE SETUP ================= -->
+      <section id="studentProfileSetupScreen" class="screen">
+        <div class="profile-setup-card">
+          <button class="back-link" onclick="App.showScreen('loginSelectionScreen')">← Back</button>
+          <h2>Student Profile Setup</h2>
+          <p class="subtitle">Complete all identification fields to start</p>
+
+          <!-- Top Center Circular Profile Photo -->
+          <div class="profile-photo-container">
+            <div class="avatar-wrapper" onclick="document.getElementById('profilePhotoInput').click()">
+              <img id="avatarPreview" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23d1c4e9'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23673ab7'>👤</text></svg>" alt="Profile Photo">
+              <div class="camera-badge">📷</div>
+            </div>
+            <input type="file" id="profilePhotoInput" accept="image/*" style="display: none;" onchange="Auth.handlePhotoUpload(event)">
+            <p class="photo-hint">Tap icon to upload photo</p>
+          </div>
+
+          <!-- Profile Input Fields -->
+          <div class="form-group">
+            <label for="studentNameInput">Name <span class="required">*</span></label>
+            <input type="text" id="studentNameInput" placeholder="Enter your full name" oninput="Auth.validateStudentForm()">
+          </div>
+
+          <div class="form-group">
+            <label for="studentGradeInput">Grade Level <span class="required">*</span></label>
+            <select id="studentGradeInput" onchange="Auth.validateStudentForm()">
+              <option value="Grade 10" selected>Grade 10</option>
+              <option value="Grade 9">Grade 9</option>
+              <option value="Grade 11">Grade 11</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="studentSectionInput">Section <span class="required">*</span></label>
+            <input type="text" id="studentSectionInput" placeholder="e.g. Einstein, Galileo, Newton" oninput="Auth.validateStudentForm()">
+          </div>
+
+          <!-- Validation Warning Message & Save Button -->
+          <div id="setupErrorMsg" class="warning-msg">Identification Requirements Unsatisfied</div>
+          
+          <div class="bottom-center-action">
+            <button id="saveProfileBtn" class="primary-btn save-btn" disabled onclick="Auth.saveStudentProfile()">
+              Save Profile
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 3. TEACHER LOGIN SCREEN ================= -->
+      <section id="teacherLoginScreen" class="screen">
+        <div class="modal-card">
+          <button class="back-link" onclick="App.showScreen('loginSelectionScreen')">← Back</button>
+          <div class="modal-header">
+            <span class="modal-icon">🔐</span>
+            <h2>Teacher Access</h2>
+            <p>Enter your credentials to manage quizzes</p>
+          </div>
+
+          <div class="form-group">
+            <label for="teacherNameInput">Teacher Name</label>
+            <input type="text" id="teacherNameInput" placeholder="e.g. Mr. Santos / Ms. Cruz">
+          </div>
+
+          <div class="form-group">
+            <label for="teacherPasscodeInput">Passcode</label>
+            <div class="passcode-wrapper">
+              <input type="password" id="teacherPasscodeInput" placeholder="Enter teacher passcode (Default: 123456)">
+            </div>
+            <small class="passcode-hint">Default passcode: <b>123456</b> or <b>NEXUS10</b></small>
+          </div>
+
+          <div id="teacherErrorMsg" class="warning-msg" style="display: none;">Invalid Passcode</div>
+
+          <button class="primary-btn teacher-btn" onclick="Auth.loginTeacher()">Enter Teacher Portal</button>
+        </div>
+      </section>
+
+      <!-- ================= 4. HOME NAVIGATION HUB ================= -->
+      <section id="homeScreen" class="screen">
+        <div class="welcome-card">
+          <div class="user-greeting">
+            <img id="homeUserAvatar" src="" class="mini-avatar" alt="Avatar">
+            <div>
+              <h2 id="homeUserName">Welcome, Student!</h2>
+              <span id="homeUserSub" class="user-subtext">Grade 10 • Section</span>
+            </div>
+          </div>
+          <div class="quick-stats-pills">
+            <div class="stat-pill"><span class="pill-icon">⭐</span> <span id="homeTotalPoints">0</span> pts</div>
+            <div class="stat-pill"><span class="pill-icon">🔥</span> <span id="homeStreak">0</span> streak</div>
+            <div class="stat-pill"><span class="pill-icon">🏆</span> <span id="homeBadges">0</span> badges</div>
+          </div>
+        </div>
+
+        <div class="home-banner">
+          <div class="banner-badge">DepEd MELCs Aligned</div>
+          <h3>Daily Science Warm-Up</h3>
+          <p>Boost your alertness and test your Grade 10 Science recall in 5 minutes!</p>
+        </div>
+
+        <!-- PRD Home Navigation Buttons placed at bottom of Home screen -->
+        <div class="home-nav-bottom">
+          <button id="playBtn" class="home-nav-btn play-btn" onclick="App.showScreen('playScreen')">
+            <span class="btn-icon">🎮</span>
+            <span class="btn-text">Play</span>
+          </button>
+          
+          <button id="customPlayBtn" class="home-nav-btn custom-play-btn" onclick="App.handleCustomPlayClick()">
+            <span class="btn-icon">✨</span>
+            <span class="btn-text">Custom Play</span>
+          </button>
+
+          <button id="settingsBtn" class="home-nav-btn settings-btn" onclick="App.showScreen('settingsScreen')">
+            <span class="btn-icon">⚙️</span>
+            <span class="btn-text">Settings</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ================= 5. PLAY UI (TERM SELECTION) ================= -->
+      <section id="playScreen" class="screen">
+        <div class="play-container">
+          <button class="back-link" onclick="App.showScreen('homeScreen')">← Home</button>
+          
+          <div class="play-prompt-header">
+            <h2 class="play-prompt-title">Select Your Science Challenge</h2>
+            <p class="play-prompt-sub">Choose a DepEd 3-Term Grade 10 Science Subject</p>
+          </div>
+
+          <div class="term-buttons-group">
+            <!-- Term 1: Red Button, White Text -->
+            <button class="term-btn term-1-btn" onclick="Quiz.selectTerm(1)">
+              <div class="term-badge">TERM 1</div>
+              <div class="term-title">Earth Science & Plate Tectonics</div>
+              <div class="term-topics">Processes, Landforms, Internal Structure</div>
+              <span class="term-action">Start Challenge ➔</span>
+            </button>
+
+            <!-- Term 2: Blue Button, White Text -->
+            <button class="term-btn term-2-btn" onclick="Quiz.selectTerm(2)">
+              <div class="term-badge">TERM 2</div>
+              <div class="term-title">Biology & Electromagnetic Spectrum</div>
+              <div class="term-topics">Nervous/Endocrine Systems, DNA/RNA, EM Waves</div>
+              <span class="term-action">Start Challenge ➔</span>
+            </button>
+
+            <!-- Term 3: Yellow Button, White Text -->
+            <button class="term-btn term-3-btn" onclick="Quiz.selectTerm(3)">
+              <div class="term-badge">TERM 3</div>
+              <div class="term-title">Chemistry & Physics Mechanics</div>
+              <div class="term-topics">Gas Laws, Chemical Reactions, Optics & Light</div>
+              <span class="term-action">Start Challenge ➔</span>
+            </button>
+          </div>
+
+          <!-- Mode Selector Modal / Sheet -->
+          <div id="modeSelectorModal" class="mode-modal hidden">
+            <div class="mode-modal-content">
+              <h3>Choose Test Mode</h3>
+              <p id="selectedTermLabel">Term 1 Selected</p>
+              
+              <div class="mode-options">
+                <button class="mode-card pre-test" onclick="Quiz.startQuiz('pre-test')">
+                  <span class="mode-icon">⏱️</span>
+                  <div>
+                    <h4>Pre-Test Mode</h4>
+                    <p>15 timed items (20s each). Randomized questions to prime recall before class.</p>
+                  </div>
+                </button>
+
+                <button class="mode-card post-test" onclick="Quiz.startQuiz('post-test')">
+                  <span class="mode-icon">🎯</span>
+                  <div>
+                    <h4>Post-Test Mode</h4>
+                    <p>Comprehensive assessment (MC, True/False, Identification) after class.</p>
+                  </div>
+                </button>
+              </div>
+
+              <button class="cancel-btn" onclick="Quiz.hideModeSelector()">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. GAMEPLAY UI ================= -->
+      <section id="gameplayScreen" class="screen">
+        <div class="gameplay-container">
+          <!-- Game Header -->
+          <div class="gameplay-header">
+            <div class="quiz-info">
+              <span id="quizTermTag" class="tag">Term 1</span>
+              <span id="quizModeTag" class="tag mode-tag">Pre-Test</span>
+            </div>
+            <button class="quit-btn" onclick="Quiz.quitQuiz()">✕ Quit</button>
+          </div>
+
+          <!-- Progress Bar & Question Counter -->
+          <div class="progress-bar-wrapper">
+            <div id="quizProgressBar" class="progress-fill" style="width: 0%;"></div>
+          </div>
+          <div class="question-meta">
+            <span id="questionCounter">Question 1 of 15</span>
+            <span id="streakCounter">🔥 Streak: 0</span>
+          </div>
+
+          <!-- Circular Speed-Tapping Timer -->
+          <div class="timer-section">
+            <div class="timer-circle">
+              <svg class="timer-svg" viewBox="0 0 100 100">
+                <circle class="timer-bg-circle" cx="50" cy="50" r="45"></circle>
+                <circle id="timerProgressCircle" class="timer-progress" cx="50" cy="50" r="45"></circle>
+              </svg>
+              <div id="timerText" class="timer-seconds">20</div>
+            </div>
+          </div>
+
+          <!-- Question Box -->
+          <div class="question-card">
+            <span id="questionCategory" class="question-category">Earth Science</span>
+            <h3 id="questionText">Loading question...</h3>
+          </div>
+
+          <!-- Answer Options (Multiple Choice / True-False / Identification) -->
+          <div id="answersContainer" class="answers-grid">
+            <!-- Rendered dynamically by quiz.js -->
+          </div>
+
+          <!-- Feedback Banner -->
+          <div id="feedbackBanner" class="feedback-banner hidden">
+            <span id="feedbackIcon">✅</span>
+            <span id="feedbackText">Correct! +120 pts</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 7. RESULTS SCREEN ================= -->
+      <section id="resultsScreen" class="screen">
+        <div class="results-card">
+          <div class="results-header">
+            <span class="results-trophy">🏆</span>
+            <h2>Round Complete!</h2>
+            <p id="resultsSubtext">Great mental warm-up session</p>
+          </div>
+
+          <!-- Percentage Score (Center of Screen) -->
+          <div class="score-center-display">
+            <div class="score-circle">
+              <span id="resultPercentage" class="percent-val">80%</span>
+              <span class="percent-label">Score</span>
+            </div>
+            <div class="total-points-earned">
+              Points Earned: <span id="resultTotalPoints">+1,240</span> pts
+            </div>
+          </div>
+
+          <!-- Correct / Incorrect Answers (Bottom Section) -->
+          <div class="results-stats-bottom">
+            <div class="stat-box correct-box">
+              <span class="box-icon">✅</span>
+              <div class="box-data">
+                <span id="resultCorrectCount" class="box-val">12</span>
+                <span class="box-label">Correct Answers</span>
+              </div>
+            </div>
+
+            <div class="stat-box incorrect-box">
+              <span class="box-icon">❌</span>
+              <div class="box-data">
+                <span id="resultIncorrectCount" class="box-val">3</span>
+                <span class="box-label">Incorrect Answers</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Below 50% Remediation Recommendation Banner -->
+          <div id="recommendationBanner" class="recommendation-card hidden">
+            <div class="rec-header">
+              <span>💡 Review Recommendation</span>
+            </div>
+            <p id="recommendationText">
+              Your score was below 50%. We recommend reviewing <b>Term 1: Plate Tectonics & Processes</b> before taking your post-test!
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="results-actions">
+            <button class="primary-btn play-again-btn" onclick="App.showScreen('playScreen')">Play Again 🎮</button>
+            <button class="secondary-btn home-nav-link" onclick="App.showScreen('homeScreen')">Return to Home 🏠</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 8. SETTINGS UI ================= -->
+      <section id="settingsScreen" class="screen">
+        <div class="settings-container">
+          <button class="back-link" onclick="App.showScreen('homeScreen')">← Home</button>
+          <h2>Settings & Overview</h2>
+          <p class="subtitle">Choose a menu option below</p>
+
+          <!-- 3 Dedicated Settings Buttons -->
+          <div class="settings-menu-grid">
+            <button class="settings-menu-btn data-btn" onclick="Settings.openSubMenu('data')">
+              <span class="menu-icon">📊</span>
+              <div class="menu-info">
+                <h3>1. Data</h3>
+                <p>View performance statistics, streaks, and term/topic accuracy</p>
+              </div>
+              <span class="arrow">➔</span>
+            </button>
+
+            <button class="settings-menu-btn profile-btn" onclick="Settings.openSubMenu('profile')">
+              <span class="menu-icon">👤</span>
+              <div class="menu-info">
+                <h3>2. Profile</h3>
+                <p>View & edit profile photo, name, grade level, and section</p>
+              </div>
+              <span class="arrow">➔</span>
+            </button>
+
+            <button class="settings-menu-btn achievements-btn" onclick="Settings.openSubMenu('achievements')">
+              <span class="menu-icon">🏅</span>
+              <div class="menu-info">
+                <h3>3. Achievements</h3>
+                <p>View all 14 unlockable badges & milestones</p>
+              </div>
+              <span class="arrow">➔</span>
+            </button>
+
+            <button class="settings-menu-btn logout-btn-card" style="border: 2px solid #ef5350; background: #ffebee;" onclick="Auth.logout()">
+              <span class="menu-icon">🚪</span>
+              <div class="menu-info">
+                <h3 style="color: #c62828;">4. Log Out</h3>
+                <p style="color: #d32f2f;">Clear stored profile session and switch role</p>
+              </div>
+              <span class="arrow" style="color: #c62828;">➔</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 8.1 DATA SUB-MENU ================= -->
+      <section id="settingsDataSubScreen" class="screen">
+        <div class="sub-settings-container">
+          <button class="back-link" onclick="App.showScreen('settingsScreen')">← Settings</button>
+          <h2>Performance Statistics</h2>
+          <p class="subtitle">Your learning accuracy & score analytics</p>
+
+          <div class="stats-cards-grid">
+            <div class="stat-card">
+              <span class="card-icon">🎯</span>
+              <div class="card-value" id="statsAvgScore">0%</div>
+              <div class="card-label">Average Score</div>
+            </div>
+
+            <div class="stat-card">
+              <span class="card-icon">🔥</span>
+              <div class="card-value" id="statsHighestStreak">0</div>
+              <div class="card-label">Highest Streak</div>
+            </div>
+          </div>
+
+          <div class="section-divider">Accuracy per Term</div>
+          <div class="accuracy-bars-group">
+            <div class="acc-row">
+              <div class="acc-info"><span>Term 1 (Earth Science)</span> <b id="accTerm1">0%</b></div>
+              <div class="bar-bg"><div id="barTerm1" class="bar-fill red-fill" style="width: 0%;"></div></div>
+            </div>
+            <div class="acc-row">
+              <div class="acc-info"><span>Term 2 (Biology & EM)</span> <b id="accTerm2">0%</b></div>
+              <div class="bar-bg"><div id="barTerm2" class="bar-fill blue-fill" style="width: 0%;"></div></div>
+            </div>
+            <div class="acc-row">
+              <div class="acc-info"><span>Term 3 (Chem & Physics)</span> <b id="accTerm3">0%</b></div>
+              <div class="bar-bg"><div id="barTerm3" class="bar-fill yellow-fill" style="width: 0%;"></div></div>
+            </div>
+          </div>
+
+          <div class="section-divider">Accuracy per Topic</div>
+          <div id="topicAccuracyList" class="topic-accuracy-grid">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 8.2 PROFILE EDIT SUB-MENU ================= -->
+      <section id="settingsProfileSubScreen" class="screen">
+        <div class="sub-settings-container">
+          <button class="back-link" onclick="App.showScreen('settingsScreen')">← Settings</button>
+          <h2>Edit Profile</h2>
+          
+          <div class="profile-photo-container">
+            <div class="avatar-wrapper" onclick="document.getElementById('editPhotoInput').click()">
+              <img id="editAvatarPreview" src="" alt="Profile Photo">
+              <div class="camera-badge">📷</div>
+            </div>
+            <input type="file" id="editPhotoInput" accept="image/*" style="display: none;" onchange="Auth.handleEditPhotoUpload(event)">
+            <p class="photo-hint">Tap icon to change photo</p>
+          </div>
+
+          <div class="form-group">
+            <label for="editNameInput">Name</label>
+            <input type="text" id="editNameInput">
+          </div>
+
+          <div class="form-group">
+            <label for="editGradeInput">Grade Level</label>
+            <select id="editGradeInput">
+              <option value="Grade 10">Grade 10</option>
+              <option value="Grade 9">Grade 9</option>
+              <option value="Grade 11">Grade 11</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="editSectionInput">Section</label>
+            <input type="text" id="editSectionInput">
+          </div>
+
+          <button class="primary-btn" onclick="Auth.updateProfile()">Update Profile</button>
+        </div>
+      </section>
+
+      <!-- ================= 8.3 ACHIEVEMENTS SUB-MENU ================= -->
+      <section id="settingsAchievementsSubScreen" class="screen">
+        <div class="sub-settings-container">
+          <button class="back-link" onclick="App.showScreen('settingsScreen')">← Settings</button>
+          <h2>Achievements & Badges</h2>
+          <p class="subtitle">Tap any badge for unlock requirements</p>
+
+          <!-- PRD Requirement: 4-Column Grid, Icon top, Name/Desc below -->
+          <div id="achievementsGrid" class="achievements-4col-grid">
+            <!-- Populated dynamically by achievements.js -->
+          </div>
+        </div>
+
+        <!-- Achievement Detail Popup Modal -->
+        <div id="achievementDetailModal" class="modal-overlay hidden" onclick="Achievements.closeModal()">
+          <div class="modal-card achievement-modal-content" onclick="event.stopPropagation()">
+            <div id="modalAchIcon" class="ach-modal-icon">🏆</div>
+            <h3 id="modalAchName">Achievement Name</h3>
+            <span id="modalAchStatus" class="ach-status-badge">Locked</span>
+            <p id="modalAchDesc">Description</p>
+            <button class="secondary-btn" onclick="Achievements.closeModal()">Close</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 9. TEACHER PORTAL & ANALYTICS ================= -->
+      <section id="teacherDashboardScreen" class="screen">
+        <div class="teacher-container">
+          <div class="teacher-header">
+            <div>
+              <h2>Teacher Portal</h2>
+              <p id="teacherGreeting">Welcome, Teacher!</p>
+            </div>
+            <button class="logout-btn" onclick="Auth.logoutTeacher()">Log Out</button>
+          </div>
+
+          <div class="teacher-tabs">
+            <button id="tabAnalyticsBtn" class="tab-btn active" onclick="Analytics.switchTab('analytics')">📊 Analytics</button>
+            <button id="tabCustomQuizBtn" class="tab-btn" onclick="Analytics.switchTab('customQuiz')">✏️ Custom Quizzes</button>
+          </div>
+
+          <!-- Tab 1: Class Analytics -->
+          <div id="teacherAnalyticsTab" class="tab-content active">
+            <div class="stats-overview-grid">
+              <div class="overview-card">
+                <span class="ov-icon">👥</span>
+                <div id="totalStudentsCount" class="ov-val">1</div>
+                <div class="ov-label">Active Students</div>
+              </div>
+
+              <div class="overview-card">
+                <span class="ov-icon">📝</span>
+                <div id="totalQuizzesTaken" class="ov-val">0</div>
+                <div class="ov-label">Quizzes Completed</div>
+              </div>
+
+              <div class="overview-card">
+                <span class="ov-icon">🎯</span>
+                <div id="classAverageScore" class="ov-val">0%</div>
+                <div class="ov-label">Class Avg Score</div>
+              </div>
+            </div>
+
+            <div class="action-bar-right">
+              <button class="primary-btn export-btn" onclick="Analytics.exportCSV()">📥 Export Data (CSV)</button>
+            </div>
+
+            <div class="section-divider">Student Results Breakdown</div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Section</th>
+                    <th>Quizzes</th>
+                    <th>Avg Score</th>
+                    <th>Highest Streak</th>
+                  </tr>
+                </thead>
+                <tbody id="studentResultsTableBody">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tab 2: Custom Quiz Creation -->
+          <div id="teacherCustomQuizTab" class="tab-content">
+            <div class="custom-quiz-builder">
+              <h3>Create Custom Class Quiz</h3>
+              <p class="subtitle">Add customized questions for Grade 10 Science topics</p>
+
+              <div class="form-group">
+                <label for="quizTitleInput">Quiz Title</label>
+                <input type="text" id="quizTitleInput" placeholder="e.g. Plate Tectonics Daily Drill">
+              </div>
+
+              <div class="form-group">
+                <label for="quizTermSelect">Science Term</label>
+                <select id="quizTermSelect">
+                  <option value="1">Term 1: Earth Science</option>
+                  <option value="2">Term 2: Biology & EM Spectrum</option>
+                  <option value="3">Term 3: Chemistry & Physics</option>
+                </select>
+              </div>
+
+              <div class="question-builder-card">
+                <h4>Add New Question</h4>
+                
+                <div class="form-group">
+                  <label for="newQText">Question Prompt</label>
+                  <input type="text" id="newQText" placeholder="Enter question text...">
+                </div>
+
+                <div class="form-group">
+                  <label for="newQOptionA">Option A</label>
+                  <input type="text" id="newQOptionA" placeholder="Option A text">
+                </div>
+                <div class="form-group">
+                  <label for="newQOptionB">Option B</label>
+                  <input type="text" id="newQOptionB" placeholder="Option B text">
+                </div>
+                <div class="form-group">
+                  <label for="newQOptionC">Option C</label>
+                  <input type="text" id="newQOptionC" placeholder="Option C text">
+                </div>
+                <div class="form-group">
+                  <label for="newQOptionD">Option D</label>
+                  <input type="text" id="newQOptionD" placeholder="Option D text">
+                </div>
+
+                <div class="form-group">
+                  <label for="correctOptionSelect">Correct Answer</label>
+                  <select id="correctOptionSelect">
+                    <option value="0">Option A</option>
+                    <option value="1">Option B</option>
+                    <option value="2">Option C</option>
+                    <option value="3">Option D</option>
+                  </select>
+                </div>
+
+                <button class="secondary-btn" onclick="Analytics.addQuestionToDraft()">+ Add Question to Quiz</button>
+              </div>
+
+              <div class="draft-questions-list">
+                <h4>Quiz Questions (<span id="draftQCount">0</span>)</h4>
+                <ul id="draftQuestionsUl" class="questions-ul">
+                  <!-- Draft questions rendered here -->
+                </ul>
+              </div>
+
+              <button class="primary-btn save-quiz-btn" onclick="Analytics.saveCustomQuiz()">Save Quiz for Students</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/achievements.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
