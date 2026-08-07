@@ -2,6 +2,7 @@ class QuestionModel {
   final String id;
   final String topicId;
   final int questionTypeId;
+  final String quizType; // 'pre_test' | 'post_test' | 'practice' | 'custom'
   final String question;
   final String questionType; // 'multiple_choice' | 'true_false' | 'identification'
   final String optionA;
@@ -21,6 +22,7 @@ class QuestionModel {
     required this.id,
     required this.topicId,
     this.questionTypeId = 1,
+    this.quizType = 'post_test',
     required this.question,
     required this.questionType,
     required this.optionA,
@@ -51,6 +53,7 @@ class QuestionModel {
       id: json['id'] as String,
       topicId: json['topic_id'] as String,
       questionTypeId: typeId,
+      quizType: json['quiz_type'] as String? ?? 'post_test',
       question: json['question'] as String,
       questionType: typeStr,
       optionA: (json['choice_a'] ?? json['option_a']) as String? ?? '',
@@ -75,6 +78,7 @@ class QuestionModel {
       'id': id,
       'topic_id': topicId,
       'question_type_id': questionTypeId,
+      'quiz_type': quizType,
       'question': question,
       'question_type': questionType,
       'choice_a': optionA,

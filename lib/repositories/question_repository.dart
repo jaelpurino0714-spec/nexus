@@ -6,6 +6,7 @@ abstract class QuestionRepository {
   Future<List<PreparedQuestion>> getPreparedQuestionsForQuiz(
     String topicId, {
     String? questionType,
+    String? quizType,
     String topicTitle = 'Science Topic',
   });
   Future<void> addQuestion(QuestionModel question);
@@ -23,11 +24,13 @@ class QuestionRepositoryImpl implements QuestionRepository {
   Future<List<PreparedQuestion>> getPreparedQuestionsForQuiz(
     String topicId, {
     String? questionType,
+    String? quizType,
     String topicTitle = 'Science Topic',
   }) async {
     final rawQuestions = await _questionService.fetchActiveQuestionsByTopic(
       topicId,
       questionType: questionType,
+      quizType: quizType,
       topicTitle: topicTitle,
     );
     return _questionService.prepareQuizQuestions(rawQuestions);
@@ -35,16 +38,16 @@ class QuestionRepositoryImpl implements QuestionRepository {
 
   @override
   Future<void> addQuestion(QuestionModel question) async {
-    await _client.from('question_bank').insert(question.toJson());
+    await _client.from('questions').insert(question.toJson());
   }
 
   @override
   Future<void> updateQuestion(QuestionModel question) async {
-    await _client.from('question_bank').update(question.toJson()).eq('id', question.id);
+    await _client.from('questions').update(question.toJson()).eq('id', question.id);
   }
 
   @override
   Future<void> deleteQuestion(String id) async {
-    await _client.from('question_bank').delete().eq('id', id);
+    await _client.from('questions').delete().eq('id', id);
   }
 }

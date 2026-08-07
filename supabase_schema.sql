@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS public.questions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     topic_id UUID NOT NULL REFERENCES public.topics(id) ON DELETE CASCADE,
     question_type_id INT NOT NULL REFERENCES public.question_types(id) ON DELETE CASCADE,
+    quiz_type TEXT DEFAULT 'post_test' CHECK (quiz_type IN ('pre_test', 'post_test', 'practice', 'custom')),
     question TEXT NOT NULL,
     choice_a TEXT,
     choice_b TEXT,

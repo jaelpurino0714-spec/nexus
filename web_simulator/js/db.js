@@ -71,7 +71,7 @@ const DB = {
     }
   },
 
-  async getQuestions(topicId, questionTypeId) {
+  async getQuestions(topicId, questionTypeId, quizType) {
     if (!supabaseClient) return [];
     try {
       let query = supabaseClient
@@ -81,6 +81,7 @@ const DB = {
 
       if (topicId) query = query.eq('topic_id', topicId);
       if (questionTypeId) query = query.eq('question_type_id', questionTypeId);
+      if (quizType) query = query.eq('quiz_type', quizType);
 
       const { data, error } = await query;
       if (error) throw error;

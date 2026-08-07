@@ -15,6 +15,7 @@ class QuestionService {
   Future<List<QuestionModel>> fetchActiveQuestionsByTopic(
     String topicId, {
     String? questionType,
+    String? quizType,
     String topicTitle = 'Science Topic',
   }) async {
     List<QuestionModel> list = [];
@@ -37,15 +38,14 @@ class QuestionService {
         query = query.eq('question_type_id', qTypeId);
       }
 
+      if (quizType != null && quizType.isNotEmpty) {
+        query = query.eq('quiz_type', quizType);
+      }
+
       final response = await query;
       list = (response as List).map((q) => QuestionModel.fromJson(q)).toList();
     } catch (e) {
-      // Fallback
-    }
-
-    if (list.length < 15) {
-      final generated = _generateFallbackQuestions(topicId, topicTitle, questionType ?? 'multiple_choice', 15 - list.length);
-      list.addAll(generated);
+      print('Error fetching questions from Supabase: $e');
     }
 
     return list;
@@ -65,55 +65,5 @@ class QuestionService {
       }
       return PreparedQuestion(question: q, shuffledOptions: options);
     }).toList();
-  }
-
-  List<QuestionModel> _generateFallbackQuestions(String topicId, String topicTitle, String questionType, int count) {
-    List<QuestionModel> generated = [];
-    for (int i = 1; i <= count; i++) {
-      if (questionType == 'true_false') {
-        final bool isTrue = i % 2 != 0;
-        generated.add(QuestionModel(
-          id: 'gen_tf_$i',
-          topicId: topicId.isEmpty ? 'topic_fallback' : topicId,
-          question: '[$topicTitle] Statement $i: Is this scientific concept accurate for Grade 10 Science?',
-          questionType: 'true_false',
-          optionA: 'True',
-          optionB: 'False',
-          correctAnswer: isTrue ? 'True' : 'False',
-          difficulty: 'Medium',
-          timeLimit: 20,
-          isActive: true,
-        ));
-      } else if (questionType == 'identification') {
-        generated.add(QuestionModel(
-          id: 'gen_id_$i',
-          topicId: topicId.isEmpty ? 'topic_fallback' : topicId,
-          question: 'Identify the core Grade 10 Science term associated with key concept #$i in $topicTitle.',
-          questionType: 'identification',
-          optionA: '',
-          optionB: '',
-          correctAnswer: topicTitle.split(' ').first,
-          difficulty: 'Medium',
-          timeLimit: 20,
-          isActive: true,
-        ));
-      } else {
-        generated.add(QuestionModel(
-          id: 'gen_mc_$i',
-          topicId: topicId.isEmpty ? 'topic_fallback' : topicId,
-          question: 'Which fundamental principle governs $topicTitle regarding item #$i?',
-          questionType: 'multiple_choice',
-          optionA: 'Primary Principle of $topicTitle',
-          optionB: 'Secondary Response Factor',
-          optionC: 'External Ambient Variable',
-          optionD: 'Inverse Reactivity Threshold',
-          correctAnswer: 'Primary Principle of $topicTitle',
-          difficulty: 'Medium',
-          timeLimit: 20,
-          isActive: true,
-        ));
-      }
-    }
-    return generated;
   }
 }

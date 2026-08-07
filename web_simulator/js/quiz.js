@@ -152,23 +152,12 @@ const Quiz = {
     if (questionFormat === 'true_false') qTypeId = 2;
     else if (questionFormat === 'identification') qTypeId = 3;
 
-    // Query questions filtering by topic_id and question_type_id
-    let pool = await DB.getQuestions(this.currentTopicId, qTypeId);
+    // Query questions filtering by topic_id, question_type_id, and quiz_type
+    let pool = await DB.getQuestions(this.currentTopicId, qTypeId, mode);
 
     if (pool.length === 0) {
-      pool = await DB.fetchQuestionsForTerm(this.currentTerm);
-      pool = pool.filter(q => {
-        if (questionFormat === 'true_false') return q.type === 'tf' || q.type === 'true_false' || q.questionTypeId === 2;
-        if (questionFormat === 'identification') return q.type === 'id' || q.type === 'identification' || q.questionTypeId === 3;
-        return q.type === 'mc' || q.type === 'multiple_choice' || q.questionTypeId === 1 || !q.type;
-      });
-    }
-
-    // Generate fallback questions to ensure exactly 15 items per gameflow spec
-    if (pool.length < 15) {
-      const extraNeeded = 15 - pool.length;
-      const generated = this._generateFallbackQuestions(this.currentTopic, questionFormat, extraNeeded);
-      pool = pool.concat(generated);
+      // Fallback query without quiz_type filter if specific pre_test/post_test tag is unassigned
+      pool = await DB.getQuestions(this.currentTopicId, qTypeId);
     }
 
     pool = this.shuffleArray(pool);
@@ -464,52 +453,5 @@ const Quiz = {
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
     return arr;
-  },
-
-  _generateFallbackQuestions(topic, format, count) {
-    const list = [];
-    for (let i = 1; i <= count; i++) {
-      if (format === 'true_false') {
-        const isTrue = i % 2 !== 0;
-        list.push({
-          id: `gen_tf_${i}`,
-          term: this.currentTerm,
-          topic: topic,
-          question: `[${topic}] Statement ${i}: Is this scientific concept accurate for Grade 10 Science?`,
-          options: ['True', 'False'],
-          answer: isTrue ? 0 : 1,
-          rawAnswer: isTrue ? 'True' : 'False',
-          type: 'tf'
-        });
-      } else if (format === 'identification') {
-        list.push({
-          id: `gen_id_${i}`,
-          term: this.currentTerm,
-          topic: topic,
-          question: `Identify the core Grade 10 Science term associated with key process #${i} in ${topic}.`,
-          options: [],
-          answer: 0,
-          rawAnswer: topic.split(' ')[0],
-          type: 'id'
-        });
-      } else {
-        list.push({
-          id: `gen_mc_${i}`,
-          term: this.currentTerm,
-          topic: topic,
-          question: `Which fundamental principle governs ${topic} regarding item #${i}?`,
-          options: [
-            `Primary Principle of ${topic}`,
-            `Secondary Response Factor`,
-            `External Ambient Variable`,
-            `Inverse Reactivity Threshold`
-          ],
-          answer: 0,
-          rawAnswer: `Primary Principle of ${topic}`,
-          type: 'mc'
-        });
-      }
-    }
-    return list;
   }
 };

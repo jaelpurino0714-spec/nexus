@@ -103,6 +103,7 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
     final questions = await _questionRepo.getPreparedQuestionsForQuiz(
       topicId,
       questionType: questionType,
+      quizType: quizType,
       topicTitle: topicTitle,
     );
 
