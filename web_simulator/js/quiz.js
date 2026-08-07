@@ -54,26 +54,40 @@ const Quiz = {
   sessionTopicStats: {},
 
   // 1. Term Selection
-  selectTerm(termNum) {
+  async selectTerm(termNum) {
     this.currentTerm = termNum;
-    this.renderTopics();
+    await this.renderTopics();
     App.showScreen('topicScreen');
   },
 
-  // 2. Render Topics for Selected Term
-  renderTopics() {
+  // 2. Render Topics for Selected Term (Dynamically from Supabase)
+  async renderTopics() {
     const termNames = { 1: 'First Term Topics', 2: 'Second Term Topics', 3: 'Third Term Topics' };
     document.getElementById('topicScreenTitle').textContent = termNames[this.currentTerm] || 'Select Topic';
     document.getElementById('topicScreenSub').textContent = `Term ${this.currentTerm} DepEd Science Topics`;
 
     const container = document.getElementById('topicsListGroup');
-    container.innerHTML = '';
+    container.innerHTML = '<div style="text-align:center; padding:20px;">Loading topics from Supabase...</div>';
 
-    const topics = CURRICULUM[this.currentTerm] || [];
-    topics.forEach((topicName, idx) => {
+    let topics = [];
+    const terms = await DB.getTerms();
+    const matchedTerm = terms.find(t => t.order_no === this.currentTerm || t.order_index === this.currentTerm);
+
+    if (matchedTerm) {
+      topics = await DB.getTopics(matchedTerm.id);
+    }
+
+    if (topics.length === 0 && CURRICULUM[this.currentTerm]) {
+      topics = CURRICULUM[this.currentTerm].map((title, idx) => ({ id: `top_${this.currentTerm}_${idx}`, title: title }));
+    }
+
+    container.innerHTML = '';
+    topics.forEach((topicObj, idx) => {
+      const topicName = topicObj.title;
+      const topicId = topicObj.id;
       const btn = document.createElement('button');
       btn.className = `term-btn topic-item-btn`;
-      btn.onclick = () => this.selectTopic(topicName);
+      btn.onclick = () => this.selectTopic(topicName, topicId);
       btn.innerHTML = `
         <div class="term-badge">TOPIC ${idx + 1}</div>
         <div class="term-title">${topicName}</div>
@@ -84,8 +98,9 @@ const Quiz = {
   },
 
   // 3. Topic Selected -> Open Test Type Modal
-  selectTopic(topicName) {
+  selectTopic(topicName, topicId) {
     this.currentTopic = topicName;
+    this.currentTopicId = topicId;
     document.getElementById('selectedTopicLabel').textContent = `Selected: ${topicName}`;
     document.getElementById('modeSelectorModal').classList.remove('hidden');
   },
@@ -133,15 +148,21 @@ const Quiz = {
     this.sessionTotalTimeSec = 0;
     this.sessionTopicStats = {};
 
-    // Fetch questions from DB or generate topic fallbacks
-    let pool = await DB.fetchQuestionsForTerm(this.currentTerm);
+    let qTypeId = 1;
+    if (questionFormat === 'true_false') qTypeId = 2;
+    else if (questionFormat === 'identification') qTypeId = 3;
 
-    // Filter by topic, testType, and questionType if available
-    pool = pool.filter(q => {
-      if (questionFormat === 'true_false') return q.type === 'tf' || q.type === 'true_false';
-      if (questionFormat === 'identification') return q.type === 'id' || q.type === 'identification';
-      return q.type === 'mc' || q.type === 'multiple_choice' || !q.type;
-    });
+    // Query questions filtering by topic_id and question_type_id
+    let pool = await DB.getQuestions(this.currentTopicId, qTypeId);
+
+    if (pool.length === 0) {
+      pool = await DB.fetchQuestionsForTerm(this.currentTerm);
+      pool = pool.filter(q => {
+        if (questionFormat === 'true_false') return q.type === 'tf' || q.type === 'true_false' || q.questionTypeId === 2;
+        if (questionFormat === 'identification') return q.type === 'id' || q.type === 'identification' || q.questionTypeId === 3;
+        return q.type === 'mc' || q.type === 'multiple_choice' || q.questionTypeId === 1 || !q.type;
+      });
+    }
 
     // Generate fallback questions to ensure exactly 15 items per gameflow spec
     if (pool.length < 15) {

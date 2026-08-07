@@ -19,8 +19,13 @@ class QuestionService {
   }) async {
     List<QuestionModel> list = [];
     try {
+      int? qTypeId;
+      if (questionType == 'true_false') qTypeId = 2;
+      else if (questionType == 'identification') qTypeId = 3;
+      else if (questionType == 'multiple_choice') qTypeId = 1;
+
       var query = _client
-          .from('question_bank')
+          .from('questions')
           .select()
           .eq('is_active', true);
 
@@ -28,8 +33,8 @@ class QuestionService {
         query = query.eq('topic_id', topicId);
       }
 
-      if (questionType != null && questionType.isNotEmpty) {
-        query = query.eq('question_type', questionType);
+      if (qTypeId != null) {
+        query = query.eq('question_type_id', qTypeId);
       }
 
       final response = await query;

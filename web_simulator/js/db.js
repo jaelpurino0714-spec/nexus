@@ -23,39 +23,93 @@ const DB = {
   _cachedResults: [],
 
   // --------------------------------------------------------------------------
-  // 1. QUESTION BANK & CURRICULUM (SUPABASE LIVE QUERY)
+  // 1. QUESTION BANK & CURRICULUM (SUPABASE LIVE QUERY API)
   // --------------------------------------------------------------------------
+  async getTerms() {
+    if (!supabaseClient) return [];
+    try {
+      const { data, error } = await supabaseClient
+        .from('terms')
+        .select('*')
+        .order('order_no', { ascending: true });
+      if (error) throw error;
+      return data || [];
+    } catch (e) {
+      console.error('Error fetching terms from Supabase:', e);
+      return [];
+    }
+  },
+
+  async getTopics(termId) {
+    if (!supabaseClient) return [];
+    try {
+      const { data, error } = await supabaseClient
+        .from('topics')
+        .select('*')
+        .eq('term_id', termId)
+        .order('order_no', { ascending: true });
+      if (error) throw error;
+      return data || [];
+    } catch (e) {
+      console.error('Error fetching topics from Supabase:', e);
+      return [];
+    }
+  },
+
+  async getQuestionTypes() {
+    if (!supabaseClient) return [];
+    try {
+      const { data, error } = await supabaseClient
+        .from('question_types')
+        .select('*')
+        .order('id', { ascending: true });
+      if (error) throw error;
+      return data || [];
+    } catch (e) {
+      console.error('Error fetching question types from Supabase:', e);
+      return [];
+    }
+  },
+
+  async getQuestions(topicId, questionTypeId) {
+    if (!supabaseClient) return [];
+    try {
+      let query = supabaseClient
+        .from('questions')
+        .select('*')
+        .eq('is_active', true);
+
+      if (topicId) query = query.eq('topic_id', topicId);
+      if (questionTypeId) query = query.eq('question_type_id', questionTypeId);
+
+      const { data, error } = await query;
+      if (error) throw error;
+      return this._formatQuestions(data || []);
+    } catch (e) {
+      console.error('Error fetching questions from Supabase:', e);
+      return [];
+    }
+  },
+
   async fetchQuestionsForTerm(termNumber) {
     if (!supabaseClient) return [];
     try {
-      // Find term by order_index
-      const { data: terms, error: termErr } = await supabaseClient
-        .from('terms')
-        .select('id')
-        .eq('order_index', termNumber);
+      const terms = await this.getTerms();
+      const matchedTerm = terms.find(t => t.order_no === termNumber || t.order_index === termNumber);
 
-      if (termErr || !terms || terms.length === 0) {
-        console.warn('Term not found, fetching fallback active questions...');
+      if (!matchedTerm) {
         const { data: allQ } = await supabaseClient
-          .from('question_bank')
+          .from('questions')
           .select('*')
           .eq('is_active', true);
         return this._formatQuestions(allQ || []);
       }
 
-      const termId = terms[0].id;
+      const topics = await this.getTopics(matchedTerm.id);
+      const topicIds = topics.map(t => t.id);
 
-      // Find topics in term
-      const { data: topics } = await supabaseClient
-        .from('topics')
-        .select('id, title')
-        .eq('term_id', termId);
-
-      const topicIds = (topics || []).map(t => t.id);
-
-      // Fetch questions in topics
       let query = supabaseClient
-        .from('question_bank')
+        .from('questions')
         .select('*')
         .eq('is_active', true);
 
@@ -68,33 +122,45 @@ const DB = {
 
       return this._formatQuestions(questions || []);
     } catch (e) {
-      console.error('Error fetching questions from Supabase:', e);
+      console.error('Error fetching questions for term:', e);
       return [];
     }
   },
 
   _formatQuestions(rawQuestions) {
     return rawQuestions.map(q => {
-      const opts = [q.option_a, q.option_b];
-      if (q.option_c && q.option_c.trim() !== '') opts.push(q.option_c);
-      if (q.option_d && q.option_d.trim() !== '') opts.push(q.option_d);
+      const choiceA = q.choice_a || q.option_a || '';
+      const choiceB = q.choice_b || q.option_b || '';
+      const choiceC = q.choice_c || q.option_c || '';
+      const choiceD = q.choice_d || q.option_d || '';
+
+      const opts = [choiceA, choiceB];
+      if (choiceC && choiceC.trim() !== '') opts.push(choiceC);
+      if (choiceD && choiceD.trim() !== '') opts.push(choiceD);
 
       let ansIndex = 0;
       const ansUpper = (q.correct_answer || '').toUpperCase().trim();
-      if (ansUpper === 'B' || ansUpper === (q.option_b || '').toUpperCase().trim()) ansIndex = 1;
-      else if (ansUpper === 'C' || ansUpper === (q.option_c || '').toUpperCase().trim()) ansIndex = 2;
-      else if (ansUpper === 'D' || ansUpper === (q.option_d || '').toUpperCase().trim()) ansIndex = 3;
+      if (ansUpper === 'B' || ansUpper === choiceB.toUpperCase().trim()) ansIndex = 1;
+      else if (ansUpper === 'C' || ansUpper === choiceC.toUpperCase().trim()) ansIndex = 2;
+      else if (ansUpper === 'D' || ansUpper === choiceD.toUpperCase().trim()) ansIndex = 3;
+
+      let qTypeStr = 'mc';
+      if (q.question_type_id === 2 || q.question_type === 'true_false') qTypeStr = 'tf';
+      if (q.question_type_id === 3 || q.question_type === 'identification') qTypeStr = 'id';
 
       return {
         id: q.id,
+        topicId: q.topic_id,
+        questionTypeId: q.question_type_id,
         term: 1,
         topic: q.difficulty || 'Science',
         question: q.question,
         options: opts,
         answer: ansIndex,
+        rawAnswer: q.correct_answer,
         explanation: q.explanation,
         timeLimit: q.time_limit || 20,
-        type: q.question_type === 'true_false' ? 'tf' : 'mc'
+        type: qTypeStr
       };
     });
   },

@@ -72,7 +72,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>? ?? {};
           return TopicSelectionScreen(
+            termId: extra['termId'],
             termNum: extra['termNum'] ?? 1,
+            termTitle: extra['termTitle'],
           );
         },
       ),

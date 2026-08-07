@@ -22,7 +22,7 @@ class TopicModel {
       title: json['title'] as String,
       description: json['description'] as String?,
       icon: json['icon'] as String?,
-      orderIndex: (json['order_index'] as num?)?.toInt() ?? 0,
+      orderIndex: (json['order_no'] ?? json['order_index'] as num?)?.toInt() ?? 0,
     );
   }
 

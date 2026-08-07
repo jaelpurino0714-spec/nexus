@@ -19,10 +19,12 @@ class TermModel {
         ? rawTopics.map((t) => TopicModel.fromJson(t as Map<String, dynamic>)).toList()
         : [];
 
+    final String nameStr = (json['name'] ?? json['title'] ?? 'Term') as String;
+
     return TermModel(
       id: json['id'] as String,
-      title: json['title'] as String,
-      orderIndex: (json['order_index'] as num?)?.toInt() ?? 0,
+      title: nameStr,
+      orderIndex: (json['order_no'] ?? json['order_index'] as num?)?.toInt() ?? 0,
       topics: topicsList,
     );
   }
