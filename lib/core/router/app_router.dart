@@ -1,10 +1,14 @@
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/auth_provider.dart';
 import '../../screens/splash_screen.dart';
 import '../../screens/login_selection_screen.dart';
 import '../../screens/student_profile_setup_screen.dart';
 import '../../screens/teacher_login_screen.dart';
 import '../../screens/student_home_screen.dart';
+import '../../screens/term_selection_screen.dart';
+import '../../screens/topic_selection_screen.dart';
+import '../../screens/test_mode_selection_screen.dart';
 import '../../screens/quiz_runner_screen.dart';
 import '../../screens/quiz_result_screen.dart';
 import '../../screens/student_analytics_screen.dart';
@@ -60,12 +64,38 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const StudentHomeScreen(),
       ),
       GoRoute(
+        path: '/student/terms',
+        builder: (context, state) => const TermSelectionScreen(),
+      ),
+      GoRoute(
+        path: '/student/topics',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return TopicSelectionScreen(
+            termNum: extra['termNum'] ?? 1,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/student/test-mode',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return TestModeSelectionScreen(
+            termNum: extra['termNum'] ?? 1,
+            topicTitle: extra['topicTitle'] ?? '',
+            topicId: extra['topicId'] ?? '',
+          );
+        },
+      ),
+      GoRoute(
         path: '/student/quiz',
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>? ?? {};
           return QuizRunnerScreen(
             topicId: extra['topicId'] ?? '',
-            quizType: extra['quizType'] ?? 'practice',
+            topicTitle: extra['topicTitle'] ?? 'Science Topic',
+            quizType: extra['quizType'] ?? 'pre_test',
+            questionType: extra['questionType'] ?? 'multiple_choice',
           );
         },
       ),

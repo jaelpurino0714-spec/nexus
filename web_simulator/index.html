@@ -182,7 +182,7 @@
           
           <button id="customPlayBtn" class="home-nav-btn custom-play-btn" onclick="App.handleCustomPlayClick()">
             <span class="btn-icon">✨</span>
-            <span class="btn-text">Custom Play</span>
+            <span class="btn-text">Custom</span>
           </button>
 
           <button id="settingsBtn" class="home-nav-btn settings-btn" onclick="App.showScreen('settingsScreen')">
@@ -198,65 +198,117 @@
           <button class="back-link" onclick="App.showScreen('homeScreen')">← Home</button>
           
           <div class="play-prompt-header">
-            <h2 class="play-prompt-title">Select Your Science Challenge</h2>
-            <p class="play-prompt-sub">Choose a DepEd 3-Term Grade 10 Science Subject</p>
+            <h2 class="play-prompt-title">Select Term</h2>
+            <p class="play-prompt-sub">Choose a DepEd Grade 10 Science Term</p>
           </div>
 
           <div class="term-buttons-group">
-            <!-- Term 1: Red Button, White Text -->
+            <!-- Term 1 -->
             <button class="term-btn term-1-btn" onclick="Quiz.selectTerm(1)">
               <div class="term-badge">TERM 1</div>
-              <div class="term-title">Earth Science & Plate Tectonics</div>
-              <div class="term-topics">Processes, Landforms, Internal Structure</div>
-              <span class="term-action">Start Challenge ➔</span>
+              <div class="term-title">First Term</div>
+              <div class="term-topics">Changes, Reactions, Equations & Homeostasis</div>
+              <span class="term-action">Select Term ➔</span>
             </button>
 
-            <!-- Term 2: Blue Button, White Text -->
+            <!-- Term 2 -->
             <button class="term-btn term-2-btn" onclick="Quiz.selectTerm(2)">
               <div class="term-badge">TERM 2</div>
-              <div class="term-title">Biology & Electromagnetic Spectrum</div>
-              <div class="term-topics">Nervous/Endocrine Systems, DNA/RNA, EM Waves</div>
-              <span class="term-action">Start Challenge ➔</span>
+              <div class="term-title">Second Term</div>
+              <div class="term-topics">Ecosystems, Plate Tectonics & Climate</div>
+              <span class="term-action">Select Term ➔</span>
             </button>
 
-            <!-- Term 3: Yellow Button, White Text -->
+            <!-- Term 3 -->
             <button class="term-btn term-3-btn" onclick="Quiz.selectTerm(3)">
               <div class="term-badge">TERM 3</div>
-              <div class="term-title">Chemistry & Physics Mechanics</div>
-              <div class="term-topics">Gas Laws, Chemical Reactions, Optics & Light</div>
-              <span class="term-action">Start Challenge ➔</span>
+              <div class="term-title">Third Term</div>
+              <div class="term-topics">Physics Mechanics & Electricity</div>
+              <span class="term-action">Select Term ➔</span>
             </button>
-          </div>
-
-          <!-- Mode Selector Modal / Sheet -->
-          <div id="modeSelectorModal" class="mode-modal hidden">
-            <div class="mode-modal-content">
-              <h3>Choose Test Mode</h3>
-              <p id="selectedTermLabel">Term 1 Selected</p>
-              
-              <div class="mode-options">
-                <button class="mode-card pre-test" onclick="Quiz.startQuiz('pre-test')">
-                  <span class="mode-icon">⏱️</span>
-                  <div>
-                    <h4>Pre-Test Mode</h4>
-                    <p>15 timed items (20s each). Randomized questions to prime recall before class.</p>
-                  </div>
-                </button>
-
-                <button class="mode-card post-test" onclick="Quiz.startQuiz('post-test')">
-                  <span class="mode-icon">🎯</span>
-                  <div>
-                    <h4>Post-Test Mode</h4>
-                    <p>Comprehensive assessment (MC, True/False, Identification) after class.</p>
-                  </div>
-                </button>
-              </div>
-
-              <button class="cancel-btn" onclick="Quiz.hideModeSelector()">Cancel</button>
-            </div>
           </div>
         </div>
       </section>
+
+      <!-- ================= 5.1 TOPIC SELECTION SCREEN ================= -->
+      <section id="topicScreen" class="screen">
+        <div class="play-container">
+          <button class="back-link" onclick="App.showScreen('playScreen')">← Back to Terms</button>
+
+          <div class="play-prompt-header">
+            <h2 id="topicScreenTitle" class="play-prompt-title">Select Topic</h2>
+            <p id="topicScreenSub" class="play-prompt-sub">Choose a topic to begin assessment</p>
+          </div>
+
+          <div id="topicsListGroup" class="topic-buttons-group">
+            <!-- Rendered dynamically by Quiz.renderTopics() -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Mode Selector Modal (Pre-Test vs Post-Test) -->
+      <div id="modeSelectorModal" class="mode-modal hidden">
+        <div class="mode-modal-content">
+          <h3>Select Test Type</h3>
+          <p id="selectedTopicLabel">Topic Selected</p>
+          
+          <div class="mode-options">
+            <button class="mode-card pre-test" onclick="Quiz.selectTestType('pre-test')">
+              <span class="mode-icon">⏱️</span>
+              <div>
+                <h4>Pre-Test</h4>
+                <p>Load 15 multiple-choice questions from selected topic</p>
+              </div>
+            </button>
+
+            <button class="mode-card post-test" onclick="Quiz.selectTestType('post-test')">
+              <span class="mode-icon">🎯</span>
+              <div>
+                <h4>Post-Test</h4>
+                <p>Choose question format: Multiple Choice, True/False, or Identification</p>
+              </div>
+            </button>
+          </div>
+
+          <button class="cancel-btn" onclick="Quiz.hideModeSelector()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Post-Test Format Selector Modal -->
+      <div id="postTestFormatModal" class="mode-modal hidden">
+        <div class="mode-modal-content">
+          <h3>Select Question Format</h3>
+          <p id="postTestTopicLabel">Post-Test Format</p>
+
+          <div class="mode-options">
+            <button class="mode-card" onclick="Quiz.selectQuestionFormat('multiple_choice')">
+              <span class="mode-icon">🔘</span>
+              <div>
+                <h4>Multiple Choice</h4>
+                <p>15 multiple-choice questions with 4 choices</p>
+              </div>
+            </button>
+
+            <button class="mode-card" onclick="Quiz.selectQuestionFormat('true_false')">
+              <span class="mode-icon">⚖️</span>
+              <div>
+                <h4>True or False</h4>
+                <p>15 questions with 2 options (True / False)</p>
+              </div>
+            </button>
+
+            <button class="mode-card" onclick="Quiz.selectQuestionFormat('identification')">
+              <span class="mode-icon">✍️</span>
+              <div>
+                <h4>Identification</h4>
+                <p>15 questions with small text input box for typing answers</p>
+              </div>
+            </button>
+          </div>
+
+          <button class="cancel-btn" onclick="Quiz.hidePostTestFormatModal()">Back</button>
+        </div>
+      </div>
 
       <!-- ================= 6. GAMEPLAY UI ================= -->
       <section id="gameplayScreen" class="screen">

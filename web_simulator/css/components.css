@@ -334,10 +334,18 @@
 
 }
 
-.term-buttons-group {
+.term-buttons-group, .topic-buttons-group {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.topic-item-btn {
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  color: white;
 }
 
 .term-btn {

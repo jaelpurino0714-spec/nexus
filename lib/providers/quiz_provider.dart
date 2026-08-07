@@ -97,8 +97,14 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
   Future<void> startQuiz({
     required String topicId,
     required String quizType,
+    String? questionType,
+    String topicTitle = 'Science Topic',
   }) async {
-    final questions = await _questionRepo.getPreparedQuestionsForQuiz(topicId);
+    final questions = await _questionRepo.getPreparedQuestionsForQuiz(
+      topicId,
+      questionType: questionType,
+      topicTitle: topicTitle,
+    );
 
     if (questions.isEmpty) return;
 
@@ -138,7 +144,15 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
     _timer?.cancel();
 
     final currentQ = state!.currentQuestion!.question;
-    bool isCorrect = selectedAnswer.toUpperCase() == currentQ.correctAnswer.toUpperCase();
+    bool isCorrect = false;
+
+    if (currentQ.questionType == 'identification') {
+      final sel = selectedAnswer.trim().toLowerCase();
+      final corr = currentQ.correctAnswer.trim().toLowerCase();
+      isCorrect = sel.isNotEmpty && (sel == corr || corr.contains(sel) || sel.contains(corr));
+    } else {
+      isCorrect = selectedAnswer.trim().toUpperCase() == currentQ.correctAnswer.trim().toUpperCase();
+    }
 
     int newScore = state!.score + (isCorrect ? 10 : 0);
     int newCorrect = state!.correctCount + (isCorrect ? 1 : 0);
