@@ -1,7 +1,7 @@
 import sys
 import json
 import urllib.request
-from generate_master_sql import TOPICS, records
+from build_clean_seed_sql import TOPICS, records
 
 sys.stdout.reconfigure(encoding='utf-8')
 
