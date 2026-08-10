@@ -306,73 +306,47 @@ const Quiz = {
   onCreatorTotalQChange() {
     const total = parseInt(document.getElementById('creatorTotalQuestions').value, 10) || 5;
     if (this.creatorCurrentIndex >= total) {
-      this.creatorCurrentIndex = total - 1;
+  onCreatorPrevQuestion() {
+    if (this.creatorCurrentIndex > 0) {
+      this.saveCurrentCreatorQuestion();
+      this.creatorCurrentIndex--;
+      this.renderCreatorQuestionStep();
     }
-    this.renderCreatorQuestionStep();
   },
 
-  renderCreatorQuestionStep() {
-    const total = parseInt(document.getElementById('creatorTotalQuestions').value, 10) || 5;
-    document.getElementById('creatorQuestionCounter').textContent = `Question ${this.creatorCurrentIndex + 1} of ${total}`;
-    
-    // Load existing question if present
-    const existing = this.customCreatedQuestions[this.creatorCurrentIndex] || {};
-    document.getElementById('creatorQuestionText').value = existing.question || '';
-
-    this.renderCreatorAnswersBox(existing);
-
-    const nextBtn = document.getElementById('creatorNextBtn');
-    if (this.creatorCurrentIndex >= total - 1) {
-      nextBtn.textContent = 'Set Custom Questions 🔒';
+  toggleLockCustomQuestions() {
+    if (this.isCustomQuestionsLocked) {
+      // Unset / Unlock Questions
+      this.isCustomQuestionsLocked = false;
+      this.renderCreatorQuestionStep();
+      alert('Custom question set unlocked 🔓! You can now edit and modify your questions.');
     } else {
-      nextBtn.textContent = 'Next Question ➔';
+      // Set / Lock Questions
+      const success = this.saveCurrentCreatorQuestion();
+      if (!success) return;
+
+      const total = parseInt(document.getElementById('creatorTotalQuestions').value, 10) || 5;
+      if (this.customCreatedQuestions.length < total || this.customCreatedQuestions.some(q => !q)) {
+        const errorEl = document.getElementById('creatorErrorMsg');
+        errorEl.textContent = `⚠️ Please complete all ${total} questions before locking!`;
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      this.isCustomQuestionsLocked = true;
+      this.renderCreatorQuestionStep();
+      alert('Custom question set locked & set 🔒! Click "Start Host Lobby" to open your lobby.');
     }
   },
 
-  renderCreatorAnswersBox(existing = {}) {
-    const mode = document.getElementById('creatorAnswerMode').value;
-    const box = document.getElementById('creatorAnswersBox');
-    box.innerHTML = '';
-
-    if (mode === 'true_false') {
-      box.innerHTML = `
-        <label>Set Correct Answer:</label>
-        <div style="display:flex; gap:16px; margin-top:6px;">
-          <label style="font-weight:600;"><input type="radio" name="creatorTF" value="True" ${existing.answer === 'True' || !existing.answer ? 'checked' : ''}> True</label>
-          <label style="font-weight:600;"><input type="radio" name="creatorTF" value="False" ${existing.answer === 'False' ? 'checked' : ''}> False</label>
-        </div>
-      `;
-    } else if (mode === 'identification') {
-      box.innerHTML = `
-        <label for="creatorIdAns">Set Correct Answer Text:</label>
-        <input type="text" id="creatorIdAns" class="customize-input" value="${existing.answer || ''}" placeholder="Type correct answer..." />
-      `;
-    } else {
-      // Multiple Choice
-      const opts = existing.options || ['', '', '', ''];
-      const correctIdx = existing.correctIndex !== undefined ? existing.correctIndex : 0;
-      box.innerHTML = `
-        <label>Set Answer Options (mark correct choice):</label>
-        <div style="display:flex; flex-direction:column; gap:8px; margin-top:6px;">
-          ${[0, 1, 2, 3].map(i => `
-            <div style="display:flex; align-items:center; gap:8px;">
-              <input type="radio" name="creatorMCCorrect" value="${i}" ${correctIdx === i ? 'checked' : ''}>
-              <input type="text" id="creatorOpt${i}" class="customize-input" style="padding:8px;" value="${opts[i] || ''}" placeholder="Option ${String.fromCharCode(65 + i)}" />
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }
-  },
-
-  onCreatorNextQuestion() {
+  saveCurrentCreatorQuestion() {
     const qText = document.getElementById('creatorQuestionText').value.trim();
     const errorEl = document.getElementById('creatorErrorMsg');
 
     if (!qText) {
       errorEl.textContent = '⚠️ Please enter question text!';
       errorEl.classList.remove('hidden');
-      return;
+      return false;
     }
 
     const mode = document.getElementById('creatorAnswerMode').value;
@@ -387,7 +361,7 @@ const Quiz = {
       if (!idAns) {
         errorEl.textContent = '⚠️ Please enter correct answer text!';
         errorEl.classList.remove('hidden');
-        return;
+        return false;
       }
       savedQ.answer = idAns;
       savedQ.rawAnswer = idAns;
@@ -402,7 +376,7 @@ const Quiz = {
       if (opts.some(o => !o)) {
         errorEl.textContent = '⚠️ Please fill out all 4 option choices!';
         errorEl.classList.remove('hidden');
-        return;
+        return false;
       }
       const radio = document.querySelector('input[name="creatorMCCorrect"]:checked');
       const correctIdx = radio ? parseInt(radio.value, 10) : 0;
@@ -413,13 +387,106 @@ const Quiz = {
 
     errorEl.classList.add('hidden');
     this.customCreatedQuestions[this.creatorCurrentIndex] = savedQ;
+    return true;
+  },
+
+  onCreatorModeChange() {
+    this.renderCreatorAnswersBox();
+  },
+
+  onCreatorTotalQChange() {
+    const total = parseInt(document.getElementById('creatorTotalQuestions').value, 10) || 5;
+    if (this.creatorCurrentIndex >= total) {
+      this.creatorCurrentIndex = total - 1;
+    }
+    this.renderCreatorQuestionStep();
+  },
+
+  renderCreatorQuestionStep() {
+    const total = parseInt(document.getElementById('creatorTotalQuestions').value, 10) || 5;
+    document.getElementById('creatorQuestionCounter').textContent = `Question ${this.creatorCurrentIndex + 1} of ${total}`;
+    
+    // Load existing question if present
+    const existing = this.customCreatedQuestions[this.creatorCurrentIndex] || {};
+    const qTextEl = document.getElementById('creatorQuestionText');
+    qTextEl.value = existing.question || '';
+    qTextEl.disabled = this.isCustomQuestionsLocked;
+
+    document.getElementById('creatorAnswerMode').disabled = this.isCustomQuestionsLocked;
+
+    this.renderCreatorAnswersBox(existing);
+
+    const prevBtn = document.getElementById('creatorPrevBtn');
+    if (prevBtn) prevBtn.disabled = (this.creatorCurrentIndex === 0);
+
+    const nextBtn = document.getElementById('creatorNextBtn');
+    if (nextBtn) {
+      if (this.creatorCurrentIndex >= total - 1) {
+        nextBtn.textContent = 'Last Question 🏁';
+        nextBtn.disabled = true;
+      } else {
+        nextBtn.textContent = 'Next Question ➔';
+        nextBtn.disabled = this.isCustomQuestionsLocked;
+      }
+    }
+
+    const lockBtn = document.getElementById('creatorLockBtn');
+    if (lockBtn) {
+      if (this.isCustomQuestionsLocked) {
+        lockBtn.textContent = 'Unset Questions 🔓';
+        lockBtn.style.background = '#EA580C';
+      } else {
+        lockBtn.textContent = 'Set Questions 🔒';
+        lockBtn.style.background = '#8B5CF6';
+      }
+    }
+  },
+
+  renderCreatorAnswersBox(existing = {}) {
+    const mode = document.getElementById('creatorAnswerMode').value;
+    const box = document.getElementById('creatorAnswersBox');
+    box.innerHTML = '';
+    const disabledAttr = this.isCustomQuestionsLocked ? 'disabled' : '';
+
+    if (mode === 'true_false') {
+      box.innerHTML = `
+        <label>Set Correct Answer:</label>
+        <div style="display:flex; gap:16px; margin-top:6px;">
+          <label style="font-weight:600;"><input type="radio" name="creatorTF" value="True" ${disabledAttr} ${existing.answer === 'True' || !existing.answer ? 'checked' : ''}> True</label>
+          <label style="font-weight:600;"><input type="radio" name="creatorTF" value="False" ${disabledAttr} ${existing.answer === 'False' ? 'checked' : ''}> False</label>
+        </div>
+      `;
+    } else if (mode === 'identification') {
+      box.innerHTML = `
+        <label for="creatorIdAns">Set Correct Answer Text:</label>
+        <input type="text" id="creatorIdAns" class="customize-input" ${disabledAttr} value="${existing.answer || ''}" placeholder="Type correct answer..." />
+      `;
+    } else {
+      // Multiple Choice
+      const opts = existing.options || ['', '', '', ''];
+      const correctIdx = existing.correctIndex !== undefined ? existing.correctIndex : 0;
+      box.innerHTML = `
+        <label>Set Answer Options (mark correct choice):</label>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:6px;">
+          ${[0, 1, 2, 3].map(i => `
+            <div style="display:flex; align-items:center; gap:8px;">
+              <input type="radio" name="creatorMCCorrect" value="${i}" ${disabledAttr} ${correctIdx === i ? 'checked' : ''}>
+              <input type="text" id="creatorOpt${i}" class="customize-input" ${disabledAttr} style="padding:8px;" value="${opts[i] || ''}" placeholder="Option ${String.fromCharCode(65 + i)}" />
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+  },
+
+  onCreatorNextQuestion() {
+    const success = this.saveCurrentCreatorQuestion();
+    if (!success) return;
 
     const total = parseInt(document.getElementById('creatorTotalQuestions').value, 10) || 5;
     if (this.creatorCurrentIndex < total - 1) {
       this.creatorCurrentIndex++;
       this.renderCreatorQuestionStep();
-    } else {
-      alert('Custom question set locked & saved successfully! Click "Start Host Lobby" to launch.');
     }
   },
 
@@ -435,8 +502,8 @@ const Quiz = {
       return;
     }
 
-    if (this.customCreatedQuestions.length < totalQ || this.customCreatedQuestions.some(q => !q)) {
-      errorEl.textContent = `⚠️ Please complete all ${totalQ} questions before starting!`;
+    if (!this.isCustomQuestionsLocked && (this.customCreatedQuestions.length < totalQ || this.customCreatedQuestions.some(q => !q))) {
+      errorEl.textContent = `⚠️ Please complete and click "Set Questions 🔒" before creating lobby!`;
       errorEl.classList.remove('hidden');
       return;
     }
@@ -588,6 +655,10 @@ const Quiz = {
 
   startHostQuizGame() {
     if (this.isHost) {
+      if (this.lobbyParticipants.length < 1) {
+        alert('⚠️ At least 1 participant must join the lobby before you can start the quiz!');
+        return;
+      }
       this.startHostTrackingDashboard();
     } else {
       this.startQuiz(this.currentMode, this.currentQuestionFormat);
@@ -598,23 +669,14 @@ const Quiz = {
     const formattedCode = `${this.lobbyAccessCode.slice(0,3)} ${this.lobbyAccessCode.slice(3,6)} ${this.lobbyAccessCode.slice(6)}`;
     document.getElementById('hostLiveCode').textContent = formattedCode;
     
-    // Initial tracking state for participants
-    if (this.lobbyParticipants.length === 0) {
-      // Add sample active players if host launches lobby directly for demo
-      this.lobbyParticipants = [
-        { name: 'Alex Johnson', grade: 'Grade 10-A', currentQ: 1, correct: 0, incorrect: 0, points: 0, finished: false },
-        { name: 'Maria Santos', grade: 'Grade 10-B', currentQ: 1, correct: 0, incorrect: 0, points: 0, finished: false },
-        { name: 'David Lee', grade: 'Grade 10-A', currentQ: 1, correct: 0, incorrect: 0, points: 0, finished: false }
-      ];
-    } else {
-      this.lobbyParticipants.forEach(p => {
-        p.currentQ = p.currentQ || 1;
-        p.correct = p.correct || 0;
-        p.incorrect = p.incorrect || 0;
-        p.points = p.points || 0;
-        p.finished = false;
-      });
-    }
+    // Initial tracking state for real participants
+    this.lobbyParticipants.forEach(p => {
+      p.currentQ = p.currentQ || 1;
+      p.correct = p.correct || 0;
+      p.incorrect = p.incorrect || 0;
+      p.points = p.points || 0;
+      p.finished = false;
+    });
 
     App.showScreen('hostLiveDashboardScreen');
     this.renderHostLiveDashboard();

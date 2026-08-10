@@ -428,8 +428,10 @@
               <!-- Rendered dynamically -->
             </div>
 
-            <div class="creator-nav-row">
-              <button id="creatorNextBtn" class="primary-btn creator-next-btn" onclick="Quiz.onCreatorNextQuestion()">Next ➔</button>
+            <div class="creator-nav-row" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+              <button id="creatorPrevBtn" class="primary-btn" style="background:#64748B; padding:10px 14px; font-size:0.85rem;" onclick="Quiz.onCreatorPrevQuestion()">← Prev</button>
+              <button id="creatorNextBtn" class="primary-btn" style="padding:10px 14px; font-size:0.85rem;" onclick="Quiz.onCreatorNextQuestion()">Next ➔</button>
+              <button id="creatorLockBtn" class="primary-btn" style="background:#8B5CF6; padding:10px 14px; font-size:0.85rem;" onclick="Quiz.toggleLockCustomQuestions()">Set Questions 🔒</button>
             </div>
 
             <hr style="margin: 16px 0; border: none; border-top: 1px solid #E2E8F0;" />
