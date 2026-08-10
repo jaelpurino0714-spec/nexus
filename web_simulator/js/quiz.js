@@ -221,7 +221,7 @@ const Quiz = {
     const streakEl = document.getElementById('streakCounter');
     if (streakEl) streakEl.textContent = `🔥 ${this.streak}`;
 
-    document.getElementById('quizModeTag').textContent = `${this.currentMode.toUpperCase()} (${this.currentQuestionFormat.toUpperCase()}): ${this.currentTopic || 'Science'}`;
+    document.getElementById('quizModeTag').textContent = `${this.currentMode.toUpperCase()} (${this.currentQuestionFormat.toUpperCase()}) • ${this.currentTopic || 'Science'}`;
     document.getElementById('questionText').textContent = q.question;
 
     // Feedback reset

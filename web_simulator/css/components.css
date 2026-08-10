@@ -460,8 +460,30 @@
 .topic-item-btn {
   background: linear-gradient(135deg, #5B21B6 0%, #4C1D95 100%);
   color: white;
-  min-height: 75px;
+  min-height: 80px;
+  height: auto;
   padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.topic-item-btn .term-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0;
+  word-break: normal;
+  white-space: normal;
+}
+
+.topic-item-btn .term-action {
+  font-size: 0.85rem;
+  font-weight: 800;
+  margin-top: 4px;
+  align-self: flex-start;
 }
 
 .term-badge {
@@ -597,14 +619,35 @@
 
 .gameplay-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+  width: 100%;
 }
 
-.quiz-info-left {
+.gameplay-header-top {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.quiz-info-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dot-separator {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.gameplay-header-sub {
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 .question-counter-text {
@@ -649,12 +692,18 @@
 }
 
 .mode-tag {
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(139, 92, 246, 0.12);
   color: #6D28D9;
-  font-size: 0.72rem;
-  font-weight: 800;
-  padding: 4px 10px;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 5px 12px;
   border-radius: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .exit-quiz-pill {

@@ -81,20 +81,22 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
         elevation: 0,
         title: Column(
           crossAxisAlignment: CrossAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Question ${quizState.currentIndex + 1} of ${quizState.questions.length}',
-              style: const TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.bold),
-            ),
             Row(
               children: [
                 Text(
-                  'Points: ${quizState.totalPoints}',
-                  style: const TextStyle(fontSize: 14, color: Color(0xFFF59E0B), fontWeight: FontWeight.w800),
+                  'Question ${quizState.currentIndex + 1} of ${quizState.questions.length}',
+                  style: const TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(width: 8),
+                const Text(' • ', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                Text(
+                  'Points: ${quizState.totalPoints}',
+                  style: const TextStyle(fontSize: 12, color: Color(0xFFF59E0B), fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(width: 6),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
                   decoration: BoxDecoration(
                     color: const Color(0xFFEF4444).withOpacity(0.12),
                     borderRadius: BorderRadius.circular(10),
@@ -102,10 +104,25 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                   ),
                   child: Text(
                     '🔥 ${quizState.streak}',
-                    style: const TextStyle(fontSize: 12, color: Color(0xFFEF4444), fontWeight: FontWeight.w800),
+                    style: const TextStyle(fontSize: 11, color: Color(0xFFEF4444), fontWeight: FontWeight.w800),
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 4),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              decoration: BoxDecoration(
+                color: const Color(0xFF8B5CF6).withOpacity(0.12),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFF8B5CF6).withOpacity(0.25)),
+              ),
+              child: Text(
+                '${widget.quizType.toUpperCase()} (${widget.questionType.toUpperCase()}) • ${widget.topicTitle}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 11, color: Color(0xFF6D28D9), fontWeight: FontWeight.w700),
+              ),
             ),
           ],
         ),

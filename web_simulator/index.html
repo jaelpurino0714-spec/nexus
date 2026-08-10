@@ -315,17 +315,18 @@
         <div class="gameplay-container">
           <!-- Game Header -->
           <div class="gameplay-header">
-            <div class="quiz-info-left">
-              <span id="questionCounter" class="question-counter-text">Question 1 of 15</span>
-              <div class="score-streak-row">
+            <div class="gameplay-header-top">
+              <div class="quiz-info-stats">
+                <span id="questionCounter" class="question-counter-text">Question 1 of 15</span>
+                <span class="dot-separator">•</span>
                 <span id="scorePointsText" class="points-counter-text">Points: 0</span>
                 <span id="streakCounter" class="streak-counter-text">🔥 0</span>
               </div>
+              <button class="quit-btn exit-quiz-pill" onclick="Quiz.quitQuiz()">⏸ Exit Quiz</button>
             </div>
-            <div class="quiz-info-center">
-              <span id="quizModeTag" class="tag mode-tag">PRETEST (MULTIPLE CHOICE): Topic Name</span>
+            <div class="gameplay-header-sub">
+              <span id="quizModeTag" class="mode-tag">POST-TEST (IDENTIFICATION) • Physical vs. Chemical Change</span>
             </div>
-            <button class="quit-btn exit-quiz-pill" onclick="Quiz.quitQuiz()">⏸ Exit Quiz</button>
           </div>
 
           <!-- Speed Tapping Countdown Time Card (Dark Card) -->
