@@ -166,49 +166,48 @@ const Quiz = {
     this.renderQuestion();
   },
 
-  // 7. Render Current Question
+  // 7. Render Active Question
   renderQuestion() {
     if (this.currentIndex >= this.questionsList.length) {
       this.finishQuiz();
       return;
     }
 
-    clearInterval(this.timerInterval);
     const q = this.questionsList[this.currentIndex];
 
-    // Headers & Counter
-    document.getElementById('quizTermTag').textContent = `Term ${this.currentTerm}`;
-    document.getElementById('quizModeTag').textContent = `${this.currentMode.toUpperCase()} (${this.currentQuestionFormat.replace('_', ' ').toUpperCase()})`;
-    document.getElementById('questionCategory').textContent = this.currentTopic || 'Science';
+    // Header info
     document.getElementById('questionCounter').textContent = `Question ${this.currentIndex + 1} of ${this.questionsList.length}`;
-    document.getElementById('streakCounter').textContent = `🔥 Streak: ${this.streak}`;
+    document.getElementById('scorePointsText').textContent = `Points: ${this.totalScorePoints.toLocaleString()}`;
+    document.getElementById('quizModeTag').textContent = `${this.currentMode.toUpperCase()} (${this.currentQuestionFormat.toUpperCase()}): ${this.currentTopic || 'Science'}`;
     document.getElementById('questionText').textContent = q.question;
-
-    // Progress Bar
-    const pct = ((this.currentIndex) / this.questionsList.length) * 100;
-    document.getElementById('quizProgressBar').style.width = `${pct}%`;
 
     // Feedback reset
     const feedback = document.getElementById('feedbackBanner');
-    feedback.className = 'feedback-banner hidden';
+    if (feedback) feedback.className = 'feedback-banner hidden';
 
     // Render Answer Options according to question format
     const container = document.getElementById('answersContainer');
     container.innerHTML = '';
 
     if (this.currentQuestionFormat === 'true_false') {
-      // Display only 2 answer buttons: True and False
-      ['True', 'False'].forEach((val) => {
+      const tfData = [
+        { label: 'True', letter: 'T', icon: '✅' },
+        { label: 'False', letter: 'F', icon: '❌' }
+      ];
+      tfData.forEach((tf) => {
         const btn = document.createElement('button');
         btn.className = 'answer-option-btn tf-option-btn';
-        btn.style.fontSize = '1.2rem';
-        btn.style.fontWeight = 'bold';
-        btn.innerHTML = `<span>${val}</span>`;
-        btn.onclick = () => this.handleAnswer(val);
+        btn.innerHTML = `
+          <div class="option-badge-pill">
+            <span class="badge-letter">${tf.letter}</span>
+            <span class="badge-icon">${tf.icon}</span>
+          </div>
+          <span>${tf.label}</span>
+        `;
+        btn.onclick = () => this.handleAnswer(tf.label);
         container.appendChild(btn);
       });
     } else if (this.currentQuestionFormat === 'identification') {
-      // Display small text input box + Submit button
       const wrap = document.createElement('div');
       wrap.className = 'identification-wrapper';
       wrap.style.display = 'flex';
@@ -217,8 +216,10 @@ const Quiz = {
       wrap.style.width = '100%';
 
       wrap.innerHTML = `
-        <input type="text" id="identificationInput" placeholder="Type your answer here..." class="identification-input" style="padding:14px; font-size:1.1rem; border-radius:12px; border:2px solid #ccc; width:100%; outline:none;" autocomplete="off">
-        <button id="identificationSubmitBtn" class="primary-btn" style="padding:12px; font-size:1rem; border-radius:12px;">Submit Answer ➔</button>
+        <input type="text" id="identificationInput" placeholder="Type your answer here..." class="identification-input-field" autocomplete="off">
+        <button id="identificationSubmitBtn" class="next-question-btn">
+          Submit Answer <span class="arrow-pill">➡</span>
+        </button>
       `;
       container.appendChild(wrap);
 
@@ -237,19 +238,26 @@ const Quiz = {
       };
       setTimeout(() => inputEl.focus(), 100);
     } else {
-      // Multiple Choice (4 answer choices)
+      // Multiple Choice (4 choices)
       const prefixes = ['A', 'B', 'C', 'D'];
+      const icons = ['🧪', '🔥', '⚛️', '💥'];
       const opts = q.options || ['Option A', 'Option B', 'Option C', 'Option D'];
       opts.forEach((optText, index) => {
         const btn = document.createElement('button');
         btn.className = 'answer-option-btn';
-        btn.innerHTML = `<span class="option-prefix">${prefixes[index] || index+1}</span> <span>${optText}</span>`;
+        btn.innerHTML = `
+          <div class="option-badge-pill">
+            <span class="badge-letter">${prefixes[index] || 'A'}</span>
+            <span class="badge-icon">${icons[index] || '🧪'}</span>
+          </div>
+          <span>${optText}</span>
+        `;
         btn.onclick = () => this.handleAnswer(index);
         container.appendChild(btn);
       });
     }
 
-    // Start 20-Second Circular Countdown Timer
+    // Start 20-Second Digital Timer
     this.timeRemainingSec = 20;
     this.questionStartTime = Date.now();
     this.updateTimerDisplay();
@@ -266,18 +274,16 @@ const Quiz = {
   },
 
   updateTimerDisplay() {
-    document.getElementById('timerText').textContent = this.timeRemainingSec;
-    const circle = document.getElementById('timerProgressCircle');
-    const offset = 283 - (this.timeRemainingSec / 20) * 283;
-    if (circle) circle.style.strokeDashoffset = offset;
-
-    if (circle) {
-      if (this.timeRemainingSec <= 5) {
-        circle.style.stroke = 'var(--error-red)';
-      } else {
-        circle.style.stroke = 'var(--primary-purple)';
-      }
+    const valEl = document.getElementById('speedTimerValue');
+    if (valEl) {
+      const secs = Math.max(0, this.timeRemainingSec);
+      valEl.textContent = `${secs < 10 ? '0' : ''}${secs}.00s`;
     }
+  },
+
+  nextQuestion() {
+    this.currentIndex++;
+    this.renderQuestion();
   },
 
   // 8. Process Answer Selection / Submission
@@ -301,8 +307,8 @@ const Quiz = {
       const buttons = document.querySelectorAll('.tf-option-btn');
       buttons.forEach(btn => {
         btn.disabled = true;
-        if (btn.textContent.trim().toLowerCase() === correctStr) btn.classList.add('correct-choice');
-        else if (btn.textContent.trim().toLowerCase() === selStr && !isCorrect) btn.classList.add('wrong-choice');
+        if (btn.textContent.trim().toLowerCase().includes(correctStr)) btn.classList.add('correct-choice');
+        else if (btn.textContent.trim().toLowerCase().includes(selStr) && !isCorrect) btn.classList.add('wrong-choice');
       });
     } else if (this.currentQuestionFormat === 'identification') {
       const correctStr = String(q.rawAnswer || (q.options ? q.options[q.answer] : '') || '').trim().toLowerCase();
@@ -330,6 +336,8 @@ const Quiz = {
     this.sessionTopicStats[this.currentTopic].total++;
 
     const feedback = document.getElementById('feedbackBanner');
+    const statusTextEl = document.getElementById('feedbackText');
+    const subTextEl = document.getElementById('feedbackAnswerSub');
 
     if (isCorrect) {
       this.correctCount++;
@@ -346,19 +354,22 @@ const Quiz = {
       const earned = Math.round((100 + timeBonus) * multiplier);
       this.totalScorePoints += earned;
 
-      feedback.className = 'feedback-banner correct';
-      feedback.innerHTML = `<span>✅ Correct! +${earned} pts</span>`;
+      if (feedback) feedback.className = 'feedback-banner correct';
+      if (statusTextEl) statusTextEl.textContent = `✅ Correct! +${earned} pts`;
+      if (subTextEl) subTextEl.textContent = '';
     } else {
       this.incorrectCount++;
       this.streak = 0;
-      feedback.className = 'feedback-banner wrong';
+      if (feedback) feedback.className = 'feedback-banner wrong';
       const ansHint = q.rawAnswer || (q.options ? q.options[q.answer] : '');
-      feedback.innerHTML = `<span>❌ Incorrect! Answer: <b>${ansHint}</b></span>`;
+      if (statusTextEl) statusTextEl.textContent = `❌ Incorrect!`;
+      if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${ansHint}</b>`;
     }
 
+    document.getElementById('scorePointsText').textContent = `Points: ${this.totalScorePoints.toLocaleString()}`;
+    
     setTimeout(() => {
-      this.currentIndex++;
-      this.renderQuestion();
+      this.nextQuestion();
     }, 1400);
   },
 
@@ -368,14 +379,17 @@ const Quiz = {
     this.sessionTotalTimeSec += 20;
 
     const feedback = document.getElementById('feedbackBanner');
-    feedback.className = 'feedback-banner wrong';
+    const statusTextEl = document.getElementById('feedbackText');
+    const subTextEl = document.getElementById('feedbackAnswerSub');
+
+    if (feedback) feedback.className = 'feedback-banner wrong';
     const q = this.questionsList[this.currentIndex];
     const ansHint = q.rawAnswer || (q.options ? q.options[q.answer] : '');
-    feedback.innerHTML = `<span>⏰ Time's Up! Correct Answer: <b>${ansHint}</b></span>`;
+    if (statusTextEl) statusTextEl.textContent = `⏱ Time Expired!`;
+    if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${ansHint}</b>`;
 
     setTimeout(() => {
-      this.currentIndex++;
-      this.renderQuestion();
+      this.nextQuestion();
     }, 1400);
   },
 

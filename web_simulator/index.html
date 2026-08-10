@@ -315,48 +315,42 @@
         <div class="gameplay-container">
           <!-- Game Header -->
           <div class="gameplay-header">
-            <div class="quiz-info">
-              <span id="quizTermTag" class="tag">Term 1</span>
-              <span id="quizModeTag" class="tag mode-tag">Pre-Test</span>
+            <div class="quiz-info-left">
+              <span id="questionCounter" class="question-counter-text">Question 1 of 15</span>
+              <span id="scorePointsText" class="points-counter-text">Points: 0</span>
             </div>
-            <button class="quit-btn" onclick="Quiz.quitQuiz()">✕ Quit</button>
+            <div class="quiz-info-center">
+              <span id="quizModeTag" class="tag mode-tag">PRETEST (MULTIPLE CHOICE): Topic Name</span>
+            </div>
+            <button class="quit-btn exit-quiz-pill" onclick="Quiz.quitQuiz()">⏸ Exit Quiz</button>
           </div>
 
-          <!-- Progress Bar & Question Counter -->
-          <div class="progress-bar-wrapper">
-            <div id="quizProgressBar" class="progress-fill" style="width: 0%;"></div>
-          </div>
-          <div class="question-meta">
-            <span id="questionCounter">Question 1 of 15</span>
-            <span id="streakCounter">🔥 Streak: 0</span>
-          </div>
-
-          <!-- Circular Speed-Tapping Timer -->
-          <div class="timer-section">
-            <div class="timer-circle">
-              <svg class="timer-svg" viewBox="0 0 100 100">
-                <circle class="timer-bg-circle" cx="50" cy="50" r="45"></circle>
-                <circle id="timerProgressCircle" class="timer-progress" cx="50" cy="50" r="45"></circle>
-              </svg>
-              <div id="timerText" class="timer-seconds">20</div>
+          <!-- Speed Tapping Countdown Time Card (Dark Card) -->
+          <div class="speed-timer-card">
+            <div class="lightning-badge">⚡</div>
+            <div class="speed-timer-info">
+              <span class="speed-timer-label">SPEED TAPPING COUNTDOWN TIME</span>
+              <span id="speedTimerValue" class="speed-timer-value">20.00s</span>
             </div>
           </div>
 
-          <!-- Question Box -->
-          <div class="question-card">
-            <span id="questionCategory" class="question-category">Earth Science</span>
-            <h3 id="questionText">Loading question...</h3>
-          </div>
+          <!-- Main Question Card (Light Card) -->
+          <div class="question-card main-question-card">
+            <h3 id="questionText" class="gameplay-question-text">Loading question...</h3>
+            
+            <!-- Answer Options (Multiple Choice / True-False / Identification) -->
+            <div id="answersContainer" class="answers-grid">
+              <!-- Rendered dynamically by quiz.js -->
+            </div>
 
-          <!-- Answer Options (Multiple Choice / True-False / Identification) -->
-          <div id="answersContainer" class="answers-grid">
-            <!-- Rendered dynamically by quiz.js -->
-          </div>
-
-          <!-- Feedback Banner -->
-          <div id="feedbackBanner" class="feedback-banner hidden">
-            <span id="feedbackIcon">✅</span>
-            <span id="feedbackText">Correct! +120 pts</span>
+            <!-- Feedback & Next Question Bar -->
+            <div id="feedbackBanner" class="feedback-banner hidden">
+              <div id="feedbackText" class="feedback-status-text">✅ Correct! +120 pts</div>
+              <div id="feedbackAnswerSub" class="feedback-answer-sub"></div>
+              <button id="nextQuestionBtn" class="next-question-btn" onclick="Quiz.nextQuestion()">
+                Next Question <span class="arrow-pill">➡</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>
