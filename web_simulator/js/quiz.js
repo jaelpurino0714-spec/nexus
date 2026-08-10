@@ -571,13 +571,9 @@ const Quiz = {
       `;
       hostActions.style.display = 'block';
 
-      // Initial lobby participants for host view (with demo players, supports real joins & kicking)
+      // Real participants list (starts empty for host lobby, no fake/bot accounts)
       if (!this.lobbyParticipants || this.resetLobbyParticipants) {
-        this.lobbyParticipants = [
-          { name: 'Alex Johnson', grade: 'Grade 10-A', points: 1450, streak: 4, photo: '' },
-          { name: 'Maria Santos', grade: 'Grade 10-B', points: 1200, streak: 3, photo: '' },
-          { name: 'David Lee', grade: 'Grade 10-A', points: 980, streak: 2, photo: '' }
-        ];
+        this.lobbyParticipants = [];
         this.resetLobbyParticipants = false;
       }
     } else {
