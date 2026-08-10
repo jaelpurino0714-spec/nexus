@@ -44,6 +44,7 @@ def esc(val):
 records = []
 
 def add_q(top_key, q_type_id, q_text, c_a, c_b, c_c, c_d, ans, exp, quiz_type='post_test'):
+    if top_key.startswith('t3_'): return
     
     topic_info = TOPICS[top_key]
     topic_id = topic_info[0]
