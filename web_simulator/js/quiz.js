@@ -107,35 +107,42 @@ const Quiz = {
   creatorCurrentIndex: 0,
   isHost: false,
 
+  hideAllModals() {
+    ['customHubModal', 'hostTypeModal', 'preGameCustomizeModal', 'customCreatorModal', 'joinCodeModal', 'modeSelectorModal', 'postTestFormatModal', 'participantProfileModal'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    });
+  },
+
   showCustomHubModal() {
-    this.hideHostTypeModal();
-    this.hidePreGameCustomizeModal();
-    this.hideCustomCreatorModal();
-    this.hideJoinCodeModal();
-    this.hideModeSelector();
-    this.hidePostTestFormatModal();
+    this.hideAllModals();
     const el = document.getElementById('customHubModal');
     if (el) el.classList.remove('hidden');
   },
 
   hideCustomHubModal() {
-    document.getElementById('customHubModal').classList.add('hidden');
+    const el = document.getElementById('customHubModal');
+    if (el) el.classList.add('hidden');
   },
 
   hideHostTypeModal() {
-    document.getElementById('hostTypeModal').classList.add('hidden');
+    const el = document.getElementById('hostTypeModal');
+    if (el) el.classList.add('hidden');
   },
 
   hidePreGameCustomizeModal() {
-    document.getElementById('preGameCustomizeModal').classList.add('hidden');
+    const el = document.getElementById('preGameCustomizeModal');
+    if (el) el.classList.add('hidden');
   },
 
   hideCustomCreatorModal() {
-    document.getElementById('customCreatorModal').classList.add('hidden');
+    const el = document.getElementById('customCreatorModal');
+    if (el) el.classList.add('hidden');
   },
 
   hideJoinCodeModal() {
-    document.getElementById('joinCodeModal').classList.add('hidden');
+    const el = document.getElementById('joinCodeModal');
+    if (el) el.classList.add('hidden');
   },
 
   // 1. Handle selection in Custom Hub

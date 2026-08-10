@@ -37,6 +37,10 @@ const App = {
       target.classList.add('active');
     }
 
+    if (typeof Quiz !== 'undefined' && Quiz.hideAllModals) {
+      Quiz.hideAllModals();
+    }
+
     if (screenId === 'homeScreen') {
       this.updateUserHeader();
     }
