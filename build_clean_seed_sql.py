@@ -44,8 +44,7 @@ def esc(val):
 records = []
 
 def add_q(top_key, q_type_id, q_text, c_a, c_b, c_c, c_d, ans, exp, quiz_type='post_test'):
-    if top_key.startswith('t2_') and q_type_id == 1:
-        return  # Exclude Term 2 MCQs only (include T/F and Identification)
+    
     topic_info = TOPICS[top_key]
     topic_id = topic_info[0]
     
@@ -349,42 +348,96 @@ for idx in range(1, len(sections_mcq1), 2):
 with open('dump_nexus-MCQ-term-2.pdf.txt', 'r', encoding='utf-8') as f:
     text_mcq2 = re.sub(r'--- PAGE \d+ ---', '', f.read())
 
-topics_raw2 = re.split(r'TOPIC\s+(\d+)\s+·\s+([^\n]+)', text_mcq2)
-top_map2 = {
+top_map_mcq2 = {
     1: 't2_carrying_capacity',
     2: 't2_biotechnology',
     3: 't2_plate_tectonics',
     4: 't2_global_climate',
+    5: 't2_global_interactions',
+    6: 't2_sustainability',
 }
 
-for i in range(1, len(topics_raw2), 3):
-    t_num = int(topics_raw2[i])
-    t_content = topics_raw2[i+2]
-    top_key = top_map2.get(t_num, 't2_carrying_capacity')
+sec_mcq2 = re.split(r'(TOPIC\s+(\d+)\s*[·\-\:][^\n]+)', text_mcq2)
+
+def clean_mcq2_stem(raw_q):
+    s = raw_q
+    if 'randomized each playthrough' in s.lower():
+        s = re.sub(r'^[^\)]*\)\s*', '', s)
+    s = re.sub(r'^pre-test questions[^\n]*', '', s, flags=re.IGNORECASE)
+    s = re.sub(r'^TERM 2[^\n]*', '', s, flags=re.IGNORECASE)
+    s = re.sub(r'^\d+[\.\)]\s*', '', s)
+    return s.strip()
+
+for idx in range(1, len(sec_mcq2), 3):
+    t_num = int(sec_mcq2[idx+1])
+    t_body = sec_mcq2[idx+2]
+    if t_num not in top_map_mcq2: continue
     
-    q_blocks = re.findall(r'(.*?)\n\s*A\.\s*(.*?)\n\s*B\.\s*(.*?)\n\s*C\.\s*(.*?)\n\s*D\.\s*(.*?)(?=\n\s*[A-Z].*|\n\s*TOPIC|\Z)', t_content, re.DOTALL)
-    for q_idx, block in enumerate(q_blocks, 1):
-        q_stem = re.sub(r'\s+', ' ', block[0]).strip()
-        ca = block[1].strip()
-        cb = block[2].strip()
-        cc = block[3].strip()
-        cd = block[4].strip()
+    top_k = top_map_mcq2[t_num]
+    lines = t_body.split('\n')
+    
+    curr_q = None
+    curr_a = None
+    curr_b = None
+    curr_c = None
+    curr_d = None
+    curr_ans = 'A'
+    q_idx_in_topic = 0
+
+    for raw_line in lines:
+        l = raw_line.strip()
+        if not l: continue
         
-        correct_letter = 'A'
-        if '✅' in cb: correct_letter = 'B'
-        elif '✅' in cc: correct_letter = 'C'
-        elif '✅' in cd: correct_letter = 'D'
-        
-        ca = ca.replace('✅', '').strip()
-        cb = cb.replace('✅', '').strip()
-        cc = cc.replace('✅', '').strip()
-        cd = cd.replace('✅', '').strip()
-        
-        # All Term 2 MCQs are post_test (removing hardcoded pre_test MCQs for Term 2)
-        q_stem = re.sub(r'\(only use 15 questions in every pretest topic[^\)]*\)', '', q_stem, flags=re.IGNORECASE)
-        q_stem = re.sub(r'^and randomized each playthrough\)\s*', '', q_stem, flags=re.IGNORECASE).strip()
-        qtype = 'post_test'
-        add_q(top_key, 1, q_stem, ca, cb, cc, cd, correct_letter, f'Option {correct_letter} is the correct answer.', qtype)
+        m_a = re.match(r'^\*?\s*A[\.\)]\s*(.*?)\s*$', l)
+        if m_a and curr_q and not curr_a:
+            val = m_a.group(1)
+            if '✅' in val: curr_ans = 'A'
+            curr_a = val.replace('✅', '').strip()
+            continue
+            
+        m_b = re.match(r'^\*?\s*B[\.\)]\s*(.*?)\s*$', l)
+        if m_b and curr_q and not curr_b:
+            val = m_b.group(1)
+            if '✅' in val: curr_ans = 'B'
+            curr_b = val.replace('✅', '').strip()
+            continue
+
+        m_c = re.match(r'^\*?\s*C[\.\)]\s*(.*?)\s*$', l)
+        if m_c and curr_q and not curr_c:
+            val = m_c.group(1)
+            if '✅' in val: curr_ans = 'C'
+            curr_c = val.replace('✅', '').strip()
+            continue
+
+        m_d = re.match(r'^\*?\s*D[\.\)]\s*(.*?)\s*$', l)
+        if m_d and curr_q and not curr_d:
+            val = m_d.group(1)
+            if '✅' in val: curr_ans = 'D'
+            curr_d = val.replace('✅', '').strip()
+            continue
+            
+        if not curr_a:
+            if curr_q:
+                curr_q += " " + l
+            else:
+                curr_q = l
+        elif curr_d:
+            if curr_q and curr_a and curr_b and curr_c and curr_d:
+                q_idx_in_topic += 1
+                qtype = 'pre_test' if q_idx_in_topic <= 15 else 'post_test'
+                add_q(top_k, 1, clean_mcq2_stem(curr_q), curr_a, curr_b, curr_c, curr_d, curr_ans, f'Option {curr_ans} is the correct answer.', qtype)
+            curr_q = l
+            curr_a = None
+            curr_b = None
+            curr_c = None
+            curr_d = None
+            curr_ans = 'A'
+            
+    if curr_q and curr_a and curr_b and curr_c and curr_d:
+        q_idx_in_topic += 1
+        qtype = 'pre_test' if q_idx_in_topic <= 15 else 'post_test'
+        add_q(top_k, 1, clean_mcq2_stem(curr_q), curr_a, curr_b, curr_c, curr_d, curr_ans, f'Option {curr_ans} is the correct answer.', qtype)
+
 
 # --- 7. Parse MCQ Term 3 ---
 with open('dump_MCQ-term-3.pdf.txt', 'r', encoding='utf-8') as f:
