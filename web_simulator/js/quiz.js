@@ -62,9 +62,9 @@ const Quiz = {
 
   // 2. Render Topics for Selected Term (Dynamically from Supabase)
   async renderTopics() {
-    const termNames = { 1: 'TERM 1 TOPICS WARM-UP', 2: 'TERM 2 TOPICS WARM-UP', 3: 'TERM 3 TOPICS WARM-UP' };
-    document.getElementById('topicScreenTitle').textContent = termNames[this.currentTerm] || `TERM ${this.currentTerm} TOPICS WARM-UP`;
-    document.getElementById('topicScreenSub').textContent = `Comprehensive 15-question assessment across all lessons`;
+    const termNames = { 1: 'First Term Topics', 2: 'Second Term Topics', 3: 'Third Term Topics' };
+    document.getElementById('topicScreenTitle').textContent = termNames[this.currentTerm] || 'Select Topic';
+    document.getElementById('topicScreenSub').textContent = `Choose a DepEd Grade 10 Science topic to begin`;
 
     const container = document.getElementById('topicsListGroup');
     container.innerHTML = '<div style="text-align:center; padding:20px;">Loading topics from Supabase...</div>';
@@ -85,13 +85,16 @@ const Quiz = {
     topics.forEach((topicObj, idx) => {
       const topicName = topicObj.title;
       const topicId = topicObj.id;
+      const topicDesc = topicObj.description || 'Comprehensive 15-question assessment across all lessons';
       const btn = document.createElement('button');
-      btn.className = `term-btn topic-item-btn`;
+      btn.className = `topic-card-btn`;
       btn.onclick = () => this.selectTopic(topicName, topicId);
       btn.innerHTML = `
-        <div class="term-badge">TOPIC ${idx + 1}</div>
-        <div class="term-title">${topicName}</div>
-        <span class="term-action">Select Topic ➔</span>
+        <div class="topic-card-header">
+          <h3 class="topic-card-title">${topicName.toUpperCase()}</h3>
+          <span class="topic-card-badge">15 Questions Drill</span>
+        </div>
+        <p class="topic-card-sub">${topicDesc}</p>
       `;
       container.appendChild(btn);
     });
