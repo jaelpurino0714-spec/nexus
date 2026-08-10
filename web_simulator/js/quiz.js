@@ -275,6 +275,7 @@ const Quiz = {
 
     if (this.customFlowType === 'host_builtin') {
       this.isHost = true;
+      this.resetLobbyParticipants = true;
       this.generateLobbyCode();
       await this.prepareBuiltinQuestions();
       this.renderLobbyScreen();
@@ -444,6 +445,7 @@ const Quiz = {
     this.customQuestionCount = totalQ;
     this.customMaxParticipants = maxPart;
     this.isHost = true;
+    this.resetLobbyParticipants = true;
 
     this.generateLobbyCode();
     this.questionsList = [...this.customCreatedQuestions];
@@ -470,7 +472,7 @@ const Quiz = {
     if (this.isHost) {
       roleBadge.textContent = 'HOST LOBBY';
       hostBox.innerHTML = `
-        <img src="${profile.photo || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'%23DDD6FE\'/><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'40\' fill=\'%236D28D9\'>👑</text></svg>'}" class="part-avatar" alt="Host">
+        <img src="${profile.photo || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23DDD6FE\'/><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'40\' fill=\'%236D28D9\'>👑</text></svg>'}" class="part-avatar" alt="Host">
         <div>
           <h4 style="margin:0; font-size:0.95rem; color:#1E293B;">${profile.name} (Host)</h4>
           <span style="font-size:0.75rem; color:#64748B;">Waiting for players to enter code ${this.lobbyAccessCode}...</span>
@@ -478,16 +480,15 @@ const Quiz = {
       `;
       hostActions.style.display = 'block';
 
-      // Default mock participants for host demo
-      this.lobbyParticipants = [
-        { name: 'Alex Johnson', grade: 'Grade 10-A', points: 1450, streak: 4, photo: '' },
-        { name: 'Maria Santos', grade: 'Grade 10-B', points: 1200, streak: 3, photo: '' },
-        { name: 'David Lee', grade: 'Grade 10-A', points: 980, streak: 2, photo: '' }
-      ];
+      // Real participants list (starts empty for host lobby)
+      if (!this.lobbyParticipants || this.resetLobbyParticipants) {
+        this.lobbyParticipants = [];
+        this.resetLobbyParticipants = false;
+      }
     } else {
       roleBadge.textContent = 'PARTICIPANT LOBBY';
       hostBox.innerHTML = `
-        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👑</text></svg>" class="part-avatar" alt="Host">
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👑</text></svg>" class="part-avatar" alt="Host">
         <div>
           <h4 style="margin:0; font-size:0.95rem; color:#1E293B;">Host: Prof. DepEd Science</h4>
           <span style="font-size:0.75rem; color:#64748B;">Waiting for host to press Start Quiz...</span>
@@ -496,7 +497,7 @@ const Quiz = {
       hostActions.style.display = 'none';
 
       this.lobbyParticipants = [
-        { name: profile.name, grade: profile.section, points: profile.totalPoints, streak: profile.streak, photo: profile.photo }
+        { name: profile.name, grade: profile.section || profile.gradeLevel, points: profile.totalPoints || 0, streak: profile.streak || 0, photo: profile.photo }
       ];
     }
 
@@ -504,35 +505,58 @@ const Quiz = {
     const listEl = document.getElementById('lobbyPartList');
     listEl.innerHTML = '';
 
-    this.lobbyParticipants.forEach((p, idx) => {
-      const card = document.createElement('div');
-      card.className = 'lobby-part-card';
-      card.innerHTML = `
-        <div class="part-info-left">
-          <img src="${p.photo || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'%23DDD6FE\'/><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'40\' fill=\'%236D28D9\'>👤</text></svg>'}" class="part-avatar" alt="${p.name}">
-          <div>
-            <h5 style="margin:0; font-size:0.85rem; color:#1E293B;">${p.name}</h5>
-            <span style="font-size:0.72rem; color:#64748B;">${p.grade || 'Student'}</span>
-          </div>
+    if (this.lobbyParticipants.length === 0) {
+      listEl.innerHTML = `
+        <div style="text-align:center; padding:20px; color:#94A3B8; font-size:0.85rem; font-weight:600;">
+          No participants joined yet. Share code <b style="color:#6D28D9;">${this.lobbyAccessCode}</b> to join!
         </div>
-        ${this.isHost ? `<button class="view-profile-btn" onclick="Quiz.viewParticipantProfile(${idx})">View Profile</button>` : ''}
       `;
-      listEl.appendChild(card);
-    });
+    } else {
+      this.lobbyParticipants.forEach((p, idx) => {
+        const card = document.createElement('div');
+        card.className = 'lobby-part-card';
+        const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
+        card.innerHTML = `
+          <div class="part-info-left">
+            <img src="${p.photo || defaultAvatar}" class="part-avatar" alt="${p.name}">
+            <div>
+              <h5 style="margin:0; font-size:0.85rem; color:#1E293B;">${p.name}</h5>
+              <span style="font-size:0.72rem; color:#64748B;">${p.grade || 'Student'}</span>
+            </div>
+          </div>
+          ${this.isHost ? `
+            <div style="display:flex; gap:6px;">
+              <button class="view-profile-btn" onclick="Quiz.viewParticipantProfile(${idx})">View Profile</button>
+              <button class="kick-btn" onclick="Quiz.kickParticipant(${idx})">Kick 🚫</button>
+            </div>
+          ` : ''}
+        `;
+        listEl.appendChild(card);
+      });
+    }
+  },
+
+  kickParticipant(idx) {
+    const p = this.lobbyParticipants[idx];
+    if (p && confirm(`Are you sure you want to kick ${p.name} from the lobby?`)) {
+      this.lobbyParticipants.splice(idx, 1);
+      this.renderLobbyScreen();
+    }
   },
 
   viewParticipantProfile(idx) {
     const p = this.lobbyParticipants[idx];
     if (!p) return;
     const body = document.getElementById('partProfileBody');
+    const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
     body.innerHTML = `
       <div style="text-align:center; padding:12px 0;">
-        <img src="${p.photo || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'%23DDD6FE\'/><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'40\' fill=\'%236D28D9\'>👤</text></svg>'}" style="width:60px; height:60px; border-radius:50%; margin-bottom:8px;" alt="${p.name}">
+        <img src="${p.photo || defaultAvatar}" style="width:60px; height:60px; border-radius:50%; margin-bottom:8px; object-fit:cover;" alt="${p.name}">
         <h4 style="margin:0; font-size:1.1rem; color:#1E293B;">${p.name}</h4>
         <p style="font-size:0.8rem; color:#64748B; margin:2px 0 12px 0;">${p.grade || 'Student'}</p>
         <div style="display:flex; justify-content:space-around; background:#F8FAFC; padding:10px; border-radius:12px;">
-          <div><strong style="font-size:1rem; color:#6D28D9;">${p.points}</strong><br><span style="font-size:0.7rem; color:#64748B;">Total Pts</span></div>
-          <div><strong style="font-size:1rem; color:#EF4444;">🔥 ${p.streak}</strong><br><span style="font-size:0.7rem; color:#64748B;">Streak</span></div>
+          <div><strong style="font-size:1rem; color:#6D28D9;">${p.points || 0}</strong><br><span style="font-size:0.7rem; color:#64748B;">Total Pts</span></div>
+          <div><strong style="font-size:1rem; color:#EF4444;">🔥 ${p.streak || 0}</strong><br><span style="font-size:0.7rem; color:#64748B;">Streak</span></div>
         </div>
       </div>
     `;

@@ -1594,4 +1594,22 @@
   padding: 5px 10px;
   border-radius: 12px;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.kick-btn {
+  background: rgba(239, 68, 68, 0.12);
+  color: #DC2626;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 5px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.kick-btn:hover {
+  background: #DC2626;
+  color: white;
 }
