@@ -24,7 +24,12 @@ class TermSelectionScreen extends ConsumerWidget {
             itemCount: terms.length,
             itemBuilder: (context, index) {
               final term = terms[index];
-              final colors = [Colors.deepOrange, Colors.blueAccent, Colors.amber.shade800, Colors.purple];
+              final colors = [
+                const Color(0xFFEF4444), // Term 1: Red
+                const Color(0xFFF59E0B), // Term 2: Yellow
+                const Color(0xFF10B981), // Term 3: Green
+                Colors.purple,
+              ];
               final cardColor = colors[index % colors.length];
 
               return Padding(

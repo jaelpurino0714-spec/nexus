@@ -85,16 +85,13 @@ const Quiz = {
     topics.forEach((topicObj, idx) => {
       const topicName = topicObj.title;
       const topicId = topicObj.id;
-      const topicDesc = topicObj.description || 'Comprehensive 15-question assessment across all lessons';
       const btn = document.createElement('button');
-      btn.className = `topic-card-btn`;
+      btn.className = `term-btn topic-item-btn`;
       btn.onclick = () => this.selectTopic(topicName, topicId);
       btn.innerHTML = `
-        <div class="topic-card-header">
-          <h3 class="topic-card-title">${topicName}</h3>
-          <span class="topic-card-badge">15 Questions Drill</span>
-        </div>
-        <p class="topic-card-sub">${topicDesc}</p>
+        <div class="term-badge">TOPIC ${idx + 1}</div>
+        <div class="term-title">${topicName}</div>
+        <span class="term-action">Select Topic ➔</span>
       `;
       container.appendChild(btn);
     });

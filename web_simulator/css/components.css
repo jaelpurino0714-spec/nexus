@@ -476,20 +476,19 @@
   font-weight: 800;
 }
 
-/* Term Button colors per PRD */
 .term-1-btn {
-  background-color: var(--term-1-red);
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
   color: white;
 }
 
 .term-2-btn {
-  background-color: var(--term-2-blue);
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
   color: white;
 }
 
 .term-3-btn {
-  background-color: var(--term-3-yellow);
-  color: var(--term-3-text);
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: white;
 }
 
 /* Mode Selection Modal */
