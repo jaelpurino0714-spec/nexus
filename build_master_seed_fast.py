@@ -44,7 +44,7 @@ def esc(val):
 records = []
 
 def add_q(top_key, q_type_id, q_text, c_a, c_b, c_c, c_d, ans, exp, quiz_type='post_test'):
-    if (top_key.startswith('t2_') or top_key.startswith('t3_')) and q_type_id == 3: return  # Exclude Term 2 and 3 Identification questions, allow Term 1
+    if top_key.startswith('t3_') and q_type_id == 3: return  # Exclude Term 3 Identification questions, allow Term 1 and Term 2
     # Allow all question types for t3_
     
     topic_info = TOPICS[top_key]
@@ -192,22 +192,24 @@ top_map_id2 = {
     2: 't2_biotechnology',
     3: 't2_plate_tectonics',
     4: 't2_global_climate',
+    5: 't2_global_interactions',
+    6: 't2_sustainability',
 }
 
-sec_id2 = re.split(r'(^[ \t]*TOPIC\s*\d+:[^\n]+)', text_id2, flags=re.MULTILINE)
-t_cnt = 0
-for idx in range(1, len(sec_id2), 2):
-    t_cnt += 1
-    if t_cnt > 4: break
-    top_k = top_map_id2[t_cnt]
-    t_body = sec_id2[idx+1]
+sec_id2 = re.split(r'(^[ \t]*TOPIC\s*(\d+):[^\n]+)', text_id2, flags=re.MULTILINE)
+
+for idx in range(1, len(sec_id2), 3):
+    t_num = int(sec_id2[idx+1])
+    if t_num not in top_map_id2: continue
+    
+    top_k = top_map_id2[t_num]
+    t_body = sec_id2[idx+2]
     
     q_matches = re.finditer(r'(?:^|\n)\s*(\d+)[\.\)]\s*(.*?)\n\s*Answer:\s*([^\n]+)', t_body, re.DOTALL)
     for q_m in q_matches:
         q_body = re.sub(r'\s+', ' ', q_m.group(2)).strip()
         ans_val = re.sub(r'\s*\.$', '', q_m.group(3).strip())
         add_q(top_k, 3, q_body, None, None, None, None, ans_val, f'The correct term is: {ans_val}.', 'post_test')
-
 
 
 # --- 4c. Parse Identification term 3.pdf ---

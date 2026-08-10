@@ -1,15 +1,16 @@
 import os
 import sys
 import re
-from pypdf import PdfReader
 
 sys.stdout.reconfigure(encoding='utf-8')
 
 TOPICS_ID2 = {
-    1: ('b0000000-0000-0000-0000-000000000201', 'Ecosystem\'s Carrying Capacity and Population Growth'),
+    1: ('b0000000-0000-0000-0000-000000000201', 'Ecosystems Carrying Capacity and Population Growth'),
     2: ('b0000000-0000-0000-0000-000000000202', 'Biotechnology'),
     3: ('b0000000-0000-0000-0000-000000000203', 'Plate Tectonics'),
     4: ('b0000000-0000-0000-0000-000000000204', 'Global Climate'),
+    5: ('b0000000-0000-0000-0000-000000000205', 'Global Interactions (El Niño & La Niña)'),
+    6: ('b0000000-0000-0000-0000-000000000206', 'Global and Local Sustainability'),
 }
 
 def sql_escape(val):
@@ -21,22 +22,17 @@ def sql_escape(val):
 with open('dump_post-test-Term-2-identification.pdf.txt', 'r', encoding='utf-8') as f:
     text = f.read()
 
-# Split by TOPIC headers
-sections = re.split(r'(^[ \t]*TOPIC\s*\d+:[^\n]+)', text, flags=re.MULTILINE)
+sec_id2 = re.split(r'(^[ \t]*TOPIC\s*(\d+):[^\n]+)', text, flags=re.MULTILINE)
 
 records = []
-topic_counter = 0
 
-for idx in range(1, len(sections), 2):
-    t_header = sections[idx].strip()
-    t_body = sections[idx+1]
+for idx in range(1, len(sec_id2), 3):
+    t_num = int(sec_id2[idx+1])
+    if t_num not in TOPICS_ID2: continue
     
-    topic_counter += 1
-    if topic_counter > 4: break
+    t_id, t_title = TOPICS_ID2[t_num]
+    t_body = sec_id2[idx+2]
     
-    t_id, t_title = TOPICS_ID2[topic_counter]
-    
-    # Split question blocks: \d+\. ... Answer: ...
     q_matches = re.finditer(r'(?:^|\n)\s*(\d+)[\.\)]\s*(.*?)\n\s*Answer:\s*([^\n]+)', t_body, re.DOTALL)
     for q_m in q_matches:
         q_num = int(q_m.group(1))
@@ -44,18 +40,19 @@ for idx in range(1, len(sections), 2):
         ans_val = re.sub(r'\s*\.$', '', q_m.group(3).strip())
         
         records.append({
-            'topic_num': topic_counter,
+            'topic_num': t_num,
             'topic_id': t_id,
             'topic_title': t_title,
+            'q_num': q_num,
             'question': q_body,
             'correct_answer': ans_val,
             'explanation': f"The correct term is: {ans_val}."
         })
 
-print(f"Parsed {len(records)} Term 2 Identification questions across {topic_counter} topics:")
-for top_num in range(1, 5):
-    cnt = len([r for r in records if r['topic_num'] == top_num])
-    print(f"  Topic {top_num} ({TOPICS_ID2[top_num][1]}): {cnt} Identification questions")
+print(f"Parsed {len(records)} Term 2 Identification questions across topics:")
+for t_num in range(1, 7):
+    cnt = len([r for r in records if r['topic_num'] == t_num])
+    print(f"  Topic {t_num} ({TOPICS_ID2[t_num][1]}): {cnt} Identification questions")
 
 out_path = r'd:\Nexus 2.0\insert_identification_term2.sql'
 
@@ -72,11 +69,11 @@ with open(out_path, 'w', encoding='utf-8') as out:
 
     out.write("-- 2. Insert Identification Questions per Topic\n")
     
-    for top_num in range(1, 5):
-        t_id, t_title = TOPICS_ID2[top_num]
-        t_recs = [r for r in records if r['topic_num'] == top_num]
+    for t_num in range(1, 7):
+        t_id, t_title = TOPICS_ID2[t_num]
+        t_recs = [r for r in records if r['topic_num'] == t_num]
         
-        out.write(f"-- Topic {top_num}: {t_title} (Total {len(t_recs)} Identification questions)\n")
+        out.write(f"-- Topic {t_num}: {t_title} (Total {len(t_recs)} Identification questions)\n")
         if t_recs:
             out.write("INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation, is_active) VALUES\n")
             rows = []
