@@ -44,8 +44,8 @@ def esc(val):
 records = []
 
 def add_q(top_key, q_type_id, q_text, c_a, c_b, c_c, c_d, ans, exp, quiz_type='post_test'):
-    if top_key.startswith('t2_') and q_type_id != 2:
-        return  # Exclude Term 2 questions except True/False (q_type_id = 2)
+    if top_key.startswith('t2_') and q_type_id == 1:
+        return  # Exclude Term 2 MCQs only (include T/F and Identification)
     topic_info = TOPICS[top_key]
     topic_id = topic_info[0]
     
@@ -180,12 +180,32 @@ parse_id_file('Identification term 1.pdf', {
     7: 't1_mechanisms_evolution',
 })
 
-parse_id_file('post-test-Term-2-identification.pdf', {
+
+# --- 4b. Parse post-test-Term-2-identification.pdf ---
+with open('dump_post-test-Term-2-identification.pdf.txt', 'r', encoding='utf-8') as f:
+    text_id2 = f.read()
+
+top_map_id2 = {
     1: 't2_carrying_capacity',
     2: 't2_biotechnology',
     3: 't2_plate_tectonics',
     4: 't2_global_climate',
-})
+}
+
+sec_id2 = re.split(r'(^[ \t]*TOPIC\s*\d+:[^\n]+)', text_id2, flags=re.MULTILINE)
+t_cnt = 0
+for idx in range(1, len(sec_id2), 2):
+    t_cnt += 1
+    if t_cnt > 4: break
+    top_k = top_map_id2[t_cnt]
+    t_body = sec_id2[idx+1]
+    
+    q_matches = re.finditer(r'(?:^|\n)\s*(\d+)[\.\)]\s*(.*?)\n\s*Answer:\s*([^\n]+)', t_body, re.DOTALL)
+    for q_m in q_matches:
+        q_body = re.sub(r'\s+', ' ', q_m.group(2)).strip()
+        ans_val = re.sub(r'\s*\.$', '', q_m.group(3).strip())
+        add_q(top_k, 3, q_body, None, None, None, None, ans_val, f'The correct term is: {ans_val}.', 'post_test')
+
 
 parse_id_file('Identification term 3.pdf', {
     1: 't3_projectile_motion',
