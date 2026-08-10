@@ -89,9 +89,8 @@ const Quiz = {
       btn.className = `term-btn topic-item-btn`;
       btn.onclick = () => this.selectTopic(topicName, topicId);
       btn.innerHTML = `
-        <div class="term-badge">TOPIC ${idx + 1}</div>
-        <div class="term-title">${topicName}</div>
-        <span class="term-action">Select Topic ➔</span>
+        <div class="term-title" style="margin: 0; font-size: 1.05rem; line-height: 1.3;">${topicName}</div>
+        <span class="term-action" style="margin-top: 6px;">Select Topic ➔</span>
       `;
       container.appendChild(btn);
     });

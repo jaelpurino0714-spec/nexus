@@ -428,13 +428,18 @@
   -webkit-box-orient: vertical;
 }
 
-.topic-item-btn {
-  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
-  color: white;
+.term-buttons-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
 }
 
 .term-btn {
-  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 22px 24px;
+  min-height: 125px;
   border-radius: var(--radius-md);
   border: none;
   text-align: left;
@@ -443,10 +448,20 @@
   transition: transform 0.2s ease;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .term-btn:hover {
   transform: scale(1.02);
+}
+
+.topic-item-btn {
+  background: linear-gradient(135deg, #5B21B6 0%, #4C1D95 100%);
+  color: white;
+  min-height: 75px;
+  padding: 16px 20px;
 }
 
 .term-badge {

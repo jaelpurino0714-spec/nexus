@@ -60,48 +60,65 @@ class TermSelectionScreen extends ConsumerWidget {
     required String subtitle,
     required Color color,
   }) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: color,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: () {
-          context.push('/student/topics', extra: {
-            'termId': termId,
-            'termNum': termNum,
-            'termTitle': title,
-          });
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+    return Container(
+      width: double.infinity,
+      constraints: const BoxConstraints(minHeight: 125),
+      child: Card(
+        elevation: 4,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        color: color,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(18),
+          onTap: () {
+            context.push('/student/topics', extra: {
+              'termId': termId,
+              'termNum': termNum,
+              'termTitle': title,
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(22.0),
+            child: Row(
+              crossAxisAlignment: CrossAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'TERM $termNum',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white70,
+                          letterSpacing: 1,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      subtitle,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.white70,
+                      const SizedBox(height: 4),
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.white90,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const Icon(Icons.arrow_forward_ios, color: Colors.white),
-            ],
+                const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 20),
+              ],
+            ),
           ),
         ),
       ),
