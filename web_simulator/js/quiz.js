@@ -438,13 +438,22 @@ const Quiz = {
     }
 
     const lockBtn = document.getElementById('creatorLockBtn');
+    const topLockBtn = document.getElementById('topUnsetBtn');
     if (lockBtn) {
       if (this.isCustomQuestionsLocked) {
         lockBtn.textContent = 'Unset Questions 🔓';
         lockBtn.style.background = '#EA580C';
+        if (topLockBtn) {
+          topLockBtn.textContent = 'Unset Questions 🔓';
+          topLockBtn.style.background = '#EA580C';
+        }
       } else {
         lockBtn.textContent = 'Set Questions 🔒';
         lockBtn.style.background = '#8B5CF6';
+        if (topLockBtn) {
+          topLockBtn.textContent = 'Set Questions 🔒';
+          topLockBtn.style.background = '#8B5CF6';
+        }
       }
     }
   },
@@ -555,9 +564,13 @@ const Quiz = {
       `;
       hostActions.style.display = 'block';
 
-      // Real participants list (starts empty for host lobby)
+      // Initial lobby participants for host view (with demo players, supports real joins & kicking)
       if (!this.lobbyParticipants || this.resetLobbyParticipants) {
-        this.lobbyParticipants = [];
+        this.lobbyParticipants = [
+          { name: 'Alex Johnson', grade: 'Grade 10-A', points: 1450, streak: 4, photo: '' },
+          { name: 'Maria Santos', grade: 'Grade 10-B', points: 1200, streak: 3, photo: '' },
+          { name: 'David Lee', grade: 'Grade 10-A', points: 980, streak: 2, photo: '' }
+        ];
         this.resetLobbyParticipants = false;
       }
     } else {

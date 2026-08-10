@@ -405,7 +405,10 @@
       <!-- ================= CUSTOM QUIZ CREATOR MODAL ================= -->
       <div id="customCreatorModal" class="mode-modal hidden">
         <div class="mode-modal-content customize-modal-content creator-content">
-          <h3>Custom Quiz Creator</h3>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <h3 style="margin:0;">Custom Quiz Creator</h3>
+            <button id="topUnsetBtn" class="kick-btn" style="background:#8B5CF6; color:white; border:none; padding:5px 12px; font-size:0.75rem;" onclick="Quiz.toggleLockCustomQuestions()">Set Questions 🔒</button>
+          </div>
           <p id="creatorQuestionCounter">Question 1 of 5</p>
 
           <div class="creator-form">
