@@ -44,7 +44,7 @@ def esc(val):
 records = []
 
 def add_q(top_key, q_type_id, q_text, c_a, c_b, c_c, c_d, ans, exp, quiz_type='post_test'):
-    if top_key.startswith('t3_') and q_type_id not in [2, 3]: return
+    # Allow all question types for t3_
     
     topic_info = TOPICS[top_key]
     topic_id = topic_info[0]
@@ -477,50 +477,104 @@ for idx in range(1, len(sec_mcq2), 3):
             add_q(top_k, 1, clean_mcq2_stem(curr_q), curr_a, curr_b, curr_c, curr_d, curr_ans, f'Option {curr_ans} is the correct answer.', 'pre_test')
 
 
+
 # --- 7. Parse MCQ Term 3 ---
 with open('dump_MCQ-term-3.pdf.txt', 'r', encoding='utf-8') as f:
     text_mcq3 = re.sub(r'--- PAGE \d+ ---', '', f.read())
 
-groups3 = re.split(r'Group\s+(\d+)[·\s]+([^\n]+)', text_mcq3)
-top_map3 = {
+top_map_mcq3 = {
     1: 't3_projectile_motion',
     2: 't3_momentum_collisions',
     3: 't3_electricity_generation',
     4: 't3_energy_sources',
 }
 
-for i in range(1, len(groups3), 3):
-    g_num = int(groups3[i])
-    g_content = groups3[i+2]
-    top_key = top_map3.get(g_num, 't3_projectile_motion')
+sec_mcq3 = re.split(r'(Group\s+(\d+)[\s·\-:][^\n]+)', text_mcq3, flags=re.IGNORECASE)
+
+def clean_mcq3_stem(raw_q):
+    s = raw_q
+    if 'randomized each playthrough' in s.lower():
+        s = re.sub(r'^[^\)]*\)\s*', '', s)
+    s = re.sub(r"^Here's the same set[^\n\d]*\d+\.\s*", '', s, flags=re.IGNORECASE)
+    s = re.sub(r'^pre-test questions[^\n]*', '', s, flags=re.IGNORECASE)
+    s = re.sub(r'^TERM \d+[^\n]*', '', s, flags=re.IGNORECASE)
+    s = re.sub(r'^(?:✅\s*)?[A-D]\s*[–\-—]\s*.*?\d+[\.\)]\s*', '', s).strip()
+    s = re.sub(r'^\d+[\.\)]\s*', '', s).strip()
+    return s
+
+q_counts_mcq3 = {}
+
+for idx in range(1, len(sec_mcq3), 3):
+    g_num = int(sec_mcq3[idx+1])
+    g_body = sec_mcq3[idx+2]
+    if g_num not in top_map_mcq3: continue
     
-    blocks = re.findall(r'(\d+)[\.\)]\s*(.*?)\n\s*\*\s*A\.\s*(.*?)\n\s*\*\s*B\.\s*(.*?)\n\s*\*\s*C\.\s*(.*?)\n\s*\*\s*D\.\s*(.*?)(?=\n\s*\d+[\.\)]|\n\s*Group|\Z)', g_content, re.DOTALL)
-    for q_idx, b in enumerate(blocks, 1):
-        q_stem = re.sub(r'\s+', ' ', b[1]).strip()
-        ca = b[2].strip()
-        cb = b[3].strip()
-        cc = b[4].strip()
-        cd = b[5].strip()
+    top_k = top_map_mcq3[g_num]
+    lines = g_body.split('\n')
+    
+    curr_q = None
+    curr_a = None
+    curr_b = None
+    curr_c = None
+    curr_d = None
+    curr_ans = 'A'
+
+    for raw_line in lines:
+        l = raw_line.strip()
+        if not l: continue
         
-        correct_letter = 'A'
-        if '✅' in cb or '*' in cb: correct_letter = 'B'
-        if '✅' in cc or '*' in cc: correct_letter = 'C'
-        if '✅' in cd or '*' in cd: correct_letter = 'D'
-        if '✅' in ca or '*' in ca: correct_letter = 'A'
-        
-        def clean_opt(o):
-            return re.sub(r'[\*✅]', '', o).strip()
+        m_a = re.match(r'^\*?\s*\*?\s*A[\.\)]\s*(.*?)\s*$', l, re.IGNORECASE)
+        if m_a and curr_q and not curr_a:
+            val = m_a.group(1)
+            if '✅' in val: curr_ans = 'A'
+            curr_a = val.replace('✅', '').replace('*', '').strip()
+            continue
             
-        ca = clean_opt(ca)
-        cb = clean_opt(cb)
-        cc = clean_opt(cc)
-        cd = clean_opt(cd)
-        
-        # All Term 2 MCQs are post_test (removing hardcoded pre_test MCQs for Term 2)
-        q_stem = re.sub(r'\(only use 15 questions in every pretest topic[^\)]*\)', '', q_stem, flags=re.IGNORECASE)
-        q_stem = re.sub(r'^and randomized each playthrough\)\s*', '', q_stem, flags=re.IGNORECASE).strip()
-        qtype = 'post_test'
-        add_q(top_key, 1, q_stem, ca, cb, cc, cd, correct_letter, f'Option {correct_letter} is the correct answer.', qtype)
+        m_b = re.match(r'^\*?\s*\*?\s*B[\.\)]\s*(.*?)\s*$', l, re.IGNORECASE)
+        if m_b and curr_q and not curr_b:
+            val = m_b.group(1)
+            if '✅' in val: curr_ans = 'B'
+            curr_b = val.replace('✅', '').replace('*', '').strip()
+            continue
+
+        m_c = re.match(r'^\*?\s*\*?\s*C[\.\)]\s*(.*?)\s*$', l, re.IGNORECASE)
+        if m_c and curr_q and not curr_c:
+            val = m_c.group(1)
+            if '✅' in val: curr_ans = 'C'
+            curr_c = val.replace('✅', '').replace('*', '').strip()
+            continue
+
+        m_d = re.match(r'^\*?\s*\*?\s*D[\.\)]\s*(.*?)\s*$', l, re.IGNORECASE)
+        if m_d and curr_q and not curr_d:
+            val = m_d.group(1)
+            if '✅' in val: curr_ans = 'D'
+            curr_d = val.replace('✅', '').replace('*', '').strip()
+            continue
+            
+        if not curr_a:
+            if curr_q:
+                curr_q += " " + l
+            else:
+                curr_q = l
+        elif curr_d:
+            if curr_q and curr_a and curr_b and curr_c and curr_d:
+                q_counts_mcq3[g_num] = q_counts_mcq3.get(g_num, 0) + 1
+                q_idx = q_counts_mcq3[g_num]
+                qtype = 'pre_test' if q_idx <= 15 else 'post_test'
+                add_q(top_k, 1, clean_mcq3_stem(curr_q), curr_a, curr_b, curr_c, curr_d, curr_ans, f'Option {curr_ans} is the correct answer.', qtype)
+            curr_q = l
+            curr_a = None
+            curr_b = None
+            curr_c = None
+            curr_d = None
+            curr_ans = 'A'
+            
+    if curr_q and curr_a and curr_b and curr_c and curr_d:
+        q_counts_mcq3[g_num] = q_counts_mcq3.get(g_num, 0) + 1
+        q_idx = q_counts_mcq3[g_num]
+        qtype = 'pre_test' if q_idx <= 15 else 'post_test'
+        add_q(top_k, 1, clean_mcq3_stem(curr_q), curr_a, curr_b, curr_c, curr_d, curr_ans, f'Option {curr_ans} is the correct answer.', qtype)
+
 
 # --- Write Master SQL ---
 with open('seed_master_questions.sql', 'w', encoding='utf-8') as out:
@@ -529,6 +583,7 @@ with open('seed_master_questions.sql', 'w', encoding='utf-8') as out:
     out.write("-- Sanitized and strictly validated for PostgreSQL syntax\n")
     out.write("-- ====================================================================\n\n")
 
+    # Terms
     out.write("-- 1. TERMS\n")
     out.write("INSERT INTO public.terms (id, name, title, order_no) VALUES\n")
     out.write("('a0000000-0000-0000-0000-000000000001', 'Term 1', '1st Quarter: Earth and Space', 1),\n")
@@ -537,6 +592,7 @@ with open('seed_master_questions.sql', 'w', encoding='utf-8') as out:
     out.write("('a0000000-0000-0000-0000-000000000004', 'Term 4', '4th Quarter: Matter & Its Interactions', 4)\n")
     out.write("ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, title = EXCLUDED.title;\n\n")
 
+    # Question Types
     out.write("-- 2. QUESTION TYPES\n")
     out.write("INSERT INTO public.question_types (id, name) VALUES\n")
     out.write("(1, 'Multiple Choice'),\n")
@@ -544,6 +600,7 @@ with open('seed_master_questions.sql', 'w', encoding='utf-8') as out:
     out.write("(3, 'Identification')\n")
     out.write("ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name;\n\n")
 
+    # Topics
     out.write("-- 3. TOPICS\n")
     out.write("INSERT INTO public.topics (id, term_id, title, order_no) VALUES\n")
     top_rows = []
@@ -552,6 +609,7 @@ with open('seed_master_questions.sql', 'w', encoding='utf-8') as out:
     out.write(",\n".join(top_rows) + "\n")
     out.write("ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, order_no = EXCLUDED.order_no;\n\n")
 
+    # Questions
     out.write("-- 4. QUESTIONS\n")
     out.write("INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation, is_active) VALUES\n")
     
@@ -561,4 +619,4 @@ with open('seed_master_questions.sql', 'w', encoding='utf-8') as out:
 
     out.write(",\n".join(q_rows) + ";\n")
 
-print(f"SUCCESS: Updated generate_master_sql.py & seed_master_questions.sql ({len(records)} questions)")
+print(f"SUCCESS: Updated seed_master_questions.sql with {len(records)} total questions!")
