@@ -44,7 +44,7 @@ def esc(val):
 records = []
 
 def add_q(top_key, q_type_id, q_text, c_a, c_b, c_c, c_d, ans, exp, quiz_type='post_test'):
-    if top_key.startswith('t3_'): return
+    if top_key.startswith('t3_') and q_type_id != 2: return
     
     topic_info = TOPICS[top_key]
     topic_id = topic_info[0]
@@ -138,6 +138,7 @@ for i in range(1, len(parts_tf1), 3):
         q_body = re.sub(r'\s+', ' ', q_body).replace('Answer:', '').strip()
         ans = ans_map.get(q_num, 'True')
         add_q(top_key, 2, q_body, 'True', 'False', None, None, ans, f'The statement is {ans}.', 'post_test')
+
 
 # --- 4. Parse Identification files ---
 def parse_id_file(fname, part_map):
