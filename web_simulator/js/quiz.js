@@ -97,6 +97,78 @@ const Quiz = {
   },
 
   // 3. Topic Selected -> Open Test Type Modal
+  customFlowType: 'standard', // 'standard' | 'custom_play' | 'host_builtin' | 'host_custom' | 'join'
+  customTimeLimitSec: 20,
+  customQuestionCount: 15,
+  customMaxParticipants: 50,
+  lobbyAccessCode: '',
+  lobbyParticipants: [],
+  customCreatedQuestions: [],
+  creatorCurrentIndex: 0,
+  isHost: false,
+
+  showCustomHubModal() {
+    document.getElementById('customHubModal').classList.remove('hidden');
+  },
+
+  hideCustomHubModal() {
+    document.getElementById('customHubModal').classList.add('hidden');
+  },
+
+  hideHostTypeModal() {
+    document.getElementById('hostTypeModal').classList.add('hidden');
+  },
+
+  hidePreGameCustomizeModal() {
+    document.getElementById('preGameCustomizeModal').classList.add('hidden');
+  },
+
+  hideCustomCreatorModal() {
+    document.getElementById('customCreatorModal').classList.add('hidden');
+  },
+
+  hideJoinCodeModal() {
+    document.getElementById('joinCodeModal').classList.add('hidden');
+  },
+
+  // 1. Handle selection in Custom Hub
+  selectCustomFlow(flow) {
+    this.hideCustomHubModal();
+    this.customFlowType = flow;
+
+    if (flow === 'join') {
+      document.getElementById('joinAccessCodeInput').value = '';
+      document.getElementById('joinErrorMsg').classList.add('hidden');
+      document.getElementById('joinCodeModal').classList.remove('hidden');
+    } else if (flow === 'host') {
+      document.getElementById('hostTypeModal').classList.remove('hidden');
+    } else if (flow === 'custom_play') {
+      // Load saved custom settings from localStorage if available
+      const saved = localStorage.getItem('nexus_custom_play_settings');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed.timeLimit) this.customTimeLimitSec = parsed.timeLimit;
+          if (parsed.questionCount) this.customQuestionCount = parsed.questionCount;
+        } catch (e) {}
+      }
+      App.showScreen('playScreen');
+    }
+  },
+
+  // 2. Select Host Type (Custom Questions vs Built-in Questions)
+  selectHostType(type) {
+    this.hideHostTypeModal();
+    if (type === 'custom') {
+      this.customFlowType = 'host_custom';
+      this.initCustomCreator();
+    } else {
+      this.customFlowType = 'host_builtin';
+      App.showScreen('playScreen');
+    }
+  },
+
+  // 3. Topic Selection
   selectTopic(topicName, topicId) {
     this.currentTopic = topicName;
     this.currentTopicId = topicId;
@@ -119,7 +191,7 @@ const Quiz = {
 
     if (mode === 'pre-test') {
       this.currentQuestionFormat = 'multiple_choice';
-      this.startQuiz('pre-test', 'multiple_choice');
+      this.onFormatSelected();
     } else {
       // Post-Test: open question format selector modal
       document.getElementById('postTestTopicLabel').textContent = `Post-Test: ${this.currentTopic}`;
@@ -131,7 +203,377 @@ const Quiz = {
   selectQuestionFormat(format) {
     this.hidePostTestFormatModal();
     this.currentQuestionFormat = format;
-    this.startQuiz('post-test', format);
+    this.onFormatSelected();
+  },
+
+  // Called when format & mode are finalized
+  onFormatSelected() {
+    if (this.customFlowType === 'custom_play' || this.customFlowType === 'host_builtin') {
+      // Show Pre-Game Customize UI BEFORE starting quiz
+      const modal = document.getElementById('preGameCustomizeModal');
+      document.getElementById('customTimeLimit').value = this.customTimeLimitSec || 20;
+      document.getElementById('customQuestionCount').value = this.customQuestionCount || 15;
+
+      const maxGroup = document.getElementById('maxParticipantsGroup');
+      if (this.customFlowType === 'host_builtin') {
+        document.getElementById('customizeModalTitle').textContent = 'Host Built-in Setup';
+        document.getElementById('customizeModalSub').textContent = 'Configure live host settings for participants';
+        maxGroup.classList.remove('hidden');
+        document.getElementById('startCustomizeBtn').textContent = 'Create Lobby 🚀';
+      } else {
+        document.getElementById('customizeModalTitle').textContent = 'Custom Play Setup';
+        document.getElementById('customizeModalSub').textContent = 'Configure your custom time limit and question count';
+        maxGroup.classList.add('hidden');
+        document.getElementById('startCustomizeBtn').textContent = 'Start Custom Play 🚀';
+      }
+
+      document.getElementById('customizeErrorMsg').classList.add('hidden');
+      modal.classList.remove('hidden');
+    } else {
+      this.startQuiz(this.currentMode, this.currentQuestionFormat);
+    }
+  },
+
+  // Validate & Confirm Pre-Game Customize Settings
+  async confirmCustomSettingsAndStart() {
+    const timeVal = parseInt(document.getElementById('customTimeLimit').value, 10);
+    const countVal = parseInt(document.getElementById('customQuestionCount').value, 10);
+    const maxPartVal = parseInt(document.getElementById('customMaxParticipants').value, 10) || 50;
+    const errorEl = document.getElementById('customizeErrorMsg');
+
+    if (isNaN(timeVal) || timeVal < 5) {
+      errorEl.textContent = '⚠️ Time limit must be at least 5 seconds (undertime rejected)!';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+    if (timeVal > 60) {
+      errorEl.textContent = '⚠️ Time limit cannot exceed 60 seconds (overtime rejected)!';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    if (isNaN(countVal) || countVal < 1 || countVal > 30) {
+      errorEl.textContent = '⚠️ Number of questions must be between 1 and 30 questions!';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    errorEl.classList.add('hidden');
+    this.customTimeLimitSec = timeVal;
+    this.customQuestionCount = countVal;
+    this.customMaxParticipants = maxPartVal;
+
+    // Save custom settings for future Custom Play use
+    if (this.customFlowType === 'custom_play') {
+      localStorage.setItem('nexus_custom_play_settings', JSON.stringify({
+        timeLimit: timeVal,
+        questionCount: countVal
+      }));
+    }
+
+    this.hidePreGameCustomizeModal();
+
+    if (this.customFlowType === 'host_builtin') {
+      this.isHost = true;
+      this.generateLobbyCode();
+      await this.prepareBuiltinQuestions();
+      this.renderLobbyScreen();
+      App.showScreen('lobbyScreen');
+    } else {
+      this.startQuiz(this.currentMode, this.currentQuestionFormat);
+    }
+  },
+
+  // Init Custom Quiz Creator
+  initCustomCreator() {
+    this.customCreatedQuestions = [];
+    this.creatorCurrentIndex = 0;
+    document.getElementById('creatorTotalQuestions').value = 5;
+    document.getElementById('creatorTimeLimit').value = 20;
+    document.getElementById('creatorMaxParticipants').value = 50;
+    document.getElementById('creatorAnswerMode').value = 'multiple_choice';
+    document.getElementById('creatorErrorMsg').classList.add('hidden');
+    this.renderCreatorQuestionStep();
+    document.getElementById('customCreatorModal').classList.remove('hidden');
+  },
+
+  onCreatorModeChange() {
+    this.renderCreatorAnswersBox();
+  },
+
+  onCreatorTotalQChange() {
+    const total = parseInt(document.getElementById('creatorTotalQuestions').value, 10) || 5;
+    if (this.creatorCurrentIndex >= total) {
+      this.creatorCurrentIndex = total - 1;
+    }
+    this.renderCreatorQuestionStep();
+  },
+
+  renderCreatorQuestionStep() {
+    const total = parseInt(document.getElementById('creatorTotalQuestions').value, 10) || 5;
+    document.getElementById('creatorQuestionCounter').textContent = `Question ${this.creatorCurrentIndex + 1} of ${total}`;
+    
+    // Load existing question if present
+    const existing = this.customCreatedQuestions[this.creatorCurrentIndex] || {};
+    document.getElementById('creatorQuestionText').value = existing.question || '';
+
+    this.renderCreatorAnswersBox(existing);
+
+    const nextBtn = document.getElementById('creatorNextBtn');
+    if (this.creatorCurrentIndex >= total - 1) {
+      nextBtn.textContent = 'Set Custom Questions 🔒';
+    } else {
+      nextBtn.textContent = 'Next Question ➔';
+    }
+  },
+
+  renderCreatorAnswersBox(existing = {}) {
+    const mode = document.getElementById('creatorAnswerMode').value;
+    const box = document.getElementById('creatorAnswersBox');
+    box.innerHTML = '';
+
+    if (mode === 'true_false') {
+      box.innerHTML = `
+        <label>Set Correct Answer:</label>
+        <div style="display:flex; gap:16px; margin-top:6px;">
+          <label style="font-weight:600;"><input type="radio" name="creatorTF" value="True" ${existing.answer === 'True' || !existing.answer ? 'checked' : ''}> True</label>
+          <label style="font-weight:600;"><input type="radio" name="creatorTF" value="False" ${existing.answer === 'False' ? 'checked' : ''}> False</label>
+        </div>
+      `;
+    } else if (mode === 'identification') {
+      box.innerHTML = `
+        <label for="creatorIdAns">Set Correct Answer Text:</label>
+        <input type="text" id="creatorIdAns" class="customize-input" value="${existing.answer || ''}" placeholder="Type correct answer..." />
+      `;
+    } else {
+      // Multiple Choice
+      const opts = existing.options || ['', '', '', ''];
+      const correctIdx = existing.correctIndex !== undefined ? existing.correctIndex : 0;
+      box.innerHTML = `
+        <label>Set Answer Options (mark correct choice):</label>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:6px;">
+          ${[0, 1, 2, 3].map(i => `
+            <div style="display:flex; align-items:center; gap:8px;">
+              <input type="radio" name="creatorMCCorrect" value="${i}" ${correctIdx === i ? 'checked' : ''}>
+              <input type="text" id="creatorOpt${i}" class="customize-input" style="padding:8px;" value="${opts[i] || ''}" placeholder="Option ${String.fromCharCode(65 + i)}" />
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+  },
+
+  onCreatorNextQuestion() {
+    const qText = document.getElementById('creatorQuestionText').value.trim();
+    const errorEl = document.getElementById('creatorErrorMsg');
+
+    if (!qText) {
+      errorEl.textContent = '⚠️ Please enter question text!';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    const mode = document.getElementById('creatorAnswerMode').value;
+    let savedQ = { question: qText, questionType: mode };
+
+    if (mode === 'true_false') {
+      const selected = document.querySelector('input[name="creatorTF"]:checked');
+      savedQ.answer = selected ? selected.value : 'True';
+      savedQ.options = ['True', 'False'];
+    } else if (mode === 'identification') {
+      const idAns = document.getElementById('creatorIdAns').value.trim();
+      if (!idAns) {
+        errorEl.textContent = '⚠️ Please enter correct answer text!';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      savedQ.answer = idAns;
+      savedQ.rawAnswer = idAns;
+    } else {
+      // Multiple Choice
+      const opts = [
+        document.getElementById('creatorOpt0').value.trim(),
+        document.getElementById('creatorOpt1').value.trim(),
+        document.getElementById('creatorOpt2').value.trim(),
+        document.getElementById('creatorOpt3').value.trim()
+      ];
+      if (opts.some(o => !o)) {
+        errorEl.textContent = '⚠️ Please fill out all 4 option choices!';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      const radio = document.querySelector('input[name="creatorMCCorrect"]:checked');
+      const correctIdx = radio ? parseInt(radio.value, 10) : 0;
+      savedQ.options = opts;
+      savedQ.answer = correctIdx;
+      savedQ.correctIndex = correctIdx;
+    }
+
+    errorEl.classList.add('hidden');
+    this.customCreatedQuestions[this.creatorCurrentIndex] = savedQ;
+
+    const total = parseInt(document.getElementById('creatorTotalQuestions').value, 10) || 5;
+    if (this.creatorCurrentIndex < total - 1) {
+      this.creatorCurrentIndex++;
+      this.renderCreatorQuestionStep();
+    } else {
+      alert('Custom question set locked & saved successfully! Click "Start Host Lobby" to launch.');
+    }
+  },
+
+  confirmCustomCreatorAndStart() {
+    const timeVal = parseInt(document.getElementById('creatorTimeLimit').value, 10);
+    const totalQ = parseInt(document.getElementById('creatorTotalQuestions').value, 10);
+    const maxPart = parseInt(document.getElementById('creatorMaxParticipants').value, 10) || 50;
+    const errorEl = document.getElementById('creatorErrorMsg');
+
+    if (isNaN(timeVal) || timeVal < 5 || timeVal > 60) {
+      errorEl.textContent = '⚠️ Time limit must be between 5 and 60 seconds!';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    if (this.customCreatedQuestions.length < totalQ || this.customCreatedQuestions.some(q => !q)) {
+      errorEl.textContent = `⚠️ Please complete all ${totalQ} questions before starting!`;
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    errorEl.classList.add('hidden');
+    this.customTimeLimitSec = timeVal;
+    this.customQuestionCount = totalQ;
+    this.customMaxParticipants = maxPart;
+    this.isHost = true;
+
+    this.generateLobbyCode();
+    this.questionsList = [...this.customCreatedQuestions];
+    this.hideCustomCreatorModal();
+    this.renderLobbyScreen();
+    App.showScreen('lobbyScreen');
+  },
+
+  generateLobbyCode() {
+    const codeNum = Math.floor(1000000 + Math.random() * 9000000);
+    this.lobbyAccessCode = String(codeNum);
+  },
+
+  renderLobbyScreen() {
+    const formattedCode = `${this.lobbyAccessCode.slice(0,3)} ${this.lobbyAccessCode.slice(3,6)} ${this.lobbyAccessCode.slice(6)}`;
+    document.getElementById('lobbyCodeDisplay').textContent = formattedCode;
+    
+    const roleBadge = document.getElementById('lobbyRoleBadge');
+    const hostBox = document.getElementById('lobbyHostBox');
+    const hostActions = document.getElementById('lobbyHostActions');
+
+    const profile = DB.getStudentProfile() || { name: 'Host Teacher', gradeLevel: 'Instructor', photo: '' };
+
+    if (this.isHost) {
+      roleBadge.textContent = 'HOST LOBBY';
+      hostBox.innerHTML = `
+        <img src="${profile.photo || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'%23DDD6FE\'/><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'40\' fill=\'%236D28D9\'>👑</text></svg>'}" class="part-avatar" alt="Host">
+        <div>
+          <h4 style="margin:0; font-size:0.95rem; color:#1E293B;">${profile.name} (Host)</h4>
+          <span style="font-size:0.75rem; color:#64748B;">Waiting for players to enter code ${this.lobbyAccessCode}...</span>
+        </div>
+      `;
+      hostActions.style.display = 'block';
+
+      // Default mock participants for host demo
+      this.lobbyParticipants = [
+        { name: 'Alex Johnson', grade: 'Grade 10-A', points: 1450, streak: 4, photo: '' },
+        { name: 'Maria Santos', grade: 'Grade 10-B', points: 1200, streak: 3, photo: '' },
+        { name: 'David Lee', grade: 'Grade 10-A', points: 980, streak: 2, photo: '' }
+      ];
+    } else {
+      roleBadge.textContent = 'PARTICIPANT LOBBY';
+      hostBox.innerHTML = `
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👑</text></svg>" class="part-avatar" alt="Host">
+        <div>
+          <h4 style="margin:0; font-size:0.95rem; color:#1E293B;">Host: Prof. DepEd Science</h4>
+          <span style="font-size:0.75rem; color:#64748B;">Waiting for host to press Start Quiz...</span>
+        </div>
+      `;
+      hostActions.style.display = 'none';
+
+      this.lobbyParticipants = [
+        { name: profile.name, grade: profile.section, points: profile.totalPoints, streak: profile.streak, photo: profile.photo }
+      ];
+    }
+
+    document.getElementById('lobbyPartCount').textContent = `Participants Joined (${this.lobbyParticipants.length})`;
+    const listEl = document.getElementById('lobbyPartList');
+    listEl.innerHTML = '';
+
+    this.lobbyParticipants.forEach((p, idx) => {
+      const card = document.createElement('div');
+      card.className = 'lobby-part-card';
+      card.innerHTML = `
+        <div class="part-info-left">
+          <img src="${p.photo || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'%23DDD6FE\'/><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'40\' fill=\'%236D28D9\'>👤</text></svg>'}" class="part-avatar" alt="${p.name}">
+          <div>
+            <h5 style="margin:0; font-size:0.85rem; color:#1E293B;">${p.name}</h5>
+            <span style="font-size:0.72rem; color:#64748B;">${p.grade || 'Student'}</span>
+          </div>
+        </div>
+        ${this.isHost ? `<button class="view-profile-btn" onclick="Quiz.viewParticipantProfile(${idx})">View Profile</button>` : ''}
+      `;
+      listEl.appendChild(card);
+    });
+  },
+
+  viewParticipantProfile(idx) {
+    const p = this.lobbyParticipants[idx];
+    if (!p) return;
+    const body = document.getElementById('partProfileBody');
+    body.innerHTML = `
+      <div style="text-align:center; padding:12px 0;">
+        <img src="${p.photo || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'%23DDD6FE\'/><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'40\' fill=\'%236D28D9\'>👤</text></svg>'}" style="width:60px; height:60px; border-radius:50%; margin-bottom:8px;" alt="${p.name}">
+        <h4 style="margin:0; font-size:1.1rem; color:#1E293B;">${p.name}</h4>
+        <p style="font-size:0.8rem; color:#64748B; margin:2px 0 12px 0;">${p.grade || 'Student'}</p>
+        <div style="display:flex; justify-content:space-around; background:#F8FAFC; padding:10px; border-radius:12px;">
+          <div><strong style="font-size:1rem; color:#6D28D9;">${p.points}</strong><br><span style="font-size:0.7rem; color:#64748B;">Total Pts</span></div>
+          <div><strong style="font-size:1rem; color:#EF4444;">🔥 ${p.streak}</strong><br><span style="font-size:0.7rem; color:#64748B;">Streak</span></div>
+        </div>
+      </div>
+    `;
+    document.getElementById('participantProfileModal').classList.remove('hidden');
+  },
+
+  submitJoinCode() {
+    const val = document.getElementById('joinAccessCodeInput').value.trim();
+    const errorEl = document.getElementById('joinErrorMsg');
+
+    if (!val || val.length !== 7 || isNaN(val)) {
+      errorEl.textContent = '⚠️ Please enter a valid 7-digit access code!';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    errorEl.classList.add('hidden');
+    this.lobbyAccessCode = val;
+    this.isHost = false;
+    this.hideJoinCodeModal();
+    this.renderLobbyScreen();
+    App.showScreen('lobbyScreen');
+  },
+
+  exitLobby() {
+    App.showScreen('homeScreen');
+  },
+
+  startHostQuizGame() {
+    this.startQuiz(this.currentMode, this.currentQuestionFormat);
+  },
+
+  async prepareBuiltinQuestions() {
+    let qTypeId = 1;
+    if (this.currentQuestionFormat === 'true_false') qTypeId = 2;
+    else if (this.currentQuestionFormat === 'identification') qTypeId = 3;
+
+    let pool = await DB.getQuestions(this.currentTopicId, qTypeId, this.currentMode);
+    if (pool.length === 0) pool = await DB.getQuestions(this.currentTopicId, qTypeId);
+    pool = this.shuffleArray(pool);
+    this.questionsList = pool.slice(0, this.customQuestionCount || 15);
   },
 
   // 6. Start Quiz Engine
@@ -147,20 +589,9 @@ const Quiz = {
     this.sessionTotalTimeSec = 0;
     this.sessionTopicStats = {};
 
-    let qTypeId = 1;
-    if (questionFormat === 'true_false') qTypeId = 2;
-    else if (questionFormat === 'identification') qTypeId = 3;
-
-    // Query questions filtering by topic_id, question_type_id, and quiz_type
-    let pool = await DB.getQuestions(this.currentTopicId, qTypeId, mode);
-
-    if (pool.length === 0) {
-      // Fallback query without quiz_type filter if specific pre_test/post_test tag is unassigned
-      pool = await DB.getQuestions(this.currentTopicId, qTypeId);
+    if (this.customFlowType !== 'host_custom') {
+      await this.prepareBuiltinQuestions();
     }
-
-    pool = this.shuffleArray(pool);
-    this.questionsList = pool.slice(0, 15);
 
     App.showScreen('gameplayScreen');
     this.renderQuestion();
@@ -300,8 +731,8 @@ const Quiz = {
       });
     }
 
-    // Start 20-Second Digital Timer
-    this.timeRemainingSec = 20;
+    // Start Digital Timer with custom set time limit
+    this.timeRemainingSec = this.customTimeLimitSec || 20;
     this.questionStartTime = Date.now();
     this.updateTimerDisplay();
 

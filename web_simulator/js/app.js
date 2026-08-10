@@ -82,15 +82,7 @@ const App = {
   },
 
   handleCustomPlayClick() {
-    const customQuizzes = DB.getCustomQuizzes();
-    if (customQuizzes.length === 0) {
-      alert('No custom teacher quizzes found yet! Ask your teacher to create one in the Teacher Portal, or start a standard DepEd Challenge.');
-      this.showScreen('playScreen');
-    } else {
-      // Pick custom quiz term
-      const quiz = customQuizzes[customQuizzes.length - 1];
-      Quiz.selectTerm(quiz.term);
-    }
+    Quiz.showCustomHubModal();
   }
 };
 

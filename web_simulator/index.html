@@ -285,7 +285,7 @@
               <span class="mode-icon">🔘</span>
               <div>
                 <h4>Multiple Choice</h4>
-                <p>15 multiple-choice questions with 4 choices</p>
+                <p>Multiple-choice questions with 4 choices</p>
               </div>
             </button>
 
@@ -293,7 +293,7 @@
               <span class="mode-icon">⚖️</span>
               <div>
                 <h4>True or False</h4>
-                <p>15 questions with 2 options (True / False)</p>
+                <p>Questions with 2 options (True / False)</p>
               </div>
             </button>
 
@@ -301,12 +301,221 @@
               <span class="mode-icon">✍️</span>
               <div>
                 <h4>Identification</h4>
-                <p>15 questions with small text input box for typing answers</p>
+                <p>Questions with small text input box for typing answers</p>
               </div>
             </button>
           </div>
 
           <button class="cancel-btn" onclick="Quiz.hidePostTestFormatModal()">Back</button>
+        </div>
+      </div>
+
+      <!-- ================= CUSTOM HUB MODAL (Join / Host / Custom Play) ================= -->
+      <div id="customHubModal" class="mode-modal hidden">
+        <div class="mode-modal-content">
+          <h3>Custom Mode</h3>
+          <p>Choose your custom quiz flow</p>
+          <div class="mode-options">
+            <button class="mode-card" onclick="Quiz.selectCustomFlow('join')">
+              <span class="mode-icon">🔑</span>
+              <div>
+                <h4>Join Quiz</h4>
+                <p>Enter 7-digit access code to join a live host lobby</p>
+              </div>
+            </button>
+
+            <button class="mode-card" onclick="Quiz.selectCustomFlow('host')">
+              <span class="mode-icon">👑</span>
+              <div>
+                <h4>Host Quiz</h4>
+                <p>Create a live lobby using Built-in or Custom Questions</p>
+              </div>
+            </button>
+
+            <button class="mode-card" onclick="Quiz.selectCustomFlow('custom_play')">
+              <span class="mode-icon">⚡</span>
+              <div>
+                <h4>Custom Play</h4>
+                <p>Play single-player quiz with customized time limits & question counts</p>
+              </div>
+            </button>
+          </div>
+          <button class="cancel-btn" onclick="Quiz.hideCustomHubModal()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- ================= HOST TYPE MODAL (Built-in vs Custom Questions) ================= -->
+      <div id="hostTypeModal" class="mode-modal hidden">
+        <div class="mode-modal-content">
+          <h3>Host Quiz Setup</h3>
+          <p>Select question source for live lobby</p>
+          <div class="mode-options">
+            <button class="mode-card" onclick="Quiz.selectHostType('custom')">
+              <span class="mode-icon">✍️</span>
+              <div>
+                <h4>Custom Questions</h4>
+                <p>Manually create & type your own custom questions and answers</p>
+              </div>
+            </button>
+
+            <button class="mode-card" onclick="Quiz.selectHostType('builtin')">
+              <span class="mode-icon">📚</span>
+              <div>
+                <h4>Built-in Questions</h4>
+                <p>Host quiz using DepEd Grade 10 Science question bank</p>
+              </div>
+            </button>
+          </div>
+          <button class="cancel-btn" onclick="Quiz.hideHostTypeModal()">Back</button>
+        </div>
+      </div>
+
+      <!-- ================= PRE-GAME CUSTOMIZE UI MODAL ================= -->
+      <div id="preGameCustomizeModal" class="mode-modal hidden">
+        <div class="mode-modal-content customize-modal-content">
+          <h3 id="customizeModalTitle">Pre-Game Customize</h3>
+          <p id="customizeModalSub">Configure your quiz settings before starting</p>
+          
+          <div class="customize-form">
+            <div class="form-group">
+              <label for="customTimeLimit">⏱️ Set Time Limit per Question (5 – 60s):</label>
+              <input type="number" id="customTimeLimit" value="20" min="5" max="60" class="customize-input" />
+            </div>
+
+            <div class="form-group">
+              <label for="customQuestionCount">❓ Set Number of Questions (1 – 30):</label>
+              <input type="number" id="customQuestionCount" value="15" min="1" max="30" class="customize-input" />
+            </div>
+
+            <div id="maxParticipantsGroup" class="form-group hidden">
+              <label for="customMaxParticipants">👥 Set Max Participants (unlimited):</label>
+              <input type="number" id="customMaxParticipants" value="50" min="1" class="customize-input" />
+            </div>
+
+            <div id="customizeErrorMsg" class="customize-error-msg hidden"></div>
+
+            <button id="startCustomizeBtn" class="primary-btn bottom-start-btn" onclick="Quiz.confirmCustomSettingsAndStart()">
+              Start Game 🚀
+            </button>
+          </div>
+          <button class="cancel-btn" onclick="Quiz.hidePreGameCustomizeModal()">Back</button>
+        </div>
+      </div>
+
+      <!-- ================= CUSTOM QUIZ CREATOR MODAL ================= -->
+      <div id="customCreatorModal" class="mode-modal hidden">
+        <div class="mode-modal-content customize-modal-content creator-content">
+          <h3>Custom Quiz Creator</h3>
+          <p id="creatorQuestionCounter">Question 1 of 5</p>
+
+          <div class="creator-form">
+            <div class="form-group">
+              <label for="creatorAnswerMode">✍️ Select Answer Mode:</label>
+              <select id="creatorAnswerMode" class="customize-input" onchange="Quiz.onCreatorModeChange()">
+                <option value="multiple_choice">Multiple Choice (4 Options)</option>
+                <option value="true_false">True or False</option>
+                <option value="identification">Identification (Short Answer)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="creatorQuestionText">✍️ Question Text:</label>
+              <textarea id="creatorQuestionText" class="customize-input" rows="2" placeholder="Type question text here..."></textarea>
+            </div>
+
+            <!-- Dynamic Answer Options Section -->
+            <div id="creatorAnswersBox" class="form-group">
+              <!-- Rendered dynamically -->
+            </div>
+
+            <div class="creator-nav-row">
+              <button id="creatorNextBtn" class="primary-btn creator-next-btn" onclick="Quiz.onCreatorNextQuestion()">Next ➔</button>
+            </div>
+
+            <hr style="margin: 16px 0; border: none; border-top: 1px solid #E2E8F0;" />
+
+            <div class="form-group">
+              <label for="creatorTimeLimit">⏱️ Set Time Limit per Question (5 – 60s):</label>
+              <input type="number" id="creatorTimeLimit" value="20" min="5" max="60" class="customize-input" />
+            </div>
+
+            <div class="form-group">
+              <label for="creatorTotalQuestions">❓ Total Questions (1 – 30):</label>
+              <input type="number" id="creatorTotalQuestions" value="5" min="1" max="30" class="customize-input" onchange="Quiz.onCreatorTotalQChange()" />
+            </div>
+
+            <div class="form-group">
+              <label for="creatorMaxParticipants">👥 Set Max Participants:</label>
+              <input type="number" id="creatorMaxParticipants" value="50" min="1" class="customize-input" />
+            </div>
+
+            <div id="creatorErrorMsg" class="customize-error-msg hidden"></div>
+
+            <button id="startCustomHostBtn" class="primary-btn bottom-start-btn" onclick="Quiz.confirmCustomCreatorAndStart()">
+              Start Host Lobby 🚀
+            </button>
+          </div>
+          <button class="cancel-btn" onclick="Quiz.hideCustomCreatorModal()">Back</button>
+        </div>
+      </div>
+
+      <!-- ================= JOIN CODE MODAL ================= -->
+      <div id="joinCodeModal" class="mode-modal hidden">
+        <div class="mode-modal-content">
+          <h3>Join Live Quiz</h3>
+          <p>Enter 7-digit access code provided by host</p>
+          <div class="customize-form">
+            <div class="form-group">
+              <input type="text" id="joinAccessCodeInput" placeholder="e.g. 8492041" maxlength="7" class="customize-input" style="font-size: 1.4rem; text-align: center; letter-spacing: 2px;" />
+            </div>
+            <div id="joinErrorMsg" class="customize-error-msg hidden"></div>
+            <button class="primary-btn bottom-start-btn" onclick="Quiz.submitJoinCode()">Join Lobby ➔</button>
+          </div>
+          <button class="cancel-btn" onclick="Quiz.hideJoinCodeModal()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- ================= LOBBY SCREEN (Host & Participant) ================= -->
+      <section id="lobbyScreen" class="screen">
+        <div class="play-container">
+          <button class="back-link" onclick="Quiz.exitLobby()">← Exit Lobby</button>
+
+          <div class="lobby-header-card">
+            <span class="lobby-badge-tag" id="lobbyRoleBadge">HOST LOBBY</span>
+            <p class="lobby-code-label">ACCESS CODE</p>
+            <h1 id="lobbyCodeDisplay" class="lobby-access-code">849 204 1</h1>
+          </div>
+
+          <!-- Host / Participant Info Box -->
+          <div id="lobbyHostBox" class="lobby-host-box">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <div class="lobby-participants-section">
+            <div class="lobby-part-header">
+              <h4 id="lobbyPartCount">Participants Joined (1)</h4>
+            </div>
+            <div id="lobbyPartList" class="lobby-part-list">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <div id="lobbyHostActions" class="lobby-actions-bottom">
+            <button id="startHostQuizBtn" class="primary-btn bottom-start-btn" onclick="Quiz.startHostQuizGame()">
+              Start Quiz 🚀
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Participant Profile View Modal (Host View Only) -->
+      <div id="participantProfileModal" class="mode-modal hidden">
+        <div class="mode-modal-content">
+          <h3>Participant Profile</h3>
+          <div id="partProfileBody" class="part-profile-body">
+            <!-- Rendered dynamically -->
+          </div>
+          <button class="cancel-btn" onclick="document.getElementById('participantProfileModal').classList.add('hidden')">Close</button>
         </div>
       </div>
 
