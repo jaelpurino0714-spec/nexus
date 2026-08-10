@@ -44,7 +44,7 @@ def esc(val):
 records = []
 
 def add_q(top_key, q_type_id, q_text, c_a, c_b, c_c, c_d, ans, exp, quiz_type='post_test'):
-    if q_type_id == 3: return  # Exclude all Identification questions
+    if (top_key.startswith('t2_') or top_key.startswith('t3_')) and q_type_id == 3: return  # Exclude Term 2 and 3 Identification questions, allow Term 1
     # Allow all question types for t3_
     
     topic_info = TOPICS[top_key]
