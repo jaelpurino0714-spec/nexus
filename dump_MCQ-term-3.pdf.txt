@@ -1,0 +1,767 @@
+--- PAGE 1 ---
+pre-test questions the basis of questions to be presented per topic in term 3:  
+  
+Group 1· PROJECTILE MOTION (only use 15 questions in every pretest topic, this will be rephrased 
+and randomized each playthrough)  
+  
+1. Any object thrown, kicked, or launched into the air and acted on only by gravity and air resistance is called a: 
+ 
+* A. Linear object 
+* B. Stationary body 
+* C. Circular object 
+* *D. Projectile* ✅ 
+ 
+2. The curved path a projectile follows through the air is its: 
+ 
+* *A. Trajectory* ✅ 
+* B. Radius 
+* C. Slope 
+* D. Axis 
+ 
+3. The two independent motions that combine to make projectile motion are: 
+ 
+* A. Up and down only 
+* *B. Constant horizontal motion + accelerated vertical free-fall motion* ✅ 
+* C. Left and right only 
+* D. Fast and slow motion 
+ 
+4. If you kick a football with the same force, which angle will make it go the farthest horizontal distance 
+(maximum range) on flat ground? 
+ 
+* A. 75° 
+* *B. 45°* ✅ 
+* C. 15° 
+* D. 30° 
+ 
+5. If you want a basketball shot to go as high as possible into the air, you should release it at an angle closest to: 
+ 
+* A. 45° 
+* *B. 90° (straight up)* ✅ 
+* C. 30° 
+* D. 0° (horizontal) 
+ 
+6. If you throw a ball horizontally and drop another identical ball from the same height at the same time, which 
+hits the ground first? 
+ 
+* A. Thrown ball hits first 
+* B. Dropped ball hits first 
+* *C. Both hit at exactly the same time* ✅ 
+* D. Depends on color 
+ 
+7. The horizontal distance a projectile travels from launch to landing is its: 
+ 
+* A. Trajectory 
+* *B. Range* ✅ 
+* C. Height 
+* D. Velocity 
+ 
+8. The maximum vertical distance the projectile reaches above launch level is its: 
+ 
+* *A. Maximum height* ✅ 
+* B. Trajectory 
+* C. Range 
+* D. Angle 
+ 
+--- PAGE 2 ---
+9. If you shoot two basketballs at the same angle, the one thrown with more speed will have: 
+ 
+* A. Same range and height 
+* B. Less height only 
+* C. Shorter range only 
+* *D. Both longer range and greater height* ✅ 
+ 
+10. When air resistance is ignored, the only force acting on a projectile after release is: 
+ 
+* A. Wind forward 
+* B. Magnetism 
+* *C. Gravity (pulling downward)* ✅ 
+* D. Your hand 
+ 
+11. A sepak takraw player kicks the ball at 30°, another kicks at the same speed at 60°. Their ranges will be: 
+ 
+* A. 60° goes twice as far 
+* B. 30° goes farther 
+* C. Both fall at the same spot as 45° 
+* *D. Almost exactly equal (complementary angles)* ✅ 
+ 
+12. Between the same two complementary kicks above, which one reaches a higher maximum height? 
+ 
+* A. Same height 
+* *B. 60° kick* ✅ 
+* C. Neither rises 
+* D. 30° kick 
+ 
+13. Why does a basketball player use a high arc (large angle) when shooting from far away? 
+ 
+* *A. To give the ball more time in the air to reach the hoop and enter the ring from above* ✅ 
+* B. To use less force 
+* C. To avoid gravity 
+* D. To make it go faster 
+ 
+14. If you kick a football at 20° and another at 70° with the same speed, which has the shortest time of flight? 
+ 
+* A. Same time 
+* *B. 20° kick* ✅ 
+* C. 70° kick 
+* D. Both stay forever 
+ 
+15. A projectile's horizontal velocity component (ignoring air resistance) during flight: 
+ 
+* A. Becomes zero at the top 
+* B. Decreases due to gravity 
+* *C. Stays exactly constant* ✅ 
+* D. Increases due to gravity 
+ 
+16. A projectile's vertical velocity component at the exact top of its arc is: 
+ 
+* A. Maximum upward 
+* B. Equal to launch speed 
+* C. Maximum downward 
+* *D. Zero (momentarily stops going up)* ✅ 
+ 
+17. In real life (with air resistance), a real football's actual range compared to the ideal physics prediction will be: 
+ 
+* *A. Slightly shorter* ✅ 
+* B. Exactly the same 
+* C. Longer 
+* D. Twice as far 
+ 
+--- PAGE 3 ---
+18. A long jumper wants maximum range. What combination should they aim for? 
+ 
+* A. Very low angle only 
+* *B. Fast run-up + launch angle near 45°* ✅ 
+* C. Jump straight up 
+* D. Very high angle only 
+ 
+19. If you double the launch speed of a projectile at 45°, its range becomes approximately: 
+ 
+* A. Same 
+* B. 2× longer 
+* *C. 4× longer* ✅ 
+* D. 8× longer 
+ 
+20. Two identical stones are thrown: A at 10 m/s, 45°; B at 20 m/s, 45°. Which statement is true? 
+ 
+* A. Same flight time 
+* *B. B goes 4× farther, about 4× higher, and about 2× longer in the air* ✅ 
+* C. Same range 
+* D. Same maximum height 
+ 
+21. Which is the correct full relationship among the four projectile variables? 
+ 
+* A. Mass of the object is the biggest factor 
+* *B. Range and height depend on both launch speed and launch angle through horizontal and vertical velocity 
+components* ✅ 
+* C. Only speed matters 
+* D. Only angle matters 
+ 
+22. At what point in a projectile's full flight is its total speed slowest? 
+ 
+* A. Same speed everywhere 
+* *B. At the very peak (top of the trajectory)* ✅ 
+* C. Right after launch 
+* D. Right before landing 
+ 
+23. A basketball is released and lands at the same height. At what two points in its path is its speed exactly equal? 
+ 
+* A. Launch vs. top 
+* B. Never equal 
+* *C. Any two points at the same height (e.g., halfway up and halfway down)* ✅ 
+* D. Top vs. landing 
+ 
+24. Why do professional archers aim slightly above the target even at short distances? 
+ 
+* A. To make it go faster 
+* B. Wind always blows up 
+* *C. Gravity pulls the arrow downward during flight, so they must compensate for the drop* ✅ 
+* D. Tradition 
+ 
+25. If you launch from ground level, which pair of angles will give the same range but very different heights and 
+flight times? 
+ 
+* A. 10° and 20° 
+* B. 40° and 50° 
+* C. 25° and 65° 
+* *D. Both B and C* ✅ 
+ 
+26. A boy kicks a ball horizontally off a 10 m cliff while another drops an identical ball from the same height at 
+the same instant. Which hits first? 
+ 
+* A. Kicked ball first 
+* *B. Both hit the ground at exactly the same time* ✅ 
+--- PAGE 4 ---
+* C. Kicked ball never lands 
+* D. Dropped ball first 
+ 
+27. For a fixed launch speed, as angle increases from 0° → 45° → 90°, how do range and height change? 
+ 
+* A. Both always decrease 
+* B. Range constant; height rises 
+* *C. Range rises to a maximum at 45° then falls; height keeps increasing to 90°* ✅ 
+* D. Both always increase 
+ 
+28. The only reason 45° gives maximum range on flat ground is: 
+ 
+* A. Air resistance is zero only at 45° 
+* B. Gravity is strongest there 
+* *C. It perfectly balances time of flight and horizontal speed so their product is maximized* ✅ 
+* D. It is the middle number 
+ 
+29. In a projectile investigation using a marble launcher, a student keeps the angle fixed at 45° and increases 
+compression (speed) each trial. They will observe: 
+ 
+* A. Range stays the same 
+* B. Height stays the same 
+* C. Range increases linearly 
+* *D. Range increases roughly as the square of the compression distance* ✅ 
+ 
+30. Which everyday action is *NOT* an example of projectile motion? 
+ 
+* *A. Driving a car in a straight flat road at constant speed* ✅ 
+* B. Throwing a frisbee (ignoring lift) 
+* C. Kicking a penalty 
+* D. Shooting a three-pointer  
+ 
+ 
+Group 2 · MOMENTUM AND COLLISIONS (only use 15 questions in every pretest topic, this will be 
+rephrased and randomized each playthrough)  
+  
+Here's the same set with the *correct answers randomized* so there is *no obvious pattern* (not mostly *B*). 
+ 
+1. Momentum is defined mathematically as: 
+ 
+* A. Mass × acceleration 
+* *B. Mass × velocity (p = m × v)* ✅ 
+* C. Force × distance 
+* D. Weight × height 
+ 
+2. Momentum describes in physics what we mean in everyday life when we say: 
+ 
+* A. An object is hot 
+* B. An object is bright 
+* *C. A moving object is hard to stop* ✅ 
+* D. An object is heavy 
+ 
+3. Which has more momentum: a slow truck or a fast bullet? 
+ 
+* A. Always the truck 
+* *B. Depends on BOTH mass AND velocity of each* ✅ 
+* C. Always the bullet 
+* D. They always have equal momentum 
+ 
+4. A collision where objects bounce off perfectly with no kinetic energy lost is called: 
+ 
+* A. Inelastic 
+* B. Explosion 
+--- PAGE 5 ---
+* *C. Elastic* ✅ 
+* D. Plastic 
+ 
+5. A collision where objects stick together or deform, losing kinetic energy to heat and sound, is called: 
+ 
+* A. Perfect rebound 
+* *B. Inelastic* ✅ 
+* C. Conservative 
+* D. Elastic 
+ 
+6. The Law of Conservation of Momentum says that if no outside force acts, total momentum before collision 
+equals: 
+ 
+* A. Zero always 
+* B. Double before 
+* C. Half before 
+* *D. Total momentum after collision* ✅ 
+ 
+7. To change an object's momentum, you must apply: 
+ 
+* *A. A net force acting for some amount of time* ✅ 
+* B. Heat 
+* C. Only mass 
+* D. Only light 
+ 
+8. Seatbelts, airbags, and crumple zones all reduce injury mainly by: 
+ 
+* A. Making the car lighter 
+* B. Increasing force 
+* *C. Increasing the stopping time, lowering the average force* ✅ 
+* D. Stopping instantly 
+ 
+9. If two identical jeepneys move at different speeds, the faster one has: 
+ 
+* A. Same momentum 
+* *B. More momentum* ✅ 
+* C. Zero momentum 
+* D. Less momentum 
+ 
+10. When a moving billiard ball hits a stationary identical ball head-on and stops, the target ball: 
+ 
+* A. Explodes 
+* *B. Moves away with almost exactly the original ball's speed* ✅ 
+* C. Also stays still 
+* D. Moves twice as fast 
+ 
+11. Which is the best everyday example of an almost elastic collision? 
+ 
+* A. Two train cars coupling together 
+* *B. Two billiard balls colliding on a table* ✅ 
+* C. Car hitting a wall 
+* D. A ball of clay hitting the floor 
+ 
+12. Which is the best everyday example of a perfectly inelastic collision? 
+ 
+* *A. Two train cars bump and lock together moving as one* ✅ 
+* B. Marbles colliding 
+* C. Superball bouncing 
+* D. Tennis ball on a racket 
+ 
+13. A 2000-kg jeepney and a 200-kg motorcycle both move at 10 m/s. Which is harder to stop? 
+ 
+* A. Equally hard 
+--- PAGE 6 ---
+* B. Motorcycle 
+* *C. Jeepney (10× more momentum)* ✅ 
+* D. Neither moves 
+ 
+14. A fast lightweight boxer's punch can still hurt a much heavier opponent because: 
+ 
+* A. Gravity increases 
+* B. Only mass matters 
+* C. Mass doesn't matter 
+* *D. High velocity gives the fist large momentum* ✅ 
+ 
+15. Why is falling on a soft mattress less painful than falling on concrete from the same height? 
+ 
+* A. Concrete is colder 
+* B. The mattress reduces your mass 
+* *C. The mattress increases stopping time, reducing force* ✅ 
+* D. Gravity is weaker on the mattress 
+ 
+16. When a cannon fires a cannonball forward, the cannon kicks backward. This is explained by: 
+ 
+* A. Gravity 
+* *B. Conservation of momentum* ✅ 
+* C. Elastic collision 
+* D. Magic 
+ 
+17. In a car crash, crumple zones at the front help mainly by: 
+ 
+* A. Looking nice 
+* *B. Making the passenger cabin stop over a longer time* ✅ 
+* C. Reducing car mass 
+* D. Making the car faster 
+ 
+18. Airbags work together with seatbelts because: 
+ 
+* *A. Seatbelts hold you while airbags spread the force and increase stopping time* ✅ 
+* B. Airbags alone stop you instantly 
+* C. They look good 
+* D. Seatbelts are useless alone 
+ 
+19. Two identical balls move at equal speed toward each other, collide, and bounce back at the same speed. This 
+collision is: 
+ 
+* A. Explosive 
+* *B. Very nearly elastic* ✅ 
+* C. Impossible 
+* D. Perfectly inelastic 
+ 
+20. If you want to maximize the change in momentum of a kicked football, you should: 
+ 
+* A. Tap it softly 
+* B. Use a very light foot 
+* C. Kick perpendicular to the motion 
+* *D. Apply the largest possible force for the longest possible time* ✅ 
+ 
+21. Which correctly explains why momentum depends on BOTH mass and velocity? 
+ 
+* *A. A heavy slow object or a light fast object can both be equally hard to stop* ✅ 
+* B. Teacher said so 
+* C. Mass cancels velocity 
+* D. Only mass matters in collisions 
+ 
+22. In any collision—elastic or inelastic—which quantity is ALWAYS conserved? 
+ 
+--- PAGE 7 ---
+* A. Shape 
+* B. Speed 
+* *C. Total linear momentum of the isolated system* ✅ 
+* D. Kinetic energy 
+ 
+23. A 1-kg clay blob moving at 5 m/s hits and sticks to a 4-kg stationary block. Afterward the combined mass 
+moves at: 
+ 
+* A. 0 m/s 
+* B. 5 m/s 
+* *C. 1 m/s* ✅ 
+* D. 2.5 m/s 
+ 
+24. The main physics reason airbags reduce fatalities so dramatically is: 
+ 
+* A. They block glass 
+* *B. They increase stopping time, reducing impact force* ✅ 
+* C. They cushion visually 
+* D. They keep you awake 
+ 
+25. When you catch a fast raw egg without breaking it, you pull your hand backward while catching. This works 
+because: 
+ 
+* A. Gravity reverses 
+* B. It increases the final velocity 
+* *C. It extends the contact time, reducing the average force* ✅ 
+* D. It reduces the egg's mass 
+ 
+26. Two cars of equal mass and speed collide head-on and stop. Compared with one car hitting a wall at the same 
+speed, the force on each driver is: 
+ 
+* *A. Essentially identical* ✅ 
+* B. Half 
+* C. Double 
+* D. Zero 
+ 
+27. Which correctly ranks the stopping force on an identical passenger from LOWEST to HIGHEST? 
+ 
+* A. Dashboard → Airbag → Seatbelt 
+* B. All equal 
+* *C. Airbag + Seatbelt → Seatbelt only → Dashboard/Windshield* ✅ 
+* D. Wall → Airbag + Seatbelt → Seatbelt only 
+ 
+28. In a student investigation with marbles of different masses rolled at different speeds, the pattern that will 
+emerge is: 
+ 
+* A. Only mass matters 
+* *B. Higher mass × higher speed produces greater momentum and greater impact* ✅ 
+* C. Only speed affects impact 
+* D. No pattern 
+ 
+29. A firefighter turns on a powerful hose and feels it push backward strongly. This is a direct result of: 
+ 
+* A. Water being heavy 
+* B. Friction 
+* C. Air pressure 
+* *D. Conservation of momentum* ✅ 
+ 
+30. The key difference between elastic and inelastic collisions is: 
+ 
+* A. Momentum is conserved only in elastic collisions 
+* *B. Total kinetic energy is conserved only in elastic collisions; momentum is conserved in both* ✅ 
+* C. Inelastic collisions have no momentum 
+--- PAGE 8 ---
+* D. There are no forces in elastic collisions 
+  
+Group 3· LARGE-SCALE GENERATION & DISTRIBUTION OF ELECTRICITY (only use 15 questions 
+in every pretest topic, this will be rephrased and randomized each playthrough)  
+ The correct order of electricity from the power plant to your home is: 
+A. Meter → plant → lines 
+B. Power plant → step-up substation → transmission lines → step-down substation → distribution lines 
+→ home/meter ✅ 
+C. Home → substation → plant 
+D. Transmission → plant → home 
+A device that changes AC voltage up or down very efficiently is a: 
+A. Transformer ✅ 
+B. Generator 
+C. Motor 
+D. Resistor 
+Electricity is transmitted across the country at very high voltage mainly to: 
+A. Make electricity travel faster 
+B. Kill birds 
+C. Reduce energy lost as heat in transmission wires ✅ 
+D. Make it brighter 
+Before entering houses, voltage is stepped down to about: 
+A. 12 V 
+B. 10,000 V 
+C. 1 V 
+D. 220–240 V ✅ 
+A generator converts: 
+A. Mechanical motion into electrical energy ✅ 
+B. Electricity into motion 
+C. Heat into light 
+D. Chemical energy into light 
+An electric motor converts: 
+A. Motion into electricity 
+B. Heat into sound 
+C. Electrical energy into mechanical motion ✅ 
+D. Light into electricity 
+Which safety device melts and breaks the circuit if current becomes dangerously high? 
+A. Plug 
+B. Fuse ✅ 
+C. Wire 
+D. Switch 
+Which reusable safety device automatically trips when too much current flows? 
+A. Fuse 
+B. Bulb 
+C. Outlet 
+D. Circuit breaker ✅ 
+The third round pin of a three-prong plug is connected to: 
+A. Ground (Earth) wire ✅ 
+B. Neutral wire 
+C. Live wire 
+D. Fuse 
+The device that measures your household's electricity consumption is the: 
+A. Generator 
+B. Transformer 
+C. Kilowatt-hour (kWh) electric meter ✅ 
+D. Substation 
+Step-up transformers at power plants: 
+A. Lower voltage for homes 
+B. Generate electricity 
+C. Raise voltage for long-distance transmission ✅ 
+D. Stop current 
+Step-down transformers at substations: 
+A. Lower transmission voltage to safer distribution levels ✅ 
+B. Raise voltage 
+
+--- PAGE 9 ---
+C. Store electricity 
+D. Burn waste 
+One major similarity between a motor and a generator is that: 
+A. Both plug directly into a wall outlet 
+B. Both have coils, magnets, and rotating parts ✅ 
+C. Both always use batteries 
+D. Both produce electricity 
+One major difference between a motor and a generator is: 
+A. A generator has no magnets 
+B. There is no difference 
+C. A motor has no coils 
+D. A motor uses electricity to produce motion, while a generator uses motion to produce electricity ✅ 
+Octopus wiring is dangerous because: 
+A. Too much current can overheat wires and start a fire ✅ 
+B. It looks untidy 
+C. It uses more voltage 
+D. It breaks plugs 
+Why should you never use water to put out an electrical fire? 
+A. It makes the fire hotter 
+B. Water conducts electricity and can cause electrocution ✅ 
+C. It damages the floor 
+D. It is expensive 
+What is the safest action if someone is being electrocuted while touching a live wire? 
+A. Turn off the main breaker first, then separate them using dry wood ✅ 
+B. Grab them with your bare hands 
+C. Pour water on the wire 
+D. Pull the wire with metal 
+Why are transmission lines made with thick aluminum cables on tall towers? 
+A. Birds like them 
+B. Steel is cheaper 
+C. Aluminum is a good conductor, and tall towers provide safe clearance ✅ 
+D. They look better 
+A GFCI/ELCB outlet protects people by: 
+A. Increasing power 
+B. Making water safe 
+C. Lowering voltage 
+D. Detecting current leakage and shutting off the circuit quickly ✅ 
+The simplest way to reduce household electricity use is to: 
+A. Leave lights on 
+B. Use LED bulbs, switch off unused appliances, and use inverter appliances ✅ 
+C. Open the refrigerator often 
+D. Use more extension cords 
+Why does high voltage reduce transmission losses? 
+A. Higher voltage means lower current, reducing I²R power loss ✅ 
+B. High voltage cools wires 
+C. Voltage removes resistance 
+D. Resistance disappears 
+Which correctly describes the roles of NGCP and distribution utilities? 
+A. Distribution utilities generate electricity 
+B. Both perform the same job 
+C. NGCP handles high-voltage transmission, while distribution utilities deliver electricity to consumers 
+✅ 
+D. NGCP bills homes directly 
+Inside a power plant generator, you would find: 
+A. Solar panels 
+B. Batteries charging 
+C. A turbine spinning an electromagnet inside coils to produce AC electricity ✅ 
+D. Chemical reactions 
+Which statement about motors and generators is TRUE? 
+A. They share no parts 
+B. A generator requires electricity as input 
+C. A motor works without energy input 
+D. A DC motor can act as a generator when mechanically spun ✅ 
+--- PAGE 10 ---
+Why does the Philippines use alternating current (AC) for the national grid? 
+A. AC can be easily stepped up and down using transformers ✅ 
+B. Edison preferred AC 
+C. AC is always safer to touch 
+D. DC cannot run motors 
+A properly wired Philippine home has Live, Neutral, and Ground wires. Which statement is correct? 
+A. Neutral is always dangerous 
+B. Live carries 220 V, Neutral is the return path, and Ground is for safety ✅ 
+C. All three wires are the same 
+D. Ground carries normal current 
+Why are circuit breakers preferred over fuses in modern homes? 
+A. They are cheaper 
+B. They look better 
+C. They use less metal 
+D. They can be reset after tripping and provide reliable protection ✅ 
+Reducing household electricity use provides which benefit? 
+A. Lower electricity bills and reduced environmental impact ✅ 
+B. Only lower bills 
+C. Only global environmental benefits 
+D. No benefits 
+Why are substations built at different voltage levels? 
+A. To waste money 
+B. To store electricity 
+C. To match the safest and most efficient voltage for each stage of distribution ✅ 
+D. To confuse consumers 
+Which activity best models the journey of electricity from the power plant to homes? 
+A. Testing a fuse 
+B. Lighting a bulb with a battery 
+C. Spinning a motor 
+D. Small generator → step-up transformer → transmission wire → step-down transformer → bulb and 
+meter ✅ 
+ 
+Group 4· RENEWABLE AND NON-RENEWABLE ENERGY (only use 15 questions in every pretest 
+topic, this will be rephrased and randomized each playthrough)  
+ Group 4 – Renewable and Non-Renewable Energy 
+Energy sources that take millions of years to form and are gone once used are called: 
+A. Infinite 
+B. Non-renewable (fossil fuels) ✅ 
+C. Free 
+D. Renewable 
+Energy sources replenished naturally within a human lifetime are: 
+A. Renewable ✅ 
+B. Fossil fuels 
+C. Exhaustible 
+D. Non-renewable 
+The top source of electricity in the Philippines today is: 
+A. Solar 
+B. Wind 
+C. Coal ✅ 
+D. Tidal 
+The Philippines ranks second worldwide in which renewable energy source? 
+A. Oil 
+B. Coal 
+C. Solar 
+D. Geothermal ✅ 
+Burning fossil fuels releases large amounts of which greenhouse gas? 
+A. Carbon dioxide (CO₂) ✅ 
+B. Oxygen 
+C. Nitrogen 
+D. Hydrogen 
+Energy from falling or flowing water in dams like Angat and Magat is called: 
+A. Diesel 
+B. Coal 
+C. Hydroelectric power ✅ 
+D. Nuclear 
+
+--- PAGE 11 ---
+Energy captured directly from sunlight using solar panels is: 
+A. Wind 
+B. Solar ✅ 
+C. Biomass 
+D. Geothermal 
+Energy from rice husks, bagasse, and crop waste is: 
+A. Coal 
+B. Natural gas 
+C. Nuclear 
+D. Biomass (Bioenergy) ✅ 
+Which is a major non-renewable energy source in the Philippines? 
+A. Natural gas ✅ 
+B. River flow 
+C. Sunlight 
+D. Wind 
+Renewable energy helps fight climate change because it usually: 
+A. Releases more CO₂ 
+B. Adds methane 
+C. Produces little to zero CO₂ during operation ✅ 
+D. Only makes oxygen 
+Which list contains only non-renewable energy sources? 
+A. Solar, wind, hydro 
+B. Coal, oil, natural gas, nuclear ✅ 
+C. Geothermal and biomass 
+D. All of these 
+Which list contains only renewable energy sources used in the Philippines? 
+A. Geothermal, hydro, solar, wind, biomass ✅ 
+B. Nuclear and fusion 
+C. Hydrogen only 
+D. Coal, oil, gas 
+The biggest harmful effect of coal-fired power plants is: 
+A. Noise 
+B. Air pollution, high CO₂ emissions, and toxic ash ✅ 
+C. Water use only 
+D. Appearance only 
+A major disadvantage of large hydroelectric dams is: 
+A. They produce more CO₂ than coal 
+B. They block the wind 
+C. They always cause earthquakes 
+D. They can flood communities and affect rivers and ecosystems ✅ 
+Why is geothermal energy ideal for the Philippines? 
+A. Its location on the Pacific Ring of Fire provides abundant underground heat ✅ 
+B. It uses imported fuel 
+C. It prevents typhoons 
+D. The country has no volcanoes 
+A key economic benefit of increasing renewable energy is: 
+A. It creates no jobs 
+B. It reduces fuel imports and protects against fuel price increases ✅ 
+C. It always increases costs 
+D. It raises import bills 
+Solar and wind energy are called intermittent because: 
+A. They never work 
+B. They only work at night 
+C. Their output depends on sunlight and wind conditions ✅ 
+D. They break often 
+Natural gas is considered a transition fuel because: 
+A. It lasts forever 
+B. It is renewable 
+C. It produces zero pollution 
+D. It emits less CO₂ than coal but is still a fossil fuel ✅ 
+Replacing coal with renewable energy improves public health by: 
+A. Reducing air pollution that causes lung and heart diseases ✅ 
+B. Increasing mining 
+C. Making no difference 
+D. Raising electricity bills 
+Wind farms like those in Ilocos Norte have which advantage? 
+A. They work all the time 
+B. They use free wind and produce very low emissions ✅ 
+--- PAGE 12 ---
+C. They use large amounts of water 
+D. They block sunlight 
+Which comparison best describes renewable and non-renewable energy? 
+A. Both run out quickly 
+B. Their impacts are identical 
+C. Renewables cost more to build but are cleaner and cheaper to operate long-term ✅ 
+D. Renewables always cost more forever 
+Why is the Philippines increasing its renewable energy targets? 
+A. To stop all power generation 
+B. To favor only one technology 
+C. To improve energy security, reduce emissions, and lower fuel imports ✅ 
+D. Because the targets are random 
+Geothermal and hydroelectric power are called baseload renewables because they: 
+A. Can provide reliable electricity continuously ✅ 
+B. Only work at noon 
+C. Need imported fuel 
+D. Cost more than coal 
+A major fairness issue in building large energy projects is: 
+A. Everyone benefits equally 
+B. There are never complaints 
+C. Prices are always lower 
+D. Local and indigenous communities may experience most of the negative impacts ✅ 
+The best way to evaluate an energy source is by considering its: 
+A. Total cost, including environmental and health impacts ✅ 
+B. Name 
+C. Advertisements 
+D. Appearance 
+Coal ash and mining waste are dangerous because they: 
+A. Help crops grow 
+B. Can release toxic substances into soil and water ✅ 
+C. Break down quickly 
+D. Are completely harmless 
+How does the choice of energy source affect electricity delivered to homes? 
+A. Only the meter changes 
+B. Only wire color changes 
+C. It affects cost, reliability, emissions, and electricity bills ✅ 
+D. It has no effect 
+Which energy mix is most suitable for reliable and clean electricity in the Philippines? 
+A. Wind only 
+B. Biomass only 
+C. Solar only 
+D. Geothermal and hydro supported by solar, wind, storage, and grid upgrades ✅ 
+Why are renewable energy prices generally more stable? 
+A. They do not require fuel purchases after installation ✅ 
+B. Government permanently fixes the price 
+C. Oil companies control them 
+D. They are always subsidized 
+Why is it important for Grade 10 students to learn about energy sources? 
+A. It is only for examinations 
+B. Future citizens will make decisions that affect energy, the environment, and society ✅ 
+C. Adults make all decisions 
+D. It has no practical use 
+ 

@@ -1,0 +1,331 @@
+--- PAGE 1 ---
+PART 1 – PROJECTILE MOTION 
+Identification 
+Directions: Identify the term, concept, variable, or principle described in each statement. Write 
+your answer on the blank. 
+1. An object that is thrown, kicked, or launched and is acted upon mainly by gravity after 
+release. 
+Answer: ______________________ 
+2. The curved path followed by a projectile during its motion. 
+Answer: ______________________ 
+3. The two independent motions that combine to produce projectile motion. 
+Answer: ______________________ 
+4. The launch angle that produces the maximum horizontal range on level ground. 
+Answer: ______________________ 
+5. The launch angle that produces the greatest maximum height. 
+Answer: ______________________ 
+6. If a ball is thrown horizontally while another is dropped from the same height at the same 
+time, what happens to both balls? 
+Answer: ______________________ 
+7. The horizontal distance traveled by a projectile from launch to landing. 
+Answer: ______________________ 
+8. The greatest vertical distance a projectile reaches above its launch point. 
+Answer: ______________________ 
+9. If the launch angle remains constant, what happens to the range and maximum height as 
+launch speed increases? 
+Answer: ______________________ 
+10. Ignoring air resistance, what is the only force acting on a projectile after it is released? 
+Answer: ______________________ 
+11. Two launch angles that add up to 90° and produce the same range are called what? 
+Answer: ______________________ 
+12. Between launch angles of 30° and 60° with the same launch speed, which angle produces 
+the greater maximum height? 
+Answer: ______________________ 
+13. Why do basketball players often use a high arc when shooting? 
+Answer: ______________________ 
+14. Between launch angles of 20° and 70° with the same launch speed, which angle has the 
+shorter flight time? 
+Answer: ______________________ 
+15. How does the horizontal velocity of a projectile behave during flight when air resistance 
+is ignored? 
+Answer: ______________________ 
+16. What is the vertical velocity of a projectile at the highest point of its trajectory? 
+Answer: ______________________ 
+--- PAGE 2 ---
+17. Compared with the ideal prediction, what effect does air resistance have on a projectile's 
+range? 
+Answer: ______________________ 
+18. What launch condition helps a long jumper achieve maximum range? 
+Answer: ______________________ 
+19. If the launch speed doubles while the launch angle remains at 45°, approximately how 
+many times greater will the range become? 
+Answer: ______________________ 
+20. Which two variables determine the range and maximum height of a projectile? 
+Answer: ______________________ 
+21. At what point in its flight is a projectile's total speed the slowest? 
+Answer: ______________________ 
+22. At what positions along the trajectory does a projectile have equal speed due to 
+symmetry? 
+Answer: ______________________ 
+23. Why do archers aim slightly above the target? 
+Answer: ______________________ 
+24. Which pair of launch angles produces the same range but different maximum heights? 
+Answer: ______________________ 
+25. Does horizontal motion affect the time required for vertical free fall? 
+Answer: ______________________ 
+26. As the launch angle increases from 0° to 45° to 90°, how do the range and maximum 
+height change? 
+Answer: ______________________ 
+27. Why does a launch angle of 45° produce the maximum range on level ground? 
+Answer: ______________________ 
+28. In an experiment with a fixed launch angle, how does increasing launch speed affect the 
+range? 
+Answer: ______________________ 
+29. Which of the following is not an example of projectile motion? 
+Answer: ______________________ 
+30. What is the shape of the ideal path followed by a projectile? 
+Answer: ______________________ 
+ 
+Answer Key 
+1. Projectile 
+2. Trajectory 
+3. Constant horizontal motion and accelerated vertical free fall 
+4. 45° 
+5. 90° (straight upward) 
+6. Both hit the ground at the same time 
+7. Range 
+--- PAGE 3 ---
+8. Maximum height 
+9. Both range and height increase 
+10. Gravity 
+11. Complementary angles 
+12. 60° 
+13. More flight time and a better entry angle to the hoop 
+14. 20° 
+15. Remains constant 
+16. Zero 
+17. Makes the range shorter 
+18. Fast run-up with a launch angle near 45° 
+19. Four times 
+20. Launch speed and launch angle 
+21. At the peak (top of the trajectory) 
+22. Any two points at the same height above the launch point 
+23. To compensate for gravity pulling the arrow downward 
+24. Any pair of complementary angles (e.g., 40° and 50°) 
+25. No 
+26. Range peaks at 45° then decreases; maximum height continues to increase 
+27. It balances horizontal speed and flight time 
+28. It increases approximately as the square of the launch speed 
+29. Driving a car on a straight, flat road 
+30. Parabola 
+PART 2 – MOMENTUM AND 
+COLLISIONS 
+Identification 
+Directions: Identify the term, concept, formula, collision type, or principle described in each 
+statement. Write your answer on the blank. 
+1. The quantity defined as the product of an object's mass and velocity. 
+Answer: ______________________ 
+2. The formula used to calculate momentum. 
+Answer: ______________________ 
+3. Momentum describes how difficult it is to __________ a moving object. 
+Answer: ______________________ 
+4. The two factors that determine an object's momentum. 
+Answer: ______________________ 
+5. A collision in which no kinetic energy is lost and the objects bounce apart. 
+Answer: ______________________ 
+--- PAGE 4 ---
+6. A collision in which the objects stick together or deform, causing kinetic energy to 
+decrease. 
+Answer: ______________________ 
+7. In an isolated system, the total momentum before a collision is equal to the total 
+momentum __________. 
+Answer: ______________________ 
+8. The product of force and the time during which it acts. 
+Answer: ______________________ 
+9. Seatbelts and airbags reduce the force during a collision by increasing the __________. 
+Answer: ______________________ 
+10. For objects with equal mass, what happens to momentum as speed increases? 
+Answer: ______________________ 
+11. Billiard balls colliding and bouncing off with nearly the same speed are an example of 
+what type of collision? 
+Answer: ______________________ 
+12. Train cars coupling together after a collision demonstrate what type of collision? 
+Answer: ______________________ 
+13. Between a jeepney and a motorcycle traveling at the same speed, which has the greater 
+momentum? 
+Answer: ______________________ 
+14. Catching an egg by moving your hand backward increases the __________, reducing the 
+force on the egg. 
+Answer: ______________________ 
+15. The recoil of a cannon after firing is explained by what physical principle? 
+Answer: ______________________ 
+16. Crumple zones in vehicles reduce the force of impact by increasing the __________ and 
+__________. 
+Answer: ______________________ 
+17. In any collision involving an isolated system, what quantity is always conserved? 
+Answer: ______________________ 
+18. The form of energy that is conserved only in elastic collisions. 
+Answer: ______________________ 
+19. A 1 kg object moving at 5 m/s sticks to a 4 kg object at rest. What is their final speed? 
+Answer: ______________________ 
+20. Why is falling onto a mattress less painful than falling onto concrete? 
+Answer: ______________________ 
+21. Momentum is the product of what two quantities? 
+Answer: ______________________ 
+22. Two balls moving at equal speeds toward each other and bouncing apart demonstrate 
+what type of collision? 
+Answer: ______________________ 
+23. A boxer's punch has large momentum mainly because of the __________ of the fist. 
+Answer: ______________________ 
+24. During a car crash, what effect does a longer impact time have on the force experienced? 
+Answer: ______________________ 
+--- PAGE 5 ---
+25. The recoil of a fire hose when water is released demonstrates what law? 
+Answer: ______________________ 
+26. According to the impulse-momentum theorem, the product of force and time equals the 
+__________. 
+Answer: ______________________ 
+27. What is the main difference between elastic and inelastic collisions? 
+Answer: ______________________ 
+28. When momentum is conserved during a collision, what quantity is exchanged between 
+the objects? 
+Answer: ______________________ 
+29. Which object is harder to stop: a heavy, slow-moving object or a light, fast-moving 
+object? 
+Answer: ______________________ 
+30. Safety devices such as airbags and seatbelts reduce injuries by increasing __________ to 
+decrease force. 
+Answer: ______________________ 
+ 
+Answer Key 
+1. Momentum 
+2. p = m × v 
+3. Stop 
+4. Mass and velocity 
+5. Elastic collision 
+6. Inelastic collision 
+7. After the collision 
+8. Impulse 
+9. Stopping time (impact time) 
+10. Momentum increases 
+11. Nearly elastic collision 
+12. Perfectly inelastic collision 
+13. Jeepney 
+14. Impact time (stopping time) 
+15. Conservation of momentum 
+16. Stopping distance and stopping time 
+17. Total momentum 
+18. Kinetic energy 
+19. 1 m/s 
+20. Longer stopping time results in a smaller force 
+21. Mass and velocity 
+22. Elastic collision 
+23. High velocity 
+24. It reduces the force 
+--- PAGE 6 ---
+25. Conservation of momentum 
+26. Change in momentum (Δp) 
+27. Kinetic energy is conserved in elastic collisions but not in inelastic collisions; momentum 
+is conserved in both 
+28. Momentum 
+29. It depends on the product of mass and velocity (momentum) 
+30. Stopping time     
+ 
+PART 4 – RENEWABLE AND 
+NONRENEWABLE ENERGY 
+Identification 
+Directions: Identify the term, concept, energy source, or principle described in each statement. 
+Write your answer on the blank. 
+1. Energy sources that are depleted after use and require millions of years to form. 
+Answer: ______________________ 
+2. Energy sources that are naturally replenished within a relatively short period of time. 
+Answer: ______________________ 
+3. The primary source of electricity generation in the Philippines today. 
+Answer: ______________________ 
+4. The renewable energy resource in which the Philippines ranks second in the world. 
+Answer: ______________________ 
+5. The greenhouse gas mainly released when fossil fuels are burned. 
+Answer: ______________________ 
+6. Energy produced from the movement or falling of water. 
+Answer: ______________________ 
+7. Energy obtained directly from sunlight. 
+Answer: ______________________ 
+8. Energy produced from organic materials such as agricultural waste, wood, and crops. 
+Answer: ______________________ 
+9. The major nonrenewable natural gas source in the Philippines. 
+Answer: ______________________ 
+10. Why do renewable energy sources help reduce climate change? 
+Answer: ______________________ 
+11. Identify the group composed only of nonrenewable energy sources. 
+Answer: ______________________ 
+12. Identify the group composed only of renewable energy sources commonly used in the 
+Philippines. 
+Answer: ______________________ 
+--- PAGE 7 ---
+13. What is the major environmental effect of coal-fired power plants? 
+Answer: ______________________ 
+14. What is the primary disadvantage of constructing large hydroelectric dams? 
+Answer: ______________________ 
+15. Why is geothermal energy highly suitable for the Philippines? 
+Answer: ______________________ 
+16. What economic benefit results from increasing the use of renewable energy sources? 
+Answer: ______________________ 
+17. Solar and wind energy are classified as what type of energy sources because their output 
+depends on weather conditions? 
+Answer: ______________________ 
+18. Why is natural gas considered a transition fuel? 
+Answer: ______________________ 
+19. Replacing coal-fired power plants helps reduce what health problem? 
+Answer: ______________________ 
+20. State one major advantage of wind energy. 
+Answer: ______________________ 
+21. Compare the long-term cost of renewable energy with fossil fuels. 
+Answer: ______________________ 
+22. The Philippine goal of achieving 35% renewable energy by 2030 and 50% by 2040 
+primarily supports what two objectives? 
+Answer: ______________________ 
+23. Geothermal and hydropower are classified as what type of renewable energy because 
+they can provide continuous electricity? 
+Answer: ______________________ 
+24. What social issue is commonly associated with large energy development projects? 
+Answer: ______________________ 
+25. Besides fuel costs, what other impacts should be included in the true cost of energy 
+production? 
+Answer: ______________________ 
+26. Coal ash and mining waste may release what harmful materials into the environment? 
+Answer: ______________________ 
+27. Energy choices affect what four important aspects of society and electricity use? 
+Answer: ______________________ 
+28. Give a reliable clean energy mix recommended for the Philippines. 
+Answer: ______________________ 
+29. Why are renewable energy prices generally more stable than fossil fuel prices? 
+Answer: ______________________ 
+30. Why is learning about renewable and nonrenewable energy important for students? 
+Answer: ______________________ 
+ 
+Answer K 
+--- PAGE 8 ---
+1. Nonrenewable energy 
+2. Renewable energy 
+3. Coal 
+4. Geothermal energy 
+5. Carbon dioxide (CO₂) 
+6. Hydropower (Hydroelectric power) 
+7. Solar energy 
+8. Biomass energy 
+9. Natural gas (Malampaya) 
+10. They emit little to no CO₂ during operation 
+11. Coal, oil, and natural gas 
+12. Geothermal, hydropower, solar, wind, and biomass 
+13. Air pollution and high carbon dioxide emissions 
+14. Flooding and displacement of communities 
+15. The Philippines is located along the Ring of Fire 
+16. Lower fuel imports and greater price stability 
+17. Intermittent energy sources 
+18. It is cleaner than coal but is still a finite fossil fuel 
+19. Respiratory illnesses caused by air pollution 
+20. Free fuel and low emissions 
+21. Renewable energy has higher installation costs but lower long-term operating costs 
+22. Climate goals and energy security 
+23. Baseload renewable energy sources 
+24. Local communities often bear the negative impacts of the projects 
+25. Health, environmental, and climate impacts 
+26. Toxic substances 
+27. Cost, reliability, emissions, and electricity bills 
+28. Geothermal + Hydropower + Solar + Wind + Energy Storage 
+29. They have no fuel cost once the facilities are built 
+30. Because today's energy choices will affect people's lives and the environment in the 
+future. 
+ 
+ 
+ 

@@ -5,12 +5,14 @@ from pypdf import PdfReader
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-assets_dir = r'd:\Nexus 2.0\Assets'
+pdf_path = r'd:\Nexus 2.0\Assets\nexus-MCQ-term-1 (1).pdf'
+reader = PdfReader(pdf_path)
 
-reader = PdfReader(os.path.join(assets_dir, 'nexus-MCQ-term-1 (1).pdf'))
-print(f"Total pages in nexus-MCQ-term-1: {len(reader.pages)}")
+full_text = ""
+for i, p in enumerate(reader.pages):
+    full_text += f"\n--- PAGE {i+1} ---\n" + (p.extract_text() or "")
 
-for i, page in enumerate(reader.pages):
-    txt = page.extract_text() or ''
-    first_line = txt.split('\n')[0] if txt else ''
-    print(f"Page {i+1}: {first_line[:80]}")
+with open('mcq1_raw_text.txt', 'w', encoding='utf-8') as f:
+    f.write(full_text)
+
+print(f"Extracted {len(full_text)} chars from nexus-MCQ-term-1 (1).pdf to mcq1_raw_text.txt")

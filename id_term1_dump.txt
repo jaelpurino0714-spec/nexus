@@ -1,0 +1,840 @@
+P1 Q01 [Physical vs. Chemical Change]:
+  Q: A change that produces one or more new substances.
+  A: Chemical change
+
+P1 Q02 [Physical vs. Chemical Change]:
+  Q: A change that only affects the size, shape, or state of a substance without changing its composition.
+  A: Physical change
+
+P1 Q03 [Physical vs. Chemical Change]:
+  Q: The process of tomatoes spoiling and producing new substances.
+  A: Rotting (rotting of tomatoes)
+
+P1 Q04 [Physical vs. Chemical Change]:
+  Q: The type of change represented by crushing chunks of ice.
+  A: Physical change
+
+P1 Q05 [Physical vs. Chemical Change]:
+  Q: The main characteristic that distinguishes a chemical change from a physical change.
+  A: Formation of a new substance
+
+P1 Q06 [Physical vs. Chemical Change]:
+  Q: The evidence of a chemical reaction shown when vinegar reacts with baking soda and bubbles are produced.
+  A: Gas evolution (gas formation)
+
+P1 Q07 [Physical vs. Chemical Change]:
+  Q: The evidence of a chemical reaction shown when milk forms lumpy solids.
+  A: Formation of a precipitate
+
+P1 Q08 [Physical vs. Chemical Change]:
+  Q: The evidence shown when quicklime reacts with water and releases heat.
+  A: Temperature change (heat released)
+
+P1 Q09 [Physical vs. Chemical Change]:
+  Q: The change that occurs when paper is cut into smaller pieces.
+  A: Physical change
+
+P1 Q10 [Physical vs. Chemical Change]:
+  Q: The evidence of a chemical reaction when a yellow solid forms after mixing two clear solutions.
+  A: Precipitate formation
+
+P1 Q11 [Physical vs. Chemical Change]:
+  Q: The substances found on the left side of a chemical equation.
+  A: Reactants
+
+P1 Q12 [Physical vs. Chemical Change]:
+  Q: The substances formed on the right side of a chemical equation.
+  A: Products
+
+P1 Q13 [Physical vs. Chemical Change]:
+  Q: The meaning of the symbol (aq) in a chemical equation.
+  A: Aqueous (dissolved in water)
+
+P1 Q14 [Physical vs. Chemical Change]:
+  Q: The meaning of the symbol Δ written above the reaction arrow.
+  A: Heat is supplied
+
+P1 Q15 [Physical vs. Chemical Change]:
+  Q: The meaning of the downward arrow (↓) in a chemical equation.
+  A: Precipitate (solid formed)
+
+P1 Q16 [Physical vs. Chemical Change]:
+  Q: The meaning of the plus sign (+) between substances in a chemical equation.
+  A: Reacts with / mixed with
+
+P1 Q17 [Physical vs. Chemical Change]:
+  Q: The reaction type represented by A + B → AB.
+  A: Combination (Synthesis) reaction
+
+P1 Q18 [Physical vs. Chemical Change]:
+  Q: The reaction type shown by 2Na + Cl₂ → 2NaCl.
+  A: Combination (Synthesis) reaction
+
+P1 Q19 [Physical vs. Chemical Change]:
+  Q: The reaction type represented by CaCO₃ → CaO + CO₂.
+  A: Decomposition reaction
+
+P1 Q20 [Physical vs. Chemical Change]:
+  Q: The general equation for a decomposition reaction.
+  A: AB → A + B
+
+P1 Q21 [Physical vs. Chemical Change]:
+  Q: The reaction in which one element replaces another element in a compound.
+  A: Single displacement reaction
+
+P1 Q22 [Physical vs. Chemical Change]:
+  Q: The reaction type represented by AgNO₃ + NaCl → AgCl + NaNO₃.
+  A: Double displacement reaction
+
+P1 Q23 [Physical vs. Chemical Change]:
+  Q: The gas that is always required for combustion reactions.
+  A: Oxygen (O₂)
+
+P1 Q24 [Physical vs. Chemical Change]:
+  Q: The two products always formed during the complete combustion of a hydrocarbon.
+  A: Carbon dioxide (CO₂) and water (H₂O)
+
+P1 Q25 [Physical vs. Chemical Change]:
+  Q: The reaction represented by HBr + NaOH → NaBr + H₂O.
+  A: Neutralization (Acid–Base reaction)
+
+P1 Q26 [Physical vs. Chemical Change]:
+  Q: The special type of double displacement reaction involving an acid and a base.
+  A: Neutralization
+
+P1 Q27 [Physical vs. Chemical Change]:
+  Q: The type of change represented by melting wax.
+  A: Physical change
+
+P1 Q28 [Physical vs. Chemical Change]:
+  Q: The process represented by dissolving salt in water.
+  A: Physical change
+
+P1 Q29 [Physical vs. Chemical Change]:
+  Q: In the equation Mg + O₂ → MgO, the substance MgO is called the ________.
+  A: Product
+
+P1 Q30 [Physical vs. Chemical Change]:
+  Q: The meaning of the reaction arrow (→) in a chemical equation.
+  A: Yields / Produces
+
+P2 Q01 [Acids, Bases, and Salts]:
+  Q: A substance that has a sour taste and turns blue litmus paper red.
+  A: Acid
+
+P2 Q02 [Acids, Bases, and Salts]:
+  Q: A substance that turns red litmus paper blue and has a pH greater than 7.
+  A: Base
+
+P2 Q03 [Acids, Bases, and Salts]:
+  Q: The pH value of pure water at 25°C.
+  A: pH 7
+
+P2 Q04 [Acids, Bases, and Salts]:
+  Q: The color of phenolphthalein in a basic solution.
+  A: Bright pink
+
+P2 Q05 [Acids, Bases, and Salts]:
+  Q: The ion released by acids in water according to the Arrhenius definition.
+  A: H⁺ (Hydrogen ion) / H₃O⁺
+
+P2 Q06 [Acids, Bases, and Salts]:
+  Q: The ion released by bases in water according to the Arrhenius definition.
+  A: OH⁻ (Hydroxide ion)
+
+P2 Q07 [Acids, Bases, and Salts]:
+  Q: The chemical formula of common table salt.
+  A: NaCl
+
+P2 Q08 [Acids, Bases, and Salts]:
+  Q: The chemical formula of hydrochloric acid found in the stomach.
+  A: HCl
+
+P2 Q09 [Acids, Bases, and Salts]:
+  Q: The chemical formula of sodium hydroxide (caustic soda).
+  A: NaOH
+
+P2 Q10 [Acids, Bases, and Salts]:
+  Q: The color of methyl orange in an acidic solution.
+  A: Red
+
+P2 Q11 [Acids, Bases, and Salts]:
+  Q: A natural indicator obtained from plants that turns reddish-brown in a base.
+  A: Turmeric
+
+P2 Q12 [Acids, Bases, and Salts]:
+  Q: A solution with a pH of 7 is described as __________.
+  A: Neutral
+
+P2 Q13 [Acids, Bases, and Salts]:
+  Q: The weak acid commonly found in vinegar.
+  A: Acetic acid (CH₃COOH)
+
+P2 Q14 [Acids, Bases, and Salts]:
+  Q: The base commonly found in milk of magnesia.
+  A: Magnesium hydroxide [Mg(OH)₂]
+
+P2 Q15 [Acids, Bases, and Salts]:
+  Q: The color of blue litmus paper when placed in a base.
+  A: Blue
+
+P2 Q16 [Acids, Bases, and Salts]:
+  Q: The reaction between an acid and a base that produces salt and water.
+  A: Neutralization
+
+P2 Q17 [Acids, Bases, and Salts]:
+  Q: The type of indicator that changes smell instead of color in acids and bases.
+  A: Olfactory indicator
+
+P2 Q18 [Acids, Bases, and Salts]:
+  Q: The approximate mouth pH at which tooth enamel begins to dissolve.
+  A: pH 5.5
+
+P2 Q19 [Acids, Bases, and Salts]:
+  Q: The salt that forms a basic solution when dissolved in water.
+  A: Sodium carbonate (Na₂CO₃)
+
+P2 Q20 [Acids, Bases, and Salts]:
+  Q: The salt that forms an acidic solution when dissolved in water.
+  A: Ammonium chloride (NH₄Cl)
+
+P2 Q21 [Acids, Bases, and Salts]:
+  Q: The reason dry hydrogen chloride gas does not affect dry blue litmus paper.
+  A: No water is present to ionize HCl and produce H⁺ ions.
+
+P2 Q22 [Acids, Bases, and Salts]:
+  Q: The factor by which hydrogen ion concentration changes for every one-unit change in pH.
+  A: 10×
+
+P2 Q23 [Acids, Bases, and Salts]:
+  Q: Arrange the following pH values from strongest acid to strongest base: 2, 6, 7, 9, 12.
+  A: 2 → 6 → 7 → 9 → 12
+
+P2 Q24 [Acids, Bases, and Salts]:
+  Q: The neutral salt produced by the reaction of hydrochloric acid and sodium hydroxide.
+  A: Sodium chloride (NaCl)
+
+P2 Q25 [Acids, Bases, and Salts]:
+  Q: The particles that allow acidic and basic solutions to conduct electricity.
+  A: Mobile ions
+
+P2 Q26 [Acids, Bases, and Salts]:
+  Q: The safe laboratory practice when diluting concentrated acids.
+  A: Pour acid slowly into water while stirring.
+
+P2 Q27 [Acids, Bases, and Salts]:
+  Q: The gas released when baking soda reacts with an acid.
+  A: Carbon dioxide (CO₂)
+
+P2 Q28 [Acids, Bases, and Salts]:
+  Q: The indicator that remains blue in a basic solution.
+  A: Blue litmus paper
+
+P2 Q29 [Acids, Bases, and Salts]:
+  Q: The substance released by bases that gives them their basic properties.
+  A: Hydroxide ion (OH⁻)
+
+P2 Q30 [Acids, Bases, and Salts]:
+  Q: The product formed together with water during a neutralization reaction.
+  A: Salt
+
+P3 Q01 [Chemical Reactions]:
+  Q: The reaction represented by A + B → AB.
+  A: Combination (Synthesis) reaction
+
+P3 Q02 [Chemical Reactions]:
+  Q: The reaction represented by AB → A + B.
+  A: Decomposition reaction
+
+P3 Q03 [Chemical Reactions]:
+  Q: The reaction in which a hydrocarbon reacts with oxygen to produce carbon dioxide, water, and heat.
+  A: Combustion
+
+P3 Q04 [Chemical Reactions]:
+  Q: The reaction between an acid and a base that forms salt and water.
+  A: Neutralization (special double displacement)
+
+P3 Q05 [Chemical Reactions]:
+  Q: The reaction represented by AB + C → AC + B.
+  A: Single displacement (Single replacement) reaction
+
+P3 Q06 [Chemical Reactions]:
+  Q: The reaction represented by AB + CD → AD + CB.
+  A: Double displacement (Double replacement) reaction
+
+P3 Q07 [Chemical Reactions]:
+  Q: The reaction type shown by 2Na + Cl₂ → 2NaCl.
+  A: Combination (Synthesis) reaction
+
+P3 Q08 [Chemical Reactions]:
+  Q: The reaction type represented by CaCO₃ → CaO + CO₂.
+  A: Decomposition reaction
+
+P3 Q09 [Chemical Reactions]:
+  Q: The process by which plants produce glucose from carbon dioxide and water using sunlight.
+  A: Photosynthesis
+
+P3 Q10 [Chemical Reactions]:
+  Q: The process by which body cells break down glucose to release energy.
+  A: Cellular respiration
+
+P3 Q11 [Chemical Reactions]:
+  Q: A reaction in which one reactant breaks down into two or more simpler substances.
+  A: Decomposition reaction
+
+P3 Q12 [Chemical Reactions]:
+  Q: The slow oxidation of iron that produces rust.
+  A: Oxidation (Corrosion/Rusting)
+
+P3 Q13 [Chemical Reactions]:
+  Q: A reaction that forms an insoluble solid from two solutions.
+  A: Precipitation reaction
+
+P3 Q14 [Chemical Reactions]:
+  Q: A reaction in which one element replaces another element in a compound.
+  A: Single displacement reaction
+
+P3 Q15 [Chemical Reactions]:
+  Q: The biological process that is the reverse of photosynthesis.
+  A: Cellular respiration
+
+P3 Q16 [Chemical Reactions]:
+  Q: The reaction represented by Zn + 2HCl → ZnCl₂ + H₂.
+  A: Single displacement reaction
+
+P3 Q17 [Chemical Reactions]:
+  Q: The reaction represented by AgNO₃ + NaCl → AgCl + NaNO₃.
+  A: Double displacement with precipitation
+
+P3 Q18 [Chemical Reactions]:
+  Q: The combustion of methane represented by CH₄ + 2O₂ → CO₂ + 2H₂O + heat.
+  A: Combustion of methane
+
+P3 Q19 [Chemical Reactions]:
+  Q: The environmental problem caused when sulfur dioxide and nitrogen oxides react with rainwater.
+  A: Acid rain
+
+P3 Q20 [Chemical Reactions]:
+  Q: The process represented by 4Fe + 3O₂ + H₂O → 2Fe₂O₃·H₂O.
+  A: Corrosion (Slow oxidation/Rusting)
+
+P3 Q21 [Chemical Reactions]:
+  Q: The process that is considered the opposite of cellular respiration.
+  A: Photosynthesis
+
+P3 Q22 [Chemical Reactions]:
+  Q: The reaction that occurs when acid rain reacts with limestone statues.
+  A: Acid-carbonate double displacement reaction
+
+P3 Q23 [Chemical Reactions]:
+  Q: The greenhouse gas commonly released during the burning of fuels, forests, and volcanic eruptions.
+  A: Carbon dioxide (CO₂)
+
+P3 Q24 [Chemical Reactions]:
+  Q: The process by which plants help reduce global warming by removing carbon dioxide from the atmosphere.
+  A: Photosynthesis
+
+P3 Q25 [Chemical Reactions]:
+  Q: A reaction that has only one reactant and produces two or more products.
+  A: Decomposition reaction
+
+P3 Q26 [Chemical Reactions]:
+  Q: The reaction type represented by 2Mg + O₂ → 2MgO.
+  A: Combination and oxidation reaction
+
+P3 Q27 [Chemical Reactions]:
+  Q: The reaction type that always produces heat according to the source material.
+  A: Combustion
+
+P3 Q28 [Chemical Reactions]:
+  Q: The reaction represented by 2H₂O → 2H₂ + O₂ using electricity.
+  A: Electrolytic decomposition
+
+P3 Q29 [Chemical Reactions]:
+  Q: The reason iron replaces copper in the reaction Fe + CuSO₄ → FeSO₄ + Cu.
+  A: Iron is more reactive than copper (activity series rule).
+
+P3 Q30 [Chemical Reactions]:
+  Q: The main environmental effects of uncontrolled combustion.
+  A: Global warming, acid rain, and air pollution
+
+P4 Q01 [Chemical Equations]:
+  Q: The substances found on the left side of a chemical equation.
+  A: Reactants
+
+P4 Q02 [Chemical Equations]:
+  Q: The substances found on the right side of a chemical equation.
+  A: Products
+
+P4 Q03 [Chemical Equations]:
+  Q: The meaning of the symbol (aq) in a chemical equation.
+  A: Aqueous (dissolved in water)
+
+P4 Q04 [Chemical Equations]:
+  Q: The meaning of the symbol (s) in a chemical equation.
+  A: Solid
+
+P4 Q05 [Chemical Equations]:
+  Q: The meaning of the symbol (g) in a chemical equation.
+  A: Gas
+
+P4 Q06 [Chemical Equations]:
+  Q: The scientific law stating that the total mass of reactants equals the total mass of products.
+  A: Law of Conservation of Mass
+
+P4 Q07 [Chemical Equations]:
+  Q: The meaning of the arrow (→) in a chemical equation.
+  A: Yields / Produces / Forms
+
+P4 Q08 [Chemical Equations]:
+  Q: The meaning of the plus sign (+) between reactants.
+  A: Reacts with (or "and")
+
+P4 Q09 [Chemical Equations]:
+  Q: A balanced chemical equation has __________ atoms of each element on both sides.
+  A: Equal
+
+P4 Q10 [Chemical Equations]:
+  Q: Write the balanced chemical equation for the reaction of hydrogen and oxygen to form water.
+  A: 2H₂ + O₂ → 2H₂O
+
+P4 Q11 [Chemical Equations]:
+  Q: The meaning of the symbol (l) in a chemical equation.
+  A: Liquid
+
+P4 Q12 [Chemical Equations]:
+  Q: A number written in front of a chemical formula that indicates the number of molecules or moles.
+  A: Coefficient
+
+P4 Q13 [Chemical Equations]:
+  Q: A small number written below and to the right of an element symbol showing the number of atoms in one molecule.
+  A: Subscript
+
+P4 Q14 [Chemical Equations]:
+  Q: The correct chemical formula for carbon dioxide.
+  A: CO₂
+
+P4 Q15 [Chemical Equations]:
+  Q: In the formula CaCl₂, the subscript "2" refers to the number of __________ atoms.
+  A: Chlorine
+
+P4 Q16 [Chemical Equations]:
+  Q: The only numbers that may be changed when balancing a chemical equation.
+  A: Coefficients
+
+P4 Q17 [Chemical Equations]:
+  Q: In 3H₂O, identify the large number 3 and the small number 2.
+  A: 3 = Coefficient; 2 = Subscript
+
+P4 Q18 [Chemical Equations]:
+  Q: The balanced equation among the following: Ca + Cl₂ → CaCl₂. What is its condition?
+  A: Already balanced
+
+P4 Q19 [Chemical Equations]:
+  Q: The total number of hydrogen atoms in 2H₂SO₄.
+  A: 4 hydrogen atoms
+
+P4 Q20 [Chemical Equations]:
+  Q: The total number of oxygen atoms in 4Al₂O₃.
+  A: 12 oxygen atoms
+
+P4 Q21 [Chemical Equations]:
+  Q: In the equation Mg + 2HCl → MgCl₂ + H₂, how many chlorine atoms are present in the product?
+  A: 2 chlorine atoms
+
+P4 Q22 [Chemical Equations]:
+  Q: The first step in balancing any chemical equation.
+  A: Count the atoms of each element on both sides.
+
+P4 Q23 [Chemical Equations]:
+  Q: The reason chemical equations must be balanced.
+  A: To obey the Law of Conservation of Mass.
+
+P4 Q24 [Chemical Equations]:
+  Q: If gas escapes from an open container during a reaction, what law still applies?
+  A: Law of Conservation of Mass
+
+P4 Q25 [Chemical Equations]:
+  Q: In the equation N₂ + H₂ → NH₃, the elements that are initially unbalanced are __________.
+  A: Nitrogen and Hydrogen
+
+P4 Q26 [Chemical Equations]:
+  Q: The total number of carbon atoms in 5C₆H₁₂O₆.
+  A: 30 carbon atoms
+
+P4 Q27 [Chemical Equations]:
+  Q: The action that is not allowed when balancing chemical equations.
+  A: Changing the subscripts
+
+P4 Q28 [Chemical Equations]:
+  Q: Balance the equation: __ H₂ + __ O₂ → __ H₂O.
+  A: 2, 1, 2
+
+P4 Q29 [Chemical Equations]:
+  Q: Balance the equation: __ N₂ + __ H₂ → __ NH₃.
+  A: 1, 3, 2
+
+P4 Q30 [Chemical Equations]:
+  Q: Balance the equation: __ Al + __ O₂ → __ Al₂O₃.
+  A: 4, 3, 2
+
+P5 Q01 [Rates of Reactions]:
+  Q: The measure of how fast a chemical reaction occurs.
+  A: Reaction rate
+
+P5 Q02 [Rates of Reactions]:
+  Q: The factor that generally increases reaction rate by increasing particle movement.
+  A: Temperature
+
+P5 Q03 [Rates of Reactions]:
+  Q: A substance that speeds up a reaction without being consumed.
+  A: Catalyst
+
+P5 Q04 [Rates of Reactions]:
+  Q: A reaction that releases heat to its surroundings.
+  A: Exothermic reaction
+
+P5 Q05 [Rates of Reactions]:
+  Q: A reaction that absorbs heat from its surroundings.
+  A: Endothermic reaction
+
+P5 Q06 [Rates of Reactions]:
+  Q: The factor increased when a solid reactant is crushed into smaller pieces.
+  A: Surface area
+
+P5 Q07 [Rates of Reactions]:
+  Q: The three components of the fire triangle.
+  A: Fuel, oxygen, and heat (ignition temperature)
+
+P5 Q08 [Rates of Reactions]:
+  Q: The factor responsible for slowing food spoilage inside a refrigerator.
+  A: Lower temperature
+
+P5 Q09 [Rates of Reactions]:
+  Q: A substance that slows down a chemical reaction.
+  A: Inhibitor
+
+P5 Q10 [Rates of Reactions]:
+  Q: A common example of an exothermic reaction.
+  A: Combustion (burning wood)
+
+P5 Q11 [Rates of Reactions]:
+  Q: The minimum amount of energy required for a reaction to begin.
+  A: Activation energy
+
+P5 Q12 [Rates of Reactions]:
+  Q: The theory stating that particles must collide with enough energy and proper orientation for a reaction to occur.
+  A: Collision theory
+
+P5 Q13 [Rates of Reactions]:
+  Q: The effect of crushing a solid reactant on its reaction rate.
+  A: Increases the reaction rate
+
+P5 Q14 [Rates of Reactions]:
+  Q: The effect of lowering temperature on most chemical reactions.
+  A: Slows the reaction rate
+
+P5 Q15 [Rates of Reactions]:
+  Q: Powdered calcium carbonate reacts faster than marble chips because it has greater __________.
+  A: Surface area
+
+P5 Q16 [Rates of Reactions]:
+  Q: Concentrated hydrochloric acid reacts faster than dilute hydrochloric acid because of higher __________.
+  A: Concentration
+
+P5 Q17 [Rates of Reactions]:
+  Q: Biological catalysts found in living organisms.
+  A: Enzymes
+
+P5 Q18 [Rates of Reactions]:
+  Q: Water extinguishes fire mainly by removing __________.
+  A: Heat
+
+P5 Q19 [Rates of Reactions]:
+  Q: A fire blanket extinguishes fire by removing __________.
+  A: Oxygen
+
+P5 Q20 [Rates of Reactions]:
+  Q: Painting or galvanizing iron prevents rust by blocking contact with __________ and __________.
+  A: Oxygen and water (moisture)
+
+P5 Q21 [Rates of Reactions]:
+  Q: The food preservation method that removes water needed by microorganisms.
+  A: Drying, salting, or sugaring
+
+P5 Q22 [Rates of Reactions]:
+  Q: The food preservation method that kills microorganisms with heat and seals out oxygen.
+  A: Canning
+
+P5 Q23 [Rates of Reactions]:
+  Q: Stirring reactants usually has what effect on reaction rate?
+  A: Speeds up the reaction
+
+P5 Q24 [Rates of Reactions]:
+  Q: A process that continuously absorbs energy from sunlight.
+  A: Photosynthesis
+
+P5 Q25 [Rates of Reactions]:
+  Q: The way a catalyst speeds up a reaction.
+  A: By lowering the activation energy
+
+P5 Q26 [Rates of Reactions]:
+  Q: The reason higher temperatures greatly increase reaction rate.
+  A: More frequent collisions and more particles have enough energy to react
+
+P5 Q27 [Rates of Reactions]:
+  Q: The reason explosions occur extremely rapidly.
+  A: Instant gas release, heat, and large surface contact
+
+P5 Q28 [Rates of Reactions]:
+  Q: Why does a reaction eventually stop after all reactants are used up?
+  A: The reactants are completely used up, so no more effective collisions occur.
+
+P5 Q29 [Rates of Reactions]:
+  Q: The device in vehicles that uses catalysts to reduce harmful exhaust gases.
+  A: Catalytic converter
+
+P5 Q30 [Rates of Reactions]:
+  Q: The factor increased when oxygen concentration becomes higher, causing fire to burn faster.
+  A: Concentration of oxygen (reactant concentration)
+
+P6 Q01 [Homeostasis]:
+  Q: The process of maintaining a stable internal environment despite external changes.
+  A: Homeostasis
+
+P6 Q02 [Homeostasis]:
+  Q: The two body systems that serve as the main control systems for homeostasis.
+  A: Nervous system and Endocrine system
+
+P6 Q03 [Homeostasis]:
+  Q: The type of feedback mechanism that reverses a change and returns the body to its normal condition.
+  A: Negative feedback
+
+P6 Q04 [Homeostasis]:
+  Q: The normal or target value maintained by the body during homeostasis.
+  A: Set point
+
+P6 Q05 [Homeostasis]:
+  Q: The structure that detects changes in the internal or external environment.
+  A: Receptor (Sensor)
+
+P6 Q06 [Homeostasis]:
+  Q: The structure that carries out the response to restore balance.
+  A: Effector
+
+P6 Q07 [Homeostasis]:
+  Q: The main function of negative feedback in the body.
+  A: Reverse the change and restore the set point
+
+P6 Q08 [Homeostasis]:
+  Q: The body characteristic that is not maintained by homeostasis according to the lesson.
+  A: Constant body height
+
+P6 Q09 [Homeostasis]:
+  Q: The part of the brain responsible for regulating body temperature.
+  A: Hypothalamus
+
+P6 Q10 [Homeostasis]:
+  Q: The response of blood vessels in the skin when the body is cold.
+  A: Vasoconstriction (blood vessels constrict)
+
+P6 Q11 [Homeostasis]:
+  Q: The body system that uses hormones as chemical messengers.
+  A: Endocrine system
+
+P6 Q12 [Homeostasis]:
+  Q: The two hormones responsible for regulating blood glucose levels.
+  A: Insulin and Glucagon
+
+P6 Q13 [Homeostasis]:
+  Q: The hormone released by the pancreas when blood sugar becomes too high.
+  A: Insulin
+
+P6 Q14 [Homeostasis]:
+  Q: The hormone released by the pancreas when blood sugar becomes too low.
+  A: Glucagon
+
+P6 Q15 [Homeostasis]:
+  Q: The organ that regulates water and salt balance by adjusting urine concentration.
+  A: Kidneys
+
+P6 Q16 [Homeostasis]:
+  Q: The body's response that generates heat when a person feels cold.
+  A: Shivering
+
+P6 Q17 [Homeostasis]:
+  Q: The type of feedback mechanism demonstrated by shivering.
+  A: Negative feedback
+
+P6 Q18 [Homeostasis]:
+  Q: The relationship between insulin and glucagon in regulating blood sugar.
+  A: Opposing negative feedback
+
+P6 Q19 [Homeostasis]:
+  Q: The type of feedback mechanism that amplifies a change away from the set point.
+  A: Positive feedback
+
+P6 Q20 [Homeostasis]:
+  Q: The hormone released after eating to lower blood glucose levels.
+  A: Insulin
+
+P6 Q21 [Homeostasis]:
+  Q: The organ that mainly removes waste while helping regulate body fluids.
+  A: Kidneys
+
+P6 Q22 [Homeostasis]:
+  Q: The two body responses that help lower body temperature when a person becomes too hot.
+  A: Sweating and vasodilation
+
+P6 Q23 [Homeostasis]:
+  Q: A common example of positive feedback in the human body.
+  A: Blood clotting
+
+P6 Q24 [Homeostasis]:
+  Q: Homeostasis requires a constant supply of what to maintain balance?
+  A: Energy
+
+P6 Q25 [Homeostasis]:
+  Q: If blood pH is not properly maintained, what happens first to many enzymes?
+  A: They denature or stop functioning properly.
+
+P6 Q26 [Homeostasis]:
+  Q: During exercise, breathing rate increases to maintain the balance of which two gases?
+  A: Oxygen (O₂) and Carbon dioxide (CO₂)
+
+P6 Q27 [Homeostasis]:
+  Q: Arrange the correct sequence of a homeostatic feedback loop.
+  A: Stimulus → Receptor → Control Center → Effector → Response
+
+P6 Q28 [Homeostasis]:
+  Q: The hormone that strengthens uterine contractions during childbirth through positive feedback.
+  A: Oxytocin
+
+P6 Q29 [Homeostasis]:
+  Q: The long-term result if homeostasis fails to maintain stable internal conditions.
+  A: Disease, organ damage, or death
+
+P6 Q30 [Homeostasis]:
+  Q: The active process that continuously keeps the body's internal environment stable.
+  A: Homeostasis
+
+P7 Q01 [Mechanisms of Evolution]:
+  Q: The gradual change in the inherited traits of a population over many generations.
+  A: Evolution
+
+P7 Q02 [Mechanisms of Evolution]:
+  Q: The scientist who proposed natural selection as the primary mechanism of evolution.
+  A: Charles Darwin
+
+P7 Q03 [Mechanisms of Evolution]:
+  Q: The process in which organisms best adapted to their environment survive and reproduce.
+  A: Natural selection
+
+P7 Q04 [Mechanisms of Evolution]:
+  Q: An inherited characteristic that helps an organism survive and reproduce in its environment.
+  A: Adaptation
+
+P7 Q05 [Mechanisms of Evolution]:
+  Q: The natural differences in traits among individuals of the same species.
+  A: Variation
+
+P7 Q06 [Mechanisms of Evolution]:
+  Q: The passing of genetic traits from parents to offspring.
+  A: Heredity (Inheritance)
+
+P7 Q07 [Mechanisms of Evolution]:
+  Q: Preserved remains, traces, or impressions of ancient organisms found in rocks.
+  A: Fossils
+
+P7 Q08 [Mechanisms of Evolution]:
+  Q: Body parts with similar internal structures but different functions due to common ancestry.
+  A: Homologous structures
+
+P7 Q09 [Mechanisms of Evolution]:
+  Q: A reduced structure that has lost most or all of its original function through evolution.
+  A: Vestigial structure
+
+P7 Q10 [Mechanisms of Evolution]:
+  Q: The study of the geographic distribution of living organisms.
+  A: Biogeography
+
+P7 Q11 [Mechanisms of Evolution]:
+  Q: The famous example of evolution involving light and dark peppered moths during the Industrial Revolution.
+  A: Natural selection (Peppered moth example)
+
+P7 Q12 [Mechanisms of Evolution]:
+  Q: The type of isolation that occurs when a physical barrier separates populations.
+  A: Geographic isolation
+
+P7 Q13 [Mechanisms of Evolution]:
+  Q: Structures that perform the same function but have different evolutionary origins.
+  A: Analogous structures
+
+P7 Q14 [Mechanisms of Evolution]:
+  Q: The process that prevents gene flow between separated populations, leading to the formation of new species.
+  A: Reproductive isolation
+
+P7 Q15 [Mechanisms of Evolution]:
+  Q: Fossils found in deeper rock layers are generally __________ than those in younger layers.
+  A: Simpler and more different from modern organisms
+
+P7 Q16 [Mechanisms of Evolution]:
+  Q: The evolutionary explanation for the long necks of giraffes.
+  A: Natural selection favored longer-necked giraffes over many generations.
+
+P7 Q17 [Mechanisms of Evolution]:
+  Q: The process in which humans choose organisms with desirable traits for breeding.
+  A: Artificial selection
+
+P7 Q18 [Mechanisms of Evolution]:
+  Q: The study of similarities in the early development of embryos as evidence for evolution.
+  A: Comparative embryology
+
+P7 Q19 [Mechanisms of Evolution]:
+  Q: The type of isolation that occurs when populations do not interbreed because of differences in behavior or breeding time.
+  A: Reproductive isolation
+
+P7 Q20 [Mechanisms of Evolution]:
+  Q: A species found naturally in only one geographic location.
+  A: Endemic species
+
+P7 Q21 [Mechanisms of Evolution]:
+  Q: The process through which new species are formed.
+  A: Speciation
+
+P7 Q22 [Mechanisms of Evolution]:
+  Q: The primary mechanism of evolution that consistently produces adaptations suited to the environment.
+  A: Natural selection
+
+P7 Q23 [Mechanisms of Evolution]:
+  Q: Tiny unused pelvic bones in modern whales are an example of what type of evolutionary evidence?
+  A: Vestigial structure
+
+P7 Q24 [Mechanisms of Evolution]:
+  Q: In science, a well-tested explanation supported by extensive evidence is called a __________.
+  A: Scientific theory
+
+P7 Q25 [Mechanisms of Evolution]:
+  Q: The supercontinent whose existence is supported by matching fossils found in South America and Africa.
+  A: Pangaea
+
+P7 Q26 [Mechanisms of Evolution]:
+  Q: A condition required for natural selection in which inherited differences already exist within a population.
+  A: Variation
+
+P7 Q27 [Mechanisms of Evolution]:
+  Q: Homologous structures provide evidence that different species share a __________.
+  A: Common ancestor
+
+P7 Q28 [Mechanisms of Evolution]:
+  Q: During a long drought, finches with larger beaks survived better because of __________.
+  A: Natural selection
+
+P7 Q29 [Mechanisms of Evolution]:
+  Q: The movement of individuals between populations that keeps their gene pools similar.
+  A: Gene flow
+
+P7 Q30 [Mechanisms of Evolution]:
+  Q: The strongest evidence for evolution comes from multiple independent lines of evidence, including fossils, homologous structures, DNA similarity, and __________.
+  A: Biogeography
+

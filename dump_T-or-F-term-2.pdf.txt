@@ -1,0 +1,194 @@
+TOPIC: ECOSYSTEM’S CARRYING CAPACITY & POPULATION GROWTH  
+1. Carrying capacity is the maximum number of individuals an ecosystem can support long-term. | TRUE  
+2. Limiting factors stop a population from growing beyond available resources. | TRUE  
+3. Food, water, and shelter are core limiting factors for most populations. | TRUE  
+4. Body color is one of the main limiting factors that control population size. | FALSE  
+5. Unrestricted growth produces a J-shaped curve called exponential growth. | TRUE  
+6. As a population nears carrying capacity, its growth rate slows down. | TRUE  
+7. Logistic growth forms an S-shaped curve that levels off near carrying capacity. | TRUE  
+8. Lack of available mates acts as a limiting factor for small populations. | TRUE  
+9. Density-dependent factors affect crowded populations more strongly. | TRUE  
+10. Typhoons and earthquakes are density-independent limiting factors. | TRUE  
+11. Disease spreads faster in crowded areas so it is density-independent. | FALSE  
+12. Competition for resources increases as population size gets larger. | TRUE  
+13. Overshooting carrying capacity often leads to population crash or dieback. | TRUE  
+14. Birth rate higher than death rate causes population to increase. | TRUE  
+15. Immigration means moving out of an area permanently. | FALSE  
+16. Emigration reduces the number of individuals in a local population. | TRUE  
+17. Habitat destruction can lower an ecosystem’s carrying capacity. | TRUE  
+18. Carrying capacity is fixed and can never change for any reason. | FALSE  
+19. Population density counts individuals per unit area or volume. | TRUE  
+20. Predation helps keep prey populations balanced with resources. | TRUE  
+21. Drought affects plants and animals regardless of how dense they are. | TRUE  
+22. Exponential growth can continue forever in natural ecosystems. | FALSE  
+23. When birth rate equals death rate, population size stays nearly stable. | TRUE  
+24. Limiting factors can be biotic, abiotic, or related to reproduction. | TRUE  
+25. Higher carrying capacity means more resources are available to sustain life. | TRUE  
+26. Human activities often reduce or damage available limiting factors. | TRUE  
+27. A population below carrying capacity will usually increase in size. | TRUE  
+28. All resources are finite, so no population can grow indefinitely. | TRUE  
+29. Protecting food, water, and shelter helps maintain stable carrying capacity. | TRUE  
+30. Balanced populations depend on both limiting factors and resource use. | TRUE  
+  
+TOPIC: BIOTECHNOLOGY  
+1. Biotechnology uses living organisms or processes to make useful products. | TRUE  
+2. Traditional biotechnology relies mostly on fermentation by microbes. | TRUE  
+3. Nata de coco is made by fermenting coconut water with bacteria. | TRUE  
+4. Soy sauce is commonly made by fermenting soybeans and grains. | TRUE  
+5. Vinegar forms when alcohol is oxidized into acetic acid. | TRUE  
+6. Cheese and yogurt are produced using lactic acid bacteria. | TRUE  
+7. Modern biotechnology does not involve changing genetic material. | FALSE  
+
+8. GMOs have their DNA or genetic material altered intentionally. | TRUE  
+9. In vitro fertilization happens outside the body then implanted later. | TRUE  
+10. GMO crops may be bred for pest resistance or higher yield. | TRUE  
+11. Fermentation is a very new technology developed only recently. | FALSE  
+12. Biotechnology can have ethical, environmental, and social impacts. | TRUE  
+13. All uses of biotechnology are always safe and have no risks. | FALSE  
+14. Traditional fermented foods are part of Filipino cultural heritage. | TRUE  
+15. Microorganisms like yeast and bacteria are essential in many biotech products. | TRUE  
+16. Genetic engineering never changes traits passed to offspring. | FALSE  
+17. Biotechnology helps produce medicines, food, and industrial materials. | TRUE  
+18. IVF is one method used to assist couples with fertility issues. | TRUE  
+19. Using biotechnology always harms natural ecosystems. | FALSE  
+20. Fermentation preserves food and improves its flavor or nutrition. | TRUE  
+21. Only modern laboratories can perform biotechnology work. | FALSE  
+22. Changes in DNA can affect how an organism grows or functions. | TRUE  
+23. Biotechnology can help address food security challenges. | TRUE  
+24. All GMOs look exactly the same as their non-GMO versions. | FALSE  
+25. Ethical questions often involve safety, choice, and long-term effects. | TRUE  
+26. Biotechnology can also help in cleaning up pollution. | TRUE  
+27. Yeast uses fermentation to make bread rise and produce alcohol. | TRUE  
+28. Traditional and modern biotechnology share the same basic principles. | TRUE  
+29. Regulations help manage the safe use of biotechnology. | TRUE  
+30. Biotechnology benefits society but requires responsible use. | TRUE  
+  
+TOPIC: PLATE TECTONICS  
+1. The Earth’s outer layer is broken into moving plates called tectonic plates. | TRUE  
+2. Plates move because of convection currents in the asthenosphere. | TRUE  
+3. Divergent boundaries occur where plates move away from each other. | TRUE  
+4. Convergent boundaries form when plates collide or push together. | TRUE  
+5. Transform boundaries involve plates sliding past one another. | TRUE  
+6. Trenches and volcanoes often form at divergent boundaries. | FALSE  
+7. Mountains like the Himalayas form from continental-continental convergence. | TRUE  
+8. The Philippines sits on the Pacific Ring of Fire. | TRUE  
+9. Most earthquakes and volcanoes happen along plate boundaries. | TRUE  
+10. Subduction happens when one plate sinks beneath another plate. | TRUE  
+11. Plate movement is fast and easily felt every day. | FALSE  
+12. We can measure plate displacement using satellites and GPS. | TRUE  
+13. Volcanoes and trenches near the Philippines show active subduction. | TRUE  
+14. At transform boundaries, crust is neither created nor destroyed. | TRUE  
+15. New crust forms at mid-ocean ridges in divergent zones. | TRUE  
+
+16. Oceanic crust usually subducts under less dense continental crust. | TRUE  
+17. Plate movement will not change the Philippine islands in the future. | FALSE  
+18. The Andes Mountains formed from ocean-continental convergence. | TRUE  
+19. Faults are cracks in the crust where movement occurs. | TRUE  
+20. Earthquakes happen when stored energy along faults is released. | TRUE  
+21. Convection in the mantle drives plate motion. | TRUE  
+22. All plate boundaries produce exactly the same landforms. | FALSE  
+23. Plates move at roughly the speed fingernails grow. | TRUE  
+24. Tectonic activity shapes the location of mountains, faults, and coastlines. | TRUE  
+25. Plate movement provides evidence for the theory of evolution. | FALSE  
+26. Continents have moved apart from one large supercontinent called Pangaea. | TRUE  
+27. Seafloor spreading supports the idea of moving plates. | TRUE  
+28. In millions of years, plate movement will rearrange the map again. | TRUE  
+29. Understanding plate tectonics helps prepare for earthquakes and volcanoes. | TRUE  
+30. The theory of plate tectonics unifies many geological observations. | TRUE  
+  
+TOPIC: GLOBAL CLIMATE & GREENHOUSE EFFECT  
+1. Climate is the long-term average pattern of weather conditions in an area. | TRUE  
+2. Weather describes day-to-day conditions while climate spans decades or longer. | TRUE  
+3. Global warming refers to the rising average temperature of Earth’s atmosphere and oceans. | TRUE  
+4. Greenhouse gases trap heat and keep Earth warmer than it would be otherwise. | TRUE  
+5. Carbon dioxide is the main human-caused greenhouse gas driving modern warming. | TRUE  
+6. Natural greenhouse effect makes Earth too hot for life to exist. | FALSE  
+7. Enhanced greenhouse effect is caused by extra gases released by human activities. | TRUE  
+8. Burning fossil fuels adds large amounts of carbon dioxide to the atmosphere. | TRUE  
+9. Melting glaciers and ice sheets contribute to rising sea levels. | TRUE  
+10. Warmer oceans expand in volume, which also raises sea levels. | TRUE  
+11. Ice core data shows current carbon dioxide levels are far higher than in 800 000 years. | TRUE  
+12. A single hot summer or strong typhoon is direct proof of climate change. | FALSE  
+13. Deforestation reduces the number of trees that absorb carbon dioxide. | TRUE  
+14. Volcanic eruptions and solar activity fully explain recent rapid warming. | FALSE  
+15. Methane is more potent than carbon dioxide but stays in the air for a shorter time. | TRUE  
+16. Nitrous oxide and CFCs are also greenhouse gases. | TRUE  
+17. Ocean acidification happens when carbon dioxide dissolves in seawater. | TRUE  
+18. Coral reefs and shell-forming animals are harmed by ocean acidification. | TRUE  
+19. Climate change can shift rainfall patterns and worsen extreme weather events. | TRUE  
+20. Higher global temperatures always mean every place gets hotter equally. | FALSE  
+21. Arctic sea ice loss creates a feedback loop that speeds up warming. | TRUE  
+22. Climate change can happen naturally but current rate is extremely fast. | TRUE  
+23. Stopping emissions today will instantly stop all climate change effects. | FALSE  
+24. The Philippines is highly vulnerable to sea-level rise and stronger storms. | TRUE  
+25. Protecting forests helps slow climate change by storing carbon. | TRUE  
+26. Energy conservation and renewable energy use reduce greenhouse gas emissions. | TRUE  
+27. Climate change only affects polar regions and not tropical countries. | FALSE  
+28. Scientific evidence supports human activities as the main cause of current warming. | TRUE  
+29. Higher temperatures can reduce crop yields and threaten food security. | TRUE  
+30. Understanding climate change helps communities prepare and adapt effectively. | TRUE  
+  
+TOPIC: GLOBAL INTERACTIONS – ENSO  
+1. ENSO stands for El Niño Southern Oscillation. | TRUE  
+2. El Niño is the warm phase of the ENSO cycle. | TRUE  
+3. La Niña is the cool phase of the ENSO cycle. | TRUE  
+4. ENSO originates mainly in the tropical Pacific Ocean. | TRUE  
+5. During El Niño, trade winds weaken or reverse direction. | TRUE  
+6. During El Niño, warm ocean water shifts toward the eastern and central Pacific. | TRUE  
+7. El Niño usually brings drier, hotter conditions to the Philippines. | TRUE  
+8. El Niño often causes droughts, water shortages, and crop losses locally. | TRUE  
+9. La Niña typically brings above-average rainfall and more frequent floods to the Philippines. | TRUE  
+10. La Niña often increases the number and intensity of typhoons affecting the country. | TRUE  
+11. Normal trade winds blow steadily from east to west across the tropical Pacific. | TRUE  
+12. ENSO events typically last about 9 to 12 months or longer. | TRUE  
+13. During La Niña, the western Pacific near the Philippines stays warmer than usual. | TRUE  
+14. The Southern Oscillation refers to changes in air pressure across the Pacific. | TRUE  
+15. ENSO can shift global weather patterns far beyond the Pacific region. | TRUE  
+16. El Niño always causes the same effects in every country. | FALSE  
+17. Complementary seasons and opposite impacts mark El Niño and La Niña. | TRUE  
+18. PAGASA and international agencies monitor ocean and atmosphere indicators to forecast ENSO. | TRUE  
+19. Strong El Niño events can delay or weaken the southwest monsoon (Habagat). | TRUE  
+20. La Niña can prolong and intensify the rainy season in the Philippines. | TRUE  
+21. ENSO affects agriculture, water supply, energy, and disaster management. | TRUE  
+22. Global warming may make extreme El Niño and La Niña events more frequent or intense. | TRUE  
+23. Neutral phase means ocean and atmosphere conditions are near long-term averages. | TRUE  
+24. El Niño brings more typhoons to the Philippines than usual. | FALSE  
+25. La Niña increases flood and landslide risk in many parts of the country. | TRUE  
+26. ENSO is entirely caused by human pollution and greenhouse gases. | FALSE  
+27. Knowing ENSO status helps farmers, fishermen, and communities prepare better. | TRUE  
+28. Rising sea surface temperatures provide more energy for stronger tropical cyclones. | TRUE  
+29. ENSO impacts are predictable enough to support early warning and action plans. | TRUE  
+30. Climate change interacts with ENSO to amplify many of its effects. | TRUE  
+TOPIC: GLOBAL AND LOCAL SUSTAINABILITY  
+
+1. Mitigation means reducing or preventing greenhouse gas emissions at the source. | TRUE  
+2. Adaptation means adjusting to climate changes that are already happening. | TRUE  
+3. Renewable energy comes from sources that replenish naturally within a human lifetime. | TRUE  
+4. Coal, oil, and natural gas are renewable energy sources. | FALSE  
+5. The Philippines ranks second worldwide in geothermal energy production. | TRUE  
+6. Hydropower uses flowing or falling water to generate electricity. | TRUE  
+7. Solar energy is captured directly from sunlight using panels. | TRUE  
+8. Burning fossil fuels releases large amounts of carbon dioxide into the atmosphere. | TRUE  
+9. Renewable energy produces almost zero carbon dioxide during normal operation. | TRUE  
+10. Energy efficiency means using more energy to do the same amount of work. | FALSE  
+11. The 3 Rs are Reduce, Reuse, and Recycle. | TRUE  
+12. Planting native trees helps fight climate change by absorbing carbon dioxide. | TRUE  
+13. Sea-level rise causes saltwater intrusion into coastal wells and farmland. | TRUE  
+14. Geothermal energy is available 24 hours a day unlike solar and wind. | TRUE  
+15. The Philippines spends billions of pesos yearly importing coal and oil. | TRUE  
+16. Switching to renewables can help lower electricity price volatility. | TRUE  
+17. Drought-resistant crops and flood barriers are examples of mitigation. | FALSE  
+18. Mangroves and coral reefs protect coastlines from storm surges and erosion. | TRUE  
+19. Landfill waste produces methane, a very potent greenhouse gas. | TRUE  
+20. Composting organic waste reduces methane emissions and makes natural fertilizer. | TRUE  
+21. The Renewable Energy Act of the Philippines aims to increase clean energy use. | TRUE  
+22. Coal use improves public health by reducing air pollution. | FALSE  
+23. Higher energy use always means better sustainability. | FALSE  
+24. Wasting electricity increases the amount of fossil fuels burned at power plants. | TRUE  
+25. The country targets 35% renewable energy share by year 2030. | TRUE  
+26. Climate justice means those who contributed least often suffer the most. | TRUE  
+27. All renewable energy sources have exactly the same advantages and costs. | FALSE  
+28. Individual actions like saving energy add up to large national impacts. | TRUE  
+29. Sustainability balances human needs with protecting the environment. | TRUE  
+30. Choosing renewable energy benefits both the climate and the local economy. | TRUE  
+ 

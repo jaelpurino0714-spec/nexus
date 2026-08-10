@@ -1,0 +1,408 @@
+TOPIC 1: ECOSYSTEM’S CARRYING CAPACITY AND POPULATION GROWTH  
+1. What term describes the largest number of individuals an ecosystem can support 
+sustainably over time without damaging its resources?  
+Answer: Carrying capacity  
+2. What do we call any factor that limits or stops a population from growing further?  
+Answer: Limiting factor  
+3. Which of these is not a typical limiting factor for animal populations: food, water, shelter, or 
+body color?  
+Answer: Body color of individuals  
+4. What name is given to rapid, unrestricted population growth that produces a steep upward 
+curve?  
+Answer: Exponential growth / J-shaped curve  
+5. What happens to a population’s growth rate as it gets close to the carrying capacity of its 
+environment?  
+Answer: It slows down and approaches zero  
+6. What is the term for the growth pattern that rises quickly then levels off smoothly at 
+carrying capacity?  
+Answer: Logistic growth  
+7. What effect does a shortage of available mates have on the size of a small population?  
+Answer: It limits population growth  
+8. What does the flat, horizontal section at the top of a logistic growth curve stand for?  
+Answer: Carrying capacity / stable population size  
+9. Drought reduces food and water, causing rabbit numbers to drop sharply. What kind of 
+factor is drought in this case?  
+Answer: Limiting factor  
+10. What phrase refers to the count of individuals living within a specific unit of area or 
+volume?  
+Answer: Population density  
+11. A forest normally supports 500 deer. After a typhoon destroys many trees, what will 
+happen to its carrying capacity?  
+Answer: It will decrease  
+12. What type of limiting factor has a stronger effect when a population is large and crowded?  
+Answer: Density-dependent limiting factor  
+13. What type of limiting factor affects populations regardless of whether they are dense or 
+sparse?  
+Answer: Density-independent limiting factor  
+14. What is the main reason population growth slows as it nears carrying capacity?  
+Answer: Competition for resources becomes more intense  
+15. Rats increase in number, so snakes that eat them also rise, slowing rat population growth. 
+Predation acts as what kind of limiting factor?  
+Answer: Biotic limiting factor  
+16. In nature, what eventually happens to a population showing J-shaped exponential 
+growth?  
+Answer: Limiting factors stop growth; it either crashes or levels into an S-shaped curve  
+17. If a population is smaller than the environment’s carrying capacity, how will its size usually 
+change?  
+Answer: It will increase until it approaches carrying capacity  
+18. Building a landfill destroys most of a frog’s breeding pond. Which limiting factor is most 
+reduced?  
+Answer: Shelter / breeding space  
+19. Which pair consists only of abiotic (non-living) limiting factors?  
+Answer: Water availability and temperature extremes  
+20. Which growth pattern best matches the current human population?  
+Answer: Rising J-shaped curve / early logistic growth  
+21. Arrange the stages of logistic growth in the correct order.  
+Answer: Slow initial growth → rapid exponential growth → slowing growth → stable at carrying 
+capacity  
+22. What usually happens after a population temporarily exceeds its carrying capacity?  
+Answer: Population crash or sharp decline due to resource shortage  
+23. A lake can support 1,000 tilapia. If 1,200 are added, what will most likely happen?  
+Answer: Many will die; numbers will settle back near 1,000  
+24. Why is the availability of mates especially important for small, isolated groups?  
+Answer: It reduces the chance of successful reproduction  
+25. What is the key difference between density-dependent and density-independent limiting 
+factors?  
+Answer: Density-dependent impact rises with crowding; density-independent impact is the same 
+at any population size  
+26. Give an example that shows growth slowing as it nears carrying capacity.  
+Answer: Mouse numbers change from 100 → 180 → 210 → 215 → 212  
+27. How does competition limit population size near carrying capacity?  
+Answer: Fewer individuals survive and reproduce because resources become scarce  
+28. Protecting both food sources and nesting sites will raise the carrying capacity of the 
+Philippine Eagle. What does this show about carrying capacity?  
+Answer: It depends on multiple limiting factors working together  
+29. Why can exponential growth never continue indefinitely in any real ecosystem?  
+Answer: All natural resources are finite  
+30. Under what condition does a population remain stable at carrying capacity?  
+Answer: When birth rate is roughly equal to death rate  
+  
+TOPIC 2: BIOTECHNOLOGY  
+1. What is the general term for using living things or biological processes to create useful 
+goods?  
+Answer: Biotechnology  
+2. What process forms the basis of traditional biotechnology used to make foods like cheese 
+and vinegar?  
+Answer: Fermentation  
+3. What Filipino food product is made when bacteria ferment coconut water?  
+Answer: Nata de coco  
+4. What acid is produced when alcohol is further oxidized to form vinegar?  
+Answer: Acetic acid  
+5. What acid is produced by bacteria to make yogurt, cheese, and pickles?  
+Answer: Lactic acid  
+6. What main ingredients are fermented to produce soy sauce?  
+Answer: Soybeans and usually wheat or grain  
+7. What part of an organism is deliberately altered to create a Genetically Modified 
+Organism?  
+Answer: DNA / genetic material  
+8. What does “in vitro” mean in the process of In Vitro Fertilization?  
+Answer: Fertilization happens outside the body in a laboratory  
+9. What is one common benefit of genetically modified crops?  
+Answer: Pest resistance / higher yield / reduced pesticide use  
+10. What is one major ethical concern linked to IVF?  
+Answer: Moral status of embryos / cost and fair access  
+11. Which list contains only products made using traditional fermentation?  
+Answer: Cheese, soy sauce, vinegar, nata de coco, yogurt  
+12. What gas does yeast produce that makes bread rise?  
+Answer: Carbon dioxide  
+13. Golden Rice is modified to produce high levels of what nutrient to prevent blindness?  
+Answer: Beta-carotene (Vitamin A precursor)  
+14. What is one possible environmental risk of planting insect-resistant GMO crops?  
+Answer: Pests may develop resistance / harm to beneficial insects  
+15. What is one economic concern regarding GMO seeds in the Philippines?  
+Answer: High cost and corporate control affecting small farmers  
+16. How is human insulin for diabetes produced using modern biotechnology?  
+Answer: The human insulin gene is inserted into bacteria that make the insulin  
+17. Which microbe is responsible for turning alcohol into acetic acid?  
+Answer: Acetic acid bacteria  
+18. Why is fermentation considered an ancient form of biotechnology?  
+Answer: It was used for thousands of years before microbes were discovered  
+19. What is true about the genetic makeup of an organism produced by cloning?  
+Answer: It is genetically identical to the donor parent  
+20. What is one major ethical concern about using gene-editing tools like CRISPR on 
+humans?  
+Answer: Risk of unintended genetic changes / creation of “designer babies”  
+21. What is the correct two-step process for making traditional vinegar?  
+Answer: Sugar → (yeast) → ethanol → (bacteria) → acetic acid  
+22. What material forms the solid jelly part of nata de coco?  
+Answer: Bacterial cellulose  
+23. What international agreement governs the safe handling and movement of living GMOs?  
+Answer: Cartagena Protocol  
+
+24. What is one environmental benefit of some approved GMO crops?  
+Answer: Less insecticide use and reduced chemical pollution  
+25. What issue involves both ethics and economics regarding IVF in the Philippines?  
+Answer: High cost makes it unavailable to many people  
+26. How does fermentation help preserve food?  
+Answer: It produces acids or alcohol that stop harmful microbes from growing  
+27. Where does the gene that gives Bt corn its pest-killing ability come from?  
+Answer: The bacterium Bacillus thuringiensis  
+28. What is the main difference between traditional and modern biotechnology?  
+Answer: Traditional uses natural processes; modern directly modifies DNA in a lab  
+29. What ethical concern arises because several embryos are created during IVF?  
+Answer: What happens to unused or extra embryos  
+30. Give one example of a practice that can be done using both traditional and modern 
+biotechnology.  
+Answer: Plant breeding  
+  
+TOPIC 3: PLATE TECTONICS  
+1. What theory states that Earth’s outer layer is made of large moving slabs of rock?  
+Answer: Plate Tectonics  
+2. What name is given to these large moving slabs?  
+Answer: Tectonic / lithospheric plates  
+3. Approximately how fast do tectonic plates move each year?  
+Answer: About 2–10 centimeters per year (as fast as fingernails grow)  
+4. What modern technology is used to measure plate movement accurately?  
+Answer: GPS satellites  
+5. What kind of boundary forms where plates move apart?  
+Answer: Divergent boundary  
+6. What kind of boundary forms where plates collide?  
+Answer: Convergent boundary  
+7. What kind of boundary forms where plates slide past each other?  
+Answer: Transform fault boundary  
+8. What layer of the mantle allows plates to move over it?  
+Answer: Asthenosphere  
+9. What process occurs when one plate sinks beneath another into the mantle?  
+Answer: Subduction  
+10. What is the name of the major fault system running through the Philippines?  
+Answer: Philippine Fault System  
+11. What landform is created when two continents collide?  
+Answer: Large non-volcanic mountain ranges  
+12. What features form when an oceanic plate subducts under a continental plate?  
+Answer: Deep ocean trench and volcanic mountains on land  
+13. Between which two major plates does the Philippines lie?  
+Answer: Philippine Sea Plate and Eurasian Plate  
+14. Why does the Philippines have many volcanoes and trenches?  
+Answer: Multiple plates are subducting around the archipelago  
+15. What geologic event is most common at transform boundaries?  
+Answer: Earthquakes  
+16. How were the Himalayan Mountains formed?  
+Answer: Collision of the Indian Plate with the Eurasian Plate  
+17. How did the Andes Mountains form?  
+Answer: Subduction of the Nazca Plate under the South American Plate  
+18. What is the main force that drives plate movement?  
+Answer: Thermal convection currents in the mantle  
+19. What happens to the overriding plate when another plate subducts beneath it?  
+Answer: Magma rises to form volcanoes; folding and faulting create mountains  
+20. Where are new sections of ocean floor created?  
+Answer: At divergent boundaries / mid-ocean ridges  
+21. If the Philippine Sea Plate keeps moving northwest, where will the Philippines be in 50 
+million years?  
+Answer: About 3,500 km northwest, joining the eastern edge of Asia  
+22. Why is GPS preferred over older methods for measuring plate motion?  
+Answer: It gives highly precise, continuous, global measurements  
+23. What process formed the Mariana Trench and Philippine Trench?  
+Answer: Subduction  
+24. What type of boundary created Mayon Volcano and the Manila Trench?  
+
+Answer: Convergent boundary  
+25. Why do no volcanoes form when two continental plates collide?  
+Answer: Continental crust is too light to sink and melt  
+26. What property allows the asthenosphere to flow slowly and move the plates?  
+Answer: It is solid rock that is soft and flexible over very long periods  
+27. What does having trenches on both sides of the Philippines tell us about its tectonic 
+setting?  
+Answer: It is squeezed between two sets of subducting plates  
+28. What kind of fault is the Philippine Fault System?  
+Answer: Left-lateral transform fault  
+29. What is the difference between landforms formed by ocean-ocean and ocean-continent 
+subduction?  
+Answer: Ocean-ocean forms volcanic island arcs; ocean-continent forms volcanic mountains on 
+land  
+30. If we reversed plate motion 50 million years ago, where would India and the Philippines 
+be?  
+Answer: India was an island south of Asia; the Philippines was separate volcanic islands  
+  
+TOPIC 4: GLOBAL CLIMATE  
+1. What term describes the average weather pattern of an area over many years?  
+Answer: Climate  
+2. What is the gradual rise in Earth’s average surface temperature called?  
+Answer: Global warming  
+3. What broader term includes warming plus changes in rainfall, storms, and seasons?  
+Answer: Climate change  
+4. What name is given to gases that trap heat in the atmosphere?  
+Answer: Greenhouse gases  
+5. What is the main human-caused greenhouse gas driving modern warming?  
+Answer: Carbon dioxide (CO₂)  
+6. Name two natural greenhouse gases that keep Earth warm enough for life.  
+Answer: Water vapor and carbon dioxide  
+7. What does the “enhanced greenhouse effect” mean?  
+Answer: Extra greenhouse gases from human activities trap more heat than normal  
+8. What direct effect do melting glaciers and ice sheets have on oceans?  
+Answer: Sea level rise  
+9. What do ice core samples show about carbon dioxide levels today compared to the past 
+800,000 years?  
+Answer: They are far higher than any previous natural level  
+10. Aside from melting ice, what other process causes sea levels to rise?  
+Answer: Thermal expansion of seawater as it warms  
+11. Which list contains only major greenhouse gases?  
+Answer: Carbon dioxide, methane, nitrous oxide, CFCs, water vapor  
+12. What human activities produce large amounts of methane?  
+Answer: Livestock, rice farming, landfills, leaking natural gas  
+13. What two harmful effects do CFCs cause?  
+Answer: They trap heat and destroy the ozone layer  
+14. Give three long-term signs that climate change is happening.  
+Answer: Rising temperatures, shrinking ice, rising sea levels  
+15. How does cutting down forests worsen global warming?  
+Answer: It releases stored carbon and removes trees that absorb CO₂  
+16. Is a single hot day or one storm enough proof of climate change?  
+Answer: No; climate change requires long-term trends over many years  
+17. What is the correct sequence of events leading to human-caused warming?  
+Answer: Burning fossil fuels → extra CO₂ → stronger greenhouse effect → higher temperatures  
+18. Why will warming continue for decades even if all emissions stop now?  
+Answer: Greenhouse gases stay in the air for a long time and oceans hold heat  
+19. What human activity produces the most greenhouse gases?  
+Answer: Burning fossil fuels for energy and transport  
+20. How do scientists confirm that extra CO₂ comes from burning fossil fuels?  
+Answer: Its chemical makeup matches carbon from coal, oil, and gas  
+21. What is the difference between the natural and enhanced greenhouse effect?  
+Answer: Natural keeps Earth livable; enhanced is caused by humans and warms the planet too 
+much  
+
+22. What kind of feedback loop happens when melting sea ice leads to more heat being 
+absorbed?  
+Answer: Positive feedback  
+23. Why is a 1°C rise in global average temperature a serious problem?  
+Answer: It causes much larger increases in extreme weather and uneven warming  
+24. How does global warming affect tropical cyclones in the Philippines?  
+Answer: They become stronger and carry more rainfall  
+25. Why does the Arctic warm faster than other parts of the world?  
+Answer: Ice-albedo positive feedback: less ice means more sunlight absorbed  
+26. Why can’t natural factors explain the rapid warming seen recently?  
+Answer: Natural factors alone would cause cooling; only human greenhouse gases match the 
+trend  
+27. How does extra CO₂ harm marine life?  
+Answer: It makes seawater more acidic, damaging coral and shellfish  
+28. Give three observed signs of climate change in the Philippines.  
+Answer: Rising sea levels, stronger typhoons, longer dry spells  
+29. Why is water vapor not considered the main cause of modern warming?  
+Answer: It increases because of warming; it does not start the warming  
+30. What relationship do ice core records show between CO₂ and global temperature?  
+Answer: They rise and fall together; current levels are far higher than natural peaks  
+  
+TOPIC 5: GLOBAL INTERACTIONS  
+1. What does the abbreviation ENSO stand for?  
+Answer: El Niño Southern Oscillation  
+2. What is the warm phase of the ENSO cycle called?  
+Answer: El Niño  
+3. What is the cool phase of the ENSO cycle called?  
+Answer: La Niña  
+4. In which ocean basin does the ENSO cycle occur?  
+Answer: Tropical Pacific Ocean  
+5. What are the steady winds that normally blow east to west across the tropical Pacific?  
+Answer: Trade winds  
+6. What is the most common effect of El Niño on the Philippines?  
+Answer: Prolonged drought and below-normal rainfall  
+7. What is the most common effect of La Niña on the Philippines?  
+Answer: Above-normal rain, more floods, and more typhoons  
+8. What does the “Southern Oscillation” part of the name refer to?  
+Answer: Shifts in air pressure between the eastern and western Pacific  
+9. How long do El Niño and La Niña events typically last?  
+Answer: About 9–12 months, sometimes up to 2 years  
+10. Which agency officially declares El Niño or La Niña in the Philippines?  
+Answer: PAGASA  
+11. What happens to trade winds when an El Niño begins?  
+Answer: They weaken or reverse direction  
+12. What happens to the pool of warm ocean water during El Niño?  
+Answer: It shifts toward the central and eastern Pacific  
+13. Why does the Philippines usually get fewer typhoons during El Niño?  
+Answer: Storms form farther away and wind patterns suppress development  
+14. Why does the Philippines usually get more typhoons during La Niña?  
+Answer: Conditions become more favorable; storms form closer to the country  
+15. Which Philippine industries are most harmed by El Niño drought?  
+Answer: Farming: rice, corn, and coconut production  
+16. List three common impacts of El Niño in the Philippines.  
+Answer: Drought, water shortage, crop damage  
+17. List three common impacts of La Niña in the Philippines.  
+Answer: Heavier rain, more floods, more typhoons  
+18. Why do different countries experience different effects from El Niño and La Niña?  
+Answer: They change global wind and rain patterns differently in each place  
+19. Why do government agencies monitor ENSO closely?  
+Answer: To issue warnings and prepare for disasters  
+20. What does a “neutral” ENSO condition mean?  
+Answer: Ocean and weather conditions are near their long-term average  
+21. What is the Walker Circulation?  
+Answer: The large east-west cycle of rising and sinking air across the tropical Pacific  
+
+22. Why does rain fall on the eastern Pacific instead of the Philippines during El Niño?  
+Answer: The main rain belt follows the shifted warm water eastward  
+23. How does climate change affect El Niño and La Niña events?  
+Answer: It makes them stronger and more frequent  
+24. What is the correct sequence leading to dry weather in the Philippines during El Niño?  
+Answer: Trade winds weaken → warm water shifts east → rain belt moves away → less rainfall  
+25. How does El Niño affect Metro Manila’s water supply?  
+Answer: It reduces rainfall that fills major dams like Angat and Ipo  
+26. How do El Niño and La Niña change typhoon paths toward the Philippines?  
+Answer: El Niño: storms turn away; La Niña: more storms hit land  
+27. What were some major effects of the strong 2015–2016 El Niño in the Philippines?  
+Answer: Severe drought, record heat, and large crop losses  
+28. How do El Niño and La Niña affect the monsoon seasons?  
+Answer: El Niño weakens the southwest monsoon; La Niña strengthens it  
+29. Why do impacts vary from one El Niño event to another?  
+Answer: Differences in strength, location of warm water, and background climate  
+30. Why is it important for students to learn about ENSO?  
+Answer: It helps understand and prepare for changes in food, water, and weather  
+  
+TOPIC 6: GLOBAL AND LOCAL SUSTAINABILITY  
+1. What term describes actions that reduce or prevent greenhouse gas emissions?  
+Answer: Mitigation  
+2. What term describes actions that adjust to changes already happening?  
+Answer: Adaptation  
+3. What renewable energy uses heat from underground, abundant in the Philippines?  
+Answer: Geothermal energy  
+4. What energy source uses flowing or falling water?  
+Answer: Hydroelectric power / hydropower  
+5. What renewable energy comes directly from sunlight?  
+Answer: Solar energy  
+6. What is the biggest source of greenhouse gas emissions in the Philippines?  
+Answer: Burning fossil fuels like coal, oil, and gas  
+7. What simple action most reduces transport emissions?  
+Answer: Walk, bike, or take public transport instead of private cars  
+8. What do the three “R’s” of waste management stand for?  
+Answer: Reduce, Reuse, Recycle  
+9. How do trees help fight climate change?  
+Answer: They absorb and store carbon dioxide  
+10. Give one observed effect of climate change already seen in the Philippines.  
+Answer: Stronger typhoons / longer droughts / rising sea levels  
+11. Which list contains renewable energy sources found in the Philippines?  
+Answer: Geothermal, hydro, solar, wind, biomass  
+12. How does switching to renewable energy help fight global warming?  
+Answer: It produces almost no carbon dioxide  
+13. What is one effect of rising sea levels on Philippine coastal communities?  
+Answer: Coastal flooding, erosion, and saltwater damage  
+14. Why does using energy-efficient appliances help the climate?  
+Answer: Less electricity used means less fuel burned at power plants  
+15. What is one effective way households can lower their carbon footprint?  
+Answer: Reduce wasted electricity and use efficient appliances  
+16. How does separating and composting waste help reduce greenhouse gases?  
+Answer: It prevents methane from forming in landfills  
+17. What is the purpose of the Renewable Energy Act of 2008?  
+Answer: To increase the use of local renewable energy  
+18. How does climate change affect Philippine farming?  
+Answer: Unpredictable weather damages crops and threatens food supply  
+19. Why are mangroves and coral reefs considered important for climate action?  
+Answer: They store carbon and protect coasts from storms and rising seas  
+20. What is the national target for renewable energy share in the Philippines by 2040?  
+Answer: 50%  
+21. Give one example each of mitigation and adaptation.  
+Answer: Mitigation: use solar power; Adaptation: plant flood-resistant crops  
+22. Why is geothermal energy especially useful for the Philippines?  
+Answer: It provides reliable power 24 hours a day using local resources  
+23. Why is adaptation still needed even if we cut emissions?  
+
+Answer: Some warming and sea-level rise are already unavoidable  
+24. How does expanding renewable energy help the Philippine economy?  
+Answer: It saves money on imported fuel and creates local jobs  
+25. What household action helps both reduce emissions and cope with hotter weather?  
+Answer: Planting shade trees or collecting rainwater  
+26. Is there enough renewable energy available to power the entire Philippines?  
+Answer: Yes; our natural resources are more than sufficient  
+27. What does “climate justice” mean for the Philippines?  
+Answer: We contribute very little to emissions but are among the most affected countries  
+28. How does saving electricity help reduce climate impacts?  
+Answer: Less coal or gas is burned, so fewer greenhouse gases are released  
+29. What is the main barrier to faster renewable energy adoption in the Philippines?  
+Answer: Existing contracts, slow approval, and grid limitations  
+30. Why is it important for Grade 10 students to learn about sustainability?  
+Answer: They will shape the future policies and face the effects of climate change  
+ 

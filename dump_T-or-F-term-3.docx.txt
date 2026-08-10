@@ -1,0 +1,136 @@
+Any object thrown or launched into the air acted on mainly by gravity is a projectile. | TRUE 
+The curved path a projectile follows is called its trajectory. | TRUE 
+Projectile motion combines constant horizontal motion and accelerated vertical motion. | TRUE 
+On level ground, a launch angle near 45° gives the maximum horizontal range. | TRUE 
+Complementary angles like 30° and 60° give almost the same range. | TRUE 
+Higher launch angles produce greater maximum height but shorter flight time. | FALSE 
+At the very top of its path, the projectile’s vertical velocity is momentarily zero. | TRUE 
+If thrown horizontally and dropped from the same height, both hit the ground at the same time. | TRUE 
+Horizontal velocity stays constant if air resistance is ignored. | TRUE 
+Gravity acts both horizontally and vertically on a moving projectile. | FALSE 
+Greater launch speed increases both range and maximum height. | TRUE 
+Range depends on the square of the initial speed. | TRUE 
+Air resistance makes the actual range shorter than the ideal calculation. | TRUE 
+Maximum height depends mostly on the vertical component of velocity. | TRUE 
+Projectile motion applies to sports like basketball, sepak takraw, and archery. | TRUE 
+Launch angle has no effect on how long the projectile stays in the air. | FALSE 
+A ball thrown straight up has zero horizontal velocity throughout its flight. | TRUE 
+Symmetry means speed is equal at equal heights above launch level. | TRUE 
+Projectile motion only happens when objects move straight up or down. | FALSE 
+Even without air resistance, total speed is lowest at the highest point. | TRUE 
+Increasing launch speed four times doubles the range. | FALSE 
+Long jumpers aim for fast runup plus an angle close to 45°. | TRUE 
+The horizontal and vertical motions affect each other strongly. | FALSE 
+At landing level equal to launch, speed matches speed at launch. | TRUE 
+Steeper angle means more time in air but less horizontal distance covered. | TRUE 
+Earth’s curvature is usually ignored in basic Grade 10 projectile calculations. | TRUE 
+Only mass determines how far a projectile will travel. | FALSE 
+The ideal model assumes no air resistance and constant gravity. | TRUE 
+Angle and speed together determine the path of the projectile. | TRUE 
+Projectile motion follows a parabolic shape under ideal conditions. | TRUE 
+ 
+TOPIC 2: MOMENTUM AND COLLISIONS 
+Momentum equals mass multiplied by velocity (p = m×v). | TRUE 
+A heavy slow object can have the same momentum as a light fast object. | TRUE 
+In an isolated system, total momentum before collision equals total momentum after. | TRUE 
+Elastic collisions conserve both momentum and kinetic energy. | TRUE 
+Inelastic collisions conserve momentum but lose some kinetic energy. | TRUE 
+Perfectly inelastic means objects stick together after impact. | TRUE 
+Force multiplied by time equals change in momentum (impulsemomentum theorem). | TRUE 
+Increasing stopping time reduces the average force experienced. | TRUE 
+Seatbelts and airbags work mainly by lengthening the stopping time. | TRUE 
+A fast small object can have more momentum than a slow large one. | TRUE 
+Momentum depends on mass and speed only, not direction. | FALSE 
+When a cannon fires, recoil shows momentum conservation. | TRUE 
+Billiard ball collisions are nearly perfectly elastic. | TRUE 
+Clay sticking to a wall is an example of perfectly elastic collision. | FALSE 
+A jeepney has more momentum than a motorcycle at the same speed. | TRUE 
+If velocity doubles, momentum also doubles. | TRUE 
+Total momentum is always conserved even if kinetic energy is not. | TRUE 
+Crumple zones in cars extend collision time to lower impact force. | TRUE 
+Catching an egg while pulling your hand back reduces force by increasing time. | TRUE 
+Momentum is a scalar quantity with no direction. | FALSE 
+Stationary objects have zero momentum. | TRUE 
+Any change in momentum requires an applied force over time. | TRUE 
+Two cars with equal speed and mass colliding headon each experience similar force as hitting a wall. | TRUE 
+Mass alone determines how hard it is to stop a moving object. | FALSE 
+Doubling both mass and velocity quadruples the momentum. | TRUE 
+In single displacement collisions, one object loses momentum the other gains it. | TRUE 
+Restitution is perfect in ideal elastic collisions. | TRUE 
+Heavy trucks need longer stopping distances even at same speed as cars. | TRUE 
+Momentum conservation applies to all collision types. | TRUE 
+The unit for momentum is kilogrammeter per second (kg·m/s). | TRUE 
+ 
+TOPIC 3: LARGESCALE GENERATION AND DISTRIBUTION OF ELECTRICITY 
+A generator converts mechanical energy into electrical energy. | TRUE 
+An electric motor converts electrical energy into mechanical motion. | TRUE 
+Transformers change AC voltage levels efficiently. | TRUE 
+Stepup transformers raise voltage for longdistance transmission. | TRUE 
+High voltage transmission reduces energy lost as heat in wires. | TRUE 
+Stepdown transformers lower voltage for safe household use. | TRUE 
+Standard Philippine residential supply is about 220 V. | TRUE 
+Transmission lines operate at much higher voltages than distribution lines. | TRUE 
+The grid sequence is: Power plant → Stepup → Transmission → Stepdown → Home. | TRUE 
+Fuses melt to break the circuit during dangerous overcurrent. | TRUE 
+Circuit breakers can be reset after tripping unlike fuses. | TRUE 
+The third pin on plugs connects to the ground wire for safety. | TRUE 
+Octopus wiring increases fire risk by overloading the circuit. | TRUE 
+Water should never be used on an electrical fire. | TRUE 
+The kilowatthour meter measures total electrical energy consumed. | TRUE 
+Motors and generators have similar main parts: coils, magnets, rotor. | TRUE 
+Transformers work efficiently only with alternating current (AC). | TRUE 
+NGCP manages transmission; utilities like MERALCO handle distribution. | TRUE 
+Live wire carries voltage; neutral is the return path; ground is for safety. | TRUE 
+Energy conservation reduces demand and lowers greenhouse gas emissions. | TRUE 
+Power plants use turbines driven by steam, water, wind, or heat. | TRUE 
+High voltage transmission lines are supported by tall towers for safety. | TRUE 
+Electrical energy is easily stored in large amounts along transmission lines. | FALSE 
+GFCI or ELCB outlets protect against fatal electric shock in wet areas. | TRUE 
+The symbol ΔV means change in voltage. | TRUE 
+Power loss in lines increases with the square of the current. | TRUE 
+Turning off unused appliances reduces load and your monthly bill. | TRUE 
+Transformers can create extra electrical energy for free. | FALSE 
+Proper grounding prevents shocks if an appliance casing becomes live. | TRUE 
+Understanding the grid helps us use electricity safely and wisely. | TRUE 
+ 
+TOPIC 4: RENEWABLE AND NONRENEWABLE ENERGY 
+Renewable energy replenishes naturally within a human lifetime. | TRUE 
+Nonrenewable energy takes millions of years to form and cannot be replaced quickly. | TRUE 
+Coal, oil, and natural gas are classified as fossil fuels. | TRUE 
+Solar, wind, hydro, geothermal, and biomass are renewable sources. | TRUE 
+The Philippines ranks second globally in geothermal energy production. | TRUE 
+Coal currently supplies the largest share of electricity in the Philippines. | TRUE 
+Burning fossil fuels releases carbon dioxide that contributes to global warming. | TRUE 
+Hydropower uses flowing or falling water to turn turbines and generate electricity. | TRUE 
+Solar panels convert sunlight directly into electrical energy. | TRUE 
+Natural gas is a renewable energy resource. | FALSE 
+Renewable energy produces almost zero greenhouse gas emissions during operation. | TRUE 
+Nonrenewable sources will eventually run out if used continuously. | TRUE 
+Biomass uses organic materials like crop waste, wood, and manure for energy. | TRUE 
+Wind energy relies on moving air to spin turbine blades. | TRUE 
+Geothermal energy uses heat from deep inside the Earth. | TRUE 
+Switching to renewables reduces our dependence on imported fuels. | TRUE 
+Hydroelectric dams can also help control floods and supply irrigation water. | TRUE 
+All renewable energy sources work perfectly 24 hours every day. | FALSE 
+Energy conservation helps stretch both renewable and nonrenewable supplies. | TRUE 
+Fossil fuels cause air pollution that harms human health. | TRUE 
+Nuclear energy is considered a renewable resource. | FALSE 
+Using rice husks and bagasse for energy is an example of biomass. | TRUE 
+Highvoltage transmission lines work the same way for all energy sources. | TRUE 
+Renewable energy is always cheaper and easier to set up everywhere. | FALSE 
+The Malampaya gas field is a major local source of natural gas. | TRUE 
+Increasing renewable use supports both energy security and climate action. | TRUE 
+Once used, fossil fuels can be grown back like plants. | FALSE 
+Energy efficiency means wasting less energy to do the same work. | TRUE 
+The Philippines has abundant natural resources for all major renewable types. | TRUE 
+A balanced mix of renewables and responsible use is key to sustainable energy. | TRUE 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
