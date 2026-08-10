@@ -91,7 +91,7 @@ const Quiz = {
       btn.onclick = () => this.selectTopic(topicName, topicId);
       btn.innerHTML = `
         <div class="topic-card-header">
-          <h3 class="topic-card-title">${topicName.toUpperCase()}</h3>
+          <h3 class="topic-card-title">${topicName}</h3>
           <span class="topic-card-badge">15 Questions Drill</span>
         </div>
         <p class="topic-card-sub">${topicDesc}</p>
