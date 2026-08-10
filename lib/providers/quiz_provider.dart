@@ -7,6 +7,7 @@ import '../repositories/quiz_repository.dart';
 import '../services/question_service.dart';
 import '../services/quiz_service.dart';
 import '../services/sync_service.dart';
+import '../services/lobby_service.dart';
 import '../core/network/connectivity_service.dart';
 
 final questionServiceProvider = Provider<QuestionService>((ref) => QuestionService());
@@ -34,10 +35,13 @@ class ActiveQuizState {
   final int score;
   final int correctCount;
   final int wrongCount;
+  final int streak;
   final int secondsRemaining;
   final List<Map<String, dynamic>> recordedAnswers;
   final bool isCompleted;
   final QuizAttemptModel? resultAttempt;
+  final String? lobbyAccessCode;
+  final String? participantId;
 
   ActiveQuizState({
     required this.topicId,
@@ -47,11 +51,16 @@ class ActiveQuizState {
     this.score = 0,
     this.correctCount = 0,
     this.wrongCount = 0,
+    this.streak = 0,
     this.secondsRemaining = 30,
     this.recordedAnswers = const [],
     this.isCompleted = false,
     this.resultAttempt,
+    this.lobbyAccessCode,
+    this.participantId,
   });
+
+  int get totalPoints => score;
 
   PreparedQuestion? get currentQuestion =>
       questions.isNotEmpty && currentIndex < questions.length
@@ -66,10 +75,13 @@ class ActiveQuizState {
     int? score,
     int? correctCount,
     int? wrongCount,
+    int? streak,
     int? secondsRemaining,
-    List<Map<String, dynamic>>? recordedAnswers,
+    List<Map<String, dynamic>>: recordedAnswers,
     bool? isCompleted,
     QuizAttemptModel? resultAttempt,
+    String? lobbyAccessCode,
+    String? participantId,
   }) {
     return ActiveQuizState(
       topicId: topicId ?? this.topicId,
@@ -79,10 +91,13 @@ class ActiveQuizState {
       score: score ?? this.score,
       correctCount: correctCount ?? this.correctCount,
       wrongCount: wrongCount ?? this.wrongCount,
+      streak: streak ?? this.streak,
       secondsRemaining: secondsRemaining ?? this.secondsRemaining,
       recordedAnswers: recordedAnswers ?? this.recordedAnswers,
       isCompleted: isCompleted ?? this.isCompleted,
       resultAttempt: resultAttempt ?? this.resultAttempt,
+      lobbyAccessCode: lobbyAccessCode ?? this.lobbyAccessCode,
+      participantId: participantId ?? this.participantId,
     );
   }
 }
@@ -90,22 +105,65 @@ class ActiveQuizState {
 class QuizNotifier extends StateNotifier<ActiveQuizState?> {
   final QuestionRepository _questionRepo;
   final QuizRepository _quizRepo;
+  final QuestionService _questionService;
   Timer? _timer;
 
-  QuizNotifier(this._questionRepo, this._quizRepo) : super(null);
+  QuizNotifier(this._questionRepo, this._quizRepo, this._questionService) : super(null);
 
   Future<void> startQuiz({
     required String topicId,
     required String quizType,
     String? questionType,
     String topicTitle = 'Science Topic',
+    List<QuestionModel>? customQuestions,
+    int? customTimeLimit,
+    int? customQuestionCount,
+    String? lobbyAccessCode,
+    String? participantId,
   }) async {
-    final questions = await _questionRepo.getPreparedQuestionsForQuiz(
-      topicId,
-      questionType: questionType,
-      quizType: quizType,
-      topicTitle: topicTitle,
-    );
+    List<PreparedQuestion> questions = [];
+
+    if (customQuestions != null && customQuestions.isNotEmpty) {
+      questions = _questionService.prepareQuizQuestions(customQuestions);
+    } else {
+      questions = await _questionRepo.getPreparedQuestionsForQuiz(
+        topicId,
+        questionType: questionType,
+        quizType: quizType,
+        topicTitle: topicTitle,
+      );
+    }
+
+    if (customQuestionCount != null && customQuestionCount > 0 && questions.length > customQuestionCount) {
+      questions = questions.sublist(0, customQuestionCount);
+    }
+
+    if (customTimeLimit != null && customTimeLimit >= 5) {
+      questions = questions.map((pq) {
+        final q = pq.question;
+        final customQ = QuestionModel(
+          id: q.id,
+          topicId: q.topicId,
+          questionTypeId: q.questionTypeId,
+          quizType: q.quizType,
+          question: q.question,
+          questionType: q.questionType,
+          optionA: q.optionA,
+          optionB: q.optionB,
+          optionC: q.optionC,
+          optionD: q.optionD,
+          correctAnswer: q.correctAnswer,
+          explanation: q.explanation,
+          difficulty: q.difficulty,
+          imageUrl: q.imageUrl,
+          timeLimit: customTimeLimit,
+          isActive: q.isActive,
+          createdBy: q.createdBy,
+          createdAt: q.createdAt,
+        );
+        return PreparedQuestion(question: customQ, shuffledOptions: pq.shuffledOptions);
+      }).toList();
+    }
 
     if (questions.isEmpty) return;
 
@@ -114,8 +172,11 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
       quizType: quizType,
       questions: questions,
       secondsRemaining: questions[0].question.timeLimit,
+      lobbyAccessCode: lobbyAccessCode,
+      participantId: participantId,
     );
 
+    _syncLobbyProgress();
     _startTimer();
   }
 
@@ -130,7 +191,6 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
       if (state!.secondsRemaining > 1) {
         state = state!.copyWith(secondsRemaining: state!.secondsRemaining - 1);
       } else {
-        // Time ran out for this question
         submitAnswer(selectedAnswer: 'NO_ANSWER', timeTaken: state!.currentQuestion!.question.timeLimit);
       }
     });
@@ -158,6 +218,7 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
     int newScore = state!.score + (isCorrect ? 10 : 0);
     int newCorrect = state!.correctCount + (isCorrect ? 1 : 0);
     int newWrong = state!.wrongCount + (isCorrect ? 0 : 1);
+    int newStreak = isCorrect ? state!.streak + 1 : 0;
 
     final newAnswer = {
       'question_id': currentQ.id,
@@ -175,9 +236,11 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
         score: newScore,
         correctCount: newCorrect,
         wrongCount: newWrong,
+        streak: newStreak,
         recordedAnswers: updatedAnswers,
         secondsRemaining: state!.questions[nextIndex].question.timeLimit,
       );
+      _syncLobbyProgress();
       _startTimer();
     } else {
       // Quiz Finished!
@@ -186,24 +249,41 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
         score: newScore,
         correctCount: newCorrect,
         wrongCount: newWrong,
+        streak: newStreak,
         recordedAnswers: updatedAnswers,
         isCompleted: true,
       );
 
-      // Finish attempt
+      _syncLobbyProgress();
+
       final attempt = await _quizRepo.submitQuizAttempt(
-        studentId: 'TEMP_STUDENT_ID',
+        studentId: state!.participantId ?? 'TEMP_STUDENT_ID',
         topicId: state!.topicId,
         quizType: state!.quizType,
         score: newScore,
         correct: newCorrect,
         wrong: newWrong,
         percentage: pct,
-        duration: 120, // default placeholder
+        duration: 120,
         answersData: updatedAnswers,
       );
 
       state = state!.copyWith(resultAttempt: attempt);
+    }
+  }
+
+  void _syncLobbyProgress() {
+    if (state == null) return;
+    if (state!.lobbyAccessCode != null && state!.participantId != null) {
+      LobbyService.instance.updateParticipantProgress(
+        accessCode: state!.lobbyAccessCode!,
+        participantId: state!.participantId!,
+        questionIndex: state!.currentIndex,
+        score: state!.score,
+        correctCount: state!.correctCount,
+        wrongCount: state!.wrongCount,
+        isFinished: state!.isCompleted,
+      );
     }
   }
 
@@ -218,5 +298,6 @@ final quizProvider = StateNotifierProvider<QuizNotifier, ActiveQuizState?>((ref)
   return QuizNotifier(
     ref.watch(questionRepositoryProvider),
     ref.watch(quizRepositoryProvider),
+    ref.watch(questionServiceProvider),
   );
 });

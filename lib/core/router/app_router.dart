@@ -13,6 +13,9 @@ import '../../screens/quiz_runner_screen.dart';
 import '../../screens/quiz_result_screen.dart';
 import '../../screens/student_analytics_screen.dart';
 import '../../screens/teacher_dashboard_screen.dart';
+import '../../screens/custom_play_screen.dart';
+import '../../screens/host_quiz_screen.dart';
+import '../../screens/join_quiz_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -90,6 +93,18 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
+        path: '/student/custom-play',
+        builder: (context, state) => const CustomPlayScreen(),
+      ),
+      GoRoute(
+        path: '/student/host-quiz',
+        builder: (context, state) => const HostQuizScreen(),
+      ),
+      GoRoute(
+        path: '/student/join-quiz',
+        builder: (context, state) => const JoinQuizScreen(),
+      ),
+      GoRoute(
         path: '/student/quiz',
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>? ?? {};
@@ -98,6 +113,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             topicTitle: extra['topicTitle'] ?? 'Science Topic',
             quizType: extra['quizType'] ?? 'pre_test',
             questionType: extra['questionType'] ?? 'multiple_choice',
+            customTimeLimit: extra['customTimeLimit'],
+            customQuestionCount: extra['customQuestionCount'],
+            customQuestions: extra['customQuestions'],
+            lobbyAccessCode: extra['lobbyAccessCode'],
+            participantId: extra['participantId'],
           );
         },
       ),

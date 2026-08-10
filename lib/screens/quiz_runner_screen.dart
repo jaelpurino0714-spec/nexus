@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/quiz_provider.dart';
+import '../models/question_model.dart';
 
 class QuizRunnerScreen extends ConsumerStatefulWidget {
   final String topicId;
   final String topicTitle;
   final String quizType;
   final String questionType;
+  final int? customTimeLimit;
+  final int? customQuestionCount;
+  final List<QuestionModel>? customQuestions;
+  final String? lobbyAccessCode;
+  final String? participantId;
 
   const QuizRunnerScreen({
     super.key,
@@ -15,6 +21,11 @@ class QuizRunnerScreen extends ConsumerStatefulWidget {
     this.topicTitle = 'Science Topic',
     required this.quizType,
     this.questionType = 'multiple_choice',
+    this.customTimeLimit,
+    this.customQuestionCount,
+    this.customQuestions,
+    this.lobbyAccessCode,
+    this.participantId,
   });
 
   @override
@@ -34,6 +45,11 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
             topicTitle: widget.topicTitle,
             quizType: widget.quizType,
             questionType: widget.questionType,
+            customTimeLimit: widget.customTimeLimit,
+            customQuestionCount: widget.customQuestionCount,
+            customQuestions: widget.customQuestions,
+            lobbyAccessCode: widget.lobbyAccessCode,
+            participantId: widget.participantId,
           );
     });
   }
