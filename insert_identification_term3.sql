@@ -1,11 +1,11 @@
 -- ====================================================================
 -- NEXUS: TERM 3 IDENTIFICATION QUESTIONS FOR POST-TEST
--- Source: Assets/Identification term 3.pdf
+-- Source: Assets/Identification term 3.pdf + Screenshots
 -- Question Type: 3 (Identification)
 -- ====================================================================
 
 -- 1. Clean existing Identification questions for Term 3 topics
-DELETE FROM public.questions WHERE topic_id IN ('b0000000-0000-0000-0000-000000000301', 'b0000000-0000-0000-0000-000000000302', 'b0000000-0000-0000-0000-000000000304') AND question_type_id = 3;
+DELETE FROM public.questions WHERE topic_id IN ('b0000000-0000-0000-0000-000000000301', 'b0000000-0000-0000-0000-000000000302', 'b0000000-0000-0000-0000-000000000303', 'b0000000-0000-0000-0000-000000000304') AND question_type_id = 3;
 
 -- 2. Insert Identification Questions per Topic
 -- Topic (Part 1): Projectile Motion (Total 30 Identification questions)
@@ -73,6 +73,39 @@ INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, c
 ('b0000000-0000-0000-0000-000000000302', 3, 'post_test', 'When momentum is conserved during a collision, what quantity is exchanged between the objects?', NULL, NULL, NULL, NULL, 'Momentum', 'The correct term is: Momentum.', true),
 ('b0000000-0000-0000-0000-000000000302', 3, 'post_test', 'Which object is harder to stop: a heavy, slow-moving object or a light, fast-moving object?', NULL, NULL, NULL, NULL, 'It depends on the product of mass and velocity (momentum)', 'The correct term is: It depends on the product of mass and velocity (momentum).', true),
 ('b0000000-0000-0000-0000-000000000302', 3, 'post_test', 'Safety devices such as airbags and seatbelts reduce injuries by increasing __________ to decrease force.', NULL, NULL, NULL, NULL, 'Stopping time', 'The correct term is: Stopping time.', true);
+
+-- Topic (Part 3): Large-Scale Generation and Distribution of Electricity (Total 30 Identification questions)
+INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation, is_active) VALUES
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What device generates electrical energy from mechanical energy?', NULL, NULL, NULL, NULL, 'Generator', 'The correct term is: Generator.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What device changes AC voltage up or down?', NULL, NULL, NULL, NULL, 'Transformer', 'The correct term is: Transformer.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What voltage is used for long-distance transmission?', NULL, NULL, NULL, NULL, 'High voltage', 'The correct term is: High voltage.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'Why is electricity transmitted at high voltage?', NULL, NULL, NULL, NULL, 'Reduce losses', 'The correct term is: Reduce losses.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What device lowers voltage before electricity reaches homes?', NULL, NULL, NULL, NULL, 'Step-down transformer', 'The correct term is: Step-down transformer.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What carries electricity over long distances?', NULL, NULL, NULL, NULL, 'Transmission lines', 'The correct term is: Transmission lines.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What distributes electricity to homes and businesses?', NULL, NULL, NULL, NULL, 'Distribution lines', 'The correct term is: Distribution lines.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What measures household electricity use?', NULL, NULL, NULL, NULL, 'Electric meter', 'The correct term is: Electric meter.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What unit does an electric meter measure?', NULL, NULL, NULL, NULL, 'Kilowatt-hour', 'The correct term is: Kilowatt-hour.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What device protects a circuit from excessive current?', NULL, NULL, NULL, NULL, 'Fuse', 'The correct term is: Fuse.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What reusable device trips during overcurrent?', NULL, NULL, NULL, NULL, 'Circuit breaker', 'The correct term is: Circuit breaker.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What pin on a three-prong plug provides safety grounding?', NULL, NULL, NULL, NULL, 'Ground pin', 'The correct term is: Ground pin.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'Why is octopus wiring dangerous?', NULL, NULL, NULL, NULL, 'Overheating', 'The correct term is: Overheating.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'Why should water not be used on electrical fires?', NULL, NULL, NULL, NULL, 'Electrocution risk', 'The correct term is: Electrocution risk.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What should you turn off during an electrical emergency?', NULL, NULL, NULL, NULL, 'Main breaker', 'The correct term is: Main breaker.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What wire carries electrical current to appliances?', NULL, NULL, NULL, NULL, 'Live wire', 'The correct term is: Live wire.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What wire provides a return path for current?', NULL, NULL, NULL, NULL, 'Neutral wire', 'The correct term is: Neutral wire.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What wire provides protection from electrical faults?', NULL, NULL, NULL, NULL, 'Ground wire', 'The correct term is: Ground wire.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What device detects electrical leakage?', NULL, NULL, NULL, NULL, 'GFCI', 'The correct term is: GFCI.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What does a generator convert?', NULL, NULL, NULL, NULL, 'Mechanical to electrical', 'The correct term is: Mechanical to electrical.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What does an electric motor convert?', NULL, NULL, NULL, NULL, 'Electrical to mechanical', 'The correct term is: Electrical to mechanical.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What do motors and generators have in common?', NULL, NULL, NULL, NULL, 'Coils and magnets', 'The correct term is: Coils and magnets.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What is the main difference between a motor and generator?', NULL, NULL, NULL, NULL, 'Energy conversion', 'The correct term is: Energy conversion.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What happens when a motor is mechanically spun?', NULL, NULL, NULL, NULL, 'Produces electricity', 'The correct term is: Produces electricity.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'Why are transmission wires made thick?', NULL, NULL, NULL, NULL, 'Reduce resistance', 'The correct term is: Reduce resistance.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'Why are transmission towers tall?', NULL, NULL, NULL, NULL, 'Safe clearance', 'The correct term is: Safe clearance.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What reduces electricity use in homes?', NULL, NULL, NULL, NULL, 'Energy conservation', 'The correct term is: Energy conservation.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What type of bulb uses less electricity?', NULL, NULL, NULL, NULL, 'LED bulb', 'The correct term is: LED bulb.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What happens to transmission losses when voltage increases?', NULL, NULL, NULL, NULL, 'Losses decrease', 'The correct term is: Losses decrease.', true),
+('b0000000-0000-0000-0000-000000000303', 3, 'post_test', 'What are two benefits of reducing electricity use?', NULL, NULL, NULL, NULL, 'Lower bills, emissions', 'The correct term is: Lower bills, emissions.', true);
 
 -- Topic (Part 4): Renewable and Non-Renewable Energy Sources (Total 30 Identification questions)
 INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation, is_active) VALUES

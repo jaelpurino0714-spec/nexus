@@ -44,7 +44,7 @@ def esc(val):
 records = []
 
 def add_q(top_key, q_type_id, q_text, c_a, c_b, c_c, c_d, ans, exp, quiz_type='post_test'):
-    if top_key.startswith('t3_') and q_type_id == 3: return  # Exclude Term 3 Identification questions, allow Term 1 and Term 2
+    # Allow all Identification questions for Terms 1, 2, and 3
     # Allow all question types for t3_
     
     topic_info = TOPICS[top_key]
@@ -212,13 +212,14 @@ for idx in range(1, len(sec_id2), 3):
         add_q(top_k, 3, q_body, None, None, None, None, ans_val, f'The correct term is: {ans_val}.', 'post_test')
 
 
-# --- 4c. Parse Identification term 3.pdf ---
+# --- 4c. Parse Identification term 3.pdf + Part 3 ---
 with open('dump_Identification term 3.pdf.txt', 'r', encoding='utf-8') as f:
     text_id3 = f.read()
 
 top_map_id3 = {
     1: 't3_projectile_motion',
     2: 't3_momentum_collisions',
+    3: 't3_electricity_generation',
     4: 't3_energy_sources',
 }
 
@@ -251,6 +252,43 @@ for i in range(1, len(parts_id3), 3):
         ans = ans_map.get(q_num)
         if q_body and ans:
             add_q(top_k, 3, q_body, None, None, None, None, ans, f'The correct term is: {ans}.', 'post_test')
+
+# Add Part 3 items
+part3_id3_data = [
+    ("What device generates electrical energy from mechanical energy?", "Generator"),
+    ("What device changes AC voltage up or down?", "Transformer"),
+    ("What voltage is used for long-distance transmission?", "High voltage"),
+    ("Why is electricity transmitted at high voltage?", "Reduce losses"),
+    ("What device lowers voltage before electricity reaches homes?", "Step-down transformer"),
+    ("What carries electricity over long distances?", "Transmission lines"),
+    ("What distributes electricity to homes and businesses?", "Distribution lines"),
+    ("What measures household electricity use?", "Electric meter"),
+    ("What unit does an electric meter measure?", "Kilowatt-hour"),
+    ("What device protects a circuit from excessive current?", "Fuse"),
+    ("What reusable device trips during overcurrent?", "Circuit breaker"),
+    ("What pin on a three-prong plug provides safety grounding?", "Ground pin"),
+    ("Why is octopus wiring dangerous?", "Overheating"),
+    ("Why should water not be used on electrical fires?", "Electrocution risk"),
+    ("What should you turn off during an electrical emergency?", "Main breaker"),
+    ("What wire carries electrical current to appliances?", "Live wire"),
+    ("What wire provides a return path for current?", "Neutral wire"),
+    ("What wire provides protection from electrical faults?", "Ground wire"),
+    ("What device detects electrical leakage?", "GFCI"),
+    ("What does a generator convert?", "Mechanical to electrical"),
+    ("What does an electric motor convert?", "Electrical to mechanical"),
+    ("What do motors and generators have in common?", "Coils and magnets"),
+    ("What is the main difference between a motor and generator?", "Energy conversion"),
+    ("What happens when a motor is mechanically spun?", "Produces electricity"),
+    ("Why are transmission wires made thick?", "Reduce resistance"),
+    ("Why are transmission towers tall?", "Safe clearance"),
+    ("What reduces electricity use in homes?", "Energy conservation"),
+    ("What type of bulb uses less electricity?", "LED bulb"),
+    ("What happens to transmission losses when voltage increases?", "Losses decrease"),
+    ("What are two benefits of reducing electricity use?", "Lower bills, emissions"),
+]
+
+for q_b, a_v in part3_id3_data:
+    add_q('t3_electricity_generation', 3, q_b, None, None, None, None, a_v, f'The correct term is: {a_v}.', 'post_test')
 
 
 # --- 5. MCQ Term 1 Parser ---
