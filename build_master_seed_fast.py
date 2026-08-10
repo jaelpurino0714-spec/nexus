@@ -450,4 +450,4 @@ with open('seed_master_questions.sql', 'w', encoding='utf-8') as out:
 
     out.write(",\n".join(q_rows) + ";\n")
 
-print(f"SUCCESS: Updated generate_master_sql.py & seed_master_questions.sql ({len(records)} questions)")
+print(f"SUCCESS: Updated build_master_seed_fast.py & seed_master_questions.sql with {len(records)} total questions!")
