@@ -91,21 +91,21 @@ for idx in range(1, len(sections), 3):
         elif curr_d:
             if curr_q and curr_a and curr_b and curr_c and curr_d:
                 q_idx_in_topic += 1
-                qtype = 'pre_test' if q_idx_in_topic <= 15 else 'post_test'
-                records.append({
-                    'topic_num': t_num,
-                    'topic_id': t_id,
-                    'topic_title': t_title,
-                    'q_num': q_idx_in_topic,
-                    'quiz_type': qtype,
-                    'question': clean_stem(curr_q),
-                    'choice_a': curr_a,
-                    'choice_b': curr_b,
-                    'choice_c': curr_c,
-                    'choice_d': curr_d,
-                    'correct_answer': curr_ans,
-                    'explanation': f"Option {curr_ans} is the correct answer."
-                })
+                if q_idx_in_topic <= 15:
+                    records.append({
+                        'topic_num': t_num,
+                        'topic_id': t_id,
+                        'topic_title': t_title,
+                        'q_num': q_idx_in_topic,
+                        'quiz_type': 'pre_test',
+                        'question': clean_stem(curr_q),
+                        'choice_a': curr_a,
+                        'choice_b': curr_b,
+                        'choice_c': curr_c,
+                        'choice_d': curr_d,
+                        'correct_answer': curr_ans,
+                        'explanation': f"Option {curr_ans} is the correct answer."
+                    })
             curr_q = l
             curr_a = None
             curr_b = None
@@ -115,27 +115,27 @@ for idx in range(1, len(sections), 3):
             
     if curr_q and curr_a and curr_b and curr_c and curr_d:
         q_idx_in_topic += 1
-        qtype = 'pre_test' if q_idx_in_topic <= 15 else 'post_test'
-        records.append({
-            'topic_num': t_num,
-            'topic_id': t_id,
-            'topic_title': t_title,
-            'q_num': q_idx_in_topic,
-            'quiz_type': qtype,
-            'question': clean_stem(curr_q),
-            'choice_a': curr_a,
-            'choice_b': curr_b,
-            'choice_c': curr_c,
-            'choice_d': curr_d,
-            'correct_answer': curr_ans,
-            'explanation': f"Option {curr_ans} is the correct answer."
-        })
+        if q_idx_in_topic <= 15:
+            records.append({
+                'topic_num': t_num,
+                'topic_id': t_id,
+                'topic_title': t_title,
+                'q_num': q_idx_in_topic,
+                'quiz_type': 'pre_test',
+                'question': clean_stem(curr_q),
+                'choice_a': curr_a,
+                'choice_b': curr_b,
+                'choice_c': curr_c,
+                'choice_d': curr_d,
+                'correct_answer': curr_ans,
+                'explanation': f"Option {curr_ans} is the correct answer."
+            })
 
 out_path = r'd:\Nexus 2.0\insert_mcq_term2.sql'
 
 with open(out_path, 'w', encoding='utf-8') as out:
     out.write("-- ====================================================================\n")
-    out.write("-- NEXUS: TERM 2 MULTIPLE CHOICE QUESTIONS FOR PRE-TEST & POST-TEST\n")
+    out.write("-- NEXUS: TERM 2 MULTIPLE CHOICE QUESTIONS FOR PRE-TEST\n")
     out.write("-- Source: Assets/nexus-MCQ-term-2.pdf\n")
     out.write("-- Question Type: 1 (Multiple Choice)\n")
     out.write("-- ====================================================================\n\n")
@@ -144,20 +144,18 @@ with open(out_path, 'w', encoding='utf-8') as out:
     out.write("-- 1. Clean existing MCQ questions for Term 2 topics\n")
     out.write(f"DELETE FROM public.questions WHERE topic_id IN ({topic_ids_str}) AND question_type_id = 1;\n\n")
 
-    out.write("-- 2. Insert Multiple Choice Questions per Topic & Quiz Type\n")
+    out.write("-- 2. Insert Pre-test Multiple Choice Questions per Topic\n")
     
     for topic_num in range(1, 7):
         t_id, t_title = TOPICS_MCQ2[topic_num]
-        t_recs = [r for r in records if r['topic_num'] == topic_num]
-        pre_recs = [r for r in t_recs if r['quiz_type'] == 'pre_test']
-        post_recs = [r for r in t_recs if r['quiz_type'] == 'post_test']
+        pre_recs = [r for r in records if r['topic_num'] == topic_num and r['quiz_type'] == 'pre_test']
         
-        out.write(f"-- Topic {topic_num}: {t_title} (Total {len(t_recs)} items: {len(pre_recs)} Pre-test, {len(post_recs)} Post-test)\n")
-        if t_recs:
+        out.write(f"-- Topic {topic_num}: {t_title} (Total {len(pre_recs)} Pre-test MCQs)\n")
+        if pre_recs:
             out.write("INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation, is_active) VALUES\n")
             rows = []
-            for r in t_recs:
-                rows.append(f"({sql_escape(r['topic_id'])}, 1, {sql_escape(r['quiz_type'])}, {sql_escape(r['question'])}, {sql_escape(r['choice_a'])}, {sql_escape(r['choice_b'])}, {sql_escape(r['choice_c'])}, {sql_escape(r['choice_d'])}, {sql_escape(r['correct_answer'])}, {sql_escape(r['explanation'])}, true)")
+            for r in pre_recs:
+                rows.append(f"({sql_escape(r['topic_id'])}, 1, 'pre_test', {sql_escape(r['question'])}, {sql_escape(r['choice_a'])}, {sql_escape(r['choice_b'])}, {sql_escape(r['choice_c'])}, {sql_escape(r['choice_d'])}, {sql_escape(r['correct_answer'])}, {sql_escape(r['explanation'])}, true)")
             out.write(",\n".join(rows) + ";\n\n")
 
-print(f"Successfully generated {out_path} with {len(records)} Term 2 MCQs!")
+print(f"Successfully generated {out_path} with {len(records)} Term 2 Pre-test MCQs!")

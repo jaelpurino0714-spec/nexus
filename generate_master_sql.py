@@ -424,8 +424,8 @@ for idx in range(1, len(sec_mcq2), 3):
         elif curr_d:
             if curr_q and curr_a and curr_b and curr_c and curr_d:
                 q_idx_in_topic += 1
-                qtype = 'pre_test' if q_idx_in_topic <= 15 else 'post_test'
-                add_q(top_k, 1, clean_mcq2_stem(curr_q), curr_a, curr_b, curr_c, curr_d, curr_ans, f'Option {curr_ans} is the correct answer.', qtype)
+                if q_idx_in_topic <= 15:
+                    add_q(top_k, 1, clean_mcq2_stem(curr_q), curr_a, curr_b, curr_c, curr_d, curr_ans, f'Option {curr_ans} is the correct answer.', 'pre_test')
             curr_q = l
             curr_a = None
             curr_b = None
@@ -435,8 +435,8 @@ for idx in range(1, len(sec_mcq2), 3):
             
     if curr_q and curr_a and curr_b and curr_c and curr_d:
         q_idx_in_topic += 1
-        qtype = 'pre_test' if q_idx_in_topic <= 15 else 'post_test'
-        add_q(top_k, 1, clean_mcq2_stem(curr_q), curr_a, curr_b, curr_c, curr_d, curr_ans, f'Option {curr_ans} is the correct answer.', qtype)
+        if q_idx_in_topic <= 15:
+            add_q(top_k, 1, clean_mcq2_stem(curr_q), curr_a, curr_b, curr_c, curr_d, curr_ans, f'Option {curr_ans} is the correct answer.', 'pre_test')
 
 
 # --- 7. Parse MCQ Term 3 ---
