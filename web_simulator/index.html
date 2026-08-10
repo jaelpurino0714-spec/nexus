@@ -519,6 +519,40 @@
         </div>
       </div>
 
+      <!-- ================= HOST LIVE DASHBOARD SCREEN (Host View Only) ================= -->
+      <section id="hostLiveDashboardScreen" class="screen">
+        <div class="play-container">
+          <div class="lobby-header-card" style="margin-bottom:12px;">
+            <span class="lobby-badge-tag">LIVE HOST DASHBOARD 🔴</span>
+            <p class="lobby-code-label">ACCESS CODE: <b id="hostLiveCode" style="color:#38BDF8;">849 204 1</b></p>
+            <h3 style="margin:6px 0 0 0; font-size:1.1rem; color:white;">Tracking Participant Progress Live</h3>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h4 id="hostLiveStatusLabel" style="margin:0; font-size:0.95rem; color:#1E293B;">Live Rankings & Tally</h4>
+            <button class="kick-btn" style="background:#DC2626; color:white; border:none; padding:6px 12px;" onclick="Quiz.endHostQuizEarly()">End Quiz ⏹</button>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="data-table" style="font-size:0.8rem;">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Participant</th>
+                  <th>Current Q</th>
+                  <th>Correct ✅</th>
+                  <th>Incorrect ❌</th>
+                  <th>Points</th>
+                </tr>
+              </thead>
+              <tbody id="hostLiveTableBody">
+                <!-- Rendered dynamically by Quiz.renderHostLiveDashboard() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       <!-- ================= 6. GAMEPLAY UI ================= -->
       <section id="gameplayScreen" class="screen">
         <div class="gameplay-container">

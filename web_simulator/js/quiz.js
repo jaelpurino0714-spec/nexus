@@ -213,17 +213,18 @@ const Quiz = {
       const modal = document.getElementById('preGameCustomizeModal');
       document.getElementById('customTimeLimit').value = this.customTimeLimitSec || 20;
       document.getElementById('customQuestionCount').value = this.customQuestionCount || 15;
-
       const maxGroup = document.getElementById('maxParticipantsGroup');
       if (this.customFlowType === 'host_builtin') {
         document.getElementById('customizeModalTitle').textContent = 'Host Built-in Setup';
         document.getElementById('customizeModalSub').textContent = 'Configure live host settings for participants';
         maxGroup.classList.remove('hidden');
+        maxGroup.style.display = 'flex';
         document.getElementById('startCustomizeBtn').textContent = 'Create Lobby 🚀';
       } else {
         document.getElementById('customizeModalTitle').textContent = 'Custom Play Setup';
         document.getElementById('customizeModalSub').textContent = 'Configure your custom time limit and question count';
         maxGroup.classList.add('hidden');
+        maxGroup.style.display = 'none';
         document.getElementById('startCustomizeBtn').textContent = 'Start Custom Play 🚀';
       }
 
@@ -586,7 +587,111 @@ const Quiz = {
   },
 
   startHostQuizGame() {
-    this.startQuiz(this.currentMode, this.currentQuestionFormat);
+    if (this.isHost) {
+      this.startHostTrackingDashboard();
+    } else {
+      this.startQuiz(this.currentMode, this.currentQuestionFormat);
+    }
+  },
+
+  startHostTrackingDashboard() {
+    const formattedCode = `${this.lobbyAccessCode.slice(0,3)} ${this.lobbyAccessCode.slice(3,6)} ${this.lobbyAccessCode.slice(6)}`;
+    document.getElementById('hostLiveCode').textContent = formattedCode;
+    
+    // Initial tracking state for participants
+    if (this.lobbyParticipants.length === 0) {
+      // Add sample active players if host launches lobby directly for demo
+      this.lobbyParticipants = [
+        { name: 'Alex Johnson', grade: 'Grade 10-A', currentQ: 1, correct: 0, incorrect: 0, points: 0, finished: false },
+        { name: 'Maria Santos', grade: 'Grade 10-B', currentQ: 1, correct: 0, incorrect: 0, points: 0, finished: false },
+        { name: 'David Lee', grade: 'Grade 10-A', currentQ: 1, correct: 0, incorrect: 0, points: 0, finished: false }
+      ];
+    } else {
+      this.lobbyParticipants.forEach(p => {
+        p.currentQ = p.currentQ || 1;
+        p.correct = p.correct || 0;
+        p.incorrect = p.incorrect || 0;
+        p.points = p.points || 0;
+        p.finished = false;
+      });
+    }
+
+    App.showScreen('hostLiveDashboardScreen');
+    this.renderHostLiveDashboard();
+
+    if (this.hostTrackInterval) clearInterval(this.hostTrackInterval);
+    this.hostTrackInterval = setInterval(() => {
+      this.simulateHostLiveTracking();
+    }, 2000);
+  },
+
+  simulateHostLiveTracking() {
+    let allFinished = true;
+    const totalQ = this.customQuestionCount || 15;
+
+    this.lobbyParticipants.forEach(p => {
+      if (!p.finished) {
+        allFinished = false;
+        if (Math.random() > 0.3) {
+          const isCorrect = Math.random() > 0.25;
+          if (isCorrect) {
+            p.correct = (p.correct || 0) + 1;
+            p.points = (p.points || 0) + 120;
+          } else {
+            p.incorrect = (p.incorrect || 0) + 1;
+          }
+          p.currentQ = (p.currentQ || 1) + 1;
+          if (p.currentQ > totalQ) {
+            p.currentQ = totalQ;
+            p.finished = true;
+          }
+        }
+      }
+    });
+
+    this.renderHostLiveDashboard();
+
+    if (allFinished) {
+      clearInterval(this.hostTrackInterval);
+      document.getElementById('hostLiveStatusLabel').textContent = '✅ All Participants Finished! Auto-switching to Final Leaderboard...';
+      setTimeout(() => {
+        this.finishQuizHostView();
+      }, 1800);
+    }
+  },
+
+  renderHostLiveDashboard() {
+    const tbody = document.getElementById('hostLiveTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    const sorted = [...this.lobbyParticipants].sort((a, b) => (b.points || 0) - (a.points || 0));
+    const totalQ = this.customQuestionCount || 15;
+
+    sorted.forEach((p, idx) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="font-weight:800; color:#6D28D9;">#${idx + 1}</td>
+        <td style="font-weight:700;">${p.name} <br><span style="font-size:0.7rem; color:#64748B;">${p.grade || 'Student'}</span></td>
+        <td style="font-weight:700;">${p.finished ? '<span style="color:#10B981;">Finished</span>' : `Q${p.currentQ || 1}/${totalQ}`}</td>
+        <td style="color:#10B981; font-weight:800;">${p.correct || 0}</td>
+        <td style="color:#EF4444; font-weight:800;">${p.incorrect || 0}</td>
+        <td style="color:#F59E0B; font-weight:900;">${(p.points || 0).toLocaleString()} pts</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  },
+
+  endHostQuizEarly() {
+    if (confirm('Are you sure you want to end the quiz early for all participants?')) {
+      if (this.hostTrackInterval) clearInterval(this.hostTrackInterval);
+      this.finishQuizHostView();
+    }
+  },
+
+  finishQuizHostView() {
+    App.showScreen('homeScreen');
+    alert('Host Live Quiz finished! Final participant scores saved.');
   },
 
   async prepareBuiltinQuestions() {
