@@ -108,7 +108,14 @@ const Quiz = {
   isHost: false,
 
   showCustomHubModal() {
-    document.getElementById('customHubModal').classList.remove('hidden');
+    this.hideHostTypeModal();
+    this.hidePreGameCustomizeModal();
+    this.hideCustomCreatorModal();
+    this.hideJoinCodeModal();
+    this.hideModeSelector();
+    this.hidePostTestFormatModal();
+    const el = document.getElementById('customHubModal');
+    if (el) el.classList.remove('hidden');
   },
 
   hideCustomHubModal() {

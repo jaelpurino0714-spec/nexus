@@ -531,17 +531,18 @@
 
 /* Mode Selection Modal */
 .mode-modal {
-  position: absolute;
+  position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: flex-end;
-  z-index: 10;
+  justify-content: center;
+  z-index: 9999;
 }
 
 .mode-modal.hidden {
-  display: none;
+  display: none !important;
 }
 
 .mode-modal-content {

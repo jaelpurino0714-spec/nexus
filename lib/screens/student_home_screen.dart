@@ -90,9 +90,7 @@ class StudentHomeScreen extends ConsumerWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Custom mode selected')),
-                );
+                _showCustomHubModal(context);
               },
             ),
             const SizedBox(height: 16),
@@ -120,6 +118,65 @@ class StudentHomeScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showCustomHubModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAlignment.stretch,
+            children: [
+              const Text(
+                'Custom Mode',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF4C1D95)),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Choose your custom quiz flow',
+                style: TextStyle(fontSize: 13, color: Colors.grey),
+              ),
+              const SizedBox(height: 20),
+              ListTile(
+                leading: const CircleAvatar(backgroundColor: Color(0xFFEDE9FE), child: Text('🔑')),
+                title: const Text('Join Quiz', style: TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: const Text('Enter 7-digit access code to join host lobby'),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  context.push('/student/terms');
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const CircleAvatar(backgroundColor: Color(0xFFFEF3C7), child: Text('👑')),
+                title: const Text('Host Quiz', style: TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: const Text('Create live quiz lobby using Built-in or Custom questions'),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  context.push('/student/terms');
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const CircleAvatar(backgroundColor: Color(0xFFD1FAE5), child: Text('⚡')),
+                title: const Text('Custom Play', style: TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: const Text('Single-player with custom time limit & question count'),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  context.push('/student/terms');
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
