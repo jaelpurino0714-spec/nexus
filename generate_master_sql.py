@@ -364,9 +364,10 @@ def clean_mcq2_stem(raw_q):
     if 'randomized each playthrough' in s.lower():
         s = re.sub(r'^[^\)]*\)\s*', '', s)
     s = re.sub(r'^pre-test questions[^\n]*', '', s, flags=re.IGNORECASE)
-    s = re.sub(r'^TERM 2[^\n]*', '', s, flags=re.IGNORECASE)
-    s = re.sub(r'^\d+[\.\)]\s*', '', s)
-    return s.strip()
+    s = re.sub(r'^TERM \d+[^\n]*', '', s, flags=re.IGNORECASE)
+    s = re.sub(r'^(?:✅\s*)?[A-D]\s*[–\-—]\s*.*?\d+[\.\)]\s*', '', s).strip()
+    s = re.sub(r'^\d+[\.\)]\s*', '', s).strip()
+    return s
 
 for idx in range(1, len(sec_mcq2), 3):
     t_num = int(sec_mcq2[idx+1])

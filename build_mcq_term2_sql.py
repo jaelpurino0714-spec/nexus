@@ -24,9 +24,10 @@ def clean_stem(raw_q):
     if 'randomized each playthrough' in s.lower():
         s = re.sub(r'^[^\)]*\)\s*', '', s)
     s = re.sub(r'^pre-test questions[^\n]*', '', s, flags=re.IGNORECASE)
-    s = re.sub(r'^TERM 2[^\n]*', '', s, flags=re.IGNORECASE)
-    s = re.sub(r'^\d+[\.\)]\s*', '', s)
-    return s.strip()
+    s = re.sub(r'^TERM \d+[^\n]*', '', s, flags=re.IGNORECASE)
+    s = re.sub(r'^(?:✅\s*)?[A-D]\s*[–\-—]\s*.*?\d+[\.\)]\s*', '', s).strip()
+    s = re.sub(r'^\d+[\.\)]\s*', '', s).strip()
+    return s
 
 with open('dump_nexus-MCQ-term-2.pdf.txt', 'r', encoding='utf-8') as f:
     text = re.sub(r'--- PAGE \d+ ---', '', f.read())
