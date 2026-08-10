@@ -331,7 +331,69 @@
 .play-prompt-sub {
   font-size: 0.85rem;
   color: var(--text-muted);
+}
 
+/* ---------------- TOPIC SELECTION WARM-UP BANNER ---------------- */
+.topic-warmup-banner {
+  background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #5b21b6 100%);
+  border-radius: 20px;
+  padding: 24px 26px;
+  box-shadow: 0 14px 32px rgba(76, 29, 149, 0.35), 0 0 0 1px rgba(167, 139, 250, 0.2);
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.topic-warmup-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.warmup-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.warmup-title {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.warmup-badge {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  padding: 6px 14px;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.warmup-sub {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  margin-top: 8px;
 }
 
 .term-buttons-group, .topic-buttons-group {

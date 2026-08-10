@@ -62,9 +62,9 @@ const Quiz = {
 
   // 2. Render Topics for Selected Term (Dynamically from Supabase)
   async renderTopics() {
-    const termNames = { 1: 'First Term Topics', 2: 'Second Term Topics', 3: 'Third Term Topics' };
-    document.getElementById('topicScreenTitle').textContent = termNames[this.currentTerm] || 'Select Topic';
-    document.getElementById('topicScreenSub').textContent = `Term ${this.currentTerm} DepEd Science Topics`;
+    const termNames = { 1: 'TERM 1 TOPICS WARM-UP', 2: 'TERM 2 TOPICS WARM-UP', 3: 'TERM 3 TOPICS WARM-UP' };
+    document.getElementById('topicScreenTitle').textContent = termNames[this.currentTerm] || `TERM ${this.currentTerm} TOPICS WARM-UP`;
+    document.getElementById('topicScreenSub').textContent = `Comprehensive 15-question assessment across all lessons`;
 
     const container = document.getElementById('topicsListGroup');
     container.innerHTML = '<div style="text-align:center; padding:20px;">Loading topics from Supabase...</div>';
