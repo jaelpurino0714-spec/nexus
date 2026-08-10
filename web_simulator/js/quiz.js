@@ -166,6 +166,46 @@ const Quiz = {
     this.renderQuestion();
   },
 
+  // Helper: Contextual Icon Generator for MC Options
+  getOptionIcon(text, index) {
+    if (!text) return ['🧪', '⚛️', '🔬', '⚡'][index % 4];
+    const lower = text.toLowerCase();
+    
+    if (lower.includes('heat') || lower.includes('fire') || lower.includes('temperature') || lower.includes('warm') || lower.includes('thermal') || lower.includes('burn') || lower.includes('combust')) {
+      return '🔥';
+    }
+    if (lower.includes('gas') || lower.includes('vapor') || lower.includes('evaporat') || lower.includes('bubble') || lower.includes('air') || lower.includes('oxygen') || lower.includes('carbon')) {
+      return '💨';
+    }
+    if (lower.includes('liquid') || lower.includes('water') || lower.includes('fluid') || lower.includes('solution') || lower.includes('acid') || lower.includes('base') || lower.includes('aqueous')) {
+      return '💧';
+    }
+    if (lower.includes('solid') || lower.includes('precipitat') || lower.includes('down') || lower.includes('crystal') || lower.includes('sediment') || lower.includes('metal') || lower.includes('rock')) {
+      return '🔻';
+    }
+    if (lower.includes('electricity') || lower.includes('power') || lower.includes('voltage') || lower.includes('current') || lower.includes('charge') || lower.includes('electron') || lower.includes('energy')) {
+      return '⚡';
+    }
+    if (lower.includes('light') || lower.includes('sun') || lower.includes('solar') || lower.includes('photon') || lower.includes('ray')) {
+      return '☀️';
+    }
+    if (lower.includes('force') || lower.includes('motion') || lower.includes('speed') || lower.includes('velocity') || lower.includes('accel') || lower.includes('projectile') || lower.includes('momentum') || lower.includes('collision')) {
+      return '🚀';
+    }
+    if (lower.includes('cell') || lower.includes('dna') || lower.includes('gene') || lower.includes('bio') || lower.includes('organism') || lower.includes('homeostasis') || lower.includes('life')) {
+      return '🧬';
+    }
+    if (lower.includes('earth') || lower.includes('plate') || lower.includes('tectonic') || lower.includes('volcano') || lower.includes('climate') || lower.includes('ecosystem') || lower.includes('global')) {
+      return '🌍';
+    }
+    if (lower.includes('chemical') || lower.includes('reaction') || lower.includes('atom') || lower.includes('element') || lower.includes('compound') || lower.includes('molecule')) {
+      return '⚛️';
+    }
+    
+    const fallbacks = ['🧪', '⚛️', '🔬', '⚡'];
+    return fallbacks[index % fallbacks.length];
+  },
+
   // 7. Render Active Question
   renderQuestion() {
     if (this.currentIndex >= this.questionsList.length) {
@@ -178,6 +218,9 @@ const Quiz = {
     // Header info
     document.getElementById('questionCounter').textContent = `Question ${this.currentIndex + 1} of ${this.questionsList.length}`;
     document.getElementById('scorePointsText').textContent = `Points: ${this.totalScorePoints.toLocaleString()}`;
+    const streakEl = document.getElementById('streakCounter');
+    if (streakEl) streakEl.textContent = `🔥 ${this.streak}`;
+
     document.getElementById('quizModeTag').textContent = `${this.currentMode.toUpperCase()} (${this.currentQuestionFormat.toUpperCase()}): ${this.currentTopic || 'Science'}`;
     document.getElementById('questionText').textContent = q.question;
 
@@ -238,17 +281,17 @@ const Quiz = {
       };
       setTimeout(() => inputEl.focus(), 100);
     } else {
-      // Multiple Choice (4 choices)
+      // Multiple Choice (4 choices) - Uses Contextual Icons
       const prefixes = ['A', 'B', 'C', 'D'];
-      const icons = ['🧪', '🔥', '⚛️', '💥'];
       const opts = q.options || ['Option A', 'Option B', 'Option C', 'Option D'];
       opts.forEach((optText, index) => {
+        const contextualIcon = this.getOptionIcon(optText, index);
         const btn = document.createElement('button');
         btn.className = 'answer-option-btn';
         btn.innerHTML = `
           <div class="option-badge-pill">
             <span class="badge-letter">${prefixes[index] || 'A'}</span>
-            <span class="badge-icon">${icons[index] || '🧪'}</span>
+            <span class="badge-icon">${contextualIcon}</span>
           </div>
           <span>${optText}</span>
         `;
@@ -367,6 +410,13 @@ const Quiz = {
     }
 
     document.getElementById('scorePointsText').textContent = `Points: ${this.totalScorePoints.toLocaleString()}`;
+    const streakEl = document.getElementById('streakCounter');
+    if (streakEl) {
+      streakEl.textContent = `🔥 ${this.streak}`;
+      streakEl.classList.remove('streak-pop');
+      void streakEl.offsetWidth; // trigger reflow
+      if (this.streak > 0) streakEl.classList.add('streak-pop');
+    }
     
     setTimeout(() => {
       this.nextQuestion();
@@ -377,6 +427,9 @@ const Quiz = {
     this.incorrectCount++;
     this.streak = 0;
     this.sessionTotalTimeSec += 20;
+
+    const streakEl = document.getElementById('streakCounter');
+    if (streakEl) streakEl.textContent = `🔥 ${this.streak}`;
 
     const feedback = document.getElementById('feedbackBanner');
     const statusTextEl = document.getElementById('feedbackText');

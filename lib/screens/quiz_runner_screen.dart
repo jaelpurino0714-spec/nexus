@@ -86,9 +86,26 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
               'Question ${quizState.currentIndex + 1} of ${quizState.questions.length}',
               style: const TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.bold),
             ),
-            Text(
-              'Points: ${quizState.totalPoints}',
-              style: const TextStyle(fontSize: 14, color: Color(0xFFF59E0B), fontWeight: FontWeight.w800),
+            Row(
+              children: [
+                Text(
+                  'Points: ${quizState.totalPoints}',
+                  style: const TextStyle(fontSize: 14, color: Color(0xFFF59E0B), fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEF4444).withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: const Color(0xFFEF4444).withOpacity(0.25)),
+                  ),
+                  child: Text(
+                    '🔥 ${quizState.streak}',
+                    style: const TextStyle(fontSize: 12, color: Color(0xFFEF4444), fontWeight: FontWeight.w800),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -256,28 +273,28 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                         _buildOptionButton(
                           currentQ.shuffledOptions.isNotEmpty ? currentQ.shuffledOptions[0] : 'Option A',
                           'A',
-                          '🧪',
+                          _getOptionIcon(currentQ.shuffledOptions.isNotEmpty ? currentQ.shuffledOptions[0] : '', 0),
                           () => _submitUserAnswer(currentQ.shuffledOptions[0]),
                         ),
                         if (currentQ.shuffledOptions.length > 1)
                           _buildOptionButton(
                             currentQ.shuffledOptions[1],
                             'B',
-                            '🔥',
+                            _getOptionIcon(currentQ.shuffledOptions[1], 1),
                             () => _submitUserAnswer(currentQ.shuffledOptions[1]),
                           ),
                         if (currentQ.shuffledOptions.length > 2)
                           _buildOptionButton(
                             currentQ.shuffledOptions[2],
                             'C',
-                            '⚛️',
+                            _getOptionIcon(currentQ.shuffledOptions[2], 2),
                             () => _submitUserAnswer(currentQ.shuffledOptions[2]),
                           ),
                         if (currentQ.shuffledOptions.length > 3)
                           _buildOptionButton(
                             currentQ.shuffledOptions[3],
                             'D',
-                            '💥',
+                            _getOptionIcon(currentQ.shuffledOptions[3], 3),
                             () => _submitUserAnswer(currentQ.shuffledOptions[3]),
                           ),
                       ],
@@ -290,6 +307,45 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
         ),
       ),
     );
+  }
+
+  String _getOptionIcon(String text, int index) {
+    if (text.isEmpty) return ['🧪', '⚛️', '🔬', '⚡'][index % 4];
+    final lower = text.toLowerCase();
+    
+    if (lower.contains('heat') || lower.contains('fire') || lower.contains('temperature') || lower.contains('warm') || lower.contains('thermal') || lower.contains('burn') || lower.contains('combust')) {
+      return '🔥';
+    }
+    if (lower.contains('gas') || lower.contains('vapor') || lower.contains('evaporat') || lower.contains('bubble') || lower.contains('air') || lower.contains('oxygen') || lower.contains('carbon')) {
+      return '💨';
+    }
+    if (lower.contains('liquid') || lower.contains('water') || lower.contains('fluid') || lower.contains('solution') || lower.contains('acid') || lower.contains('base') || lower.contains('aqueous')) {
+      return '💧';
+    }
+    if (lower.contains('solid') || lower.contains('precipitat') || lower.contains('down') || lower.contains('crystal') || lower.contains('sediment') || lower.contains('metal') || lower.contains('rock')) {
+      return '🔻';
+    }
+    if (lower.contains('electricity') || lower.contains('power') || lower.contains('voltage') || lower.contains('current') || lower.contains('charge') || lower.contains('electron') || lower.contains('energy')) {
+      return '⚡';
+    }
+    if (lower.contains('light') || lower.contains('sun') || lower.contains('solar') || lower.contains('photon') || lower.contains('ray')) {
+      return '☀️';
+    }
+    if (lower.contains('force') || lower.contains('motion') || lower.contains('speed') || lower.contains('velocity') || lower.contains('accel') || lower.contains('projectile') || lower.contains('momentum') || lower.contains('collision')) {
+      return '🚀';
+    }
+    if (lower.contains('cell') || lower.contains('dna') || lower.contains('gene') || lower.contains('bio') || lower.contains('organism') || lower.contains('homeostasis') || lower.contains('life')) {
+      return '🧬';
+    }
+    if (lower.contains('earth') || lower.contains('plate') || lower.contains('tectonic') || lower.contains('volcano') || lower.contains('climate') || lower.contains('ecosystem') || lower.contains('global')) {
+      return '🌍';
+    }
+    if (lower.contains('chemical') || lower.contains('reaction') || lower.contains('atom') || lower.contains('element') || lower.contains('compound') || lower.contains('molecule')) {
+      return '⚛️';
+    }
+    
+    final fallbacks = ['🧪', '⚛️', '🔬', '⚡'];
+    return fallbacks[index % fallbacks.length];
   }
 
   Widget _buildOptionButton(String text, String letter, String icon, VoidCallback onTap) {

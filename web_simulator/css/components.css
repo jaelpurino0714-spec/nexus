@@ -619,6 +619,35 @@
   color: #F59E0B;
 }
 
+.score-streak-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.streak-counter-text {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #EF4444;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 2px 8px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.streak-pop {
+  animation: flamePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes flamePop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
 .mode-tag {
   background: rgba(139, 92, 246, 0.15);
   color: #6D28D9;
