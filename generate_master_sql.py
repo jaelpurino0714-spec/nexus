@@ -44,7 +44,7 @@ def esc(val):
 records = []
 
 def add_q(top_key, q_type_id, q_text, c_a, c_b, c_c, c_d, ans, exp, quiz_type='post_test'):
-    if top_key.startswith('t3_') and q_type_id != 2: return
+    if top_key.startswith('t3_') and q_type_id not in [2, 3]: return
     
     topic_info = TOPICS[top_key]
     topic_id = topic_info[0]
@@ -208,12 +208,47 @@ for idx in range(1, len(sec_id2), 2):
         add_q(top_k, 3, q_body, None, None, None, None, ans_val, f'The correct term is: {ans_val}.', 'post_test')
 
 
-parse_id_file('Identification term 3.pdf', {
+
+# --- 4c. Parse Identification term 3.pdf ---
+with open('dump_Identification term 3.pdf.txt', 'r', encoding='utf-8') as f:
+    text_id3 = f.read()
+
+top_map_id3 = {
     1: 't3_projectile_motion',
     2: 't3_momentum_collisions',
-    3: 't3_electricity_generation',
     4: 't3_energy_sources',
-})
+}
+
+parts_id3 = re.split(r'PART\s+(\d+)\s+[–\-]\s+([^\n]+)', text_id3)
+
+for i in range(1, len(parts_id3), 3):
+    p_num = int(parts_id3[i])
+    p_content = parts_id3[i+2]
+    if p_num not in top_map_id3: continue
+    
+    top_k = top_map_id3[p_num]
+    
+    sections = re.split(r'Answer Key|Answer K', p_content, flags=re.IGNORECASE)
+    q_sec = sections[0]
+    ans_sec = sections[1] if len(sections) > 1 else ''
+    
+    ans_map = {}
+    for a_match in re.finditer(r'(?:^|\n)\s*(\d+)[\.\)]\s*([^\n]+)', ans_sec):
+        q_n = int(a_match.group(1))
+        a_val = re.sub(r'\s*\.$', '', a_match.group(2).strip())
+        ans_map[q_n] = a_val
+        
+    for q_match in re.finditer(r'(?:^|\n)\s*(\d+)[\.\)]\s*(.*?)(?=\s*Answer:|\n\s*\d+[\.\)]|\Z)', q_sec, re.DOTALL):
+        q_num = int(q_match.group(1))
+        q_body = re.sub(r'--- PAGE \d+ ---', '', q_match.group(2))
+        q_body = re.sub(r'Directions:[^\n]*', '', q_body)
+        q_body = re.sub(r'Identification', '', q_body)
+        q_body = re.sub(r'\s+', ' ', q_body).replace('Answer:', '').strip()
+        
+        ans = ans_map.get(q_num)
+        if q_body and ans:
+            add_q(top_k, 3, q_body, None, None, None, None, ans, f'The correct term is: {ans}.', 'post_test')
+
 
 # --- 5. MCQ Term 1 Parser ---
 with open('dump_nexus-MCQ-term-1 (1).pdf.txt', 'r', encoding='utf-8') as f:
