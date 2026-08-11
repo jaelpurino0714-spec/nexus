@@ -320,6 +320,11 @@ const Quiz = {
   onCreatorTotalQChange() {
     const total = parseInt(document.getElementById('creatorTotalQuestions').value, 10) || 5;
     if (this.creatorCurrentIndex >= total) {
+      this.creatorCurrentIndex = Math.max(0, total - 1);
+    }
+    this.renderCreatorQuestionStep();
+  },
+
   onCreatorPrevQuestion() {
     if (this.creatorCurrentIndex > 0) {
       this.saveCurrentCreatorQuestion();
