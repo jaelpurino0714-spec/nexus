@@ -884,8 +884,8 @@ const Quiz = {
 
     if (this.currentQuestionFormat === 'true_false') {
       const tfData = [
-        { label: 'True', letter: 'T', icon: '✅' },
-        { label: 'False', letter: 'F', icon: '❌' }
+        { label: 'True', letter: 'T' },
+        { label: 'False', letter: 'F' }
       ];
       tfData.forEach((tf) => {
         const btn = document.createElement('button');
@@ -893,7 +893,6 @@ const Quiz = {
         btn.innerHTML = `
           <div class="option-badge-pill">
             <span class="badge-letter">${tf.letter}</span>
-            <span class="badge-icon">${tf.icon}</span>
           </div>
           <span>${tf.label}</span>
         `;
@@ -931,17 +930,15 @@ const Quiz = {
       };
       setTimeout(() => inputEl.focus(), 100);
     } else {
-      // Multiple Choice (4 choices) - Uses Contextual Icons
+      // Multiple Choice (4 choices)
       const prefixes = ['A', 'B', 'C', 'D'];
       const opts = q.options || ['Option A', 'Option B', 'Option C', 'Option D'];
       opts.forEach((optText, index) => {
-        const contextualIcon = this.getOptionIcon(optText, index);
         const btn = document.createElement('button');
         btn.className = 'answer-option-btn';
         btn.innerHTML = `
           <div class="option-badge-pill">
             <span class="badge-letter">${prefixes[index] || 'A'}</span>
-            <span class="badge-icon">${contextualIcon}</span>
           </div>
           <span>${optText}</span>
         `;

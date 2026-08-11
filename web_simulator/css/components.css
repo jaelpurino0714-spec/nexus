@@ -719,29 +719,29 @@
   cursor: pointer;
 }
 
-/* Speed Tapping Timer Card (Dark Top Card) */
+/* Speed Tapping Timer Card (Vibrant Purple Card) */
 .speed-timer-card {
-  background: #0B0F19;
-  border: 1.5px solid rgba(239, 68, 68, 0.4);
+  background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 18px;
   padding: 14px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 24px rgba(109, 40, 217, 0.25);
   margin-bottom: 16px;
 }
 
 .lightning-badge {
-  background: #111827;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
   border-radius: 50%;
   width: 44px;
   height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  font-size: 1.3rem;
 }
 
 .speed-timer-info {
@@ -753,8 +753,8 @@
 .speed-timer-label {
   font-size: 0.7rem;
   font-weight: 800;
-  color: #F59E0B;
-  letter-spacing: 0.5px;
+  color: #E9D5FF;
+  letter-spacing: 0.6px;
 }
 
 .speed-timer-value {
@@ -765,12 +765,13 @@
   letter-spacing: 0.5px;
 }
 
-/* Main Question Card (Light Card) */
+/* Main Question Card (Clean White Focus Card) */
 .main-question-card {
-  background: #F8FAFC;
+  background: #FFFFFF;
+  border: 1.5px solid #EDE9FE;
   border-radius: 24px;
-  padding: 24px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  padding: 24px 20px;
+  box-shadow: 0 10px 30px rgba(109, 40, 217, 0.06);
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -778,11 +779,11 @@
 
 .gameplay-question-text {
   font-family: var(--font-heading);
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: #1E293B;
+  color: #2E1065;
   text-align: center;
-  line-height: 1.4;
+  line-height: 1.45;
   margin: 0;
 }
 
@@ -795,46 +796,44 @@
 
 .answer-option-btn {
   background: #FFFFFF;
-  border: 2px solid #E2E8F0;
+  border: 2px solid #F3E8FF;
   border-radius: 18px;
   padding: 14px 16px;
   text-align: left;
   font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 600;
-  color: #334155;
+  color: #3B0764;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 12px rgba(109, 40, 217, 0.04);
 }
 
 .answer-option-btn:hover:not(:disabled) {
   border-color: #8B5CF6;
+  background: #FAF5FF;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(139, 92, 246, 0.15);
 }
 
 .option-badge-pill {
-  background: #EDE9FE;
+  background: #F3E8FF;
   border-radius: 12px;
-  padding: 6px 10px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
   flex-shrink: 0;
 }
 
 .badge-letter {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 800;
-  color: #6D28D9;
-}
-
-.badge-icon {
-  font-size: 0.9rem;
+  color: #7C3AED;
 }
 
 .answer-option-btn.correct-choice {
