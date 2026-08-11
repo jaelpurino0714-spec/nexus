@@ -393,6 +393,327 @@
   margin-top: 6px;
 }
 
+/* ---------------- Physical vs Chemical Activity CSS ---------------- */
+.exp-activity-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.exp-mode-toggle-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  background: #F3E8FF;
+  padding: 6px;
+  border-radius: 18px;
+}
+
+.exp-mode-btn {
+  background: transparent;
+  border: none;
+  padding: 12px 10px;
+  border-radius: 14px;
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #6D28D9;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.exp-mode-btn.active {
+  background: #7C3AED;
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+}
+
+.exp-activity-card {
+  background: #FFFFFF;
+  border: 1.5px solid #EDE9FE;
+  border-radius: 24px;
+  padding: 20px 18px;
+  box-shadow: 0 10px 30px rgba(109, 40, 217, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.exp-sub-title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #2E1065;
+  text-align: center;
+}
+
+.exp-instruction {
+  font-size: 0.88rem;
+  color: #5B21B6;
+  text-align: center;
+  margin: -6px 0 4px 0;
+}
+
+.exp-items-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.exp-item-card {
+  background: #F8FAFC;
+  border: 2px solid #E2E8F0;
+  border-radius: 18px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exp-item-card:hover {
+  border-color: #A855F7;
+  transform: translateY(-2px);
+}
+
+.exp-item-card.selected {
+  background: #F3E8FF;
+  border-color: #7C3AED;
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.18);
+}
+
+.exp-item-icon {
+  font-size: 2.2rem;
+  margin-bottom: 6px;
+}
+
+.exp-item-name {
+  font-family: var(--font-heading);
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #2E1065;
+}
+
+.exp-item-sub {
+  font-size: 0.75rem;
+  color: #6D28D9;
+  margin-top: 2px;
+}
+
+.exp-select-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #7C3AED;
+  background: rgba(124, 58, 237, 0.1);
+  padding: 3px 10px;
+  border-radius: 10px;
+  margin-top: 8px;
+}
+
+.exp-item-card.selected .exp-select-badge {
+  background: #7C3AED;
+  color: #FFFFFF;
+}
+
+.combine-action-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.25);
+  transition: all 0.2s ease;
+}
+
+.combine-action-btn.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+  background: #94A3B8;
+}
+
+/* Result Screen & Visual Animations */
+.exp-result-container {
+  background: #FAF5FF;
+  border: 2px solid #E9D5FF;
+  border-radius: 20px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.reaction-animation-box {
+  position: relative;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flask-visual {
+  font-size: 3.2rem;
+  animation: pulseFlask 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulseFlask {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
+}
+
+.fizz-bubbles-container {
+  display: flex;
+  gap: 8px;
+  position: absolute;
+  top: 5px;
+}
+
+.fizz-bubbles-container .bubble {
+  font-size: 1.4rem;
+  animation: fizzUp 1.2s infinite ease-out;
+}
+
+.bubble.b1 { animation-delay: 0s; }
+.bubble.b2 { animation-delay: 0.3s; }
+.bubble.b3 { animation-delay: 0.6s; }
+.bubble.b4 { animation-delay: 0.9s; }
+
+@keyframes fizzUp {
+  0% { opacity: 0; transform: translateY(20px) scale(0.6); }
+  50% { opacity: 1; transform: translateY(0px) scale(1.1); }
+  100% { opacity: 0; transform: translateY(-25px) scale(1.4); }
+}
+
+.melting-visual {
+  font-size: 2.8rem;
+  animation: pulseIce 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulseIce {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+.water-drops-container {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  bottom: 0px;
+}
+
+.water-drops-container .drop {
+  font-size: 1.3rem;
+  animation: dropFall 1.4s infinite ease-in-out;
+}
+
+.drop.d1 { animation-delay: 0s; }
+.drop.d2 { animation-delay: 0.4s; }
+.drop.d3 { animation-delay: 0.8s; }
+
+@keyframes dropFall {
+  0% { opacity: 0; transform: translateY(-10px); }
+  50% { opacity: 1; transform: translateY(5px); }
+  100% { opacity: 0; transform: translateY(15px); }
+}
+
+.result-badge {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  padding: 6px 16px;
+  border-radius: 20px;
+  color: #FFFFFF;
+}
+
+.result-badge.chemical {
+  background: #7C3AED;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+}
+
+.result-badge.physical {
+  background: #0284C7;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+}
+
+.exp-explanation-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.exp-explain-block {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+
+.exp-explain-block h5 {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #2E1065;
+  margin-bottom: 6px;
+}
+
+.exp-explain-block p {
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: #334155;
+  margin: 0;
+}
+
+.exp-explain-block ul {
+  padding-left: 18px;
+  margin: 0;
+}
+
+.exp-explain-block ul li {
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+.exp-key-idea-box {
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.exp-key-idea-box.chemical-key {
+  background: #F3E8FF;
+  border-left: 4px solid #7C3AED;
+  color: #4C1D95;
+}
+
+.exp-key-idea-box.physical-key {
+  background: #E0F2FE;
+  border-left: 4px solid #0284C7;
+  color: #075985;
+}
+
+.reset-exp-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
 /* ---------------- 4. PLAY UI & TERM SELECTION ---------------- */
 .play-container {
   display: flex;
