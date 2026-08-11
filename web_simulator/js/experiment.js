@@ -34,6 +34,7 @@ const Experiment = {
   currentTerm: 1,
   currentTopic: '',
   changeTypeMode: 'chemical', // 'chemical' or 'physical'
+  chemicalReactionsMode: 'iron', // 'iron' or 'apple'
   selectedItems: new Set(),
   isCombined: false,
 
@@ -86,6 +87,11 @@ const Experiment = {
         this.selectedItems = new Set();
         this.isCombined = false;
         this.renderPhysicalVsChemicalActivity(canvasBox);
+      } else if (topicName === "Chemical Reactions") {
+        this.chemicalReactionsMode = 'iron';
+        this.selectedItems = new Set();
+        this.isCombined = false;
+        this.renderChemicalReactionsActivity(canvasBox);
       } else {
         canvasBox.innerHTML = ''; // Keep blank for other topics for now
       }
@@ -104,6 +110,16 @@ const Experiment = {
     }
   },
 
+  switchChemicalReactionsMode(mode) {
+    this.chemicalReactionsMode = mode;
+    this.selectedItems = new Set();
+    this.isCombined = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderChemicalReactionsActivity(canvasBox);
+    }
+  },
+
   toggleItemSelection(itemId) {
     if (this.isCombined) return;
     if (this.selectedItems.has(itemId)) {
@@ -113,7 +129,11 @@ const Experiment = {
     }
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) {
-      this.renderPhysicalVsChemicalActivity(canvasBox);
+      if (this.currentTopic === "Physical vs. Chemical Change") {
+        this.renderPhysicalVsChemicalActivity(canvasBox);
+      } else if (this.currentTopic === "Chemical Reactions") {
+        this.renderChemicalReactionsActivity(canvasBox);
+      }
     }
   },
 
@@ -122,7 +142,11 @@ const Experiment = {
     this.isCombined = true;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) {
-      this.renderPhysicalVsChemicalActivity(canvasBox);
+      if (this.currentTopic === "Physical vs. Chemical Change") {
+        this.renderPhysicalVsChemicalActivity(canvasBox);
+      } else if (this.currentTopic === "Chemical Reactions") {
+        this.renderChemicalReactionsActivity(canvasBox);
+      }
     }
   },
 
@@ -131,7 +155,11 @@ const Experiment = {
     this.isCombined = false;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) {
-      this.renderPhysicalVsChemicalActivity(canvasBox);
+      if (this.currentTopic === "Physical vs. Chemical Change") {
+        this.renderPhysicalVsChemicalActivity(canvasBox);
+      } else if (this.currentTopic === "Chemical Reactions") {
+        this.renderChemicalReactionsActivity(canvasBox);
+      }
     }
   },
 
@@ -279,6 +307,173 @@ const Experiment = {
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
             🔄 Reset / Try Again
+          </button>
+        </div>
+        `;
+      }
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  renderChemicalReactionsActivity(container) {
+    const isIron = this.chemicalReactionsMode === 'iron';
+
+    const items = isIron ? [
+      { id: 'iron', name: 'Iron', icon: '🔩', sub: 'Solid Metal' },
+      { id: 'oxygen', name: 'Oxygen', icon: '💨', sub: 'Gas in Air' }
+    ] : [
+      { id: 'fresh_apple', name: 'Fresh Apple', icon: '🍎', sub: 'Cut Fruit Tissue' },
+      { id: 'oxygen_air', name: 'Oxygen (Air)', icon: '💨', sub: 'Gas in Air' }
+    ];
+
+    const canCombine = this.selectedItems.size === 2;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <!-- 2 Experiment Selection Buttons -->
+        <div class="exp-mode-toggle-group">
+          <button class="exp-mode-btn ${isIron ? 'active' : ''}" onclick="Experiment.switchChemicalReactionsMode('iron')">
+            🔩 Iron + Oxygen
+          </button>
+          <button class="exp-mode-btn ${!isIron ? 'active' : ''}" onclick="Experiment.switchChemicalReactionsMode('apple')">
+            🍎 Apple + Oxygen
+          </button>
+        </div>
+
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">
+            ${isIron ? '🧪 Experiment: Iron + Oxygen' : '🍎 Experiment: Apple + Oxygen'}
+          </div>
+    `;
+
+    if (!this.isCombined) {
+      html += `
+          <p class="exp-instruction">Select both reactants to combine them:</p>
+
+          <!-- Selectable Items Grid -->
+          <div class="exp-items-grid">
+      `;
+
+      items.forEach(item => {
+        const isSelected = this.selectedItems.has(item.id);
+        html += `
+          <div class="exp-item-card ${isSelected ? 'selected' : ''}" onclick="Experiment.toggleItemSelection('${item.id}')">
+            <div class="exp-item-icon">${item.icon}</div>
+            <div class="exp-item-name">${item.name}</div>
+            <div class="exp-item-sub">${item.sub}</div>
+            <div class="exp-select-badge">${isSelected ? '✓ Selected' : '+ Select'}</div>
+          </div>
+        `;
+      });
+
+      html += `
+          </div>
+
+          <button class="primary-btn combine-action-btn ${canCombine ? 'ready' : 'disabled'}"
+                  ${canCombine ? 'onclick="Experiment.combineItems()"' : 'disabled'}>
+            Combine ${canCombine ? '✨' : '🔒'}
+          </button>
+        </div>
+      `;
+    } else {
+      // Combined Result Screen
+      if (isIron) {
+        html += `
+          <!-- Iron + Oxygen Rusting Visual Result -->
+          <div class="exp-result-container chemical-result">
+            <div class="reaction-animation-box">
+              <div class="rusting-visual">
+                <span>🔩</span>
+                <span style="font-size:1.5rem;">➡️</span>
+                <span class="rust-anim-item">🟤</span>
+              </div>
+            </div>
+            <div class="result-badge chemical">Chemical Reaction • Rust (Iron Oxide)</div>
+          </div>
+
+          <!-- Explanation Section -->
+          <div class="exp-explanation-section">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>Iron reacts with oxygen in the presence of moisture to form rust, a new substance called iron oxide.</p>
+            </div>
+
+            <div class="exp-explain-block">
+              <h5>Why is it a chemical reaction?</h5>
+              <ul>
+                <li>A new substance is formed.</li>
+                <li>The iron changes into iron oxide.</li>
+                <li>The change cannot easily be reversed.</li>
+                <li>The formation of rust shows that the iron has reacted chemically with oxygen.</li>
+              </ul>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Chemical reaction = substances react and form one or more new substances.
+            </div>
+
+            <div class="exp-explain-block" style="background:#FAF5FF; border-color:#DDD6FE;">
+              <h5 style="color:#6D28D9;">🧪 Suggested Reaction:</h5>
+              <p><b>Iron + Oxygen + Water → Rust (Iron Oxide)</b></p>
+              <p style="font-size:0.8rem; color:#5B21B6; margin-top:4px;">Water/moisture helps the rusting process happen, but oxygen is the substance reacting with the iron.</p>
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      } else {
+        html += `
+          <!-- Apple + Oxygen Browning Visual Result -->
+          <div class="exp-result-container chemical-result">
+            <div class="reaction-animation-box">
+              <div class="apple-browning-visual">
+                <span>🍎</span>
+                <span style="font-size:1.5rem;">➡️</span>
+                <span class="apple-anim-item">🟤</span>
+              </div>
+            </div>
+            <div class="result-badge chemical">Chemical Reaction • Brown Compounds</div>
+          </div>
+
+          <!-- Explanation Section -->
+          <div class="exp-explanation-section">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>When a cut apple is exposed to oxygen in the air, enzymes in the apple help substances in the apple react with oxygen. This process produces new compounds that cause the exposed surface to turn brown.</p>
+            </div>
+
+            <div class="exp-explain-block">
+              <h5>How does the reaction happen?</h5>
+              <ol>
+                <li>The apple is cut, exposing its inside to air.</li>
+                <li>Oxygen from the air comes into contact with substances inside the apple.</li>
+                <li>Enzymes in the apple help the reaction occur.</li>
+                <li>New brown-colored compounds are produced.</li>
+                <li>The apple's exposed surface gradually becomes brown.</li>
+              </ol>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> In a chemical reaction, reactants interact and form new products.
+            </div>
+
+            <!-- Information Panel -->
+            <div class="exp-info-panel">
+              <h5>🔬 Reaction: Enzymatic Browning</h5>
+              <div class="exp-info-item"><b>Reactants:</b> 🍎 Compounds in the apple + 💨 Oxygen</div>
+              <div class="exp-info-item"><b>Product:</b> 🟤 Brown-colored compounds</div>
+              <div class="exp-info-item"><b>What causes it?</b> Enzymes in the apple help oxygen react with certain compounds in the exposed apple tissue.</div>
+              <div class="exp-info-item"><b>Where can you see it?</b> This reaction commonly occurs when apples, bananas, potatoes, and other fruits or vegetables are cut and exposed to air.</div>
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
+            🔄 Reset Experiment
           </button>
         </div>
         `;

@@ -714,6 +714,77 @@
   margin-top: 4px;
 }
 
+/* Chemical Reactions Experiment Animations & Styles */
+.rusting-visual, .apple-browning-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 2.5rem;
+}
+
+.rust-anim-item {
+  display: inline-block;
+  animation: rustColorChange 2s ease-in-out forwards;
+}
+
+@keyframes rustColorChange {
+  0% { filter: sepia(0) hue-rotate(0deg); transform: scale(1); }
+  50% { filter: sepia(0.8) hue-rotate(-50deg) contrast(1.2); transform: scale(1.1); }
+  100% { filter: sepia(1) hue-rotate(-60deg) saturate(3); transform: scale(1); }
+}
+
+.apple-anim-item {
+  display: inline-block;
+  animation: appleBrowning 2s ease-in-out forwards;
+}
+
+@keyframes appleBrowning {
+  0% { filter: none; transform: scale(1); }
+  50% { filter: sepia(0.6) hue-rotate(-30deg) brightness(0.9); transform: scale(1.1); }
+  100% { filter: sepia(0.9) hue-rotate(-45deg) brightness(0.7); transform: scale(1); }
+}
+
+.exp-explain-block ol {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.exp-explain-block ol li {
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+.exp-info-panel {
+  background: #FFFBEB;
+  border: 1.5px solid #FCD34D;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exp-info-panel h5 {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #92400E;
+  margin: 0 0 4px 0;
+}
+
+.exp-info-item {
+  font-size: 0.85rem;
+  color: #78350F;
+  line-height: 1.4;
+}
+
+.exp-info-item b {
+  color: #451A03;
+}
+
 /* ---------------- 4. PLAY UI & TERM SELECTION ---------------- */
 .play-container {
   display: flex;
