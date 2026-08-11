@@ -36,8 +36,11 @@ const Experiment = {
   changeTypeMode: 'chemical', // 'chemical' or 'physical'
   chemicalReactionsMode: 'iron', // 'iron' or 'apple'
   acidsBasesMode: 'blue_litmus', // 'blue_litmus', 'red_litmus', or 'neutralization'
+  chemicalEquationsMode: 'h2o', // 'h2o' or 'nacl'
   selectedItems: new Set(),
   isCombined: false,
+  challengeSubmitted: false,
+  challengeIsCorrect: false,
 
   showTermSelection() {
     App.showScreen('experimentTermScreen');
@@ -98,6 +101,12 @@ const Experiment = {
         this.selectedItems = new Set();
         this.isCombined = false;
         this.renderAcidsBasesActivity(canvasBox);
+      } else if (topicName === "Chemical Equations") {
+        this.chemicalEquationsMode = 'h2o';
+        this.selectedItems = new Set();
+        this.isCombined = false;
+        this.challengeSubmitted = false;
+        this.renderChemicalEquationsActivity(canvasBox);
       } else {
         canvasBox.innerHTML = ''; // Keep blank for other topics for now
       }
@@ -136,6 +145,17 @@ const Experiment = {
     }
   },
 
+  switchChemicalEquationsMode(mode) {
+    this.chemicalEquationsMode = mode;
+    this.selectedItems = new Set();
+    this.isCombined = false;
+    this.challengeSubmitted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderChemicalEquationsActivity(canvasBox);
+    }
+  },
+
   toggleItemSelection(itemId) {
     if (this.isCombined) return;
     if (this.selectedItems.has(itemId)) {
@@ -151,6 +171,8 @@ const Experiment = {
         this.renderChemicalReactionsActivity(canvasBox);
       } else if (this.currentTopic === "Acids, Bases, and Salts") {
         this.renderAcidsBasesActivity(canvasBox);
+      } else if (this.currentTopic === "Chemical Equations") {
+        this.renderChemicalEquationsActivity(canvasBox);
       }
     }
   },
@@ -166,6 +188,8 @@ const Experiment = {
         this.renderChemicalReactionsActivity(canvasBox);
       } else if (this.currentTopic === "Acids, Bases, and Salts") {
         this.renderAcidsBasesActivity(canvasBox);
+      } else if (this.currentTopic === "Chemical Equations") {
+        this.renderChemicalEquationsActivity(canvasBox);
       }
     }
   },
@@ -173,6 +197,7 @@ const Experiment = {
   resetActivity() {
     this.selectedItems = new Set();
     this.isCombined = false;
+    this.challengeSubmitted = false;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) {
       if (this.currentTopic === "Physical vs. Chemical Change") {
@@ -181,7 +206,29 @@ const Experiment = {
         this.renderChemicalReactionsActivity(canvasBox);
       } else if (this.currentTopic === "Acids, Bases, and Salts") {
         this.renderAcidsBasesActivity(canvasBox);
+      } else if (this.currentTopic === "Chemical Equations") {
+        this.renderChemicalEquationsActivity(canvasBox);
       }
+    }
+  },
+
+  checkBalancingChallenge() {
+    const c1 = document.getElementById('coeff1') ? document.getElementById('coeff1').value.trim() : '';
+    const c2 = document.getElementById('coeff2') ? document.getElementById('coeff2').value.trim() : '';
+    const c3 = document.getElementById('coeff3') ? document.getElementById('coeff3').value.trim() : '';
+
+    this.challengeSubmitted = true;
+
+    // Both 2H2 + 1O2 -> 2H2O and 2H2 + O2 -> 2H2O (empty c2) are accepted
+    if (c1 === '2' && (c2 === '1' || c2 === '') && c3 === '2') {
+      this.challengeIsCorrect = true;
+    } else {
+      this.challengeIsCorrect = false;
+    }
+
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderChemicalEquationsActivity(canvasBox);
     }
   },
 
@@ -783,6 +830,189 @@ const Experiment = {
         </div>
         `;
       }
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  renderChemicalEquationsActivity(container) {
+    const isH2O = this.chemicalEquationsMode === 'h2o';
+
+    const items = isH2O ? [
+      { id: 'hydrogen', name: 'Hydrogen (H₂)', icon: '💨', sub: 'Gas Molecule' },
+      { id: 'oxygen', name: 'Oxygen (O₂)', icon: '💨', sub: 'Gas Molecule' }
+    ] : [
+      { id: 'sodium', name: 'Sodium (Na)', icon: '🪙', sub: 'Alkali Metal' },
+      { id: 'chlorine', name: 'Chlorine (Cl₂)', icon: '🟢', sub: 'Halogen Gas' }
+    ];
+
+    const canAction = this.selectedItems.size === 2;
+    const otherMode = isH2O ? 'nacl' : 'h2o';
+    const otherLabel = isH2O ? '🧂 Experiment 2: Na + Cl₂ → NaCl' : '🧪 Experiment 1: H₂ + O₂ → H₂O';
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <!-- 2 Experiment Selection Buttons -->
+        <div class="exp-mode-toggle-group">
+          <button class="exp-mode-btn ${isH2O ? 'active' : ''}" onclick="Experiment.switchChemicalEquationsMode('h2o')">
+            🧪 H₂ + O₂ → H₂O
+          </button>
+          <button class="exp-mode-btn ${!isH2O ? 'active' : ''}" onclick="Experiment.switchChemicalEquationsMode('nacl')">
+            🧂 Na + Cl₂ → NaCl
+          </button>
+        </div>
+
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">
+            ${isH2O ? '🧪 EXPERIMENT 1 — Hydrogen + Oxygen → Water' : '🧪 EXPERIMENT 2 — Sodium + Chlorine → Sodium Chloride'}
+          </div>
+    `;
+
+    if (!this.isCombined) {
+      html += `
+          <p class="exp-instruction">Select both reactants before pressing <b>REACT</b>:</p>
+
+          <!-- Selectable Items Grid -->
+          <div class="exp-items-grid">
+      `;
+
+      items.forEach(item => {
+        const isSelected = this.selectedItems.has(item.id);
+        html += `
+          <div class="exp-item-card ${isSelected ? 'selected' : ''}" onclick="Experiment.toggleItemSelection('${item.id}')">
+            <div class="exp-item-icon">${item.icon}</div>
+            <div class="exp-item-name">${item.name}</div>
+            <div class="exp-item-sub">${item.sub}</div>
+            <div class="exp-select-badge">${isSelected ? '✓ Selected' : '+ Select'}</div>
+          </div>
+        `;
+      });
+
+      html += `
+          </div>
+
+          <button class="primary-btn combine-action-btn ${canAction ? 'ready' : 'disabled'}"
+                  ${canAction ? 'onclick="Experiment.combineItems()"' : 'disabled'}>
+            REACT ⚡
+          </button>
+        </div>
+      `;
+    } else {
+      // Combined Result Screen with Prominent Chemical Equation
+      const eqFormula = isH2O ? '2H₂ + O₂ → 2H₂O' : '2Na + Cl₂ → 2NaCl';
+
+      html += `
+        <!-- Reaction Visual Animation -->
+        <div class="exp-result-container chemical-result">
+          <div class="reaction-animation-box">
+            <div class="neutralization-anim-box">
+              <span class="neut-particle-1">${isH2O ? '💨' : '🪙'}</span>
+              <span style="font-size:1.5rem;">+</span>
+              <span class="neut-particle-2">${isH2O ? '💨' : '🟢'}</span>
+              <span style="font-size:1.5rem;">➡️</span>
+              <span>${isH2O ? '💧 H₂O' : '🧂 NaCl'}</span>
+            </div>
+          </div>
+          <div class="result-badge chemical">Product: ${isH2O ? 'Water (H₂O)' : 'Sodium Chloride (NaCl)'}</div>
+        </div>
+
+        <!-- MAIN PROMINENT RESULT: CHEMICAL EQUATION -->
+        <div class="eq-main-banner">
+          <div class="eq-banner-title">⚗️ CHEMICAL EQUATION</div>
+          <div class="eq-equation-display">${eqFormula}</div>
+        </div>
+
+        <!-- Explanation & Equation Breakdown -->
+        <div class="exp-explanation-section">
+          <div class="exp-explain-block">
+            <h5>Equation Breakdown:</h5>
+            <div class="eq-symbol-grid">
+              <div class="eq-symbol-item">${isH2O ? '<b>H₂</b> = Hydrogen' : '<b>Na</b> = Sodium'}</div>
+              <div class="eq-symbol-item">${isH2O ? '<b>O₂</b> = Oxygen' : '<b>Cl₂</b> = Chlorine'}</div>
+              <div class="eq-symbol-item">${isH2O ? '<b>H₂O</b> = Water' : '<b>NaCl</b> = Sodium Chloride'}</div>
+              <div class="eq-symbol-item"><b>+</b> = Reacts with</div>
+              <div class="eq-symbol-item"><b>→</b> = Produces</div>
+              <div class="eq-symbol-item"><b>2</b> = Coefficient</div>
+            </div>
+            <div style="font-size:0.86rem; margin-top:8px; color:#334155;">
+              • <b>Reactants:</b> ${isH2O ? 'Hydrogen and Oxygen' : 'Sodium and Chlorine'}<br>
+              • <b>Product:</b> ${isH2O ? 'Water' : 'Sodium Chloride'}
+            </div>
+          </div>
+
+          <!-- Balance Check Section -->
+          <div class="exp-explain-block">
+            <h5>⚖️ Balance Check</h5>
+            <div class="atom-counter-grid">
+              <div class="atom-count-card">
+                <h6>Reactants</h6>
+                <p>${isH2O ? 'Hydrogen: 4 atoms' : 'Sodium: 2 atoms'}</p>
+                <p>${isH2O ? 'Oxygen: 2 atoms' : 'Chlorine: 2 atoms'}</p>
+              </div>
+              <div class="atom-count-card">
+                <h6>Products</h6>
+                <p>${isH2O ? 'Hydrogen: 4 atoms' : 'Sodium: 2 atoms'}</p>
+                <p>${isH2O ? 'Oxygen: 2 atoms' : 'Chlorine: 2 atoms'}</p>
+              </div>
+            </div>
+            <div class="toast-banner" style="background:#DCFCE7; border-color:#86EFAC; color:#15803D; margin-top:10px;">
+              ✅ BALANCED EQUATION
+            </div>
+            <p style="font-size:0.84rem; color:#334155; margin-top:6px;">
+              The equation is balanced because the number of ${isH2O ? 'hydrogen and oxygen' : 'sodium and chlorine'} atoms is the same on both sides.
+            </p>
+          </div>
+
+          <div class="exp-key-idea-box chemical-key">
+            💡 <b>Key Learning:</b> A chemical equation represents a chemical reaction using chemical formulas and coefficients.
+          </div>
+
+          <!-- OPTIONAL BALANCING CHALLENGE -->
+          <div class="challenge-card">
+            <div class="challenge-title">🎯 Balancing Challenge</div>
+            <p style="font-size:0.85rem; color:#4C1D95; margin:0;">Fill in the coefficients to balance the equation:</p>
+            <div class="challenge-row">
+              <input type="number" id="coeff1" class="coeff-input" placeholder="?" min="1" max="9">
+              <span>${isH2O ? 'H₂ +' : 'Na +'}</span>
+              <input type="number" id="coeff2" class="coeff-input" placeholder="1" min="1" max="9">
+              <span>${isH2O ? 'O₂ →' : 'Cl₂ →'}</span>
+              <input type="number" id="coeff3" class="coeff-input" placeholder="?" min="1" max="9">
+              <span>${isH2O ? 'H₂O' : 'NaCl'}</span>
+            </div>
+
+            <button class="primary-btn" style="padding:10px 18px; font-size:0.9rem;" onclick="Experiment.checkBalancingChallenge()">
+              Check Balance 🎯
+            </button>
+
+            ${this.challengeSubmitted ? `
+              <div class="feedback-pill ${this.challengeIsCorrect ? 'correct' : 'incorrect'}">
+                ${this.challengeIsCorrect ? '✅ Correct! The equation is balanced.' : '❌ Try again! Count each type of atom on both sides.'}
+              </div>
+            ` : ''}
+          </div>
+
+          <!-- Key Concepts Panel -->
+          <div class="exp-info-panel">
+            <h5>📚 Key Concepts</h5>
+            <div class="exp-info-item"><b>Reactants:</b> The substances that start the chemical reaction.</div>
+            <div class="exp-info-item"><b>Products:</b> The new substances formed by the reaction.</div>
+            <div class="exp-info-item"><b>Coefficients:</b> Numbers placed in front of chemical formulas to show how many particles or molecules are involved.</div>
+            <div class="exp-info-item"><b>Balanced Chemical Equation:</b> An equation where the number of atoms of each element is equal on both sides.</div>
+            <div class="exp-info-item" style="margin-top:4px; font-weight:700; color:#92400E;">💡 Important Rule: Never change the small numbers inside a chemical formula when balancing an equation. Change only the coefficients in front.</div>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
+            🔄 Reset Experiment
+          </button>
+          <button class="primary-btn" style="padding:12px; border-radius:14px; font-size:0.9rem;" onclick="Experiment.switchChemicalEquationsMode('${otherMode}')">
+            🔀 ${otherLabel}
+          </button>
+        </div>
+      </div>
+      `;
     }
 
     html += `</div>`;
