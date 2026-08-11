@@ -37,6 +37,14 @@ const Experiment = {
   chemicalReactionsMode: 'iron', // 'iron' or 'apple'
   acidsBasesMode: 'blue_litmus', // 'blue_litmus', 'red_litmus', or 'neutralization'
   chemicalEquationsMode: 'h2o', // 'h2o' or 'nacl'
+  balancingStage: 'guided', // 'guided' or 'practice'
+  bCoeff1: '1',
+  bCoeff2: '1',
+  bCoeff3: '1',
+  hintIndex: 0,
+  bSubmitted: false,
+  bIsCorrect: false,
+
   selectedItems: new Set(),
   isCombined: false,
   challengeSubmitted: false,
@@ -107,6 +115,14 @@ const Experiment = {
         this.isCombined = false;
         this.challengeSubmitted = false;
         this.renderChemicalEquationsActivity(canvasBox);
+      } else if (topicName === "Balancing Chemical Equations") {
+        this.balancingStage = 'guided';
+        this.bCoeff1 = '1';
+        this.bCoeff2 = '1';
+        this.bCoeff3 = '1';
+        this.hintIndex = 0;
+        this.bSubmitted = false;
+        this.renderBalancingChemicalEquationsActivity(canvasBox);
       } else {
         canvasBox.innerHTML = ''; // Keep blank for other topics for now
       }
@@ -156,6 +172,71 @@ const Experiment = {
     }
   },
 
+  switchBalancingStage(stage) {
+    this.balancingStage = stage;
+    this.bCoeff1 = '1';
+    this.bCoeff2 = '1';
+    this.bCoeff3 = '1';
+    this.hintIndex = 0;
+    this.bSubmitted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderBalancingChemicalEquationsActivity(canvasBox);
+    }
+  },
+
+  updateCoeff(idx, delta) {
+    let key = `bCoeff${idx}`;
+    let val = parseInt(this[key]) || 1;
+    val = Math.max(1, Math.min(9, val + delta));
+    this[key] = String(val);
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderBalancingChemicalEquationsActivity(canvasBox);
+    }
+  },
+
+  setCoeffDirect(idx, valStr) {
+    let key = `bCoeff${idx}`;
+    let val = parseInt(valStr) || 1;
+    val = Math.max(1, Math.min(9, val));
+    this[key] = String(val);
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderBalancingChemicalEquationsActivity(canvasBox);
+    }
+  },
+
+  showNextHint() {
+    if (this.hintIndex < 3) {
+      this.hintIndex++;
+    }
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderBalancingChemicalEquationsActivity(canvasBox);
+    }
+  },
+
+  checkBalancingAnswer() {
+    this.bSubmitted = true;
+    const c1 = parseInt(this.bCoeff1) || 1;
+    const c2 = parseInt(this.bCoeff2) || 1;
+    const c3 = parseInt(this.bCoeff3) || 1;
+
+    if (this.balancingStage === 'guided') {
+      // H2 + O2 -> H2O => 2H2 + O2 -> 2H2O
+      this.bIsCorrect = (c1 === 2 && c2 === 1 && c3 === 2);
+    } else {
+      // Na + Cl2 -> NaCl => 2Na + Cl2 -> 2NaCl
+      this.bIsCorrect = (c1 === 2 && c2 === 1 && c3 === 2);
+    }
+
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderBalancingChemicalEquationsActivity(canvasBox);
+    }
+  },
+
   toggleItemSelection(itemId) {
     if (this.isCombined) return;
     if (this.selectedItems.has(itemId)) {
@@ -173,6 +254,8 @@ const Experiment = {
         this.renderAcidsBasesActivity(canvasBox);
       } else if (this.currentTopic === "Chemical Equations") {
         this.renderChemicalEquationsActivity(canvasBox);
+      } else if (this.currentTopic === "Balancing Chemical Equations") {
+        this.renderBalancingChemicalEquationsActivity(canvasBox);
       }
     }
   },
@@ -190,6 +273,8 @@ const Experiment = {
         this.renderAcidsBasesActivity(canvasBox);
       } else if (this.currentTopic === "Chemical Equations") {
         this.renderChemicalEquationsActivity(canvasBox);
+      } else if (this.currentTopic === "Balancing Chemical Equations") {
+        this.renderBalancingChemicalEquationsActivity(canvasBox);
       }
     }
   },
@@ -198,6 +283,11 @@ const Experiment = {
     this.selectedItems = new Set();
     this.isCombined = false;
     this.challengeSubmitted = false;
+    this.bCoeff1 = '1';
+    this.bCoeff2 = '1';
+    this.bCoeff3 = '1';
+    this.hintIndex = 0;
+    this.bSubmitted = false;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) {
       if (this.currentTopic === "Physical vs. Chemical Change") {
@@ -208,6 +298,8 @@ const Experiment = {
         this.renderAcidsBasesActivity(canvasBox);
       } else if (this.currentTopic === "Chemical Equations") {
         this.renderChemicalEquationsActivity(canvasBox);
+      } else if (this.currentTopic === "Balancing Chemical Equations") {
+        this.renderBalancingChemicalEquationsActivity(canvasBox);
       }
     }
   },
@@ -1016,6 +1108,253 @@ const Experiment = {
     }
 
     html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  renderBalancingChemicalEquationsActivity(container) {
+    const isGuided = this.balancingStage === 'guided';
+
+    const c1Val = parseInt(this.bCoeff1) || 1;
+    const c2Val = parseInt(this.bCoeff2) || 1;
+    const c3Val = parseInt(this.bCoeff3) || 1;
+
+    let isHOrNaBalanced = false;
+    let isOOrClBalanced = false;
+    let isBalanced = false;
+
+    if (isGuided) {
+      // H2 + O2 -> H2O
+      // Reactants: H = 2*c1Val, O = 2*c2Val
+      // Products: H = 2*c3Val, O = 1*c3Val
+      isHOrNaBalanced = (2 * c1Val === 2 * c3Val);
+      isOOrClBalanced = (2 * c2Val === 1 * c3Val);
+      isBalanced = isHOrNaBalanced && isOOrClBalanced;
+    } else {
+      // Na + Cl2 -> NaCl
+      // Reactants: Na = 1*c1Val, Cl = 2*c2Val
+      // Products: Na = 1*c3Val, Cl = 1*c3Val
+      isHOrNaBalanced = (1 * c1Val === 1 * c3Val);
+      isOOrClBalanced = (2 * c2Val === 1 * c3Val);
+      isBalanced = isHOrNaBalanced && isOOrClBalanced;
+    }
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <!-- 2 Stage Selection Buttons -->
+        <div class="exp-mode-toggle-group">
+          <button class="exp-mode-btn ${isGuided ? 'active' : ''}" onclick="Experiment.switchBalancingStage('guided')">
+            ⚖️ Guided Example
+          </button>
+          <button class="exp-mode-btn ${!isGuided ? 'active' : ''}" onclick="Experiment.switchBalancingStage('practice')">
+            🎯 Practice Challenge
+          </button>
+        </div>
+
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">
+            ${isGuided ? '⚖️ Activity: Balance the Chemical Equation (H₂ + O₂ → H₂O)' : '🎯 Practice Challenge: Na + Cl₂ → NaCl'}
+          </div>
+          <p class="exp-instruction">Balance the equation by changing the numbers in front of the chemical formulas:</p>
+
+          <!-- PROMINENT UNBALANCED EQUATION WITH EDITABLE COEFFICIENT BOXES & STEPPERS -->
+          <div class="eq-main-banner" style="background: linear-gradient(135deg, #4C1D95 0%, #2E1065 100%);">
+            <div class="eq-banner-title">CHEMICAL FORMULA</div>
+            <div class="challenge-row" style="margin-top:6px;">
+              
+              <!-- Coeff 1 Stepper -->
+              <div class="stepper-box">
+                <button class="stepper-btn" onclick="Experiment.updateCoeff(1, -1)">-</button>
+                <input type="number" class="coeff-input" value="${this.bCoeff1}" min="1" max="9" onchange="Experiment.setCoeffDirect(1, this.value)">
+                <button class="stepper-btn" onclick="Experiment.updateCoeff(1, 1)">+</button>
+              </div>
+              <span style="font-size:1.5rem; color:#FDE047;">${isGuided ? 'H₂ +' : 'Na +'}</span>
+
+              <!-- Coeff 2 Stepper -->
+              <div class="stepper-box">
+                <button class="stepper-btn" onclick="Experiment.updateCoeff(2, -1)">-</button>
+                <input type="number" class="coeff-input" value="${this.bCoeff2}" min="1" max="9" onchange="Experiment.setCoeffDirect(2, this.value)">
+                <button class="stepper-btn" onclick="Experiment.updateCoeff(2, 1)">+</button>
+              </div>
+              <span style="font-size:1.5rem; color:#FDE047;">${isGuided ? 'O₂ →' : 'Cl₂ →'}</span>
+
+              <!-- Coeff 3 Stepper -->
+              <div class="stepper-box">
+                <button class="stepper-btn" onclick="Experiment.updateCoeff(3, -1)">-</button>
+                <input type="number" class="coeff-input" value="${this.bCoeff3}" min="1" max="9" onchange="Experiment.setCoeffDirect(3, this.value)">
+                <button class="stepper-btn" onclick="Experiment.updateCoeff(3, 1)">+</button>
+              </div>
+              <span style="font-size:1.5rem; color:#FDE047;">${isGuided ? 'H₂O' : 'NaCl'}</span>
+
+            </div>
+          </div>
+
+          <!-- REAL-TIME LIVE ATOM COUNTER & BALANCE STATUS -->
+          <div class="atom-counter-grid">
+            <div class="atom-count-card">
+              <h6>Reactants</h6>
+              <p>• ${isGuided ? 'H' : 'Na'}: <b>${isGuided ? 2 * c1Val : 1 * c1Val}</b> ${isHOrNaBalanced ? '✓' : '⚠️'}</p>
+              <p>• ${isGuided ? 'O' : 'Cl'}: <b>${2 * c2Val}</b> ${isOOrClBalanced ? '✓' : '⚠️ <span class="unbalanced-tag">Unbalanced</span>'}</p>
+            </div>
+            <div class="atom-count-card">
+              <h6>Products</h6>
+              <p>• ${isGuided ? 'H' : 'Na'}: <b>${isGuided ? 2 * c3Val : 1 * c3Val}</b> ${isHOrNaBalanced ? '✓' : '⚠️'}</p>
+              <p>• ${isGuided ? 'O' : 'Cl'}: <b>${1 * c3Val}</b> ${isOOrClBalanced ? '✓' : '⚠️ <span class="unbalanced-tag">Unbalanced</span>'}</p>
+            </div>
+          </div>
+
+          <!-- Status Toast Banner -->
+          ${isBalanced ? `
+            <div class="toast-banner" style="background:#DCFCE7; border-color:#86EFAC; color:#15803D; margin-top:10px; font-size:1.1rem; padding:12px;">
+              🎉 ✅ BALANCED!
+            </div>
+          ` : `
+            <div class="toast-banner" style="background:#FFFBEB; border-color:#F59E0B; color:#92400E; margin-top:10px;">
+              ⚠️ Not balanced yet. Keep adjusting coefficients!
+            </div>
+          `}
+        </div>
+
+        <!-- HINT SYSTEM FOR GUIDED EXAMPLE -->
+        ${isGuided ? `
+          <div style="margin-top:10px;">
+            <button class="secondary-btn" style="padding:8px 14px; font-size:0.85rem;" onclick="Experiment.showNextHint()">
+              💡 Show Hint (${this.hintIndex}/3)
+            </button>
+
+            ${this.hintIndex >= 1 ? `
+              <div class="hint-card">
+                <div class="hint-title">Hint 1:</div>
+                Look at the oxygen atoms. There are 2 oxygen atoms on the left but only 1 on the right.
+              </div>
+            ` : ''}
+
+            ${this.hintIndex >= 2 ? `
+              <div class="hint-card">
+                <div class="hint-title">Hint 2:</div>
+                Try placing a 2 in front of H₂O.
+              </div>
+            ` : ''}
+
+            ${this.hintIndex >= 3 ? `
+              <div class="hint-card">
+                <div class="hint-title">Hint 3:</div>
+                Now check hydrogen. You may need to adjust the coefficient in front of H₂.<br>
+                <i>(Remember: Do not change the small numbers inside H₂, O₂, or H₂O!)</i>
+              </div>
+            ` : ''}
+          </div>
+        ` : ''}
+
+        <!-- CHECK ANSWER BUTTON & FEEDBACK FOR PRACTICE CHALLENGE -->
+        ${!isGuided ? `
+          <div style="margin-top:10px; text-align:center;">
+            <button class="primary-btn" style="padding:10px 18px; font-size:0.9rem;" onclick="Experiment.checkBalancingAnswer()">
+              Check Answer 🎯
+            </button>
+            ${this.bSubmitted ? `
+              <div class="feedback-pill ${this.bIsCorrect ? 'correct' : 'incorrect'}" style="margin-top:8px; display:inline-block;">
+                ${this.bIsCorrect ? '✅ Correct! You balanced the equation! There are 2 sodium atoms and 2 chlorine atoms on both sides.' : '❌ Not balanced yet. Count the atoms of each element on both sides and try again.'}
+              </div>
+            ` : ''}
+          </div>
+        ` : ''}
+
+        <!-- EXPLANATION & BALANCE CHECK TABLE -->
+        ${isBalanced ? `
+          <div class="exp-explanation-section" style="margin-top:12px;">
+            <div class="exp-explain-block">
+              <h5>🧠 Explanation: Step-by-Step</h5>
+              <div style="font-weight:700; color:#5B21B6; font-size:0.95rem; margin-bottom:6px;">
+                Balanced Chemical Equation: ${isGuided ? '2H₂ + O₂ → 2H₂O' : '2Na + Cl₂ → 2NaCl'}
+              </div>
+              
+              ${isGuided ? `
+                <p><b>Step 1 — Count the atoms</b><br>Before balancing: H: 2 on left, 2 on right | O: 2 on left, 1 on right. Oxygen is not balanced.</p>
+                <p><b>Step 2 — Add a coefficient</b><br>Place 2 before H₂O: <code>H₂ + O₂ → 2H₂O</code>. Now oxygen is balanced, but hydrogen is not.</p>
+                <p><b>Step 3 — Balance hydrogen</b><br>Place 2 before H₂: <code>2H₂ + O₂ → 2H₂O</code>. Now both elements have equal numbers of atoms.</p>
+              ` : `
+                <p><b>Step 1 — Count the atoms</b><br>Before balancing: Na: 1 on left, 1 on right | Cl: 2 on left, 1 on right. Chlorine is not balanced.</p>
+                <p><b>Step 2 — Add a coefficient</b><br>Place 2 before NaCl: <code>Na + Cl₂ → 2NaCl</code>. Now chlorine is balanced, but sodium is not.</p>
+                <p><b>Step 3 — Balance sodium</b><br>Place 2 before Na: <code>2Na + Cl₂ → 2NaCl</code>. Now both elements have equal numbers of atoms.</p>
+              `}
+            </div>
+
+            <!-- Visual Comparison Table -->
+            <div class="exp-explain-block">
+              <h5>📊 Balance Check</h5>
+              <table class="comparison-table">
+                <thead>
+                  <tr>
+                    <th>Element</th>
+                    <th>Reactants</th>
+                    <th>Products</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${isGuided ? `
+                    <tr>
+                      <td><b>H</b></td>
+                      <td>4</td>
+                      <td>4</td>
+                      <td>✅</td>
+                    </tr>
+                    <tr>
+                      <td><b>O</b></td>
+                      <td>2</td>
+                      <td>2</td>
+                      <td>✅</td>
+                    </tr>
+                  ` : `
+                    <tr>
+                      <td><b>Na</b></td>
+                      <td>2</td>
+                      <td>2</td>
+                      <td>✅</td>
+                    </tr>
+                    <tr>
+                      <td><b>Cl</b></td>
+                      <td>2</td>
+                      <td>2</td>
+                      <td>✅</td>
+                    </tr>
+                  `}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- IMPORTANT RULE CARD -->
+        <div class="rule-card">
+          <div class="rule-title">⚠️ Important Rule</div>
+          <p style="margin:0; font-size:0.84rem; color:#78350F; line-height:1.4;">
+            When balancing chemical equations, <b>change only the coefficients</b>. Never change the subscripts in a chemical formula.
+          </p>
+          <div class="rule-example">
+            <div>❌ <code>H₂O₂</code> — changing the subscript changes the substance (Water becomes Hydrogen Peroxide).</div>
+            <div>✅ <code>2H₂O</code> — changing the coefficient changes the number of molecules without changing the substance.</div>
+          </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
+            🔄 Reset Activity
+          </button>
+          ${isGuided ? `
+            <button class="primary-btn" style="padding:12px; border-radius:14px; font-size:0.9rem;" onclick="Experiment.switchBalancingStage('practice')">
+              🎯 Next Challenge (Na + Cl₂ → NaCl) ➔
+            </button>
+          ` : `
+            <button class="primary-btn" style="padding:12px; border-radius:14px; font-size:0.9rem;" onclick="Experiment.switchBalancingStage('guided')">
+              ⬅️ Back to Guided Example (H₂ + O₂ → H₂O)
+            </button>
+          `}
+        </div>
+      </div>
+    `;
+
     container.innerHTML = html;
   }
 };

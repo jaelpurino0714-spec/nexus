@@ -1061,6 +1061,89 @@
   border: 1px solid #FCA5A5;
 }
 
+/* ---------------- Balancing Chemical Equations Extra Styles ---------------- */
+.unbalanced-tag {
+  background: #FEE2E2;
+  color: #B91C1C;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-left: 4px;
+}
+
+.hint-card {
+  background: #EFF6FF;
+  border: 1.5px solid #60A5FA;
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #1E40AF;
+  line-height: 1.45;
+}
+
+.hint-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: #1D4ED8;
+  margin-bottom: 4px;
+}
+
+.rule-card {
+  background: #FFFBEB;
+  border: 2px solid #F59E0B;
+  border-radius: 16px;
+  padding: 14px;
+  margin-top: 10px;
+}
+
+.rule-title {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #B45309;
+  margin-bottom: 6px;
+}
+
+.rule-example {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.83rem;
+  color: #78350F;
+  margin-top: 6px;
+}
+
+.stepper-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: #FFFFFF;
+  border: 2px solid #A855F7;
+  border-radius: 10px;
+  padding: 2px;
+}
+
+.stepper-btn {
+  width: 24px;
+  height: 32px;
+  background: #F3E8FF;
+  border: none;
+  border-radius: 6px;
+  color: #6D28D9;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stepper-btn:hover {
+  background: #DDD6FE;
+}
+
 /* ---------------- 4. PLAY UI & TERM SELECTION ---------------- */
 .play-container {
   display: flex;
