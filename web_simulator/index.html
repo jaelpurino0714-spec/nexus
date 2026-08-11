@@ -179,6 +179,11 @@
             <span class="btn-icon">🎮</span>
             <span class="btn-text">Play</span>
           </button>
+
+          <button id="experimentSimulatorBtn" class="home-nav-btn experiment-btn" onclick="Experiment.showTermSelection()">
+            <span class="btn-icon">🧪</span>
+            <span class="btn-text">Experiment Simulator</span>
+          </button>
           
           <button id="customPlayBtn" class="home-nav-btn custom-play-btn" onclick="App.handleCustomPlayClick()">
             <span class="btn-icon">✨</span>
@@ -242,6 +247,82 @@
 
           <div id="topicsListGroup" class="topic-buttons-group">
             <!-- Rendered dynamically by Quiz.renderTopics() -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= EXPERIMENT SIMULATOR (TERM SELECTION) ================= -->
+      <section id="experimentTermScreen" class="screen">
+        <div class="play-container">
+          <button class="back-link" onclick="App.showScreen('homeScreen')">← Home</button>
+          
+          <div class="play-prompt-header">
+            <h2 class="play-prompt-title">Experiment Simulator</h2>
+            <p class="play-prompt-sub">Select a DepEd Grade 10 Science Term</p>
+          </div>
+
+          <div class="term-buttons-group">
+            <!-- Term 1 -->
+            <button class="term-btn term-1-btn" onclick="Experiment.selectTerm(1)">
+              <div class="term-badge">TERM 1</div>
+              <div class="term-title">First Term</div>
+              <div class="term-topics">Changes, Reactions, Equations & Homeostasis</div>
+              <span class="term-action">Select Term ➔</span>
+            </button>
+
+            <!-- Term 2 -->
+            <button class="term-btn term-2-btn" onclick="Experiment.selectTerm(2)">
+              <div class="term-badge">TERM 2</div>
+              <div class="term-title">Second Term</div>
+              <div class="term-topics">Ecosystems, Biotechnology, Plate Tectonics & Climate</div>
+              <span class="term-action">Select Term ➔</span>
+            </button>
+
+            <!-- Term 3 -->
+            <button class="term-btn term-3-btn" onclick="Experiment.selectTerm(3)">
+              <div class="term-badge">TERM 3</div>
+              <div class="term-title">Third Term</div>
+              <div class="term-topics">Projectile Motion, Momentum & Electricity</div>
+              <span class="term-action">Select Term ➔</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= EXPERIMENT SIMULATOR (TOPIC SELECTION) ================= -->
+      <section id="experimentTopicScreen" class="screen">
+        <div class="play-container">
+          <button class="back-link" onclick="App.showScreen('experimentTermScreen')">← Back to Terms</button>
+
+          <div class="play-prompt-header">
+            <h2 id="experimentTopicTitle" class="play-prompt-title">Experiment Topics</h2>
+            <p id="experimentTopicSub" class="play-prompt-sub">Select a topic to begin interactive simulation</p>
+          </div>
+
+          <div id="experimentTopicsList" class="topic-buttons-group">
+            <!-- Rendered dynamically by Experiment.renderTopics() -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= EXPERIMENT SIMULATOR (SIMULATION VIEW) ================= -->
+      <section id="experimentDetailScreen" class="screen">
+        <div class="play-container">
+          <button class="back-link" onclick="App.showScreen('experimentTopicScreen')">← Back to Topics</button>
+
+          <div class="play-prompt-header" style="margin-bottom:12px;">
+            <span id="expDetailTopicTag" class="mode-tag" style="margin-bottom:6px; display:inline-block;">Term 1 • Experiment Simulation</span>
+            <h2 id="expDetailTitle" class="play-prompt-title" style="font-size:1.3rem;">Experiment Title</h2>
+          </div>
+
+          <div id="expCanvasBox">
+            <!-- Rendered dynamically by Experiment.openExperiment() -->
+          </div>
+
+          <div style="margin-top:16px;">
+            <button class="primary-btn bottom-start-btn" onclick="Experiment.startExperimentQuiz()" style="background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);">
+              Take Experiment Quiz 🎯
+            </button>
           </div>
         </div>
       </section>
@@ -961,6 +1042,7 @@
   <script src="js/achievements.js"></script>
   <script src="js/quiz.js"></script>
   <script src="js/analytics.js"></script>
+  <script src="js/experiment.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

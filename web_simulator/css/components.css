@@ -309,6 +309,90 @@
   box-shadow: 0 8px 24px var(--purple-glow);
 }
 
+/* Experiment Simulator Button */
+.experiment-btn {
+  background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+  color: white;
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.25);
+}
+
+/* Experiment Simulator Card Components */
+.exp-sim-card {
+  background: #FFFFFF;
+  border: 1.5px solid #EDE9FE;
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(109, 40, 217, 0.06);
+}
+
+.exp-sim-header {
+  margin-bottom: 14px;
+}
+
+.exp-badge {
+  background: #F3E8FF;
+  color: #7C3AED;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+.exp-sim-header h4 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  color: #2E1065;
+  margin: 0;
+}
+
+.exp-sim-canvas {
+  background: #FAF5FF;
+  border: 2px dashed #DDD6FE;
+  border-radius: 16px;
+  padding: 20px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.exp-icon-large {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.exp-sim-status {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #5B21B6;
+  margin: 0;
+}
+
+.exp-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.sim-output-log {
+  background: #FFFFFF;
+  border: 1px solid #E9D5FF;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  color: #4C1D95;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  line-height: 1.4;
+  margin-top: 6px;
+}
+
 /* ---------------- 4. PLAY UI & TERM SELECTION ---------------- */
 .play-container {
   display: flex;
