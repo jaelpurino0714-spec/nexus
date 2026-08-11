@@ -785,6 +785,99 @@
   color: #451A03;
 }
 
+/* ---------------- Acids, Bases, and Salts Styles ---------------- */
+.litmus-anim-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 2.5rem;
+}
+
+.litmus-blue-to-red {
+  display: inline-block;
+  animation: turnRed 1.8s ease-in-out forwards;
+}
+
+@keyframes turnRed {
+  0% { filter: hue-rotate(0deg); transform: scale(1); }
+  50% { filter: hue-rotate(90deg); transform: scale(1.1); }
+  100% { filter: hue-rotate(180deg) saturate(2.5); transform: scale(1); }
+}
+
+.litmus-red-to-blue {
+  display: inline-block;
+  animation: turnBlue 1.8s ease-in-out forwards;
+}
+
+@keyframes turnBlue {
+  0% { filter: hue-rotate(0deg); transform: scale(1); }
+  50% { filter: hue-rotate(-90deg); transform: scale(1.1); }
+  100% { filter: hue-rotate(-180deg) saturate(2.5); transform: scale(1); }
+}
+
+.toast-banner {
+  background: #FEF3C7;
+  border: 1.5px solid #F59E0B;
+  color: #92400E;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.exp-safety-note {
+  background: #FFFBEB;
+  border: 1.5px solid #F59E0B;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  color: #92400E;
+  line-height: 1.4;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  font-size: 0.82rem;
+}
+
+.comparison-table th, .comparison-table td {
+  border: 1px solid #E2E8F0;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.comparison-table th {
+  background: #F8FAFC;
+  color: #1E293B;
+  font-weight: 700;
+}
+
+.neutralization-anim-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-size: 2.2rem;
+}
+
+.neut-particle-1, .neut-particle-2 {
+  display: inline-block;
+  animation: moveTogether 1.8s ease-in-out forwards;
+}
+
+@keyframes moveTogether {
+  0% { transform: translateX(0); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
 /* ---------------- 4. PLAY UI & TERM SELECTION ---------------- */
 .play-container {
   display: flex;

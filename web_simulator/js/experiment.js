@@ -35,6 +35,7 @@ const Experiment = {
   currentTopic: '',
   changeTypeMode: 'chemical', // 'chemical' or 'physical'
   chemicalReactionsMode: 'iron', // 'iron' or 'apple'
+  acidsBasesMode: 'blue_litmus', // 'blue_litmus', 'red_litmus', or 'neutralization'
   selectedItems: new Set(),
   isCombined: false,
 
@@ -92,6 +93,11 @@ const Experiment = {
         this.selectedItems = new Set();
         this.isCombined = false;
         this.renderChemicalReactionsActivity(canvasBox);
+      } else if (topicName === "Acids, Bases, and Salts") {
+        this.acidsBasesMode = 'blue_litmus';
+        this.selectedItems = new Set();
+        this.isCombined = false;
+        this.renderAcidsBasesActivity(canvasBox);
       } else {
         canvasBox.innerHTML = ''; // Keep blank for other topics for now
       }
@@ -120,6 +126,16 @@ const Experiment = {
     }
   },
 
+  switchAcidsBasesMode(mode) {
+    this.acidsBasesMode = mode;
+    this.selectedItems = new Set();
+    this.isCombined = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderAcidsBasesActivity(canvasBox);
+    }
+  },
+
   toggleItemSelection(itemId) {
     if (this.isCombined) return;
     if (this.selectedItems.has(itemId)) {
@@ -133,6 +149,8 @@ const Experiment = {
         this.renderPhysicalVsChemicalActivity(canvasBox);
       } else if (this.currentTopic === "Chemical Reactions") {
         this.renderChemicalReactionsActivity(canvasBox);
+      } else if (this.currentTopic === "Acids, Bases, and Salts") {
+        this.renderAcidsBasesActivity(canvasBox);
       }
     }
   },
@@ -146,6 +164,8 @@ const Experiment = {
         this.renderPhysicalVsChemicalActivity(canvasBox);
       } else if (this.currentTopic === "Chemical Reactions") {
         this.renderChemicalReactionsActivity(canvasBox);
+      } else if (this.currentTopic === "Acids, Bases, and Salts") {
+        this.renderAcidsBasesActivity(canvasBox);
       }
     }
   },
@@ -159,6 +179,8 @@ const Experiment = {
         this.renderPhysicalVsChemicalActivity(canvasBox);
       } else if (this.currentTopic === "Chemical Reactions") {
         this.renderChemicalReactionsActivity(canvasBox);
+      } else if (this.currentTopic === "Acids, Bases, and Salts") {
+        this.renderAcidsBasesActivity(canvasBox);
       }
     }
   },
@@ -469,6 +491,289 @@ const Experiment = {
               <div class="exp-info-item"><b>Product:</b> 🟤 Brown-colored compounds</div>
               <div class="exp-info-item"><b>What causes it?</b> Enzymes in the apple help oxygen react with certain compounds in the exposed apple tissue.</div>
               <div class="exp-info-item"><b>Where can you see it?</b> This reaction commonly occurs when apples, bananas, potatoes, and other fruits or vegetables are cut and exposed to air.</div>
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  renderAcidsBasesActivity(container) {
+    const mode = this.acidsBasesMode; // 'blue_litmus', 'red_litmus', or 'neutralization'
+
+    let items = [];
+    let actionBtnLabel = 'Test 🧪';
+    let subTitle = '';
+
+    if (mode === 'blue_litmus') {
+      subTitle = '🧪 Experiment 1: Blue Litmus + Acid';
+      items = [
+        { id: 'blue_litmus', name: 'Blue Litmus Paper', icon: '🔵', sub: 'pH Indicator' },
+        { id: 'acid_sol', name: 'Acidic Solution', icon: '🧪', sub: 'pH Below 7' }
+      ];
+    } else if (mode === 'red_litmus') {
+      subTitle = '🧪 Experiment 2: Red Litmus + Base';
+      items = [
+        { id: 'red_litmus', name: 'Red Litmus Paper', icon: '🔴', sub: 'pH Indicator' },
+        { id: 'base_sol', name: 'Basic Solution', icon: '🧪', sub: 'pH Above 7' }
+      ];
+    } else {
+      subTitle = '🧪 Experiment 3: Acid + Base — Neutralization';
+      actionBtnLabel = 'Combine ✨';
+      items = [
+        { id: 'acid', name: 'Acid', icon: '🧪', sub: 'H⁺ Ion Provider' },
+        { id: 'base', name: 'Base', icon: '🧪', sub: 'OH⁻ Ion Provider' }
+      ];
+    }
+
+    const canAction = this.selectedItems.size === 2;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <!-- 3 Experiment Selection Buttons -->
+        <div class="exp-mode-toggle-group" style="grid-template-columns: 1fr 1fr 1fr; font-size: 0.78rem;">
+          <button class="exp-mode-btn ${mode === 'blue_litmus' ? 'active' : ''}" onclick="Experiment.switchAcidsBasesMode('blue_litmus')">
+            🔵 Blue Litmus
+          </button>
+          <button class="exp-mode-btn ${mode === 'red_litmus' ? 'active' : ''}" onclick="Experiment.switchAcidsBasesMode('red_litmus')">
+            🔴 Red Litmus
+          </button>
+          <button class="exp-mode-btn ${mode === 'neutralization' ? 'active' : ''}" onclick="Experiment.switchAcidsBasesMode('neutralization')">
+            🧪 Neutralization
+          </button>
+        </div>
+
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">${subTitle}</div>
+    `;
+
+    if (!this.isCombined) {
+      html += `
+          <p class="exp-instruction">Select both items to test/combine them:</p>
+
+          <!-- Selectable Items Grid -->
+          <div class="exp-items-grid">
+      `;
+
+      items.forEach(item => {
+        const isSelected = this.selectedItems.has(item.id);
+        html += `
+          <div class="exp-item-card ${isSelected ? 'selected' : ''}" onclick="Experiment.toggleItemSelection('${item.id}')">
+            <div class="exp-item-icon">${item.icon}</div>
+            <div class="exp-item-name">${item.name}</div>
+            <div class="exp-item-sub">${item.sub}</div>
+            <div class="exp-select-badge">${isSelected ? '✓ Selected' : '+ Select'}</div>
+          </div>
+        `;
+      });
+
+      html += `
+          </div>
+
+          <button class="primary-btn combine-action-btn ${canAction ? 'ready' : 'disabled'}"
+                  ${canAction ? 'onclick="Experiment.combineItems()"' : 'disabled'}>
+            ${actionBtnLabel}
+          </button>
+        </div>
+      `;
+    } else {
+      // Result Screens for Acids, Bases, and Salts
+      if (mode === 'blue_litmus') {
+        html += `
+          <!-- Blue Litmus + Acid Visual Result -->
+          <div class="exp-result-container chemical-result">
+            <div class="reaction-animation-box">
+              <div class="litmus-anim-visual">
+                <span>🔵</span>
+                <span style="font-size:1.5rem;">➡️</span>
+                <span class="litmus-blue-to-red">🔴</span>
+              </div>
+            </div>
+            <div class="result-badge chemical">Result: Acid Detected</div>
+            <div class="toast-banner">“Acid detected! The solution is acidic.”</div>
+          </div>
+
+          <!-- Explanation Section -->
+          <div class="exp-explanation-section">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>The acidic solution caused the <b>blue litmus paper to turn red</b>.</p>
+            </div>
+
+            <div class="exp-explain-block">
+              <h5>Traits of Acids:</h5>
+              <ul>
+                <li>Acids have a <b>pH below 7</b>.</li>
+                <li>They turn <b>blue litmus paper red</b>.</li>
+                <li>Many acids have a sour taste, but <b>never taste an unknown chemical</b>.</li>
+                <li>Acids can react with certain metals.</li>
+                <li>Strong acids can be corrosive.</li>
+              </ul>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Blue litmus turns red in an acid.
+            </div>
+
+            <div class="exp-safety-note">
+              ⚠️ <b>Safety Note:</b> Never taste, smell closely, or touch unknown acids or bases. The experiments are simulations for learning.
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      } else if (mode === 'red_litmus') {
+        html += `
+          <!-- Red Litmus + Base Visual Result -->
+          <div class="exp-result-container physical-result">
+            <div class="reaction-animation-box">
+              <div class="litmus-anim-visual">
+                <span>🔴</span>
+                <span style="font-size:1.5rem;">➡️</span>
+                <span class="litmus-red-to-blue">🔵</span>
+              </div>
+            </div>
+            <div class="result-badge physical">Result: Base Detected</div>
+            <div class="toast-banner">“Base detected! The solution is basic.”</div>
+          </div>
+
+          <!-- Explanation Section -->
+          <div class="exp-explanation-section">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>The basic solution caused the <b>red litmus paper to turn blue</b>.</p>
+            </div>
+
+            <div class="exp-explain-block">
+              <h5>Traits of Bases:</h5>
+              <ul>
+                <li>Bases have a <b>pH above 7</b>.</li>
+                <li>They turn <b>red litmus paper blue</b>.</li>
+                <li>Many bases feel slippery, but <b>never touch or taste unknown chemicals</b>.</li>
+                <li>Bases can react with acids in a process called <b>neutralization</b>.</li>
+                <li>Strong bases can be corrosive.</li>
+              </ul>
+            </div>
+
+            <div class="exp-key-idea-box physical-key">
+              💡 <b>Key Idea:</b> Red litmus turns blue in a base.
+            </div>
+
+            <!-- Comparison Panel -->
+            <div class="exp-explain-block">
+              <h5>📊 Comparison Panel</h5>
+              <table class="comparison-table">
+                <thead>
+                  <tr>
+                    <th>Property</th>
+                    <th>🧪 Acid</th>
+                    <th>🧪 Base</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><b>pH</b></td>
+                    <td>Below 7</td>
+                    <td>Above 7</td>
+                  </tr>
+                  <tr>
+                    <td><b>Blue Litmus</b></td>
+                    <td>🔵 ➡️ 🔴 Red</td>
+                    <td>Stays blue</td>
+                  </tr>
+                  <tr>
+                    <td><b>Red Litmus</b></td>
+                    <td>Stays red</td>
+                    <td>🔴 ➡️ 🔵 Blue</td>
+                  </tr>
+                  <tr>
+                    <td><b>Common trait</b></td>
+                    <td>Can react with bases</td>
+                    <td>Can react with acids</td>
+                  </tr>
+                  <tr>
+                    <td><b>Reaction</b></td>
+                    <td>Can neutralize bases</td>
+                    <td>Can neutralize acids</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="exp-safety-note">
+              ⚠️ <b>Safety Note:</b> Never taste, smell closely, or touch unknown acids or bases. The experiments are simulations for learning.
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      } else {
+        html += `
+          <!-- Acid + Base Neutralization Visual Result -->
+          <div class="exp-result-container chemical-result">
+            <div class="reaction-animation-box">
+              <div class="neutralization-anim-box">
+                <span class="neut-particle-1">🧪</span>
+                <span style="font-size:1.5rem;">+</span>
+                <span class="neut-particle-2">🧪</span>
+                <span style="font-size:1.5rem;">➡️</span>
+                <span>💧 🧂</span>
+              </div>
+            </div>
+            <div class="result-badge chemical">Result: Neutralization Reaction</div>
+          </div>
+
+          <!-- Explanation Section -->
+          <div class="exp-explanation-section">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>When an acid reacts with a base, they can <b>neutralize each other</b>. The reaction produces <b>water and a salt</b>.</p>
+            </div>
+
+            <div class="exp-explain-block">
+              <h5>General Reaction:</h5>
+              <p><b>Acid + Base → Salt + Water</b></p>
+              <p style="font-size:0.84rem; color:#5B21B6; margin-top:4px;"><b>Example:</b> Hydrochloric Acid + Sodium Hydroxide → Sodium Chloride + Water<br><code>HCl + NaOH → NaCl + H₂O</code></p>
+            </div>
+
+            <div class="exp-explain-block">
+              <h5>What Is Neutralization?</h5>
+              <p>Neutralization is a chemical reaction in which an acid reacts with a base, reducing their acidic and basic properties.</p>
+              <ul style="margin-top:6px;">
+                <li>The acid provides <b>H⁺ ions</b>.</li>
+                <li>The base provides <b>OH⁻ ions</b>.</li>
+                <li><b>H⁺ + OH⁻ → H₂O</b></li>
+                <li>The remaining ions combine to form a <b>salt</b>.</li>
+              </ul>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Neutralization occurs when an acid and a base react to form salt and water.
+            </div>
+
+            <!-- Information Panel -->
+            <div class="exp-info-panel">
+              <h5>🔬 Reaction: Neutralization</h5>
+              <div class="exp-info-item"><b>Reactants:</b> 🧪 Acid + 🧪 Base</div>
+              <div class="exp-info-item"><b>Products:</b> 🧂 Salt + 💧 Water</div>
+              <div class="exp-info-item" style="margin-top:4px;"><b>Real-Life Examples ("Where do we see this?"):</b></div>
+              <div class="exp-info-item">• 💊 <b>Antacids</b> — bases can neutralize excess stomach acid.</div>
+              <div class="exp-info-item">• 🌱 <b>Soil treatment</b> — substances can be added to adjust overly acidic soil.</div>
+              <div class="exp-info-item">• 🏭 <b>Wastewater treatment</b> — acids and bases can be neutralized to help control pH.</div>
             </div>
           </div>
 
