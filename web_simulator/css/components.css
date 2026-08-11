@@ -786,34 +786,71 @@
 }
 
 /* ---------------- Acids, Bases, and Salts Styles ---------------- */
+/* Litmus Spheres & Animations */
 .litmus-anim-visual {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  font-size: 2.5rem;
+  gap: 16px;
+  padding: 10px 0;
 }
 
-.litmus-blue-to-red {
+.litmus-sphere {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
   display: inline-block;
-  animation: turnRed 1.8s ease-in-out forwards;
+  flex-shrink: 0;
 }
 
-@keyframes turnRed {
-  0% { filter: hue-rotate(0deg); transform: scale(1); }
-  50% { filter: hue-rotate(90deg); transform: scale(1.1); }
-  100% { filter: hue-rotate(180deg) saturate(2.5); transform: scale(1); }
+.blue-sphere {
+  background: radial-gradient(circle at 35% 35%, #60A5FA 0%, #2563EB 60%, #1D4ED8 100%);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
 }
 
-.litmus-red-to-blue {
-  display: inline-block;
-  animation: turnBlue 1.8s ease-in-out forwards;
+.red-sphere {
+  background: radial-gradient(circle at 35% 35%, #F87171 0%, #EF4444 60%, #B91C1C 100%);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
 }
 
-@keyframes turnBlue {
-  0% { filter: hue-rotate(0deg); transform: scale(1); }
-  50% { filter: hue-rotate(-90deg); transform: scale(1.1); }
-  100% { filter: hue-rotate(-180deg) saturate(2.5); transform: scale(1); }
+.turn-blue-to-red {
+  animation: blueToRedAnim 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes blueToRedAnim {
+  0% {
+    background: radial-gradient(circle at 35% 35%, #60A5FA 0%, #2563EB 60%, #1D4ED8 100%);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+  100% {
+    background: radial-gradient(circle at 35% 35%, #F87171 0%, #EF4444 60%, #B91C1C 100%);
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.45);
+    transform: scale(1);
+  }
+}
+
+.turn-red-to-blue {
+  animation: redToBlueAnim 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes redToBlueAnim {
+  0% {
+    background: radial-gradient(circle at 35% 35%, #F87171 0%, #EF4444 60%, #B91C1C 100%);
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+  100% {
+    background: radial-gradient(circle at 35% 35%, #60A5FA 0%, #2563EB 60%, #1D4ED8 100%);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45);
+    transform: scale(1);
+  }
 }
 
 .toast-banner {

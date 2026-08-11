@@ -592,9 +592,9 @@ const Experiment = {
           <div class="exp-result-container chemical-result">
             <div class="reaction-animation-box">
               <div class="litmus-anim-visual">
-                <span>🔵</span>
-                <span style="font-size:1.5rem;">➡️</span>
-                <span class="litmus-blue-to-red">🔴</span>
+                <span class="litmus-sphere blue-sphere" title="Blue Litmus"></span>
+                <span style="font-size:1.5rem; color:#8B5CF6;">➡️</span>
+                <span class="litmus-sphere turn-blue-to-red" title="Red Litmus"></span>
               </div>
             </div>
             <div class="result-badge chemical">Result: Acid Detected</div>
@@ -639,9 +639,9 @@ const Experiment = {
           <div class="exp-result-container physical-result">
             <div class="reaction-animation-box">
               <div class="litmus-anim-visual">
-                <span>🔴</span>
-                <span style="font-size:1.5rem;">➡️</span>
-                <span class="litmus-red-to-blue">🔵</span>
+                <span class="litmus-sphere red-sphere" title="Red Litmus"></span>
+                <span style="font-size:1.5rem; color:#8B5CF6;">➡️</span>
+                <span class="litmus-sphere turn-red-to-blue" title="Blue Litmus"></span>
               </div>
             </div>
             <div class="result-badge physical">Result: Base Detected</div>
