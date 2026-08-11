@@ -87,7 +87,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
 
     final newQ = QuestionModel(
       id: 'custom_${DateTime.now().millisecondsSinceEpoch}_$_currentCustomQuestionIndex',
-      topicId: 'custom_topic',
+      topicId: 'b0000000-0000-0000-0000-000000000001',
       questionTypeId: _customAnswerMode == 'true_false' ? 2 : (_customAnswerMode == 'identification' ? 3 : 1),
       quizType: 'custom',
       question: qText,

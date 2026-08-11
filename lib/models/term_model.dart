@@ -18,6 +18,7 @@ class TermModel {
     List<TopicModel> topicsList = rawTopics != null
         ? rawTopics.map((t) => TopicModel.fromJson(t as Map<String, dynamic>)).toList()
         : [];
+    topicsList.sort((a, b) => a.orderIndex.compareTo(b.orderIndex));
 
     final String nameStr = (json['name'] ?? json['title'] ?? 'Term') as String;
 

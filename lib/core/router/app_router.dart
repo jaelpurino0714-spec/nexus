@@ -27,7 +27,8 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       if (status == AuthStatus.uninitialized) return '/';
 
-      final isLoggingIn = state.matchedLocation == '/login' ||
+      final isLoggingIn = state.matchedLocation == '/' ||
+          state.matchedLocation == '/login' ||
           state.matchedLocation == '/student/profile-setup' ||
           state.matchedLocation == '/teacher/login';
 

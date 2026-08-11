@@ -30,7 +30,8 @@ class QuestionService {
           .select()
           .eq('is_active', true);
 
-      if (topicId.isNotEmpty) {
+      final isUuid = RegExp(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$').hasMatch(topicId);
+      if (topicId.isNotEmpty && isUuid) {
         query = query.eq('topic_id', topicId);
       }
 

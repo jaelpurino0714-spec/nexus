@@ -282,6 +282,17 @@ const DB = {
     localStorage.setItem(this.STORAGE_USER_UUID, uuid);
   },
 
+  saveCustomQuiz(quizObj) {
+    const list = JSON.parse(localStorage.getItem('nexus_custom_quizzes') || '[]');
+    list.push(quizObj);
+    localStorage.setItem('nexus_custom_quizzes', JSON.stringify(list));
+  },
+
+  getCustomQuizzes() {
+    const raw = localStorage.getItem('nexus_custom_quizzes');
+    return raw ? JSON.parse(raw) : [];
+  },
+
   clearSession() {
     this._cachedProfile = null;
     localStorage.removeItem(this.STORAGE_PROFILE);
@@ -289,3 +300,4 @@ const DB = {
     localStorage.removeItem(this.STORAGE_USER_UUID);
   }
 };
+

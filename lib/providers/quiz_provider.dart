@@ -256,9 +256,17 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
 
       _syncLobbyProgress();
 
+      final uuidRegex = RegExp(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$');
+      final validStudentId = (state!.participantId != null && uuidRegex.hasMatch(state!.participantId!))
+          ? state!.participantId!
+          : 'a0000000-0000-0000-0000-000000000000';
+      final validTopicId = uuidRegex.hasMatch(state!.topicId)
+          ? state!.topicId
+          : 'b0000000-0000-0000-0000-000000000001';
+
       final attempt = await _quizRepo.submitQuizAttempt(
-        studentId: state!.participantId ?? 'TEMP_STUDENT_ID',
-        topicId: state!.topicId,
+        studentId: validStudentId,
+        topicId: validTopicId,
         quizType: state!.quizType,
         score: newScore,
         correct: newCorrect,
