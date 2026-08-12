@@ -54,6 +54,12 @@ const Experiment = {
   homeostasisStarted: false,
   homeostasisExp1Completed: false,
   homeostasisExp2Completed: false,
+  evolutionMode: 'camouflage', // 'camouflage', 'resistance', or 'summary'
+  evolutionEnv: 'green', // 'green' or 'brown'
+  evolutionGeneration: 1, // 1, 2, or 3
+  evolutionStarted: false,
+  evolutionExp1Completed: false,
+  evolutionExp2Completed: false,
 
   selectedItems: new Set(),
   isCombined: false,
@@ -143,6 +149,12 @@ const Experiment = {
         this.homeostasisCondition = 'hot';
         this.homeostasisStarted = false;
         this.renderHomeostasisActivity(canvasBox);
+      } else if (topicName === "Mechanisms of Evolution") {
+        this.evolutionMode = 'camouflage';
+        this.evolutionEnv = 'green';
+        this.evolutionGeneration = 1;
+        this.evolutionStarted = false;
+        this.renderEvolutionActivity(canvasBox);
       } else {
         canvasBox.innerHTML = ''; // Keep blank for other topics for now
       }
@@ -280,6 +292,8 @@ const Experiment = {
         this.renderRatesActivity(canvasBox);
       } else if (this.currentTopic === "Homeostasis") {
         this.renderHomeostasisActivity(canvasBox);
+      } else if (this.currentTopic === "Mechanisms of Evolution") {
+        this.renderEvolutionActivity(canvasBox);
       }
     }
   },
@@ -303,6 +317,8 @@ const Experiment = {
         this.renderRatesActivity(canvasBox);
       } else if (this.currentTopic === "Homeostasis") {
         this.renderHomeostasisActivity(canvasBox);
+      } else if (this.currentTopic === "Mechanisms of Evolution") {
+        this.renderEvolutionActivity(canvasBox);
       }
     }
   },
@@ -318,6 +334,8 @@ const Experiment = {
     this.bSubmitted = false;
     this.ratesStarted = false;
     this.homeostasisStarted = false;
+    this.evolutionStarted = false;
+    this.evolutionGeneration = 1;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) {
       if (this.currentTopic === "Physical vs. Chemical Change") {
@@ -334,6 +352,8 @@ const Experiment = {
         this.renderRatesActivity(canvasBox);
       } else if (this.currentTopic === "Homeostasis") {
         this.renderHomeostasisActivity(canvasBox);
+      } else if (this.currentTopic === "Mechanisms of Evolution") {
+        this.renderEvolutionActivity(canvasBox);
       }
     }
   },
@@ -2188,6 +2208,375 @@ const Experiment = {
             </button>
             <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchHomeostasisMode('glucose')">
               🍬 Exp 2: Glucose
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  switchEvolutionMode(mode) {
+    this.evolutionMode = mode;
+    this.evolutionEnv = 'green';
+    this.evolutionGeneration = 1;
+    this.evolutionStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderEvolutionActivity(canvasBox);
+    }
+  },
+
+  setEvolutionEnv(env) {
+    this.evolutionEnv = env;
+    this.evolutionGeneration = 1;
+    this.evolutionStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderEvolutionActivity(canvasBox);
+    }
+  },
+
+  startEvolutionSimulation() {
+    this.evolutionStarted = true;
+    this.evolutionGeneration = 1;
+    if (this.evolutionMode === 'camouflage') {
+      this.evolutionExp1Completed = true;
+    } else if (this.evolutionMode === 'resistance') {
+      this.evolutionExp2Completed = true;
+    }
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderEvolutionActivity(canvasBox);
+    }
+  },
+
+  nextEvolutionGeneration() {
+    if (this.evolutionGeneration < 3) {
+      this.evolutionGeneration++;
+    }
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderEvolutionActivity(canvasBox);
+    }
+  },
+
+  resetEvolutionActivity() {
+    this.evolutionStarted = false;
+    this.evolutionGeneration = 1;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderEvolutionActivity(canvasBox);
+    }
+  },
+
+  renderEvolutionActivity(container) {
+    const mode = this.evolutionMode; // 'camouflage', 'resistance', 'summary'
+    const env = this.evolutionEnv; // 'green', 'brown'
+    const gen = this.evolutionGeneration; // 1, 2, 3
+    const isStarted = this.evolutionStarted;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <!-- 3 Top Mode Toggle Buttons -->
+        <div class="exp-mode-toggle-group" style="grid-template-columns: 1fr 1fr 1fr; font-size: 0.78rem;">
+          <button class="exp-mode-btn ${mode === 'camouflage' ? 'active' : ''}" onclick="Experiment.switchEvolutionMode('camouflage')">
+            🦋 Exp 1: Camouflage
+          </button>
+          <button class="exp-mode-btn ${mode === 'resistance' ? 'active' : ''}" onclick="Experiment.switchEvolutionMode('resistance')">
+            🦠 Exp 2: Resistance
+          </button>
+          <button class="exp-mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="Experiment.switchEvolutionMode('summary')">
+            📚 Learning Panel
+          </button>
+        </div>
+    `;
+
+    if (mode === 'camouflage') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🦋 EXPERIMENT 1 — Natural Selection: Camouflage</div>
+          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
+            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+              <b>Goal:</b> Demonstrate how natural selection can cause a population to change when individuals with certain inherited traits survive and reproduce more successfully.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        const isGreenEnv = (env === 'green');
+
+        html += `
+          <div class="evo-env-box ${isGreenEnv ? 'green-bg' : 'brown-bg'}">
+            <div class="pop-counter-badge">Starting Population: 10 insects</div>
+            <div class="evo-creature-grid">
+              <span>🟢</span><span>🟢</span><span>🟢</span><span>🟢</span><span>🟢</span>
+              <span>🟤</span><span>🟤</span><span>🟤</span><span>🟤</span><span>🟤</span>
+            </div>
+            <div style="font-size:0.82rem; font-weight:700; color:#334155;">
+              Inherited Variations: 5 🟢 Green Insects + 5 🟤 Brown Insects
+            </div>
+          </div>
+
+          <div class="exp-condition-select-group">
+            <label class="exp-condition-label">Choose Environment:</label>
+            <div class="exp-condition-buttons">
+              <button class="exp-cond-btn ${isGreenEnv ? 'active' : ''}" onclick="Experiment.setEvolutionEnv('green')">
+                🌿 Green Environment
+              </button>
+              <button class="exp-cond-btn ${!isGreenEnv ? 'active' : ''}" onclick="Experiment.setEvolutionEnv('brown')">
+                🟤 Brown Environment
+              </button>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startEvolutionSimulation()">
+            🦋 [ START SELECTION ]
+          </button>
+        </div>
+        `;
+      } else {
+        const isGreenEnv = (env === 'green');
+
+        let greenCount = 5;
+        let brownCount = 5;
+
+        if (isGreenEnv) {
+          if (gen === 2) { greenCount = 7; brownCount = 3; }
+          else if (gen === 3) { greenCount = 9; brownCount = 1; }
+        } else {
+          if (gen === 2) { greenCount = 3; brownCount = 7; }
+          else if (gen === 3) { greenCount = 1; brownCount = 9; }
+        }
+
+        let greenIcons = Array(greenCount).fill('🟢').map(e => `<span>${e}</span>`).join('');
+        let brownIcons = Array(brownCount).fill('🟤').map(e => `<span>${e}</span>`).join('');
+
+        html += `
+          <div class="exp-result-container ${isGreenEnv ? 'physical-result' : 'chemical-result'}">
+            <div class="evo-env-box ${isGreenEnv ? 'green-bg' : 'brown-bg'}" style="margin:0; width:100%;">
+              <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+                <span class="gen-tracker-pill">Generation ${gen} of 3</span>
+                <span class="pop-counter-badge">Population: 10</span>
+              </div>
+
+              <div class="evo-creature-grid">
+                ${greenIcons}${brownIcons}
+              </div>
+
+              <div style="display:flex; gap:12px; font-size:0.85rem; font-weight:800;">
+                <span style="color:#15803D;">🟢 Green: ${greenCount}</span>
+                <span style="color:#B45309;">🟤 Brown: ${brownCount}</span>
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);">
+              🧬 POPULATION CHANGED
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="predator-hunt-box">
+              <span class="hunt-icon">🐦</span>
+              <div class="hunt-text">
+                <b>Predator Selection Process:</b><br>
+                1. 🐦 A predator searches for insects.<br>
+                2. Insects easier to see are eaten first.<br>
+                3. Better-camouflaged insects survive & reproduce.
+              </div>
+            </div>
+
+            <div class="exp-explain-block">
+              <h5>What happened? (Generation ${gen})</h5>
+              <p>${isGreenEnv ? 
+                'Green insects were better camouflaged in the green environment. They were more likely to survive and reproduce, so the green trait became more common in the population over generations.' : 
+                'Brown insects were better camouflaged in the brown environment. They were more likely to survive and reproduce, so the brown trait became more common in the population over generations.'
+              }</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Natural selection favors inherited traits that improve survival and reproduction in a particular environment.
+            </div>
+
+            <div class="exp-info-panel" style="background:#EFF6FF; border-color:#BFDBFE;">
+              <div class="exp-info-item" style="color:#1E40AF;">
+                ⚠️ <b>Important Note:</b> The individual insect did not evolve during its lifetime. The population changed across generations because individuals with different inherited traits had different reproductive success.
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            ${gen < 3 ? `
+              <button class="primary-btn ready" style="flex:1.2; padding:12px; font-size:0.9rem;" onclick="Experiment.nextEvolutionGeneration()">
+                ⏭️ Next Generation (Gen ${gen} ➔ ${gen + 1})
+              </button>
+            ` : ''}
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.resetEvolutionActivity()">
+              🔄 Reset Experiment
+            </button>
+            <button class="secondary-btn" style="flex:1; background:#F3E8FF; border-color:#C084FC; color:#6D28D9;" onclick="Experiment.setEvolutionEnv('${isGreenEnv ? 'brown' : 'green'}')">
+              🔀 Switch Env (${isGreenEnv ? 'Brown 🟤' : 'Green 🌿'})
+            </button>
+          </div>
+        </div>
+        `;
+      }
+    } else if (mode === 'resistance') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🦠 EXPERIMENT 2 — Antibiotic Resistance</div>
+          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
+            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+              <b>Goal:</b> Demonstrate how natural selection can lead to antibiotic resistance in a bacterial population.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="evo-env-box petri-bg">
+            <div class="pop-counter-badge">Starting Population: 10 Bacteria</div>
+            <div class="evo-creature-grid">
+              <span>🦠</span><span>🦠</span><span>🦠</span><span>🦠</span><span>🦠</span>
+              <span>🦠</span><span>🦠</span><span>🦠</span><span>🦠</span><span>🔵</span>
+            </div>
+            <div style="font-size:0.82rem; font-weight:700; color:#0F766E;">
+              Initial Setup: 9 Susceptible Bacteria (🦠) + 1 Resistant Bacterium (🔵)
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startEvolutionSimulation()">
+            💊 [ APPLY ANTIBIOTIC ]
+          </button>
+        </div>
+        `;
+      } else {
+        let susCount = 9;
+        let resCount = 1;
+
+        if (gen === 2) { susCount = 2; resCount = 4; }
+        else if (gen === 3) { susCount = 0; resCount = 10; }
+
+        let susIcons = Array(susCount).fill('🦠').map(e => `<span>${e}</span>`).join('');
+        let resIcons = Array(resCount).fill('🔵').map(e => `<span>${e}</span>`).join('');
+
+        html += `
+          <div class="exp-result-container chemical-result">
+            <div class="evo-env-box petri-bg" style="margin:0; width:100%;">
+              <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+                <span class="gen-tracker-pill">Generation ${gen} of 3</span>
+                <span class="pop-counter-badge">Population: ${susCount + resCount}</span>
+              </div>
+
+              <div class="evo-creature-grid">
+                ${susIcons}${resIcons}
+              </div>
+
+              <div style="display:flex; gap:12px; font-size:0.85rem; font-weight:800;">
+                <span style="color:#0F766E;">🦠 Susceptible: ${susCount}</span>
+                <span style="color:#2563EB;">🔵 Resistant: ${resCount}</span>
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);">
+              🧬 RESISTANCE BECOMES MORE COMMON
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="predator-hunt-box" style="background:#EFF6FF; border-color:#BFDBFE;">
+              <span class="hunt-icon">💊</span>
+              <div class="hunt-text" style="color:#1E40AF;">
+                <b>Antibiotic Selection Process:</b><br>
+                1. 💊 Antibiotic eliminates susceptible bacteria.<br>
+                2. Resistant bacteria survive & reproduce.<br>
+                3. Over generations, resistant trait becomes common.
+              </div>
+            </div>
+
+            <div class="exp-explain-block">
+              <h5>What happened? (Generation ${gen})</h5>
+              <p>The antibiotic killed many susceptible bacteria, while bacteria with inherited resistance were more likely to survive and reproduce. Over generations, the resistant trait became more common in the population.</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Natural selection can increase the frequency of inherited traits that help organisms survive in a particular environment.
+            </div>
+
+            <div class="exp-info-panel" style="background:#FFFBEB; border-color:#FCD34D;">
+              <div class="exp-info-item" style="color:#92400E;">
+                ⚠️ <b>Important Note:</b> Resistance can already exist because of inherited genetic variation. The antibiotic creates a selection pressure that favors resistant bacteria (it does not simply teach bacteria to become resistant).
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            ${gen < 3 ? `
+              <button class="primary-btn ready" style="flex:1.2; padding:12px; font-size:0.9rem;" onclick="Experiment.nextEvolutionGeneration()">
+                ⏭️ Next Generation (Gen ${gen} ➔ ${gen + 1})
+              </button>
+            ` : ''}
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.resetEvolutionActivity()">
+              🔄 Reset Experiment
+            </button>
+          </div>
+        </div>
+        `;
+      }
+    } else {
+      // 📚 FINAL MECHANISMS OF EVOLUTION PANEL
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">📚 Final Mechanisms of Evolution Panel</div>
+
+          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+            <h5 style="color:#6D28D9; font-size:1.1rem;">🧬 Natural Selection</h5>
+            <div style="font-family:var(--font-heading); font-size:0.88rem; font-weight:800; color:#5B21B6; margin-top:6px; text-align:center;">
+              Variation → Selection Pressure → Differential Survival/Reproduction → Inherited Traits Become More Common
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>Key Terms</h5>
+              <div class="evo-terms-grid">
+                <div class="evo-term-card">
+                  <h6>Variation</h6>
+                  <p>Individuals in a population have differences in their traits.</p>
+                </div>
+                <div class="evo-term-card">
+                  <h6>Selection Pressure</h6>
+                  <p>An environmental factor affects which individuals are more likely to survive and reproduce.</p>
+                </div>
+                <div class="evo-term-card">
+                  <h6>Natural Selection</h6>
+                  <p>Individuals with advantageous inherited traits tend to leave more offspring.</p>
+                </div>
+                <div class="evo-term-card">
+                  <h6>Evolution</h6>
+                  <p>The inherited characteristics of a population change over generations.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key" style="background:#EFF6FF; border-color:#BFDBFE; color:#1E40AF;">
+              💡 <b>Main Concept:</b> Evolution occurs at the population level over generations, not because individual organisms intentionally change their traits.
+            </div>
+
+            <div class="exp-objective-box">
+              <h5>🎯 Main Learning Objective</h5>
+              <p>Students should understand that <b>natural selection is a major mechanism of evolution because differences in survival and reproduction can cause inherited traits to become more or less common in a population over generations.</b></p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchEvolutionMode('camouflage')">
+              🦋 Exp 1: Camouflage
+            </button>
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchEvolutionMode('resistance')">
+              🦠 Exp 2: Resistance
             </button>
           </div>
         </div>
