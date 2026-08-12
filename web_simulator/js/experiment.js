@@ -44,6 +44,11 @@ const Experiment = {
   hintIndex: 0,
   bSubmitted: false,
   bIsCorrect: false,
+  ratesMode: 'catalyst', // 'catalyst', 'inhibitor', or 'summary'
+  ratesCondition: 'without', // 'without' or 'with'
+  ratesStarted: false,
+  ratesExp1Completed: false,
+  ratesExp2Completed: false,
 
   selectedItems: new Set(),
   isCombined: false,
@@ -123,6 +128,11 @@ const Experiment = {
         this.hintIndex = 0;
         this.bSubmitted = false;
         this.renderBalancingChemicalEquationsActivity(canvasBox);
+      } else if (topicName === "Rates of Reactions") {
+        this.ratesMode = 'catalyst';
+        this.ratesCondition = 'without';
+        this.ratesStarted = false;
+        this.renderRatesActivity(canvasBox);
       } else {
         canvasBox.innerHTML = ''; // Keep blank for other topics for now
       }
@@ -256,6 +266,8 @@ const Experiment = {
         this.renderChemicalEquationsActivity(canvasBox);
       } else if (this.currentTopic === "Balancing Chemical Equations") {
         this.renderBalancingChemicalEquationsActivity(canvasBox);
+      } else if (this.currentTopic === "Rates of Reactions") {
+        this.renderRatesActivity(canvasBox);
       }
     }
   },
@@ -275,6 +287,8 @@ const Experiment = {
         this.renderChemicalEquationsActivity(canvasBox);
       } else if (this.currentTopic === "Balancing Chemical Equations") {
         this.renderBalancingChemicalEquationsActivity(canvasBox);
+      } else if (this.currentTopic === "Rates of Reactions") {
+        this.renderRatesActivity(canvasBox);
       }
     }
   },
@@ -288,6 +302,7 @@ const Experiment = {
     this.bCoeff3 = '1';
     this.hintIndex = 0;
     this.bSubmitted = false;
+    this.ratesStarted = false;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) {
       if (this.currentTopic === "Physical vs. Chemical Change") {
@@ -300,6 +315,8 @@ const Experiment = {
         this.renderChemicalEquationsActivity(canvasBox);
       } else if (this.currentTopic === "Balancing Chemical Equations") {
         this.renderBalancingChemicalEquationsActivity(canvasBox);
+      } else if (this.currentTopic === "Rates of Reactions") {
+        this.renderRatesActivity(canvasBox);
       }
     }
   },
@@ -1355,6 +1372,391 @@ const Experiment = {
       </div>
     `;
 
+    container.innerHTML = html;
+  }
+  switchRatesMode(mode) {
+    this.ratesMode = mode;
+    this.ratesCondition = 'without';
+    this.ratesStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderRatesActivity(canvasBox);
+    }
+  },
+
+  setRatesCondition(cond) {
+    this.ratesCondition = cond;
+    this.ratesStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderRatesActivity(canvasBox);
+    }
+  },
+
+  startRatesReaction() {
+    this.ratesStarted = true;
+    if (this.ratesMode === 'catalyst') {
+      this.ratesExp1Completed = true;
+    } else if (this.ratesMode === 'inhibitor') {
+      this.ratesExp2Completed = true;
+    }
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderRatesActivity(canvasBox);
+    }
+  },
+
+  resetRatesActivity() {
+    this.ratesStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderRatesActivity(canvasBox);
+    }
+  },
+
+  renderRatesActivity(container) {
+    const mode = this.ratesMode; // 'catalyst', 'inhibitor', 'summary'
+    const cond = this.ratesCondition; // 'without', 'with'
+    const isStarted = this.ratesStarted;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <!-- 3 Top Mode Toggle Buttons -->
+        <div class="exp-mode-toggle-group" style="grid-template-columns: 1fr 1fr 1fr; font-size: 0.78rem;">
+          <button class="exp-mode-btn ${mode === 'catalyst' ? 'active' : ''}" onclick="Experiment.switchRatesMode('catalyst')">
+            🧪 Exp 1: Catalyst
+          </button>
+          <button class="exp-mode-btn ${mode === 'inhibitor' ? 'active' : ''}" onclick="Experiment.switchRatesMode('inhibitor')">
+            🧪 Exp 2: Inhibitor
+          </button>
+          <button class="exp-mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="Experiment.switchRatesMode('summary')">
+            📚 Learning Panel
+          </button>
+        </div>
+    `;
+
+    if (mode === 'catalyst') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🧪 EXPERIMENT 1 — Catalyst: Hydrogen Peroxide + Catalyst</div>
+          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
+            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+              <b>Goal:</b> Demonstrate that a catalyst increases the rate of a reaction without being consumed by the reaction.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <p class="exp-instruction" style="margin-top:10px;">Interactive Flow — Displaying Substances:</p>
+          
+          <div class="exp-items-display-grid">
+            <div class="exp-item-card readonly">
+              <div class="exp-item-icon">🧪</div>
+              <div class="exp-item-name">Hydrogen Peroxide</div>
+              <div class="exp-item-sub">Reactant</div>
+            </div>
+            <div class="exp-item-card readonly">
+              <div class="exp-item-icon">🧪</div>
+              <div class="exp-item-name">Catalyst</div>
+              <div class="exp-item-sub">Rate Accelerator</div>
+            </div>
+            <div class="exp-item-card readonly">
+              <div class="exp-item-icon">💧</div>
+              <div class="exp-item-name">Water</div>
+              <div class="exp-item-sub">Control / Comparison</div>
+            </div>
+          </div>
+
+          <div class="exp-condition-select-group">
+            <label class="exp-condition-label">Choose Condition:</label>
+            <div class="exp-condition-buttons">
+              <button class="exp-cond-btn ${cond === 'without' ? 'active' : ''}" onclick="Experiment.setRatesCondition('without')">
+                Without Catalyst
+              </button>
+              <button class="exp-cond-btn ${cond === 'with' ? 'active' : ''}" onclick="Experiment.setRatesCondition('with')">
+                With Catalyst
+              </button>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startRatesReaction()">
+            🧪 [ START REACTION ]
+          </button>
+        </div>
+        `;
+      } else {
+        const isWithout = (cond === 'without');
+
+        html += `
+          <div class="exp-result-container ${isWithout ? 'physical-result' : 'chemical-result'}">
+            <div class="rates-animation-box ${isWithout ? 'rates-anim-slow' : 'rates-anim-fast'}">
+              <div class="beaker-base">🧪</div>
+              <div class="particles-layer">
+                ${isWithout ? `
+                  <span class="rate-particle p1">🫧</span>
+                  <span class="rate-particle p2">🫧</span>
+                ` : `
+                  <span class="rate-particle p1">🫧</span>
+                  <span class="rate-particle p2">⚡</span>
+                  <span class="rate-particle p3">🫧</span>
+                  <span class="rate-particle p4">⚡</span>
+                  <span class="rate-particle p5">🫧</span>
+                  <span class="rate-particle spark">✨</span>
+                `}
+              </div>
+            </div>
+
+            <div class="result-badge ${isWithout ? 'slow' : 'faster'}">
+              ${isWithout ? '🐢 SLOW REACTION' : '⚡ FASTER REACTION'}
+            </div>
+            <div class="rate-speed-tag">Reaction Rate: ${isWithout ? 'Slow' : 'Faster'}</div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>Explain:</h5>
+              <p>${isWithout ? 
+                'Without a catalyst, the reaction happens slowly because fewer particles have enough energy to overcome the activation energy.' : 
+                'A catalyst provides an alternative reaction pathway with a lower activation energy. This allows more particles to react successfully in the same amount of time.'
+              }</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Catalyst → lowers activation energy → increases reaction rate
+            </div>
+
+            <div class="exp-info-panel" style="background:#EFF6FF; border-color:#BFDBFE;">
+              <div class="exp-info-item" style="color:#1E40AF;">
+                ⚠️ <b>Important:</b> A catalyst is not used up in the overall reaction.
+              </div>
+            </div>
+
+            <div class="exp-explain-block">
+              <h5>Visual Comparison</h5>
+              <table class="comparison-table">
+                <thead>
+                  <tr>
+                    <th>Condition</th>
+                    <th>Reaction Rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="${isWithout ? 'highlight-row' : ''}">
+                    <td>Without catalyst</td>
+                    <td>🐢 Slow</td>
+                  </tr>
+                  <tr class="${!isWithout ? 'highlight-row' : ''}">
+                    <td>With catalyst</td>
+                    <td>⚡ Faster</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetRatesActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else if (mode === 'inhibitor') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🧪 EXPERIMENT 2 — Inhibitor: Hydrogen Peroxide + Inhibitor</div>
+          <div class="exp-explain-block" style="background:#FEF2F2; border-color:#FCA5A5;">
+            <p style="font-size:0.88rem; color:#991B1B; font-weight:700;">
+              <b>Goal:</b> Demonstrate that an inhibitor slows down a chemical reaction.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <p class="exp-instruction" style="margin-top:10px;">Interactive Flow — Displaying Substances:</p>
+          
+          <div class="exp-items-display-grid">
+            <div class="exp-item-card readonly">
+              <div class="exp-item-icon">🧪</div>
+              <div class="exp-item-name">Hydrogen Peroxide</div>
+              <div class="exp-item-sub">Reactant</div>
+            </div>
+            <div class="exp-item-card readonly">
+              <div class="exp-item-icon">🧪</div>
+              <div class="exp-item-name">Inhibitor</div>
+              <div class="exp-item-sub">Rate Decelerator</div>
+            </div>
+            <div class="exp-item-card readonly">
+              <div class="exp-item-icon">💧</div>
+              <div class="exp-item-name">Water</div>
+              <div class="exp-item-sub">Control / Comparison</div>
+            </div>
+          </div>
+
+          <div class="exp-condition-select-group">
+            <label class="exp-condition-label">Choose Condition:</label>
+            <div class="exp-condition-buttons">
+              <button class="exp-cond-btn ${cond === 'without' ? 'active' : ''}" onclick="Experiment.setRatesCondition('without')">
+                Without Inhibitor
+              </button>
+              <button class="exp-cond-btn ${cond === 'with' ? 'active' : ''}" onclick="Experiment.setRatesCondition('with')">
+                With Inhibitor
+              </button>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startRatesReaction()">
+            🧪 [ START REACTION ]
+          </button>
+        </div>
+        `;
+      } else {
+        const isWithout = (cond === 'without');
+
+        html += `
+          <div class="exp-result-container ${isWithout ? 'physical-result' : 'chemical-result'}">
+            <div class="rates-animation-box ${isWithout ? 'rates-anim-normal' : 'rates-anim-slower'}">
+              <div class="beaker-base">🧪</div>
+              <div class="particles-layer">
+                ${isWithout ? `
+                  <span class="rate-particle p1">🫧</span>
+                  <span class="rate-particle p2">🫧</span>
+                  <span class="rate-particle p3">🫧</span>
+                ` : `
+                  <span class="rate-particle p1">💧</span>
+                  <span class="rate-particle p2">💧</span>
+                  <span class="rate-particle blocker">🛑</span>
+                `}
+              </div>
+            </div>
+
+            <div class="result-badge ${isWithout ? 'normal' : 'slower'}">
+              ${isWithout ? '⚡ NORMAL REACTION' : '🐢 SLOWER REACTION'}
+            </div>
+            <div class="rate-speed-tag">Reaction Rate: ${isWithout ? 'Normal' : 'Slower'}</div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>Explain:</h5>
+              <p>${isWithout ? 
+                'The reaction proceeds normally because there is no substance interfering with the reaction.' : 
+                'An inhibitor reduces the rate of a chemical reaction by interfering with the reaction process. It can make effective collisions less likely or interfere with the reaction pathway.'
+              }</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key" style="background:#FFF7ED; border-color:#FFD8A8; color:#9A3412;">
+              💡 <b>Key Idea:</b> Inhibitor → slows down a reaction
+            </div>
+
+            <div class="exp-explain-block">
+              <h5>Visual Comparison</h5>
+              <table class="comparison-table">
+                <thead>
+                  <tr>
+                    <th>Condition</th>
+                    <th>Reaction Rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="${isWithout ? 'highlight-row' : ''}">
+                    <td>Without inhibitor</td>
+                    <td>⚡ Normal</td>
+                  </tr>
+                  <tr class="${!isWithout ? 'highlight-row' : ''}">
+                    <td>With inhibitor</td>
+                    <td>🐢 Slower</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetRatesActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else {
+      // 📚 Final Learning Panel
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">📚 Final Learning Panel</div>
+
+          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+            <h5 style="color:#6D28D9; font-size:1.1rem;">⚡ Catalysts vs. Inhibitors</h5>
+            <table class="comparison-table" style="margin-top:10px;">
+              <thead>
+                <tr>
+                  <th>Aspect</th>
+                  <th style="color:#15803D;">🟢 Catalyst</th>
+                  <th style="color:#B91C1C;">🔴 Inhibitor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Effect</b></td>
+                  <td>Speeds up reaction</td>
+                  <td>Slows down reaction</td>
+                </tr>
+                <tr>
+                  <td><b>Activation energy</b></td>
+                  <td>Generally lowers it</td>
+                  <td>Can interfere with reaction pathways</td>
+                </tr>
+                <tr>
+                  <td><b>Purpose</b></td>
+                  <td>Make reactions faster</td>
+                  <td>Control or slow reactions</td>
+                </tr>
+                <tr>
+                  <td><b>Overall effect</b></td>
+                  <td>⬆️ Reaction rate</td>
+                  <td>⬇️ Reaction rate</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>Key Concepts</h5>
+              <div style="margin-bottom:8px;">
+                <b>Catalyst:</b><br>
+                <span style="font-size:0.86rem; color:#475569;">A substance that increases the rate of a chemical reaction by providing an alternative pathway with lower activation energy, without being consumed overall.</span>
+              </div>
+              <div>
+                <b>Inhibitor:</b><br>
+                <span style="font-size:0.86rem; color:#475569;">A substance that decreases the rate of a chemical reaction by interfering with the reaction process.</span>
+              </div>
+            </div>
+
+            <div class="exp-objective-box">
+              <h5>🎯 Main Learning Objective</h5>
+              <p>Students should understand:</p>
+              <div class="exp-obj-pills">
+                <div class="obj-pill catalyst">Catalyst → Faster Reaction ⚡</div>
+                <div class="obj-pill inhibitor">Inhibitor → Slower Reaction 🐢</div>
+              </div>
+              <p class="exp-obj-sub">Both are important because they allow scientists and industries to control the rate of chemical reactions.</p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchRatesMode('catalyst')">
+              🧪 Exp 1: Catalyst
+            </button>
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchRatesMode('inhibitor')">
+              🧪 Exp 2: Inhibitor
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
     container.innerHTML = html;
   }
 };
