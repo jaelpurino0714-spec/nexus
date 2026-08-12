@@ -1373,7 +1373,7 @@ const Experiment = {
     `;
 
     container.innerHTML = html;
-  }
+  },
   switchRatesMode(mode) {
     this.ratesMode = mode;
     this.ratesCondition = 'without';
