@@ -83,6 +83,29 @@ const Experiment = {
   wasteSelections: {}, // itemId -> 'bio' | 'rec' | 'res'
   energySwitches: { lights: true, ac: true, tv: true, fan: false, fridge: true, unplug: false },
   sustainabilityStarted: false,
+  projectileMode: 'angle', // 'angle', 'velocity', 'summary'
+  projectileAngle: 45, // 15, 30, 45, 60, 75
+  projectileVelocity: 'medium', // 'low', 'medium', 'high'
+  projectileStarted: false,
+  projectileAnswer: null,
+  momentumMode: 'momentum', // 'momentum', 'collision', 'summary'
+  momentumMass: 5, // 1, 2, 5
+  momentumVel: 2, // 1, 2, 5
+  collisionMassA: 2,
+  collisionVelA: 3,
+  collisionMassB: 2,
+  collisionVelB: -1,
+  momentumStarted: false,
+  momentumAnswer: null,
+  electricityMode: 'grid', // 'grid', 'voltage', 'summary'
+  voltageType: 'high', // 'low', 'high'
+  electricityStarted: false,
+  electricityAnswer: null,
+  energyMixMode: 'compare', // 'compare', 'mix', 'summary'
+  energySourceType: 'solar', // 'solar', 'coal'
+  activeRenewables: { solar: true, wind: false, hydro: false, geo: false },
+  energyMixStarted: false,
+  energyMixAnswer: null,
 
   selectedItems: new Set(),
   isCombined: false,
@@ -206,6 +229,33 @@ const Experiment = {
         this.energySwitches = { lights: true, ac: true, tv: true, fan: false, fridge: true, unplug: false };
         this.sustainabilityStarted = false;
         this.renderSustainabilityActivity(canvasBox);
+      } else if (topicName === "Projectile Motion") {
+        this.projectileMode = 'angle';
+        this.projectileAngle = 45;
+        this.projectileVelocity = 'medium';
+        this.projectileStarted = false;
+        this.projectileAnswer = null;
+        this.renderProjectileActivity(canvasBox);
+      } else if (topicName === "Momentum and Collisions") {
+        this.momentumMode = 'momentum';
+        this.momentumMass = 5;
+        this.momentumVel = 2;
+        this.momentumStarted = false;
+        this.momentumAnswer = null;
+        this.renderMomentumActivity(canvasBox);
+      } else if (topicName === "Large-Scale Generation and Distribution of Electricity") {
+        this.electricityMode = 'grid';
+        this.voltageType = 'high';
+        this.electricityStarted = false;
+        this.electricityAnswer = null;
+        this.renderElectricityActivity(canvasBox);
+      } else if (topicName === "Renewable and Non-Renewable Energy Sources") {
+        this.energyMixMode = 'compare';
+        this.energySourceType = 'solar';
+        this.activeRenewables = { solar: true, wind: false, hydro: false, geo: false };
+        this.energyMixStarted = false;
+        this.energyMixAnswer = null;
+        this.renderEnergyMixActivity(canvasBox);
       } else {
         canvasBox.innerHTML = ''; // Keep blank for other topics for now
       }
@@ -357,6 +407,14 @@ const Experiment = {
         this.renderEnsoActivity(canvasBox);
       } else if (this.currentTopic === "Global and Local Sustainability") {
         this.renderSustainabilityActivity(canvasBox);
+      } else if (this.currentTopic === "Projectile Motion") {
+        this.renderProjectileActivity(canvasBox);
+      } else if (this.currentTopic === "Momentum and Collisions") {
+        this.renderMomentumActivity(canvasBox);
+      } else if (this.currentTopic === "Large-Scale Generation and Distribution of Electricity") {
+        this.renderElectricityActivity(canvasBox);
+      } else if (this.currentTopic === "Renewable and Non-Renewable Energy Sources") {
+        this.renderEnergyMixActivity(canvasBox);
       }
     }
   },
@@ -394,6 +452,14 @@ const Experiment = {
         this.renderEnsoActivity(canvasBox);
       } else if (this.currentTopic === "Global and Local Sustainability") {
         this.renderSustainabilityActivity(canvasBox);
+      } else if (this.currentTopic === "Projectile Motion") {
+        this.renderProjectileActivity(canvasBox);
+      } else if (this.currentTopic === "Momentum and Collisions") {
+        this.renderMomentumActivity(canvasBox);
+      } else if (this.currentTopic === "Large-Scale Generation and Distribution of Electricity") {
+        this.renderElectricityActivity(canvasBox);
+      } else if (this.currentTopic === "Renewable and Non-Renewable Energy Sources") {
+        this.renderEnergyMixActivity(canvasBox);
       }
     }
   },
@@ -417,6 +483,14 @@ const Experiment = {
     this.climateStarted = false;
     this.ensoStarted = false;
     this.sustainabilityStarted = false;
+    this.projectileStarted = false;
+    this.projectileAnswer = null;
+    this.momentumStarted = false;
+    this.momentumAnswer = null;
+    this.electricityStarted = false;
+    this.electricityAnswer = null;
+    this.energyMixStarted = false;
+    this.energyMixAnswer = null;
     this.wasteSelections = {};
     this.energySwitches = { lights: true, ac: true, tv: true, fan: false, fridge: true, unplug: false };
     const canvasBox = document.getElementById('expCanvasBox');
@@ -449,6 +523,14 @@ const Experiment = {
         this.renderEnsoActivity(canvasBox);
       } else if (this.currentTopic === "Global and Local Sustainability") {
         this.renderSustainabilityActivity(canvasBox);
+      } else if (this.currentTopic === "Projectile Motion") {
+        this.renderProjectileActivity(canvasBox);
+      } else if (this.currentTopic === "Momentum and Collisions") {
+        this.renderMomentumActivity(canvasBox);
+      } else if (this.currentTopic === "Large-Scale Generation and Distribution of Electricity") {
+        this.renderElectricityActivity(canvasBox);
+      } else if (this.currentTopic === "Renewable and Non-Renewable Energy Sources") {
+        this.renderEnergyMixActivity(canvasBox);
       }
     }
   },
@@ -4165,6 +4247,1076 @@ const Experiment = {
             </button>
             <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchSustainabilityMode('energy')">
               ⚡ Exp 2: Energy
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  switchProjectileMode(mode) {
+    this.projectileMode = mode;
+    this.projectileStarted = false;
+    this.projectileAnswer = null;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderProjectileActivity(canvasBox);
+  },
+
+  setProjectileAngle(angle) {
+    this.projectileAngle = angle;
+    this.projectileStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderProjectileActivity(canvasBox);
+  },
+
+  setProjectileVel(vel) {
+    this.projectileVelocity = vel;
+    this.projectileStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderProjectileActivity(canvasBox);
+  },
+
+  startProjectileSimulation() {
+    this.projectileStarted = true;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderProjectileActivity(canvasBox);
+  },
+
+  answerProjectileChallenge(ans) {
+    this.projectileAnswer = ans;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderProjectileActivity(canvasBox);
+  },
+
+  resetProjectileActivity() {
+    this.projectileStarted = false;
+    this.projectileAnswer = null;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderProjectileActivity(canvasBox);
+  },
+
+  renderProjectileActivity(container) {
+    const mode = this.projectileMode; // 'angle', 'velocity', 'summary'
+    const angle = this.projectileAngle; // 15, 30, 45, 60, 75
+    const vel = this.projectileVelocity; // 'low', 'medium', 'high'
+    const isStarted = this.projectileStarted;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <div class="exp-mode-toggle-group" style="grid-template-columns: 1fr 1fr 1fr; font-size: 0.78rem;">
+          <button class="exp-mode-btn ${mode === 'angle' ? 'active' : ''}" onclick="Experiment.switchProjectileMode('angle')">
+            🏀 Exp 1: Launch Angle
+          </button>
+          <button class="exp-mode-btn ${mode === 'velocity' ? 'active' : ''}" onclick="Experiment.switchProjectileMode('velocity')">
+            🏹 Exp 2: Velocity
+          </button>
+          <button class="exp-mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="Experiment.switchProjectileMode('summary')">
+            📚 Learning Panel
+          </button>
+        </div>
+    `;
+
+    if (mode === 'angle') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🏀 EXPERIMENT 1 — Launch Angle and Range</div>
+          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
+            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+              <b>Goal:</b> Demonstrate how changing the launch angle affects the horizontal range of a projectile.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="homeo-body-card">
+            <div class="homeo-body-icon">🚀</div>
+            <div class="homeo-temp-display">Selected Angle: ${angle}°</div>
+          </div>
+
+          <div class="exp-condition-select-group">
+            <label class="exp-condition-label">Choose Launch Angle:</label>
+            <div class="exp-condition-buttons" style="grid-template-columns: repeat(5, 1fr); font-size:0.75rem;">
+              <button class="exp-cond-btn ${angle === 15 ? 'active' : ''}" onclick="Experiment.setProjectileAngle(15)">15°</button>
+              <button class="exp-cond-btn ${angle === 30 ? 'active' : ''}" onclick="Experiment.setProjectileAngle(30)">30°</button>
+              <button class="exp-cond-btn ${angle === 45 ? 'active' : ''}" onclick="Experiment.setProjectileAngle(45)">45°</button>
+              <button class="exp-cond-btn ${angle === 60 ? 'active' : ''}" onclick="Experiment.setProjectileAngle(60)">60°</button>
+              <button class="exp-cond-btn ${angle === 75 ? 'active' : ''}" onclick="Experiment.setProjectileAngle(75)">75°</button>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startProjectileSimulation()">
+            🏀 [ LAUNCH ]
+          </button>
+        </div>
+        `;
+      } else {
+        let rangeMap = { 15: 50, 30: 86.6, 45: 100, 60: 86.6, 75: 50 };
+        let currentRange = rangeMap[angle];
+
+        // Trajectory SVG path curves based on angle
+        let pathMap = {
+          15: "M 20,90 Q 70,75 140,90",
+          30: "M 20,90 Q 110,40 210,90",
+          45: "M 20,90 Q 150,15 280,90",
+          60: "M 20,90 Q 120,5 210,90",
+          75: "M 20,90 Q 80,0 140,90"
+        };
+
+        html += `
+          <div class="exp-result-container physical-result">
+            <div class="pop-graph-box">
+              <div class="pop-graph-header">
+                <span>Projectile Trajectory (${angle}°)</span>
+                <span class="resource-pill">Range: ${currentRange}m ${angle === 45 ? '🎯 MAXIMUM' : ''}</span>
+              </div>
+              <svg viewBox="0 0 300 110" style="width:100%; height:110px; overflow:visible;">
+                <line x1="10" y1="90" x2="290" y2="90" stroke="#94A3B8" stroke-width="1.5"/>
+                <path d="${pathMap[angle]}" fill="none" stroke="${angle === 45 ? '#10B981' : '#3B82F6'}" stroke-width="3" stroke-dasharray="4,2"/>
+                <circle cx="20" cy="90" r="4" fill="#3B82F6"/>
+                <text x="20" y="105" font-size="9" fill="#64748B">Cannon</text>
+                <text x="${angle === 45 ? 275 : (angle === 30 || angle === 60 ? 205 : 135)}" y="105" font-size="9" fill="#0F172A" font-weight="bold">${currentRange}m</text>
+              </svg>
+            </div>
+
+            <div class="result-badge maintained" style="background:${angle === 45 ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)'};">
+              🎯 PROJECTILE RANGE (${angle}° ➔ ${angle === 45 ? 'Maximum Range!' : currentRange + 'm'})
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>When air resistance is ignored and launch & landing heights are the same, a launch angle of about <b>45°</b> produces the greatest horizontal range for a given initial speed.</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Changing the launch angle changes the projectile's trajectory, flight time, and horizontal range.
+            </div>
+
+            <div class="exp-info-panel" style="background:#FFFBEB; border-color:#FCD34D; margin-top:10px;">
+              <div style="font-weight:800; color:#92400E; font-size:0.88rem; margin-bottom:6px;">❓ Challenge: Which angle gives the greatest range when launch and landing heights are equal?</div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                ${[15, 30, 45, 60, 75].map(a => `
+                  <button class="exp-cond-btn ${this.projectileAnswer === String(a) ? 'active' : ''}" onclick="Experiment.answerProjectileChallenge('${a}')">${a}°</button>
+                `).join('')}
+              </div>
+              ${this.projectileAnswer === '45' ? `
+                <div style="color:#15803D; font-weight:800; font-size:0.85rem; margin-top:8px;">✅ Correct! 45° produces maximum horizontal range.</div>
+              ` : (this.projectileAnswer ? `
+                <div style="color:#B91C1C; font-weight:800; font-size:0.85rem; margin-top:8px;">❌ Try again! Hint: Look for the angle with 100m range.</div>
+              ` : '')}
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetProjectileActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else if (mode === 'velocity') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🏹 EXPERIMENT 2 — Initial Velocity and Projectile Motion</div>
+          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
+            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+              <b>Goal:</b> Demonstrate how increasing the initial velocity changes the distance and height of a projectile.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="homeo-body-card">
+            <div class="homeo-body-icon">🏹</div>
+            <div class="homeo-temp-display">Initial Velocity: ${vel.toUpperCase()}</div>
+          </div>
+
+          <div class="exp-condition-select-group">
+            <label class="exp-condition-label">Choose Initial Velocity:</label>
+            <div class="exp-condition-buttons" style="grid-template-columns: 1fr 1fr 1fr; font-size:0.75rem;">
+              <button class="exp-cond-btn ${vel === 'low' ? 'active' : ''}" onclick="Experiment.setProjectileVel('low')">🟢 Low Velocity</button>
+              <button class="exp-cond-btn ${vel === 'medium' ? 'active' : ''}" onclick="Experiment.setProjectileVel('medium')">🟡 Medium Velocity</button>
+              <button class="exp-cond-btn ${vel === 'high' ? 'active' : ''}" onclick="Experiment.setProjectileVel('high')">🔴 High Velocity</button>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startProjectileSimulation()">
+            🏹 [ LAUNCH PROJECTILE ]
+          </button>
+        </div>
+        `;
+      } else {
+        html += `
+          <div class="exp-result-container physical-result">
+            <div class="homeo-body-card" style="margin:0; width:100%;">
+              <div class="homeo-body-icon">🏹</div>
+              <div class="homeo-temp-display">Velocity Level: ${vel.toUpperCase()}</div>
+              
+              <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:0.82rem;">
+                <tr style="background:#F1F5F9;">
+                  <th style="padding:6px; border:1px solid #CBD5E1;">Velocity</th>
+                  <th style="padding:6px; border:1px solid #CBD5E1;">Height</th>
+                  <th style="padding:6px; border:1px solid #CBD5E1;">Range</th>
+                </tr>
+                <tr style="${vel === 'low' ? 'background:#DCFCE7; font-weight:bold;' : ''}">
+                  <td style="padding:6px; border:1px solid #CBD5E1;">Low 🟢</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">Lower (15m)</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">Shorter (40m)</td>
+                </tr>
+                <tr style="${vel === 'medium' ? 'background:#FEF3C7; font-weight:bold;' : ''}">
+                  <td style="padding:6px; border:1px solid #CBD5E1;">Medium 🟡</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">Higher (35m)</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">Longer (80m)</td>
+                </tr>
+                <tr style="${vel === 'high' ? 'background:#FEE2E2; font-weight:bold;' : ''}">
+                  <td style="padding:6px; border:1px solid #CBD5E1;">High 🔴</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">Highest (70m)</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">Longest (150m)</td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
+              🏹 VELOCITY EFFECT MEASURED
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Increasing initial velocity generally increases the projectile's range and maximum height when other conditions are kept constant.
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetProjectileActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else {
+      // 📚 FINAL PROJECTILE PANEL
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">📚 Final Projectile Motion Panel</div>
+
+          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+            <h5 style="color:#6D28D9;">Projectile Motion = Horizontal Motion + Vertical Motion</h5>
+            
+            <ul style="margin-top:8px;">
+              <li><b>Horizontal Motion (➡️):</b> Approximately constant velocity (no horizontal acceleration).</li>
+              <li><b>Vertical Motion (⬇️):</b> Accelerated downward by gravity ($g = 9.8\text{ m/s}^2$).</li>
+            </ul>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-objective-box">
+              <h5>🎯 Main Learning Objective</h5>
+              <p><b>Projectile motion is the motion of an object launched into the air while gravity affects its vertical motion.</b></p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchProjectileMode('angle')">
+              🏀 Exp 1: Angle
+            </button>
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchProjectileMode('velocity')">
+              🏹 Exp 2: Velocity
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  switchMomentumMode(mode) {
+    this.momentumMode = mode;
+    this.momentumStarted = false;
+    this.momentumAnswer = null;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderMomentumActivity(canvasBox);
+  },
+
+  setMomentumMass(m) {
+    this.momentumMass = m;
+    this.momentumStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderMomentumActivity(canvasBox);
+  },
+
+  setMomentumVel(v) {
+    this.momentumVel = v;
+    this.momentumStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderMomentumActivity(canvasBox);
+  },
+
+  startMomentumSimulation() {
+    this.momentumStarted = true;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderMomentumActivity(canvasBox);
+  },
+
+  answerMomentumChallenge(ans) {
+    this.momentumAnswer = ans;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderMomentumActivity(canvasBox);
+  },
+
+  resetMomentumActivity() {
+    this.momentumStarted = false;
+    this.momentumAnswer = null;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderMomentumActivity(canvasBox);
+  },
+
+  renderMomentumActivity(container) {
+    const mode = this.momentumMode; // 'momentum', 'collision', 'summary'
+    const m = this.momentumMass; // 1, 2, 5
+    const v = this.momentumVel; // 1, 2, 5
+    const isStarted = this.momentumStarted;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <div class="exp-mode-toggle-group" style="grid-template-columns: 1fr 1fr 1fr; font-size: 0.78rem;">
+          <button class="exp-mode-btn ${mode === 'momentum' ? 'active' : ''}" onclick="Experiment.switchMomentumMode('momentum')">
+            🚗 Exp 1: Momentum (mv)
+          </button>
+          <button class="exp-mode-btn ${mode === 'collision' ? 'active' : ''}" onclick="Experiment.switchMomentumMode('collision')">
+            💥 Exp 2: Collisions
+          </button>
+          <button class="exp-mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="Experiment.switchMomentumMode('summary')">
+            📚 Learning Panel
+          </button>
+        </div>
+    `;
+
+    if (mode === 'momentum') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🚗 EXPERIMENT 1 — Momentum: Mass and Velocity</div>
+          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
+            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+              <b>Goal:</b> Demonstrate how mass and velocity affect momentum.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="homeo-body-card">
+            <div class="homeo-body-icon">🛒</div>
+            <div class="homeo-temp-display">Cart Setup: Mass = ${m} kg | Velocity = ${v} m/s</div>
+          </div>
+
+          <div class="exp-condition-select-group">
+            <label class="exp-condition-label">Choose Mass (m):</label>
+            <div class="exp-condition-buttons" style="grid-template-columns: 1fr 1fr 1fr; font-size:0.75rem;">
+              <button class="exp-cond-btn ${m === 1 ? 'active' : ''}" onclick="Experiment.setMomentumMass(1)">1 kg</button>
+              <button class="exp-cond-btn ${m === 2 ? 'active' : ''}" onclick="Experiment.setMomentumMass(2)">2 kg</button>
+              <button class="exp-cond-btn ${m === 5 ? 'active' : ''}" onclick="Experiment.setMomentumMass(5)">5 kg</button>
+            </div>
+          </div>
+
+          <div class="exp-condition-select-group" style="margin-top:8px;">
+            <label class="exp-condition-label">Choose Velocity (v):</label>
+            <div class="exp-condition-buttons" style="grid-template-columns: 1fr 1fr 1fr; font-size:0.75rem;">
+              <button class="exp-cond-btn ${v === 1 ? 'active' : ''}" onclick="Experiment.setMomentumVel(1)">1 m/s</button>
+              <button class="exp-cond-btn ${v === 2 ? 'active' : ''}" onclick="Experiment.setMomentumVel(2)">2 m/s</button>
+              <button class="exp-cond-btn ${v === 5 ? 'active' : ''}" onclick="Experiment.setMomentumVel(5)">5 m/s</button>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startMomentumSimulation()">
+            ⚡ [ CALCULATE MOMENTUM ]
+          </button>
+        </div>
+        `;
+      } else {
+        let p = m * v;
+
+        html += `
+          <div class="exp-result-container physical-result">
+            <div class="homeo-body-card" style="margin:0; width:100%;">
+              <div class="homeo-body-icon">⚡</div>
+              <div class="homeo-temp-display" style="background:#DCFCE7; border-color:#86EFAC; color:#15803D;">
+                p = m × v = ${m} kg × ${v} m/s = ${p} kg·m/s
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
+              ⚡ MOMENTUM = ${p} kg·m/s
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>Increasing mass increases momentum. Increasing velocity also increases momentum.</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Momentum depends on both mass and velocity (<i>p = mv</i>).
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetMomentumActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else if (mode === 'collision') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">💥 EXPERIMENT 2 — Collision and Conservation of Momentum</div>
+          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
+            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+              <b>Goal:</b> Demonstrate that total momentum is conserved in an isolated collision.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="homeo-body-card">
+            <div style="font-size:1.8rem; margin-bottom:4px;">🛒 Cart A → 💥 ← Cart B 🛒</div>
+            <div style="font-size:0.82rem; font-weight:800; color:#334155;">
+              Cart A: 2 kg @ +3 m/s (p = +6) | Cart B: 2 kg @ -1 m/s (p = -2)
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startMomentumSimulation()">
+            💥 [ COLLIDE ]
+          </button>
+        </div>
+        `;
+      } else {
+        html += `
+          <div class="exp-result-container physical-result">
+            <div class="homeo-body-card" style="margin:0; width:100%;">
+              <div style="font-size:0.88rem; font-weight:800; color:#1E293B;">
+                Before Collision: p_total = (2 × 3) + (2 × -1) = 6 - 2 = <b>4 kg·m/s</b>
+              </div>
+              <div style="font-size:0.88rem; font-weight:800; color:#15803D; margin-top:6px;">
+                After Collision: p_total = <b>4 kg·m/s</b>
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
+              ✅ MOMENTUM CONSERVED (Before = After = 4 kg·m/s)
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>In an isolated system, the total momentum before a collision equals the total momentum after the collision.</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Total momentum before collision = Total momentum after collision.
+            </div>
+
+            <div class="exp-info-panel" style="background:#FFFBEB; border-color:#FCD34D; margin-top:10px;">
+              <div style="font-weight:800; color:#92400E; font-size:0.88rem; margin-bottom:6px;">❓ Challenge: What happens to total momentum after the collision?</div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button class="exp-cond-btn ${this.momentumAnswer === 'inc' ? 'active' : ''}" onclick="Experiment.answerMomentumChallenge('inc')">Increases</button>
+                <button class="exp-cond-btn ${this.momentumAnswer === 'dec' ? 'active' : ''}" onclick="Experiment.answerMomentumChallenge('dec')">Decreases</button>
+                <button class="exp-cond-btn ${this.momentumAnswer === 'same' ? 'active' : ''}" onclick="Experiment.answerMomentumChallenge('same')">Remains the same</button>
+              </div>
+              ${this.momentumAnswer === 'same' ? `
+                <div style="color:#15803D; font-weight:800; font-size:0.85rem; margin-top:8px;">✅ Correct! Total momentum remains the same assuming no external forces.</div>
+              ` : (this.momentumAnswer ? `
+                <div style="color:#B91C1C; font-weight:800; font-size:0.85rem; margin-top:8px;">❌ Try again! Hint: Total momentum is conserved.</div>
+              ` : '')}
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetMomentumActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else {
+      // 📚 FINAL MOMENTUM PANEL
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">📚 Final Momentum & Collisions Panel</div>
+
+          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+            <h5 style="color:#6D28D9;">Momentum and Collisions</h5>
+            <p>Momentum (<i>p = mv</i>) measures an object's mass in motion. In collisions, momentum transfers between objects while total momentum remains conserved.</p>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-objective-box">
+              <h5>🎯 Main Learning Objective</h5>
+              <p><b>Momentum depends on mass and velocity, and total momentum is conserved during collisions in an isolated system.</b></p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchMomentumMode('momentum')">
+              🚗 Exp 1: Momentum
+            </button>
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchMomentumMode('collision')">
+              💥 Exp 2: Collisions
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  switchElectricityMode(mode) {
+    this.electricityMode = mode;
+    this.electricityStarted = false;
+    this.electricityAnswer = null;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderElectricityActivity(canvasBox);
+  },
+
+  setVoltageType(type) {
+    this.voltageType = type;
+    this.electricityStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderElectricityActivity(canvasBox);
+  },
+
+  startElectricitySimulation() {
+    this.electricityStarted = true;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderElectricityActivity(canvasBox);
+  },
+
+  answerElectricityChallenge(ans) {
+    this.electricityAnswer = ans;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderElectricityActivity(canvasBox);
+  },
+
+  resetElectricityActivity() {
+    this.electricityStarted = false;
+    this.electricityAnswer = null;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderElectricityActivity(canvasBox);
+  },
+
+  renderElectricityActivity(container) {
+    const mode = this.electricityMode; // 'grid', 'voltage', 'summary'
+    const type = this.voltageType; // 'low', 'high'
+    const isStarted = this.electricityStarted;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <div class="exp-mode-toggle-group" style="grid-template-columns: 1fr 1fr 1fr; font-size: 0.78rem;">
+          <button class="exp-mode-btn ${mode === 'grid' ? 'active' : ''}" onclick="Experiment.switchElectricityMode('grid')">
+            ⚡ Exp 1: Power Plant to Home
+          </button>
+          <button class="exp-mode-btn ${mode === 'voltage' ? 'active' : ''}" onclick="Experiment.switchElectricityMode('voltage')">
+            🔥 Exp 2: High Voltage
+          </button>
+          <button class="exp-mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="Experiment.switchElectricityMode('summary')">
+            📚 Learning Panel
+          </button>
+        </div>
+    `;
+
+    if (mode === 'grid') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">⚡ EXPERIMENT 1 — Power Plant to Home</div>
+          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
+            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+              <b>Goal:</b> Demonstrate the complete journey of electricity from a power plant to a household.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="homeo-body-card">
+            <div style="font-size:1.8rem; margin-bottom:4px;">🏭 ➔ ⚡ ➔ 🗼 ➔ 🔌 ➔ 🏘️ ➔ 🏠</div>
+            <div style="font-size:0.82rem; font-weight:800; color:#334155;">Power Grid Stage: Ready to Transmit</div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startElectricitySimulation()">
+            ⚡ [ START POWER FLOW ]
+          </button>
+        </div>
+        `;
+      } else {
+        html += `
+          <div class="exp-result-container physical-result">
+            <div class="recombinant-flow">
+              <div class="recombinant-step-card">
+                <span style="font-size:1.5rem;">🏭</span>
+                <span><b>Power Plant:</b> Generates electrical energy</span>
+              </div>
+              <div style="color:#8B5CF6;">⬇️</div>
+              <div class="recombinant-step-card">
+                <span style="font-size:1.5rem;">⚡</span>
+                <span><b>Step-Up Transformer:</b> Raises voltage for long distances</span>
+              </div>
+              <div style="color:#8B5CF6;">⬇️</div>
+              <div class="recombinant-step-card">
+                <span style="font-size:1.5rem;">🗼</span>
+                <span><b>Transmission Lines:</b> Carries high-voltage power</span>
+              </div>
+              <div style="color:#8B5CF6;">⬇️</div>
+              <div class="recombinant-step-card">
+                <span style="font-size:1.5rem;">🔌</span>
+                <span><b>Step-Down Transformer:</b> Reduces voltage for safe local use</span>
+              </div>
+              <div style="color:#8B5CF6;">⬇️</div>
+              <div class="recombinant-step-card" style="border-color:#10B981; background:#ECFDF5;">
+                <span style="font-size:1.5rem;">🏠</span>
+                <span style="color:#065F46;"><b>Home & Electric Meter:</b> Measures and uses electricity</span>
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
+              ⚡ ELECTRICITY DELIVERED SAFELY
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Electricity is generated, transmitted at high voltage, stepped down, and distributed to consumers.
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetElectricityActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else if (mode === 'voltage') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">⚡ EXPERIMENT 2 — Why High Voltage Is Used</div>
+          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
+            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+              <b>Goal:</b> Demonstrate why electricity is transmitted at high voltage.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        const isHigh = (type === 'high');
+
+        html += `
+          <div class="homeo-body-card">
+            <div class="homeo-body-icon">${isHigh ? '⚡' : '🔥'}</div>
+            <div class="homeo-temp-display">Transmission Voltage: ${isHigh ? 'High Voltage (Low I)' : 'Low Voltage (High I)'}</div>
+          </div>
+
+          <div class="exp-condition-select-group">
+            <label class="exp-condition-label">Choose Voltage System:</label>
+            <div class="exp-condition-buttons">
+              <button class="exp-cond-btn ${!isHigh ? 'active' : ''}" onclick="Experiment.setVoltageType('low')">🟢 Low Voltage</button>
+              <button class="exp-cond-btn ${isHigh ? 'active' : ''}" onclick="Experiment.setVoltageType('high')">🔵 High Voltage</button>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startElectricitySimulation()">
+            ⚡ [ COMPARE TRANSMISSION ]
+          </button>
+        </div>
+        `;
+      } else {
+        const isHigh = (type === 'high');
+
+        html += `
+          <div class="exp-result-container ${isHigh ? 'physical-result' : 'chemical-result'}">
+            <div class="homeo-body-card" style="margin:0; width:100%; border-color:${isHigh ? '#86EFAC' : '#FCA5A5'}; background:${isHigh ? '#F0FDF4' : '#FEF2F2'};">
+              <div class="homeo-body-icon">${isHigh ? '⚡' : '🔥'}</div>
+              <div class="homeo-temp-display" style="color:${isHigh ? '#15803D' : '#B91C1C'};">
+                Power Loss Formula: P_loss = I² × R
+              </div>
+              <div style="font-size:0.88rem; font-weight:800; color:${isHigh ? '#166534' : '#991B1B'}; margin-top:6px;">
+                ${isHigh ? '⚡ High Voltage → Lower Current → Less Energy Loss!' : '🔥 Low Voltage → Higher Current → Greater Energy Loss!'}
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:${isHigh ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #EF4444 0%, #B91C1C 100%)'};">
+              ${isHigh ? '⚡ HIGH VOLTAGE (Efficient Transmission)' : '🔥 LOW VOLTAGE (Excessive Heat Loss)'}
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>For the same transmitted power, increasing voltage reduces the current. Because resistive power loss depends on the square of current (<i>P_loss = I²R</i>), using high voltage greatly reduces energy loss during long-distance transmission.</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> High voltage allows electricity to be transmitted more efficiently over long distances.
+            </div>
+
+            <div class="exp-info-panel" style="background:#FFFBEB; border-color:#FCD34D; margin-top:10px;">
+              <div style="font-weight:800; color:#92400E; font-size:0.88rem; margin-bottom:6px;">❓ Challenge: Why is electricity transmitted at high voltage?</div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <button class="exp-cond-btn ${this.electricityAnswer === 'curr' ? 'active' : ''}" onclick="Experiment.answerElectricityChallenge('curr')">To increase current</button>
+                <button class="exp-cond-btn ${this.electricityAnswer === 'loss' ? 'active' : ''}" onclick="Experiment.answerElectricityChallenge('loss')">To reduce current and minimize energy loss in transmission lines</button>
+                <button class="exp-cond-btn ${this.electricityAnswer === 'short' ? 'active' : ''}" onclick="Experiment.answerElectricityChallenge('short')">To make wires shorter</button>
+              </div>
+              ${this.electricityAnswer === 'loss' ? `
+                <div style="color:#15803D; font-weight:800; font-size:0.85rem; margin-top:8px;">✅ Correct! Reducing current minimizes I²R power loss.</div>
+              ` : (this.electricityAnswer ? `
+                <div style="color:#B91C1C; font-weight:800; font-size:0.85rem; margin-top:8px;">❌ Try again! Hint: Remember P_loss = I²R.</div>
+              ` : '')}
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetElectricityActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else {
+      // 📚 FINAL ELECTRICITY PANEL
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">📚 Final Electricity Distribution Panel</div>
+
+          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+            <h5 style="color:#6D28D9;">Electricity Generation & Distribution</h5>
+            <p>Power plants generate electricity, step-up transformers raise voltage for long-distance grid transmission, and step-down transformers lower voltage to safe levels for homes.</p>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-objective-box">
+              <h5>🎯 Main Learning Objective</h5>
+              <p><b>Electricity is generated, transmitted at high voltage to minimize energy loss, stepped down, and distributed safely to consumers.</b></p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchElectricityMode('grid')">
+              ⚡ Exp 1: Power Grid
+            </button>
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchElectricityMode('voltage')">
+              🔥 Exp 2: High Voltage
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  switchEnergyMixMode(mode) {
+    this.energyMixMode = mode;
+    this.energyMixStarted = false;
+    this.energyMixAnswer = null;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderEnergyMixActivity(canvasBox);
+  },
+
+  setEnergySourceType(type) {
+    this.energySourceType = type;
+    this.energyMixStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderEnergyMixActivity(canvasBox);
+  },
+
+  toggleRenewableSource(sourceKey) {
+    this.activeRenewables[sourceKey] = !this.activeRenewables[sourceKey];
+    this.energyMixStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderEnergyMixActivity(canvasBox);
+  },
+
+  startEnergyMixSimulation() {
+    this.energyMixStarted = true;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderEnergyMixActivity(canvasBox);
+  },
+
+  answerEnergyMixChallenge(ans) {
+    this.energyMixAnswer = ans;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderEnergyMixActivity(canvasBox);
+  },
+
+  resetEnergyMixActivity() {
+    this.energyMixStarted = false;
+    this.energyMixAnswer = null;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderEnergyMixActivity(canvasBox);
+  },
+
+  renderEnergyMixActivity(container) {
+    const mode = this.energyMixMode; // 'compare', 'mix', 'summary'
+    const type = this.energySourceType; // 'solar', 'coal'
+    const isStarted = this.energyMixStarted;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <div class="exp-mode-toggle-group" style="grid-template-columns: 1fr 1fr 1fr; font-size: 0.78rem;">
+          <button class="exp-mode-btn ${mode === 'compare' ? 'active' : ''}" onclick="Experiment.switchEnergyMixMode('compare')">
+            ☀️ Exp 1: Solar vs. Coal
+          </button>
+          <button class="exp-mode-btn ${mode === 'mix' ? 'active' : ''}" onclick="Experiment.switchEnergyMixMode('mix')">
+            🌬️ Exp 2: Renewable Mix
+          </button>
+          <button class="exp-mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="Experiment.switchEnergyMixMode('summary')">
+            📚 Learning Panel
+          </button>
+        </div>
+    `;
+
+    if (mode === 'compare') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">☀️ EXPERIMENT 1 — Solar vs. Fossil Fuel Energy</div>
+          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
+            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+              <b>Goal:</b> Compare a renewable energy source with a non-renewable energy source.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        const isSolar = (type === 'solar');
+
+        html += `
+          <div class="homeo-body-card">
+            <div class="homeo-body-icon">${isSolar ? '☀️' : '🪨'}</div>
+            <div class="homeo-temp-display">Selected Energy Source: ${isSolar ? '☀️ Solar Energy (Renewable)' : '🪨 Coal (Non-Renewable)'}</div>
+          </div>
+
+          <div class="exp-condition-select-group">
+            <label class="exp-condition-label">Choose Energy Source:</label>
+            <div class="exp-condition-buttons">
+              <button class="exp-cond-btn ${isSolar ? 'active' : ''}" onclick="Experiment.setEnergySourceType('solar')">☀️ Solar Energy</button>
+              <button class="exp-cond-btn ${!isSolar ? 'active' : ''}" onclick="Experiment.setEnergySourceType('coal')">🪨 Coal</button>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startEnergyMixSimulation()">
+            ⚡ [ GENERATE ELECTRICITY ]
+          </button>
+        </div>
+        `;
+      } else {
+        const isSolar = (type === 'solar');
+
+        html += `
+          <div class="exp-result-container ${isSolar ? 'physical-result' : 'chemical-result'}">
+            <div class="recombinant-flow">
+              ${isSolar ? `
+                <div class="recombinant-step-card">
+                  <span style="font-size:1.5rem;">☀️</span>
+                  <span><b>Sunlight</b> shines continuously</span>
+                </div>
+                <div style="color:#10B981;">⬇️</div>
+                <div class="recombinant-step-card">
+                  <span style="font-size:1.5rem;">🔲</span>
+                  <span><b>Solar Panels</b> convert photons to electricity</span>
+                </div>
+                <div style="color:#10B981;">⬇️</div>
+                <div class="recombinant-step-card" style="border-color:#10B981; background:#ECFDF5;">
+                  <span style="font-size:1.5rem;">⚡</span>
+                  <span style="color:#065F46;"><b>Clean Electricity Generated!</b></span>
+                </div>
+              ` : `
+                <div class="recombinant-step-card">
+                  <span style="font-size:1.5rem;">🪨</span>
+                  <span><b>Coal</b> mined from ground</span>
+                </div>
+                <div style="color:#EF4444;">⬇️</div>
+                <div class="recombinant-step-card">
+                  <span style="font-size:1.5rem;">🔥</span>
+                  <span><b>Combustion</b> generates steam turbine rotation</span>
+                </div>
+                <div style="color:#EF4444;">⬇️</div>
+                <div class="recombinant-step-card" style="border-color:#EF4444; background:#FEF2F2;">
+                  <span style="font-size:1.5rem;">⚡</span>
+                  <span style="color:#991B1B;"><b>Electricity Generated (Fuel Consumed)</b></span>
+                </div>
+              `}
+            </div>
+
+            <div class="result-badge maintained" style="background:${isSolar ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #D97706 0%, #B45309 100%)'};">
+              ${isSolar ? '♻️ RENEWABLE ENERGY (Naturally Replenished)' : '⛏️ NON-RENEWABLE ENERGY (Finite Fossil Fuel)'}
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>Comparison Summary</h5>
+              <table style="width:100%; border-collapse:collapse; margin-top:6px; font-size:0.82rem;">
+                <tr style="background:#F1F5F9;">
+                  <th style="padding:6px; border:1px solid #CBD5E1;">Feature</th>
+                  <th style="padding:6px; border:1px solid #CBD5E1; color:#059669;">☀️ Solar</th>
+                  <th style="padding:6px; border:1px solid #CBD5E1; color:#B45309;">🪨 Coal</th>
+                </tr>
+                <tr>
+                  <td style="padding:6px; border:1px solid #CBD5E1; font-weight:700;">Type</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">Renewable</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">Non-renewable</td>
+                </tr>
+                <tr>
+                  <td style="padding:6px; border:1px solid #CBD5E1; font-weight:700;">Replenished</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">Yes</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">No, takes millions of yrs</td>
+                </tr>
+                <tr>
+                  <td style="padding:6px; border:1px solid #CBD5E1; font-weight:700;">Generation</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">Solar panels</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">Thermal power plant</td>
+                </tr>
+                <tr>
+                  <td style="padding:6px; border:1px solid #CBD5E1; font-weight:700;">Fuel Consumed</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">No</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">Yes</td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Renewable resources are naturally replenished, while non-renewable resources are finite and take very long periods to form.
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetEnergyMixActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else if (mode === 'mix') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🌬️ EXPERIMENT 2 — Renewable Energy Mix</div>
+          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
+            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+              <b>Goal:</b> Demonstrate how different renewable energy sources can contribute to electricity generation.
+            </p>
+          </div>
+      `;
+
+      const ren = this.activeRenewables;
+      let totalMW = 0;
+      if (ren.solar) totalMW += 25;
+      if (ren.wind) totalMW += 25;
+      if (ren.hydro) totalMW += 25;
+      if (ren.geo) totalMW += 25;
+
+      if (!isStarted) {
+        html += `
+          <div style="margin:10px 0;">
+            <div class="homeo-temp-display" style="margin-bottom:10px;">
+              ⚡ Renewable Grid Output: ${totalMW} MW
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+              <button class="exp-cond-btn ${ren.solar ? 'active' : ''}" onclick="Experiment.toggleRenewableSource('solar')">☀️ Solar (25 MW)</button>
+              <button class="exp-cond-btn ${ren.wind ? 'active' : ''}" onclick="Experiment.toggleRenewableSource('wind')">🌬️ Wind (25 MW)</button>
+              <button class="exp-cond-btn ${ren.hydro ? 'active' : ''}" onclick="Experiment.toggleRenewableSource('hydro')">💧 Hydro (25 MW)</button>
+              <button class="exp-cond-btn ${ren.geo ? 'active' : ''}" onclick="Experiment.toggleRenewableSource('geo')">🌋 Geothermal (25 MW)</button>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startEnergyMixSimulation()">
+            ⚡ [ GENERATE POWER ]
+          </button>
+        </div>
+        `;
+      } else {
+        html += `
+          <div class="exp-result-container physical-result">
+            <div class="homeo-body-card" style="margin:0; width:100%;">
+              <div class="homeo-body-icon">⚡</div>
+              <div class="homeo-temp-display" style="background:#DCFCE7; border-color:#86EFAC; color:#15803D;">
+                Total Clean Electricity Generated: ${totalMW} MW
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
+              ⚡ RENEWABLE ENERGY MIX (${totalMW} MW Active)
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>Renewable energy sources use naturally replenished resources such as sunlight, wind, moving water, and Earth's internal heat. Combining different renewable sources creates a balanced energy grid.</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Renewable energy comes from resources that are naturally replenished, while non-renewable energy relies on finite resources.
+            </div>
+
+            <div class="exp-info-panel" style="background:#FFFBEB; border-color:#FCD34D; margin-top:10px;">
+              <div style="font-weight:800; color:#92400E; font-size:0.88rem; margin-bottom:6px;">❓ Challenge: Which of these energy sources is non-renewable?</div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button class="exp-cond-btn ${this.energyMixAnswer === 'solar' ? 'active' : ''}" onclick="Experiment.answerEnergyMixChallenge('solar')">☀️ Solar</button>
+                <button class="exp-cond-btn ${this.energyMixAnswer === 'wind' ? 'active' : ''}" onclick="Experiment.answerEnergyMixChallenge('wind')">🌬️ Wind</button>
+                <button class="exp-cond-btn ${this.energyMixAnswer === 'hydro' ? 'active' : ''}" onclick="Experiment.answerEnergyMixChallenge('hydro')">💧 Hydropower</button>
+                <button class="exp-cond-btn ${this.energyMixAnswer === 'coal' ? 'active' : ''}" onclick="Experiment.answerEnergyMixChallenge('coal')">🪨 Coal</button>
+              </div>
+              ${this.energyMixAnswer === 'coal' ? `
+                <div style="color:#15803D; font-weight:800; font-size:0.85rem; margin-top:8px;">✅ Correct! Coal is a non-renewable fossil fuel.</div>
+              ` : (this.energyMixAnswer ? `
+                <div style="color:#B91C1C; font-weight:800; font-size:0.85rem; margin-top:8px;">❌ Try again! Hint: Look for the fossil fuel.</div>
+              ` : '')}
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetEnergyMixActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else {
+      // 📚 FINAL ENERGY PANEL
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">📚 Final Energy Sources Panel</div>
+
+          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+            <h5 style="color:#15803D;">♻️ Renewable Energy</h5>
+            <p>☀️ Solar | 🌬️ Wind | 💧 Hydropower | 🌋 Geothermal</p>
+            <div style="font-size:0.82rem; font-weight:700; color:#166534; margin-top:4px;">Naturally replenished by nature.</div>
+
+            <h5 style="color:#B91C1C; margin-top:10px;">⛏️ Non-Renewable Energy</h5>
+            <p>🪨 Coal | 🛢️ Oil | 🔥 Natural Gas</p>
+            <div style="font-size:0.82rem; font-weight:700; color:#991B1B; margin-top:4px;">Finite resources that take millions of years to form.</div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-objective-box">
+              <h5>🎯 Main Learning Objective</h5>
+              <p><b>Energy sources can be classified as renewable or non-renewable based on how quickly nature replenishes them.</b></p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchEnergyMixMode('compare')">
+              ☀️ Exp 1: Solar vs Coal
+            </button>
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchEnergyMixMode('mix')">
+              🌬️ Exp 2: Renewable Mix
             </button>
           </div>
         </div>
