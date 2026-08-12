@@ -3736,25 +3736,51 @@
 .baby-avatar-wrapper {
   position: relative;
   cursor: pointer;
-  margin: 10px 0;
+  margin: 12px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .baby-char-img {
-  width: 130px;
-  height: 130px;
+  width: 140px;
+  height: 140px;
+  max-width: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 6px 12px rgba(56, 189, 248, 0.25));
-  transition: transform 0.3s ease;
+  filter: drop-shadow(0 8px 16px rgba(56, 189, 248, 0.3));
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.baby-avatar-wrapper:hover .baby-char-img {
+  transform: scale(1.05);
+  filter: drop-shadow(0 10px 20px rgba(56, 189, 248, 0.4));
+}
+
+.baby-avatar-wrapper:active .baby-char-img {
+  transform: scale(0.95);
+}
+
+.baby-char-img.tap-react {
+  animation: babyTapPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .baby-char-img.bounce-anim {
-  animation: babyWiggle 3s ease-in-out infinite;
+  animation: babyWiggle 3.5s ease-in-out infinite;
+}
+
+@keyframes babyTapPop {
+  0% { transform: scale(0.92); }
+  40% { transform: translateY(-10px) scale(1.12); }
+  100% { transform: translateY(0) scale(1); }
 }
 
 @keyframes babyWiggle {
   0%, 100% { transform: translateY(0) scale(1); }
-  30% { transform: translateY(-6px) scale(1.03) rotate(-3deg); }
-  70% { transform: translateY(-3px) scale(1.02) rotate(3deg); }
+  30% { transform: translateY(-5px) scale(1.03) rotate(-2deg); }
+  70% { transform: translateY(-2px) scale(1.01) rotate(2deg); }
 }
 
 .char-quote-label {

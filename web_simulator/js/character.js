@@ -12,7 +12,7 @@ const EVOLUTION_STAGES = [
     stage: 1, 
     title: 'BABY', 
     icon: '👶', 
-    image: 'assets/baby_character.jpg',
+    image: 'assets/baby-character.png',
     minXP: 0, 
     nextXP: 100, 
     color: '#38BDF8', 
@@ -58,6 +58,7 @@ const EVOLUTION_STAGES = [
 ];
 
 const BABY_INTERACTION_REACTIONS = [
+  "Yay! 👶",
   "Happy reaction! 👶",
   "Giggle giggle! 🧪",
   "Ready to learn with you! ⭐",
@@ -246,12 +247,14 @@ const CharacterSystem = {
 
     const img = document.querySelector('.baby-char-img, .char-avatar-icon');
     if (img) {
-      img.classList.remove('bounce-anim');
+      img.classList.remove('tap-react');
       void img.offsetWidth;
-      img.classList.add('bounce-anim');
+      img.classList.add('tap-react');
+      setTimeout(() => img.classList.remove('tap-react'), 450);
     }
 
-    setTimeout(() => {
+    if (this._bubbleTimer) clearTimeout(this._bubbleTimer);
+    this._bubbleTimer = setTimeout(() => {
       bubble.classList.add('hidden');
     }, 2500);
   },
