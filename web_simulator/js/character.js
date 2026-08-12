@@ -48,11 +48,11 @@ const EVOLUTION_STAGES = [
     stage: 4, 
     title: 'ADULT', 
     icon: '🧑', 
-    image: null,
+    image: 'assets/adult-character.png',
     minXP: 600, 
     nextXP: Infinity, 
     color: '#F59E0B', 
-    defaultQuote: "Final Stage — Science Grandmaster!",
+    defaultQuote: "Science Grandmaster & Expert!",
     desc: 'Science Grandmaster & Expert!' 
   }
 ];
@@ -82,6 +82,15 @@ const GRADUATE_INTERACTION_REACTIONS = [
   "Almost there! 🎯",
   "The next chapter awaits! ✨",
   "Mastering trivia & simulations! 🧪"
+];
+
+const ADULT_INTERACTION_REACTIONS = [
+  "Let's keep going! 🔬",
+  "We made it! 🏆",
+  "Great work! ⭐",
+  "Keep learning! 📚",
+  "What's next? 🚀",
+  "Science Grandmaster & Expert! 🌟"
 ];
 
 // --------------------------------------------------------------------------
@@ -212,7 +221,7 @@ const CharacterSystem = {
       untilNextText = `${diff} XP until ${EVOLUTION_STAGES[stage.stage].title}`;
     } else {
       nextReqText = `${xp} XP`;
-      untilNextText = `FINAL STAGE REACHED! 🎉`;
+      untilNextText = `🏆 FINAL STAGE`;
       pct = 100;
     }
 
@@ -251,8 +260,8 @@ const CharacterSystem = {
             <div class="char-progress-fill" style="width: ${pct}%; background: ${stage.color};"></div>
           </div>
           <div class="char-progress-sub-row">
-            <span>${nextReqText}</span>
-            <span style="font-weight: 800; color: ${stage.color};">${untilNextText}</span>
+            <span>${isAdult ? '⭐ ' + xp + ' XP' : nextReqText}</span>
+            <span style="font-weight: 800; color: ${stage.color};">${isAdult ? '🏆 FINAL STAGE COMPLETE' : untilNextText}</span>
           </div>
 
           <button class="earn-more-xp-btn" onclick="App.showScreen('playScreen')">
@@ -271,7 +280,9 @@ const CharacterSystem = {
     const stage = ProgressionSystem.getStageForXP(xp);
 
     let msg = "";
-    if (stage.id === 'graduate') {
+    if (stage.id === 'adult') {
+      msg = ADULT_INTERACTION_REACTIONS[Math.floor(Math.random() * ADULT_INTERACTION_REACTIONS.length)];
+    } else if (stage.id === 'graduate') {
       if (xp >= 550) {
         msg = "Almost at the final stage! 🧑";
       } else {
