@@ -2719,3 +2719,187 @@
   margin-top: 6px;
 }
 
+/* ---------------- 9. Homeostasis Styles ---------------- */
+.homeo-body-card {
+  background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+  border: 2px solid #3B82F6;
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.12);
+  margin: 12px 0;
+}
+
+.homeo-body-icon {
+  font-size: 3.2rem;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+}
+
+.homeo-temp-display {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #1E40AF;
+  background: #DBEAFE;
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid #BFDBFE;
+}
+
+.homeo-temp-display.hot {
+  color: #991B1B;
+  background: #FEE2E2;
+  border-color: #FCA5A5;
+}
+
+.homeo-temp-display.cold {
+  color: #0369A1;
+  background: #E0F2FE;
+  border-color: #7DD3FC;
+}
+
+.homeo-glucose-display {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #92400E;
+  background: #FEF3C7;
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid #FCD34D;
+}
+
+.homeo-glucose-display.high {
+  color: #991B1B;
+  background: #FEE2E2;
+  border-color: #FCA5A5;
+}
+
+.homeo-glucose-display.low {
+  color: #1E40AF;
+  background: #DBEAFE;
+  border-color: #BFDBFE;
+}
+
+.homeo-stepper-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 14px 0;
+  width: 100%;
+}
+
+.homeo-step-card {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.homeo-step-card .step-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.homeo-step-card .step-text {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1E293B;
+}
+
+.homeo-arrow-divider {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #8B5CF6;
+  margin: -2px 0;
+}
+
+.result-badge.maintained {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+  font-size: 1rem;
+  padding: 8px 18px;
+}
+
+.homeo-flow-diagram {
+  background: #F8FAFC;
+  border: 1px dashed #CBD5E1;
+  border-radius: 16px;
+  padding: 14px;
+  margin-top: 10px;
+}
+
+.homeo-flow-diagram h5 {
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #475569;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.homeo-flow-steps {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.homeo-flow-pill {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #334155;
+  text-align: center;
+  width: 90%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+
+.homeo-flow-arrow {
+  font-size: 0.85rem;
+  color: #94A3B8;
+}
+
+.homeo-five-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.five-step-card {
+  background: #FFFFFF;
+  border-left: 4px solid #8B5CF6;
+  border-top: 1px solid #E2E8F0;
+  border-right: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.five-step-card h6 {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #5B21B6;
+  margin-bottom: 2px;
+}
+
+.five-step-card p {
+  font-size: 0.82rem;
+  color: #475569;
+  margin: 0;
+}
+
+

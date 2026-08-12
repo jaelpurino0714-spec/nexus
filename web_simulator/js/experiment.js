@@ -49,6 +49,11 @@ const Experiment = {
   ratesStarted: false,
   ratesExp1Completed: false,
   ratesExp2Completed: false,
+  homeostasisMode: 'temperature', // 'temperature', 'glucose', or 'summary'
+  homeostasisCondition: 'hot', // 'hot' or 'cold' for temp; 'eat' or 'nofood' for glucose
+  homeostasisStarted: false,
+  homeostasisExp1Completed: false,
+  homeostasisExp2Completed: false,
 
   selectedItems: new Set(),
   isCombined: false,
@@ -133,6 +138,11 @@ const Experiment = {
         this.ratesCondition = 'without';
         this.ratesStarted = false;
         this.renderRatesActivity(canvasBox);
+      } else if (topicName === "Homeostasis") {
+        this.homeostasisMode = 'temperature';
+        this.homeostasisCondition = 'hot';
+        this.homeostasisStarted = false;
+        this.renderHomeostasisActivity(canvasBox);
       } else {
         canvasBox.innerHTML = ''; // Keep blank for other topics for now
       }
@@ -268,6 +278,8 @@ const Experiment = {
         this.renderBalancingChemicalEquationsActivity(canvasBox);
       } else if (this.currentTopic === "Rates of Reactions") {
         this.renderRatesActivity(canvasBox);
+      } else if (this.currentTopic === "Homeostasis") {
+        this.renderHomeostasisActivity(canvasBox);
       }
     }
   },
@@ -289,6 +301,8 @@ const Experiment = {
         this.renderBalancingChemicalEquationsActivity(canvasBox);
       } else if (this.currentTopic === "Rates of Reactions") {
         this.renderRatesActivity(canvasBox);
+      } else if (this.currentTopic === "Homeostasis") {
+        this.renderHomeostasisActivity(canvasBox);
       }
     }
   },
@@ -303,6 +317,7 @@ const Experiment = {
     this.hintIndex = 0;
     this.bSubmitted = false;
     this.ratesStarted = false;
+    this.homeostasisStarted = false;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) {
       if (this.currentTopic === "Physical vs. Chemical Change") {
@@ -317,6 +332,8 @@ const Experiment = {
         this.renderBalancingChemicalEquationsActivity(canvasBox);
       } else if (this.currentTopic === "Rates of Reactions") {
         this.renderRatesActivity(canvasBox);
+      } else if (this.currentTopic === "Homeostasis") {
+        this.renderHomeostasisActivity(canvasBox);
       }
     }
   },
@@ -1750,6 +1767,427 @@ const Experiment = {
             </button>
             <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchRatesMode('inhibitor')">
               🧪 Exp 2: Inhibitor
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  switchHomeostasisMode(mode) {
+    this.homeostasisMode = mode;
+    this.homeostasisCondition = mode === 'temperature' ? 'hot' : (mode === 'glucose' ? 'eat' : 'hot');
+    this.homeostasisStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderHomeostasisActivity(canvasBox);
+    }
+  },
+
+  setHomeostasisCondition(cond) {
+    this.homeostasisCondition = cond;
+    this.homeostasisStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderHomeostasisActivity(canvasBox);
+    }
+  },
+
+  startHomeostasisReaction() {
+    this.homeostasisStarted = true;
+    if (this.homeostasisMode === 'temperature') {
+      this.homeostasisExp1Completed = true;
+    } else if (this.homeostasisMode === 'glucose') {
+      this.homeostasisExp2Completed = true;
+    }
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderHomeostasisActivity(canvasBox);
+    }
+  },
+
+  resetHomeostasisActivity() {
+    this.homeostasisStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderHomeostasisActivity(canvasBox);
+    }
+  },
+
+  tryOtherHomeostasisCondition() {
+    if (this.homeostasisMode === 'temperature') {
+      this.homeostasisCondition = (this.homeostasisCondition === 'hot') ? 'cold' : 'hot';
+    } else if (this.homeostasisMode === 'glucose') {
+      this.homeostasisCondition = (this.homeostasisCondition === 'eat') ? 'nofood' : 'eat';
+    }
+    this.homeostasisStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderHomeostasisActivity(canvasBox);
+    }
+  },
+
+  renderHomeostasisActivity(container) {
+    const mode = this.homeostasisMode; // 'temperature', 'glucose', 'summary'
+    const cond = this.homeostasisCondition; // 'hot' / 'cold' or 'eat' / 'nofood'
+    const isStarted = this.homeostasisStarted;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <!-- 3 Top Mode Toggle Buttons -->
+        <div class="exp-mode-toggle-group" style="grid-template-columns: 1fr 1fr 1fr; font-size: 0.78rem;">
+          <button class="exp-mode-btn ${mode === 'temperature' ? 'active' : ''}" onclick="Experiment.switchHomeostasisMode('temperature')">
+            🌡️ Exp 1: Temp
+          </button>
+          <button class="exp-mode-btn ${mode === 'glucose' ? 'active' : ''}" onclick="Experiment.switchHomeostasisMode('glucose')">
+            🍬 Exp 2: Glucose
+          </button>
+          <button class="exp-mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="Experiment.switchHomeostasisMode('summary')">
+            📚 Learning Panel
+          </button>
+        </div>
+    `;
+
+    if (mode === 'temperature') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🌡️ EXPERIMENT 1 — Body Temperature Regulation</div>
+          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
+            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+              <b>Goal:</b> Demonstrate how the human body maintains a stable internal temperature when the environment becomes too hot or too cold.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="homeo-body-card">
+            <div class="homeo-body-icon">🧍</div>
+            <div class="homeo-temp-display">🌡️ Body Temperature: 37°C</div>
+          </div>
+
+          <div class="exp-condition-select-group">
+            <label class="exp-condition-label">Provide Environmental Condition:</label>
+            <div class="exp-condition-buttons">
+              <button class="exp-cond-btn ${cond === 'hot' ? 'active' : ''}" onclick="Experiment.setHomeostasisCondition('hot')">
+                ☀️ Hot Environment
+              </button>
+              <button class="exp-cond-btn ${cond === 'cold' ? 'active' : ''}" onclick="Experiment.setHomeostasisCondition('cold')">
+                ❄️ Cold Environment
+              </button>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startHomeostasisReaction()">
+            🌡️ [ CHANGE ENVIRONMENT ]
+          </button>
+        </div>
+        `;
+      } else {
+        const isHot = (cond === 'hot');
+
+        html += `
+          <div class="exp-result-container ${isHot ? 'chemical-result' : 'physical-result'}">
+            <div class="homeo-body-card" style="margin:0; width:100%; border:none; background:transparent; box-shadow:none;">
+              <div class="homeo-body-icon">${isHot ? '🥵' : '🥶'}</div>
+              <div class="homeo-temp-display ${isHot ? 'hot' : 'cold'}">
+                ${isHot ? '37°C → 38°C' : '37°C → 35–36°C'}
+              </div>
+            </div>
+
+            <div class="result-badge maintained">
+              ✅ HOMEOSTASIS MAINTAINED
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>Body Response:</h5>
+              <div class="homeo-stepper-box">
+                ${isHot ? `
+                  <div class="homeo-step-card">
+                    <span class="step-icon">💦</span>
+                    <span class="step-text">Sweating increases</span>
+                  </div>
+                  <div class="homeo-arrow-divider">⬇️</div>
+                  <div class="homeo-step-card">
+                    <span class="step-icon">🩸</span>
+                    <span class="step-text">Blood vessels near the skin widen</span>
+                  </div>
+                  <div class="homeo-arrow-divider">⬇️</div>
+                  <div class="homeo-step-card">
+                    <span class="step-icon">🌡️</span>
+                    <span class="step-text">Body temperature returns toward normal (38°C → 37°C)</span>
+                  </div>
+                ` : `
+                  <div class="homeo-step-card">
+                    <span class="step-icon">🥶</span>
+                    <span class="step-text">Shivering increases</span>
+                  </div>
+                  <div class="homeo-arrow-divider">⬇️</div>
+                  <div class="homeo-step-card">
+                    <span class="step-icon">🩸</span>
+                    <span class="step-text">Blood vessels near the skin narrow</span>
+                  </div>
+                  <div class="homeo-arrow-divider">⬇️</div>
+                  <div class="homeo-step-card">
+                    <span class="step-icon">🔥</span>
+                    <span class="step-text">Heat loss decreases</span>
+                  </div>
+                  <div class="homeo-arrow-divider">⬇️</div>
+                  <div class="homeo-step-card">
+                    <span class="step-icon">🌡️</span>
+                    <span class="step-text">Body temperature returns toward normal (35–36°C → 37°C)</span>
+                  </div>
+                `}
+              </div>
+            </div>
+
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>${isHot ? 
+                'When the body becomes too warm, the body responds by increasing sweating and sending more blood toward the skin. These responses help release heat and bring body temperature back toward its normal range.' : 
+                'When the body becomes too cold, it responds by producing and conserving heat. Shivering produces heat, while narrowing blood vessels near the skin reduces heat loss.'
+              }</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> ${isHot ? 
+                'Too hot → sweating + increased heat loss → temperature moves back toward normal' : 
+                'Too cold → shivering + reduced heat loss → temperature moves back toward normal'
+              }
+            </div>
+
+            <div class="homeo-flow-diagram">
+              <h5>📊 Visual Flow</h5>
+              <div class="homeo-flow-steps">
+                <div class="homeo-flow-pill">Normal Temperature (🌡️ 37°C)</div>
+                <div class="homeo-flow-arrow">↓</div>
+                <div class="homeo-flow-pill">Environmental Change (${isHot ? '☀️ Too Hot' : '❄️ Too Cold'})</div>
+                <div class="homeo-flow-arrow">↓</div>
+                <div class="homeo-flow-pill">Body Detects Change</div>
+                <div class="homeo-flow-arrow">↓</div>
+                <div class="homeo-flow-pill">Body Responds (${isHot ? 'Sweating / Vessel Widening' : 'Shivering / Vessel Narrowing'})</div>
+                <div class="homeo-flow-arrow">↓</div>
+                <div class="homeo-flow-pill" style="border-color:#10B981; color:#065F46; background:#ECFDF5;">🌡️ Temperature Returns Toward Normal (37°C)</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.resetHomeostasisActivity()">
+              🔄 Reset Experiment
+            </button>
+            <button class="secondary-btn" style="flex:1; background:#F3E8FF; border-color:#C084FC; color:#6D28D9;" onclick="Experiment.tryOtherHomeostasisCondition()">
+              🔀 Try Other Condition (${isHot ? 'Cold ❄️' : 'Hot ☀️'})
+            </button>
+          </div>
+        </div>
+        `;
+      }
+    } else if (mode === 'glucose') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🍬 EXPERIMENT 2 — Blood Glucose Regulation</div>
+          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
+            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+              <b>Goal:</b> Demonstrate how the body keeps blood glucose within a suitable range after eating.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="homeo-body-card">
+            <div class="homeo-body-icon">🩺</div>
+            <div class="homeo-glucose-display">🩸 Blood Glucose: Normal</div>
+          </div>
+
+          <div class="exp-condition-select-group">
+            <label class="exp-condition-label">Choose Action/Condition:</label>
+            <div class="exp-condition-buttons">
+              <button class="exp-cond-btn ${cond === 'eat' ? 'active' : ''}" onclick="Experiment.setHomeostasisCondition('eat')">
+                🍚 Eat a Meal
+              </button>
+              <button class="exp-cond-btn ${cond === 'nofood' ? 'active' : ''}" onclick="Experiment.setHomeostasisCondition('nofood')">
+                ⏳ No Food for Several Hours
+              </button>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startHomeostasisReaction()">
+            🍬 [ APPLY CHANGE ]
+          </button>
+        </div>
+        `;
+      } else {
+        const isEat = (cond === 'eat');
+
+        html += `
+          <div class="exp-result-container ${isEat ? 'chemical-result' : 'physical-result'}">
+            <div class="homeo-body-card" style="margin:0; width:100%; border:none; background:transparent; box-shadow:none;">
+              <div class="homeo-body-icon">${isEat ? '🍚' : '⏳'}</div>
+              <div class="homeo-glucose-display ${isEat ? 'high' : 'low'}">
+                ${isEat ? '📈 Blood Glucose ↑ (Increases)' : '📉 Blood Glucose ↓ (Decreases)'}
+              </div>
+            </div>
+
+            <div class="result-badge maintained">
+              ✅ HOMEOSTASIS MAINTAINED
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>Hormonal Response Steps:</h5>
+              <div class="homeo-stepper-box">
+                ${isEat ? `
+                  <div class="homeo-step-card">
+                    <span class="step-icon">🧬</span>
+                    <span class="step-text">Pancreas detects the increase</span>
+                  </div>
+                  <div class="homeo-arrow-divider">⬇️</div>
+                  <div class="homeo-step-card">
+                    <span class="step-icon">💉</span>
+                    <span class="step-text">Insulin is released</span>
+                  </div>
+                  <div class="homeo-arrow-divider">⬇️</div>
+                  <div class="homeo-step-card">
+                    <span class="step-icon">🧍</span>
+                    <span class="step-text">Body cells take in more glucose</span>
+                  </div>
+                  <div class="homeo-arrow-divider">⬇️</div>
+                  <div class="homeo-step-card">
+                    <span class="step-icon">📉</span>
+                    <span class="step-text">Blood glucose decreases toward normal</span>
+                  </div>
+                ` : `
+                  <div class="homeo-step-card">
+                    <span class="step-icon">🧬</span>
+                    <span class="step-text">Pancreas detects the decrease</span>
+                  </div>
+                  <div class="homeo-arrow-divider">⬇️</div>
+                  <div class="homeo-step-card">
+                    <span class="step-icon">🧪</span>
+                    <span class="step-text">Glucagon is released</span>
+                  </div>
+                  <div class="homeo-arrow-divider">⬇️</div>
+                  <div class="homeo-step-card">
+                    <span class="step-icon">🧍</span>
+                    <span class="step-text">The liver releases stored glucose</span>
+                  </div>
+                  <div class="homeo-arrow-divider">⬇️</div>
+                  <div class="homeo-step-card">
+                    <span class="step-icon">📈</span>
+                    <span class="step-text">Blood glucose increases toward normal</span>
+                  </div>
+                `}
+              </div>
+            </div>
+
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>${isEat ? 
+                'After eating, glucose enters the bloodstream and blood glucose rises. The pancreas releases insulin, which helps body cells take in glucose and helps lower blood glucose toward its normal range.' : 
+                'When blood glucose becomes low, the pancreas releases glucagon. Glucagon signals the liver to release stored glucose, helping bring blood glucose back toward its normal range.'
+              }</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key" style="background:#FFF7ED; border-color:#FFD8A8; color:#9A3412;">
+              💡 <b>Key Idea:</b> ${isEat ? 
+                'Blood glucose rises → insulin is released → cells take in glucose → blood glucose returns toward normal' : 
+                'Blood glucose falls → glucagon is released → stored glucose is released → blood glucose returns toward normal'
+              }
+            </div>
+
+            <div class="homeo-flow-diagram">
+              <h5>📊 Visual Flow</h5>
+              <div class="homeo-flow-steps">
+                <div class="homeo-flow-pill">Normal Blood Glucose</div>
+                <div class="homeo-flow-arrow">↓</div>
+                <div class="homeo-flow-pill">${isEat ? '🍚 Eat a Meal (Glucose ↑)' : '⏳ No Food for Several Hours (Glucose ↓)'}</div>
+                <div class="homeo-flow-arrow">↓</div>
+                <div class="homeo-flow-pill">Pancreas Detects Change</div>
+                <div class="homeo-flow-arrow">↓</div>
+                <div class="homeo-flow-pill">${isEat ? 'Insulin Released → Cells Take Glucose' : 'Glucagon Released → Liver Releases Stored Glucose'}</div>
+                <div class="homeo-flow-arrow">↓</div>
+                <div class="homeo-flow-pill" style="border-color:#10B981; color:#065F46; background:#ECFDF5;">🩸 Blood Glucose Returns Toward Normal</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.resetHomeostasisActivity()">
+              🔄 Reset Experiment
+            </button>
+            <button class="secondary-btn" style="flex:1; background:#F3E8FF; border-color:#C084FC; color:#6D28D9;" onclick="Experiment.tryOtherHomeostasisCondition()">
+              🔀 Try Other Condition (${isEat ? 'No Food ⏳' : 'Eat Meal 🍚'})
+            </button>
+          </div>
+        </div>
+        `;
+      }
+    } else {
+      // 📚 FINAL HOMEOSTASIS PANEL
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">📚 Final Homeostasis Panel</div>
+
+          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+            <h5 style="color:#6D28D9; font-size:1.1rem;">🔄 How Does Homeostasis Work?</h5>
+            
+            <div class="homeo-five-steps">
+              <div class="five-step-card">
+                <h6>1. Stimulus</h6>
+                <p>An internal or external condition changes.</p>
+              </div>
+              <div class="five-step-card">
+                <h6>2. Receptor / Detector</h6>
+                <p>The body detects the change.</p>
+              </div>
+              <div class="five-step-card">
+                <h6>3. Control Center</h6>
+                <p>The body coordinates an appropriate response.</p>
+              </div>
+              <div class="five-step-card">
+                <h6>4. Effector</h6>
+                <p>Organs or tissues carry out the response.</p>
+              </div>
+              <div class="five-step-card">
+                <h6>5. Return Toward Normal</h6>
+                <p>The response reduces the change and helps restore balance.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-key-idea-box chemical-key" style="background:#EFF6FF; border-color:#BFDBFE; color:#1E40AF;">
+              💡 <b>Key Concept:</b> Homeostasis keeps the body's internal environment relatively stable through continuous adjustments.
+            </div>
+
+            <div class="exp-explain-block" style="background:#FFF7ED; border-color:#FFD8A8;">
+              <h5 style="color:#9A3412;">🔄 Negative Feedback</h5>
+              <p style="color:#7C2D12;">Both experiments demonstrate <b>negative feedback</b>:</p>
+              <div style="font-family:var(--font-heading); font-size:0.92rem; font-weight:800; color:#C2410C; margin-top:6px; text-align:center;">
+                Change → Response → Change is reduced → Condition returns toward normal
+              </div>
+            </div>
+
+            <div class="exp-objective-box">
+              <h5>🎯 Main Learning Objective</h5>
+              <p>Students should understand that <b>homeostasis is an ongoing process of detecting changes and making adjustments to keep internal conditions stable.</b></p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchHomeostasisMode('temperature')">
+              🌡️ Exp 1: Temp
+            </button>
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchHomeostasisMode('glucose')">
+              🍬 Exp 2: Glucose
             </button>
           </div>
         </div>
