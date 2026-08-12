@@ -3415,6 +3415,44 @@
   color: #FFFFFF;
 }
 
+/* ---------------- 17. Result Entrance Animations ---------------- */
+.exp-result-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  width: 100%;
+  animation: resultPopIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes resultPopIn {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.result-badge {
+  animation: badgePulseGlow 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes badgePulseGlow {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  100% {
+    transform: scale(1.02);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  }
+}
+
+
 
 
 

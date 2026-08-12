@@ -4082,25 +4082,40 @@ const Experiment = {
 
         let reduction = 12 - kwh;
         let percentReduced = Math.round((reduction / 12) * 100);
+        let isEnergyOptimal = (kwh <= 4);
 
         html += `
-          <div class="exp-result-container physical-result">
-            <div class="homeo-body-card" style="margin:0; width:100%;">
-              <div class="homeo-body-icon">⚡</div>
-              <div class="homeo-temp-display" style="background:#DCFCE7; border-color:#86EFAC; color:#15803D;">
+          <div class="exp-result-container ${isEnergyOptimal ? 'physical-result' : 'chemical-result'}">
+            <div class="homeo-body-card" style="margin:0; width:100%; border-color:${isEnergyOptimal ? '#86EFAC' : '#FCA5A5'}; background:${isEnergyOptimal ? '#F0FDF4' : '#FEF2F2'};">
+              <div class="homeo-body-icon">${isEnergyOptimal ? '🌱' : '⚠️'}</div>
+              <div class="homeo-temp-display" style="background:${isEnergyOptimal ? '#DCFCE7' : '#FEE2E2'}; border-color:${isEnergyOptimal ? '#86EFAC' : '#FCA5A5'}; color:${isEnergyOptimal ? '#15803D' : '#B91C1C'};">
                 Daily Energy Use: 12 kWh ➔ ${kwh} kWh
               </div>
-              <div style="font-size:0.88rem; font-weight:800; color:#166534; margin-top:6px;">
-                Energy Reduction: ${reduction} kWh/day (${percentReduced}% Saved)
+              <div style="font-size:0.88rem; font-weight:800; color:${isEnergyOptimal ? '#166534' : '#991B1B'}; margin-top:6px;">
+                ${isEnergyOptimal ? `Energy Reduction: ${reduction} kWh/day (${percentReduced}% Saved)` : `Still Wasting Energy! (${kwh} kWh in use)`}
               </div>
             </div>
 
-            <div class="result-badge maintained" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
-              🌱 ENERGY SAVED (${percentReduced >= 20 ? 'Target ≥20% Reached!' : 'Keep Saving!'})
+            <div class="result-badge maintained" style="background:${isEnergyOptimal ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #EF4444 0%, #B91C1C 100%)'};">
+              ${isEnergyOptimal ? '🌱 ENERGY SAVED (Target ≤4 kWh Reached!)' : '⚠️ STILL WASTING ENERGY (Didn\'t Save Energy!)'}
             </div>
           </div>
 
           <div class="exp-explanation-section" style="margin-top:14px;">
+            ${!isEnergyOptimal ? `
+              <div class="exp-info-panel" style="background:#FEF2F2; border-color:#FCA5A5; margin-bottom:10px;">
+                <div class="exp-info-item" style="color:#991B1B;">
+                  ⚠️ <b>Still Wasting Energy:</b> Total energy is <b>${kwh} kWh</b>, which is above 4 kWh. The household is still wasting energy and didn't save enough energy! Turn off AC, lights, or unplug unused devices to reduce energy use to 4 kWh or below.
+                </div>
+              </div>
+            ` : `
+              <div class="exp-info-panel" style="background:#F0FDF4; border-color:#86EFAC; margin-bottom:10px;">
+                <div class="exp-info-item" style="color:#166534;">
+                  🎉 <b>Excellent Energy Saving!</b> Total energy successfully reduced to <b>${kwh} kWh</b> (Saved ${reduction} kWh/day).
+                </div>
+              </div>
+            `}
+
             <div class="exp-explain-block">
               <h5>What happened?</h5>
               <p>Using less electricity reduces energy demand. Depending on how electricity is generated, reducing electricity use can also reduce greenhouse gas emissions.</p>
@@ -4112,7 +4127,7 @@ const Experiment = {
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetSustainabilityActivity()">
-            🔄 Reset Experiment
+            🔄 Reset & Save Energy
           </button>
         </div>
         `;
