@@ -75,6 +75,15 @@ const STUDENT_INTERACTION_REACTIONS = [
   "Studying Grade 10 concepts! 🧪"
 ];
 
+const GRADUATE_INTERACTION_REACTIONS = [
+  "One step closer! 🎓",
+  "We did it! 🏆",
+  "Keep going! 🚀",
+  "Almost there! 🎯",
+  "The next chapter awaits! ✨",
+  "Mastering trivia & simulations! 🧪"
+];
+
 // --------------------------------------------------------------------------
 // 1. TASK SYSTEM
 // --------------------------------------------------------------------------
@@ -146,7 +155,7 @@ const ProgressionSystem = {
     CharacterSystem.renderHomeCharacterCard();
     App.updateUserHeader();
 
-    // Check Evolution Threshold (e.g. 100 XP for Baby -> Student, 300 XP for Student -> Graduate)
+    // Check Evolution Threshold (e.g. 100 XP for Baby -> Student, 300 XP for Student -> Graduate, 600 XP for Graduate -> Adult)
     if (newStage.stage > oldStage.stage) {
       setTimeout(() => {
         CharacterSystem.triggerEvolutionModal(oldStage, newStage, newXP);
@@ -171,6 +180,8 @@ const CharacterSystem = {
     const stage = ProgressionSystem.getStageForXP(xp);
     const isBaby = (stage.id === 'baby');
     const isStudent = (stage.id === 'student');
+    const isGraduate = (stage.id === 'graduate');
+    const isAdult = (stage.id === 'adult');
     
     let dynamicQuote = stage.defaultQuote;
     if (isBaby) {
@@ -179,6 +190,11 @@ const CharacterSystem = {
     } else if (isStudent) {
       if (xp >= 270) dynamicQuote = "Graduation is close! 🎓";
       else dynamicQuote = "Studying core Grade 10 concepts!";
+    } else if (isGraduate) {
+      if (xp >= 550) dynamicQuote = "Almost at the final stage! 🧑";
+      else dynamicQuote = "Mastering trivia & simulations!";
+    } else if (isAdult) {
+      dynamicQuote = "Science Grandmaster & Expert! 🌟";
     }
 
     let nextReqText = '';
@@ -218,7 +234,7 @@ const CharacterSystem = {
     }
 
     container.innerHTML = `
-      <div class="character-evolution-box ${isBaby ? 'baby-stage-card' : ''} ${isStudent ? 'student-stage-card' : ''}" style="border-color: ${stage.color};">
+      <div class="character-evolution-box ${isBaby ? 'baby-stage-card' : ''} ${isStudent ? 'student-stage-card' : ''} ${isGraduate ? 'graduate-stage-card' : ''} ${isAdult ? 'adult-stage-card' : ''}" style="border-color: ${stage.color};">
         <div class="char-card-header">
           <span class="char-header-title">MY CHARACTER</span>
           <span class="char-stage-badge" style="background: ${stage.color};">${stage.icon} ${stage.title}</span>
@@ -255,7 +271,13 @@ const CharacterSystem = {
     const stage = ProgressionSystem.getStageForXP(xp);
 
     let msg = "";
-    if (stage.id === 'student') {
+    if (stage.id === 'graduate') {
+      if (xp >= 550) {
+        msg = "Almost at the final stage! 🧑";
+      } else {
+        msg = GRADUATE_INTERACTION_REACTIONS[Math.floor(Math.random() * GRADUATE_INTERACTION_REACTIONS.length)];
+      }
+    } else if (stage.id === 'student') {
       if (xp >= 270) {
         msg = "Graduation is close! 🎓";
       } else {
@@ -348,7 +370,12 @@ const CharacterSystem = {
     document.getElementById('evoNewIcon').innerHTML = newDisplay;
     document.getElementById('evoNewTitle').textContent = newStage.title;
     document.getElementById('evoNewDesc').textContent = newStage.desc;
-    document.getElementById('evoXPText').textContent = `🎉 ${newStage.minXP} XP Reached! ${oldStage.title} evolved into ${newStage.title}!`;
+    
+    if (newStage.id === 'adult') {
+      document.getElementById('evoXPText').textContent = `🎉 ${newStage.minXP} XP Reached! ${oldStage.title} evolved into ${newStage.title} (FINAL STAGE)!`;
+    } else {
+      document.getElementById('evoXPText').textContent = `🎉 ${newStage.minXP} XP Reached! ${oldStage.title} evolved into ${newStage.title}!`;
+    }
 
     modal.classList.remove('hidden');
   },

@@ -3725,6 +3725,40 @@
   filter: drop-shadow(0 10px 20px rgba(16, 185, 129, 0.45));
 }
 
+/* Graduate Stage Card Specific Styling */
+.character-evolution-box.graduate-stage-card {
+  flex-direction: column;
+  padding: 20px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F5F3FF 100%);
+  border: 2.5px solid #8B5CF6;
+  border-radius: 24px;
+}
+
+.graduate-stage-card .baby-char-img {
+  filter: drop-shadow(0 8px 20px rgba(139, 92, 246, 0.35));
+}
+
+.graduate-stage-card .baby-avatar-wrapper:hover .baby-char-img {
+  filter: drop-shadow(0 10px 20px rgba(139, 92, 246, 0.45));
+}
+
+/* Adult Stage Card Specific Styling */
+.character-evolution-box.adult-stage-card {
+  flex-direction: column;
+  padding: 20px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFFBEB 100%);
+  border: 2.5px solid #F59E0B;
+  border-radius: 24px;
+}
+
+.adult-stage-card .baby-char-img {
+  filter: drop-shadow(0 8px 20px rgba(245, 158, 11, 0.35));
+}
+
+.adult-stage-card .baby-avatar-wrapper:hover .baby-char-img {
+  filter: drop-shadow(0 10px 20px rgba(245, 158, 11, 0.45));
+}
+
 .char-card-header {
   width: 100%;
   display: flex;
