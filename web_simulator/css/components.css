@@ -3717,6 +3717,14 @@
   border-radius: 24px;
 }
 
+.student-stage-card .baby-char-img {
+  filter: drop-shadow(0 8px 20px rgba(16, 185, 129, 0.35));
+}
+
+.student-stage-card .baby-avatar-wrapper:hover .baby-char-img {
+  filter: drop-shadow(0 10px 20px rgba(16, 185, 129, 0.45));
+}
+
 .char-card-header {
   width: 100%;
   display: flex;

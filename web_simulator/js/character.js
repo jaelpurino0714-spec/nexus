@@ -24,7 +24,7 @@ const EVOLUTION_STAGES = [
     stage: 2, 
     title: 'STUDENT', 
     icon: '🎒', 
-    image: null,
+    image: 'assets/student-character.png',
     minXP: 100, 
     nextXP: 300, 
     color: '#10B981', 
