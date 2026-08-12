@@ -3209,6 +3209,191 @@
   box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
 }
 
+/* ---------------- 14. Global Climate Styles ---------------- */
+.climate-dual-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  margin: 12px 0;
+}
+
+.earth-model-card {
+  background: #FFFFFF;
+  border: 2px solid #CBD5E1;
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+
+.earth-model-card.enhanced-ghg {
+  border-color: #EF4444;
+  background: #FEF2F2;
+}
+
+.earth-model-icon {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+}
+
+.temp-indicator-pill {
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 12px;
+  color: #FFFFFF;
+}
+
+.temp-indicator-pill.normal {
+  background: #10B981;
+}
+
+.temp-indicator-pill.retained {
+  background: #EF4444;
+}
+
+/* ---------------- 15. ENSO Styles ---------------- */
+.enso-pacific-box {
+  background: linear-gradient(180deg, #E0F2FE 0%, #0284C7 100%);
+  border: 2px solid #0369A1;
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin: 12px 0;
+  position: relative;
+}
+
+.enso-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.enso-water-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(6px);
+  width: 100%;
+}
+
+.enso-status-pill {
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: #FFFFFF;
+  color: #0F172A;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* ---------------- 16. Sustainability Styles ---------------- */
+.waste-item-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #FFFFFF;
+  border: 1.5px solid #CBD5E1;
+  border-radius: 14px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1E293B;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+}
+
+.waste-bin-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.waste-bin-btn {
+  padding: 8px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  border-radius: 12px;
+  border: 1.5px solid #CBD5E1;
+  background: #F8FAFC;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.waste-bin-btn.bio.active {
+  background: #DCFCE7;
+  border-color: #22C55E;
+  color: #15803D;
+}
+
+.waste-bin-btn.rec.active {
+  background: #DBEAFE;
+  border-color: #3B82F6;
+  color: #1E40AF;
+}
+
+.waste-bin-btn.res.active {
+  background: #E2E8F0;
+  border-color: #64748B;
+  color: #334155;
+}
+
+.appliance-switch-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+
+.appliance-switch-card.saved {
+  border-color: #86EFAC;
+  background: #F0FDF4;
+}
+
+.toggle-switch-btn {
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.toggle-switch-btn.on {
+  background: #EF4444;
+  color: #FFFFFF;
+}
+
+.toggle-switch-btn.off {
+  background: #10B981;
+  color: #FFFFFF;
+}
+
+
 
 
 

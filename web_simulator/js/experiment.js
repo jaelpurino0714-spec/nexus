@@ -67,6 +67,22 @@ const Experiment = {
   biotechStarted: false,
   tectonicsMode: 'divergent', // 'divergent', 'convergent', or 'summary'
   tectonicsStarted: false,
+  climateMode: 'greenhouse', // 'greenhouse', 'ocean', or 'summary'
+  climateOceanCond: 'with', // 'with' or 'without'
+  climateStarted: false,
+  ensoMode: 'elnino', // 'elnino', 'lanina', or 'summary'
+  ensoStarted: false,
+  sustainabilityMode: 'waste', // 'waste', 'energy', or 'summary'
+  wasteItems: [
+    { id: 'item1', name: '🍌 Food waste', type: 'bio' },
+    { id: 'item2', name: '🥤 Plastic bottle', type: 'rec' },
+    { id: 'item3', name: '📄 Paper', type: 'rec' },
+    { id: 'item4', name: '🥫 Metal can', type: 'rec' },
+    { id: 'item5', name: '🍾 Glass bottle', type: 'rec' }
+  ],
+  wasteSelections: {}, // itemId -> 'bio' | 'rec' | 'res'
+  energySwitches: { lights: true, ac: true, tv: true, fan: false, fridge: true, unplug: false },
+  sustainabilityStarted: false,
 
   selectedItems: new Set(),
   isCombined: false,
@@ -175,6 +191,21 @@ const Experiment = {
         this.tectonicsMode = 'divergent';
         this.tectonicsStarted = false;
         this.renderTectonicsActivity(canvasBox);
+      } else if (topicName === "Global Climate") {
+        this.climateMode = 'greenhouse';
+        this.climateOceanCond = 'with';
+        this.climateStarted = false;
+        this.renderClimateActivity(canvasBox);
+      } else if (topicName === "Global Interactions (ENSO)") {
+        this.ensoMode = 'elnino';
+        this.ensoStarted = false;
+        this.renderEnsoActivity(canvasBox);
+      } else if (topicName === "Global and Local Sustainability") {
+        this.sustainabilityMode = 'waste';
+        this.wasteSelections = {};
+        this.energySwitches = { lights: true, ac: true, tv: true, fan: false, fridge: true, unplug: false };
+        this.sustainabilityStarted = false;
+        this.renderSustainabilityActivity(canvasBox);
       } else {
         canvasBox.innerHTML = ''; // Keep blank for other topics for now
       }
@@ -320,6 +351,12 @@ const Experiment = {
         this.renderBiotechActivity(canvasBox);
       } else if (this.currentTopic === "Plate Tectonics") {
         this.renderTectonicsActivity(canvasBox);
+      } else if (this.currentTopic === "Global Climate") {
+        this.renderClimateActivity(canvasBox);
+      } else if (this.currentTopic === "Global Interactions (ENSO)") {
+        this.renderEnsoActivity(canvasBox);
+      } else if (this.currentTopic === "Global and Local Sustainability") {
+        this.renderSustainabilityActivity(canvasBox);
       }
     }
   },
@@ -351,6 +388,12 @@ const Experiment = {
         this.renderBiotechActivity(canvasBox);
       } else if (this.currentTopic === "Plate Tectonics") {
         this.renderTectonicsActivity(canvasBox);
+      } else if (this.currentTopic === "Global Climate") {
+        this.renderClimateActivity(canvasBox);
+      } else if (this.currentTopic === "Global Interactions (ENSO)") {
+        this.renderEnsoActivity(canvasBox);
+      } else if (this.currentTopic === "Global and Local Sustainability") {
+        this.renderSustainabilityActivity(canvasBox);
       }
     }
   },
@@ -371,6 +414,11 @@ const Experiment = {
     this.carryingCapacityStarted = false;
     this.biotechStarted = false;
     this.tectonicsStarted = false;
+    this.climateStarted = false;
+    this.ensoStarted = false;
+    this.sustainabilityStarted = false;
+    this.wasteSelections = {};
+    this.energySwitches = { lights: true, ac: true, tv: true, fan: false, fridge: true, unplug: false };
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) {
       if (this.currentTopic === "Physical vs. Chemical Change") {
@@ -395,6 +443,12 @@ const Experiment = {
         this.renderBiotechActivity(canvasBox);
       } else if (this.currentTopic === "Plate Tectonics") {
         this.renderTectonicsActivity(canvasBox);
+      } else if (this.currentTopic === "Global Climate") {
+        this.renderClimateActivity(canvasBox);
+      } else if (this.currentTopic === "Global Interactions (ENSO)") {
+        this.renderEnsoActivity(canvasBox);
+      } else if (this.currentTopic === "Global and Local Sustainability") {
+        this.renderSustainabilityActivity(canvasBox);
       }
     }
   },
@@ -3334,6 +3388,768 @@ const Experiment = {
             </button>
             <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchTectonicsMode('convergent')">
               🏔️ Exp 2: Convergent
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  switchClimateMode(mode) {
+    this.climateMode = mode;
+    this.climateOceanCond = 'with';
+    this.climateStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderClimateActivity(canvasBox);
+  },
+
+  setClimateOceanCond(cond) {
+    this.climateOceanCond = cond;
+    this.climateStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderClimateActivity(canvasBox);
+  },
+
+  startClimateSimulation() {
+    this.climateStarted = true;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderClimateActivity(canvasBox);
+  },
+
+  resetClimateActivity() {
+    this.climateStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderClimateActivity(canvasBox);
+  },
+
+  renderClimateActivity(container) {
+    const mode = this.climateMode; // 'greenhouse', 'ocean', 'summary'
+    const cond = this.climateOceanCond; // 'with', 'without'
+    const isStarted = this.climateStarted;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <div class="exp-mode-toggle-group" style="grid-template-columns: 1fr 1fr 1fr; font-size: 0.78rem;">
+          <button class="exp-mode-btn ${mode === 'greenhouse' ? 'active' : ''}" onclick="Experiment.switchClimateMode('greenhouse')">
+            🌍 Exp 1: Greenhouse
+          </button>
+          <button class="exp-mode-btn ${mode === 'ocean' ? 'active' : ''}" onclick="Experiment.switchClimateMode('ocean')">
+            🌊 Exp 2: Ocean & Climate
+          </button>
+          <button class="exp-mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="Experiment.switchClimateMode('summary')">
+            📚 Learning Panel
+          </button>
+        </div>
+    `;
+
+    if (mode === 'greenhouse') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🌍 EXPERIMENT 1 — Greenhouse Effect</div>
+          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
+            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+              <b>Goal:</b> Demonstrate how greenhouse gases help retain heat in Earth's atmosphere.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="climate-dual-box">
+            <div class="earth-model-card">
+              <div style="font-size:0.82rem; font-weight:800; color:#334155;">🌍 Earth A</div>
+              <div class="earth-model-icon">🌍</div>
+              <div class="temp-indicator-pill normal">Normal Atmosphere</div>
+            </div>
+
+            <div class="earth-model-card enhanced-ghg">
+              <div style="font-size:0.82rem; font-weight:800; color:#991B1B;">🌍 Earth B</div>
+              <div class="earth-model-icon">🌏</div>
+              <div class="temp-indicator-pill retained">+ Greenhouse Gases</div>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startClimateSimulation()">
+            ☀️ [ START SIMULATION ]
+          </button>
+        </div>
+        `;
+      } else {
+        html += `
+          <div class="exp-result-container chemical-result">
+            <div class="climate-dual-box" style="margin:0;">
+              <div class="earth-model-card">
+                <div style="font-size:0.82rem; font-weight:800; color:#334155;">🌍 Earth A</div>
+                <div class="earth-model-icon">🌍</div>
+                <div class="temp-indicator-pill normal">🌡️ Normal Warming (15°C)</div>
+                <div style="font-size:0.75rem; color:#64748B;">Heat escapes to space</div>
+              </div>
+
+              <div class="earth-model-card enhanced-ghg">
+                <div style="font-size:0.82rem; font-weight:800; color:#991B1B;">🌍 Earth B</div>
+                <div class="earth-model-icon">🌏</div>
+                <div class="temp-indicator-pill retained">🌡️ More Heat Retained (22°C)</div>
+                <div style="font-size:0.75rem; color:#991B1B; font-weight:700;">Gases re-emit heat</div>
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #EF4444 0%, #B91C1C 100%);">
+              🌡️ GREENHOUSE EFFECT (Heat Trapped)
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>Greenhouse gases absorb and re-emit some outgoing infrared radiation, helping keep heat in Earth's atmosphere. This natural greenhouse effect makes Earth warm enough to support life. Increasing greenhouse gas concentrations strengthens this heat-trapping effect and contributes to global warming.</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Greenhouse gases trap part of Earth's outgoing heat, affecting Earth's temperature.
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetClimateActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else if (mode === 'ocean') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🌊 EXPERIMENT 2 — Ocean and Climate</div>
+          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
+            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+              <b>Goal:</b> Demonstrate how oceans influence Earth's climate by absorbing and storing heat.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        const isWithOcean = (cond === 'with');
+
+        html += `
+          <div class="homeo-body-card" style="background:${isWithOcean ? 'linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%)' : 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)'};">
+            <div class="homeo-body-icon">${isWithOcean ? '🌊' : '🏜️'}</div>
+            <div class="homeo-temp-display">
+              ${isWithOcean ? '☀️ Sun + 🌊 Ocean + 🏝️ Land' : '☀️ Sun + 🏜️ Desert Land (No Ocean)'}
+            </div>
+          </div>
+
+          <div class="exp-condition-select-group">
+            <label class="exp-condition-label">Choose Ecosystem Setup:</label>
+            <div class="exp-condition-buttons">
+              <button class="exp-cond-btn ${isWithOcean ? 'active' : ''}" onclick="Experiment.setClimateOceanCond('with')">
+                🌊 With Ocean
+              </button>
+              <button class="exp-cond-btn ${!isWithOcean ? 'active' : ''}" onclick="Experiment.setClimateOceanCond('without')">
+                🏜️ Without Ocean
+              </button>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startClimateSimulation()">
+            ☀️ [ HEAT EARTH ]
+          </button>
+        </div>
+        `;
+      } else {
+        const isWithOcean = (cond === 'with');
+
+        html += `
+          <div class="exp-result-container ${isWithOcean ? 'physical-result' : 'chemical-result'}">
+            <div class="homeo-body-card" style="margin:0; width:100%;">
+              <div class="homeo-body-icon">${isWithOcean ? '🌊' : '🏜️'}</div>
+              <div class="homeo-temp-display">
+                ${isWithOcean ? '🌊 Ocean Absorbs & Stores Large Heat' : '🏜️ Land Temp Fluctuates Rapidly'}
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:${isWithOcean ? 'linear-gradient(135deg, #0284C7 0%, #0369A1 100%)' : 'linear-gradient(135deg, #D97706 0%, #B45309 100%)'};">
+              🌊 ${isWithOcean ? 'OCEANS MODERATE CLIMATE' : 'EXTREME TEMPERATURE SWINGS'}
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>Oceans absorb and store large amounts of heat. Because water changes temperature more slowly than land, oceans help moderate temperatures and influence climate.</p>
+              
+              <table style="width:100%; border-collapse:collapse; margin-top:8px; font-size:0.84rem;">
+                <tr style="background:#F1F5F9;">
+                  <th style="padding:6px; text-align:left; border:1px solid #CBD5E1;">Surface</th>
+                  <th style="padding:6px; text-align:left; border:1px solid #CBD5E1;">Temperature Change</th>
+                </tr>
+                <tr>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">🏝️ Land</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1; color:#B45309; font-weight:700;">Changes more quickly</td>
+                </tr>
+                <tr>
+                  <td style="padding:6px; border:1px solid #CBD5E1;">🌊 Ocean</td>
+                  <td style="padding:6px; border:1px solid #CBD5E1; color:#0284C7; font-weight:700;">Changes more slowly</td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> The oceans are an important part of Earth's climate system because they store and redistribute heat.
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetClimateActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else {
+      // 📚 FINAL GLOBAL CLIMATE PANEL
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">📚 Final Global Climate Panel</div>
+
+          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+            <h5 style="color:#6D28D9;">Factors Affecting Climate</h5>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+              <span class="resource-pill">☀️ Solar energy</span>
+              <span class="resource-pill">🌊 Oceans</span>
+              <span class="resource-pill">🌫️ Atmosphere</span>
+              <span class="resource-pill">🌱 Greenhouse gases</span>
+              <span class="resource-pill">🌍 Earth's surface</span>
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-objective-box">
+              <h5>🎯 Main Learning Objective</h5>
+              <p>Students should understand that <b>global climate is influenced by interactions among the atmosphere, oceans, land, and incoming solar energy.</b></p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchClimateMode('greenhouse')">
+              🌍 Exp 1: Greenhouse
+            </button>
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchClimateMode('ocean')">
+              🌊 Exp 2: Ocean
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  switchEnsoMode(mode) {
+    this.ensoMode = mode;
+    this.ensoStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderEnsoActivity(canvasBox);
+  },
+
+  startEnsoSimulation() {
+    this.ensoStarted = true;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderEnsoActivity(canvasBox);
+  },
+
+  resetEnsoActivity() {
+    this.ensoStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderEnsoActivity(canvasBox);
+  },
+
+  renderEnsoActivity(container) {
+    const mode = this.ensoMode; // 'elnino', 'lanina', 'summary'
+    const isStarted = this.ensoStarted;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <div class="exp-mode-toggle-group" style="grid-template-columns: 1fr 1fr 1fr; font-size: 0.78rem;">
+          <button class="exp-mode-btn ${mode === 'elnino' ? 'active' : ''}" onclick="Experiment.switchEnsoMode('elnino')">
+            🔥 Exp 1: El Niño
+          </button>
+          <button class="exp-mode-btn ${mode === 'lanina' ? 'active' : ''}" onclick="Experiment.switchEnsoMode('lanina')">
+            ❄️ Exp 2: La Niña
+          </button>
+          <button class="exp-mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="Experiment.switchEnsoMode('summary')">
+            📚 Learning Panel
+          </button>
+        </div>
+    `;
+
+    if (mode === 'elnino') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🌊 EXPERIMENT 1 — El Niño</div>
+          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
+            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+              <b>Goal:</b> Demonstrate how unusually warm surface waters in the central and eastern tropical Pacific can affect atmospheric circulation and weather patterns.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="enso-pacific-box">
+            <div class="enso-map-header">
+              <span>🌏 Asia / West</span>
+              <span>🌊 Tropical Pacific</span>
+              <span>🌎 Americas / East</span>
+            </div>
+            <div class="enso-water-strip">
+              <span>💨 Normal Trade Winds</span>
+              <span class="enso-status-pill">Normal Sea Temp</span>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startEnsoSimulation()">
+            🔥 [ START EL NIÑO ]
+          </button>
+        </div>
+        `;
+      } else {
+        html += `
+          <div class="exp-result-container chemical-result">
+            <div class="enso-pacific-box" style="background:linear-gradient(180deg, #FDE8E8 0%, #EF4444 100%); border-color:#DC2626;">
+              <div class="enso-map-header">
+                <span>🌏 Asia</span>
+                <span>🔥 Warm Pacific Water Shifts East ➡️</span>
+                <span>🌎 Americas 🌧️</span>
+              </div>
+              <div class="enso-water-strip" style="background:rgba(255,255,255,0.45);">
+                <span style="color:#991B1B; font-weight:800;">💨 Trade Winds WEAKENED</span>
+                <span class="enso-status-pill" style="color:#DC2626; border:1px solid #FCA5A5;">Warmer Central/East Pacific</span>
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #EF4444 0%, #B91C1C 100%);">
+              🔥 EL NIÑO (Ocean: Warmer East | Winds: Weakened | Rain: Shifts East)
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>During El Niño, unusually warm surface waters develop in the central and eastern tropical Pacific. This changes atmospheric circulation and can influence weather patterns far beyond the Pacific Ocean.</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Changes in ocean temperature can affect atmospheric circulation and weather around the world.
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetEnsoActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else if (mode === 'lanina') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🌊 EXPERIMENT 2 — La Niña</div>
+          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
+            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+              <b>Goal:</b> Demonstrate how unusually cool surface waters in the central and eastern tropical Pacific affect global atmospheric circulation and weather patterns.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="enso-pacific-box">
+            <div class="enso-map-header">
+              <span>🌏 Asia / West</span>
+              <span>🌊 Tropical Pacific</span>
+              <span>🌎 Americas / East</span>
+            </div>
+            <div class="enso-water-strip">
+              <span>💨 Normal Trade Winds</span>
+              <span class="enso-status-pill">Normal Sea Temp</span>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startEnsoSimulation()">
+            ❄️ [ START LA NIÑA ]
+          </button>
+        </div>
+        `;
+      } else {
+        html += `
+          <div class="exp-result-container physical-result">
+            <div class="enso-pacific-box" style="background:linear-gradient(180deg, #E0F2FE 0%, #0284C7 100%); border-color:#0369A1;">
+              <div class="enso-map-header">
+                <span>🌏 Asia 🌧️</span>
+                <span>⬅️ 🌊 Warm Water Pushed Far West</span>
+                <span>🌎 Americas 🧊</span>
+              </div>
+              <div class="enso-water-strip" style="background:rgba(255,255,255,0.45);">
+                <span style="color:#0369A1; font-weight:800;">💨 Trade Winds STRONGER</span>
+                <span class="enso-status-pill" style="color:#0284C7; border:1px solid #93C5FD;">Cooler Central/East Pacific</span>
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #0284C7 0%, #0369A1 100%);">
+              ❄️ LA NIÑA (Ocean: Cooler East | Winds: Stronger | Rain: Concentrated West)
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>During La Niña, stronger trade winds push warm surface water westward and allow cooler deep water to rise in the eastern Pacific. This changes atmospheric circulation and rainfall patterns.</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> La Niña is characterized by cooler-than-normal tropical Pacific surface waters and changes in atmospheric circulation.
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetEnsoActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else {
+      // 📚 FINAL ENSO PANEL
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">📚 Final ENSO Panel</div>
+
+          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+            <h5 style="color:#6D28D9;">El Niño–Southern Oscillation (ENSO)</h5>
+            <p>A recurring climate pattern involving interactions between the tropical Pacific Ocean and atmosphere.</p>
+            
+            <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:0.82rem;">
+              <tr style="background:#F3E8FF;">
+                <th style="padding:6px; border:1px solid #DDD6FE;">Feature</th>
+                <th style="padding:6px; border:1px solid #DDD6FE; color:#DC2626;">🔥 El Niño</th>
+                <th style="padding:6px; border:1px solid #DDD6FE; color:#0284C7;">❄️ La Niña</th>
+              </tr>
+              <tr>
+                <td style="padding:6px; border:1px solid #DDD6FE; font-weight:700;">Pacific Ocean</td>
+                <td style="padding:6px; border:1px solid #DDD6FE;">Warmer</td>
+                <td style="padding:6px; border:1px solid #DDD6FE;">Cooler</td>
+              </tr>
+              <tr>
+                <td style="padding:6px; border:1px solid #DDD6FE; font-weight:700;">Trade Winds</td>
+                <td style="padding:6px; border:1px solid #DDD6FE;">Weaker</td>
+                <td style="padding:6px; border:1px solid #DDD6FE;">Stronger</td>
+              </tr>
+              <tr>
+                <td style="padding:6px; border:1px solid #DDD6FE; font-weight:700;">Warm Water</td>
+                <td style="padding:6px; border:1px solid #DDD6FE;">Moves eastward</td>
+                <td style="padding:6px; border:1px solid #DDD6FE;">Concentrates farther west</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-objective-box">
+              <h5>🎯 Main Learning Objective</h5>
+              <p>Students should understand that <b>ENSO demonstrates how ocean and atmospheric processes interact to influence weather and climate patterns locally and globally.</b></p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchEnsoMode('elnino')">
+              🔥 Exp 1: El Niño
+            </button>
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchEnsoMode('lanina')">
+              ❄️ Exp 2: La Niña
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  switchSustainabilityMode(mode) {
+    this.sustainabilityMode = mode;
+    this.sustainabilityStarted = false;
+    this.wasteSelections = {};
+    this.energySwitches = { lights: true, ac: true, tv: true, fan: false, fridge: true, unplug: false };
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderSustainabilityActivity(canvasBox);
+  },
+
+  selectWasteBin(itemId, binType) {
+    this.wasteSelections[itemId] = binType;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderSustainabilityActivity(canvasBox);
+  },
+
+  toggleEnergySwitch(applianceKey) {
+    this.energySwitches[applianceKey] = !this.energySwitches[applianceKey];
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderSustainabilityActivity(canvasBox);
+  },
+
+  startSustainabilitySimulation() {
+    this.sustainabilityStarted = true;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderSustainabilityActivity(canvasBox);
+  },
+
+  resetSustainabilityActivity() {
+    this.sustainabilityStarted = false;
+    this.wasteSelections = {};
+    this.energySwitches = { lights: true, ac: true, tv: true, fan: false, fridge: true, unplug: false };
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) this.renderSustainabilityActivity(canvasBox);
+  },
+
+  renderSustainabilityActivity(container) {
+    const mode = this.sustainabilityMode; // 'waste', 'energy', 'summary'
+    const isStarted = this.sustainabilityStarted;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <div class="exp-mode-toggle-group" style="grid-template-columns: 1fr 1fr 1fr; font-size: 0.78rem;">
+          <button class="exp-mode-btn ${mode === 'waste' ? 'active' : ''}" onclick="Experiment.switchSustainabilityMode('waste')">
+            ♻️ Exp 1: Waste
+          </button>
+          <button class="exp-mode-btn ${mode === 'energy' ? 'active' : ''}" onclick="Experiment.switchSustainabilityMode('energy')">
+            ⚡ Exp 2: Energy
+          </button>
+          <button class="exp-mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="Experiment.switchSustainabilityMode('summary')">
+            📚 Learning Panel
+          </button>
+        </div>
+    `;
+
+    if (mode === 'waste') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">♻️ EXPERIMENT 1 — Waste Management</div>
+          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
+            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+              <b>Goal:</b> Demonstrate how proper waste segregation and recycling can reduce the amount of waste sent to landfills.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        const items = this.wasteItems;
+        const selections = this.wasteSelections;
+
+        let itemsHtml = items.map(item => {
+          const sel = selections[item.id] || '';
+          return `
+            <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:10px; margin-bottom:8px;">
+              <div style="font-weight:800; font-size:0.88rem; margin-bottom:4px;">${item.name}</div>
+              <div class="waste-bin-group">
+                <button class="waste-bin-btn bio ${sel === 'bio' ? 'active' : ''}" onclick="Experiment.selectWasteBin('${item.id}', 'bio')">🟢 Bio</button>
+                <button class="waste-bin-btn rec ${sel === 'rec' ? 'active' : ''}" onclick="Experiment.selectWasteBin('${item.id}', 'rec')">🔵 Recyclable</button>
+                <button class="waste-bin-btn res ${sel === 'res' ? 'active' : ''}" onclick="Experiment.selectWasteBin('${item.id}', 'res')">⚫ Residual</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        html += `
+          <div style="margin:10px 0;">
+            <div style="font-size:0.82rem; font-weight:800; color:#334155; margin-bottom:6px;">Select Bin for Each Household Waste Item:</div>
+            ${itemsHtml}
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startSustainabilitySimulation()">
+            ♻️ [ PROCESS WASTE ]
+          </button>
+        </div>
+        `;
+      } else {
+        const items = this.wasteItems;
+        const selections = this.wasteSelections;
+
+        let correctCount = 0;
+        items.forEach(item => {
+          if (selections[item.id] === item.type) correctCount++;
+        });
+
+        let divertPercentage = Math.round((correctCount / items.length) * 100);
+
+        html += `
+          <div class="exp-result-container physical-result">
+            <div class="homeo-body-card" style="margin:0; width:100%;">
+              <div class="homeo-body-icon">♻️</div>
+              <div class="homeo-temp-display" style="background:#DCFCE7; border-color:#86EFAC; color:#15803D;">
+                Waste Diverted from Landfill: ${divertPercentage}%
+              </div>
+              <div style="font-size:0.82rem; font-weight:700; color:#166534; margin-top:6px;">
+                ♻️ Recyclables → Recycling | 🌱 Biodegradable → Composting | 🗑️ Residual → Proper Disposal
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
+              ♻️ SUSTAINABLE WASTE MANAGEMENT
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>Proper waste segregation makes it easier to recycle materials and compost biodegradable waste. This reduces the amount of waste sent to landfills and helps conserve resources.</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Reduce ➔ Reuse ➔ Recycle
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetSustainabilityActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else if (mode === 'energy') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">⚡ EXPERIMENT 2 — Household Energy Conservation</div>
+          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
+            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+              <b>Goal:</b> Demonstrate how small changes in household energy use can reduce electricity consumption and environmental impact.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        const sw = this.energySwitches;
+
+        // Base kWh calculations
+        let kwh = 0;
+        if (sw.lights) kwh += 2;
+        if (sw.ac) kwh += 5;
+        if (sw.tv) kwh += 1;
+        if (sw.fan) kwh += 1;
+        if (sw.fridge) kwh += 2;
+        if (!sw.unplug) kwh += 1; // phantom load
+
+        html += `
+          <div style="margin:10px 0;">
+            <div class="homeo-temp-display" style="margin-bottom:10px; font-size:1.05rem;">
+              ⚡ Current Daily Energy Use: ${kwh} kWh
+            </div>
+
+            <div class="appliance-switch-card ${!sw.lights ? 'saved' : ''}">
+              <span>💡 Turn off unused lights (-2 kWh)</span>
+              <button class="toggle-switch-btn ${sw.lights ? 'on' : 'off'}" onclick="Experiment.toggleEnergySwitch('lights')">
+                ${sw.lights ? 'ON (Using)' : 'OFF (Saved)'}
+              </button>
+            </div>
+
+            <div class="appliance-switch-card ${!sw.ac ? 'saved' : ''}">
+              <span>❄️ Reduce unnecessary AC (-5 kWh)</span>
+              <button class="toggle-switch-btn ${sw.ac ? 'on' : 'off'}" onclick="Experiment.toggleEnergySwitch('ac')">
+                ${sw.ac ? 'ON (Using)' : 'OFF (Saved)'}
+              </button>
+            </div>
+
+            <div class="appliance-switch-card ${sw.unplug ? 'saved' : ''}">
+              <span>🔌 Unplug unused devices (-1 kWh)</span>
+              <button class="toggle-switch-btn ${!sw.unplug ? 'on' : 'off'}" onclick="Experiment.toggleEnergySwitch('unplug')">
+                ${!sw.unplug ? 'PLUGGED' : 'UNPLUGGED'}
+              </button>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startSustainabilitySimulation()">
+            ⚡ [ CALCULATE SAVINGS ]
+          </button>
+        </div>
+        `;
+      } else {
+        const sw = this.energySwitches;
+        let kwh = 0;
+        if (sw.lights) kwh += 2;
+        if (sw.ac) kwh += 5;
+        if (sw.tv) kwh += 1;
+        if (sw.fan) kwh += 1;
+        if (sw.fridge) kwh += 2;
+        if (!sw.unplug) kwh += 1;
+
+        let reduction = 12 - kwh;
+        let percentReduced = Math.round((reduction / 12) * 100);
+
+        html += `
+          <div class="exp-result-container physical-result">
+            <div class="homeo-body-card" style="margin:0; width:100%;">
+              <div class="homeo-body-icon">⚡</div>
+              <div class="homeo-temp-display" style="background:#DCFCE7; border-color:#86EFAC; color:#15803D;">
+                Daily Energy Use: 12 kWh ➔ ${kwh} kWh
+              </div>
+              <div style="font-size:0.88rem; font-weight:800; color:#166534; margin-top:6px;">
+                Energy Reduction: ${reduction} kWh/day (${percentReduced}% Saved)
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
+              🌱 ENERGY SAVED (${percentReduced >= 20 ? 'Target ≥20% Reached!' : 'Keep Saving!'})
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>Using less electricity reduces energy demand. Depending on how electricity is generated, reducing electricity use can also reduce greenhouse gas emissions.</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Using energy efficiently conserves resources, lowers electricity use, and can reduce environmental impacts.
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetSustainabilityActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else {
+      // 📚 FINAL SUSTAINABILITY PANEL
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">📚 Final Sustainability Panel</div>
+
+          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+            <h5 style="color:#6D28D9;">🌍 What Is Sustainability?</h5>
+            <p>Sustainability means meeting present needs while protecting the ability of future generations to meet their needs.</p>
+
+            <h5 style="color:#6D28D9; margin-top:10px;">Local Actions</h5>
+            <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;">
+              <span class="resource-pill">♻️ Waste Segregation</span>
+              <span class="resource-pill">💧 Conserving Water</span>
+              <span class="resource-pill">⚡ Saving Electricity</span>
+              <span class="resource-pill">🌱 Protecting Ecosystems</span>
+              <span class="resource-pill">🚲 Eco Transport</span>
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-objective-box">
+              <h5>🎯 Main Learning Objective</h5>
+              <p>Students should understand that <b>sustainability connects everyday decisions with the long-term health of communities, ecosystems, and the planet.</b></p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchSustainabilityMode('waste')">
+              ♻️ Exp 1: Waste
+            </button>
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchSustainabilityMode('energy')">
+              ⚡ Exp 2: Energy
             </button>
           </div>
         </div>
