@@ -3,23 +3,66 @@
    Three connected systems:
    1. TaskSystem: Activity detection, XP rewards, duplicate prevention
    2. ProgressionSystem: XP calculation, evolution stage thresholds, Supabase sync
-   3. CharacterSystem: Character UI rendering, animations, reactions & evolution modal
+   3. CharacterSystem: Baby Stage Screen/Card, interactions, reactions & evolution modal
    ========================================================================== */
 
 const EVOLUTION_STAGES = [
-  { id: 'baby', stage: 1, title: 'BABY', icon: '👶', minXP: 0, nextXP: 100, color: '#38BDF8', desc: 'Starting your science journey!' },
-  { id: 'student', stage: 2, title: 'STUDENT', icon: '🎒', minXP: 100, nextXP: 300, color: '#10B981', desc: 'Learning core Grade 10 concepts!' },
-  { id: 'graduate', stage: 3, title: 'GRADUATE', icon: '🎓', minXP: 300, nextXP: 600, color: '#8B5CF6', desc: 'Mastered science trivia & simulations!' },
-  { id: 'adult', stage: 4, title: 'ADULT', icon: '🧑', minXP: 600, nextXP: Infinity, color: '#F59E0B', desc: 'Science Grandmaster & Expert!' }
+  { 
+    id: 'baby', 
+    stage: 1, 
+    title: 'BABY', 
+    icon: '👶', 
+    image: 'assets/baby_character.jpg',
+    minXP: 0, 
+    nextXP: 100, 
+    color: '#38BDF8', 
+    defaultQuote: "Let's grow together!",
+    desc: 'Focusing on earning 100 XP to evolve into Student!' 
+  },
+  { 
+    id: 'student', 
+    stage: 2, 
+    title: 'STUDENT', 
+    icon: '🎒', 
+    image: null,
+    minXP: 100, 
+    nextXP: 300, 
+    color: '#10B981', 
+    defaultQuote: "Studying core Grade 10 concepts!",
+    desc: 'Learning core Grade 10 Science topics!' 
+  },
+  { 
+    id: 'graduate', 
+    stage: 3, 
+    title: 'GRADUATE', 
+    icon: '🎓', 
+    image: null,
+    minXP: 300, 
+    nextXP: 600, 
+    color: '#8B5CF6', 
+    defaultQuote: "Mastering trivia & simulations!",
+    desc: 'Mastered science trivia & simulations!' 
+  },
+  { 
+    id: 'adult', 
+    stage: 4, 
+    title: 'ADULT', 
+    icon: '🧑', 
+    image: null,
+    minXP: 600, 
+    nextXP: Infinity, 
+    color: '#F59E0B', 
+    defaultQuote: "Final Stage — Science Grandmaster!",
+    desc: 'Science Grandmaster & Expert!' 
+  }
 ];
 
-const CHARACTER_REACTIONS = [
-  "Ready to learn science! 🧪",
-  "Great job studying today! ⭐",
-  "Knowledge is power! ⚡",
-  "Keep completing tasks to evolve! 🚀",
-  "Let's get 100% accuracy! 🎯",
-  "Science is amazing! 🧬"
+const BABY_INTERACTION_REACTIONS = [
+  "Happy reaction! 👶",
+  "Giggle giggle! 🧪",
+  "Ready to learn with you! ⭐",
+  "Every quiz makes me grow! 🚀",
+  "Let's reach 100 XP! 🎯"
 ];
 
 // --------------------------------------------------------------------------
@@ -44,7 +87,7 @@ const TaskSystem = {
     }
   },
 
-  completeTask(taskId, taskName, xpAmount = 20) {
+  completeTask(taskId, taskName, xpAmount = 10) {
     if (this.isTaskCompleted(taskId)) {
       console.log(`Task [${taskId}] reward already given.`);
       return false;
@@ -85,18 +128,18 @@ const ProgressionSystem = {
 
     DB.saveStudentProfile(profile);
 
-    // Show floating XP notification
+    // Show floating XP notification & reaction
     CharacterSystem.showXPToast(amount, reason);
 
     // Update UI
     CharacterSystem.renderHomeCharacterCard();
     App.updateUserHeader();
 
-    // Check Evolution Threshold
+    // Check Evolution Threshold (e.g. 100 XP for Baby -> Student)
     if (newStage.stage > oldStage.stage) {
       setTimeout(() => {
         CharacterSystem.triggerEvolutionModal(oldStage, newStage, newXP);
-      }, 500);
+      }, 600);
     }
   }
 };
@@ -115,39 +158,75 @@ const CharacterSystem = {
 
     const xp = ProgressionSystem.getCurrentXP();
     const stage = ProgressionSystem.getStageForXP(xp);
+    const isBaby = (stage.id === 'baby');
     
+    let dynamicQuote = stage.defaultQuote;
+    if (isBaby) {
+      if (xp >= 100) dynamicQuote = "I grew up! 🎉";
+      else if (xp >= 70) dynamicQuote = "I'm growing! 👶";
+    }
+
     let nextReqText = '';
+    let untilNextText = '';
     let pct = 100;
+
     if (stage.nextXP !== Infinity) {
       const prevMin = stage.minXP;
       const currentLevelXP = xp - prevMin;
       const neededXP = stage.nextXP - prevMin;
       pct = Math.min(100, Math.round((currentLevelXP / neededXP) * 100));
-      nextReqText = `${xp} / ${stage.nextXP} XP (${pct}%)`;
+      nextReqText = `${xp} / ${stage.nextXP} XP`;
+      
+      const diff = Math.max(0, stage.nextXP - xp);
+      untilNextText = `${diff} XP until ${EVOLUTION_STAGES[stage.stage].title}`;
     } else {
-      nextReqText = `${xp} XP (MAX EVOLUTION)`;
+      nextReqText = `${xp} XP`;
+      untilNextText = `FINAL STAGE REACHED! 🎉`;
       pct = 100;
     }
 
-    container.innerHTML = `
-      <div class="character-evolution-box" style="border-color: ${stage.color};">
+    let avatarHtml = '';
+    if (stage.image) {
+      avatarHtml = `
+        <div class="baby-avatar-wrapper" onclick="CharacterSystem.onTapCharacter()">
+          <img src="${stage.image}" class="baby-char-img bounce-anim" alt="Baby Character" />
+          <div class="char-speech-bubble hidden" id="charSpeechBubble">${dynamicQuote}</div>
+        </div>
+      `;
+    } else {
+      avatarHtml = `
         <div class="char-avatar-section" onclick="CharacterSystem.onTapCharacter()">
           <div class="char-avatar-icon bounce-anim">${stage.icon}</div>
-          <div class="char-speech-bubble hidden" id="charSpeechBubble">Hello!</div>
+          <div class="char-speech-bubble hidden" id="charSpeechBubble">${dynamicQuote}</div>
+        </div>
+      `;
+    }
+
+    container.innerHTML = `
+      <div class="character-evolution-box ${isBaby ? 'baby-stage-card' : ''}" style="border-color: ${stage.color};">
+        <div class="char-card-header">
+          <span class="char-header-title">MY CHARACTER</span>
+          <span class="char-stage-badge" style="background: ${stage.color};">${stage.icon} ${stage.title} STAGE</span>
         </div>
 
-        <div class="char-info-section">
-          <div class="char-title-row">
-            <span class="char-stage-badge" style="background: ${stage.color};">${stage.title}</span>
-            <span class="char-xp-count">${xp} XP</span>
-          </div>
+        <div class="char-card-body">
+          ${avatarHtml}
+          
+          <div class="char-quote-label">"${dynamicQuote}"</div>
 
-          <p class="char-desc-text">${stage.desc}</p>
+          <div class="char-xp-hero-badge">⭐ ${xp} XP</div>
 
           <div class="char-progress-bar-container">
             <div class="char-progress-fill" style="width: ${pct}%; background: ${stage.color};"></div>
           </div>
-          <div class="char-progress-label">${nextReqText}</div>
+          <div class="char-progress-sub-row">
+            <span>${nextReqText}</span>
+            <span style="font-weight: 800; color: ${stage.color};">${untilNextText}</span>
+          </div>
+
+          <button class="earn-more-xp-btn" onclick="App.showScreen('playScreen')">
+            🚀 EARN MORE XP
+          </button>
         </div>
       </div>
     `;
@@ -157,15 +236,19 @@ const CharacterSystem = {
     const bubble = document.getElementById('charSpeechBubble');
     if (!bubble) return;
 
-    const randomMsg = CHARACTER_REACTIONS[Math.floor(Math.random() * CHARACTER_REACTIONS.length)];
-    bubble.textContent = randomMsg;
+    const xp = ProgressionSystem.getCurrentXP();
+    let msg = BABY_INTERACTION_REACTIONS[Math.floor(Math.random() * BABY_INTERACTION_REACTIONS.length)];
+    if (xp >= 100) msg = "I grew up! 🎉";
+    else if (xp >= 70) msg = "I'm growing! 👶";
+
+    bubble.textContent = msg;
     bubble.classList.remove('hidden');
 
-    const icon = document.querySelector('.char-avatar-icon');
-    if (icon) {
-      icon.classList.remove('bounce-anim');
-      void icon.offsetWidth;
-      icon.classList.add('bounce-anim');
+    const img = document.querySelector('.baby-char-img, .char-avatar-icon');
+    if (img) {
+      img.classList.remove('bounce-anim');
+      void img.offsetWidth;
+      img.classList.add('bounce-anim');
     }
 
     setTimeout(() => {
@@ -197,13 +280,17 @@ const CharacterSystem = {
     const modal = document.getElementById('evolutionModal');
     if (!modal) return;
 
-    document.getElementById('evoOldIcon').textContent = oldStage.icon;
+    const oldDisplay = oldStage.image 
+      ? `<img src="${oldStage.image}" class="evo-img-thumb" />` 
+      : oldStage.icon;
+    
+    document.getElementById('evoOldIcon').innerHTML = oldDisplay;
     document.getElementById('evoOldTitle').textContent = oldStage.title;
 
     document.getElementById('evoNewIcon').textContent = newStage.icon;
     document.getElementById('evoNewTitle').textContent = newStage.title;
     document.getElementById('evoNewDesc').textContent = newStage.desc;
-    document.getElementById('evoXPText').textContent = `${currentXP} XP Reached!`;
+    document.getElementById('evoXPText').textContent = `🎉 100 XP Reached! ${oldStage.title} evolved into ${newStage.title}!`;
 
     modal.classList.remove('hidden');
   },

@@ -1123,10 +1123,25 @@ const Quiz = {
       App.updateUserHeader();
     }
 
-    // Interactive Character Progression: Award +20 XP on completing quiz task
-    const taskId = `quiz_${this.currentTerm}_${this.currentTopic}_${Date.now()}`;
+    // Interactive Character Progression: Pass rewards through TaskSystem
     if (typeof TaskSystem !== 'undefined') {
-      TaskSystem.completeTask(taskId, `Completed Quiz: ${this.currentTopic || 'Science'}`, 20);
+      // 1. Complete a quiz (+10 XP)
+      TaskSystem.completeTask(`quiz_complete_${Date.now()}`, `Completed Quiz`, 10);
+
+      // 2. High Score Bonus (+10 XP if score >= 80%)
+      if (percentage >= 80) {
+        TaskSystem.completeTask(`high_score_${Date.now()}`, `High Score (≥80%)`, 10);
+      }
+
+      // 3. Finish a topic (+15 XP)
+      if (this.currentTopic) {
+        TaskSystem.completeTask(`topic_finish_${this.currentTerm}_${this.currentTopic}_${Date.now()}`, `Finished Topic: ${this.currentTopic}`, 15);
+      }
+
+      // 4. Maintain a streak (+5 XP if maxStreak >= 3)
+      if (this.maxStreak >= 3) {
+        TaskSystem.completeTask(`streak_${Date.now()}`, `Streak Bonus (🔥 ${this.maxStreak})`, 5);
+      }
     }
 
     Achievements.evaluateSession({

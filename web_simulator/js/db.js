@@ -273,6 +273,9 @@ const DB = {
     if (!list.includes(achId)) {
       list.push(achId);
       localStorage.setItem(this.STORAGE_ACHIEVEMENTS, JSON.stringify(list));
+      if (typeof TaskSystem !== 'undefined') {
+        TaskSystem.completeTask(`ach_xp_${achId}`, `Achievement Unlocked`, 15);
+      }
     }
   },
 

@@ -3699,6 +3699,119 @@
   color: #059669;
 }
 
+/* Baby Stage Card Specific Styling */
+.character-evolution-box.baby-stage-card {
+  flex-direction: column;
+  padding: 20px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F0F9FF 100%);
+  border: 2.5px solid #38BDF8;
+  border-radius: 24px;
+}
+
+.char-card-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.char-header-title {
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #0284C7;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.char-card-body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.baby-avatar-wrapper {
+  position: relative;
+  cursor: pointer;
+  margin: 10px 0;
+}
+
+.baby-char-img {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 12px rgba(56, 189, 248, 0.25));
+  transition: transform 0.3s ease;
+}
+
+.baby-char-img.bounce-anim {
+  animation: babyWiggle 3s ease-in-out infinite;
+}
+
+@keyframes babyWiggle {
+  0%, 100% { transform: translateY(0) scale(1); }
+  30% { transform: translateY(-6px) scale(1.03) rotate(-3deg); }
+  70% { transform: translateY(-3px) scale(1.02) rotate(3deg); }
+}
+
+.char-quote-label {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0369A1;
+  margin: 6px 0 10px 0;
+  font-style: italic;
+}
+
+.char-xp-hero-badge {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 8px;
+}
+
+.char-progress-sub-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #475569;
+  margin-top: 4px;
+  margin-bottom: 14px;
+}
+
+.earn-more-xp-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 12px 18px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.earn-more-xp-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45);
+}
+
+.evo-img-thumb {
+  width: 75px;
+  height: 75px;
+  object-fit: contain;
+}
+
+
 
 
 
