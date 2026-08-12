@@ -3330,7 +3330,7 @@ const Experiment = {
             <div class="tectonics-anim-box">
               <div class="plates-row">
                 <div class="tectonic-plate move-collide-left">🟫 Plate A</div>
-                <div style="font-size:2.2rem;">🏔️</div>
+                <div class="mountain-rising-anim">🏔️</div>
                 <div class="tectonic-plate move-collide-right">🟫 Plate B</div>
               </div>
               <div class="crust-new-badge" style="background:#0284C7; margin-top:8px;">
