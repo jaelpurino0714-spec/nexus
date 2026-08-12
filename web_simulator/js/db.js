@@ -195,6 +195,7 @@ const DB = {
           device_id: profile.id,
           total_xp: profile.totalXP || 0,
           evolution_stage: profile.evolutionStage || 'baby',
+          gender: profile.gender || null,
           created_at: profile.createdAt || new Date().toISOString()
         });
       } catch (e) {

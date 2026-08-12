@@ -57,6 +57,19 @@ const EVOLUTION_STAGES = [
   }
 ];
 
+const GENDER_CHARACTER_IMAGES = {
+  male: {
+    student: 'assets/student-character.png',
+    graduate: 'assets/graduate-character.png',
+    adult: 'assets/adult-character.png'
+  },
+  female: {
+    student: 'assets/female-student-character.png',
+    graduate: 'assets/female-graduate-character.png',
+    adult: 'assets/female-adult-character.png'
+  }
+};
+
 const BABY_INTERACTION_REACTIONS = [
   "Yay! 👶",
   "Happy reaction! 👶",
@@ -164,10 +177,15 @@ const ProgressionSystem = {
     CharacterSystem.renderHomeCharacterCard();
     App.updateUserHeader();
 
-    // Check Evolution Threshold (e.g. 100 XP for Baby -> Student, 300 XP for Student -> Graduate, 600 XP for Graduate -> Adult)
+    // Check Evolution Threshold
     if (newStage.stage > oldStage.stage) {
       setTimeout(() => {
-        CharacterSystem.triggerEvolutionModal(oldStage, newStage, newXP);
+        // If gender not selected yet and evolving to Student or beyond, prompt gender choice first!
+        if (!profile.gender && newStage.stage >= 2) {
+          CharacterSystem.triggerGenderSelectionModal(oldStage, newStage, newXP);
+        } else {
+          CharacterSystem.triggerEvolutionModal(oldStage, newStage, newXP);
+        }
       }, 600);
     }
   }
@@ -177,8 +195,74 @@ const ProgressionSystem = {
 // 3. CHARACTER SYSTEM
 // --------------------------------------------------------------------------
 const CharacterSystem = {
+  _pendingEvolutionData: null,
+  _selectedGender: null,
+  _genderPromptShown: false,
+
   init() {
     this.renderHomeCharacterCard();
+  },
+
+  getStageImage(stage, gender) {
+    if (stage.id === 'baby') return stage.image;
+    const g = (gender === 'female') ? 'female' : 'male';
+    return GENDER_CHARACTER_IMAGES[g][stage.id] || stage.image;
+  },
+
+  triggerGenderSelectionModal(oldStage, newStage, newXP, isExistingUser = false) {
+    this._pendingEvolutionData = { oldStage, newStage, newXP, isExistingUser };
+    this._selectedGender = null;
+    
+    const maleCard = document.getElementById('genderCardMale');
+    const femaleCard = document.getElementById('genderCardFemale');
+    const confirmBtn = document.getElementById('confirmGenderBtn');
+    
+    if (maleCard) maleCard.classList.remove('selected');
+    if (femaleCard) femaleCard.classList.remove('selected');
+    if (confirmBtn) confirmBtn.disabled = true;
+
+    const modal = document.getElementById('genderSelectionModal');
+    if (modal) modal.classList.remove('hidden');
+  },
+
+  selectGenderChoice(gender) {
+    this._selectedGender = gender;
+    const maleCard = document.getElementById('genderCardMale');
+    const femaleCard = document.getElementById('genderCardFemale');
+    const confirmBtn = document.getElementById('confirmGenderBtn');
+
+    if (gender === 'male') {
+      if (maleCard) maleCard.classList.add('selected');
+      if (femaleCard) femaleCard.classList.remove('selected');
+    } else {
+      if (femaleCard) femaleCard.classList.add('selected');
+      if (maleCard) maleCard.classList.remove('selected');
+    }
+
+    if (confirmBtn) confirmBtn.disabled = false;
+  },
+
+  confirmGenderSelection() {
+    if (!this._selectedGender) return;
+
+    const profile = DB.getStudentProfile() || {};
+    profile.gender = this._selectedGender;
+    DB.saveStudentProfile(profile);
+
+    const modal = document.getElementById('genderSelectionModal');
+    if (modal) modal.classList.add('hidden');
+
+    const data = this._pendingEvolutionData;
+    if (data) {
+      if (data.isExistingUser) {
+        this.renderHomeCharacterCard();
+        App.updateUserHeader();
+      } else {
+        this.triggerEvolutionModal(data.oldStage, data.newStage, data.newXP);
+      }
+    } else {
+      this.renderHomeCharacterCard();
+    }
   },
 
   renderHomeCharacterCard() {
@@ -187,6 +271,18 @@ const CharacterSystem = {
 
     const xp = ProgressionSystem.getCurrentXP();
     const stage = ProgressionSystem.getStageForXP(xp);
+    const profile = DB.getStudentProfile() || {};
+
+    // For existing users with no gender set who are past Baby stage
+    if (!profile.gender && stage.id !== 'baby' && !this._genderPromptShown) {
+      this._genderPromptShown = true;
+      const oldStage = EVOLUTION_STAGES[0];
+      this.triggerGenderSelectionModal(oldStage, stage, xp, true);
+    }
+
+    const gender = profile.gender || 'male';
+    const stageImage = this.getStageImage(stage, gender);
+
     const isBaby = (stage.id === 'baby');
     const isStudent = (stage.id === 'student');
     const isGraduate = (stage.id === 'graduate');
@@ -226,11 +322,11 @@ const CharacterSystem = {
     }
 
     let avatarHtml = '';
-    if (stage.image) {
+    if (stageImage) {
       avatarHtml = `
         <div class="baby-avatar-wrapper" onclick="CharacterSystem.onTapCharacter()" title="Tap character to interact!">
           <div class="char-speech-bubble hidden" id="charSpeechBubble">${dynamicQuote}</div>
-          <img src="${stage.image}" class="baby-char-img bounce-anim" alt="${stage.title} Character" />
+          <img src="${stageImage}" class="baby-char-img bounce-anim" alt="${stage.title} Character" />
         </div>
       `;
     } else {
@@ -242,11 +338,15 @@ const CharacterSystem = {
       `;
     }
 
+    const genderBadge = (!isBaby && profile.gender) 
+      ? (profile.gender === 'female' ? ' 👧' : ' 👦') 
+      : '';
+
     container.innerHTML = `
       <div class="character-evolution-box ${isBaby ? 'baby-stage-card' : ''} ${isStudent ? 'student-stage-card' : ''} ${isGraduate ? 'graduate-stage-card' : ''} ${isAdult ? 'adult-stage-card' : ''}" style="border-color: ${stage.color};">
         <div class="char-card-header">
           <span class="char-header-title">MY CHARACTER</span>
-          <span class="char-stage-badge" style="background: ${stage.color};">${stage.icon} ${stage.title}</span>
+          <span class="char-stage-badge" style="background: ${stage.color};">${stage.icon} ${stage.title}${genderBadge}</span>
         </div>
 
         <div class="char-card-body">
@@ -367,12 +467,18 @@ const CharacterSystem = {
     const modal = document.getElementById('evolutionModal');
     if (!modal) return;
 
-    const oldDisplay = oldStage.image 
-      ? `<img src="${oldStage.image}" class="evo-img-thumb" alt="${oldStage.title}" />` 
+    const profile = DB.getStudentProfile() || {};
+    const gender = profile.gender || 'male';
+
+    const oldImg = this.getStageImage(oldStage, gender);
+    const newImg = this.getStageImage(newStage, gender);
+
+    const oldDisplay = oldImg 
+      ? `<img src="${oldImg}" class="evo-img-thumb" alt="${oldStage.title}" />` 
       : oldStage.icon;
 
-    const newDisplay = newStage.image 
-      ? `<img src="${newStage.image}" class="evo-img-thumb" alt="${newStage.title}" />` 
+    const newDisplay = newImg 
+      ? `<img src="${newImg}" class="evo-img-thumb" alt="${newStage.title}" />` 
       : newStage.icon;
     
     document.getElementById('evoOldIcon').innerHTML = oldDisplay;
