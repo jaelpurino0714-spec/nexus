@@ -3708,6 +3708,15 @@
   border-radius: 24px;
 }
 
+/* Student Stage Card Specific Styling */
+.character-evolution-box.student-stage-card {
+  flex-direction: column;
+  padding: 20px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #ECFDF5 100%);
+  border: 2.5px solid #10B981;
+  border-radius: 24px;
+}
+
 .char-card-header {
   width: 100%;
   display: flex;

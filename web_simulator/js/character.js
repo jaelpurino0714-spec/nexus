@@ -66,6 +66,15 @@ const BABY_INTERACTION_REACTIONS = [
   "Let's reach 100 XP! 🎯"
 ];
 
+const STUDENT_INTERACTION_REACTIONS = [
+  "Let's study! 🎒",
+  "I can do this! ⚡",
+  "Let's learn! 📚",
+  "Almost there! 🎯",
+  "Keep going! 🚀",
+  "Studying Grade 10 concepts! 🧪"
+];
+
 // --------------------------------------------------------------------------
 // 1. TASK SYSTEM
 // --------------------------------------------------------------------------
@@ -137,7 +146,7 @@ const ProgressionSystem = {
     CharacterSystem.renderHomeCharacterCard();
     App.updateUserHeader();
 
-    // Check Evolution Threshold (e.g. 100 XP for Baby -> Student)
+    // Check Evolution Threshold (e.g. 100 XP for Baby -> Student, 300 XP for Student -> Graduate)
     if (newStage.stage > oldStage.stage) {
       setTimeout(() => {
         CharacterSystem.triggerEvolutionModal(oldStage, newStage, newXP);
@@ -161,11 +170,15 @@ const CharacterSystem = {
     const xp = ProgressionSystem.getCurrentXP();
     const stage = ProgressionSystem.getStageForXP(xp);
     const isBaby = (stage.id === 'baby');
+    const isStudent = (stage.id === 'student');
     
     let dynamicQuote = stage.defaultQuote;
     if (isBaby) {
       if (xp >= 70) dynamicQuote = "Almost ready to evolve! 👶";
       else dynamicQuote = "Let's grow together!";
+    } else if (isStudent) {
+      if (xp >= 270) dynamicQuote = "Graduation is close! 🎓";
+      else dynamicQuote = "Studying core Grade 10 concepts!";
     }
 
     let nextReqText = '';
@@ -192,7 +205,7 @@ const CharacterSystem = {
       avatarHtml = `
         <div class="baby-avatar-wrapper" onclick="CharacterSystem.onTapCharacter()" title="Tap character to interact!">
           <div class="char-speech-bubble hidden" id="charSpeechBubble">${dynamicQuote}</div>
-          <img src="${stage.image}" class="baby-char-img bounce-anim" alt="Baby Character" />
+          <img src="${stage.image}" class="baby-char-img bounce-anim" alt="${stage.title} Character" />
         </div>
       `;
     } else {
@@ -205,7 +218,7 @@ const CharacterSystem = {
     }
 
     container.innerHTML = `
-      <div class="character-evolution-box ${isBaby ? 'baby-stage-card' : ''}" style="border-color: ${stage.color};">
+      <div class="character-evolution-box ${isBaby ? 'baby-stage-card' : ''} ${isStudent ? 'student-stage-card' : ''}" style="border-color: ${stage.color};">
         <div class="char-card-header">
           <span class="char-header-title">MY CHARACTER</span>
           <span class="char-stage-badge" style="background: ${stage.color};">${stage.icon} ${stage.title}</span>
@@ -239,9 +252,24 @@ const CharacterSystem = {
     if (!bubble) return;
 
     const xp = ProgressionSystem.getCurrentXP();
-    let msg = BABY_INTERACTION_REACTIONS[Math.floor(Math.random() * BABY_INTERACTION_REACTIONS.length)];
-    if (xp >= 100) msg = "I grew up! 🎉";
-    else if (xp >= 70) msg = "I'm growing! 👶";
+    const stage = ProgressionSystem.getStageForXP(xp);
+
+    let msg = "";
+    if (stage.id === 'student') {
+      if (xp >= 270) {
+        msg = "Graduation is close! 🎓";
+      } else {
+        msg = STUDENT_INTERACTION_REACTIONS[Math.floor(Math.random() * STUDENT_INTERACTION_REACTIONS.length)];
+      }
+    } else if (stage.id === 'baby') {
+      if (xp >= 70) {
+        msg = "I'm growing! 👶";
+      } else {
+        msg = BABY_INTERACTION_REACTIONS[Math.floor(Math.random() * BABY_INTERACTION_REACTIONS.length)];
+      }
+    } else {
+      msg = stage.defaultQuote;
+    }
 
     bubble.textContent = msg;
     bubble.classList.remove('hidden');
@@ -307,16 +335,20 @@ const CharacterSystem = {
     if (!modal) return;
 
     const oldDisplay = oldStage.image 
-      ? `<img src="${oldStage.image}" class="evo-img-thumb" />` 
+      ? `<img src="${oldStage.image}" class="evo-img-thumb" alt="${oldStage.title}" />` 
       : oldStage.icon;
+
+    const newDisplay = newStage.image 
+      ? `<img src="${newStage.image}" class="evo-img-thumb" alt="${newStage.title}" />` 
+      : newStage.icon;
     
     document.getElementById('evoOldIcon').innerHTML = oldDisplay;
     document.getElementById('evoOldTitle').textContent = oldStage.title;
 
-    document.getElementById('evoNewIcon').textContent = newStage.icon;
+    document.getElementById('evoNewIcon').innerHTML = newDisplay;
     document.getElementById('evoNewTitle').textContent = newStage.title;
     document.getElementById('evoNewDesc').textContent = newStage.desc;
-    document.getElementById('evoXPText').textContent = `🎉 100 XP Reached! ${oldStage.title} evolved into ${newStage.title}!`;
+    document.getElementById('evoXPText').textContent = `🎉 ${newStage.minXP} XP Reached! ${oldStage.title} evolved into ${newStage.title}!`;
 
     modal.classList.remove('hidden');
   },
