@@ -1123,6 +1123,12 @@ const Quiz = {
       App.updateUserHeader();
     }
 
+    // Interactive Character Progression: Award +20 XP on completing quiz task
+    const taskId = `quiz_${this.currentTerm}_${this.currentTopic}_${Date.now()}`;
+    if (typeof TaskSystem !== 'undefined') {
+      TaskSystem.completeTask(taskId, `Completed Quiz: ${this.currentTopic || 'Science'}`, 20);
+    }
+
     Achievements.evaluateSession({
       term: this.currentTerm,
       totalQuestions: totalQ,

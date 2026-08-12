@@ -43,6 +43,9 @@ const App = {
 
     if (screenId === 'homeScreen') {
       this.updateUserHeader();
+      if (typeof CharacterSystem !== 'undefined') {
+        CharacterSystem.renderHomeCharacterCard();
+      }
     }
   },
 

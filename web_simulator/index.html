@@ -167,6 +167,11 @@
           </div>
         </div>
 
+        <!-- Interactive Character Evolution Card -->
+        <div id="homeCharacterCard" class="home-character-card">
+          <!-- Rendered dynamically by CharacterSystem -->
+        </div>
+
         <div class="home-banner">
           <div class="banner-badge">DepEd MELCs Aligned</div>
           <h3>Daily Science Warm-Up</h3>
@@ -596,6 +601,35 @@
             <!-- Rendered dynamically -->
           </div>
           <button class="cancel-btn" onclick="document.getElementById('participantProfileModal').classList.add('hidden')">Close</button>
+        </div>
+      </div>
+
+      <!-- Character Evolution Celebration Modal -->
+      <div id="evolutionModal" class="mode-modal hidden">
+        <div class="mode-modal-content evo-modal-content">
+          <div class="evo-modal-header">
+            <span class="evo-celebrate-badge">🎉 THRESHOLD REACHED!</span>
+            <h2>CHARACTER EVOLUTION!</h2>
+          </div>
+
+          <div class="evo-animation-stage">
+            <div class="evo-stage-item old">
+              <span id="evoOldIcon" class="evo-icon">👶</span>
+              <span id="evoOldTitle" class="evo-title">BABY</span>
+            </div>
+            <div class="evo-arrow">➔</div>
+            <div class="evo-stage-item new glow-bounce">
+              <span id="evoNewIcon" class="evo-icon">🎒</span>
+              <span id="evoNewTitle" class="evo-title">STUDENT</span>
+            </div>
+          </div>
+
+          <p id="evoNewDesc" class="evo-desc">Learning core Grade 10 concepts!</p>
+          <div id="evoXPText" class="evo-xp-text">105 XP Reached!</div>
+
+          <button class="primary-btn bottom-start-btn" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); margin-top: 14px;" onclick="CharacterSystem.closeEvolutionModal()">
+            Keep Learning 🚀
+          </button>
         </div>
       </div>
 
@@ -1037,6 +1071,7 @@
   <script src="js/quiz.js"></script>
   <script src="js/analytics.js"></script>
   <script src="js/experiment.js"></script>
+  <script src="js/character.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

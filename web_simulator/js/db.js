@@ -193,6 +193,8 @@ const DB = {
           section: profile.section,
           photo_url: profile.photo,
           device_id: profile.id,
+          total_xp: profile.totalXP || 0,
+          evolution_stage: profile.evolutionStage || 'baby',
           created_at: profile.createdAt || new Date().toISOString()
         });
       } catch (e) {
