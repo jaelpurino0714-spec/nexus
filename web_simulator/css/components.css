@@ -3736,7 +3736,7 @@
 .baby-avatar-wrapper {
   position: relative;
   cursor: pointer;
-  margin: 12px 0;
+  margin: 16px 0 10px 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -3744,11 +3744,11 @@
 }
 
 .baby-char-img {
-  width: 140px;
-  height: 140px;
+  width: 160px;
+  height: 160px;
   max-width: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 8px 16px rgba(56, 189, 248, 0.3));
+  filter: drop-shadow(0 8px 20px rgba(56, 189, 248, 0.35));
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
   user-select: none;
   -webkit-user-drag: none;

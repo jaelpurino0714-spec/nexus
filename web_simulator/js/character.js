@@ -129,8 +129,9 @@ const ProgressionSystem = {
 
     DB.saveStudentProfile(profile);
 
-    // Show floating XP notification & reaction
+    // Show floating XP notification & character visual reaction
     CharacterSystem.showXPToast(amount, reason);
+    CharacterSystem.triggerXPReaction(amount);
 
     // Update UI
     CharacterSystem.renderHomeCharacterCard();
@@ -163,8 +164,8 @@ const CharacterSystem = {
     
     let dynamicQuote = stage.defaultQuote;
     if (isBaby) {
-      if (xp >= 100) dynamicQuote = "I grew up! 🎉";
-      else if (xp >= 70) dynamicQuote = "I'm growing! 👶";
+      if (xp >= 70) dynamicQuote = "Almost ready to evolve! 👶";
+      else dynamicQuote = "Let's grow together!";
     }
 
     let nextReqText = '';
@@ -189,16 +190,16 @@ const CharacterSystem = {
     let avatarHtml = '';
     if (stage.image) {
       avatarHtml = `
-        <div class="baby-avatar-wrapper" onclick="CharacterSystem.onTapCharacter()">
-          <img src="${stage.image}" class="baby-char-img bounce-anim" alt="Baby Character" />
+        <div class="baby-avatar-wrapper" onclick="CharacterSystem.onTapCharacter()" title="Tap character to interact!">
           <div class="char-speech-bubble hidden" id="charSpeechBubble">${dynamicQuote}</div>
+          <img src="${stage.image}" class="baby-char-img bounce-anim" alt="Baby Character" />
         </div>
       `;
     } else {
       avatarHtml = `
-        <div class="char-avatar-section" onclick="CharacterSystem.onTapCharacter()">
-          <div class="char-avatar-icon bounce-anim">${stage.icon}</div>
+        <div class="char-avatar-section" onclick="CharacterSystem.onTapCharacter()" title="Tap character to interact!">
           <div class="char-speech-bubble hidden" id="charSpeechBubble">${dynamicQuote}</div>
+          <div class="char-avatar-icon bounce-anim">${stage.icon}</div>
         </div>
       `;
     }
@@ -207,7 +208,7 @@ const CharacterSystem = {
       <div class="character-evolution-box ${isBaby ? 'baby-stage-card' : ''}" style="border-color: ${stage.color};">
         <div class="char-card-header">
           <span class="char-header-title">MY CHARACTER</span>
-          <span class="char-stage-badge" style="background: ${stage.color};">${stage.icon} ${stage.title} STAGE</span>
+          <span class="char-stage-badge" style="background: ${stage.color};">${stage.icon} ${stage.title}</span>
         </div>
 
         <div class="char-card-body">
@@ -257,6 +258,28 @@ const CharacterSystem = {
     this._bubbleTimer = setTimeout(() => {
       bubble.classList.add('hidden');
     }, 2500);
+  },
+
+  triggerXPReaction(amount) {
+    const bubble = document.getElementById('charSpeechBubble');
+    const img = document.querySelector('.baby-char-img, .char-avatar-icon');
+
+    if (img) {
+      img.classList.remove('tap-react');
+      void img.offsetWidth;
+      img.classList.add('tap-react');
+      setTimeout(() => img.classList.remove('tap-react'), 450);
+    }
+
+    if (bubble) {
+      bubble.textContent = `+${amount} XP! 🎉`;
+      bubble.classList.remove('hidden');
+
+      if (this._bubbleTimer) clearTimeout(this._bubbleTimer);
+      this._bubbleTimer = setTimeout(() => {
+        bubble.classList.add('hidden');
+      }, 2500);
+    }
   },
 
   showXPToast(amount, reason) {
