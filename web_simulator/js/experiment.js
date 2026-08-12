@@ -60,6 +60,13 @@ const Experiment = {
   evolutionStarted: false,
   evolutionExp1Completed: false,
   evolutionExp2Completed: false,
+  carryingCapacityMode: 'growth', // 'growth', 'capacity', or 'summary'
+  carryingCapacityChoice: 'resources', // 'resources', 'drought', or 'habitat'
+  carryingCapacityStarted: false,
+  biotechMode: 'fermentation', // 'fermentation', 'recombinant', or 'summary'
+  biotechStarted: false,
+  tectonicsMode: 'divergent', // 'divergent', 'convergent', or 'summary'
+  tectonicsStarted: false,
 
   selectedItems: new Set(),
   isCombined: false,
@@ -155,6 +162,19 @@ const Experiment = {
         this.evolutionGeneration = 1;
         this.evolutionStarted = false;
         this.renderEvolutionActivity(canvasBox);
+      } else if (topicName === "Ecosystem's Carrying Capacity and Population Growth") {
+        this.carryingCapacityMode = 'growth';
+        this.carryingCapacityChoice = 'resources';
+        this.carryingCapacityStarted = false;
+        this.renderCarryingCapacityActivity(canvasBox);
+      } else if (topicName === "Biotechnology") {
+        this.biotechMode = 'fermentation';
+        this.biotechStarted = false;
+        this.renderBiotechActivity(canvasBox);
+      } else if (topicName === "Plate Tectonics") {
+        this.tectonicsMode = 'divergent';
+        this.tectonicsStarted = false;
+        this.renderTectonicsActivity(canvasBox);
       } else {
         canvasBox.innerHTML = ''; // Keep blank for other topics for now
       }
@@ -294,6 +314,12 @@ const Experiment = {
         this.renderHomeostasisActivity(canvasBox);
       } else if (this.currentTopic === "Mechanisms of Evolution") {
         this.renderEvolutionActivity(canvasBox);
+      } else if (this.currentTopic === "Ecosystem's Carrying Capacity and Population Growth") {
+        this.renderCarryingCapacityActivity(canvasBox);
+      } else if (this.currentTopic === "Biotechnology") {
+        this.renderBiotechActivity(canvasBox);
+      } else if (this.currentTopic === "Plate Tectonics") {
+        this.renderTectonicsActivity(canvasBox);
       }
     }
   },
@@ -319,6 +345,12 @@ const Experiment = {
         this.renderHomeostasisActivity(canvasBox);
       } else if (this.currentTopic === "Mechanisms of Evolution") {
         this.renderEvolutionActivity(canvasBox);
+      } else if (this.currentTopic === "Ecosystem's Carrying Capacity and Population Growth") {
+        this.renderCarryingCapacityActivity(canvasBox);
+      } else if (this.currentTopic === "Biotechnology") {
+        this.renderBiotechActivity(canvasBox);
+      } else if (this.currentTopic === "Plate Tectonics") {
+        this.renderTectonicsActivity(canvasBox);
       }
     }
   },
@@ -336,6 +368,9 @@ const Experiment = {
     this.homeostasisStarted = false;
     this.evolutionStarted = false;
     this.evolutionGeneration = 1;
+    this.carryingCapacityStarted = false;
+    this.biotechStarted = false;
+    this.tectonicsStarted = false;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) {
       if (this.currentTopic === "Physical vs. Chemical Change") {
@@ -354,6 +389,12 @@ const Experiment = {
         this.renderHomeostasisActivity(canvasBox);
       } else if (this.currentTopic === "Mechanisms of Evolution") {
         this.renderEvolutionActivity(canvasBox);
+      } else if (this.currentTopic === "Ecosystem's Carrying Capacity and Population Growth") {
+        this.renderCarryingCapacityActivity(canvasBox);
+      } else if (this.currentTopic === "Biotechnology") {
+        this.renderBiotechActivity(canvasBox);
+      } else if (this.currentTopic === "Plate Tectonics") {
+        this.renderTectonicsActivity(canvasBox);
       }
     }
   },
@@ -2577,6 +2618,722 @@ const Experiment = {
             </button>
             <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchEvolutionMode('resistance')">
               🦠 Exp 2: Resistance
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  switchCarryingCapacityMode(mode) {
+    this.carryingCapacityMode = mode;
+    this.carryingCapacityChoice = 'resources';
+    this.carryingCapacityStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderCarryingCapacityActivity(canvasBox);
+    }
+  },
+
+  setCarryingCapacityChoice(choice) {
+    this.carryingCapacityChoice = choice;
+    this.carryingCapacityStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderCarryingCapacityActivity(canvasBox);
+    }
+  },
+
+  startCarryingCapacitySimulation() {
+    this.carryingCapacityStarted = true;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderCarryingCapacityActivity(canvasBox);
+    }
+  },
+
+  resetCarryingCapacityActivity() {
+    this.carryingCapacityStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderCarryingCapacityActivity(canvasBox);
+    }
+  },
+
+  renderCarryingCapacityActivity(container) {
+    const mode = this.carryingCapacityMode; // 'growth', 'capacity', 'summary'
+    const choice = this.carryingCapacityChoice; // 'resources', 'drought', 'habitat'
+    const isStarted = this.carryingCapacityStarted;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <div class="exp-mode-toggle-group" style="grid-template-columns: 1fr 1fr 1fr; font-size: 0.78rem;">
+          <button class="exp-mode-btn ${mode === 'growth' ? 'active' : ''}" onclick="Experiment.switchCarryingCapacityMode('growth')">
+            🐇 Exp 1: Growth
+          </button>
+          <button class="exp-mode-btn ${mode === 'capacity' ? 'active' : ''}" onclick="Experiment.switchCarryingCapacityMode('capacity')">
+            🌱 Exp 2: Carrying Capacity
+          </button>
+          <button class="exp-mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="Experiment.switchCarryingCapacityMode('summary')">
+            📚 Learning Panel
+          </button>
+        </div>
+    `;
+
+    if (mode === 'growth') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🐇 EXPERIMENT 1 — Rabbit Population Growth</div>
+          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
+            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+              <b>Goal:</b> Demonstrate how a population can grow rapidly when resources are abundant and eventually approach the environment's carrying capacity.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="homeo-body-card" style="background:linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); border-color:#4ADE80;">
+            <div class="homeo-body-icon">🐇</div>
+            <div class="homeo-temp-display" style="background:#DCFCE7; border-color:#86EFAC; color:#15803D;">
+              🐇 Rabbit Population: 10
+            </div>
+            <div class="pop-resources-pills">
+              <span class="resource-pill">🌱 Food: High</span>
+              <span class="resource-pill">💧 Water: High</span>
+              <span class="resource-pill">🏡 Space: Available</span>
+            </div>
+            <div style="font-size:0.82rem; font-weight:800; color:#166534; margin-top:4px;">
+              Carrying Capacity (K) = 100 rabbits
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startCarryingCapacitySimulation()">
+            📈 [ START POPULATION GROWTH ]
+          </button>
+        </div>
+        `;
+      } else {
+        html += `
+          <div class="exp-result-container physical-result">
+            <div class="pop-graph-box">
+              <div class="pop-graph-header">
+                <span>Rabbit Population Growth</span>
+                <span class="k-line-indicator">Carrying Capacity (K = 100)</span>
+              </div>
+              <svg viewBox="0 0 300 120" style="width:100%; height:110px; overflow:visible;">
+                <line x1="30" y1="20" x2="290" y2="20" stroke="#FCA5A5" stroke-dasharray="4,4" stroke-width="1.5"/>
+                <line x1="30" y1="100" x2="290" y2="100" stroke="#CBD5E1" stroke-width="1"/>
+                <line x1="30" y1="10" x2="30" y2="100" stroke="#CBD5E1" stroke-width="1"/>
+                <path d="M 30,95 Q 100,90 140,50 T 290,22" fill="none" stroke="#10B981" stroke-width="3.5" stroke-linecap="round"/>
+                <circle cx="290" cy="22" r="5" fill="#059669">
+                  <animate attributeName="r" values="4;7;4" dur="1.5s" repeatCount="indefinite"/>
+                </circle>
+                <text x="15" y="24" font-size="9" fill="#DC2626" font-weight="bold">100</text>
+                <text x="15" y="100" font-size="9" fill="#64748B">0</text>
+                <text x="150" y="115" font-size="9" fill="#64748B" text-anchor="middle">Time (Generations) ➔</text>
+              </svg>
+            </div>
+
+            <div class="result-badge maintained">
+              📈 POPULATION GROWTH (Stable @ ~100)
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>When resources were abundant, the rabbit population grew quickly. As the population increased, food, water, and space became more limited. Growth slowed as the population approached the environment's carrying capacity.</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Carrying capacity is the largest population an environment can sustainably support with its available resources.
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetCarryingCapacityActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else if (mode === 'capacity') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🌱 EXPERIMENT 2 — Changing Carrying Capacity</div>
+          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
+            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+              <b>Goal:</b> Demonstrate how environmental changes can increase or decrease an ecosystem's carrying capacity.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="homeo-body-card">
+            <div class="homeo-body-icon">🐇</div>
+            <div class="homeo-temp-display">🐇 Population: 80 | K = 100 rabbits</div>
+            <div class="pop-resources-pills">
+              <span class="resource-pill">🌱 Food: Normal</span>
+              <span class="resource-pill">💧 Water: Normal</span>
+              <span class="resource-pill">🏡 Space: Normal</span>
+            </div>
+          </div>
+
+          <div class="exp-condition-select-group">
+            <label class="exp-condition-label">Choose Environmental Change:</label>
+            <div class="exp-condition-buttons" style="grid-template-columns: 1fr 1fr 1fr; font-size:0.75rem;">
+              <button class="exp-cond-btn ${choice === 'resources' ? 'active' : ''}" onclick="Experiment.setCarryingCapacityChoice('resources')">
+                🌧️ More Resources
+              </button>
+              <button class="exp-cond-btn ${choice === 'drought' ? 'active' : ''}" onclick="Experiment.setCarryingCapacityChoice('drought')">
+                ☀️ Drought
+              </button>
+              <button class="exp-cond-btn ${choice === 'habitat' ? 'active' : ''}" onclick="Experiment.setCarryingCapacityChoice('habitat')">
+                🌳 Habitat Expansion
+              </button>
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startCarryingCapacitySimulation()">
+            🌱 [ APPLY CHANGE ]
+          </button>
+        </div>
+        `;
+      } else {
+        const isDrought = (choice === 'drought');
+        const isHabitat = (choice === 'habitat');
+
+        let titleBadge = '📈 CARRYING CAPACITY INCREASED';
+        let kText = 'Carrying Capacity: 100 → 150';
+        let detailText = 'More available resources allow the ecosystem to support a larger population.';
+        let res1 = '🌱 Food increases';
+        let res2 = '💧 Water increases';
+
+        if (isDrought) {
+          titleBadge = '📉 CARRYING CAPACITY DECREASED';
+          kText = 'Carrying Capacity: 100 → 50';
+          detailText = 'Limited water and food reduce the number of rabbits the environment can sustainably support.';
+          res1 = '💧 Water decreases';
+          res2 = '🌱 Food decreases';
+        } else if (isHabitat) {
+          titleBadge = '📈 CARRYING CAPACITY INCREASED';
+          kText = 'Carrying Capacity: 100 → 140';
+          detailText = 'More habitat provides additional space and resources for the population.';
+          res1 = '🏡 Available space increases';
+          res2 = '🌱 Food & cover increases';
+        }
+
+        html += `
+          <div class="exp-result-container ${isDrought ? 'chemical-result' : 'physical-result'}">
+            <div class="homeo-body-card" style="margin:0; width:100%;">
+              <div class="homeo-body-icon">${isDrought ? '☀️' : (isHabitat ? '🌳' : '🌧️')}</div>
+              <div class="homeo-temp-display ${isDrought ? 'hot' : 'cold'}">
+                ${kText}
+              </div>
+              <div class="pop-resources-pills">
+                <span class="resource-pill">${res1}</span>
+                <span class="resource-pill">${res2}</span>
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:${isDrought ? 'linear-gradient(135deg, #EF4444 0%, #B91C1C 100%)' : 'linear-gradient(135deg, #10B981 0%, #059669 100%)'};">
+              ${titleBadge}
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>${detailText}</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Carrying capacity can change when environmental conditions and available resources change.
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetCarryingCapacityActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">📚 Final Concept Panel — Population Growth & Carrying Capacity</div>
+
+          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+            <h5 style="color:#6D28D9;">Population Growth</h5>
+            <p>A population increases when births and immigration exceed deaths and emigration.</p>
+
+            <h5 style="color:#6D28D9; margin-top:10px;">Carrying Capacity</h5>
+            <p>The maximum population size an environment can sustainably support.</p>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block" style="background:#FFF7ED; border-color:#FFD8A8;">
+              <h5 style="color:#9A3412;">Important Relationship</h5>
+              <ul style="margin-top:4px;">
+                <li>More resources → Higher carrying capacity</li>
+                <li>Fewer resources → Lower carrying capacity</li>
+              </ul>
+            </div>
+
+            <div class="exp-objective-box">
+              <h5>🎯 Main Learning Objective</h5>
+              <p>Students should understand that <b>population growth is affected by resource availability, while carrying capacity represents the population size an environment can sustainably support.</b></p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchCarryingCapacityMode('growth')">
+              🐇 Exp 1: Growth
+            </button>
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchCarryingCapacityMode('capacity')">
+              🌱 Exp 2: Capacity
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  switchBiotechMode(mode) {
+    this.biotechMode = mode;
+    this.biotechStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderBiotechActivity(canvasBox);
+    }
+  },
+
+  startBiotechSimulation() {
+    this.biotechStarted = true;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderBiotechActivity(canvasBox);
+    }
+  },
+
+  resetBiotechActivity() {
+    this.biotechStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderBiotechActivity(canvasBox);
+    }
+  },
+
+  renderBiotechActivity(container) {
+    const mode = this.biotechMode; // 'fermentation', 'recombinant', 'summary'
+    const isStarted = this.biotechStarted;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <div class="exp-mode-toggle-group" style="grid-template-columns: 1fr 1fr 1fr; font-size: 0.78rem;">
+          <button class="exp-mode-btn ${mode === 'fermentation' ? 'active' : ''}" onclick="Experiment.switchBiotechMode('fermentation')">
+            🧫 Exp 1: Fermentation
+          </button>
+          <button class="exp-mode-btn ${mode === 'recombinant' ? 'active' : ''}" onclick="Experiment.switchBiotechMode('recombinant')">
+            🧬 Exp 2: Recombinant DNA
+          </button>
+          <button class="exp-mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="Experiment.switchBiotechMode('summary')">
+            📚 Learning Panel
+          </button>
+        </div>
+    `;
+
+    if (mode === 'fermentation') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🧫 EXPERIMENT 1 — Yeast Fermentation</div>
+          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
+            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+              <b>Goal:</b> Demonstrate how microorganisms can be used in biotechnology to produce useful products through fermentation.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="biotech-anim-box">
+            <div style="font-size:3rem;">🧫</div>
+            <div style="font-size:0.9rem; font-weight:800; color:#92400E;">Inputs: 🦠 Yeast + 🍬 Sugar + 💧 Water</div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startBiotechSimulation()">
+            🫧 [ START FERMENTATION ]
+          </button>
+        </div>
+        `;
+      } else {
+        html += `
+          <div class="exp-result-container chemical-result">
+            <div class="biotech-anim-box">
+              <div class="bubbles-container">
+                <span>🫧</span><span>🫧</span><span>🍞</span><span>🫧</span><span>🫧</span>
+              </div>
+              <div style="font-family:var(--font-heading); font-size:1.05rem; font-weight:800; color:#6D28D9;">
+                Sugar → Carbon Dioxide (CO₂) + Ethanol
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);">
+              🫧 FERMENTATION OCCURRING (CO₂ Bubbles Produced)
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>Yeast breaks down sugar during fermentation and produces carbon dioxide and ethanol. Humans use this process in biotechnology, including bread-making and some food-production processes.</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Biotechnology uses living organisms or biological processes to produce useful products.
+            </div>
+
+            <div class="exp-info-panel" style="background:#FFFBEB; border-color:#FCD34D;">
+              <div class="exp-info-item" style="color:#92400E;">
+                🍞 <b>Real-Life Application (Bread-making):</b> Carbon dioxide produced by yeast gets trapped in dough and helps it rise.
+              </div>
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetBiotechActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else if (mode === 'recombinant') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🧬 EXPERIMENT 2 — Recombinant DNA / Insulin Production</div>
+          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
+            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+              <b>Goal:</b> Demonstrate how biotechnology can use genetic engineering to produce useful biological products.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="biotech-anim-box" style="background:radial-gradient(circle at 50% 100%, #F3E8FF 0%, #FAF5FF 100%); border-color:#C084FC;">
+            <div style="font-size:3rem;">🧬</div>
+            <div style="font-size:0.88rem; font-weight:800; color:#5B21B6;">
+              Components: 🧬 Human Insulin Gene + 🧬 Plasmid + 🦠 Bacterial Cell
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startBiotechSimulation()">
+            💉 [ INSERT GENE ]
+          </button>
+        </div>
+        `;
+      } else {
+        html += `
+          <div class="exp-result-container chemical-result">
+            <div class="recombinant-flow">
+              <div class="recombinant-step-card">
+                <span style="font-size:1.5rem;">🧬</span>
+                <span><b>Human Insulin Gene</b> isolated</span>
+              </div>
+              <div style="color:#8B5CF6; font-size:1.1rem;">⬇️</div>
+              <div class="recombinant-step-card">
+                <span style="font-size:1.5rem;">🧬</span>
+                <span>Inserted into <b>Bacterial Plasmid</b></span>
+              </div>
+              <div style="color:#8B5CF6; font-size:1.1rem;">⬇️</div>
+              <div class="recombinant-step-card">
+                <span style="font-size:1.5rem;">🦠</span>
+                <span>Recombinant plasmid put into <b>Bacterial Cell</b></span>
+              </div>
+              <div style="color:#8B5CF6; font-size:1.1rem;">⬇️</div>
+              <div class="recombinant-step-card" style="border-color:#10B981; background:#ECFDF5;">
+                <span style="font-size:1.5rem;">💉</span>
+                <span style="color:#065F46;"><b>Bacteria produce Human Insulin Protein!</b></span>
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
+              🧬 RECOMBINANT DNA CREATED
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>A useful gene can be inserted into a bacterial plasmid. The bacterium can then use the inserted genetic information to produce a desired protein.</p>
+              <div style="font-family:var(--font-heading); font-size:0.86rem; font-weight:800; color:#5B21B6; margin-top:6px;">
+                Human insulin gene → Bacterial cell → Insulin protein
+              </div>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Genetic engineering allows scientists to introduce specific genetic information into organisms to produce useful products.
+            </div>
+
+            <div class="exp-info-panel" style="background:#EFF6FF; border-color:#BFDBFE;">
+              <div class="exp-info-item" style="color:#1E40AF;">
+                💉 <b>Real-Life Application (Insulin Production):</b> Genetically engineered microorganisms are used to produce human insulin for diabetic medical treatment.
+              </div>
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetBiotechActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">📚 Final Biotechnology Panel</div>
+
+          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+            <h5 style="color:#6D28D9;">Biotechnology</h5>
+            <p>The use of living organisms, cells, or biological processes to develop useful products and technologies.</p>
+            
+            <ul style="margin-top:8px;">
+              <li><b>Fermentation:</b> Food production (bread, cheese, yogurt).</li>
+              <li><b>Genetic Engineering:</b> Medical products (insulin, vaccines).</li>
+            </ul>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-objective-box">
+              <h5>🎯 Main Learning Objective</h5>
+              <p>Students should understand that <b>biotechnology can use microorganisms and genetic information to create useful products.</b></p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchBiotechMode('fermentation')">
+              🧫 Exp 1: Fermentation
+            </button>
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchBiotechMode('recombinant')">
+              🧬 Exp 2: Recombinant DNA
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  switchTectonicsMode(mode) {
+    this.tectonicsMode = mode;
+    this.tectonicsStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderTectonicsActivity(canvasBox);
+    }
+  },
+
+  startTectonicsSimulation() {
+    this.tectonicsStarted = true;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderTectonicsActivity(canvasBox);
+    }
+  },
+
+  resetTectonicsActivity() {
+    this.tectonicsStarted = false;
+    const canvasBox = document.getElementById('expCanvasBox');
+    if (canvasBox) {
+      this.renderTectonicsActivity(canvasBox);
+    }
+  },
+
+  renderTectonicsActivity(container) {
+    const mode = this.tectonicsMode; // 'divergent', 'convergent', 'summary'
+    const isStarted = this.tectonicsStarted;
+
+    let html = `
+      <div class="exp-activity-wrapper">
+        <div class="exp-mode-toggle-group" style="grid-template-columns: 1fr 1fr 1fr; font-size: 0.78rem;">
+          <button class="exp-mode-btn ${mode === 'divergent' ? 'active' : ''}" onclick="Experiment.switchTectonicsMode('divergent')">
+            🌋 Exp 1: Divergent
+          </button>
+          <button class="exp-mode-btn ${mode === 'convergent' ? 'active' : ''}" onclick="Experiment.switchTectonicsMode('convergent')">
+            🏔️ Exp 2: Convergent
+          </button>
+          <button class="exp-mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="Experiment.switchTectonicsMode('summary')">
+            📚 Learning Panel
+          </button>
+        </div>
+    `;
+
+    if (mode === 'divergent') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🌍 EXPERIMENT 1 — Divergent Plate Boundary</div>
+          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
+            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+              <b>Goal:</b> Demonstrate what happens when two tectonic plates move away from each other.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="tectonics-anim-box">
+            <div class="plates-row">
+              <div class="tectonic-plate">🟫 Plate A</div>
+              <div style="font-size:1.5rem; color:#0284C7; font-weight:800;">← →</div>
+              <div class="tectonic-plate">🟫 Plate B</div>
+            </div>
+            <div style="font-size:0.82rem; font-weight:800; color:#78350F; margin-top:10px;">
+              🌋 Magma Layer Below
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startTectonicsSimulation()">
+            🌋 [ MOVE PLATES ]
+          </button>
+        </div>
+        `;
+      } else {
+        html += `
+          <div class="exp-result-container chemical-result">
+            <div class="tectonics-anim-box">
+              <div class="plates-row">
+                <div class="tectonic-plate move-left">🟫 Plate A</div>
+                <div class="magma-rising-anim">🌋</div>
+                <div class="tectonic-plate move-right">🟫 Plate B</div>
+              </div>
+              <div class="crust-new-badge" style="margin-top:8px;">
+                ✨ New Oceanic Crust Forming
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #EF4444 0%, #B91C1C 100%);">
+              🌋 DIVERGENT BOUNDARY (Plate A ← → Plate B)
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>At a divergent boundary, tectonic plates move away from each other. The gap between them opens, magma rises from below, and new crust forms as it cools.</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Divergent boundaries pull apart, forming new crust as magma rises to fill the rift.
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetTectonicsActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else if (mode === 'convergent') {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">🏔️ EXPERIMENT 2 — Convergent Plate Boundary</div>
+          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
+            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+              <b>Goal:</b> Demonstrate what happens when two tectonic plates collide.
+            </p>
+          </div>
+      `;
+
+      if (!isStarted) {
+        html += `
+          <div class="tectonics-anim-box">
+            <div class="plates-row">
+              <div class="tectonic-plate">🟫 Plate A</div>
+              <div style="font-size:1.5rem; color:#92400E; font-weight:800;">→ ←</div>
+              <div class="tectonic-plate">🟫 Plate B</div>
+            </div>
+            <div style="font-size:0.82rem; font-weight:800; color:#78350F; margin-top:10px;">
+              Collision Zone Below
+            </div>
+          </div>
+
+          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startTectonicsSimulation()">
+            🏔️ [ MOVE PLATES ]
+          </button>
+        </div>
+        `;
+      } else {
+        html += `
+          <div class="exp-result-container physical-result">
+            <div class="tectonics-anim-box">
+              <div class="plates-row">
+                <div class="tectonic-plate move-collide-left">🟫 Plate A</div>
+                <div style="font-size:2.2rem;">🏔️</div>
+                <div class="tectonic-plate move-collide-right">🟫 Plate B</div>
+              </div>
+              <div class="crust-new-badge" style="background:#0284C7; margin-top:8px;">
+                ⛰️ Mountain Ranges / Trench Formed
+              </div>
+            </div>
+
+            <div class="result-badge maintained" style="background:linear-gradient(135deg, #0284C7 0%, #0369A1 100%);">
+              🏔️ CONVERGENT BOUNDARY (Plate Collision)
+            </div>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>At a convergent boundary, tectonic plates collide. Land buckles upward into mountain ranges or one plate slides beneath another into a deep ocean trench (subduction).</p>
+            </div>
+
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Convergent boundaries collide, forming mountains and subduction zones.
+            </div>
+          </div>
+
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetTectonicsActivity()">
+            🔄 Reset Experiment
+          </button>
+        </div>
+        `;
+      }
+    } else {
+      html += `
+        <div class="exp-activity-card">
+          <div class="exp-sub-title">📚 Final Plate Tectonics Panel</div>
+
+          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+            <h5 style="color:#6D28D9;">Plate Tectonics</h5>
+            <p>Earth's crust is divided into moving tectonic plates driven by heat from Earth's core.</p>
+
+            <ul style="margin-top:8px;">
+              <li><b>Divergent (← →):</b> Plates pull apart → New crust forms.</li>
+              <li><b>Convergent (→ ←):</b> Plates collide → Mountains & trenches form.</li>
+            </ul>
+          </div>
+
+          <div class="exp-explanation-section" style="margin-top:14px;">
+            <div class="exp-objective-box">
+              <h5>🎯 Main Learning Objective</h5>
+              <p>Students should understand that <b>Earth's crust is divided into moving tectonic plates and that different plate movements produce different geological features.</b></p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchTectonicsMode('divergent')">
+              🌋 Exp 1: Divergent
+            </button>
+            <button class="secondary-btn" style="flex:1;" onclick="Experiment.switchTectonicsMode('convergent')">
+              🏔️ Exp 2: Convergent
             </button>
           </div>
         </div>

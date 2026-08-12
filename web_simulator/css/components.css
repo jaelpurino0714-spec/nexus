@@ -3032,5 +3032,183 @@
   margin: 0;
 }
 
+/* ---------------- 11. Carrying Capacity & Population Growth Styles ---------------- */
+.pop-graph-box {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 16px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin: 12px 0;
+}
+
+.pop-graph-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.k-line-indicator {
+  color: #DC2626;
+  background: #FEE2E2;
+  padding: 2px 10px;
+  border-radius: 12px;
+  border: 1px dashed #FCA5A5;
+}
+
+.pop-resources-pills {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.resource-pill {
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: #F1F5F9;
+  color: #334155;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+/* ---------------- 12. Biotechnology Styles ---------------- */
+.biotech-anim-box {
+  background: radial-gradient(circle at 50% 100%, #FEF3C7 0%, #FFFBEB 100%);
+  border: 2px solid #FCD34D;
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin: 12px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.bubbles-container {
+  display: flex;
+  gap: 12px;
+  font-size: 1.8rem;
+  animation: floatUpSlow 1.5s infinite ease-in-out;
+}
+
+@keyframes floatUpSlow {
+  0% { transform: translateY(10px); opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-15px); opacity: 0.1; }
+}
+
+.recombinant-flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.recombinant-step-card {
+  background: #FFFFFF;
+  border: 1.5px solid #DDD6FE;
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 90%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.recombinant-step-card b {
+  color: #6D28D9;
+  font-family: var(--font-heading);
+}
+
+/* ---------------- 13. Plate Tectonics Styles ---------------- */
+.tectonics-anim-box {
+  background: linear-gradient(180deg, #E0F2FE 0%, #BAE6FD 60%, #B45309 60%, #78350F 100%);
+  border: 2px solid #0284C7;
+  border-radius: 18px;
+  padding: 20px 14px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 12px 0;
+  position: relative;
+  min-height: 140px;
+  justify-content: space-between;
+}
+
+.plates-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.tectonic-plate {
+  background: linear-gradient(135deg, #78350F 0%, #451A03 100%);
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 2px solid #D97706;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tectonic-plate.move-left {
+  transform: translateX(-25px);
+}
+
+.tectonic-plate.move-right {
+  transform: translateX(25px);
+}
+
+.tectonic-plate.move-collide-left {
+  transform: translateX(18px);
+}
+
+.tectonic-plate.move-collide-right {
+  transform: translateX(-18px);
+}
+
+.magma-rising-anim {
+  font-size: 2.2rem;
+  z-index: 3;
+  animation: magmaUp 1.2s ease-out forwards;
+}
+
+@keyframes magmaUp {
+  0% { transform: translateY(30px) scale(0.5); opacity: 0; }
+  100% { transform: translateY(-5px) scale(1.2); opacity: 1; }
+}
+
+.crust-new-badge {
+  background: #EF4444;
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+}
+
+
 
 
