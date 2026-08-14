@@ -396,9 +396,9 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                               // EXP Text inside/over bar (matching 1381/900 format from Image 3)
                               Center(
                                 child: Text(
-                                  neededXP < 999999
+                                  neededXP < 999999 && stage.stage < 4
                                       ? '$xp / $neededXP EXP'
-                                      : '$xp EXP (MAX LEVEL)',
+                                      : '$xp EXP (FINAL STAGE)',
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w900,
@@ -426,14 +426,15 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                             );
                           },
                           child: Text(
-                            stage.nextXP < 999999
+                            neededXP < 999999 && stage.stage < 4
                                 ? '${stage.nextXP - xp} EXP until next evolution >'
-                                : 'More looks will be available soon >',
+                                : '🏆 Final Stage Reached! Additional XP contributes to achievements, streaks & stats >',
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                               color: Colors.teal.shade700,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ],
