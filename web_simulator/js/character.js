@@ -490,8 +490,8 @@ const CharacterSystem = {
 
   promptEditPetName() {
     const profile = DB.getStudentProfile() || {};
-    const currentName = profile.petName || (profile.name ? `${profile.name}'s Pet` : 'baby aaica');
-    const newName = prompt('Enter a name for your pet:', currentName);
+    const currentName = profile.petName || (profile.name ? `${profile.name}'s Learning Buddy` : 'baby aaica');
+    const newName = prompt('Enter a name for your Learning Buddy:', currentName);
     if (newName && newName.trim() !== '') {
       profile.petName = newName.trim();
       DB.saveStudentProfile(profile);
@@ -519,7 +519,7 @@ const CharacterSystem = {
 
     const gender = profile.gender || 'male';
     const stageImage = this.getStageImage(stage, gender);
-    const petName = profile.petName || (stage.id === 'baby' ? 'baby aaica' : `${stage.title} Pet`);
+    const petName = profile.petName || (stage.id === 'baby' ? 'baby aaica' : `${stage.title} Buddy`);
 
     const activeOutfitId = ProgressionSystem.getActiveOutfit();
     const activeOutfit = OUTFITS_CATALOG.find(o => o.id === activeOutfitId) || OUTFITS_CATALOG[0];
@@ -567,7 +567,7 @@ const CharacterSystem = {
             <span id="petNamePillLabel">${petName}</span>
             <button class="pet-name-edit-btn">✏️</button>
           </div>
-          <button class="pet-circle-icon-btn" onclick="CharacterSystem.openPetSettingsModal()" title="Pet Settings & Theme">⚙️</button>
+          <button class="pet-circle-icon-btn" onclick="CharacterSystem.openPetSettingsModal()" title="Learning Buddy Settings & Theme">⚙️</button>
         </div>
 
         <!-- Big Counter & Header Avatars -->
@@ -644,15 +644,15 @@ const CharacterSystem = {
           <div class="pet-shop-banner-card" onclick="CharacterSystem.closeCharacterModal(); CharacterSystem.openOutfitShopModal();">
             <div class="pet-banner-left">
               <div class="pet-banner-icon">🛍️</div>
-              <div class="pet-banner-text">Unlock new outfits for your Pet with Science XP!</div>
+              <div class="pet-banner-text">Unlock new outfits for your Learning Buddy with Science XP!</div>
             </div>
             <div class="pet-chevron-right">›</div>
           </div>
 
-          <!-- Card 2: Grow Your Pet -->
+          <!-- Card 2: Grow Your Learning Buddy -->
           <div class="pet-info-card">
             <div class="pet-tasks-header">
-              <span>Grow your Pet 🐾</span>
+              <span>Grow your Learning Buddy 🐾</span>
               <small style="color: #64748b; font-size: 0.78rem;">Daily Tasks</small>
             </div>
 
@@ -814,7 +814,7 @@ const CharacterSystem = {
     }
 
     this.renderHomeCharacterCard();
-    this.showSettingsSaveToast('Pet name saved! ✏️');
+    this.showSettingsSaveToast('Learning Buddy name saved! ✏️');
   },
 
   showSettingsSaveToast(msg = 'Saved!') {
@@ -861,7 +861,7 @@ const CharacterSystem = {
     modal.innerHTML = `
       <div class="pet-settings-card">
         <div class="pet-settings-header">
-          <span>⚙️ Pet Settings & Theme</span>
+          <span>⚙️ Learning Buddy Settings & Theme</span>
           <button class="close-modal-btn" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:#666;" onclick="CharacterSystem.closePetSettingsModal()">✕</button>
         </div>
 
@@ -895,12 +895,12 @@ const CharacterSystem = {
         </div>
 
         <div>
-          <div class="pet-settings-section-title">✏️ Pet Name</div>
+          <div class="pet-settings-section-title">✏️ Learning Buddy Name</div>
           <div style="display: flex; gap: 8px;">
             <input type="text" id="petNameSettingInput" value="${currentPetName.replace('✏️', '').trim()}"
                    oninput="CharacterSystem.savePetNameFromSettings(this.value)"
                    onkeyup="if(event.key==='Enter') this.blur()"
-                   style="flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 14px; font-weight: 700;" placeholder="Pet name..." />
+                   style="flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 14px; font-weight: 700;" placeholder="Learning Buddy name..." />
           </div>
         </div>
       </div>
@@ -1095,7 +1095,7 @@ const CharacterSystem = {
       <div class="modal-card outfit-shop-card">
         <div class="modal-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div class="modal-title-group" style="display: flex; align-items: center; gap: 6px;">
-            <h3 style="margin: 0; font-size: 1.2rem; color: #4c1d95;">👕 Pet Outfits Shop</h3>
+            <h3 style="margin: 0; font-size: 1.2rem; color: #4c1d95;">👕 Learning Buddy Outfits Shop</h3>
           </div>
           <div class="header-right-group" style="display: flex; align-items: center; gap: 8px;">
             <div class="coin-balance-pill" style="background: #fef08a; border: 1px solid #facc15; padding: 4px 10px; border-radius: 12px; font-weight: 800; color: #854d0e; font-size: 0.88rem;">🪙 ${coins} Coins</div>
