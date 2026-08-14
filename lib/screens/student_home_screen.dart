@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
+import '../providers/character_provider.dart';
+import '../widgets/floating_companion_widget.dart';
+import '../widgets/gender_selection_dialog.dart';
 
 class StudentHomeScreen extends ConsumerStatefulWidget {
   const StudentHomeScreen({super.key});
@@ -11,6 +14,21 @@ class StudentHomeScreen extends ConsumerStatefulWidget {
 }
 
 class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final charState = ref.read(characterProvider);
+      if (charState.pendingGenderSelection) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (ctx) => const GenderSelectionDialog(),
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
@@ -25,8 +43,10 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAlignment: CrossAlignment.stretch,
           children: [
@@ -116,12 +136,13 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
               onPressed: () {
                 context.push('/student/analytics');
               },
-            ),
           ],
         ),
       ),
-    );
-  }
+      const FloatingCompanionWidget(),
+    ],
+  ),
+);
 
 
   void _showCustomHubModal(BuildContext context) {

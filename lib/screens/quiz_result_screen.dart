@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/quiz_provider.dart';
 import '../providers/character_provider.dart';
+import '../widgets/evolution_celebration_dialog.dart';
 
 class QuizResultScreen extends ConsumerStatefulWidget {
   const QuizResultScreen({super.key});
@@ -22,17 +23,28 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
     });
   }
 
-  void _recordActivityIfNeeded() {
+  void _recordActivityIfNeeded() async {
     if (_activityRecorded) return;
     final quizState = ref.read(quizProvider);
     if (quizState != null && quizState.questions.isNotEmpty) {
       _activityRecorded = true;
       final double pct = (quizState.correctCount / quizState.questions.length) * 100;
-      ref.read(characterProvider.notifier).recordLearningActivity(
+      await ref.read(characterProvider.notifier).recordLearningActivity(
             percentageScore: pct,
             correctAnswers: quizState.correctCount,
             totalQuestions: quizState.questions.length,
           );
+
+      if (mounted) {
+        final charState = ref.read(characterProvider);
+        if (charState.pendingEvolution != null) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (ctx) => const EvolutionCelebrationDialog(),
+          );
+        }
+      }
     }
   }
 
