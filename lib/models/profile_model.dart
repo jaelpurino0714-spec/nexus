@@ -13,12 +13,15 @@ class ProfileModel {
   final String? characterOutfit; // 'default' | 'academic' | 'lab_coat' | 'casual' | 'golden'
   final String? characterGender; // 'male' | 'female'
   final int characterXp;
-  final String characterStage; // 'baby' | 'student' | 'graduate' | 'adult'
+  final String characterStage; // 'baby' | 'student' | 'graduate' | 'worker'
   final String characterMood; // 'idle' | 'happy' | 'excited' | 'sleepy' | 'encouraging'
   final int currentStreak;
   final int longestStreak;
   final String? lastActivityDate; // 'YYYY-MM-DD'
   final DateTime? lastCharacterInteraction;
+
+  final int coins;
+  final List<String> unlockedOutfits;
 
   ProfileModel({
     required this.id,
@@ -39,6 +42,8 @@ class ProfileModel {
     this.longestStreak = 0,
     this.lastActivityDate,
     this.lastCharacterInteraction,
+    this.coins = 50,
+    this.unlockedOutfits = const ['default'],
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
@@ -65,6 +70,8 @@ class ProfileModel {
       lastCharacterInteraction: json['last_character_interaction'] != null
           ? DateTime.parse(json['last_character_interaction'] as String)
           : null,
+      coins: json['coins'] as int? ?? 50,
+      unlockedOutfits: (json['unlocked_outfits'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? const ['default'],
     );
   }
 
@@ -88,6 +95,8 @@ class ProfileModel {
       'longest_streak': longestStreak,
       'last_activity_date': lastActivityDate,
       'last_character_interaction': lastCharacterInteraction?.toIso8601String(),
+      'coins': coins,
+      'unlocked_outfits': unlockedOutfits,
     };
   }
 
@@ -110,6 +119,8 @@ class ProfileModel {
     int? longestStreak,
     String? lastActivityDate,
     DateTime? lastCharacterInteraction,
+    int? coins,
+    List<String>? unlockedOutfits,
   }) {
     return ProfileModel(
       id: id ?? this.id,
@@ -130,6 +141,8 @@ class ProfileModel {
       longestStreak: longestStreak ?? this.longestStreak,
       lastActivityDate: lastActivityDate ?? this.lastActivityDate,
       lastCharacterInteraction: lastCharacterInteraction ?? this.lastCharacterInteraction,
+      coins: coins ?? this.coins,
+      unlockedOutfits: unlockedOutfits ?? this.unlockedOutfits,
     );
   }
 }

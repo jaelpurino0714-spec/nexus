@@ -1138,6 +1138,13 @@ const Quiz = {
         TaskSystem.completeTask(`topic_finish_${this.currentTerm}_${this.currentTopic}_${Date.now()}`, `Finished Topic: ${this.currentTopic}`, 15);
       }
 
+      // 4. Award Science Coins (+5 coins per correct answer + 20 bonus for 100%)
+      const coinsEarned = (this.correctCount * 5) + (percentage >= 100 ? 20 : 0);
+      if (typeof ProgressionSystem !== 'undefined' && ProgressionSystem.addCoins) {
+        ProgressionSystem.addCoins(coinsEarned);
+      }
+    }
+
       // 4. Maintain a streak (+5 XP if maxStreak >= 3)
       if (this.maxStreak >= 3) {
         TaskSystem.completeTask(`streak_${Date.now()}`, `Streak Bonus (🔥 ${this.maxStreak})`, 5);

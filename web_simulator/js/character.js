@@ -44,16 +44,16 @@ const EVOLUTION_STAGES = [
     desc: 'Mastered science trivia & simulations!' 
   },
   { 
-    id: 'adult', 
+    id: 'worker', 
     stage: 4, 
-    title: 'ADULT', 
-    icon: '🧑', 
+    title: 'WORKER', 
+    icon: '💼', 
     image: 'assets/adult-character.png',
     minXP: 600, 
     nextXP: Infinity, 
     color: '#F59E0B', 
-    defaultQuote: "Science Grandmaster & Expert!",
-    desc: 'Science Grandmaster & Expert!' 
+    defaultQuote: "Working hard & applying science knowledge!",
+    desc: 'Science Professional & Industry Worker!' 
   }
 ];
 
@@ -62,13 +62,15 @@ const GENDER_CHARACTER_IMAGES = {
     baby: 'assets/male/baby.png',
     student: 'assets/male/student.png',
     graduate: 'assets/male/graduate.png',
-    adult: 'assets/male/adult.png'
+    worker: 'assets/male/worker.png',
+    adult: 'assets/male/worker.png'
   },
   female: {
     baby: 'assets/female/baby.png',
     student: 'assets/female/student.png',
     graduate: 'assets/female/graduate.png',
-    adult: 'assets/female/adult.png'
+    worker: 'assets/female/worker.png',
+    adult: 'assets/female/worker.png'
   }
 };
 
@@ -79,6 +81,15 @@ const BABY_INTERACTION_REACTIONS = [
   "Ready to learn with you! ⭐",
   "Every quiz makes me grow! 🚀",
   "Let's reach 100 XP! 🎯"
+];
+
+const OUTFITS_CATALOG = [
+  { id: 'default', name: 'Standard Uniform', icon: '🎒', desc: 'Classic Nexus student uniform', requiredStage: 1, priceCoins: 0 },
+  { id: 'explorer', name: 'Explorer Gear', icon: '🤠', desc: 'Outdoor field research & exploration gear', requiredStage: 1, priceCoins: 40 },
+  { id: 'lab_coat', name: 'Science Lab Coat', icon: '🥼', desc: 'Professional research & lab gear', requiredStage: 2, priceCoins: 50 },
+  { id: 'astronaut', name: 'Astronaut Suit', icon: '👨‍🚀', desc: 'High-tech space exploration suit', requiredStage: 2, priceCoins: 120 },
+  { id: 'academic', name: 'Academic Regalia', icon: '🎓', desc: 'Graduation gown and mortarboard', requiredStage: 3, priceCoins: 100 },
+  { id: 'golden', name: 'Grandmaster Aura', icon: '👑', desc: 'Exclusive golden science master style', requiredStage: 4, priceCoins: 200 }
 ];
 
 const STUDENT_INTERACTION_REACTIONS = [
@@ -149,6 +160,63 @@ const ProgressionSystem = {
   getCurrentXP() {
     const profile = DB.getStudentProfile() || {};
     return profile.totalXP || 0;
+  },
+
+  getCoins() {
+    const profile = DB.getStudentProfile() || {};
+    return profile.coins !== undefined ? profile.coins : 50;
+  },
+
+  addCoins(amount) {
+    const profile = DB.getStudentProfile() || { id: 'local_student', name: 'Student', totalXP: 0, coins: 50 };
+    profile.coins = (profile.coins !== undefined ? profile.coins : 50) + amount;
+    DB.saveStudentProfile(profile);
+    if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
+    CharacterSystem.renderHomeCharacterCard();
+  },
+
+  getUnlockedOutfits() {
+    const profile = DB.getStudentProfile() || {};
+    return profile.unlockedOutfits || ['default'];
+  },
+
+  getActiveOutfit() {
+    const profile = DB.getStudentProfile() || {};
+    return profile.activeOutfit || 'default';
+  },
+
+  selectOutfit(outfitId) {
+    const profile = DB.getStudentProfile() || {};
+    profile.activeOutfit = outfitId;
+    DB.saveStudentProfile(profile);
+    CharacterSystem.renderHomeCharacterCard();
+  },
+
+  buyOutfit(outfitId) {
+    const outfit = OUTFITS_CATALOG.find(o => o.id === outfitId);
+    if (!outfit) return { success: false, message: 'Invalid outfit' };
+
+    const profile = DB.getStudentProfile() || {};
+    const unlocked = profile.unlockedOutfits || ['default'];
+
+    if (unlocked.includes(outfitId)) {
+      this.selectOutfit(outfitId);
+      return { success: true, message: `Equipped ${outfit.name}!` };
+    }
+
+    const coins = profile.coins !== undefined ? profile.coins : 50;
+    if (coins < outfit.priceCoins) {
+      return { success: false, message: `Not enough Science Coins! (Need 🪙 ${outfit.priceCoins})` };
+    }
+
+    profile.coins = coins - outfit.priceCoins;
+    profile.unlockedOutfits = [...unlocked, outfitId];
+    profile.activeOutfit = outfitId;
+    DB.saveStudentProfile(profile);
+
+    if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
+    CharacterSystem.renderHomeCharacterCard();
+    return { success: true, message: `Purchased & Equipped ${outfit.name}! 🎉` };
   },
 
   getStageForXP(xp) {
@@ -390,7 +458,7 @@ const CharacterSystem = {
     const isBaby = (stage.id === 'baby');
     const isStudent = (stage.id === 'student');
     const isGraduate = (stage.id === 'graduate');
-    const isAdult = (stage.id === 'adult');
+    const isAdult = (stage.id === 'worker' || stage.id === 'adult');
     
     let dynamicQuote = stage.defaultQuote;
     if (isBaby) {
@@ -400,10 +468,10 @@ const CharacterSystem = {
       if (xp >= 270) dynamicQuote = "Graduation is close! 🎓";
       else dynamicQuote = "Studying core Grade 10 concepts!";
     } else if (isGraduate) {
-      if (xp >= 550) dynamicQuote = "Almost at the final stage! 🧑";
+      if (xp >= 550) dynamicQuote = "Almost at the worker stage! 💼";
       else dynamicQuote = "Mastering trivia & simulations!";
     } else if (isAdult) {
-      dynamicQuote = "Science Grandmaster & Expert! 🌟";
+      dynamicQuote = "Working hard & applying science knowledge! 💼";
     }
 
     let nextReqText = '';
@@ -446,17 +514,21 @@ const CharacterSystem = {
       ? (profile.gender === 'female' ? ' 👧' : ' 👦') 
       : '';
 
+    const coins = ProgressionSystem.getCoins();
+    const activeOutfitId = ProgressionSystem.getActiveOutfit();
+    const activeOutfit = OUTFITS_CATALOG.find(o => o.id === activeOutfitId) || OUTFITS_CATALOG[0];
+
     container.innerHTML = `
       <div class="character-evolution-box ${isBaby ? 'baby-stage-card' : ''} ${isStudent ? 'student-stage-card' : ''} ${isGraduate ? 'graduate-stage-card' : ''} ${isAdult ? 'adult-stage-card' : ''}" style="border-color: ${stage.color};">
         <div class="char-card-header">
-          <span class="char-header-title">MY CHARACTER</span>
+          <span class="char-header-title">MY CHARACTER (${activeOutfit.icon} ${activeOutfit.name})</span>
           <span class="char-stage-badge" style="background: ${stage.color};">${stage.icon} ${stage.title}${genderBadge}</span>
         </div>
 
         <div class="char-card-body">
           <div class="char-quote-label">"${dynamicQuote}"</div>
 
-          <div class="char-xp-hero-badge">⭐ ${xp} XP</div>
+          <div class="char-xp-hero-badge">⭐ ${xp} XP &nbsp;•&nbsp; 🪙 ${coins} Coins</div>
 
           <div class="char-progress-bar-container">
             <div class="char-progress-fill" style="width: ${pct}%; background: ${stage.color};"></div>
@@ -466,12 +538,132 @@ const CharacterSystem = {
             <span style="font-weight: 800; color: ${stage.color};">${isAdult ? '🏆 FINAL STAGE COMPLETE' : untilNextText}</span>
           </div>
 
-          <button class="earn-more-xp-btn" onclick="App.showScreen('playScreen')">
-            🚀 EARN MORE XP
-          </button>
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="earn-more-xp-btn" style="flex: 1;" onclick="App.showScreen('playScreen')">
+              🚀 EARN XP
+            </button>
+            <button class="earn-more-xp-btn" style="flex: 1; background: #8b5cf6;" onclick="CharacterSystem.openOutfitShopModal()">
+              👕 OUTFITS SHOP
+            </button>
+          </div>
         </div>
       </div>
     `;
+  },
+
+  openOutfitShopModal(activeTab = 'wardrobe') {
+    let modal = document.getElementById('outfitShopModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'outfitShopModal';
+      modal.className = 'modal-overlay hidden';
+      document.body.appendChild(modal);
+    }
+    
+    this.renderOutfitShopModal(activeTab);
+    modal.classList.remove('hidden');
+  },
+
+  closeOutfitShopModal() {
+    const modal = document.getElementById('outfitShopModal');
+    if (modal) modal.classList.add('hidden');
+  },
+
+  renderOutfitShopModal(activeTab = 'wardrobe') {
+    const modal = document.getElementById('outfitShopModal');
+    if (!modal) return;
+
+    const coins = ProgressionSystem.getCoins();
+    const unlocked = ProgressionSystem.getUnlockedOutfits();
+    const activeOutfitId = ProgressionSystem.getActiveOutfit();
+    const xp = ProgressionSystem.getCurrentXP();
+    const stage = ProgressionSystem.getStageForXP(xp);
+    const profile = DB.getStudentProfile() || {};
+    const gender = profile.gender || 'male';
+    const stageImage = this.getStageImage(stage, gender);
+
+    const activeOutfit = OUTFITS_CATALOG.find(o => o.id === activeOutfitId) || OUTFITS_CATALOG[0];
+
+    let itemsHtml = '';
+    OUTFITS_CATALOG.forEach(outfit => {
+      const isUnlockedByStage = stage.stage >= outfit.requiredStage;
+      const isUnlockedByPurchase = unlocked.includes(outfit.id);
+      const isOwned = isUnlockedByStage || isUnlockedByPurchase;
+      const isEquipped = activeOutfitId === outfit.id;
+
+      if (activeTab === 'wardrobe' && !isOwned) return;
+
+      let actionBtn = '';
+      if (isEquipped) {
+        actionBtn = `<span class="badge-equipped">✓ Active</span>`;
+      } else if (isOwned) {
+        actionBtn = `<button class="secondary-btn btn-sm" onclick="CharacterSystem.equipOutfitAction('${outfit.id}')">Equip</button>`;
+      } else {
+        actionBtn = `<button class="primary-btn btn-sm" style="background: #d97706;" onclick="CharacterSystem.buyOutfitAction('${outfit.id}')">Buy 🪙${outfit.priceCoins}</button>`;
+      }
+
+      itemsHtml += `
+        <div class="outfit-item-card ${isEquipped ? 'equipped' : ''} ${isOwned ? 'owned' : 'locked'}">
+          <div class="outfit-icon">${outfit.icon}</div>
+          <div class="outfit-info">
+            <div class="outfit-title">
+              <strong>${outfit.name}</strong>
+              ${!isOwned && outfit.priceCoins > 0 ? `<span class="price-pill">🪙 ${outfit.priceCoins}</span>` : ''}
+            </div>
+            <div class="outfit-desc">${isOwned ? outfit.desc : `${outfit.desc} (Stage ${outfit.requiredStage} or 🪙 ${outfit.priceCoins})`}</div>
+          </div>
+          <div class="outfit-action">${actionBtn}</div>
+        </div>
+      `;
+    });
+
+    if (activeTab === 'wardrobe' && !itemsHtml.trim()) {
+      itemsHtml = `<div class="empty-wardrobe-msg">No extra outfits owned yet! Click <b>🛍️ Outfit Shop</b> to buy outfits with Science Coins.</div>`;
+    }
+
+    modal.innerHTML = `
+      <div class="modal-card outfit-shop-card">
+        <div class="modal-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div class="modal-title-group" style="display: flex; align-items: center; gap: 6px;">
+            <h3 style="margin: 0; font-size: 1.2rem; color: #4c1d95;">👕 Pet Outfits Shop</h3>
+          </div>
+          <div class="header-right-group" style="display: flex; align-items: center; gap: 8px;">
+            <div class="coin-balance-pill" style="background: #fef08a; border: 1px solid #facc15; padding: 4px 10px; border-radius: 12px; font-weight: 800; color: #854d0e; font-size: 0.88rem;">🪙 ${coins} Coins</div>
+            <button class="close-modal-btn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #666;" onclick="CharacterSystem.closeOutfitShopModal()">✕</button>
+          </div>
+        </div>
+
+        <div class="outfit-preview-banner" style="background: #f3e8ff; border: 1px solid #ddd6fe; border-radius: 16px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <div class="mini-avatar-box" style="width: 48px; height: 48px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">
+            ${stageImage ? `<img src="${stageImage}" style="width: 40px; height: 40px; object-fit: contain;" />` : `<span>${stage.icon}</span>`}
+          </div>
+          <div class="preview-text" style="display: flex; flex-direction: column;">
+            <strong style="color: #5b21b6; font-size: 0.9rem;">Equipped: ${activeOutfit.icon} ${activeOutfit.name}</strong>
+            <small style="color: #666; font-size: 0.78rem;">Earn +5 Science Coins for every correct quiz answer!</small>
+          </div>
+        </div>
+
+        <div class="modal-tabs" style="display: flex; gap: 6px; background: #eee; padding: 4px; border-radius: 12px; margin-bottom: 12px;">
+          <button class="tab-btn ${activeTab === 'wardrobe' ? 'active' : ''}" style="flex: 1; padding: 8px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; background: ${activeTab === 'wardrobe' ? '#673ab7' : 'transparent'}; color: ${activeTab === 'wardrobe' ? 'white' : '#555'};" onclick="CharacterSystem.renderOutfitShopModal('wardrobe')">🎒 My Wardrobe</button>
+          <button class="tab-btn ${activeTab === 'shop' ? 'active' : ''}" style="flex: 1; padding: 8px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; background: ${activeTab === 'shop' ? '#673ab7' : 'transparent'}; color: ${activeTab === 'shop' ? 'white' : '#555'};" onclick="CharacterSystem.renderOutfitShopModal('shop')">🛍️ Outfit Shop</button>
+        </div>
+
+        <div class="outfits-list-container" style="display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto;">
+          ${itemsHtml}
+        </div>
+      </div>
+    `;
+  },
+
+  equipOutfitAction(outfitId) {
+    ProgressionSystem.selectOutfit(outfitId);
+    this.renderOutfitShopModal('wardrobe');
+  },
+
+  buyOutfitAction(outfitId) {
+    const res = ProgressionSystem.buyOutfit(outfitId);
+    alert(res.message);
+    this.renderOutfitShopModal('shop');
   },
 
   onTapCharacter() {

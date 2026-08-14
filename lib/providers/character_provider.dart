@@ -236,6 +236,39 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
     await _profileService.updateCharacterData(updatedProfile);
   }
 
+  /// Buys a new outfit using Science Coins
+  Future<bool> buyOutfit(String outfitId) async {
+    if (state.profile == null) return false;
+    final profile = state.profile!;
+    final outfit = CharacterService.outfits.firstWhere(
+      (o) => o.id == outfitId,
+      orElse: () => CharacterService.outfits.first,
+    );
+
+    if (profile.unlockedOutfits.contains(outfitId)) {
+      await selectOutfit(outfitId);
+      return true;
+    }
+
+    if (profile.coins < outfit.priceCoins) {
+      return false; // Not enough coins
+    }
+
+    final newCoins = profile.coins - outfit.priceCoins;
+    final newUnlocked = List<String>.from(profile.unlockedOutfits)..add(outfitId);
+
+    final updatedProfile = profile.copyWith(
+      coins: newCoins,
+      unlockedOutfits: newUnlocked,
+      characterOutfit: outfitId,
+    );
+
+    state = state.copyWith(profile: updatedProfile, characterOutfit: outfitId);
+    _ref.read(authProvider.notifier).setProfile(updatedProfile);
+    await _profileService.updateCharacterData(updatedProfile);
+    return true;
+  }
+
   /// Saves selected gender choice (male / female)
   Future<void> setGender(String gender) async {
     if (state.profile == null) return;
@@ -271,6 +304,13 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
     } else if (percentageScore >= 75) {
       xpGained += 15;
     }
+
+    // 1b. Calculate Science Coins Gained: +5 coins per correct answer + 20 bonus coins for 100%
+    int coinsGained = (correctAnswers * 5);
+    if (percentageScore >= 100) {
+      coinsGained += 20;
+    }
+    final newCoins = oldProfile.coins + coinsGained;
 
     final newXP = oldProfile.characterXp + xpGained;
     final newStage = CharacterService.instance.getStageForXP(newXP);
@@ -325,6 +365,7 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
       currentStreak: newStreak,
       longestStreak: newLongest,
       lastActivityDate: newLastDate,
+      coins: newCoins,
     );
 
     state = state.copyWith(

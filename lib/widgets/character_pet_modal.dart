@@ -166,8 +166,9 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                       // Options & Badge icons
                       Row(
                         children: [
+                          // Coins Badge
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
                             decoration: BoxDecoration(
                               color: const Color(0xFFFEF08A),
                               borderRadius: BorderRadius.circular(16),
@@ -175,30 +176,54 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                             ),
                             child: Row(
                               children: [
-                                const Text('🔥', style: TextStyle(fontSize: 13)),
-                                const SizedBox(width: 4),
+                                const Text('🪙', style: TextStyle(fontSize: 12)),
+                                const SizedBox(width: 3),
                                 Text(
-                                  '$streak',
+                                  '${profile?.coins ?? 50}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w900,
                                     color: Color(0xFF854D0E),
-                                    fontSize: 13,
+                                    fontSize: 12,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 6),
+                          // Streak Badge
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFEDD5),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: const Color(0xFFFB923C)),
+                            ),
+                            child: Row(
+                              children: [
+                                const Text('🔥', style: TextStyle(fontSize: 12)),
+                                const SizedBox(width: 3),
+                                Text(
+                                  '$streak',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    color: Color(0xFF9A3412),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 6),
                           GestureDetector(
                             onTap: () => _showEditNameDialog(charName),
                             child: Container(
-                              height: 38,
-                              width: 38,
+                              height: 34,
+                              width: 34,
                               decoration: BoxDecoration(
                                 color: Colors.white.withOpacity(0.85),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(Icons.more_horiz, color: Colors.black54),
+                              child: const Icon(Icons.more_horiz, color: Colors.black54, size: 20),
                             ),
                           ),
                         ],

@@ -30,6 +30,7 @@ class OutfitConfig {
   final String icon;
   final String description;
   final int requiredStage;
+  final int priceCoins;
 
   const OutfitConfig({
     required this.id,
@@ -37,6 +38,7 @@ class OutfitConfig {
     required this.icon,
     required this.description,
     required this.requiredStage,
+    this.priceCoins = 0,
   });
 }
 
@@ -99,15 +101,15 @@ class CharacterService {
       description: 'Mastered science trivia & simulations!',
     ),
     EvolutionStageConfig(
-      id: 'adult',
+      id: 'worker',
       stage: 4,
-      title: 'ADULT',
-      icon: '🧑',
+      title: 'WORKER',
+      icon: '💼',
       minXP: 600,
       nextXP: 999999,
       colorHex: '#F59E0B',
-      defaultQuote: "Science Grandmaster & Expert!",
-      description: 'Science Grandmaster & Expert!',
+      defaultQuote: "Working hard & applying science knowledge!",
+      description: 'Science Professional & Industry Worker!',
     ),
   ];
 
@@ -118,6 +120,15 @@ class CharacterService {
       icon: '🎒',
       description: 'Classic Nexus student uniform',
       requiredStage: 1,
+      priceCoins: 0,
+    ),
+    OutfitConfig(
+      id: 'explorer',
+      name: 'Explorer Gear',
+      icon: '🤠',
+      description: 'Outdoor field research & exploration gear',
+      requiredStage: 1,
+      priceCoins: 40,
     ),
     OutfitConfig(
       id: 'lab_coat',
@@ -125,6 +136,15 @@ class CharacterService {
       icon: '🥼',
       description: 'Professional research & lab gear',
       requiredStage: 2,
+      priceCoins: 50,
+    ),
+    OutfitConfig(
+      id: 'astronaut',
+      name: 'Astronaut Suit',
+      icon: '👨‍🚀',
+      description: 'High-tech space exploration suit',
+      requiredStage: 2,
+      priceCoins: 120,
     ),
     OutfitConfig(
       id: 'academic',
@@ -132,6 +152,7 @@ class CharacterService {
       icon: '🎓',
       description: 'Graduation gown and mortarboard',
       requiredStage: 3,
+      priceCoins: 100,
     ),
     OutfitConfig(
       id: 'golden',
@@ -139,6 +160,7 @@ class CharacterService {
       icon: '👑',
       description: 'Exclusive golden science master style',
       requiredStage: 4,
+      priceCoins: 200,
     ),
   ];
 
@@ -193,8 +215,9 @@ class CharacterService {
         return 'assets/images/character/$g/student.png';
       case 'graduate':
         return 'assets/images/character/$g/graduate.png';
+      case 'worker':
       case 'adult':
-        return 'assets/images/character/$g/adult.png';
+        return 'assets/images/character/$g/worker.png';
       default:
         return 'assets/images/character/$g/baby.png';
     }

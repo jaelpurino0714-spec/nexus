@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../providers/character_provider.dart';
+import '../widgets/character_pet_modal.dart';
 import '../widgets/floating_companion_widget.dart';
 import '../widgets/gender_selection_dialog.dart';
 
@@ -29,6 +30,15 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
     });
   }
 
+  void _showCharacterPetModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => const CharacterPetModal(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
@@ -47,102 +57,126 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
         children: [
           SingleChildScrollView(
             padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAlignment: CrossAlignment.stretch,
-          children: [
-            const SizedBox(height: 10),
+            child: Column(
+              crossAlignment: CrossAlignment.stretch,
+              children: [
+                const SizedBox(height: 10),
 
-            // 1. Title & App Subtitle
-            const Text(
-              'NEXUS',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w900,
-                color: Color(0xFF673AB7),
-                letterSpacing: 1.5,
-              ),
-            ),
-            const Text(
-              'DepEd Grade 10 Science Trivia',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // 2. Play Button
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 18),
-                backgroundColor: const Color(0xFF673AB7),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                // 1. Title & App Subtitle
+                const Text(
+                  'NEXUS',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w900,
+                    color: Color(0xFF673AB7),
+                    letterSpacing: 1.5,
+                  ),
                 ),
-                elevation: 4,
-              ),
-              icon: const Icon(Icons.play_arrow, size: 28),
-              label: const Text(
-                'Play',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                context.push('/student/terms');
-              },
-            ),
-            const SizedBox(height: 14),
-
-            // 4. Custom Button
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 18),
-                backgroundColor: Colors.purple.shade600,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                const Text(
+                  'DepEd Grade 10 Science Trivia',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey,
+                  ),
                 ),
-                elevation: 4,
-              ),
-              icon: const Icon(Icons.auto_awesome, size: 28),
-              label: const Text(
-                'Custom',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                _showCustomHubModal(context);
-              },
-            ),
-            const SizedBox(height: 14),
+                const SizedBox(height: 24),
 
-            // 5. Settings / Analytics Button
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 18),
-                backgroundColor: Colors.blueGrey.shade700,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                // 2. Play Button
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    backgroundColor: const Color(0xFF673AB7),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 4,
+                  ),
+                  icon: const Icon(Icons.play_arrow, size: 28),
+                  label: const Text(
+                    'Play',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    context.push('/student/terms');
+                  },
                 ),
-                elevation: 4,
-              ),
-              icon: const Icon(Icons.settings, size: 28),
-              label: const Text(
-                'Settings',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                context.push('/student/analytics');
-              },
-          ],
-        ),
+                const SizedBox(height: 14),
+
+                // 3. My Character Button
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    backgroundColor: const Color(0xFF0D9488),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 4,
+                  ),
+                  icon: const Icon(Icons.pets, size: 28),
+                  label: const Text(
+                    'My Character',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    _showCharacterPetModal(context);
+                  },
+                ),
+                const SizedBox(height: 14),
+
+                // 4. Custom Button
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    backgroundColor: Colors.purple.shade600,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 4,
+                  ),
+                  icon: const Icon(Icons.auto_awesome, size: 28),
+                  label: const Text(
+                    'Custom',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    _showCustomHubModal(context);
+                  },
+                ),
+                const SizedBox(height: 14),
+
+                // 5. Settings / Analytics Button
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    backgroundColor: Colors.blueGrey.shade700,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 4,
+                  ),
+                  icon: const Icon(Icons.settings, size: 28),
+                  label: const Text(
+                    'Settings',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    context.push('/student/analytics');
+                  },
+                ),
+              ],
+            ),
+          ),
+          const FloatingCompanionWidget(),
+        ],
       ),
-      const FloatingCompanionWidget(),
-    ],
-  ),
-);
+    );
+  }
 
 
   void _showCustomHubModal(BuildContext context) {

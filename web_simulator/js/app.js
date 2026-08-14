@@ -90,6 +90,10 @@ const App = {
     
     const unlockedCount = DB.getUnlockedAchievements().length;
     document.getElementById('homeBadges').textContent = unlockedCount;
+
+    const coins = profile.coins !== undefined ? profile.coins : 50;
+    const coinsEl = document.getElementById('homeCoins');
+    if (coinsEl) coinsEl.textContent = coins;
   },
 
   handleCustomPlayClick() {

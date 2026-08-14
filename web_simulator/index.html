@@ -164,6 +164,7 @@
           <div class="quick-stats-pills">
             <div class="stat-pill"><span class="pill-icon">⭐</span> <span id="homeTotalPoints">0</span> pts</div>
             <div class="stat-pill"><span class="pill-icon">🔥</span> <span id="homeStreak">0</span> streak</div>
+            <div class="stat-pill"><span class="pill-icon">🪙</span> <span id="homeCoins">50</span> coins</div>
             <div class="stat-pill"><span class="pill-icon">🏆</span> <span id="homeBadges">0</span> badges</div>
           </div>
         </div>
@@ -179,6 +180,11 @@
           <button id="playBtn" class="home-nav-btn play-btn" onclick="App.showScreen('playScreen')">
             <span class="btn-icon">🎮</span>
             <span class="btn-text">Play</span>
+          </button>
+
+          <button id="myCharacterBtn" class="home-nav-btn character-btn" style="background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%); color: white;" onclick="CharacterSystem.openCharacterModal()">
+            <span class="btn-icon">🐾</span>
+            <span class="btn-text">My Character</span>
           </button>
 
           <button id="experimentSimulatorBtn" class="home-nav-btn experiment-btn" onclick="Experiment.showTermSelection()">
