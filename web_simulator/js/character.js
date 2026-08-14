@@ -447,6 +447,22 @@ const CharacterSystem = {
     if (modal) modal.classList.add('hidden');
   },
 
+  PET_BG_THEMES: {
+    mint: { name: 'Mint Cyan', gradient: 'linear-gradient(185deg, #a7f3d0 0%, #ccfbf1 30%, #e0f2fe 65%, #f0fdf4 100%)', isDark: false },
+    lavender: { name: 'Lavender Mist', gradient: 'linear-gradient(185deg, #e9d5ff 0%, #f3e8ff 30%, #fae8ff 65%, #faf5ff 100%)', isDark: false },
+    sunset: { name: 'Sunset Peach', gradient: 'linear-gradient(185deg, #ffedd5 0%, #fed7aa 30%, #fee2e2 65%, #fff7ed 100%)', isDark: false },
+    ocean: { name: 'Oceanic Blue', gradient: 'linear-gradient(185deg, #bae6fd 0%, #e0f2fe 30%, #dbeafe 65%, #f0f9ff 100%)', isDark: false },
+    pink: { name: 'Pastel Pink', gradient: 'linear-gradient(185deg, #fbcfe8 0%, #fce7f3 30%, #ffe4e6 65%, #fff1f2 100%)', isDark: false },
+    midnight: { name: 'Midnight Cyber', gradient: 'linear-gradient(185deg, #0f172a 0%, #1e1b4b 35%, #312e81 70%, #0f172a 100%)', isDark: true }
+  },
+
+  getPetBgStyle(themeSetting) {
+    if (!themeSetting) return this.PET_BG_THEMES.mint.gradient;
+    if (this.PET_BG_THEMES[themeSetting]) return this.PET_BG_THEMES[themeSetting].gradient;
+    if (themeSetting.startsWith('#') || themeSetting.startsWith('linear-gradient')) return themeSetting;
+    return this.PET_BG_THEMES.mint.gradient;
+  },
+
   promptEditPetName() {
     const profile = DB.getStudentProfile() || {};
     const currentName = profile.petName || (profile.name ? `${profile.name}'s Pet` : 'baby aaica');
@@ -473,6 +489,8 @@ const CharacterSystem = {
 
     const activeOutfitId = ProgressionSystem.getActiveOutfit();
     const activeOutfit = OUTFITS_CATALOG.find(o => o.id === activeOutfitId) || OUTFITS_CATALOG[0];
+
+    const bgStyle = this.getPetBgStyle(profile.petBgTheme);
 
     let pct = 100;
     let nextReqText = `${xp} XP`;
@@ -504,7 +522,7 @@ const CharacterSystem = {
     const isHighScoreDone = typeof TaskSystem !== 'undefined' && TaskSystem.isTaskCompleted(`high_score_${new Date().toDateString()}`);
 
     modal.innerHTML = `
-      <div class="pet-modal-card">
+      <div class="pet-modal-card" style="background: ${bgStyle};">
         <!-- Top Bar -->
         <div class="pet-top-bar">
           <button class="pet-circle-icon-btn" onclick="CharacterSystem.closeCharacterModal()" title="Close">✕</button>
@@ -512,12 +530,15 @@ const CharacterSystem = {
             <span>${petName}</span>
             <button class="pet-name-edit-btn">✏️</button>
           </div>
-          <button class="pet-circle-icon-btn" onclick="CharacterSystem.openGenderModalFromPetScreen()" title="Options / Gender">⚙️</button>
+          <button class="pet-circle-icon-btn" onclick="CharacterSystem.openPetSettingsModal()" title="Pet Settings & Theme">⚙️</button>
         </div>
 
         <!-- Big Counter & Header Avatars -->
         <div class="pet-hero-stats-row">
-          <div class="pet-xp-big-counter">${xp}</div>
+          <div class="pet-xp-big-counter">
+            <span class="pet-xp-num">${xp}</span>
+            <span class="pet-xp-label">XP</span>
+          </div>
           <div class="pet-header-avatars">
             <div class="pet-header-avatar-badge">${stage.icon}</div>
             <div class="pet-header-avatar-badge">${profile.gender === 'female' ? '👧' : '👦'}</div>
@@ -633,10 +654,118 @@ const CharacterSystem = {
     setTimeout(() => { bubble.style.animation = 'popIn 0.3s ease-out'; }, 10);
   },
 
-  openGenderModalFromPetScreen() {
-    this.closeCharacterModal();
-    const modal = document.getElementById('genderSelectionModal');
-    if (modal) modal.classList.remove('hidden');
+  openPetSettingsModal() {
+    let modal = document.getElementById('petSettingsModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'petSettingsModal';
+      modal.className = 'pet-modal-overlay hidden';
+      document.body.appendChild(modal);
+    }
+    this.renderPetSettingsModalContent();
+    modal.classList.remove('hidden');
+  },
+
+  closePetSettingsModal() {
+    const modal = document.getElementById('petSettingsModal');
+    if (modal) modal.classList.add('hidden');
+  },
+
+  setPetBgTheme(themeKey, customValue = null) {
+    const profile = DB.getStudentProfile() || {};
+    profile.petBgTheme = customValue || themeKey;
+    DB.saveStudentProfile(profile);
+    this.renderPetSettingsModalContent();
+    this.renderCharacterModalContent();
+  },
+
+  setGenderChoiceFromSettings(gender) {
+    const profile = DB.getStudentProfile() || {};
+    profile.gender = gender;
+    DB.saveStudentProfile(profile);
+    this.renderPetSettingsModalContent();
+    this.renderCharacterModalContent();
+    this.renderHomeCharacterCard();
+  },
+
+  savePetNameFromSettings(newName) {
+    if (!newName || newName.trim() === '') return;
+    const profile = DB.getStudentProfile() || {};
+    profile.petName = newName.trim();
+    DB.saveStudentProfile(profile);
+    this.renderCharacterModalContent();
+    this.renderHomeCharacterCard();
+  },
+
+  renderPetSettingsModalContent() {
+    const modal = document.getElementById('petSettingsModal');
+    if (!modal) return;
+
+    const profile = DB.getStudentProfile() || {};
+    const currentTheme = profile.petBgTheme || 'mint';
+    const currentGender = profile.gender || 'male';
+    const currentPetName = profile.petName || 'baby aaica';
+
+    let themesHtml = '';
+    Object.keys(this.PET_BG_THEMES).forEach(key => {
+      const theme = this.PET_BG_THEMES[key];
+      const isActive = (currentTheme === key || currentTheme === theme.gradient);
+      themesHtml += `
+        <div class="pet-theme-swatch ${isActive ? 'active' : ''}" 
+             style="background: ${theme.gradient}; color: ${theme.isDark ? 'white' : '#0f172a'};"
+             onclick="CharacterSystem.setPetBgTheme('${key}')">
+          ${theme.name}
+        </div>
+      `;
+    });
+
+    const isCustomHex = currentTheme.startsWith('#');
+
+    modal.innerHTML = `
+      <div class="pet-settings-card">
+        <div class="pet-settings-header">
+          <span>⚙️ Pet Settings & Theme</span>
+          <button class="close-modal-btn" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:#666;" onclick="CharacterSystem.closePetSettingsModal()">✕</button>
+        </div>
+
+        <div>
+          <div class="pet-settings-section-title">🎨 Background Highlight Theme</div>
+          <div class="pet-themes-grid">
+            ${themesHtml}
+          </div>
+          <div class="pet-custom-color-row" style="margin-top: 10px;">
+            <span style="font-size: 0.88rem; font-weight: 700; color: #334155;">Custom Color Highlight</span>
+            <input type="color" class="pet-custom-color-input" value="${isCustomHex ? currentTheme : '#a7f3d0'}"
+                   onchange="CharacterSystem.setPetBgTheme(null, this.value)" />
+          </div>
+        </div>
+
+        <div>
+          <div class="pet-settings-section-title">👦👧 Character Gender Model</div>
+          <div style="display: flex; gap: 10px;">
+            <button class="primary-btn btn-sm" 
+                    style="flex: 1; background: ${currentGender === 'male' ? '#0284c7' : '#e2e8f0'}; color: ${currentGender === 'male' ? 'white' : '#334155'};"
+                    onclick="CharacterSystem.setGenderChoiceFromSettings('male')">
+              👦 Male
+            </button>
+            <button class="primary-btn btn-sm" 
+                    style="flex: 1; background: ${currentGender === 'female' ? '#ec4899' : '#e2e8f0'}; color: ${currentGender === 'female' ? 'white' : '#334155'};"
+                    onclick="CharacterSystem.setGenderChoiceFromSettings('female')">
+              👧 Female
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <div class="pet-settings-section-title">✏️ Pet Name</div>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="petNameSettingInput" value="${currentPetName.replace('✏️', '').trim()}"
+                   style="flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 14px; font-weight: 700;" placeholder="Pet name..." />
+            <button class="primary-btn btn-sm" onclick="CharacterSystem.savePetNameFromSettings(document.getElementById('petNameSettingInput').value)">Save</button>
+          </div>
+        </div>
+      </div>
+    `;
   },
 
   renderHomeCharacterCard() {
