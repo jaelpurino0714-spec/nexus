@@ -785,6 +785,82 @@
   color: #451A03;
 }
 
+/* Floating Interactive Character Companion (App Container) */
+.web-floating-companion {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: transform 0.2s ease;
+}
+
+.web-floating-companion:active {
+  cursor: grabbing;
+}
+
+.web-floating-companion.hidden {
+  display: none !important;
+}
+
+.web-floating-speech {
+  background: #673AB7;
+  color: #ffffff;
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  white-space: nowrap;
+}
+
+.web-floating-speech.hidden {
+  display: none !important;
+}
+
+.web-floating-avatar {
+  width: 60px;
+  height: 60px;
+  background: #ffffff;
+  border: 2.5px solid #673AB7;
+  border-radius: 50%;
+  padding: 4px;
+  box-shadow: 0 4px 12px rgba(103, 58, 183, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: floatingBob 2s ease-in-out infinite alternate;
+}
+
+.web-floating-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+@keyframes floatingBob {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-6px); }
+}
+
+.tap-react {
+  animation: tapBounce 0.45s ease-out !important;
+}
+
+@keyframes tapBounce {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.25) rotate(-6deg); }
+  70% { transform: scale(0.9) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
 /* ---------------- Acids, Bases, and Salts Styles ---------------- */
 /* Litmus Spheres & Animations */
 .litmus-anim-visual {

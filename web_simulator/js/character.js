@@ -286,8 +286,8 @@ const CharacterSystem = {
     if (!companion || !img) return;
 
     const profile = DB.getStudentProfile() || {};
-    // CRITICAL: Floating companion must ONLY render when current screen is homeScreen!
-    if (profile.role === 'teacher' || currentScreenId !== 'homeScreen') {
+    // Render floating companion across all student screens inside app container
+    if (profile.role === 'teacher') {
       companion.classList.add('hidden');
       return;
     }
