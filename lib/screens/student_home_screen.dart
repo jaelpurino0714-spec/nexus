@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../providers/character_provider.dart';
 import '../widgets/interactive_character_widget.dart';
+import '../widgets/floating_companion_widget.dart';
 import '../widgets/gender_selection_dialog.dart';
 import '../widgets/evolution_celebration_dialog.dart';
 
@@ -62,7 +63,9 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAlignment: CrossAlignment.stretch,
@@ -159,7 +162,10 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
           ],
         ),
       ),
-    );
+      const FloatingCompanionWidget(),
+    ],
+  ),
+);
   }
 
 

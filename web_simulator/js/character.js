@@ -280,13 +280,14 @@ const CharacterSystem = {
     window.addEventListener('touchend', onPointerUp);
   },
 
-  updateFloatingCompanion() {
+  updateFloatingCompanion(currentScreenId = 'homeScreen') {
     const companion = document.getElementById('webFloatingCompanion');
     const img = document.getElementById('webFloatingImg');
     if (!companion || !img) return;
 
     const profile = DB.getStudentProfile() || {};
-    if (profile.role !== 'student') {
+    // CRITICAL: Floating companion must ONLY render when current screen is homeScreen!
+    if (profile.role !== 'student' || currentScreenId !== 'homeScreen') {
       companion.classList.add('hidden');
       return;
     }

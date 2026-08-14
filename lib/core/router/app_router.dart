@@ -71,16 +71,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const TeacherDashboardScreen(),
       ),
 
-      // ShellRoute for Student Application incorporating Persistent Floating Companion
+      // ShellRoute for Student Application
       ShellRoute(
         builder: (context, state, child) {
           return Scaffold(
-            body: Stack(
-              children: [
-                child,
-                const FloatingCompanionWidget(),
-              ],
-            ),
+            body: child,
           );
         },
         routes: [

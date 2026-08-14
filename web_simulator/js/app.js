@@ -41,6 +41,10 @@ const App = {
       Quiz.hideAllModals();
     }
 
+    if (typeof CharacterSystem !== 'undefined' && CharacterSystem.updateFloatingCompanion) {
+      CharacterSystem.updateFloatingCompanion(screenId);
+    }
+
     if (screenId === 'homeScreen') {
       this.updateUserHeader();
       if (typeof CharacterSystem !== 'undefined') {

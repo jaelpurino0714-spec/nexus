@@ -154,39 +154,20 @@ class _InteractiveCharacterWidgetState extends ConsumerState<InteractiveCharacte
             ),
           ),
 
-          // Interactive Character Avatar
-          GestureDetector(
-            onTap: () {
-              ref.read(characterProvider.notifier).interactWithCharacter();
-            },
-            child: ScaleTransition(
-              scale: _scaleAnimation,
-              child: Container(
-                height: 140,
-                width: 140,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: stageColor.withOpacity(0.08),
-                ),
-                child: Center(
-                  child: Image.asset(
-                    assetPath,
-                    height: 120,
-                    width: 120,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      // Graceful fallback icon if image fails
-                      return Text(
-                        stage.icon,
-                        style: const TextStyle(fontSize: 80),
-                      );
-                    },
-                  ),
-                ),
+          // Quote Label Container (Character artwork floats on Home screen)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0),
+            child: Text(
+              '"${stage.defaultQuote}"',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                color: stageColor,
               ),
             ),
           ),
-          const SizedBox(height: 12),
 
           // Streak & XP Badges Row
           Row(
