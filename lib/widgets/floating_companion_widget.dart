@@ -129,10 +129,11 @@ class _FloatingCompanionWidgetState extends ConsumerState<FloatingCompanionWidge
                   onPanUpdate: (details) {
                     _totalDragDistance += details.delta.distance;
                     setState(() {
-                      _localPos = Offset(
-                        clampedDx + details.delta.dx,
-                        clampedDy + details.delta.dy,
-                      );
+                      final double currentX = _localPos?.dx ?? (charState.floatingDx ?? defaultLeft);
+                      final double currentY = _localPos?.dy ?? (charState.floatingDy ?? defaultTop);
+                      final double newX = (currentX + details.delta.dx).clamp(8.0, parentWidth - 72.0);
+                      final double newY = (currentY + details.delta.dy).clamp(topPadding, parentHeight - bottomPadding);
+                      _localPos = Offset(newX, newY);
                     });
                   },
                   onPanEnd: (details) {

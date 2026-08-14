@@ -234,9 +234,8 @@ const CharacterSystem = {
       startX = clientX;
       startY = clientY;
 
-      const rect = companion.getBoundingClientRect();
-      initialLeft = rect.left;
-      initialTop = rect.top;
+      initialLeft = companion.offsetLeft;
+      initialTop = companion.offsetTop;
     };
 
     const onPointerMove = (e) => {
@@ -250,8 +249,12 @@ const CharacterSystem = {
       let newLeft = initialLeft + dx;
       let newTop = initialTop + dy;
 
-      newLeft = Math.max(10, Math.min(window.innerWidth - 70, newLeft));
-      newTop = Math.max(10, Math.min(window.innerHeight - 70, newTop));
+      const parent = companion.parentElement || document.body;
+      const maxW = parent.clientWidth || window.innerWidth;
+      const maxH = parent.clientHeight || window.innerHeight;
+
+      newLeft = Math.max(8, Math.min(maxW - 68, newLeft));
+      newTop = Math.max(8, Math.min(maxH - 68, newTop));
 
       companion.style.left = newLeft + 'px';
       companion.style.top = newTop + 'px';
