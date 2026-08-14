@@ -564,7 +564,7 @@ const CharacterSystem = {
         <div class="pet-top-bar">
           <button class="pet-circle-icon-btn" onclick="CharacterSystem.closeCharacterModal()" title="Close">✕</button>
           <div class="pet-name-pill" onclick="CharacterSystem.promptEditPetName()">
-            <span>${petName}</span>
+            <span id="petNamePillLabel">${petName}</span>
             <button class="pet-name-edit-btn">✏️</button>
           </div>
           <button class="pet-circle-icon-btn" onclick="CharacterSystem.openPetSettingsModal()" title="Pet Settings & Theme">⚙️</button>
@@ -578,7 +578,7 @@ const CharacterSystem = {
           </div>
           <div class="pet-header-avatars">
             <div class="pet-header-avatar-badge">${stage.icon}</div>
-            <div class="pet-header-avatar-badge">${profile.gender === 'female' ? '👧' : '👦'}</div>
+            <div class="pet-header-avatar-badge" id="petHeaderGenderBadge">${profile.gender === 'female' ? '👧' : '👦'}</div>
           </div>
         </div>
 
@@ -729,28 +729,108 @@ const CharacterSystem = {
 
   setPetBgTheme(themeKey, customValue = null) {
     const profile = DB.getStudentProfile() || {};
-    profile.petBgTheme = customValue || themeKey;
+    const newTheme = customValue || themeKey;
+    profile.petBgTheme = newTheme;
+    
+    // 1. Instant background update on DOM with zero re-rendering delay
+    const bgStyle = this.getPetBgStyle(newTheme);
+    const petCard = document.querySelector('#myCharacterPetModal .pet-modal-card');
+    if (petCard) {
+      petCard.style.background = bgStyle;
+    }
+
+    // 2. Instant active class update on theme swatches
+    if (themeKey) {
+      const swatches = document.querySelectorAll('.pet-theme-swatch');
+      swatches.forEach(swatch => {
+        const key = swatch.getAttribute('data-theme-key');
+        if (key === themeKey) {
+          swatch.classList.add('active');
+        } else {
+          swatch.classList.remove('active');
+        }
+      });
+    }
+
+    // 3. Save profile asynchronously
     DB.saveStudentProfile(profile);
-    this.renderPetSettingsModalContent();
-    this.renderCharacterModalContent();
+    this.showSettingsSaveToast('Theme applied ✨');
   },
 
   setGenderChoiceFromSettings(gender) {
     const profile = DB.getStudentProfile() || {};
     profile.gender = gender;
+    
+    // 1. Save profile
     DB.saveStudentProfile(profile);
-    this.renderPetSettingsModalContent();
-    this.renderCharacterModalContent();
+
+    // 2. Update character image & gender badges in DOM instantly
+    const xp = ProgressionSystem.getCurrentXP();
+    const actualStage = ProgressionSystem.getStageForXP(xp);
+    if (this._previewStageIndex === undefined) this._previewStageIndex = actualStage.stage - 1;
+    const stage = EVOLUTION_STAGES[this._previewStageIndex] || actualStage;
+    
+    const stageImg = this.getStageImage(stage, gender);
+    const imgEl = document.querySelector('#myCharacterPetModal .pet-char-img');
+    if (imgEl && stageImg) {
+      imgEl.src = stageImg;
+    }
+
+    const genderBadgeEl = document.getElementById('petHeaderGenderBadge');
+    if (genderBadgeEl) {
+      genderBadgeEl.textContent = (gender === 'female' ? '👧' : '👦');
+    }
+
+    // 3. Update settings modal gender buttons style directly
+    const maleBtn = document.getElementById('petSettingsMaleBtn');
+    const femaleBtn = document.getElementById('petSettingsFemaleBtn');
+    if (maleBtn && femaleBtn) {
+      if (gender === 'male') {
+        maleBtn.style.background = '#0284c7'; maleBtn.style.color = 'white';
+        femaleBtn.style.background = '#e2e8f0'; femaleBtn.style.color = '#334155';
+      } else {
+        femaleBtn.style.background = '#ec4899'; femaleBtn.style.color = 'white';
+        maleBtn.style.background = '#e2e8f0'; maleBtn.style.color = '#334155';
+      }
+    }
+
     this.renderHomeCharacterCard();
+    this.showSettingsSaveToast('Gender updated! 👦👧');
   },
 
   savePetNameFromSettings(newName) {
     if (!newName || newName.trim() === '') return;
     const profile = DB.getStudentProfile() || {};
-    profile.petName = newName.trim();
+    const trimmed = newName.trim();
+    if (profile.petName === trimmed) return;
+
+    profile.petName = trimmed;
     DB.saveStudentProfile(profile);
-    this.renderCharacterModalContent();
+
+    // Update name labels in DOM instantly without re-rendering modal
+    const petNameLabel = document.getElementById('petNamePillLabel');
+    if (petNameLabel) {
+      petNameLabel.textContent = trimmed;
+    }
+
     this.renderHomeCharacterCard();
+    this.showSettingsSaveToast('Pet name saved! ✏️');
+  },
+
+  showSettingsSaveToast(msg = 'Saved!') {
+    let toast = document.getElementById('petSettingsToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'petSettingsToast';
+      toast.style.cssText = 'position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 8px 18px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 8px 20px rgba(0,0,0,0.25); z-index: 1200; transition: opacity 0.25s ease; opacity: 0; pointer-events: none;';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.style.opacity = '1';
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => {
+      toast.style.opacity = '0';
+    }, 1500);
   },
 
   renderPetSettingsModalContent() {
@@ -768,6 +848,7 @@ const CharacterSystem = {
       const isActive = (currentTheme === key || currentTheme === theme.gradient);
       themesHtml += `
         <div class="pet-theme-swatch ${isActive ? 'active' : ''}" 
+             data-theme-key="${key}"
              style="background: ${theme.gradient}; color: ${theme.isDark ? 'white' : '#0f172a'};"
              onclick="CharacterSystem.setPetBgTheme('${key}')">
           ${theme.name}
@@ -792,6 +873,7 @@ const CharacterSystem = {
           <div class="pet-custom-color-row" style="margin-top: 10px;">
             <span style="font-size: 0.88rem; font-weight: 700; color: #334155;">Custom Color Highlight</span>
             <input type="color" class="pet-custom-color-input" value="${isCustomHex ? currentTheme : '#a7f3d0'}"
+                   oninput="CharacterSystem.setPetBgTheme(null, this.value)"
                    onchange="CharacterSystem.setPetBgTheme(null, this.value)" />
           </div>
         </div>
@@ -799,12 +881,12 @@ const CharacterSystem = {
         <div>
           <div class="pet-settings-section-title">👦👧 Character Gender Model</div>
           <div style="display: flex; gap: 10px;">
-            <button class="primary-btn btn-sm" 
+            <button id="petSettingsMaleBtn" class="primary-btn btn-sm" 
                     style="flex: 1; background: ${currentGender === 'male' ? '#0284c7' : '#e2e8f0'}; color: ${currentGender === 'male' ? 'white' : '#334155'};"
                     onclick="CharacterSystem.setGenderChoiceFromSettings('male')">
               👦 Male
             </button>
-            <button class="primary-btn btn-sm" 
+            <button id="petSettingsFemaleBtn" class="primary-btn btn-sm" 
                     style="flex: 1; background: ${currentGender === 'female' ? '#ec4899' : '#e2e8f0'}; color: ${currentGender === 'female' ? 'white' : '#334155'};"
                     onclick="CharacterSystem.setGenderChoiceFromSettings('female')">
               👧 Female
@@ -816,8 +898,9 @@ const CharacterSystem = {
           <div class="pet-settings-section-title">✏️ Pet Name</div>
           <div style="display: flex; gap: 8px;">
             <input type="text" id="petNameSettingInput" value="${currentPetName.replace('✏️', '').trim()}"
+                   oninput="CharacterSystem.savePetNameFromSettings(this.value)"
+                   onkeyup="if(event.key==='Enter') this.blur()"
                    style="flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 14px; font-weight: 700;" placeholder="Pet name..." />
-            <button class="primary-btn btn-sm" onclick="CharacterSystem.savePetNameFromSettings(document.getElementById('petNameSettingInput').value)">Save</button>
           </div>
         </div>
       </div>
