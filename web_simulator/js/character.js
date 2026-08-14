@@ -463,6 +463,31 @@ const CharacterSystem = {
     return this.PET_BG_THEMES.mint.gradient;
   },
 
+  prevStage() {
+    const xp = ProgressionSystem.getCurrentXP();
+    const currentStage = ProgressionSystem.getStageForXP(xp);
+    if (this._previewStageIndex === undefined) {
+      this._previewStageIndex = currentStage.stage - 1;
+    }
+    this._previewStageIndex = Math.max(0, this._previewStageIndex - 1);
+    this.renderCharacterModalContent();
+  },
+
+  nextStage() {
+    const xp = ProgressionSystem.getCurrentXP();
+    const currentStage = ProgressionSystem.getStageForXP(xp);
+    if (this._previewStageIndex === undefined) {
+      this._previewStageIndex = currentStage.stage - 1;
+    }
+    this._previewStageIndex = Math.min(EVOLUTION_STAGES.length - 1, this._previewStageIndex + 1);
+    this.renderCharacterModalContent();
+  },
+
+  selectPreviewStage(index) {
+    this._previewStageIndex = index;
+    this.renderCharacterModalContent();
+  },
+
   promptEditPetName() {
     const profile = DB.getStudentProfile() || {};
     const currentName = profile.petName || (profile.name ? `${profile.name}'s Pet` : 'baby aaica');
@@ -480,8 +505,17 @@ const CharacterSystem = {
     if (!modal) return;
 
     const xp = ProgressionSystem.getCurrentXP();
-    const stage = ProgressionSystem.getStageForXP(xp);
+    const actualStage = ProgressionSystem.getStageForXP(xp);
     const profile = DB.getStudentProfile() || {};
+
+    if (this._previewStageIndex === undefined) {
+      this._previewStageIndex = actualStage.stage - 1;
+    }
+
+    const previewIndex = this._previewStageIndex;
+    const stage = EVOLUTION_STAGES[previewIndex] || actualStage;
+    const isLocked = (xp < stage.minXP);
+    const isCurrent = (actualStage.id === stage.id);
 
     const gender = profile.gender || 'male';
     const stageImage = this.getStageImage(stage, gender);
@@ -496,27 +530,30 @@ const CharacterSystem = {
     let nextReqText = `${xp} XP`;
     let untilNextText = 'More looks will be available soon ›';
 
-    if (stage.nextXP !== Infinity) {
-      const prevMin = stage.minXP;
+    if (actualStage.nextXP !== Infinity) {
+      const prevMin = actualStage.minXP;
       const currentLevelXP = xp - prevMin;
-      const neededXP = stage.nextXP - prevMin;
+      const neededXP = actualStage.nextXP - prevMin;
       pct = Math.min(100, Math.max(5, Math.round((currentLevelXP / neededXP) * 100)));
-      nextReqText = `${xp} / ${stage.nextXP}`;
-      const diff = Math.max(0, stage.nextXP - xp);
-      untilNextText = `${diff} XP until ${EVOLUTION_STAGES[stage.stage].title} Stage ›`;
+      nextReqText = `${xp} / ${actualStage.nextXP}`;
+      const diff = Math.max(0, actualStage.nextXP - xp);
+      untilNextText = `${diff} XP until ${EVOLUTION_STAGES[actualStage.stage].title} Stage ›`;
     } else {
       nextReqText = `${xp} XP (MAX)`;
       pct = 100;
     }
 
-    const isBaby = (stage.id === 'baby');
-    const isStudent = (stage.id === 'student');
-    const isGraduate = (stage.id === 'graduate');
-
     let dynamicQuote = stage.defaultQuote;
-    if (isBaby) dynamicQuote = xp >= 70 ? "Almost ready to evolve! 👶" : "Let's grow together!";
-    else if (isStudent) dynamicQuote = xp >= 270 ? "Graduation is close! 🎓" : "Studying Grade 10 concepts!";
-    else if (isGraduate) dynamicQuote = "Mastering trivia & simulations! 🏆";
+    if (isLocked) {
+      dynamicQuote = `🔒 Locked • Unlocks at ${stage.minXP} XP`;
+    } else if (isCurrent) {
+      if (stage.id === 'baby') dynamicQuote = xp >= 70 ? "Almost ready to evolve! 👶" : "Let's grow together!";
+      else if (stage.id === 'student') dynamicQuote = xp >= 270 ? "Graduation is close! 🎓" : "Studying Grade 10 concepts!";
+      else if (stage.id === 'graduate') dynamicQuote = "Mastering trivia & simulations! 🏆";
+      else if (stage.id === 'worker') dynamicQuote = "Science Master Worker! 💼";
+    } else {
+      dynamicQuote = `Unlocked ${stage.title} Stage! 🎉`;
+    }
 
     const isQuizDone = typeof TaskSystem !== 'undefined' && TaskSystem.isTaskCompleted(`quiz_complete_${new Date().toDateString()}`);
     const isHighScoreDone = typeof TaskSystem !== 'undefined' && TaskSystem.isTaskCompleted(`high_score_${new Date().toDateString()}`);
@@ -545,23 +582,42 @@ const CharacterSystem = {
           </div>
         </div>
 
-        <!-- Character Stage & Cloud -->
+        <!-- Character Stage & Cloud Pedestal -->
         <div class="pet-character-stage">
+          <!-- Stage Selector Navigation Bar -->
+          <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 6px; padding: 0 6px;">
+            <button class="pet-stage-nav-btn" onclick="CharacterSystem.prevStage()" ${previewIndex === 0 ? 'disabled' : ''} title="Previous Stage">‹</button>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <span style="font-size: 0.8rem; font-weight: 800; color: ${isLocked ? '#e11d48' : '#0284c7'}; background: rgba(255,255,255,0.85); padding: 4px 14px; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                ${isCurrent ? '✨ CURRENT' : (isLocked ? `🔒 LOCKED (${stage.minXP} XP)` : '✅ UNLOCKED')} • ${stage.title} (${previewIndex + 1}/4)
+              </span>
+            </div>
+            <button class="pet-stage-nav-btn" onclick="CharacterSystem.nextStage()" ${previewIndex === EVOLUTION_STAGES.length - 1 ? 'disabled' : ''} title="Next Stage">›</button>
+          </div>
+
+          <!-- Character Avatar (With Gray Tint if Locked) -->
           <div class="pet-character-avatar" onclick="CharacterSystem.onTapCharacterModalPet()">
             <div class="pet-speech-bubble" id="modalPetSpeechBubble">${dynamicQuote}</div>
             ${stageImage 
-              ? `<img src="${stageImage}" class="pet-char-img" alt="${stage.title}" />` 
-              : `<div style="font-size: 7rem; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));">${stage.icon}</div>`
+              ? `<img src="${stageImage}" class="pet-char-img ${isLocked ? 'locked-gray-tint' : ''}" alt="${stage.title}" />` 
+              : `<div class="${isLocked ? 'locked-gray-tint' : ''}" style="font-size: 8rem; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));">${stage.icon}</div>`
             }
           </div>
 
-          <!-- 3D Cloud Platform -->
+          <!-- 3D Cloud Platform (Positioned Below Character Feet) -->
           <div class="pet-cloud-platform">
             <div class="pet-cloud-puff pet-cloud-puff-1"></div>
             <div class="pet-cloud-puff pet-cloud-puff-2"></div>
             <div class="pet-cloud-puff pet-cloud-puff-3"></div>
-            <span style="position: absolute; top: 12px; left: 24px; font-size: 0.9rem;">✨</span>
-            <span style="position: absolute; bottom: 12px; right: 28px; font-size: 0.9rem;">⭐</span>
+            <span style="position: absolute; top: 10px; left: 28px; font-size: 0.9rem;">✨</span>
+            <span style="position: absolute; bottom: 10px; right: 32px; font-size: 0.9rem;">⭐</span>
+          </div>
+
+          <!-- Stage Dots Indicator -->
+          <div class="pet-stage-indicator-pills">
+            ${EVOLUTION_STAGES.map((s, idx) => `
+              <div class="pet-stage-dot ${idx === previewIndex ? 'active' : ''}" onclick="CharacterSystem.selectPreviewStage(${idx})" title="${s.title} Stage (${s.minXP} XP)"></div>
+            `).join('')}
           </div>
 
           <!-- Outfits Button -->

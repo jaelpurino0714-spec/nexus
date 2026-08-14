@@ -4297,12 +4297,12 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  margin: 8px 0 10px;
+  margin: 6px 0 10px;
 }
 
 .pet-cloud-platform {
-  width: 250px;
-  height: 90px;
+  width: 270px;
+  height: 75px;
   background: linear-gradient(135deg, #e9d5ff 0%, #f472b6 45%, #c084fc 100%);
   border-radius: 50px;
   position: relative;
@@ -4310,7 +4310,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 16px 35px rgba(168, 85, 247, 0.35);
-  margin-top: -35px;
+  margin-top: -25px;
   z-index: 1;
   border: 4px solid rgba(255, 255, 255, 0.85);
 }
@@ -4336,11 +4336,68 @@
 }
 
 .pet-char-img {
-  width: 175px;
-  height: 175px;
+  width: 230px;
+  height: 230px;
   object-fit: contain;
   filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.2));
   animation: petFloat 3s ease-in-out infinite;
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.pet-char-img.locked-gray-tint {
+  filter: grayscale(100%) contrast(0.85) opacity(0.55) drop-shadow(0 10px 15px rgba(0, 0, 0, 0.15)) !important;
+}
+
+.pet-stage-nav-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #0f172a;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.15s ease, background 0.15s ease;
+  z-index: 10;
+}
+
+.pet-stage-nav-btn:hover {
+  transform: scale(1.1);
+  background: #ffffff;
+}
+
+.pet-stage-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pet-stage-indicator-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  z-index: 3;
+}
+
+.pet-stage-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pet-stage-dot.active {
+  width: 22px;
+  border-radius: 10px;
+  background: #0284c7;
 }
 
 @keyframes petFloat {
