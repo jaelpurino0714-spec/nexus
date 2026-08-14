@@ -162,10 +162,7 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
           ],
         ),
       ),
-      const FloatingCompanionWidget(),
-    ],
-  ),
-);
+    );
   }
 
 

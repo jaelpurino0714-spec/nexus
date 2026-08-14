@@ -75,7 +75,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       ShellRoute(
         builder: (context, state, child) {
           return Scaffold(
-            body: child,
+            body: Stack(
+              children: [
+                child,
+                const FloatingCompanionWidget(),
+              ],
+            ),
           );
         },
         routes: [

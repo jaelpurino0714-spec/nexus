@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/character_provider.dart';
 import '../services/character_service.dart';
+import 'character_pet_modal.dart';
 
 class FloatingCompanionWidget extends ConsumerStatefulWidget {
   const FloatingCompanionWidget({super.key});
@@ -38,14 +39,23 @@ class _FloatingCompanionWidgetState extends ConsumerState<FloatingCompanionWidge
     super.dispose();
   }
 
+  void _openPetModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => const CharacterPetModal(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final charState = ref.watch(characterProvider);
     final profile = charState.profile;
 
-    // Hide floating companion on any screen that is NOT Home screen or when profile is uninitialized
+    // Maintain floating companion across all student screens throughout game flow
     final String currentRoute = GoRouterState.of(context).matchedLocation;
-    if ((currentRoute != '/student/home' && currentRoute != '/') || profile == null) {
+    if (!currentRoute.startsWith('/student') || profile == null) {
       return const SizedBox.shrink();
     }
 
@@ -57,9 +67,9 @@ class _FloatingCompanionWidgetState extends ConsumerState<FloatingCompanionWidge
     final double topPadding = MediaQuery.of(context).padding.top + 16.0;
     final double bottomPadding = MediaQuery.of(context).padding.bottom + 80.0;
 
-    // Initial positioning if not dragged yet
+    // Initial positioning at TOP RIGHT SIDE of screen by default
     final double defaultLeft = screenSize.width - 80.0;
-    final double defaultTop = screenSize.height - 150.0;
+    final double defaultTop = topPadding + 40.0;
 
     final double currentDx = _localPos?.dx ?? (charState.floatingDx ?? defaultLeft);
     final double currentDy = _localPos?.dy ?? (charState.floatingDy ?? defaultTop);
@@ -128,11 +138,11 @@ class _FloatingCompanionWidgetState extends ConsumerState<FloatingCompanionWidge
                       .read(characterProvider.notifier)
                       .updateFloatingPosition(_localPos!.dx, _localPos!.dy);
                 } else if (_totalDragDistance < 10.0) {
-                  ref.read(characterProvider.notifier).interactWithCharacter();
+                  _openPetModal(context);
                 }
               },
               onTap: () {
-                ref.read(characterProvider.notifier).interactWithCharacter();
+                _openPetModal(context);
               },
               child: AnimatedBuilder(
                 animation: _bobbingAnimation,
