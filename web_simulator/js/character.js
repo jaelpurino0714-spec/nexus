@@ -201,6 +201,104 @@ const CharacterSystem = {
 
   init() {
     this.renderHomeCharacterCard();
+    this.initFloatingCompanion();
+    this.updateFloatingCompanion();
+  },
+
+  initFloatingCompanion() {
+    const companion = document.getElementById('webFloatingCompanion');
+    if (!companion || this._floatingInited) return;
+    this._floatingInited = true;
+
+    const savedPos = localStorage.getItem('nexus_floating_pos');
+    if (savedPos) {
+      try {
+        const { left, top } = JSON.parse(savedPos);
+        companion.style.left = left + 'px';
+        companion.style.top = top + 'px';
+        companion.style.right = 'auto';
+        companion.style.bottom = 'auto';
+      } catch (e) {}
+    }
+
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let initialLeft = 0, initialTop = 0;
+    let dragDistance = 0;
+
+    const onPointerDown = (e) => {
+      isDragging = true;
+      dragDistance = 0;
+      const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+      const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+      startX = clientX;
+      startY = clientY;
+
+      const rect = companion.getBoundingClientRect();
+      initialLeft = rect.left;
+      initialTop = rect.top;
+    };
+
+    const onPointerMove = (e) => {
+      if (!isDragging) return;
+      const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+      const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+      dragDistance += Math.hypot(dx, dy);
+
+      let newLeft = initialLeft + dx;
+      let newTop = initialTop + dy;
+
+      newLeft = Math.max(10, Math.min(window.innerWidth - 70, newLeft));
+      newTop = Math.max(10, Math.min(window.innerHeight - 70, newTop));
+
+      companion.style.left = newLeft + 'px';
+      companion.style.top = newTop + 'px';
+      companion.style.right = 'auto';
+      companion.style.bottom = 'auto';
+    };
+
+    const onPointerUp = () => {
+      if (!isDragging) return;
+      isDragging = false;
+
+      if (dragDistance >= 10) {
+        const rect = companion.getBoundingClientRect();
+        localStorage.setItem('nexus_floating_pos', JSON.stringify({ left: rect.left, top: rect.top }));
+      } else {
+        this.onTapCharacter();
+      }
+    };
+
+    companion.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+
+    companion.addEventListener('touchstart', onPointerDown, { passive: true });
+    window.addEventListener('touchmove', onPointerMove, { passive: true });
+    window.addEventListener('touchend', onPointerUp);
+  },
+
+  updateFloatingCompanion() {
+    const companion = document.getElementById('webFloatingCompanion');
+    const img = document.getElementById('webFloatingImg');
+    if (!companion || !img) return;
+
+    const profile = DB.getStudentProfile() || {};
+    if (profile.role !== 'student') {
+      companion.classList.add('hidden');
+      return;
+    }
+
+    companion.classList.remove('hidden');
+    const xp = ProgressionSystem.getCurrentXP();
+    const stage = ProgressionSystem.getStageForXP(xp);
+    const gender = profile.gender || 'male';
+    const stageImage = this.getStageImage(stage, gender);
+    if (stageImage) {
+      img.src = stageImage;
+    }
   },
 
   getStageImage(stage, gender) {
