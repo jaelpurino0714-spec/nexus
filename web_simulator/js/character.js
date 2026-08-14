@@ -639,7 +639,7 @@ const CharacterSystem = {
           </div>
           <div class="preview-text" style="display: flex; flex-direction: column;">
             <strong style="color: #5b21b6; font-size: 0.9rem;">Equipped: ${activeOutfit.icon} ${activeOutfit.name}</strong>
-            <small style="color: #666; font-size: 0.78rem;">Earn +5 Science Coins for every correct quiz answer!</small>
+            <small style="color: #666; font-size: 0.78rem;">Earn +5 XP for every correct quiz answer!</small>
           </div>
         </div>
 
