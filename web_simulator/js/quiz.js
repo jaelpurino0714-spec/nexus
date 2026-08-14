@@ -1143,9 +1143,8 @@ const Quiz = {
       if (typeof ProgressionSystem !== 'undefined' && ProgressionSystem.addCoins) {
         ProgressionSystem.addCoins(coinsEarned);
       }
-    }
 
-      // 4. Maintain a streak (+5 XP if maxStreak >= 3)
+      // 5. Maintain a streak (+5 XP if maxStreak >= 3)
       if (this.maxStreak >= 3) {
         TaskSystem.completeTask(`streak_${Date.now()}`, `Streak Bonus (🔥 ${this.maxStreak})`, 5);
       }
