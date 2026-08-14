@@ -43,9 +43,9 @@ class _FloatingCompanionWidgetState extends ConsumerState<FloatingCompanionWidge
     final charState = ref.watch(characterProvider);
     final profile = charState.profile;
 
-    // Hide floating companion on full character screen or when profile is uninitialized
+    // Hide floating companion on any screen that is NOT Home screen or when profile is uninitialized
     final String currentRoute = GoRouterState.of(context).matchedLocation;
-    if (currentRoute == '/student/character' || profile == null) {
+    if ((currentRoute != '/student/home' && currentRoute != '/') || profile == null) {
       return const SizedBox.shrink();
     }
 
@@ -128,11 +128,11 @@ class _FloatingCompanionWidgetState extends ConsumerState<FloatingCompanionWidge
                       .read(characterProvider.notifier)
                       .updateFloatingPosition(_localPos!.dx, _localPos!.dy);
                 } else if (_totalDragDistance < 10.0) {
-                  context.push('/student/character');
+                  ref.read(characterProvider.notifier).interactWithCharacter();
                 }
               },
               onTap: () {
-                context.push('/student/character');
+                ref.read(characterProvider.notifier).interactWithCharacter();
               },
               child: AnimatedBuilder(
                 animation: _bobbingAnimation,

@@ -287,7 +287,7 @@ const CharacterSystem = {
 
     const profile = DB.getStudentProfile() || {};
     // CRITICAL: Floating companion must ONLY render when current screen is homeScreen!
-    if (profile.role !== 'student' || currentScreenId !== 'homeScreen') {
+    if (profile.role === 'teacher' || currentScreenId !== 'homeScreen') {
       companion.classList.add('hidden');
       return;
     }
@@ -299,6 +299,19 @@ const CharacterSystem = {
     const stageImage = this.getStageImage(stage, gender);
     if (stageImage) {
       img.src = stageImage;
+    }
+
+    const savedPos = localStorage.getItem('nexus_floating_pos');
+    if (savedPos) {
+      try {
+        const { left, top } = JSON.parse(savedPos);
+        const maxL = Math.max(10, Math.min(window.innerWidth - 70, left));
+        const maxT = Math.max(10, Math.min(window.innerHeight - 70, top));
+        companion.style.left = maxL + 'px';
+        companion.style.top = maxT + 'px';
+        companion.style.right = 'auto';
+        companion.style.bottom = 'auto';
+      } catch (e) {}
     }
   },
 
@@ -449,8 +462,6 @@ const CharacterSystem = {
         </div>
 
         <div class="char-card-body">
-          ${avatarHtml}
-          
           <div class="char-quote-label">"${dynamicQuote}"</div>
 
           <div class="char-xp-hero-badge">⭐ ${xp} XP</div>
@@ -472,8 +483,8 @@ const CharacterSystem = {
   },
 
   onTapCharacter() {
-    const bubble = document.getElementById('charSpeechBubble');
-    if (!bubble) return;
+    const bubble = document.getElementById('webFloatingSpeech');
+    const avatar = document.getElementById('webFloatingAvatar');
 
     const xp = ProgressionSystem.getCurrentXP();
     const stage = ProgressionSystem.getStageForXP(xp);
@@ -503,36 +514,45 @@ const CharacterSystem = {
       msg = stage.defaultQuote;
     }
 
-    bubble.textContent = msg;
-    bubble.classList.remove('hidden');
+    if (bubble) {
+      bubble.textContent = msg;
+      bubble.classList.remove('hidden');
+    }
 
-    const img = document.querySelector('.baby-char-img, .char-avatar-icon');
-    if (img) {
-      img.classList.remove('tap-react');
-      void img.offsetWidth;
-      img.classList.add('tap-react');
-      setTimeout(() => img.classList.remove('tap-react'), 450);
+    if (avatar) {
+      avatar.classList.remove('tap-react');
+      void avatar.offsetWidth;
+      avatar.classList.add('tap-react');
+      setTimeout(() => avatar.classList.remove('tap-react'), 450);
     }
 
     if (this._bubbleTimer) clearTimeout(this._bubbleTimer);
     this._bubbleTimer = setTimeout(() => {
-      bubble.classList.add('hidden');
+      if (bubble) bubble.classList.add('hidden');
     }, 2500);
   },
 
   triggerXPReaction(amount) {
-    const bubble = document.getElementById('charSpeechBubble');
-    const img = document.querySelector('.baby-char-img, .char-avatar-icon');
+    const bubble = document.getElementById('webFloatingSpeech');
+    const avatar = document.getElementById('webFloatingAvatar');
 
-    if (img) {
-      img.classList.remove('tap-react');
-      void img.offsetWidth;
-      img.classList.add('tap-react');
-      setTimeout(() => img.classList.remove('tap-react'), 450);
+    if (avatar) {
+      avatar.classList.remove('tap-react');
+      void avatar.offsetWidth;
+      avatar.classList.add('tap-react');
+      setTimeout(() => avatar.classList.remove('tap-react'), 450);
     }
 
     if (bubble) {
       bubble.textContent = `+${amount} XP! 🎉`;
+      bubble.classList.remove('hidden');
+
+      if (this._bubbleTimer) clearTimeout(this._bubbleTimer);
+      this._bubbleTimer = setTimeout(() => {
+        bubble.classList.add('hidden');
+      }, 2500);
+    }
+  },
       bubble.classList.remove('hidden');
 
       if (this._bubbleTimer) clearTimeout(this._bubbleTimer);

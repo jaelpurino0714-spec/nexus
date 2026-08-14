@@ -4023,20 +4023,20 @@
 .web-floating-speech {
   background: #673AB7;
   color: #FFFFFF;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 800;
-  padding: 4px 10px;
-  border-radius: 12px;
+  padding: 5px 12px;
+  border-radius: 14px;
   margin-bottom: 6px;
-  box-shadow: 0 4px 12px rgba(103, 58, 183, 0.3);
+  box-shadow: 0 4px 12px rgba(103, 58, 183, 0.35);
   white-space: nowrap;
   pointer-events: none;
   animation: fadeIn 0.25s ease;
 }
 
 .web-floating-avatar {
-  width: 60px;
-  height: 60px;
+  width: 62px;
+  height: 62px;
   background: #FFFFFF;
   border: 2.5px solid #673AB7;
   border-radius: 50%;
@@ -4045,7 +4045,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: floatingBobbing 1.8s ease-in-out infinite alternate;
+  animation: floatingBobbing 2.2s ease-in-out infinite alternate;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.web-floating-avatar.tap-react {
+  animation: tapPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .web-floating-avatar img {
@@ -4059,6 +4064,12 @@
 @keyframes floatingBobbing {
   0% { transform: translateY(0px); }
   100% { transform: translateY(-6px); }
+}
+
+@keyframes tapPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2) rotate(-5deg); }
+  100% { transform: scale(1); }
 }
 
 
