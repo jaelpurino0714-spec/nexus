@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/auth_provider.dart';
-import '../../providers/character_provider.dart';
 import '../../screens/splash_screen.dart';
 import '../../screens/login_selection_screen.dart';
 import '../../screens/student_profile_setup_screen.dart';
@@ -19,58 +18,6 @@ import '../../screens/custom_play_screen.dart';
 import '../../screens/host_quiz_screen.dart';
 import '../../screens/join_quiz_screen.dart';
 import '../../screens/full_character_screen.dart';
-import '../../widgets/floating_companion_widget.dart';
-import '../../widgets/gender_selection_dialog.dart';
-import '../../widgets/evolution_celebration_dialog.dart';
-
-class StudentShellWrapper extends ConsumerStatefulWidget {
-  final Widget child;
-  const StudentShellWrapper({super.key, required this.child});
-
-  @override
-  ConsumerState<StudentShellWrapper> createState() => _StudentShellWrapperState();
-}
-
-class _StudentShellWrapperState extends ConsumerState<StudentShellWrapper> {
-  bool _modalShownThisFrame = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final charState = ref.watch(characterProvider);
-
-    // Modal triggers for Gender Selection & Evolution Celebration
-    if (!_modalShownThisFrame) {
-      if (charState.pendingGenderSelection) {
-        _modalShownThisFrame = true;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (ctx) => const GenderSelectionDialog(),
-          ).then((_) => _modalShownThisFrame = false);
-        });
-      } else if (charState.pendingEvolution != null) {
-        _modalShownThisFrame = true;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (ctx) => const EvolutionCelebrationDialog(),
-          ).then((_) => _modalShownThisFrame = false);
-        });
-      }
-    }
-
-    return Scaffold(
-      body: Stack(
-        children: [
-          widget.child,
-          const FloatingCompanionWidget(),
-        ],
-      ),
-    );
-  }
-}
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -126,7 +73,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       // ShellRoute for Student Application
       ShellRoute(
         builder: (context, state, child) {
-          return StudentShellWrapper(child: child);
+          return Scaffold(
+            body: child,
+          );
         },
         routes: [
           GoRoute(

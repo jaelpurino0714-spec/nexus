@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
-import '../providers/character_provider.dart';
-import '../widgets/interactive_character_widget.dart';
-import '../widgets/floating_companion_widget.dart';
-import '../widgets/gender_selection_dialog.dart';
-import '../widgets/evolution_celebration_dialog.dart';
 
 class StudentHomeScreen extends ConsumerStatefulWidget {
   const StudentHomeScreen({super.key});
@@ -16,42 +11,9 @@ class StudentHomeScreen extends ConsumerStatefulWidget {
 }
 
 class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
-  bool _modalShownThisFrame = false;
-
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
-    final charState = ref.watch(characterProvider);
-
-    // Sync profile to character provider if loaded
-    if (authState.profile != null && charState.profile?.id != authState.profile!.id) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(characterProvider.notifier).setProfile(authState.profile!);
-      });
-    }
-
-    // Modal triggers for Gender Selection & Evolution Celebration
-    if (! _modalShownThisFrame) {
-      if (charState.pendingGenderSelection) {
-        _modalShownThisFrame = true;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (ctx) => const GenderSelectionDialog(),
-          ).then((_) => _modalShownThisFrame = false);
-        });
-      } else if (charState.pendingEvolution != null) {
-        _modalShownThisFrame = true;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (ctx) => const EvolutionCelebrationDialog(),
-          ).then((_) => _modalShownThisFrame = false);
-        });
-      }
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -63,18 +25,14 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAlignment: CrossAlignment.stretch,
           children: [
-            // 1. Unified Interactive Character Companion
-            const InteractiveCharacterWidget(),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
 
-            // 2. Title & App Subtitle
+            // 1. Title & App Subtitle
             const Text(
               'NEXUS',
               textAlign: TextAlign.center,

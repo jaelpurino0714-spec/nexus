@@ -285,36 +285,8 @@ const CharacterSystem = {
 
   updateFloatingCompanion(currentScreenId = 'homeScreen') {
     const companion = document.getElementById('webFloatingCompanion');
-    const img = document.getElementById('webFloatingImg');
-    if (!companion || !img) return;
-
-    const profile = DB.getStudentProfile() || {};
-    // Render floating companion across all student screens inside app container
-    if (profile.role === 'teacher') {
+    if (companion) {
       companion.classList.add('hidden');
-      return;
-    }
-
-    companion.classList.remove('hidden');
-    const xp = ProgressionSystem.getCurrentXP();
-    const stage = ProgressionSystem.getStageForXP(xp);
-    const gender = profile.gender || 'male';
-    const stageImage = this.getStageImage(stage, gender);
-    if (stageImage) {
-      img.src = stageImage;
-    }
-
-    const savedPos = localStorage.getItem('nexus_floating_pos');
-    if (savedPos) {
-      try {
-        const { left, top } = JSON.parse(savedPos);
-        const maxL = Math.max(10, Math.min(window.innerWidth - 70, left));
-        const maxT = Math.max(10, Math.min(window.innerHeight - 70, top));
-        companion.style.left = maxL + 'px';
-        companion.style.top = maxT + 'px';
-        companion.style.right = 'auto';
-        companion.style.bottom = 'auto';
-      } catch (e) {}
     }
   },
 
