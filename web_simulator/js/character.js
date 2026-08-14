@@ -553,14 +553,6 @@ const CharacterSystem = {
       }, 2500);
     }
   },
-      bubble.classList.remove('hidden');
-
-      if (this._bubbleTimer) clearTimeout(this._bubbleTimer);
-      this._bubbleTimer = setTimeout(() => {
-        bubble.classList.add('hidden');
-      }, 2500);
-    }
-  },
 
   showXPToast(amount, reason) {
     let toast = document.getElementById('xpToastNotification');
