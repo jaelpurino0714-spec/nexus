@@ -352,6 +352,13 @@ const CharacterSystem = {
     }
   },
 
+  openCharacterModal() {
+    const modal = document.getElementById('evolutionModal');
+    if (modal) {
+      modal.classList.remove('hidden');
+    }
+  },
+
   renderHomeCharacterCard() {
     const container = document.getElementById('homeCharacterCard');
     if (!container) return;
