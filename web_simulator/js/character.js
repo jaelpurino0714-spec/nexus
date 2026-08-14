@@ -431,10 +431,212 @@ const CharacterSystem = {
   },
 
   openCharacterModal() {
-    const modal = document.getElementById('evolutionModal');
-    if (modal) {
-      modal.classList.remove('hidden');
+    let modal = document.getElementById('myCharacterPetModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'myCharacterPetModal';
+      modal.className = 'pet-modal-overlay hidden';
+      document.body.appendChild(modal);
     }
+    this.renderCharacterModalContent();
+    modal.classList.remove('hidden');
+  },
+
+  closeCharacterModal() {
+    const modal = document.getElementById('myCharacterPetModal');
+    if (modal) modal.classList.add('hidden');
+  },
+
+  promptEditPetName() {
+    const profile = DB.getStudentProfile() || {};
+    const currentName = profile.petName || (profile.name ? `${profile.name}'s Pet` : 'baby aaica');
+    const newName = prompt('Enter a name for your pet:', currentName);
+    if (newName && newName.trim() !== '') {
+      profile.petName = newName.trim();
+      DB.saveStudentProfile(profile);
+      this.renderCharacterModalContent();
+      this.renderHomeCharacterCard();
+    }
+  },
+
+  renderCharacterModalContent() {
+    const modal = document.getElementById('myCharacterPetModal');
+    if (!modal) return;
+
+    const xp = ProgressionSystem.getCurrentXP();
+    const stage = ProgressionSystem.getStageForXP(xp);
+    const profile = DB.getStudentProfile() || {};
+
+    const gender = profile.gender || 'male';
+    const stageImage = this.getStageImage(stage, gender);
+    const petName = profile.petName || (stage.id === 'baby' ? 'baby aaica' : `${stage.title} Pet`);
+
+    const activeOutfitId = ProgressionSystem.getActiveOutfit();
+    const activeOutfit = OUTFITS_CATALOG.find(o => o.id === activeOutfitId) || OUTFITS_CATALOG[0];
+
+    let pct = 100;
+    let nextReqText = `${xp} XP`;
+    let untilNextText = 'More looks will be available soon ›';
+
+    if (stage.nextXP !== Infinity) {
+      const prevMin = stage.minXP;
+      const currentLevelXP = xp - prevMin;
+      const neededXP = stage.nextXP - prevMin;
+      pct = Math.min(100, Math.max(5, Math.round((currentLevelXP / neededXP) * 100)));
+      nextReqText = `${xp} / ${stage.nextXP}`;
+      const diff = Math.max(0, stage.nextXP - xp);
+      untilNextText = `${diff} XP until ${EVOLUTION_STAGES[stage.stage].title} Stage ›`;
+    } else {
+      nextReqText = `${xp} XP (MAX)`;
+      pct = 100;
+    }
+
+    const isBaby = (stage.id === 'baby');
+    const isStudent = (stage.id === 'student');
+    const isGraduate = (stage.id === 'graduate');
+
+    let dynamicQuote = stage.defaultQuote;
+    if (isBaby) dynamicQuote = xp >= 70 ? "Almost ready to evolve! 👶" : "Let's grow together!";
+    else if (isStudent) dynamicQuote = xp >= 270 ? "Graduation is close! 🎓" : "Studying Grade 10 concepts!";
+    else if (isGraduate) dynamicQuote = "Mastering trivia & simulations! 🏆";
+
+    const isQuizDone = typeof TaskSystem !== 'undefined' && TaskSystem.isTaskCompleted(`quiz_complete_${new Date().toDateString()}`);
+    const isHighScoreDone = typeof TaskSystem !== 'undefined' && TaskSystem.isTaskCompleted(`high_score_${new Date().toDateString()}`);
+
+    modal.innerHTML = `
+      <div class="pet-modal-card">
+        <!-- Top Bar -->
+        <div class="pet-top-bar">
+          <button class="pet-circle-icon-btn" onclick="CharacterSystem.closeCharacterModal()" title="Close">✕</button>
+          <div class="pet-name-pill" onclick="CharacterSystem.promptEditPetName()">
+            <span>${petName}</span>
+            <button class="pet-name-edit-btn">✏️</button>
+          </div>
+          <button class="pet-circle-icon-btn" onclick="CharacterSystem.openGenderModalFromPetScreen()" title="Options / Gender">⚙️</button>
+        </div>
+
+        <!-- Big Counter & Header Avatars -->
+        <div class="pet-hero-stats-row">
+          <div class="pet-xp-big-counter">${xp}</div>
+          <div class="pet-header-avatars">
+            <div class="pet-header-avatar-badge">${stage.icon}</div>
+            <div class="pet-header-avatar-badge">${profile.gender === 'female' ? '👧' : '👦'}</div>
+          </div>
+        </div>
+
+        <!-- Character Stage & Cloud -->
+        <div class="pet-character-stage">
+          <div class="pet-character-avatar" onclick="CharacterSystem.onTapCharacterModalPet()">
+            <div class="pet-speech-bubble" id="modalPetSpeechBubble">${dynamicQuote}</div>
+            ${stageImage 
+              ? `<img src="${stageImage}" class="pet-char-img" alt="${stage.title}" />` 
+              : `<div style="font-size: 7rem; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));">${stage.icon}</div>`
+            }
+          </div>
+
+          <!-- 3D Cloud Platform -->
+          <div class="pet-cloud-platform">
+            <div class="pet-cloud-puff pet-cloud-puff-1"></div>
+            <div class="pet-cloud-puff pet-cloud-puff-2"></div>
+            <div class="pet-cloud-puff pet-cloud-puff-3"></div>
+            <span style="position: absolute; top: 12px; left: 24px; font-size: 0.9rem;">✨</span>
+            <span style="position: absolute; bottom: 12px; right: 28px; font-size: 0.9rem;">⭐</span>
+          </div>
+
+          <!-- Outfits Button -->
+          <button class="pet-outfits-pill-btn" onclick="CharacterSystem.closeCharacterModal(); CharacterSystem.openOutfitShopModal();">
+            <span>${activeOutfit.icon}</span>
+            <span>Outfits</span>
+          </button>
+        </div>
+
+        <!-- Animated Candy-Stripe EXP Bar -->
+        <div class="pet-exp-container">
+          <div class="pet-exp-bar-outer">
+            <div class="pet-exp-bar-fill" style="width: ${pct}%;"></div>
+            <div class="pet-exp-bar-text">${nextReqText}</div>
+          </div>
+          <div class="pet-exp-subtitle" onclick="CharacterSystem.closeCharacterModal(); CharacterSystem.openOutfitShopModal();">
+            ${untilNextText}
+          </div>
+        </div>
+
+        <!-- Bottom Action Cards -->
+        <div class="pet-bottom-cards">
+          <!-- Card 1: Outfit Banner -->
+          <div class="pet-shop-banner-card" onclick="CharacterSystem.closeCharacterModal(); CharacterSystem.openOutfitShopModal();">
+            <div class="pet-banner-left">
+              <div class="pet-banner-icon">🛍️</div>
+              <div class="pet-banner-text">Unlock new outfits for your Pet with Science XP!</div>
+            </div>
+            <div class="pet-chevron-right">›</div>
+          </div>
+
+          <!-- Card 2: Grow Your Pet -->
+          <div class="pet-info-card">
+            <div class="pet-tasks-header">
+              <span>Grow your Pet 🐾</span>
+              <small style="color: #64748b; font-size: 0.78rem;">Daily Tasks</small>
+            </div>
+
+            <div class="pet-task-item">
+              <div class="pet-task-left">
+                <div class="pet-task-check ${isQuizDone ? 'completed' : ''}">${isQuizDone ? '✓' : '1'}</div>
+                <div class="pet-task-info">
+                  <span class="pet-task-title">Complete 1 Science Quiz</span>
+                  <span class="pet-task-reward">+10 XP</span>
+                </div>
+              </div>
+              <button class="pet-task-btn" onclick="CharacterSystem.closeCharacterModal(); App.showScreen('playScreen');">Go</button>
+            </div>
+
+            <div class="pet-task-item">
+              <div class="pet-task-left">
+                <div class="pet-task-check ${isHighScoreDone ? 'completed' : ''}">${isHighScoreDone ? '✓' : '2'}</div>
+                <div class="pet-task-info">
+                  <span class="pet-task-title">Score ≥80% on a Quiz</span>
+                  <span class="pet-task-reward">+10 XP</span>
+                </div>
+              </div>
+              <button class="pet-task-btn" onclick="CharacterSystem.closeCharacterModal(); App.showScreen('playScreen');">Go</button>
+            </div>
+
+            <div class="pet-task-item">
+              <div class="pet-task-left">
+                <div class="pet-task-check">3</div>
+                <div class="pet-task-info">
+                  <span class="pet-task-title">Perform Science Simulation</span>
+                  <span class="pet-task-reward">+15 XP</span>
+                </div>
+              </div>
+              <button class="pet-task-btn" onclick="CharacterSystem.closeCharacterModal(); Experiment.showTermSelection();">Go</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  onTapCharacterModalPet() {
+    const bubble = document.getElementById('modalPetSpeechBubble');
+    if (!bubble) return;
+    const quotes = [
+      "Yay! Let's learn Science! 🌟",
+      "Feed me more XP! 😋",
+      "I love doing experiments! 🧪",
+      "Score 100% on the quiz! 💯",
+      "Almost evolution time! 🚀"
+    ];
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    bubble.textContent = randomQuote;
+    bubble.style.animation = 'none';
+    setTimeout(() => { bubble.style.animation = 'popIn 0.3s ease-out'; }, 10);
+  },
+
+  openGenderModalFromPetScreen() {
+    this.closeCharacterModal();
+    const modal = document.getElementById('genderSelectionModal');
+    if (modal) modal.classList.remove('hidden');
   },
 
   renderHomeCharacterCard() {
