@@ -367,8 +367,8 @@ const CharacterSystem = {
     const stage = ProgressionSystem.getStageForXP(xp);
     const profile = DB.getStudentProfile() || {};
 
-    // For existing users with no gender set who are past Baby stage
-    if (!profile.gender && stage.id !== 'baby' && !this._genderPromptShown) {
+    // For existing users with no gender set yet
+    if (!profile.gender && !this._genderPromptShown) {
       this._genderPromptShown = true;
       const oldStage = EVOLUTION_STAGES[0];
       this.triggerGenderSelectionModal(oldStage, stage, xp, true);

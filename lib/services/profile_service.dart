@@ -24,6 +24,7 @@ class ProfileService {
     required String section,
     String? photoUrl,
     String? deviceId,
+    String? gender,
   }) async {
     final String uuid = const Uuid().v4();
     final profile = ProfileModel(
@@ -35,6 +36,9 @@ class ProfileService {
       photoUrl: photoUrl,
       deviceId: deviceId,
       createdAt: DateTime.now(),
+      characterGender: gender,
+      characterStage: 'baby',
+      characterXp: 0,
     );
 
     await _client.from('profiles').insert(profile.toJson());

@@ -10,6 +10,7 @@ abstract class ProfileRepository {
     required String section,
     File? photoFile,
     String? deviceId,
+    String? gender,
   });
   Future<ProfileModel?> getProfile(String userId);
 }
@@ -27,6 +28,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
     required String section,
     File? photoFile,
     String? deviceId,
+    String? gender,
   }) async {
     String? photoUrl;
     if (photoFile != null) {
@@ -39,6 +41,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       section: section,
       photoUrl: photoUrl,
       deviceId: deviceId,
+      gender: gender,
     );
   }
 

@@ -71,18 +71,18 @@ class CharacterService {
       title: 'BABY',
       icon: '👶',
       minXP: 0,
-      nextXP: 400,
+      nextXP: 100,
       colorHex: '#38BDF8',
       defaultQuote: "Let's grow together!",
-      description: 'Focusing on earning 400 XP to evolve into Student!',
+      description: 'Focusing on earning 100 XP to evolve into Student!',
     ),
     EvolutionStageConfig(
       id: 'student',
       stage: 2,
       title: 'STUDENT',
       icon: '🎒',
-      minXP: 400,
-      nextXP: 800,
+      minXP: 100,
+      nextXP: 300,
       colorHex: '#10B981',
       defaultQuote: "Studying core Grade 10 concepts!",
       description: 'Learning core Grade 10 Science topics!',
@@ -92,11 +92,22 @@ class CharacterService {
       stage: 3,
       title: 'GRADUATE',
       icon: '🎓',
-      minXP: 800,
-      nextXP: 999999,
+      minXP: 300,
+      nextXP: 600,
       colorHex: '#8B5CF6',
       defaultQuote: "Mastering trivia & simulations!",
       description: 'Mastered science trivia & simulations!',
+    ),
+    EvolutionStageConfig(
+      id: 'adult',
+      stage: 4,
+      title: 'ADULT',
+      icon: '🧑',
+      minXP: 600,
+      nextXP: 999999,
+      colorHex: '#F59E0B',
+      defaultQuote: "Science Grandmaster & Expert!",
+      description: 'Science Grandmaster & Expert!',
     ),
   ];
 
@@ -167,8 +178,9 @@ class CharacterService {
   ];
 
   EvolutionStageConfig getStageForXP(int xp) {
-    if (xp >= 800) return stages[2];
-    if (xp >= 400) return stages[1];
+    if (xp >= 600) return stages[3];
+    if (xp >= 300) return stages[2];
+    if (xp >= 100) return stages[1];
     return stages[0];
   }
 
