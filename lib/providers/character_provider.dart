@@ -45,6 +45,8 @@ class CharacterState {
   final String floatingSpeechMessage;
   final bool showFloatingSpeech;
   final bool isFloatingVisible;
+  final double? floatingDx;
+  final double? floatingDy;
   final List<GrowthTaskProgress> tasks;
 
   CharacterState({
@@ -62,6 +64,8 @@ class CharacterState {
     this.floatingSpeechMessage = 'Ready?',
     this.showFloatingSpeech = false,
     this.isFloatingVisible = true,
+    this.floatingDx,
+    this.floatingDy,
     this.tasks = const [],
   });
 
@@ -81,6 +85,8 @@ class CharacterState {
     String? floatingSpeechMessage,
     bool? showFloatingSpeech,
     bool? isFloatingVisible,
+    double? floatingDx,
+    double? floatingDy,
     List<GrowthTaskProgress>? tasks,
   }) {
     return CharacterState(
@@ -98,10 +104,13 @@ class CharacterState {
       floatingSpeechMessage: floatingSpeechMessage ?? this.floatingSpeechMessage,
       showFloatingSpeech: showFloatingSpeech ?? this.showFloatingSpeech,
       isFloatingVisible: isFloatingVisible ?? this.isFloatingVisible,
+      floatingDx: floatingDx ?? this.floatingDx,
+      floatingDy: floatingDy ?? this.floatingDy,
       tasks: tasks ?? this.tasks,
     );
   }
 }
+
 
 class CharacterNotifier extends StateNotifier<CharacterState> {
   final ProfileService _profileService;
@@ -157,8 +166,17 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
     );
   }
 
+  /// Updates saved floating companion position on screen (dx, dy)
+  void updateFloatingPosition(double dx, double dy) {
+    state = state.copyWith(
+      floatingDx: dx,
+      floatingDy: dy,
+    );
+  }
+
   /// Triggers a brief contextual speech bubble on the compact floating companion
   void triggerFloatingReaction(String trigger) {
+
     final msg = CharacterService.instance.getFloatingReaction(trigger);
     state = state.copyWith(
       floatingSpeechMessage: msg,

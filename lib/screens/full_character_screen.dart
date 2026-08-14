@@ -25,7 +25,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Edit Companion Name'),
+        title: const Text('Edit Scientist Name'),
         content: TextField(
           controller: controller,
           decoration: const InputDecoration(
@@ -129,7 +129,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
                   children: [
                     Icon(Icons.edit, size: 18, color: Colors.grey),
                     SizedBox(width: 8),
-                    Text('Rename Companion'),
+                    Text('Rename Scientist'),
                   ],
                 ),
               ),
@@ -141,17 +141,17 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         child: Column(
           children: [
-            // 1. Prominent Streak Header
+            // 1. Prominent Science Microscope Streak Banner
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
+                  colors: [Color(0xFF673AB7), Color(0xFF8E24AA)],
                 ),
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.deepOrange.withOpacity(0.3),
+                    color: Colors.purple.withOpacity(0.3),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -160,7 +160,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('🔥', style: TextStyle(fontSize: 24)),
+                  const Text('🔬', style: TextStyle(fontSize: 24)),
                   const SizedBox(width: 8),
                   Text(
                     '$streak DAY STREAK',
@@ -235,7 +235,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
                     ),
                   ),
 
-                  // Large Character Artwork & Platform Scene
+                  // Large Existing Nexus Character Artwork
                   GestureDetector(
                     onTap: () {
                       ref.read(characterProvider.notifier).interactWithCharacter();
@@ -243,7 +243,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
                     child: Stack(
                       alignment: Alignment.bottomCenter,
                       children: [
-                        // Decorative Platform Oval
+                        // Decorative Platform Base
                         Container(
                           height: 40,
                           width: 180,
@@ -254,7 +254,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
                           ),
                         ),
 
-                        // Character Image
+                        // Existing Character Image
                         Image.asset(
                           assetPath,
                           height: 200,
@@ -294,7 +294,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Character Progress Bar
+                  // Character Growth Progress Bar
                   Column(
                     crossAlignment: CrossAlignment.start,
                     children: [
@@ -302,7 +302,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            'Companion Growth',
+                            'Scientist Growth',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 13,
@@ -336,7 +336,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
             ),
             const SizedBox(height: 24),
 
-            // 3. "Grow Your Companion" Task List Section
+            // 3. "Grow Your Scientist" Task Section
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -356,10 +356,10 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
                 children: [
                   const Row(
                     children: [
-                      Text('🌱', style: TextStyle(fontSize: 20)),
+                      Text('🧪', style: TextStyle(fontSize: 20)),
                       SizedBox(width: 8),
                       Text(
-                        'Grow Your Companion',
+                        'Grow Your Scientist',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
@@ -375,7 +375,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Tasks List
+                  // Science Tasks List
                   ...charState.tasks.map((taskProgress) {
                     final task = taskProgress.config;
                     final isDone = taskProgress.isCompleted;
@@ -439,7 +439,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
                             ),
                           ),
 
-                          // Action Button [Go]
+                          // Action Button [GO]
                           if (!isDone)
                             ElevatedButton(
                               onPressed: () {
@@ -474,15 +474,6 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
           ],
         ),
       ),
-    );
-  }
-}
-
-extension BoxShapeExtension on BoxDecoration {
-  static BoxDecoration ovalDecoration(Color color) {
-    return BoxDecoration(
-      color: color,
-      borderRadius: const BorderRadius.all(Radius.elliptical(180, 40)),
     );
   }
 }
