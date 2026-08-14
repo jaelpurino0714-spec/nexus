@@ -264,10 +264,13 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                           ),
                         ),
 
-                        // Character Image inside Hero Scene
+                        // Character Image inside Hero Scene (Tapping opens Gender Selection between Male & Female)
                         GestureDetector(
                           onTap: () {
-                            ref.read(characterProvider.notifier).interactWithCharacter();
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => const GenderSelectionDialog(),
+                            );
                           },
                           child: Column(
                             children: [
@@ -294,7 +297,7 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                             onPressed: () {
                               showDialog(
                                 context: context,
-                                builder: (ctx) => const OutfitSelectionModal(),
+                                builder: (ctx) => const GenderSelectionDialog(),
                               );
                             },
                           ),
@@ -308,7 +311,7 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                             onPressed: () {
                               showDialog(
                                 context: context,
-                                builder: (ctx) => const OutfitSelectionModal(),
+                                builder: (ctx) => const GenderSelectionDialog(),
                               );
                             },
                           ),
@@ -318,46 +321,91 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                   ),
                   const SizedBox(height: 12),
 
-                  // 4. Outfits Pill Button (directly under hero artwork)
-                  Center(
-                    child: InkWell(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (ctx) => const OutfitSelectionModal(),
-                        );
-                      },
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.06),
-                              blurRadius: 8,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Text('🎭', style: TextStyle(fontSize: 16)),
-                            const SizedBox(width: 6),
-                            const Text(
-                              'Outfits',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.extrabold,
-                                color: Color(0xFF0284C7),
+                  // 4. Gender & Outfits Buttons Row (directly under hero artwork)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Gender Selection Button (Male / Female)
+                      InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => const GenderSelectionDialog(),
+                          );
+                        },
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.06),
+                                blurRadius: 8,
+                                offset: const Offset(0, 3),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                gender == 'female' ? '👧 Female' : '👦 Male',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.extrabold,
+                                  color: Color(0xFF0284C7),
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              const Icon(Icons.swap_horiz, size: 16, color: Color(0xFF0284C7)),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
+                      const SizedBox(width: 10),
+
+                      // Outfits Button
+                      InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => const OutfitSelectionModal(),
+                          );
+                        },
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.06),
+                                blurRadius: 8,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('🎭', style: TextStyle(fontSize: 16)),
+                              SizedBox(width: 6),
+                              Text(
+                                'Outfits',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.extrabold,
+                                  color: Color(0xFF0284C7),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 20),
 
