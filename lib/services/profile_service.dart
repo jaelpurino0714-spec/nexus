@@ -75,8 +75,31 @@ class ProfileService {
     return ProfileModel.fromJson(response);
   }
 
+  Future<ProfileModel?> updateCharacterData(ProfileModel updatedProfile) async {
+    try {
+      await _client
+          .from('profiles')
+          .update({
+            'character_gender': updatedProfile.characterGender,
+            'character_xp': updatedProfile.characterXp,
+            'character_stage': updatedProfile.characterStage,
+            'character_mood': updatedProfile.characterMood,
+            'current_streak': updatedProfile.currentStreak,
+            'longest_streak': updatedProfile.longestStreak,
+            'last_activity_date': updatedProfile.lastActivityDate,
+            'last_character_interaction': updatedProfile.lastCharacterInteraction?.toIso8601String(),
+          })
+          .eq('id', updatedProfile.id);
+    } catch (e) {
+      // Graceful fallback if database column missing or network offline
+      print("ProfileService updateCharacterData warning: $e");
+    }
+    return updatedProfile;
+  }
+
   Future<void> logout() async {
     await _secureStorage.delete(key: _userUuidKey);
     await _secureStorage.delete(key: _userRoleKey);
   }
 }
+

@@ -43,3 +43,6 @@ flutter:
   uses-material-design: true
   assets:
     - .env
+    - assets/images/character/
+    - assets/images/character/male/
+    - assets/images/character/female/

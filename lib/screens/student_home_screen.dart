@@ -2,13 +2,55 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
+import '../providers/character_provider.dart';
+import '../widgets/interactive_character_widget.dart';
+import '../widgets/gender_selection_dialog.dart';
+import '../widgets/evolution_celebration_dialog.dart';
 
-class StudentHomeScreen extends ConsumerWidget {
+class StudentHomeScreen extends ConsumerStatefulWidget {
   const StudentHomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<StudentHomeScreen> createState() => _StudentHomeScreenState();
+}
+
+class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
+  bool _modalShownThisFrame = false;
+
+  @override
+  Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
+    final charState = ref.watch(characterProvider);
+
+    // Sync profile to character provider if loaded
+    if (authState.profile != null && charState.profile?.id != authState.profile!.id) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(characterProvider.notifier).setProfile(authState.profile!);
+      });
+    }
+
+    // Modal triggers for Gender Selection & Evolution Celebration
+    if (! _modalShownThisFrame) {
+      if (charState.pendingGenderSelection) {
+        _modalShownThisFrame = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (ctx) => const GenderSelectionDialog(),
+          ).then((_) => _modalShownThisFrame = false);
+        });
+      } else if (charState.pendingEvolution != null) {
+        _modalShownThisFrame = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (ctx) => const EvolutionCelebrationDialog(),
+          ).then((_) => _modalShownThisFrame = false);
+        });
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -20,41 +62,40 @@ class StudentHomeScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAlignment.stretch,
+          crossAlignment: CrossAlignment.stretch,
           children: [
-            const Icon(
-              Icons.science,
-              size: 80,
-              color: Color(0xFF673AB7),
-            ),
-            const SizedBox(height: 12),
+            // 1. Unified Interactive Character Companion
+            const InteractiveCharacterWidget(),
+            const SizedBox(height: 20),
+
+            // 2. Title & App Subtitle
             const Text(
               'NEXUS',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 32,
+                fontSize: 28,
                 fontWeight: FontWeight.w900,
                 color: Color(0xFF673AB7),
+                letterSpacing: 1.5,
               ),
             ),
             const Text(
               'DepEd Grade 10 Science Trivia',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 13,
                 color: Colors.grey,
               ),
             ),
-            const SizedBox(height: 48),
+            const SizedBox(height: 24),
 
-            // 1. Play Button
+            // 3. Play Button
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 18),
                 backgroundColor: const Color(0xFF673AB7),
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
@@ -71,12 +112,12 @@ class StudentHomeScreen extends ConsumerWidget {
                 context.push('/student/terms');
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
 
-            // 2. Custom Button
+            // 4. Custom Button
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 18),
                 backgroundColor: Colors.purple.shade600,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
@@ -93,12 +134,12 @@ class StudentHomeScreen extends ConsumerWidget {
                 _showCustomHubModal(context);
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
 
-            // 3. Settings Button
+            // 5. Settings / Analytics Button
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 18),
                 backgroundColor: Colors.blueGrey.shade700,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
@@ -120,6 +161,7 @@ class StudentHomeScreen extends ConsumerWidget {
       ),
     );
   }
+
 
   void _showCustomHubModal(BuildContext context) {
     showModalBottomSheet(
