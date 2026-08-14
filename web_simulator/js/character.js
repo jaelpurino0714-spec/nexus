@@ -59,14 +59,16 @@ const EVOLUTION_STAGES = [
 
 const GENDER_CHARACTER_IMAGES = {
   male: {
-    student: 'assets/student-character.png',
-    graduate: 'assets/graduate-character.png',
-    adult: 'assets/adult-character.png'
+    baby: 'assets/male/baby.png',
+    student: 'assets/male/student.png',
+    graduate: 'assets/male/graduate.png',
+    adult: 'assets/male/adult.png'
   },
   female: {
-    student: 'assets/female-student-character.png',
-    graduate: 'assets/female-graduate-character.png',
-    adult: 'assets/female-adult-character.png'
+    baby: 'assets/female/baby.png',
+    student: 'assets/female/student.png',
+    graduate: 'assets/female/graduate.png',
+    adult: 'assets/female/adult.png'
   }
 };
 
@@ -291,7 +293,6 @@ const CharacterSystem = {
   },
 
   getStageImage(stage, gender) {
-    if (stage.id === 'baby') return stage.image;
     const g = (gender === 'female') ? 'female' : 'male';
     return GENDER_CHARACTER_IMAGES[g][stage.id] || stage.image;
   },
@@ -300,6 +301,15 @@ const CharacterSystem = {
     this._pendingEvolutionData = { oldStage, newStage, newXP, isExistingUser };
     this._selectedGender = null;
     
+    const stage = newStage || oldStage || EVOLUTION_STAGES[0];
+    const maleImg = this.getStageImage(stage, 'male');
+    const femaleImg = this.getStageImage(stage, 'female');
+
+    const maleImgEl = document.querySelector('#genderCardMale .gender-preview-img');
+    const femaleImgEl = document.querySelector('#genderCardFemale .gender-preview-img');
+    if (maleImgEl) maleImgEl.src = maleImg;
+    if (femaleImgEl) femaleImgEl.src = femaleImg;
+
     const maleCard = document.getElementById('genderCardMale');
     const femaleCard = document.getElementById('genderCardFemale');
     const confirmBtn = document.getElementById('confirmGenderBtn');

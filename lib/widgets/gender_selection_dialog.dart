@@ -15,6 +15,12 @@ class _GenderSelectionDialogState extends ConsumerState<GenderSelectionDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final charState = ref.watch(characterProvider);
+    final stage = charState.stageConfig;
+    final maleAsset = CharacterService.instance.getStageAssetPath(stage.id, 'male');
+    final femaleAsset = CharacterService.instance.getStageAssetPath(stage.id, 'female');
+    final stageTitle = stage.title.isEmpty ? 'Companion' : (stage.title[0] + stage.title.substring(1).toLowerCase());
+
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Padding(
@@ -23,7 +29,7 @@ class _GenderSelectionDialogState extends ConsumerState<GenderSelectionDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              '✨ EVOLUTION TIME! ✨',
+              '✨ CHARACTER COMPANION ✨',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w900,
@@ -40,10 +46,10 @@ class _GenderSelectionDialogState extends ConsumerState<GenderSelectionDialog> {
               ),
             ),
             const SizedBox(height: 6),
-            const Text(
-              'Select a gender style for your Student stage. Your streak, XP, and history will be fully preserved!',
+            Text(
+              'Select a gender style for your $stageTitle stage. Your streak, XP, and history will be fully preserved!',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13, color: Colors.black54),
+              style: const TextStyle(fontSize: 13, color: Colors.black54),
             ),
             const SizedBox(height: 24),
 
@@ -72,15 +78,15 @@ class _GenderSelectionDialogState extends ConsumerState<GenderSelectionDialog> {
                       child: Column(
                         children: [
                           Image.asset(
-                            'assets/images/character/male/student.png',
+                            maleAsset,
                             height: 90,
                             fit: BoxFit.contain,
                             errorBuilder: (ctx, err, stack) => const Text('👦', style: TextStyle(fontSize: 60)),
                           ),
                           const SizedBox(height: 8),
-                          const Text(
-                            'Male Student',
-                            style: TextStyle(
+                          Text(
+                            'Male $stageTitle',
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
@@ -114,15 +120,15 @@ class _GenderSelectionDialogState extends ConsumerState<GenderSelectionDialog> {
                       child: Column(
                         children: [
                           Image.asset(
-                            'assets/images/character/female/student.png',
+                            femaleAsset,
                             height: 90,
                             fit: BoxFit.contain,
                             errorBuilder: (ctx, err, stack) => const Text('👧', style: TextStyle(fontSize: 60)),
                           ),
                           const SizedBox(height: 8),
-                          const Text(
-                            'Female Student',
-                            style: TextStyle(
+                          Text(
+                            'Female $stageTitle',
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),

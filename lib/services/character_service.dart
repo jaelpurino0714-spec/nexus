@@ -185,11 +185,10 @@ class CharacterService {
   }
 
   String getStageAssetPath(String stageId, String? gender) {
-    if (stageId == 'baby') {
-      return 'assets/images/character/baby.png';
-    }
     final g = (gender == 'female') ? 'female' : 'male';
     switch (stageId) {
+      case 'baby':
+        return 'assets/images/character/$g/baby.png';
       case 'student':
         return 'assets/images/character/$g/student.png';
       case 'graduate':
@@ -197,7 +196,7 @@ class CharacterService {
       case 'adult':
         return 'assets/images/character/$g/adult.png';
       default:
-        return 'assets/images/character/$g/student.png';
+        return 'assets/images/character/$g/baby.png';
     }
   }
 

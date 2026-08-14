@@ -144,8 +144,7 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
       currentStreak: profile.currentStreak,
     );
 
-    bool needGenderChoice = (stageConfig.stage >= 2 &&
-        (profile.characterGender == null || profile.characterGender!.isEmpty));
+    bool needGenderChoice = (profile.characterGender == null || profile.characterGender!.isEmpty);
 
     final name = (profile.characterName != null && profile.characterName!.isNotEmpty)
         ? profile.characterName!
@@ -316,8 +315,7 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
       speechMsg = CharacterService.instance.getEventSpeechMessage('streak_increased', streak: newStreak);
     }
 
-    bool triggerGenderModal = (newStage.stage >= 2 &&
-        (oldProfile.characterGender == null || oldProfile.characterGender!.isEmpty));
+    bool triggerGenderModal = (oldProfile.characterGender == null || oldProfile.characterGender!.isEmpty);
     EvolutionStageConfig? evolutionToPrompt = (newStage.stage > oldStage.stage) ? newStage : null;
 
     final updatedProfile = oldProfile.copyWith(

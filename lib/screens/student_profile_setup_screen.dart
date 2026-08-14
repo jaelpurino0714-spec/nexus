@@ -157,7 +157,7 @@ class _StudentProfileSetupScreenState extends ConsumerState<StudentProfileSetupS
                       child: Column(
                         children: [
                           Image.asset(
-                            'assets/images/character/baby.png',
+                            'assets/images/character/male/baby.png',
                             height: 70,
                             fit: BoxFit.contain,
                           ),
@@ -189,7 +189,7 @@ class _StudentProfileSetupScreenState extends ConsumerState<StudentProfileSetupS
                       child: Column(
                         children: [
                           Image.asset(
-                            'assets/images/character/baby.png',
+                            'assets/images/character/female/baby.png',
                             height: 70,
                             fit: BoxFit.contain,
                           ),
