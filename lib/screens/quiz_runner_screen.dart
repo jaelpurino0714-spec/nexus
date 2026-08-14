@@ -61,6 +61,23 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
   }
 
   void _submitUserAnswer(String ans) {
+    final quizState = ref.read(quizProvider);
+    if (quizState != null && quizState.currentQuestion != null) {
+      final currentQ = quizState.currentQuestion!.question;
+      bool isCorrect = false;
+      if (currentQ.questionType == 'identification') {
+        final sel = ans.trim().toLowerCase();
+        final corr = currentQ.correctAnswer.trim().toLowerCase();
+        isCorrect = sel.isNotEmpty && (sel == corr || corr.contains(sel) || sel.contains(corr));
+      } else {
+        isCorrect = ans.trim().toUpperCase() == currentQ.correctAnswer.trim().toUpperCase();
+      }
+
+      ref.read(characterProvider.notifier).triggerFloatingReaction(
+            isCorrect ? 'correct_answer' : 'wrong_answer',
+          );
+    }
+
     final durationSec = ((DateTime.now().millisecondsSinceEpoch - _startTime) / 1000).round();
     _startTime = DateTime.now().millisecondsSinceEpoch;
     _idInputController.clear();
@@ -69,6 +86,7 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
           timeTaken: durationSec,
         );
   }
+
 
   @override
   Widget build(BuildContext context) {

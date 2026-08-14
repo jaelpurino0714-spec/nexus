@@ -9,6 +9,8 @@ class ProfileModel {
   final DateTime createdAt;
 
   // Character & Streak Companion fields
+  final String? characterName;
+  final String? characterOutfit; // 'default' | 'academic' | 'lab_coat' | 'casual' | 'golden'
   final String? characterGender; // 'male' | 'female'
   final int characterXp;
   final String characterStage; // 'baby' | 'student' | 'graduate' | 'adult'
@@ -27,6 +29,8 @@ class ProfileModel {
     this.photoUrl,
     this.deviceId,
     required this.createdAt,
+    this.characterName,
+    this.characterOutfit = 'default',
     this.characterGender,
     this.characterXp = 0,
     this.characterStage = 'baby',
@@ -49,6 +53,8 @@ class ProfileModel {
       createdAt: json['created_at'] != null 
           ? DateTime.parse(json['created_at'] as String)
           : DateTime.now(),
+      characterName: json['character_name'] as String?,
+      characterOutfit: json['character_outfit'] as String? ?? 'default',
       characterGender: json['character_gender'] as String?,
       characterXp: json['character_xp'] as int? ?? 0,
       characterStage: json['character_stage'] as String? ?? 'baby',
@@ -72,6 +78,8 @@ class ProfileModel {
       'photo_url': photoUrl,
       'device_id': deviceId,
       'created_at': createdAt.toIso8601String(),
+      'character_name': characterName,
+      'character_outfit': characterOutfit,
       'character_gender': characterGender,
       'character_xp': characterXp,
       'character_stage': characterStage,
@@ -92,6 +100,8 @@ class ProfileModel {
     String? photoUrl,
     String? deviceId,
     DateTime? createdAt,
+    String? characterName,
+    String? characterOutfit,
     String? characterGender,
     int? characterXp,
     String? characterStage,
@@ -110,6 +120,8 @@ class ProfileModel {
       photoUrl: photoUrl ?? this.photoUrl,
       deviceId: deviceId ?? this.deviceId,
       createdAt: createdAt ?? this.createdAt,
+      characterName: characterName ?? this.characterName,
+      characterOutfit: characterOutfit ?? this.characterOutfit,
       characterGender: characterGender ?? this.characterGender,
       characterXp: characterXp ?? this.characterXp,
       characterStage: characterStage ?? this.characterStage,
@@ -121,4 +133,5 @@ class ProfileModel {
     );
   }
 }
+
 

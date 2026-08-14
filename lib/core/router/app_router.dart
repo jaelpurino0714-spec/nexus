@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/auth_provider.dart';
@@ -16,6 +17,8 @@ import '../../screens/teacher_dashboard_screen.dart';
 import '../../screens/custom_play_screen.dart';
 import '../../screens/host_quiz_screen.dart';
 import '../../screens/join_quiz_screen.dart';
+import '../../screens/full_character_screen.dart';
+import '../../widgets/floating_companion_widget.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -64,75 +67,95 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const TeacherLoginScreen(),
       ),
       GoRoute(
-        path: '/student/home',
-        builder: (context, state) => const StudentHomeScreen(),
-      ),
-      GoRoute(
-        path: '/student/terms',
-        builder: (context, state) => const TermSelectionScreen(),
-      ),
-      GoRoute(
-        path: '/student/topics',
-        builder: (context, state) {
-          final extra = state.extra as Map<String, dynamic>? ?? {};
-          return TopicSelectionScreen(
-            termId: extra['termId'],
-            termNum: extra['termNum'] ?? 1,
-            termTitle: extra['termTitle'],
-          );
-        },
-      ),
-      GoRoute(
-        path: '/student/test-mode',
-        builder: (context, state) {
-          final extra = state.extra as Map<String, dynamic>? ?? {};
-          return TestModeSelectionScreen(
-            termNum: extra['termNum'] ?? 1,
-            topicTitle: extra['topicTitle'] ?? '',
-            topicId: extra['topicId'] ?? '',
-          );
-        },
-      ),
-      GoRoute(
-        path: '/student/custom-play',
-        builder: (context, state) => const CustomPlayScreen(),
-      ),
-      GoRoute(
-        path: '/student/host-quiz',
-        builder: (context, state) => const HostQuizScreen(),
-      ),
-      GoRoute(
-        path: '/student/join-quiz',
-        builder: (context, state) => const JoinQuizScreen(),
-      ),
-      GoRoute(
-        path: '/student/quiz',
-        builder: (context, state) {
-          final extra = state.extra as Map<String, dynamic>? ?? {};
-          return QuizRunnerScreen(
-            topicId: extra['topicId'] ?? '',
-            topicTitle: extra['topicTitle'] ?? 'Science Topic',
-            quizType: extra['quizType'] ?? 'pre_test',
-            questionType: extra['questionType'] ?? 'multiple_choice',
-            customTimeLimit: extra['customTimeLimit'],
-            customQuestionCount: extra['customQuestionCount'],
-            customQuestions: extra['customQuestions'],
-            lobbyAccessCode: extra['lobbyAccessCode'],
-            participantId: extra['participantId'],
-          );
-        },
-      ),
-      GoRoute(
-        path: '/student/result',
-        builder: (context, state) => const QuizResultScreen(),
-      ),
-      GoRoute(
-        path: '/student/analytics',
-        builder: (context, state) => const StudentAnalyticsScreen(),
-      ),
-      GoRoute(
         path: '/teacher/dashboard',
         builder: (context, state) => const TeacherDashboardScreen(),
+      ),
+
+      // ShellRoute for Student Application incorporating Persistent Floating Companion
+      ShellRoute(
+        builder: (context, state, child) {
+          return Scaffold(
+            body: Stack(
+              children: [
+                child,
+                const FloatingCompanionWidget(),
+              ],
+            ),
+          );
+        },
+        routes: [
+          GoRoute(
+            path: '/student/home',
+            builder: (context, state) => const StudentHomeScreen(),
+          ),
+          GoRoute(
+            path: '/student/character',
+            builder: (context, state) => const FullCharacterScreen(),
+          ),
+          GoRoute(
+            path: '/student/terms',
+            builder: (context, state) => const TermSelectionScreen(),
+          ),
+          GoRoute(
+            path: '/student/topics',
+            builder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>? ?? {};
+              return TopicSelectionScreen(
+                termId: extra['termId'],
+                termNum: extra['termNum'] ?? 1,
+                termTitle: extra['termTitle'],
+              );
+            },
+          ),
+          GoRoute(
+            path: '/student/test-mode',
+            builder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>? ?? {};
+              return TestModeSelectionScreen(
+                termNum: extra['termNum'] ?? 1,
+                topicTitle: extra['topicTitle'] ?? '',
+                topicId: extra['topicId'] ?? '',
+              );
+            },
+          ),
+          GoRoute(
+            path: '/student/custom-play',
+            builder: (context, state) => const CustomPlayScreen(),
+          ),
+          GoRoute(
+            path: '/student/host-quiz',
+            builder: (context, state) => const HostQuizScreen(),
+          ),
+          GoRoute(
+            path: '/student/join-quiz',
+            builder: (context, state) => const JoinQuizScreen(),
+          ),
+          GoRoute(
+            path: '/student/quiz',
+            builder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>? ?? {};
+              return QuizRunnerScreen(
+                topicId: extra['topicId'] ?? '',
+                topicTitle: extra['topicTitle'] ?? 'Science Topic',
+                quizType: extra['quizType'] ?? 'pre_test',
+                questionType: extra['questionType'] ?? 'multiple_choice',
+                customTimeLimit: extra['customTimeLimit'],
+                customQuestionCount: extra['customQuestionCount'],
+                customQuestions: extra['customQuestions'],
+                lobbyAccessCode: extra['lobbyAccessCode'],
+                participantId: extra['participantId'],
+              );
+            },
+          ),
+          GoRoute(
+            path: '/student/result',
+            builder: (context, state) => const QuizResultScreen(),
+          ),
+          GoRoute(
+            path: '/student/analytics',
+            builder: (context, state) => const StudentAnalyticsScreen(),
+          ),
+        ],
       ),
     ],
   );

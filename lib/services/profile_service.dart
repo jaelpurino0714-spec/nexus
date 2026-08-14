@@ -80,6 +80,8 @@ class ProfileService {
       await _client
           .from('profiles')
           .update({
+            'character_name': updatedProfile.characterName,
+            'character_outfit': updatedProfile.characterOutfit,
             'character_gender': updatedProfile.characterGender,
             'character_xp': updatedProfile.characterXp,
             'character_stage': updatedProfile.characterStage,
@@ -96,6 +98,7 @@ class ProfileService {
     }
     return updatedProfile;
   }
+
 
   Future<void> logout() async {
     await _secureStorage.delete(key: _userUuidKey);

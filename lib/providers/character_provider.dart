@@ -5,6 +5,29 @@ import '../services/character_service.dart';
 import '../services/profile_service.dart';
 import 'auth_provider.dart';
 
+class GrowthTaskProgress {
+  final GrowthTaskConfig config;
+  final int currentCount;
+  final bool isCompleted;
+
+  GrowthTaskProgress({
+    required this.config,
+    this.currentCount = 0,
+    this.isCompleted = false,
+  });
+
+  GrowthTaskProgress copyWith({
+    int? currentCount,
+    bool? isCompleted,
+  }) {
+    return GrowthTaskProgress(
+      config: config,
+      currentCount: currentCount ?? this.currentCount,
+      isCompleted: isCompleted ?? this.isCompleted,
+    );
+  }
+}
+
 class CharacterState {
   final ProfileModel? profile;
   final EvolutionStageConfig stageConfig;
@@ -16,6 +39,14 @@ class CharacterState {
   final EvolutionStageConfig? pendingEvolution;
   final int lastXpGained;
 
+  // New Floating Companion & Customization state
+  final String characterName;
+  final String characterOutfit;
+  final String floatingSpeechMessage;
+  final bool showFloatingSpeech;
+  final bool isFloatingVisible;
+  final List<GrowthTaskProgress> tasks;
+
   CharacterState({
     required this.profile,
     required this.stageConfig,
@@ -26,6 +57,12 @@ class CharacterState {
     this.pendingGenderSelection = false,
     this.pendingEvolution,
     this.lastXpGained = 0,
+    this.characterName = 'Nexus Buddy',
+    this.characterOutfit = 'default',
+    this.floatingSpeechMessage = 'Ready?',
+    this.showFloatingSpeech = false,
+    this.isFloatingVisible = true,
+    this.tasks = const [],
   });
 
   CharacterState copyWith({
@@ -39,6 +76,12 @@ class CharacterState {
     EvolutionStageConfig? pendingEvolution,
     bool clearPendingEvolution = false,
     int? lastXpGained,
+    String? characterName,
+    String? characterOutfit,
+    String? floatingSpeechMessage,
+    bool? showFloatingSpeech,
+    bool? isFloatingVisible,
+    List<GrowthTaskProgress>? tasks,
   }) {
     return CharacterState(
       profile: profile ?? this.profile,
@@ -50,6 +93,12 @@ class CharacterState {
       pendingGenderSelection: pendingGenderSelection ?? this.pendingGenderSelection,
       pendingEvolution: clearPendingEvolution ? null : (pendingEvolution ?? this.pendingEvolution),
       lastXpGained: lastXpGained ?? this.lastXpGained,
+      characterName: characterName ?? this.characterName,
+      characterOutfit: characterOutfit ?? this.characterOutfit,
+      floatingSpeechMessage: floatingSpeechMessage ?? this.floatingSpeechMessage,
+      showFloatingSpeech: showFloatingSpeech ?? this.showFloatingSpeech,
+      isFloatingVisible: isFloatingVisible ?? this.isFloatingVisible,
+      tasks: tasks ?? this.tasks,
     );
   }
 }
@@ -58,12 +107,16 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
   final ProfileService _profileService;
   final Ref _ref;
   Timer? _speechTimer;
+  Timer? _floatingSpeechTimer;
   Timer? _cooldownTimer;
 
   CharacterNotifier(this._profileService, this._ref)
       : super(CharacterState(
           profile: null,
           stageConfig: CharacterService.instance.getStageForXP(0),
+          tasks: CharacterService.defaultGrowthTasks
+              .map((t) => GrowthTaskProgress(config: t))
+              .toList(),
         )) {
     _init();
   }
@@ -82,7 +135,12 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
       currentStreak: profile.currentStreak,
     );
 
-    bool needGenderChoice = (stageConfig.stage >= 2 && (profile.characterGender == null || profile.characterGender!.isEmpty));
+    bool needGenderChoice = (stageConfig.stage >= 2 &&
+        (profile.characterGender == null || profile.characterGender!.isEmpty));
+
+    final name = (profile.characterName != null && profile.characterName!.isNotEmpty)
+        ? profile.characterName!
+        : '${profile.name}\'s Buddy';
 
     state = state.copyWith(
       profile: profile,
@@ -94,10 +152,28 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
               ? "Let's start a new streak together! 💪"
               : stageConfig.defaultQuote),
       pendingGenderSelection: needGenderChoice,
+      characterName: name,
+      characterOutfit: profile.characterOutfit ?? 'default',
     );
   }
 
-  /// Called when student taps the companion on screen
+  /// Triggers a brief contextual speech bubble on the compact floating companion
+  void triggerFloatingReaction(String trigger) {
+    final msg = CharacterService.instance.getFloatingReaction(trigger);
+    state = state.copyWith(
+      floatingSpeechMessage: msg,
+      showFloatingSpeech: true,
+    );
+
+    _floatingSpeechTimer?.cancel();
+    _floatingSpeechTimer = Timer(const Duration(seconds: 3), () {
+      if (mounted) {
+        state = state.copyWith(showFloatingSpeech: false);
+      }
+    });
+  }
+
+  /// Interacts with character (tapped by student)
   void interactWithCharacter() {
     if (state.isTapCooldown) return;
 
@@ -125,20 +201,22 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
     });
   }
 
-  /// Triggers a specific speech bubble message (e.g. after quiz or milestone)
-  void showSpeech(String message, {String? moodOverride, Duration duration = const Duration(seconds: 4)}) {
-    state = state.copyWith(
-      speechMessage: message,
-      showSpeechBubble: true,
-      mood: moodOverride ?? state.mood,
-    );
+  /// Updates character name
+  Future<void> updateCharacterName(String newName) async {
+    if (state.profile == null || newName.trim().isEmpty) return;
+    final updatedProfile = state.profile!.copyWith(characterName: newName.trim());
+    state = state.copyWith(profile: updatedProfile, characterName: newName.trim());
+    _ref.read(authProvider.notifier).setProfile(updatedProfile);
+    await _profileService.updateCharacterData(updatedProfile);
+  }
 
-    _speechTimer?.cancel();
-    _speechTimer = Timer(duration, () {
-      if (mounted) {
-        state = state.copyWith(showSpeechBubble: false);
-      }
-    });
+  /// Updates character outfit style
+  Future<void> selectOutfit(String outfitId) async {
+    if (state.profile == null) return;
+    final updatedProfile = state.profile!.copyWith(characterOutfit: outfitId);
+    state = state.copyWith(profile: updatedProfile, characterOutfit: outfitId);
+    _ref.read(authProvider.notifier).setProfile(updatedProfile);
+    await _profileService.updateCharacterData(updatedProfile);
   }
 
   /// Saves selected gender choice (male / female)
@@ -159,7 +237,6 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
   }
 
   /// Records meaningful learning activity (completing a quiz)
-  /// Updates XP, evaluates evolution, updates streak by calendar date, updates mood.
   Future<void> recordLearningActivity({
     required double percentageScore,
     required int correctAnswers,
@@ -173,9 +250,9 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
     // 1. Calculate XP Gained: +10 XP per correct answer + bonus for score
     int xpGained = (correctAnswers * 10);
     if (percentageScore >= 100) {
-      xpGained += 30; // Perfect score bonus
+      xpGained += 30;
     } else if (percentageScore >= 75) {
-      xpGained += 15; // Passing bonus
+      xpGained += 15;
     }
 
     final newXP = oldProfile.characterXp + xpGained;
@@ -193,7 +270,23 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
     final String newLastDate = streakResult['lastActivityDate'];
     final bool streakIncreased = streakResult['streakIncreased'];
 
-    // 3. Determine New Mood & Speech Reaction
+    // 3. Update Tasks
+    final updatedTasks = state.tasks.map((t) {
+      if (t.config.id == 'task_complete_quiz') {
+        return t.copyWith(currentCount: 1, isCompleted: true);
+      } else if (t.config.id == 'task_answer_correct') {
+        final newCount = t.currentCount + correctAnswers;
+        return t.copyWith(
+          currentCount: newCount,
+          isCompleted: newCount >= t.config.targetCount,
+        );
+      } else if (t.config.id == 'task_maintain_streak' && newStreak > 1) {
+        return t.copyWith(currentCount: 1, isCompleted: true);
+      }
+      return t;
+    }).toList();
+
+    // 4. Determine New Mood & Speech Reaction
     String newMood = 'happy';
     String speechMsg = CharacterService.instance.getEventSpeechMessage('quiz_complete');
 
@@ -205,7 +298,8 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
       speechMsg = CharacterService.instance.getEventSpeechMessage('streak_increased', streak: newStreak);
     }
 
-    bool triggerGenderModal = (newStage.stage >= 2 && (oldProfile.characterGender == null || oldProfile.characterGender!.isEmpty));
+    bool triggerGenderModal = (newStage.stage >= 2 &&
+        (oldProfile.characterGender == null || oldProfile.characterGender!.isEmpty));
     EvolutionStageConfig? evolutionToPrompt = (newStage.stage > oldStage.stage) ? newStage : null;
 
     final updatedProfile = oldProfile.copyWith(
@@ -226,7 +320,10 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
       pendingGenderSelection: triggerGenderModal,
       pendingEvolution: evolutionToPrompt,
       lastXpGained: xpGained,
+      tasks: updatedTasks,
     );
+
+    triggerFloatingReaction(streakIncreased ? 'streak_boost' : 'finish_quiz');
 
     _ref.read(authProvider.notifier).setProfile(updatedProfile);
     await _profileService.updateCharacterData(updatedProfile);
@@ -246,6 +343,7 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
   @override
   void dispose() {
     _speechTimer?.cancel();
+    _floatingSpeechTimer?.cancel();
     _cooldownTimer?.cancel();
     super.dispose();
   }

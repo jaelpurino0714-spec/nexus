@@ -24,6 +24,42 @@ class EvolutionStageConfig {
   });
 }
 
+class OutfitConfig {
+  final String id;
+  final String name;
+  final String icon;
+  final String description;
+  final int requiredStage;
+
+  const OutfitConfig({
+    required this.id,
+    required this.name,
+    required this.icon,
+    required this.description,
+    required this.requiredStage,
+  });
+}
+
+class GrowthTaskConfig {
+  final String id;
+  final String title;
+  final int growthPoints;
+  final String actionRoute;
+  final String actionLabel;
+  final int targetCount;
+  final bool isDaily;
+
+  const GrowthTaskConfig({
+    required this.id,
+    required this.title,
+    required this.growthPoints,
+    required this.actionRoute,
+    required this.actionLabel,
+    this.targetCount = 1,
+    this.isDaily = true,
+  });
+}
+
 class CharacterService {
   static final CharacterService instance = CharacterService._internal();
   CharacterService._internal();
@@ -75,6 +111,72 @@ class CharacterService {
     ),
   ];
 
+  static const List<OutfitConfig> outfits = [
+    OutfitConfig(
+      id: 'default',
+      name: 'Standard Uniform',
+      icon: '🎒',
+      description: 'Classic Nexus student uniform',
+      requiredStage: 1,
+    ),
+    OutfitConfig(
+      id: 'lab_coat',
+      name: 'Science Lab Coat',
+      icon: '🥼',
+      description: 'Professional research & lab gear',
+      requiredStage: 2,
+    ),
+    OutfitConfig(
+      id: 'academic',
+      name: 'Academic Regalia',
+      icon: '🎓',
+      description: 'Graduation gown and mortarboard',
+      requiredStage: 3,
+    ),
+    OutfitConfig(
+      id: 'golden',
+      name: 'Grandmaster Aura',
+      icon: '👑',
+      description: 'Exclusive golden science master style',
+      requiredStage: 4,
+    ),
+  ];
+
+  static const List<GrowthTaskConfig> defaultGrowthTasks = [
+    GrowthTaskConfig(
+      id: 'task_complete_quiz',
+      title: 'Complete a quiz',
+      growthPoints: 4,
+      actionRoute: '/student/terms',
+      actionLabel: 'Go',
+      targetCount: 1,
+    ),
+    GrowthTaskConfig(
+      id: 'task_complete_topic',
+      title: 'Complete a Science topic',
+      growthPoints: 2,
+      actionRoute: '/student/terms',
+      actionLabel: 'Go',
+      targetCount: 1,
+    ),
+    GrowthTaskConfig(
+      id: 'task_answer_correct',
+      title: 'Answer 10 questions correctly',
+      growthPoints: 5,
+      actionRoute: '/student/terms',
+      actionLabel: 'Go',
+      targetCount: 10,
+    ),
+    GrowthTaskConfig(
+      id: 'task_maintain_streak',
+      title: 'Maintain your learning streak',
+      growthPoints: 5,
+      actionRoute: '/student/terms',
+      actionLabel: 'Go',
+      targetCount: 1,
+    ),
+  ];
+
   EvolutionStageConfig getStageForXP(int xp) {
     if (xp >= 600) return stages[3];
     if (xp >= 300) return stages[2];
@@ -104,11 +206,6 @@ class CharacterService {
     return "${now.year.toString().padLeft(4, '0')}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
   }
 
-  /// Calculates updated streak given the last activity date string (YYYY-MM-DD)
-  /// Rules:
-  /// - Same calendar day: streak unchanged
-  /// - Next consecutive calendar day: streak += 1
-  /// - Missed day(s): reset streak to 1 for this new learning activity
   Map<String, dynamic> calculateStreakOnActivity({
     required int currentStreak,
     required int longestStreak,
@@ -126,7 +223,6 @@ class CharacterService {
     }
 
     if (lastActivityDateStr == todayStr) {
-      // Activity on same day: streak doesn't increase multiple times
       return {
         'currentStreak': max(1, currentStreak),
         'longestStreak': max(currentStreak, longestStreak),
@@ -141,7 +237,6 @@ class CharacterService {
       final differenceInDays = todayDate.difference(lastDate).inDays;
 
       if (differenceInDays == 1) {
-        // Consecutive day!
         final newStreak = currentStreak + 1;
         return {
           'currentStreak': newStreak,
@@ -150,7 +245,6 @@ class CharacterService {
           'streakIncreased': true,
         };
       } else {
-        // Missed day(s): start fresh streak at 1
         return {
           'currentStreak': 1,
           'longestStreak': max(currentStreak, longestStreak),
@@ -168,7 +262,6 @@ class CharacterService {
     }
   }
 
-  /// Evaluates current character mood based on activity and date gap
   String evaluateMood({
     required String? lastActivityDateStr,
     required int currentStreak,
@@ -191,7 +284,6 @@ class CharacterService {
     return 'idle';
   }
 
-  // Interactive message pools
   static const List<String> tapMessages = [
     "Ready to learn?",
     "Let's keep the streak going!",
@@ -208,6 +300,23 @@ class CharacterService {
   String getRandomTapMessage() {
     final random = Random();
     return tapMessages[random.nextInt(tapMessages.length)];
+  }
+
+  String getFloatingReaction(String trigger) {
+    switch (trigger) {
+      case 'start_quiz':
+        return "Ready? 🚀";
+      case 'correct_answer':
+        return "Nice! ✨";
+      case 'wrong_answer':
+        return "Keep going! 💪";
+      case 'finish_quiz':
+        return "Great job! 🎉";
+      case 'streak_boost':
+        return "Streak +1! 🔥";
+      default:
+        return "Let's learn!";
+    }
   }
 
   String getEventSpeechMessage(String eventType, {int streak = 0}) {
