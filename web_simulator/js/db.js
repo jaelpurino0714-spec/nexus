@@ -469,15 +469,19 @@ const DB = {
               question_id: q.id,
               question_order: idx + 1
             }));
-            await supabaseClient.from('multiplayer_game_questions').insert(qEntries).catch(() => {});
+            try {
+              await supabaseClient.from('multiplayer_game_questions').insert(qEntries);
+            } catch (e) {}
           }
-          await supabaseClient.from('multiplayer_players').insert({
-            game_id: gameData.id,
-            user_id: userUuid,
-            display_name: profile.name || 'Host',
-            photo_url: profile.photo || null,
-            is_host: true
-          }).catch(() => {});
+          try {
+            await supabaseClient.from('multiplayer_players').insert({
+              game_id: gameData.id,
+              user_id: userUuid,
+              display_name: profile.name || 'Host',
+              photo_url: profile.photo || null,
+              is_host: true
+            });
+          } catch (e) {}
         } else {
           // 2. Try quiz_lobbies fallback table
           const { data: lRes } = await supabaseClient
@@ -499,12 +503,14 @@ const DB = {
           if (lRes) {
             gameData = lRes;
             gameData.room_code = roomCode;
-            await supabaseClient.from('lobby_participants').insert({
-              lobby_id: gameData.id,
-              student_id: userUuid,
-              student_name: profile.name || 'Host',
-              photo_url: profile.photo || null
-            }).catch(() => {});
+            try {
+              await supabaseClient.from('lobby_participants').insert({
+                lobby_id: gameData.id,
+                student_id: userUuid,
+                student_name: profile.name || 'Host',
+                photo_url: profile.photo || null
+              });
+            } catch (e) {}
           }
         }
       } catch (e) {
@@ -612,20 +618,24 @@ const DB = {
     // Insert Player into Supabase
     if (supabaseClient && !game.isLocalOnly) {
       if (game.isQuizLobbies) {
-        await supabaseClient.from('lobby_participants').insert({
-          lobby_id: game.id,
-          student_id: userUuid,
-          student_name: profile.name || 'Player',
-          photo_url: profile.photo || null
-        }).catch(() => {});
+        try {
+          await supabaseClient.from('lobby_participants').insert({
+            lobby_id: game.id,
+            student_id: userUuid,
+            student_name: profile.name || 'Player',
+            photo_url: profile.photo || null
+          });
+        } catch (e) {}
       } else {
-        await supabaseClient.from('multiplayer_players').insert({
-          game_id: game.id,
-          user_id: userUuid,
-          display_name: profile.name || 'Player',
-          photo_url: profile.photo || null,
-          is_host: (game.host_id === userUuid)
-        }).catch(() => {});
+        try {
+          await supabaseClient.from('multiplayer_players').insert({
+            game_id: game.id,
+            user_id: userUuid,
+            display_name: profile.name || 'Player',
+            photo_url: profile.photo || null,
+            is_host: (game.host_id === userUuid)
+          });
+        } catch (e) {}
       }
     }
 
@@ -744,17 +754,19 @@ const DB = {
   async submitMultiplayerAnswer(gameId, playerId, questionId, answerText, isCorrect, responseTime, pointsEarned) {
     if (!supabaseClient || !gameId || !playerId) return;
     try {
-      await supabaseClient
-        .from('multiplayer_answers')
-        .insert({
-          game_id: gameId,
-          player_id: playerId,
-          question_id: questionId,
-          answer: String(answerText),
-          is_correct: isCorrect,
-          response_time: responseTime || 0,
-          points_earned: pointsEarned || 0
-        }).catch(() => {});
+      try {
+        await supabaseClient
+          .from('multiplayer_answers')
+          .insert({
+            game_id: gameId,
+            player_id: playerId,
+            question_id: questionId,
+            answer: String(answerText),
+            is_correct: isCorrect,
+            response_time: responseTime || 0,
+            points_earned: pointsEarned || 0
+          });
+      } catch (e) {}
 
       const { data: player } = await supabaseClient
         .from('multiplayer_players')
@@ -767,15 +779,17 @@ const DB = {
         const newCorrect = (player.correct_answers || 0) + (isCorrect ? 1 : 0);
         const newWrong = (player.wrong_answers || 0) + (isCorrect ? 0 : 1);
 
-        await supabaseClient
-          .from('multiplayer_players')
-          .update({
-            score: newScore,
-            correct_answers: newCorrect,
-            wrong_answers: newWrong,
-            last_seen: new Date().toISOString()
-          })
-          .eq('id', playerId).catch(() => {});
+        try {
+          await supabaseClient
+            .from('multiplayer_players')
+            .update({
+              score: newScore,
+              correct_answers: newCorrect,
+              wrong_answers: newWrong,
+              last_seen: new Date().toISOString()
+            })
+            .eq('id', playerId);
+        } catch (e) {}
       }
     } catch (e) {
       console.error('Error submitting multiplayer answer:', e);
@@ -789,8 +803,8 @@ const DB = {
       if (status === 'active' || status === 'starting') payload.started_at = new Date().toISOString();
       if (status === 'finished' || status === 'cancelled') payload.ended_at = new Date().toISOString();
 
-      await supabaseClient.from('multiplayer_games').update(payload).eq('id', gameId).catch(() => {});
-      await supabaseClient.from('quiz_lobbies').update({ status: status }).eq('id', gameId).catch(() => {});
+      try { await supabaseClient.from('multiplayer_games').update(payload).eq('id', gameId); } catch (e) {}
+      try { await supabaseClient.from('quiz_lobbies').update({ status: status }).eq('id', gameId); } catch (e) {}
     } catch (e) {
       console.error('Error updating game status:', e);
     }
