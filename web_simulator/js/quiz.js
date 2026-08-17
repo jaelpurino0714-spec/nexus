@@ -38,6 +38,7 @@ const Quiz = {
   currentQuestionFormat: 'multiple_choice', // 'multiple_choice' | 'true_false' | 'identification'
   questionsList: [],
   currentIndex: 0,
+  isAnswering: false,
   timerInterval: null,
   timeRemainingSec: 20,
   questionStartTime: 0,
@@ -798,6 +799,7 @@ const Quiz = {
   // 6. Start Quiz Engine
   async startQuiz(mode, questionFormat) {
     this.currentIndex = 0;
+    this.isAnswering = false;
     this.correctCount = 0;
     this.incorrectCount = 0;
     this.streak = 0;
@@ -858,12 +860,19 @@ const Quiz = {
 
   // 7. Render Active Question
   renderQuestion() {
-    if (this.currentIndex >= this.questionsList.length) {
+    clearInterval(this.timerInterval);
+    this.isAnswering = false;
+
+    if (!this.questionsList || this.currentIndex >= this.questionsList.length) {
       this.finishQuiz();
       return;
     }
 
     const q = this.questionsList[this.currentIndex];
+    if (!q) {
+      this.finishQuiz();
+      return;
+    }
 
     // Header info
     document.getElementById('questionCounter').textContent = `Question ${this.currentIndex + 1} of ${this.questionsList.length}`;
@@ -978,8 +987,21 @@ const Quiz = {
 
   // 8. Process Answer Selection / Submission
   handleAnswer(userSelection) {
+    if (this.isAnswering) return;
+    this.isAnswering = true;
     clearInterval(this.timerInterval);
+
+    if (!this.questionsList || this.currentIndex >= this.questionsList.length) {
+      this.finishQuiz();
+      return;
+    }
+
     const q = this.questionsList[this.currentIndex];
+    if (!q) {
+      this.finishQuiz();
+      return;
+    }
+
     const timeSpentSec = (Date.now() - this.questionStartTime) / 1000;
     this.sessionTotalTimeSec += timeSpentSec;
 
@@ -1071,9 +1093,29 @@ const Quiz = {
   },
 
   handleTimeOut() {
+    if (this.isAnswering) return;
+    this.isAnswering = true;
+    clearInterval(this.timerInterval);
+
+    if (!this.questionsList || this.currentIndex >= this.questionsList.length) {
+      this.finishQuiz();
+      return;
+    }
+
+    const q = this.questionsList[this.currentIndex];
+    if (!q) {
+      this.finishQuiz();
+      return;
+    }
+
     this.incorrectCount++;
     this.streak = 0;
     this.sessionTotalTimeSec += 20;
+
+    if (!this.sessionTopicStats[this.currentTopic]) {
+      this.sessionTopicStats[this.currentTopic] = { total: 0, correct: 0 };
+    }
+    this.sessionTopicStats[this.currentTopic].total++;
 
     const streakEl = document.getElementById('streakCounter');
     if (streakEl) streakEl.textContent = `🔥 ${this.streak}`;
@@ -1082,9 +1124,30 @@ const Quiz = {
     const statusTextEl = document.getElementById('feedbackText');
     const subTextEl = document.getElementById('feedbackAnswerSub');
 
-    if (feedback) feedback.className = 'feedback-banner wrong';
-    const q = this.questionsList[this.currentIndex];
     const ansHint = q.rawAnswer || (q.options ? q.options[q.answer] : '');
+
+    // Disable input options according to question format
+    if (this.currentQuestionFormat === 'true_false') {
+      const correctStr = String(q.rawAnswer || (q.options ? q.options[q.answer] : '') || 'True').trim().toLowerCase();
+      const buttons = document.querySelectorAll('.tf-option-btn');
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.textContent.trim().toLowerCase().includes(correctStr)) btn.classList.add('correct-choice');
+      });
+    } else if (this.currentQuestionFormat === 'identification') {
+      const inputEl = document.getElementById('identificationInput');
+      const submitBtn = document.getElementById('identificationSubmitBtn');
+      if (inputEl) inputEl.disabled = true;
+      if (submitBtn) submitBtn.disabled = true;
+    } else {
+      const buttons = document.querySelectorAll('.answer-option-btn');
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === q.answer) btn.classList.add('correct-choice');
+      });
+    }
+
+    if (feedback) feedback.className = 'feedback-banner wrong';
     if (statusTextEl) statusTextEl.textContent = `⏱ Time Expired!`;
     if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${ansHint}</b>`;
 
@@ -1095,6 +1158,7 @@ const Quiz = {
 
   finishQuiz() {
     clearInterval(this.timerInterval);
+    this.isAnswering = true;
     const totalQ = this.questionsList.length;
     const percentage = Math.round((this.correctCount / totalQ) * 100);
 
