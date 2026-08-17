@@ -90,7 +90,10 @@ const DB = {
 
       if (topicId) query = query.eq('topic_id', topicId);
       if (questionTypeId) query = query.eq('question_type_id', questionTypeId);
-      if (quizType) query = query.eq('quiz_type', quizType);
+      if (quizType) {
+        const normalizedQuizType = String(quizType).replace('-', '_');
+        query = query.eq('quiz_type', normalizedQuizType);
+      }
 
       const { data, error } = await query;
       if (error) throw error;
@@ -138,38 +141,62 @@ const DB = {
   },
 
   _formatQuestions(rawQuestions) {
+    if (!Array.isArray(rawQuestions)) return [];
     return rawQuestions.map(q => {
-      const choiceA = q.choice_a || q.option_a || '';
-      const choiceB = q.choice_b || q.option_b || '';
-      const choiceC = q.choice_c || q.option_c || '';
-      const choiceD = q.choice_d || q.option_d || '';
+      let typeId = q.question_type_id || 1;
+      let choiceA = q.choice_a || q.option_a || '';
+      let choiceB = q.choice_b || q.option_b || '';
+      let choiceC = q.choice_c || q.option_c || '';
+      let choiceD = q.choice_d || q.option_d || '';
 
-      const opts = [choiceA, choiceB];
+      if (typeId === 2 || (!choiceC && !choiceD && (q.correct_answer === 'True' || q.correct_answer === 'False' || q.correct_answer === 'TRUE' || q.correct_answer === 'FALSE'))) {
+        choiceA = 'True';
+        choiceB = 'False';
+        choiceC = '';
+        choiceD = '';
+        typeId = 2;
+      }
+
+      const opts = [];
+      if (choiceA && choiceA.trim() !== '') opts.push(choiceA);
+      if (choiceB && choiceB.trim() !== '') opts.push(choiceB);
       if (choiceC && choiceC.trim() !== '') opts.push(choiceC);
       if (choiceD && choiceD.trim() !== '') opts.push(choiceD);
 
       let ansIndex = 0;
       const ansUpper = (q.correct_answer || '').toUpperCase().trim();
-      if (ansUpper === 'B' || ansUpper === choiceB.toUpperCase().trim()) ansIndex = 1;
+      if (ansUpper === 'A' || ansUpper === choiceA.toUpperCase().trim()) ansIndex = 0;
+      else if (ansUpper === 'B' || ansUpper === choiceB.toUpperCase().trim()) ansIndex = 1;
       else if (ansUpper === 'C' || ansUpper === choiceC.toUpperCase().trim()) ansIndex = 2;
       else if (ansUpper === 'D' || ansUpper === choiceD.toUpperCase().trim()) ansIndex = 3;
 
       let qTypeStr = 'mc';
-      if (q.question_type_id === 2 || q.question_type === 'true_false') qTypeStr = 'tf';
-      if (q.question_type_id === 3 || q.question_type === 'identification') qTypeStr = 'id';
+      if (typeId === 2 || q.question_type === 'true_false') qTypeStr = 'tf';
+      if (typeId === 3 || q.question_type === 'identification') qTypeStr = 'id';
 
       return {
         id: q.id,
         topicId: q.topic_id,
-        questionTypeId: q.question_type_id,
+        questionTypeId: typeId,
+        question_type_id: typeId,
         term: 1,
         topic: q.difficulty || 'Science',
-        question: q.question,
+        question: q.question || 'Science Question',
         options: opts,
+        choice_a: choiceA,
+        choice_b: choiceB,
+        choice_c: choiceC,
+        choice_d: choiceD,
+        option_a: choiceA,
+        option_b: choiceB,
+        option_c: choiceC,
+        option_d: choiceD,
         answer: ansIndex,
         rawAnswer: q.correct_answer,
+        correct_answer: q.correct_answer,
         explanation: q.explanation,
         timeLimit: q.time_limit || 20,
+        time_limit: q.time_limit || 20,
         type: qTypeStr
       };
     });
@@ -906,41 +933,6 @@ const DB = {
     return Array.from(playerMap.values());
   },
 
-  _formatQuestions(list) {
-    if (!Array.isArray(list)) return [];
-    return list.map(q => {
-      let typeId = q.question_type_id || 1;
-      let choiceA = q.choice_a || q.option_a || '';
-      let choiceB = q.choice_b || q.option_b || '';
-      let choiceC = q.choice_c || q.option_c || '';
-      let choiceD = q.choice_d || q.option_d || '';
-
-      if (typeId === 2 || (!choiceC && !choiceD && (q.correct_answer === 'True' || q.correct_answer === 'False' || q.correct_answer === 'TRUE' || q.correct_answer === 'FALSE'))) {
-        choiceA = 'True';
-        choiceB = 'False';
-        choiceC = '';
-        choiceD = '';
-        typeId = 2;
-      }
-
-      return {
-        id: q.id,
-        question: q.question || 'Science Question',
-        choice_a: choiceA,
-        choice_b: choiceB,
-        choice_c: choiceC,
-        choice_d: choiceD,
-        option_a: choiceA,
-        option_b: choiceB,
-        option_c: choiceC,
-        option_d: choiceD,
-        correct_answer: q.correct_answer,
-        explanation: q.explanation,
-        time_limit: q.time_limit || 20,
-        question_type_id: typeId
-      };
-    });
-  },
 
   async getMultiplayerQuestions(gameId, roomCode) {
     if (!supabaseClient) return [];

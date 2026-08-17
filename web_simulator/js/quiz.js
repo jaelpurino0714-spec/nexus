@@ -1160,7 +1160,10 @@ const Quiz = {
     } else {
       // Multiple Choice (4 choices)
       const prefixes = ['A', 'B', 'C', 'D'];
-      const opts = q.options || ['Option A', 'Option B', 'Option C', 'Option D'];
+      let opts = (q.options && q.options.length > 0) ? q.options : [q.choice_a || q.option_a, q.choice_b || q.option_b, q.choice_c || q.option_c, q.choice_d || q.option_d].filter(c => c && String(c).trim() !== '');
+      if (opts.length === 0) {
+        opts = ['Option A', 'Option B', 'Option C', 'Option D'];
+      }
       opts.forEach((optText, index) => {
         const btn = document.createElement('button');
         btn.className = 'answer-option-btn';
@@ -1231,7 +1234,7 @@ const Quiz = {
 
     let isCorrect = false;
     if (this.currentQuestionFormat === 'true_false') {
-      const correctStr = String(q.rawAnswer || q.options[q.answer] || 'True').trim().toLowerCase();
+      const correctStr = String(q.rawAnswer || (q.options ? q.options[q.answer] : '') || 'True').trim().toLowerCase();
       const selStr = String(userSelection).trim().toLowerCase();
       isCorrect = (correctStr === selStr || (correctStr.startsWith('t') && selStr.startsWith('t')) || (correctStr.startsWith('f') && selStr.startsWith('f')));
 
@@ -1292,9 +1295,17 @@ const Quiz = {
       this.incorrectCount++;
       this.streak = 0;
       if (feedback) feedback.className = 'feedback-banner wrong';
-      const ansHint = q.rawAnswer || (q.options ? q.options[q.answer] : '');
+      const prefixes = ['A', 'B', 'C', 'D'];
+      let correctDisplay = '';
+      if (q.options && typeof q.answer === 'number' && q.options[q.answer]) {
+        correctDisplay = `${prefixes[q.answer] || ''}: ${q.options[q.answer]}`;
+      } else if (q.rawAnswer || q.correct_answer) {
+        correctDisplay = q.rawAnswer || q.correct_answer;
+      } else if (q.choice_a || q.option_a) {
+        correctDisplay = q.choice_a || q.option_a;
+      }
       if (statusTextEl) statusTextEl.textContent = `❌ Incorrect!`;
-      if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${ansHint}</b>`;
+      if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${correctDisplay}</b>`;
     }
 
     document.getElementById('scorePointsText').textContent = `Points: ${this.totalScorePoints.toLocaleString()}`;
