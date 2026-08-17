@@ -478,8 +478,18 @@ const DB = {
 
         let { data: questions } = await query;
         if (!questions || questions.length === 0) {
-          const fallbackRes = await supabaseClient.from('questions').select('*').eq('is_active', true).limit(30);
-          questions = fallbackRes.data || [];
+          if (config.topicId) {
+            const { data: topicQ } = await supabaseClient.from('questions').select('*').eq('is_active', true).eq('topic_id', config.topicId);
+            questions = topicQ || [];
+          }
+          if ((!questions || questions.length === 0) && config.termId) {
+            const { data: termQ } = await supabaseClient.from('questions').select('*').eq('is_active', true).eq('term_id', config.termId);
+            questions = termQ || [];
+          }
+          if (!questions || questions.length === 0) {
+            const fallbackRes = await supabaseClient.from('questions').select('*').eq('is_active', true).limit(30);
+            questions = fallbackRes.data || [];
+          }
         }
         const shuffled = [...questions].sort(() => Math.random() - 0.5);
         selectedQuestions = shuffled.slice(0, config.questionCount || 10);
@@ -979,6 +989,59 @@ const DB = {
     }
   },
 
+  evaluateAnswerCorrectness(q, selectedChoice) {
+    if (!q || !q.correct_answer || !selectedChoice) return false;
+
+    const dbCorrect = String(q.correct_answer).trim();
+    const userSel = String(selectedChoice).trim();
+
+    const dbLower = dbCorrect.toLowerCase();
+    const userLower = userSel.toLowerCase();
+
+    // 1. Direct case-insensitive equality
+    if (dbLower === userLower) return true;
+
+    // 2. Map choices
+    const choicesMap = {
+      a: String(q.choice_a || q.option_a || '').trim().toLowerCase(),
+      b: String(q.choice_b || q.option_b || '').trim().toLowerCase(),
+      c: String(q.choice_c || q.option_c || '').trim().toLowerCase(),
+      d: String(q.choice_d || q.option_d || '').trim().toLowerCase()
+    };
+
+    // If user selected A/B/C/D letter
+    if (['a', 'b', 'c', 'd'].includes(userLower)) {
+      if (dbLower === userLower) return true;
+      const textForUserLetter = choicesMap[userLower];
+      if (textForUserLetter && (textForUserLetter === dbLower || textForUserLetter.includes(dbLower) || dbLower.includes(textForUserLetter))) {
+        return true;
+      }
+    }
+
+    // If dbCorrect is a letter A/B/C/D
+    if (['a', 'b', 'c', 'd'].includes(dbLower)) {
+      const textForDbLetter = choicesMap[dbLower];
+      if (textForDbLetter && (textForDbLetter === userLower || textForDbLetter.includes(userLower) || userLower.includes(textForDbLetter))) {
+        return true;
+      }
+    }
+
+    // 3. True / False handling
+    const trueSyns = ['true', 't', 'a', '1'];
+    const falseSyns = ['false', 'f', 'b', '2'];
+    if (q.question_type_id === 2 || (choicesMap.a === 'true' && choicesMap.b === 'false')) {
+      if (trueSyns.includes(dbLower) && trueSyns.includes(userLower)) return true;
+      if (falseSyns.includes(dbLower) && falseSyns.includes(userLower)) return true;
+    }
+
+    // 4. Substring fallback for text answer
+    if (userLower.length > 2 && dbLower.length > 2) {
+      if (userLower.includes(dbLower) || dbLower.includes(userLower)) return true;
+    }
+
+    return false;
+  },
+
   async submitPlayerAnswer(gameId, userUuid, questionId, selectedChoice, responseTimeSec = 0) {
     if (!supabaseClient || !gameId) return { is_correct: false, points_earned: 0 };
 
@@ -986,13 +1049,11 @@ const DB = {
       // 1. Fetch Question details to validate answer authoritatively
       const { data: q } = await supabaseClient
         .from('questions')
-        .select('correct_answer, time_limit')
+        .select('correct_answer, time_limit, question_type_id, choice_a, choice_b, choice_c, choice_d')
         .eq('id', questionId)
         .maybeSingle();
 
-      const correctAnswer = (q && q.correct_answer ? q.correct_answer : '').trim().toLowerCase();
-      const userChoice = String(selectedChoice || '').trim().toLowerCase();
-      const isCorrect = (correctAnswer !== '' && (correctAnswer === userChoice || correctAnswer.startsWith(userChoice)));
+      const isCorrect = this.evaluateAnswerCorrectness(q, selectedChoice);
 
       // 2. Calculate score (Speed bonus based on response time)
       let pointsEarned = 0;

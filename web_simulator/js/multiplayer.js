@@ -375,6 +375,9 @@ const Multiplayer = {
   refreshHostPresenceRoster() {
     const rosterEl = document.getElementById('mpHostPresenceRoster');
     const countEl = document.getElementById('mpHostPlayerCount');
+    const startBtn = document.getElementById('mpStartGameBtn');
+
+    if (startBtn) startBtn.disabled = false;
 
     const online = this.playersList || [];
     if (countEl) countEl.textContent = `Connected Players (${online.length})`;
@@ -439,14 +442,21 @@ const Multiplayer = {
   async hostStartGame() {
     if (!this.currentGame) return;
 
+    const btn = document.getElementById('mpStartGameBtn');
     try {
-      const btn = document.getElementById('mpStartGameBtn');
       if (btn) btn.disabled = true;
 
-      await DB.updateMultiplayerGameStatus(this.currentGame.id, 'active', 0);
-      if (this.questionsList.length === 0) {
+      if (!this.questionsList || this.questionsList.length === 0) {
         this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id, this.currentGame.room_code);
       }
+
+      if (!this.questionsList || this.questionsList.length === 0) {
+        alert('⚠️ Loading questions from Supabase question bank, please try starting again in a second!');
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      await DB.updateMultiplayerGameStatus(this.currentGame.id, 'active', 0);
 
       this.currentIndex = 0;
       this.sendBroadcast('GAME_START', { questionNumber: 1, startedAt: new Date().toISOString(), duration: 20 });
@@ -454,6 +464,7 @@ const Multiplayer = {
     } catch (e) {
       console.error(e);
       alert('Error starting game: ' + e.message);
+      if (btn) btn.disabled = false;
     }
   },
 
