@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS public.multiplayer_games (
     status TEXT NOT NULL DEFAULT 'waiting' CHECK (status IN ('waiting', 'starting', 'active', 'finished', 'cancelled')),
     current_question_index INT NOT NULL DEFAULT 0,
     question_start_time TIMESTAMP WITH TIME ZONE,
+    qr_code_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     started_at TIMESTAMP WITH TIME ZONE,
     ended_at TIMESTAMP WITH TIME ZONE

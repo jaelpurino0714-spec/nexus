@@ -7,6 +7,9 @@ const App = {
   init() {
     this.bindEvents();
     this.checkInitialAuth();
+    if (typeof Multiplayer !== 'undefined' && Multiplayer.checkAutoJoinFromUrl) {
+      Multiplayer.checkAutoJoinFromUrl();
+    }
   },
 
   bindEvents() {

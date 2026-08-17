@@ -824,6 +824,14 @@ const DB = {
     } catch (e) {
       console.error('Error updating game status:', e);
     }
+  },
+
+  async saveQrCodeUrlToSupabase(gameId, qrUrl) {
+    if (!supabaseClient || !gameId) return;
+    try {
+      await supabaseClient.from('multiplayer_games').update({ qr_code_url: qrUrl }).eq('id', gameId);
+      await supabaseClient.from('quiz_lobbies').update({ host_photo_url: qrUrl }).eq('id', gameId);
+    } catch (e) {}
   }
 };
 

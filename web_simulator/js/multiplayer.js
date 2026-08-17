@@ -165,15 +165,29 @@ const Multiplayer = {
   async enterLobbyWaitingScreen(roomCode) {
     App.showScreen('mpLobbyWaitingScreen');
 
+    const cleanCode = (roomCode || '').toUpperCase().trim();
     const codeDisplay = document.getElementById('mpRoomCodeDisplay');
-    if (codeDisplay) codeDisplay.textContent = roomCode;
+    if (codeDisplay) codeDisplay.textContent = cleanCode;
+
+    // Generate Join URL & Render Dynamic QR Code
+    const joinUrl = this.getJoinUrl(cleanCode);
+    const qrImg = document.getElementById('mpQrCodeImg');
+    if (qrImg) {
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(joinUrl)}`;
+      qrImg.src = qrApiUrl;
+    }
+
+    // Save QR Code URL payload to Supabase
+    if (this.currentGame && this.currentGame.id) {
+      DB.saveQrCodeUrlToSupabase(this.currentGame.id, joinUrl);
+    }
 
     // Load initial players list
     await this.refreshPlayersList();
     this.renderLobbyUI();
 
     // Subscribe to Supabase Realtime Channel
-    this.subscribeToRealtime(roomCode);
+    this.subscribeToRealtime(cleanCode);
   },
 
   async refreshPlayersList() {
@@ -623,14 +637,51 @@ const Multiplayer = {
     });
   },
 
+  getJoinUrl(roomCode) {
+    const origin = window.location.origin;
+    const pathname = window.location.pathname;
+    return `${origin}${pathname}?join=${roomCode.toUpperCase().trim()}`;
+  },
+
   copyRoomCode() {
     if (!this.currentGame || !this.currentGame.room_code) return;
     const code = this.currentGame.room_code;
     navigator.clipboard.writeText(code).then(() => {
-      alert(`Room code ${code} copied to clipboard!`);
+      alert(`Room text code ${code} copied to clipboard!`);
     }).catch(() => {
-      prompt('Copy Room Code:', code);
+      prompt('Copy Room Text Code:', code);
     });
+  },
+
+  copyJoinLink() {
+    if (!this.currentGame || !this.currentGame.room_code) return;
+    const link = this.getJoinUrl(this.currentGame.room_code);
+    navigator.clipboard.writeText(link).then(() => {
+      alert(`Join link copied to clipboard!\n${link}`);
+    }).catch(() => {
+      prompt('Copy Join Link:', link);
+    });
+  },
+
+  checkAutoJoinFromUrl() {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      let joinCode = urlParams.get('join') || urlParams.get('code');
+      if (!joinCode && window.location.hash.includes('join=')) {
+        joinCode = window.location.hash.split('join=')[1];
+      }
+
+      if (joinCode && joinCode.trim().length === 6) {
+        const cleanCode = joinCode.trim().toUpperCase();
+        setTimeout(() => {
+          this.initJoinGameFlow();
+          const input = document.getElementById('mpRoomCodeInput');
+          if (input) input.value = cleanCode;
+        }, 400);
+      }
+    } catch (e) {
+      console.warn('URL auto-join check error:', e);
+    }
   },
 
   resetState() {
