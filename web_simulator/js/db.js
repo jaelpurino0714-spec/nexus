@@ -405,7 +405,15 @@ const DB = {
 
   async createMultiplayerGame(config) {
     const userUuid = this.getUserUUID();
-    const profile = this.getStudentProfile() || { name: 'Host Player' };
+    let profile = this.getStudentProfile();
+    if (!profile) {
+      profile = { id: userUuid, role: 'student', name: 'Host Player', gradeLevel: 'Grade 10', section: 'Section A' };
+    } else {
+      profile.id = userUuid;
+    }
+    try {
+      await this.saveStudentProfile(profile);
+    } catch (e) {}
     const roomCode = this.generate6CharRoomCode();
 
     let selectedQuestions = [];
@@ -554,7 +562,15 @@ const DB = {
     }
 
     const userUuid = this.getUserUUID();
-    const profile = this.getStudentProfile() || { name: 'Player' };
+    let profile = this.getStudentProfile();
+    if (!profile) {
+      profile = { id: userUuid, role: 'student', name: 'Player ' + Math.floor(100 + Math.random() * 900), gradeLevel: 'Grade 10', section: 'Section A' };
+    } else {
+      profile.id = userUuid;
+    }
+    try {
+      await this.saveStudentProfile(profile);
+    } catch (e) {}
     let game = null;
 
     if (supabaseClient) {
