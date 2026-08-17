@@ -149,7 +149,15 @@ const Multiplayer = {
       this.currentGame = game;
       this.isHost = false;
 
-      await this.enterLobbyWaitingScreen(game.room_code || codeVal);
+      const code = game.room_code || codeVal;
+      if (game.status === 'active' || game.status === 'in_progress' || game.status === 'starting') {
+        App.showScreen('mpQuizGameplayScreen');
+        this.questionsList = await DB.getMultiplayerQuestions(game.id, code);
+        this.currentIndex = game.current_question_index || 0;
+        this.startMultiplayerQuizGameplay();
+      } else {
+        await this.enterLobbyWaitingScreen(code);
+      }
     } catch (e) {
       console.error(e);
       if (errEl) {

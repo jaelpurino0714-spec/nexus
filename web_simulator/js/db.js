@@ -624,34 +624,50 @@ const DB = {
       throw new Error('Room not found! Check code or make sure host created the lobby.');
     }
 
-    if (game.status === 'active' || game.status === 'in_progress') {
-      throw new Error('Game has already started!');
-    }
     if (game.status === 'finished' || game.status === 'completed' || game.status === 'cancelled') {
       throw new Error('This game session has ended!');
     }
 
-    // Insert Player into Supabase
+    // Insert or Upsert Player into Supabase
     if (supabaseClient && !game.isLocalOnly) {
       if (game.isQuizLobbies) {
         try {
-          await supabaseClient.from('lobby_participants').insert({
+          await supabaseClient.from('lobby_participants').upsert({
             lobby_id: game.id,
             student_id: userUuid,
             student_name: profile.name || 'Player',
             photo_url: profile.photo || null
-          });
-        } catch (e) {}
+          }, { onConflict: 'lobby_id,student_id' });
+        } catch (e) {
+          try {
+            await supabaseClient.from('lobby_participants').insert({
+              lobby_id: game.id,
+              student_id: userUuid,
+              student_name: profile.name || 'Player',
+              photo_url: profile.photo || null
+            });
+          } catch (err) {}
+        }
       } else {
         try {
-          await supabaseClient.from('multiplayer_players').insert({
+          await supabaseClient.from('multiplayer_players').upsert({
             game_id: game.id,
             user_id: userUuid,
             display_name: profile.name || 'Player',
             photo_url: profile.photo || null,
             is_host: (game.host_id === userUuid)
-          });
-        } catch (e) {}
+          }, { onConflict: 'game_id,user_id' });
+        } catch (e) {
+          try {
+            await supabaseClient.from('multiplayer_players').insert({
+              game_id: game.id,
+              user_id: userUuid,
+              display_name: profile.name || 'Player',
+              photo_url: profile.photo || null,
+              is_host: (game.host_id === userUuid)
+            });
+          } catch (err) {}
+        }
       }
     }
 
