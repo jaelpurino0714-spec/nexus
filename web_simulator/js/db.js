@@ -368,6 +368,330 @@ const DB = {
     localStorage.removeItem(this.STORAGE_PROFILE);
     localStorage.removeItem(this.STORAGE_TEACHER);
     localStorage.removeItem(this.STORAGE_USER_UUID);
+  },
+
+  // --------------------------------------------------------------------------
+  // 6. MULTIPLAYER TRIVIA ENGINE (SUPABASE REALTIME & DATABASE MIGRATION)
+  // --------------------------------------------------------------------------
+  generate6CharRoomCode() {
+    const chars = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
+    let code = '';
+    for (let i = 0; i < 6; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+  },
+
+  async createMultiplayerGame(config) {
+    const userUuid = this.getUserUUID();
+    const profile = this.getStudentProfile() || { name: 'Host Player' };
+    const roomCode = this.generate6CharRoomCode();
+
+    if (!supabaseClient) {
+      // Offline fallback
+      return {
+        id: 'game_' + Date.now(),
+        room_code: roomCode,
+        status: 'waiting',
+        host_id: userUuid,
+        question_count: config.questionCount || 10,
+        answer_medium: config.answerMedium || 'multiple_choice'
+      };
+    }
+
+    try {
+      // 1. Map answer_medium to question_type_id
+      let qTypeId = 1;
+      if (config.answerMedium === 'true_false') qTypeId = 2;
+      else if (config.answerMedium === 'identification') qTypeId = 3;
+
+      // 2. Fetch active questions from Supabase matching term/topic/medium
+      let query = supabaseClient.from('questions').select('*').eq('is_active', true);
+      if (config.topicId) query = query.eq('topic_id', config.topicId);
+      if (qTypeId) query = query.eq('question_type_id', qTypeId);
+
+      let { data: questions, error: qErr } = await query;
+      if (qErr || !questions || questions.length === 0) {
+        // Fallback fetch if specific topic pool empty
+        const fallbackRes = await supabaseClient.from('questions').select('*').eq('is_active', true).limit(30);
+        questions = fallbackRes.data || [];
+      }
+
+      // Shuffle & Slice requested question count
+      const shuffled = [...questions].sort(() => Math.random() - 0.5);
+      const selectedQuestions = shuffled.slice(0, config.questionCount || 10);
+      const formattedQuestions = this._formatQuestions(selectedQuestions);
+
+      // 3. Insert Game into multiplayer_games table (fallback to quiz_lobbies if main table unmigrated)
+      let gameData = null;
+      const { data: gRes, error: gErr } = await supabaseClient
+        .from('multiplayer_games')
+        .insert({
+          room_code: roomCode,
+          host_id: userUuid,
+          term_id: config.termId || null,
+          topic_id: config.topicId || null,
+          answer_medium: config.answerMedium || 'multiple_choice',
+          question_count: selectedQuestions.length || config.questionCount || 10,
+          status: 'waiting',
+          current_question_index: 0
+        })
+        .select()
+        .single();
+
+      if (gErr) {
+        console.warn('multiplayer_games table insert error (trying quiz_lobbies fallback):', gErr);
+        // Fallback insert to quiz_lobbies
+        const { data: lRes } = await supabaseClient
+          .from('quiz_lobbies')
+          .insert({
+            access_code: roomCode,
+            host_id: userUuid,
+            host_name: profile.name || 'Host',
+            quiz_title: 'Multiplayer Trivia',
+            term_id: config.termId || null,
+            topic_id: config.topicId || null,
+            time_limit_per_question: 10,
+            question_count: selectedQuestions.length || 10,
+            status: 'waiting'
+          })
+          .select()
+          .single();
+
+        gameData = lRes || { id: 'game_' + Date.now(), room_code: roomCode, status: 'waiting' };
+      } else {
+        gameData = gRes;
+      }
+
+      // 4. Insert Question sequence into multiplayer_game_questions
+      if (gameData && gameData.id && selectedQuestions.length > 0) {
+        const questionEntries = selectedQuestions.map((q, idx) => ({
+          game_id: gameData.id,
+          question_id: q.id,
+          question_order: idx + 1
+        }));
+        await supabaseClient.from('multiplayer_game_questions').insert(questionEntries).catch(() => {});
+      }
+
+      // 5. Insert Host Player into multiplayer_players
+      if (gameData && gameData.id) {
+        await supabaseClient
+          .from('multiplayer_players')
+          .insert({
+            game_id: gameData.id,
+            user_id: userUuid,
+            display_name: profile.name || 'Host',
+            photo_url: profile.photo || null,
+            is_host: true
+          })
+          .catch(() => {});
+      }
+
+      gameData.formattedQuestions = formattedQuestions;
+      return gameData;
+    } catch (e) {
+      console.error('Error creating multiplayer game:', e);
+      throw e;
+    }
+  },
+
+  async joinMultiplayerGame(roomCode) {
+    const cleanCode = (roomCode || '').toUpperCase().trim();
+    if (cleanCode.length !== 6) {
+      throw new Error('Room code must be exactly 6 characters!');
+    }
+
+    const userUuid = this.getUserUUID();
+    const profile = this.getStudentProfile() || { name: 'Player' };
+
+    if (!supabaseClient) {
+      return { game: { id: 'game_mock', room_code: cleanCode, status: 'waiting' } };
+    }
+
+    // 1. Search multiplayer_games for matching room_code
+    let game = null;
+    const { data: gData, error: gErr } = await supabaseClient
+      .from('multiplayer_games')
+      .select('*')
+      .eq('room_code', cleanCode)
+      .maybeSingle();
+
+    if (gErr || !gData) {
+      // Try quiz_lobbies fallback
+      const { data: lData } = await supabaseClient
+        .from('quiz_lobbies')
+        .select('*')
+        .eq('access_code', cleanCode)
+        .maybeSingle();
+
+      if (!lData) throw new Error('Room not found! Check code or make sure host started the lobby.');
+      game = {
+        id: lData.id,
+        room_code: lData.access_code,
+        status: lData.status || 'waiting',
+        host_id: lData.host_id,
+        question_count: lData.question_count || 10
+      };
+    } else {
+      game = gData;
+    }
+
+    if (game.status === 'active' || game.status === 'in_progress') {
+      throw new Error('Game has already started!');
+    }
+    if (game.status === 'finished' || game.status === 'completed' || game.status === 'cancelled') {
+      throw new Error('This game session has ended!');
+    }
+
+    // 2. Check current player list & max limit
+    const players = await this.getMultiplayerPlayers(game.id);
+    if (players.length >= 10) {
+      throw new Error('Lobby is full! Maximum 10 players allowed.');
+    }
+
+    // 3. Insert or update Player in multiplayer_players
+    const existing = players.find(p => p.user_id === userUuid || p.display_name === profile.name);
+    if (!existing) {
+      const { error: pErr } = await supabaseClient
+        .from('multiplayer_players')
+        .insert({
+          game_id: game.id,
+          user_id: userUuid,
+          display_name: profile.name || 'Player',
+          photo_url: profile.photo || null,
+          is_host: (game.host_id === userUuid)
+        });
+
+      if (pErr && !pErr.message.includes('unique')) {
+        console.warn('Player insert error:', pErr);
+      }
+    }
+
+    return game;
+  },
+
+  async getMultiplayerPlayers(gameId) {
+    if (!supabaseClient || !gameId) return [];
+    try {
+      const { data, error } = await supabaseClient
+        .from('multiplayer_players')
+        .select('*')
+        .eq('game_id', gameId)
+        .order('score', { ascending: false });
+
+      if (error) {
+        // Fallback to lobby_participants
+        const { data: pData } = await supabaseClient
+          .from('lobby_participants')
+          .select('*')
+          .eq('lobby_id', gameId);
+        return (pData || []).map(p => ({
+          id: p.id,
+          game_id: p.lobby_id,
+          user_id: p.student_id,
+          display_name: p.student_name,
+          photo_url: p.photo_url,
+          score: p.score || 0,
+          correct_answers: p.correct_count || 0,
+          wrong_answers: p.wrong_count || 0,
+          current_question_index: p.current_question_index || 0,
+          is_finished: p.is_finished || false,
+          is_host: false
+        }));
+      }
+      return data || [];
+    } catch (e) {
+      console.error('Error fetching multiplayer players:', e);
+      return [];
+    }
+  },
+
+  async getMultiplayerQuestions(gameId) {
+    if (!supabaseClient || !gameId) return [];
+    try {
+      const { data: gameQ, error: gqErr } = await supabaseClient
+        .from('multiplayer_game_questions')
+        .select('question_id, question_order')
+        .eq('game_id', gameId)
+        .order('question_order', { ascending: true });
+
+      if (gqErr || !gameQ || gameQ.length === 0) return [];
+
+      const qIds = gameQ.map(item => item.question_id);
+      const { data: rawQ } = await supabaseClient
+        .from('questions')
+        .select('*')
+        .in('id', qIds);
+
+      const formatted = this._formatQuestions(rawQ || []);
+      // Map exact question_order sequence
+      const ordered = [];
+      gameQ.forEach(item => {
+        const found = formatted.find(q => q.id === item.question_id);
+        if (found) ordered.push(found);
+      });
+      return ordered.length > 0 ? ordered : formatted;
+    } catch (e) {
+      console.error('Error fetching game questions:', e);
+      return [];
+    }
+  },
+
+  async submitMultiplayerAnswer(gameId, playerId, questionId, answerText, isCorrect, responseTime, pointsEarned) {
+    if (!supabaseClient || !gameId || !playerId) return;
+    try {
+      await supabaseClient
+        .from('multiplayer_answers')
+        .insert({
+          game_id: gameId,
+          player_id: playerId,
+          question_id: questionId,
+          answer: String(answerText),
+          is_correct: isCorrect,
+          response_time: responseTime || 0,
+          points_earned: pointsEarned || 0
+        })
+        .catch(() => {});
+
+      // Update player score & stats
+      const { data: player } = await supabaseClient
+        .from('multiplayer_players')
+        .select('score, correct_answers, wrong_answers')
+        .eq('id', playerId)
+        .single();
+
+      if (player) {
+        const newScore = (player.score || 0) + (pointsEarned || 0);
+        const newCorrect = (player.correct_answers || 0) + (isCorrect ? 1 : 0);
+        const newWrong = (player.wrong_answers || 0) + (isCorrect ? 0 : 1);
+
+        await supabaseClient
+          .from('multiplayer_players')
+          .update({
+            score: newScore,
+            correct_answers: newCorrect,
+            wrong_answers: newWrong,
+            last_seen: new Date().toISOString()
+          })
+          .eq('id', playerId);
+      }
+    } catch (e) {
+      console.error('Error submitting multiplayer answer:', e);
+    }
+  },
+
+  async updateMultiplayerGameStatus(gameId, status, currentQIndex = 0) {
+    if (!supabaseClient || !gameId) return;
+    try {
+      const payload = { status: status, current_question_index: currentQIndex };
+      if (status === 'active' || status === 'starting') payload.started_at = new Date().toISOString();
+      if (status === 'finished' || status === 'cancelled') payload.ended_at = new Date().toISOString();
+
+      await supabaseClient.from('multiplayer_games').update(payload).eq('id', gameId);
+    } catch (e) {
+      console.error('Error updating game status:', e);
+    }
   }
 };
+
 

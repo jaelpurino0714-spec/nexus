@@ -156,11 +156,9 @@ const Quiz = {
     this.customFlowType = flow;
 
     if (flow === 'join') {
-      document.getElementById('joinAccessCodeInput').value = '';
-      document.getElementById('joinErrorMsg').classList.add('hidden');
-      document.getElementById('joinCodeModal').classList.remove('hidden');
+      Multiplayer.initJoinGameFlow();
     } else if (flow === 'host') {
-      document.getElementById('hostTypeModal').classList.remove('hidden');
+      Multiplayer.initCreateGameFlow();
     } else if (flow === 'custom_play') {
       // Load saved custom settings from localStorage if available
       const saved = localStorage.getItem('nexus_custom_play_settings');

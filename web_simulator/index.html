@@ -595,6 +595,172 @@
         </div>
       </section>
 
+      <!-- ================= MULTIPLAYER: CREATE GAME SCREEN ================= -->
+      <section id="mpCreateGameScreen" class="screen">
+        <div class="play-container">
+          <button class="back-link" onclick="App.showScreen('homeScreen')">← Back to Home</button>
+          
+          <div class="quiz-mode-header-card">
+            <h2>Create Multiplayer Game 🎮</h2>
+            <p>Configure term, topic, answer medium & question count to generate a 6-character room code</p>
+          </div>
+
+          <div class="customize-form" style="background:#FFFFFF; padding:24px; border-radius:18px; border:1px solid #E2E8F0; box-shadow:0 4px 12px rgba(0,0,0,0.05); margin-top:16px;">
+            <div class="form-group">
+              <label for="mpTermSelect">📚 Select Term:</label>
+              <select id="mpTermSelect" class="customize-input" onchange="Multiplayer.onTermChanged()">
+                <!-- Loaded dynamically from Supabase -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="mpTopicSelect">🧬 Select Topic:</label>
+              <select id="mpTopicSelect" class="customize-input">
+                <!-- Loaded dynamically from Supabase -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="mpMediumSelect">✍️ Select Answer Medium:</label>
+              <select id="mpMediumSelect" class="customize-input">
+                <option value="multiple_choice">Multiple Choice (4 Options)</option>
+                <option value="true_false">True or False</option>
+                <option value="identification">Identification (Short Answer)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="mpCountSelect">❓ Number of Questions:</label>
+              <select id="mpCountSelect" class="customize-input">
+                <option value="5">5 Questions</option>
+                <option value="10" selected>10 Questions</option>
+                <option value="15">15 Questions</option>
+                <option value="20">20 Questions</option>
+              </select>
+            </div>
+
+            <div id="mpCreateError" class="customize-error-msg hidden"></div>
+
+            <button id="mpCreateBtn" class="primary-btn bottom-start-btn" onclick="Multiplayer.submitCreateLobby()">
+              Create Lobby 🚀
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MULTIPLAYER: JOIN GAME SCREEN ================= -->
+      <section id="mpJoinGameScreen" class="screen">
+        <div class="play-container">
+          <button class="back-link" onclick="App.showScreen('homeScreen')">← Back to Home</button>
+
+          <div class="quiz-mode-header-card" style="text-align:center;">
+            <h2>Join Game 🔑</h2>
+            <p>Enter 6-character room code provided by host</p>
+          </div>
+
+          <div class="customize-form" style="background:#FFFFFF; padding:28px; border-radius:18px; border:1px solid #E2E8F0; text-align:center; max-width:440px; margin:20px auto 0 auto;">
+            <div class="form-group">
+              <label for="mpRoomCodeInput" style="font-weight:700; color:#475569;">ENTER ROOM CODE:</label>
+              <input type="text" id="mpRoomCodeInput" placeholder="A7K9P2" maxlength="6" class="customize-input" style="font-size: 2rem; font-weight:900; text-align: center; letter-spacing: 6px; text-transform: uppercase; color:#6D28D9;" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '')" />
+            </div>
+
+            <div id="mpJoinError" class="customize-error-msg hidden"></div>
+
+            <button id="mpJoinSubmitBtn" class="primary-btn bottom-start-btn" onclick="Multiplayer.submitJoinLobby()">
+              Join Game ➔
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MULTIPLAYER: LOBBY WAITING SCREEN ================= -->
+      <section id="mpLobbyWaitingScreen" class="screen">
+        <div class="play-container">
+          <div class="lobby-header-card" style="text-align:center; background:linear-gradient(135deg, #6D28D9, #4C1D95); color:white; padding:24px; border-radius:18px;">
+            <span class="lobby-badge-tag" style="background:rgba(255,255,255,0.2); color:white;">MULTIPLAYER ROOM</span>
+            <p class="lobby-code-label" style="margin:8px 0 2px 0; font-size:0.8rem; opacity:0.9;">SHARE ROOM CODE WITH PLAYERS</p>
+            <h1 id="mpRoomCodeDisplay" class="lobby-access-code" style="font-size:2.8rem; letter-spacing:8px; margin:4px 0 12px 0;">A7K9P2</h1>
+            <button class="view-profile-btn" style="background:white; color:#6D28D9; border:none; padding:6px 16px; border-radius:20px; font-weight:700; cursor:pointer;" onclick="Multiplayer.copyRoomCode()">Copy Code 📋</button>
+          </div>
+
+          <div class="lobby-participants-section" style="margin-top:18px;">
+            <div class="lobby-part-header">
+              <h4 id="mpLobbyPlayerCount">Joined Players (1/10)</h4>
+            </div>
+            <div id="mpLobbyPlayersList" class="lobby-part-list">
+              <!-- Rendered via Supabase Realtime -->
+            </div>
+          </div>
+
+          <div id="mpHostControls" class="lobby-actions-bottom" style="margin-top:20px; display:none;">
+            <button id="mpStartGameBtn" class="primary-btn bottom-start-btn" onclick="Multiplayer.hostStartGame()">
+              Start Game 🚀
+            </button>
+            <button class="cancel-btn" style="width:100%; margin-top:8px;" onclick="Multiplayer.hostCancelGame()">Cancel Game</button>
+          </div>
+
+          <div id="mpPlayerWaitingMsg" style="text-align:center; padding:16px; color:#64748B; font-weight:600; display:none;">
+            ⏳ Waiting for the host to start the game...
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MULTIPLAYER: QUIZ GAMEPLAY SCREEN ================= -->
+      <section id="mpQuizGameplayScreen" class="screen">
+        <div class="play-container">
+          <div class="gameplay-header-row">
+            <span id="mpQCounter" class="q-count-badge">Question 1 of 10</span>
+            <div class="speed-timer-card" style="margin:0; padding:6px 14px;">
+              <span id="mpTimerValue" class="speed-timer-value" style="font-size:1.1rem;">10.00s</span>
+            </div>
+          </div>
+
+          <div class="question-card main-question-card" style="margin-top:12px;">
+            <h3 id="mpQuestionText" class="gameplay-question-text">Loading question...</h3>
+
+            <div id="mpAnswersContainer" class="answers-grid">
+              <!-- Rendered dynamically -->
+            </div>
+
+            <div id="mpFeedbackBanner" class="feedback-banner hidden">
+              <div id="mpFeedbackText" class="feedback-status-text">✅ Correct!</div>
+              <div id="mpFeedbackAnswerSub" class="feedback-answer-sub"></div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px;">
+            <button id="mpNextQuestionBtn" class="next-question-btn" style="display:none;" onclick="Multiplayer.nextQuestion()">
+              Next Question ➡
+            </button>
+          </div>
+
+          <!-- Live Scoreboard Drawer -->
+          <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:14px; margin-top:16px; padding:12px;">
+            <h5 style="margin:0 0 8px 0; color:#475569; font-size:0.85rem;">📊 Live Scoreboard</h5>
+            <div id="mpLiveScoreList"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MULTIPLAYER: RESULTS / LEADERBOARD SCREEN ================= -->
+      <section id="mpResultsScreen" class="screen">
+        <div class="results-card" style="max-width:540px; margin:0 auto; padding:24px;">
+          <div class="results-header" style="text-align:center;">
+            <span class="results-trophy" style="font-size:3rem;">🏆</span>
+            <h2>Multiplayer Leaderboard</h2>
+            <p>Final Synchronized Rankings</p>
+          </div>
+
+          <div id="mpFinalLeaderboardList" style="margin-top:20px;">
+            <!-- Final leaderboard items rendered here -->
+          </div>
+
+          <button class="primary-btn bottom-start-btn" style="margin-top:20px;" onclick="App.showScreen('homeScreen')">
+            Back to Home 🏠
+          </button>
+        </div>
+      </section>
+
       <!-- Participant Profile View Modal (Host View Only) -->
       <div id="participantProfileModal" class="mode-modal hidden">
         <div class="mode-modal-content">
@@ -1107,6 +1273,7 @@
   <script src="js/db.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/achievements.js"></script>
+  <script src="js/multiplayer.js"></script>
   <script src="js/quiz.js"></script>
   <script src="js/analytics.js"></script>
   <script src="js/experiment.js"></script>
