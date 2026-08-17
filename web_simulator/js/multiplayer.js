@@ -17,9 +17,7 @@ const Multiplayer = {
   hostLobbyPollInterval: null,
   playerSyncInterval: null,
   questionStartedAt: null,
-  questionDurationSec: 20,
-  hasAnsweredCurrent: false,
-  answeredCount: 0,
+  answeredPlayerSet: new Set(),
 
   resetState() {
     this.currentGame = null;
@@ -30,10 +28,16 @@ const Multiplayer = {
     this.currentIndex = 0;
     this.hasAnsweredCurrent = false;
     this.answeredCount = 0;
+    this.answeredPlayerSet = new Set();
     if (this.timerInterval) clearInterval(this.timerInterval);
     if (this.hostLobbyPollInterval) clearInterval(this.hostLobbyPollInterval);
     if (this.playerSyncInterval) clearInterval(this.playerSyncInterval);
     this.unsubscribeRealtime();
+  },
+
+  goHome() {
+    this.resetState();
+    App.showScreen('homeScreen');
   },
 
   // 1. Host Flow: Open Host Create Screen & Populate Term/Topic Dropdowns
@@ -472,12 +476,16 @@ const Multiplayer = {
     App.showScreen('mpHostGameScreen');
     this.currentIndex = index;
     this.answeredCount = 0;
+    this.answeredPlayerSet = new Set();
+
+    const banner = document.getElementById('mpHostCorrectAnswerBanner');
+    if (banner) banner.classList.add('hidden');
+
     const q = this.questionsList[index];
     if (!q) return;
 
     document.getElementById('mpHostQCounter').textContent = `Question ${index + 1} of ${this.questionsList.length}`;
     document.getElementById('mpHostQuestionText').textContent = q.question;
-    document.getElementById('mpHostAnswerCount').textContent = `0 / ${this.playersList.length} Answered`;
 
     // Render Host Choice Cards Overview
     const overviewEl = document.getElementById('mpHostAnswersOverview');
@@ -511,6 +519,8 @@ const Multiplayer = {
       });
     }
 
+    this.refreshHostPlayerAnswerStatuses();
+
     const startedAt = new Date().toISOString();
     this.questionStartedAt = startedAt;
     this.questionDurationSec = q.time_limit || 20;
@@ -534,6 +544,88 @@ const Multiplayer = {
     this.startSynchronizedTimer('mpHostTimerValue', startedAt, this.questionDurationSec, () => {
       this.hostLockAnswers();
     });
+  },
+
+  refreshHostPlayerAnswerStatuses() {
+    const listEl = document.getElementById('mpHostLivePlayerStatusList');
+    const countEl = document.getElementById('mpHostAnswerCount');
+    const badgeEl = document.getElementById('mpHostResponseBadge');
+
+    const total = this.playersList.length || 0;
+    const answeredCount = this.answeredPlayerSet ? this.answeredPlayerSet.size : 0;
+
+    if (countEl) countEl.textContent = `${answeredCount} / ${total} Answered`;
+    if (badgeEl) badgeEl.textContent = `${answeredCount} / ${total} Answered`;
+
+    if (listEl) {
+      listEl.innerHTML = '';
+      if (this.playersList.length === 0) {
+        listEl.innerHTML = '<div style="color:#94A3B8; padding:12px; text-align:center;">No participants connected</div>';
+      } else {
+        this.playersList.forEach(p => {
+          const pId = p.id || p.user_id || p.playerName;
+          const hasAnswered = this.answeredPlayerSet && (this.answeredPlayerSet.has(pId) || this.answeredPlayerSet.has(p.playerName));
+
+          const card = document.createElement('div');
+          card.className = 'lobby-part-card';
+          card.style.padding = '10px 14px';
+
+          const statusBadge = hasAnswered 
+            ? '<span style="color:#059669; background:#D1FAE5; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">🟢 Answered</span>'
+            : '<span style="color:#6B21A8; background:#F3E8FF; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">⏳ Thinking...</span>';
+
+          const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
+
+          card.innerHTML = `
+            <div class="part-info-left" style="justify-content:space-between; width:100%; align-items:center;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <img src="${p.photoUrl || defaultAvatar}" class="part-avatar" style="width:32px; height:32px;" alt="${p.playerName}">
+                <h5 style="margin:0; font-size:0.9rem; color:#1E293B; font-weight:700;">${p.playerName}</h5>
+              </div>
+              ${statusBadge}
+            </div>
+          `;
+          listEl.appendChild(card);
+        });
+      }
+    }
+  },
+
+  hostShowAnswer() {
+    const q = this.questionsList[this.currentIndex];
+    if (!q) return;
+
+    const banner = document.getElementById('mpHostCorrectAnswerBanner');
+    const bannerText = document.getElementById('mpHostCorrectAnswerText');
+
+    let displayAnswer = q.correct_answer || '';
+    if (q.question_type_id === 1) {
+      const key = String(q.correct_answer || '').toUpperCase();
+      const optText = q['choice_' + key.toLowerCase()] || q['option_' + key.toLowerCase()];
+      displayAnswer = optText ? `${key}: ${optText}` : key;
+    }
+
+    if (banner && bannerText) {
+      bannerText.textContent = `💡 Correct Answer: ${displayAnswer}`;
+      banner.classList.remove('hidden');
+    }
+
+    // Highlight correct option card in green on host overview
+    const overviewEl = document.getElementById('mpHostAnswersOverview');
+    if (overviewEl) {
+      const cards = overviewEl.querySelectorAll('.answer-option-btn');
+      cards.forEach(card => {
+        const letterEl = card.querySelector('.badge-letter');
+        if (letterEl && letterEl.textContent.trim().toUpperCase() === String(q.correct_answer).trim().toUpperCase()) {
+          card.style.borderColor = '#10B981';
+          card.style.background = '#ECFDF5';
+          card.style.boxShadow = '0 4px 14px rgba(16, 185, 129, 0.2)';
+        }
+      });
+    }
+
+    // Lock client inputs across all connected players
+    this.hostLockAnswers();
   },
 
   hostLockAnswers() {
@@ -708,10 +800,10 @@ const Multiplayer = {
   },
 
   onPlayerAnswered(data) {
-    if (this.isHost) {
-      this.answeredCount = (this.answeredCount || 0) + 1;
-      const countEl = document.getElementById('mpHostAnswerCount');
-      if (countEl) countEl.textContent = `${this.answeredCount} / ${this.playersList.length} Answered`;
+    if (this.isHost && data) {
+      if (data.playerId) this.answeredPlayerSet.add(data.playerId);
+      if (data.playerName) this.answeredPlayerSet.add(data.playerName);
+      this.refreshHostPlayerAnswerStatuses();
     }
   },
 

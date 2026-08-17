@@ -595,8 +595,8 @@
             </div>
 
             <div style="display:flex; gap:8px;">
-              <button id="mpLockAnswersBtn" class="primary-btn" style="background:#E11D48; padding:10px 18px; font-size:0.9rem;" onclick="Multiplayer.hostLockAnswers()">
-                Lock Answers 🔒
+              <button id="mpShowAnswerBtn" class="primary-btn" style="background:#0284C7; padding:10px 18px; font-size:0.9rem;" onclick="Multiplayer.hostShowAnswer()">
+                Show Answer 💡
               </button>
               <button id="mpShowResultsBtn" class="primary-btn" style="background:#8B5CF6; padding:10px 18px; font-size:0.9rem;" onclick="Multiplayer.hostShowResults()">
                 Show Results 📊
@@ -604,6 +604,22 @@
               <button id="mpHostNextQBtn" class="primary-btn" style="padding:10px 18px; font-size:0.9rem;" onclick="Multiplayer.hostNextQuestion()">
                 Next Question ➡
               </button>
+            </div>
+          </div>
+
+          <!-- Host Correct Answer Banner (Host View Only) -->
+          <div id="mpHostCorrectAnswerBanner" class="feedback-banner hidden" style="margin-top:14px; background:#EFF6FF; border:1px solid #93C5FD; color:#1E40AF; text-align:center;">
+            <div id="mpHostCorrectAnswerText" class="feedback-status-text" style="color:#1E40AF; font-size:1.15rem;">💡 Correct Answer: ...</div>
+          </div>
+
+          <!-- Live Participant Response Status Roster -->
+          <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:16px; margin-top:14px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <h4 style="margin:0; font-size:0.95rem; color:#1E293B; font-weight:700;">👥 Participant Answer Status</h4>
+              <span id="mpHostResponseBadge" style="font-size:0.8rem; font-weight:600; color:#6D28D9; background:#F3E8FF; padding:4px 12px; border-radius:20px;">0 / 0 Answered</span>
+            </div>
+            <div id="mpHostLivePlayerStatusList" class="lobby-part-list">
+              <!-- Live players rendered with 🟢 Answered or ⏳ Thinking... -->
             </div>
           </div>
         </div>
@@ -648,7 +664,7 @@
             <!-- Standings list rendered dynamically -->
           </div>
 
-          <button id="mpLeaderboardHomeBtn" class="primary-btn bottom-start-btn" style="margin-top:20px;" onclick="App.showScreen('homeScreen')">
+          <button id="mpLeaderboardHomeBtn" class="primary-btn bottom-start-btn" style="margin-top:20px;" onclick="Multiplayer.goHome()">
             Back to Home 🏠
           </button>
         </div>
