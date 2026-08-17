@@ -183,7 +183,7 @@ const DB = {
     try {
       const keys = Object.keys(localStorage);
       keys.forEach(k => {
-        if (k.startsWith('nexus_lobby_')) {
+        if (k.startsWith('nexus_lobby_') || k.startsWith('nexus_mp_lobby_')) {
           localStorage.removeItem(k);
         }
       });
@@ -200,6 +200,42 @@ const DB = {
     } catch (e) {
       console.warn('Error purging storage:', e);
     }
+  },
+
+  getActiveProfile() {
+    const userUuid = this.getUserUUID();
+    const teacherRaw = localStorage.getItem(this.STORAGE_TEACHER);
+    if (teacherRaw) {
+      try {
+        const teacher = JSON.parse(teacherRaw);
+        return {
+          id: userUuid,
+          role: 'teacher',
+          name: teacher.name ? (teacher.name.toLowerCase().includes('prof') || teacher.name.toLowerCase().includes('teacher') ? teacher.name : 'Prof. ' + teacher.name) : 'Teacher Host',
+          photo: teacher.photo || null,
+          isTeacher: true
+        };
+      } catch (e) {}
+    }
+
+    const student = this.getStudentProfile();
+    if (student) {
+      return {
+        id: userUuid,
+        role: 'student',
+        name: student.name || 'Student Player',
+        photo: student.photo || null,
+        isTeacher: false
+      };
+    }
+
+    return {
+      id: userUuid,
+      role: 'student',
+      name: 'Player ' + Math.floor(100 + Math.random() * 900),
+      photo: null,
+      isTeacher: false
+    };
   },
 
   safeSetItem(key, value) {
@@ -412,12 +448,7 @@ const DB = {
 
   async createMultiplayerGame(config) {
     const userUuid = this.getUserUUID();
-    let profile = this.getStudentProfile();
-    if (!profile) {
-      profile = { id: userUuid, role: 'student', name: 'Host Player', gradeLevel: 'Grade 10', section: 'Section A' };
-    } else {
-      profile.id = userUuid;
-    }
+    const profile = this.getActiveProfile();
     try {
       await this.saveStudentProfile(profile);
     } catch (e) {}
@@ -569,12 +600,7 @@ const DB = {
     }
 
     const userUuid = this.getUserUUID();
-    let profile = this.getStudentProfile();
-    if (!profile) {
-      profile = { id: userUuid, role: 'student', name: 'Player ' + Math.floor(100 + Math.random() * 900), gradeLevel: 'Grade 10', section: 'Section A' };
-    } else {
-      profile.id = userUuid;
-    }
+    const profile = this.getActiveProfile();
     try {
       await this.saveStudentProfile(profile);
     } catch (e) {}
@@ -613,18 +639,6 @@ const DB = {
       } catch (e) {
         console.warn('Supabase join query check:', e);
       }
-    }
-
-    // 3. Try LocalStorage state fallback
-    const localState = this.getLocalLobbyState(cleanCode);
-    if (!game && localState) {
-      game = {
-        id: localState.gameId || ('game_' + cleanCode),
-        room_code: cleanCode,
-        status: localState.status || 'waiting',
-        host_id: localState.hostId,
-        isLocalOnly: true
-      };
     }
 
     if (!game) {
@@ -769,28 +783,10 @@ const DB = {
       }
     }
 
-    if (roomCode) {
-      const localState = this.getLocalLobbyState(roomCode);
-      if (localState && localState.participants) {
-        localState.participants.forEach(lp => {
-          if (!players.some(p => p.user_id === lp.user_id || p.display_name === lp.display_name)) {
-            players.push(lp);
-          }
-        });
-      }
-    }
-
     return players;
   },
 
   async getMultiplayerQuestions(gameId, roomCode) {
-    if (roomCode) {
-      const localState = this.getLocalLobbyState(roomCode);
-      if (localState && localState.settings && localState.settings.questionsList && localState.settings.questionsList.length > 0) {
-        return localState.settings.questionsList;
-      }
-    }
-
     if (!supabaseClient) return [];
 
     try {
@@ -940,17 +936,6 @@ const DB = {
           };
         }
       } catch (e) {}
-    }
-
-    const localState = this.getLocalLobbyState(cleanCode);
-    if (localState) {
-      return {
-        id: localState.gameId,
-        room_code: cleanCode,
-        status: localState.status || 'waiting',
-        host_id: localState.hostId,
-        current_question_index: localState.currentIndex || 0
-      };
     }
 
     return null;
