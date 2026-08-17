@@ -97,7 +97,7 @@ const App = {
   },
 
   handleCustomPlayClick() {
-    App.showScreen('playScreen');
+    Quiz.showCustomHubModal();
   }
 };
 

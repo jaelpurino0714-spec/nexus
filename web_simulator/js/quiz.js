@@ -121,10 +121,14 @@ const Quiz = {
 
   showCustomHubModal() {
     this.hideAllModals();
-    App.showScreen('playScreen');
+    const el = document.getElementById('customHubModal');
+    if (el) el.classList.remove('hidden');
   },
 
-  hideCustomHubModal() {},
+  hideCustomHubModal() {
+    const el = document.getElementById('customHubModal');
+    if (el) el.classList.add('hidden');
+  },
 
   hideHostTypeModal() {
     const el = document.getElementById('hostTypeModal');
@@ -151,8 +155,10 @@ const Quiz = {
     this.hideCustomHubModal();
     this.customFlowType = flow;
 
-    if (flow === 'multiplayer' || flow === 'join' || flow === 'host') {
-      Multiplayer.initRoomPortalFlow();
+    if (flow === 'host') {
+      Multiplayer.initCreateGameFlow();
+    } else if (flow === 'join') {
+      Multiplayer.initJoinGameFlow();
     } else if (flow === 'custom_play') {
       // Load saved custom settings from localStorage if available
       const saved = localStorage.getItem('nexus_custom_play_settings');

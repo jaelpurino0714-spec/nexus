@@ -943,31 +943,57 @@ const DB = {
     }
   },
 
-  async submitMultiplayerAnswer(gameId, playerId, questionId, answerText, isCorrect, responseTime, pointsEarned) {
-    if (!supabaseClient || !gameId || !playerId) return;
-    try {
-      try {
-        await supabaseClient
-          .from('multiplayer_answers')
-          .insert({
-            game_id: gameId,
-            player_id: playerId,
-            question_id: questionId,
-            answer: String(answerText),
-            is_correct: isCorrect,
-            response_time: responseTime || 0,
-            points_earned: pointsEarned || 0
-          });
-      } catch (e) {}
+  async submitPlayerAnswer(gameId, userUuid, questionId, selectedChoice, responseTimeSec = 0) {
+    if (!supabaseClient || !gameId) return { is_correct: false, points_earned: 0 };
 
+    try {
+      // 1. Fetch Question details to validate answer authoritatively
+      const { data: q } = await supabaseClient
+        .from('questions')
+        .select('correct_answer, time_limit')
+        .eq('id', questionId)
+        .maybeSingle();
+
+      const correctAnswer = (q && q.correct_answer ? q.correct_answer : '').trim().toLowerCase();
+      const userChoice = String(selectedChoice || '').trim().toLowerCase();
+      const isCorrect = (correctAnswer !== '' && (correctAnswer === userChoice || correctAnswer.startsWith(userChoice)));
+
+      // 2. Calculate score (Speed bonus based on response time)
+      let pointsEarned = 0;
+      if (isCorrect) {
+        const timeLimit = (q && q.time_limit ? q.time_limit : 20) || 20;
+        const timeRatio = Math.max(0.2, 1 - (responseTimeSec / timeLimit));
+        pointsEarned = Math.round(1000 * timeRatio);
+      }
+
+      // 3. Find Player ID in multiplayer_players
       const { data: player } = await supabaseClient
         .from('multiplayer_players')
-        .select('score, correct_answers, wrong_answers')
-        .eq('id', playerId)
-        .single();
+        .select('id, score, correct_answers, wrong_answers')
+        .eq('game_id', gameId)
+        .or(`user_id.eq.${userUuid},id.eq.${userUuid}`)
+        .maybeSingle();
 
       if (player) {
-        const newScore = (player.score || 0) + (pointsEarned || 0);
+        const pId = player.id;
+
+        // Insert record into multiplayer_answers
+        try {
+          await supabaseClient
+            .from('multiplayer_answers')
+            .insert({
+              game_id: gameId,
+              player_id: pId,
+              question_id: questionId,
+              answer: String(selectedChoice),
+              is_correct: isCorrect,
+              response_time: responseTimeSec,
+              points_earned: pointsEarned
+            });
+        } catch (err) {}
+
+        // Update player score & stats
+        const newScore = (player.score || 0) + pointsEarned;
         const newCorrect = (player.correct_answers || 0) + (isCorrect ? 1 : 0);
         const newWrong = (player.wrong_answers || 0) + (isCorrect ? 0 : 1);
 
@@ -980,11 +1006,34 @@ const DB = {
               wrong_answers: newWrong,
               last_seen: new Date().toISOString()
             })
-            .eq('id', playerId);
-        } catch (e) {}
+            .eq('id', pId);
+        } catch (err) {}
       }
+
+      return { is_correct: isCorrect, points_earned: pointsEarned };
     } catch (e) {
-      console.error('Error submitting multiplayer answer:', e);
+      console.error('Error submitting player answer:', e);
+      return { is_correct: false, points_earned: 0 };
+    }
+  },
+
+  async submitMultiplayerAnswer(gameId, playerId, questionId, answerText, isCorrect, responseTime, pointsEarned) {
+    return this.submitPlayerAnswer(gameId, playerId, questionId, answerText, responseTime);
+  },
+
+  async getGameLeaderboard(gameId) {
+    if (!supabaseClient || !gameId) return [];
+    try {
+      const { data: players } = await supabaseClient
+        .from('multiplayer_players')
+        .select('id, display_name, score, correct_answers, wrong_answers')
+        .eq('game_id', gameId)
+        .order('score', { ascending: false });
+
+      return players || [];
+    } catch (e) {
+      console.error('Error fetching game leaderboard:', e);
+      return [];
     }
   },
 
