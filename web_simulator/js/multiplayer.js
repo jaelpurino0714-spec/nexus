@@ -292,32 +292,92 @@ const Multiplayer = {
     };
     window.addEventListener('storage', this.storageListener);
 
-    // Supabase Realtime sync
+    // 3. Supabase Realtime Channels (Broadcast + Presence + Postgres Changes)
     if (supabaseClient) {
       try {
-        const channelName = 'mp_game_' + roomCode;
-        this.realtimeChannel = supabaseClient
-          .channel(channelName)
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'multiplayer_players' }, async () => {
-            handleSync();
+        const cleanCode = roomCode.toUpperCase().trim();
+        const channelName = 'mp_game_' + cleanCode;
+        const myUuid = DB.getUserUUID();
+        const profile = DB.getStudentProfile() || { name: 'Player' };
+
+        this.realtimeChannel = supabaseClient.channel(channelName, {
+          config: {
+            presence: { key: myUuid },
+            broadcast: { self: true }
+          }
+        });
+
+        // Supabase Realtime PRESENCE (Auto Online/Offline Presence Tracking)
+        this.realtimeChannel
+          .on('presence', { event: 'sync' }, async () => {
+            await this.refreshPlayersList();
+            if (App.currentScreen === 'mpLobbyWaitingScreen') this.renderLobbyUI();
           })
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'lobby_participants' }, async () => {
-            handleSync();
+          .on('presence', { event: 'join' }, async () => {
+            await this.refreshPlayersList();
+            if (App.currentScreen === 'mpLobbyWaitingScreen') this.renderLobbyUI();
           })
-          .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'multiplayer_games' }, async (payload) => {
-            if (payload.new && payload.new.room_code === roomCode) {
-              handleSync(payload.new);
+          .on('presence', { event: 'leave' }, async () => {
+            await this.refreshPlayersList();
+            if (App.currentScreen === 'mpLobbyWaitingScreen') this.renderLobbyUI();
+          });
+
+        // Supabase Realtime BROADCAST (Sub-50ms Ephemeral Messaging)
+        this.realtimeChannel.on('broadcast', { event: 'game_action' }, (payload) => {
+          if (payload && payload.payload) {
+            const data = payload.payload;
+            if (data.action === 'start_game') {
+              this.handleGameStatusUpdate({ status: 'active', current_question_index: 0 });
+            } else if (data.action === 'next_question') {
+              this.handleGameStatusUpdate({ status: 'active', current_question_index: data.index });
+            } else if (data.action === 'cancel_game') {
+              this.handleGameStatusUpdate({ status: 'cancelled' });
+            } else if (data.action === 'finish_game') {
+              this.handleGameStatusUpdate({ status: 'finished' });
             }
+          }
+        });
+
+        // Supabase Realtime POSTGRES_CHANGES (Database Changes)
+        this.realtimeChannel
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'multiplayer_players' }, async () => handleSync())
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'lobby_participants' }, async () => handleSync())
+          .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'multiplayer_games' }, async (payload) => {
+            if (payload.new && payload.new.room_code === cleanCode) handleSync(payload.new);
           })
           .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'quiz_lobbies' }, async (payload) => {
-            if (payload.new && payload.new.access_code === roomCode) {
-              handleSync(payload.new);
-            }
-          })
-          .subscribe();
+            if (payload.new && payload.new.access_code === cleanCode) handleSync(payload.new);
+          });
+
+        // Subscribe to channel and track presence state
+        this.realtimeChannel.subscribe((status) => {
+          if (status === 'SUBSCRIBED') {
+            try {
+              this.realtimeChannel.track({
+                user_id: myUuid,
+                display_name: profile.name || 'Player',
+                photo_url: profile.photo || null,
+                is_host: this.isHost,
+                joined_at: new Date().toISOString()
+              });
+            } catch (err) {}
+          }
+        });
       } catch (e) {
-        console.warn('Realtime subscription fallback:', e);
+        console.warn('Realtime subscription error:', e);
       }
+    }
+  },
+
+  sendRealtimeBroadcast(action, extraData = {}) {
+    if (this.realtimeChannel) {
+      try {
+        this.realtimeChannel.send({
+          type: 'broadcast',
+          event: 'game_action',
+          payload: { action, ...extraData }
+        });
+      } catch (e) {}
     }
   },
 
@@ -470,6 +530,9 @@ const Multiplayer = {
         DB.saveLocalLobbyState(code, localState);
       }
 
+      // Send instant Supabase Realtime Broadcast to all connected clients
+      this.sendRealtimeBroadcast('start_game', { index: 0 });
+
       if (this.questionsList.length === 0) {
         this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id, code);
       }
@@ -487,6 +550,7 @@ const Multiplayer = {
     if (confirm('Are you sure you want to cancel this game for all players?')) {
       const code = this.currentGame.room_code;
       await DB.updateMultiplayerGameStatus(this.currentGame.id, 'cancelled');
+      this.sendRealtimeBroadcast('cancel_game');
       const localState = DB.getLocalLobbyState(code);
       if (localState) {
         localState.status = 'cancelled';
@@ -726,9 +790,11 @@ const Multiplayer = {
     this.currentIndex++;
     if (this.currentIndex >= this.questionsList.length) {
       await DB.updateMultiplayerGameStatus(this.currentGame.id, 'finished');
+      this.sendRealtimeBroadcast('finish_game');
       this.showFinalLeaderboard();
     } else {
       await DB.updateMultiplayerGameStatus(this.currentGame.id, 'active', this.currentIndex);
+      this.sendRealtimeBroadcast('next_question', { index: this.currentIndex });
       this.renderCurrentQuestion();
     }
   },
