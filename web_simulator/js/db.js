@@ -218,6 +218,12 @@ const DB = {
 
   async saveStudentProfile(profile) {
     this._cachedProfile = profile;
+
+    // Ensure profile has a valid 36-char RFC4122 UUID
+    if (!profile.id || profile.id.length !== 36 || !profile.id.includes('-')) {
+      profile.id = this.getUserUUID();
+    }
+
     this.safeSetItem(this.STORAGE_PROFILE, JSON.stringify(profile));
 
     if (supabaseClient && profile.id) {
@@ -226,17 +232,14 @@ const DB = {
           id: profile.id,
           role: 'student',
           name: profile.name,
-          grade_level: profile.gradeLevel,
-          section: profile.section,
-          photo_url: profile.photo,
+          grade_level: profile.gradeLevel || '',
+          section: profile.section || '',
+          photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null,
           device_id: profile.id,
-          total_xp: profile.totalXP || 0,
-          evolution_stage: profile.evolutionStage || 'baby',
-          gender: profile.gender || null,
           created_at: profile.createdAt || new Date().toISOString()
         });
       } catch (e) {
-        console.error('Error saving profile to Supabase:', e);
+        console.warn('Error saving profile to Supabase:', e);
       }
     }
   },
@@ -277,14 +280,22 @@ const DB = {
 
     if (supabaseClient) {
       try {
-        // Find default topic id or insert
+        const studentUuid = this.getUserUUID();
+        const profile = this.getStudentProfile();
+        if (profile) {
+          await this.saveStudentProfile(profile);
+        }
+
         const { data: topics } = await supabaseClient.from('topics').select('id').limit(1);
-        const topicId = (topics && topics.length > 0) ? topics[0].id : 'b0000000-0000-0000-0000-000000000001';
+        if (!topics || topics.length === 0) return;
+
+        const topicId = topics[0].id;
+        const validQuizType = (result.mode === 'pre-test') ? 'pre_test' : ((result.mode === 'post-test') ? 'post_test' : 'practice');
 
         await supabaseClient.from('quiz_attempts').insert({
-          student_id: result.studentId || this.getStoredUUID() || 'a0000000-0000-0000-0000-000000000000',
+          student_id: studentUuid,
           topic_id: topicId,
-          quiz_type: result.mode === 'pre-test' ? 'pre_test' : 'practice',
+          quiz_type: validQuizType,
           score: result.scorePoints || 0,
           correct: result.correctCount || 0,
           wrong: result.incorrectCount || 0,
@@ -293,7 +304,7 @@ const DB = {
           created_at: result.timestamp || new Date().toISOString()
         });
       } catch (e) {
-        console.error('Error saving quiz attempt to Supabase:', e);
+        console.warn('Error saving quiz attempt to Supabase:', e);
       }
     }
   },
@@ -323,8 +334,15 @@ const DB = {
 
   getUserUUID() {
     let uuid = this.getStoredUUID();
-    if (!uuid) {
-      uuid = 'usr_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+    const isValidUUID = uuid && uuid.length === 36 && uuid.includes('-');
+    if (!isValidUUID) {
+      uuid = (typeof crypto !== 'undefined' && crypto.randomUUID) 
+        ? crypto.randomUUID()
+        : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0;
+            const v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+          });
       this.saveUserUUID(uuid);
     }
     return uuid;

@@ -110,7 +110,7 @@ const Auth = {
     const name = document.getElementById('studentNameInput').value.trim();
     const grade = document.getElementById('studentGradeInput').value;
     const section = document.getElementById('studentSectionInput').value.trim();
-    const uuid = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'std-' + Date.now();
+    const uuid = DB.getUserUUID();
 
     const profile = {
       id: uuid,
