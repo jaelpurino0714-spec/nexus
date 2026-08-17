@@ -121,14 +121,10 @@ const Quiz = {
 
   showCustomHubModal() {
     this.hideAllModals();
-    const el = document.getElementById('customHubModal');
-    if (el) el.classList.remove('hidden');
+    App.showScreen('playScreen');
   },
 
-  hideCustomHubModal() {
-    const el = document.getElementById('customHubModal');
-    if (el) el.classList.add('hidden');
-  },
+  hideCustomHubModal() {},
 
   hideHostTypeModal() {
     const el = document.getElementById('hostTypeModal');
