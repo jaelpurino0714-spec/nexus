@@ -392,25 +392,17 @@
         </div>
       </div>
 
-      <!-- ================= CUSTOM HUB MODAL (Join / Host / Custom Play) ================= -->
+      <!-- ================= CUSTOM HUB MODAL ================= -->
       <div id="customHubModal" class="mode-modal hidden">
         <div class="mode-modal-content">
-          <h3>Custom Quiz Options</h3>
-          <p>Choose your play mode</p>
+          <h3>Play Modes</h3>
+          <p>Choose your trivia experience</p>
           <div class="mode-options">
-            <button class="mode-card" onclick="Quiz.selectCustomFlow('join')">
-              <span class="mode-icon">🔑</span>
+            <button class="mode-card" onclick="Quiz.selectCustomFlow('multiplayer')">
+              <span class="mode-icon">🎮</span>
               <div>
-                <h4>Join Room</h4>
-                <p>Enter 6-character room code to join a live room</p>
-              </div>
-            </button>
-
-            <button class="mode-card" onclick="Quiz.selectCustomFlow('host')">
-              <span class="mode-icon">👑</span>
-              <div>
-                <h4>Create Room</h4>
-                <p>Create a live room with built-in curriculum questions</p>
+                <h4>Multiplayer Room</h4>
+                <p>Play live trivia in real-time with connected players</p>
               </div>
             </button>
 
@@ -418,7 +410,7 @@
               <span class="mode-icon">⚡</span>
               <div>
                 <h4>Single Player</h4>
-                <p>Play single-player quiz mode</p>
+                <p>Play offline single-player quiz</p>
               </div>
             </button>
           </div>
@@ -427,79 +419,32 @@
       </div>
 
 
-      <!-- ================= MULTIPLAYER: CREATE GAME SCREEN ================= -->
-      <section id="mpCreateGameScreen" class="screen">
+      <!-- ================= MULTIPLAYER ROOM PORTAL SCREEN ================= -->
+      <section id="mpRoomPortalScreen" class="screen">
         <div class="play-container">
           <button class="back-link" onclick="App.showScreen('homeScreen')">← Back to Home</button>
           
-          <div class="quiz-mode-header-card">
-            <h2>Create Multiplayer Game 🎮</h2>
-            <p>Configure term, topic, answer medium & question count to generate a 6-character room code</p>
-          </div>
-
-          <div class="customize-form" style="background:#FFFFFF; padding:24px; border-radius:18px; border:1px solid #E2E8F0; box-shadow:0 4px 12px rgba(0,0,0,0.05); margin-top:16px;">
-            <div class="form-group">
-              <label for="mpTermSelect">📚 Select Term:</label>
-              <select id="mpTermSelect" class="customize-input" onchange="Multiplayer.onTermChanged()">
-                <!-- Loaded dynamically from Supabase -->
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="mpTopicSelect">🧬 Select Topic:</label>
-              <select id="mpTopicSelect" class="customize-input">
-                <!-- Loaded dynamically from Supabase -->
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="mpMediumSelect">✍️ Select Answer Medium:</label>
-              <select id="mpMediumSelect" class="customize-input">
-                <option value="multiple_choice">Multiple Choice (4 Options)</option>
-                <option value="true_false">True or False</option>
-                <option value="identification">Identification (Short Answer)</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="mpCountSelect">❓ Number of Questions:</label>
-              <select id="mpCountSelect" class="customize-input">
-                <option value="5">5 Questions</option>
-                <option value="10" selected>10 Questions</option>
-                <option value="15">15 Questions</option>
-                <option value="20">20 Questions</option>
-              </select>
-            </div>
-
-            <div id="mpCreateError" class="customize-error-msg hidden"></div>
-
-            <button id="mpCreateBtn" class="primary-btn bottom-start-btn" onclick="Multiplayer.submitCreateLobby()">
-              Create Lobby 🚀
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= MULTIPLAYER: JOIN GAME SCREEN ================= -->
-      <section id="mpJoinGameScreen" class="screen">
-        <div class="play-container">
-          <button class="back-link" onclick="App.showScreen('homeScreen')">← Back to Home</button>
-
           <div class="quiz-mode-header-card" style="text-align:center;">
-            <h2>Join Game 🔑</h2>
-            <p>Enter 6-character room code provided by host</p>
+            <h2>Multiplayer Room 🎮</h2>
+            <p>Connect with other players in real-time via Supabase Presence & Broadcast</p>
           </div>
 
-          <div class="customize-form" style="background:#FFFFFF; padding:28px; border-radius:18px; border:1px solid #E2E8F0; text-align:center; max-width:440px; margin:20px auto 0 auto;">
+          <div class="customize-form" style="background:#FFFFFF; padding:28px; border-radius:18px; border:1px solid #E2E8F0; text-align:center; max-width:460px; margin:20px auto 0 auto;">
             <div class="form-group">
-              <label for="mpRoomCodeInput" style="font-weight:700; color:#475569;">ENTER ROOM CODE:</label>
+              <label for="mpRoomCodeInput" style="font-weight:700; color:#475569;">ROOM CODE:</label>
               <input type="text" id="mpRoomCodeInput" placeholder="A7K9P2" maxlength="6" class="customize-input" style="font-size: 2rem; font-weight:900; text-align: center; letter-spacing: 6px; text-transform: uppercase; color:#6D28D9;" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '')" />
             </div>
 
-            <div id="mpJoinError" class="customize-error-msg hidden"></div>
+            <div id="mpRoomError" class="customize-error-msg hidden"></div>
 
-            <button id="mpJoinSubmitBtn" class="primary-btn bottom-start-btn" onclick="Multiplayer.submitJoinLobby()">
-              Join Game ➔
+            <button id="mpEnterRoomBtn" class="primary-btn bottom-start-btn" onclick="Multiplayer.submitEnterRoom()">
+              Enter Room ➔
+            </button>
+
+            <div style="margin: 16px 0; color:#94A3B8; font-weight:600; font-size:0.85rem;">— OR —</div>
+
+            <button class="primary-btn bottom-start-btn" style="background:linear-gradient(135deg, #10B981, #059669);" onclick="Multiplayer.submitQuickCreateRoom()">
+              Create New Room 🚀
             </button>
           </div>
         </div>
@@ -515,34 +460,30 @@
             <div id="mpQrCodeContainer" style="background:white; padding:10px; border-radius:16px; width:160px; height:160px; margin:14px auto 8px auto; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(0,0,0,0.2);">
               <img id="mpQrCodeImg" src="" alt="Scan QR Code to Join" style="width:100%; height:100%; object-fit:contain; border-radius:8px;" />
             </div>
-            <p style="font-size:0.75rem; color:rgba(255,255,255,0.9); margin:0 0 12px 0; font-weight:600;">📱 Scan QR Code with Phone Camera to Join instantly!</p>
+            <p style="font-size:0.75rem; color:rgba(255,255,255,0.9); margin:0 0 12px 0; font-weight:600;">📱 Scan QR Code to connect instantly!</p>
 
-            <p class="lobby-code-label" style="margin:8px 0 2px 0; font-size:0.8rem; opacity:0.9;">OR ENTER ROOM TEXT CODE</p>
+            <p class="lobby-code-label" style="margin:8px 0 2px 0; font-size:0.8rem; opacity:0.9;">ROOM CODE</p>
             <h1 id="mpRoomCodeDisplay" class="lobby-access-code" style="font-size:2.8rem; letter-spacing:8px; margin:4px 0 12px 0;">A7K9P2</h1>
             <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
               <button class="view-profile-btn" style="background:white; color:#6D28D9; border:none; padding:8px 18px; border-radius:20px; font-weight:700; cursor:pointer;" onclick="Multiplayer.copyRoomCode()">Copy Code 📋</button>
-              <button class="view-profile-btn" style="background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.4); padding:8px 18px; border-radius:20px; font-weight:700; cursor:pointer;" onclick="Multiplayer.copyJoinLink()">Copy Join Link 🔗</button>
+              <button class="view-profile-btn" style="background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.4); padding:8px 18px; border-radius:20px; font-weight:700; cursor:pointer;" onclick="Multiplayer.copyJoinLink()">Copy Room Link 🔗</button>
             </div>
           </div>
 
           <div class="lobby-participants-section" style="margin-top:18px;">
             <div class="lobby-part-header">
-              <h4 id="mpLobbyPlayerCount">Joined Players (1/10)</h4>
+              <h4 id="mpLobbyPlayerCount">Connected Players (1)</h4>
             </div>
             <div id="mpLobbyPlayersList" class="lobby-part-list">
-              <!-- Rendered via Supabase Realtime -->
+              <!-- Rendered via Supabase Realtime Presence -->
             </div>
           </div>
 
-          <div id="mpHostControls" class="lobby-actions-bottom" style="margin-top:20px; display:none;">
-            <button id="mpStartGameBtn" class="primary-btn bottom-start-btn" onclick="Multiplayer.hostStartGame()">
+          <div id="mpRoomControls" class="lobby-actions-bottom" style="margin-top:20px;">
+            <button id="mpStartGameBtn" class="primary-btn bottom-start-btn" onclick="Multiplayer.startGame()">
               Start Game 🚀
             </button>
-            <button class="cancel-btn" style="width:100%; margin-top:8px;" onclick="Multiplayer.hostCancelGame()">Cancel Game</button>
-          </div>
-
-          <div id="mpPlayerWaitingMsg" style="text-align:center; padding:16px; color:#64748B; font-weight:600; display:none;">
-            ⏳ Waiting for the host to start the game...
+            <button class="cancel-btn" style="width:100%; margin-top:8px;" onclick="Multiplayer.leaveRoom()">Leave Room</button>
           </div>
         </div>
       </section>

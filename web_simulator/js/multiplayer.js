@@ -18,119 +18,20 @@ const Multiplayer = {
   hasAnsweredCurrent: false,
 
   // 1. Initialize Multiplayer Flow
-  async initCreateGameFlow() {
-    this.resetState();
-    App.showScreen('mpCreateGameScreen');
-
-    // Populate Term dropdown from Supabase
-    const termSelect = document.getElementById('mpTermSelect');
-    if (termSelect) {
-      termSelect.innerHTML = '<option value="">Loading Terms...</option>';
-      const terms = await DB.getTerms();
-      termSelect.innerHTML = '';
-      if (terms.length === 0) {
-        termSelect.innerHTML = `
-          <option value="term-1">Term 1 (Physical & Chemical Science)</option>
-          <option value="term-2">Term 2 (Earth & Climate Systems)</option>
-          <option value="term-3">Term 3 (Physics & Electricity)</option>
-        `;
-      } else {
-        terms.forEach((t, i) => {
-          const opt = document.createElement('option');
-          opt.value = t.id;
-          opt.textContent = t.title || t.name || `Term ${i + 1}`;
-          termSelect.appendChild(opt);
-        });
-      }
-      this.onTermChanged();
-    }
-  },
-
-  async onTermChanged() {
-    const termSelect = document.getElementById('mpTermSelect');
-    const topicSelect = document.getElementById('mpTopicSelect');
-    if (!termSelect || !topicSelect) return;
-
-    const termId = termSelect.value;
-    topicSelect.innerHTML = '<option value="">Loading Topics...</option>';
-
-    const topics = await DB.getTopics(termId);
-    topicSelect.innerHTML = '';
-    if (topics.length === 0) {
-      topicSelect.innerHTML = `
-        <option value="">All Curriculum Topics</option>
-        <option value="chemical-reactions">Chemical Reactions & Equations</option>
-        <option value="homeostasis">Homeostasis & Evolution</option>
-      `;
-    } else {
-      const allOpt = document.createElement('option');
-      allOpt.value = '';
-      allOpt.textContent = 'All Curriculum Topics';
-      topicSelect.appendChild(allOpt);
-
-      topics.forEach(t => {
-        const opt = document.createElement('option');
-        opt.value = t.id;
-        opt.textContent = t.title || t.name;
-        topicSelect.appendChild(opt);
-      });
-    }
-  },
-
-  initJoinGameFlow() {
+  initRoomPortalFlow() {
     this.resetState();
     const input = document.getElementById('mpRoomCodeInput');
-    const err = document.getElementById('mpJoinError');
+    const err = document.getElementById('mpRoomError');
     if (input) input.value = '';
     if (err) err.classList.add('hidden');
 
-    App.showScreen('mpJoinGameScreen');
+    App.showScreen('mpRoomPortalScreen');
   },
 
-  // 2. Create Lobby & Generate 6-Character Room Code
-  async submitCreateLobby() {
-    const termSelect = document.getElementById('mpTermSelect');
-    const topicSelect = document.getElementById('mpTopicSelect');
-    const mediumSelect = document.getElementById('mpMediumSelect');
-    const countSelect = document.getElementById('mpCountSelect');
-    const errEl = document.getElementById('mpCreateError');
-
-    if (errEl) errEl.classList.add('hidden');
-
-    const config = {
-      termId: termSelect ? termSelect.value : null,
-      topicId: topicSelect ? topicSelect.value : null,
-      answerMedium: mediumSelect ? mediumSelect.value : 'multiple_choice',
-      questionCount: countSelect ? parseInt(countSelect.value, 10) : 10
-    };
-
-    try {
-      const btn = document.getElementById('mpCreateBtn');
-      if (btn) btn.disabled = true;
-
-      const game = await DB.createMultiplayerGame(config);
-      this.currentGame = game;
-      this.isHost = true;
-      this.questionsList = game.formattedQuestions || [];
-
-      await this.enterLobbyWaitingScreen(game.room_code);
-    } catch (e) {
-      console.error(e);
-      if (errEl) {
-        errEl.textContent = `⚠️ Error creating lobby: ${e.message || 'Server error'}`;
-        errEl.classList.remove('hidden');
-      }
-    } finally {
-      const btn = document.getElementById('mpCreateBtn');
-      if (btn) btn.disabled = false;
-    }
-  },
-
-  // 3. Join Lobby with 6-Character Code Validation
-  async submitJoinLobby() {
+  async submitEnterRoom() {
     const input = document.getElementById('mpRoomCodeInput');
-    const errEl = document.getElementById('mpJoinError');
-    const btn = document.getElementById('mpJoinSubmitBtn');
+    const errEl = document.getElementById('mpRoomError');
+    const btn = document.getElementById('mpEnterRoomBtn');
 
     if (errEl) errEl.classList.add('hidden');
     const codeVal = (input ? input.value : '').toUpperCase().trim();
@@ -147,7 +48,6 @@ const Multiplayer = {
       if (btn) btn.disabled = true;
       const game = await DB.joinMultiplayerGame(codeVal);
       this.currentGame = game;
-      this.isHost = false;
 
       const code = game.room_code || codeVal;
       if (game.status === 'active' || game.status === 'in_progress' || game.status === 'starting') {
@@ -165,13 +65,35 @@ const Multiplayer = {
     } catch (e) {
       console.error(e);
       if (errEl) {
-        errEl.textContent = `⚠️ ${e.message || 'Unable to join room'}`;
+        errEl.textContent = `⚠️ ${e.message || 'Unable to enter room'}`;
         errEl.classList.remove('hidden');
       }
     } finally {
       if (btn) btn.disabled = false;
     }
   },
+
+  async submitQuickCreateRoom() {
+    try {
+      const config = {
+        questionCount: 10,
+        answerMedium: 'multiple_choice'
+      };
+      const game = await DB.createMultiplayerGame(config);
+      this.currentGame = game;
+      this.questionsList = game.formattedQuestions || [];
+      await this.enterLobbyWaitingScreen(game.room_code);
+    } catch (e) {
+      console.error(e);
+      alert('Error creating room: ' + e.message);
+    }
+  },
+
+  // Backward compatibility aliases
+  initCreateGameFlow() { this.initRoomPortalFlow(); },
+  initJoinGameFlow() { this.initRoomPortalFlow(); },
+  submitCreateLobby() { this.submitQuickCreateRoom(); },
+  submitJoinLobby() { this.submitEnterRoom(); },
 
   // 4. Enter Lobby Waiting Screen & Subscribe to Realtime Updates
   async enterLobbyWaitingScreen(roomCode) {
@@ -189,16 +111,11 @@ const Multiplayer = {
       qrImg.src = qrApiUrl;
     }
 
-    // Save QR Code URL payload to Supabase
-    if (this.currentGame && this.currentGame.id) {
-      DB.saveQrCodeUrlToSupabase(this.currentGame.id, joinUrl);
-    }
-
     // Load initial players list
     await this.refreshPlayersList();
     this.renderLobbyUI();
 
-    // Subscribe to Supabase Realtime & Start Lobby Polling Engine
+    // Subscribe to Supabase Realtime Channels (Broadcast + Presence)
     this.subscribeToRealtime(cleanCode);
     this.startLobbyPolling(cleanCode);
   },
@@ -226,7 +143,6 @@ const Multiplayer = {
                 user_id: p.user_id || key,
                 display_name: p.display_name || p.name || 'Player',
                 photo_url: p.photo_url || p.photo || null,
-                is_host: !!p.is_host,
                 score: 0,
                 correct_answers: 0,
                 wrong_answers: 0
@@ -238,34 +154,26 @@ const Multiplayer = {
     }
 
     this.playersList = Array.from(mergedMap.values());
-
-    // Identify current player
     const myUuid = DB.getUserUUID();
-    this.currentPlayer = this.playersList.find(p => p.user_id === myUuid || p.id === myUuid) ||
-                         this.playersList.find(p => (p.is_host && this.isHost)) ||
-                         this.playersList[0];
+    this.currentPlayer = this.playersList.find(p => p.user_id === myUuid || p.id === myUuid) || this.playersList[0];
   },
 
   renderLobbyUI() {
     const listEl = document.getElementById('mpLobbyPlayersList');
     const countEl = document.getElementById('mpLobbyPlayerCount');
-    const hostControls = document.getElementById('mpHostControls');
-    const playerMsg = document.getElementById('mpPlayerWaitingMsg');
     const startBtn = document.getElementById('mpStartGameBtn');
 
-    const hostUuid = this.currentGame ? this.currentGame.host_id : null;
     const allPlayers = this.playersList || [];
 
-    if (countEl) countEl.textContent = `Joined Players (${allPlayers.length}/10)`;
+    if (countEl) countEl.textContent = `Connected Players (${allPlayers.length})`;
     if (listEl) {
       listEl.innerHTML = '';
       if (allPlayers.length === 0) {
-        listEl.innerHTML = '<div style="color:#94A3B8; padding:16px; text-align:center;">Waiting for participants to join...</div>';
+        listEl.innerHTML = '<div style="color:#94A3B8; padding:16px; text-align:center;">Waiting for connected players...</div>';
       } else {
         allPlayers.forEach(p => {
           const card = document.createElement('div');
           card.className = 'lobby-part-card';
-          const isHostEntry = p.is_host || p.user_id === hostUuid || p.id === hostUuid;
           const displayName = p.display_name || p.name || p.student_name || 'Player';
           const photoUrl = p.photo_url || p.photo || null;
           const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
@@ -273,9 +181,9 @@ const Multiplayer = {
             <div class="part-info-left">
               <img src="${photoUrl || defaultAvatar}" class="part-avatar" alt="${displayName}">
               <div>
-                <h5 style="margin:0; font-size:0.9rem; color:#1E293B;">${displayName} ${isHostEntry ? '👑' : ''}</h5>
-                <span style="font-size:0.72rem; color:${isHostEntry ? '#D97706' : '#10B981'}; font-weight:600;">
-                  ${isHostEntry ? '👑 Host (Lobby Leader)' : '● Joined & Ready'}
+                <h5 style="margin:0; font-size:0.9rem; color:#1E293B;">${displayName}</h5>
+                <span style="font-size:0.72rem; color:#10B981; font-weight:600;">
+                  ● Connected & Ready
                 </span>
               </div>
             </div>
@@ -284,15 +192,7 @@ const Multiplayer = {
         });
       }
     }
-
-    if (this.isHost) {
-      if (hostControls) hostControls.style.display = 'block';
-      if (playerMsg) playerMsg.style.display = 'none';
-      if (startBtn) startBtn.disabled = false;
-    } else {
-      if (hostControls) hostControls.style.display = 'none';
-      if (playerMsg) playerMsg.style.display = 'block';
-    }
+    if (startBtn) startBtn.disabled = false;
   },
 
   // 5. Supabase Realtime & BroadcastChannel Sync Engine
@@ -569,9 +469,9 @@ const Multiplayer = {
     }
   },
 
-  // 7. Host Controls: Start & Cancel Game
-  async hostStartGame() {
-    if (!this.isHost || !this.currentGame) return;
+  // 7. Room Controls: Start & Leave Game
+  async startGame() {
+    if (!this.currentGame) return;
 
     try {
       const btn = document.getElementById('mpStartGameBtn');
@@ -601,23 +501,19 @@ const Multiplayer = {
     }
   },
 
-  async hostCancelGame() {
-    if (!this.isHost || !this.currentGame) return;
-
-    if (confirm('Are you sure you want to cancel this game for all players?')) {
+  async leaveRoom() {
+    if (this.currentGame) {
       const code = this.currentGame.room_code;
-      await DB.updateMultiplayerGameStatus(this.currentGame.id, 'cancelled');
-      this.sendRealtimeBroadcast('cancel_game');
-      const localState = DB.getLocalLobbyState(code);
-      if (localState) {
-        localState.status = 'cancelled';
-        DB.saveLocalLobbyState(code, localState);
-      }
-      this.stopLobbyPolling();
-      this.unsubscribeRealtime();
-      App.showScreen('homeScreen');
+      this.sendRealtimeBroadcast('player_left', { user_id: DB.getUserUUID() });
     }
+    this.stopLobbyPolling();
+    this.unsubscribeRealtime();
+    App.showScreen('homeScreen');
   },
+
+  // Backward compatibility aliases
+  hostStartGame() { this.startGame(); },
+  hostCancelGame() { this.leaveRoom(); },
 
   // 8. Multiplayer Synchronized Trivia Gameplay
   startMultiplayerQuizGameplay() {
@@ -655,7 +551,7 @@ const Multiplayer = {
     if (feedbackBanner) feedbackBanner.className = 'feedback-banner hidden';
 
     if (nextBtn) {
-      nextBtn.style.display = this.isHost ? 'inline-block' : 'none';
+      nextBtn.style.display = 'inline-block';
       nextBtn.disabled = false;
     }
 

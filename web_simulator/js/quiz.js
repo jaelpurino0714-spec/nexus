@@ -155,10 +155,8 @@ const Quiz = {
     this.hideCustomHubModal();
     this.customFlowType = flow;
 
-    if (flow === 'join') {
-      Multiplayer.initJoinGameFlow();
-    } else if (flow === 'host') {
-      Multiplayer.initCreateGameFlow();
+    if (flow === 'multiplayer' || flow === 'join' || flow === 'host') {
+      Multiplayer.initRoomPortalFlow();
     } else if (flow === 'custom_play') {
       // Load saved custom settings from localStorage if available
       const saved = localStorage.getItem('nexus_custom_play_settings');
