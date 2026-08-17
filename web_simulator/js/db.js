@@ -690,6 +690,7 @@ const DB = {
           } catch (err) {}
         }
       }
+    }
     return game;
   },
 
