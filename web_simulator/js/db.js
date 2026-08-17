@@ -690,26 +690,6 @@ const DB = {
           } catch (err) {}
         }
       }
-    }
-
-    // Update LocalStorage state
-    if (localState) {
-      localState.participants = localState.participants || [];
-      const exists = localState.participants.some(p => p.user_id === userUuid || p.display_name === profile.name);
-      if (!exists) {
-        localState.participants.push({
-          user_id: userUuid,
-          display_name: profile.name || 'Player',
-          photo_url: profile.photo || null,
-          is_host: (game.host_id === userUuid),
-          score: 0,
-          correct_answers: 0,
-          wrong_answers: 0
-        });
-        this.saveLocalLobbyState(cleanCode, localState);
-      }
-    }
-
     return game;
   },
 
