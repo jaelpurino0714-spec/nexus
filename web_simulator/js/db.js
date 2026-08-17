@@ -738,29 +738,46 @@ const DB = {
       }
     }
 
-    if (!supabaseClient || !gameId) return [];
+    if (!supabaseClient) return [];
+
     try {
-      const { data: gameQ, error: gqErr } = await supabaseClient
-        .from('multiplayer_game_questions')
-        .select('question_id, question_order')
-        .eq('game_id', gameId)
-        .order('question_order', { ascending: true });
+      if (gameId) {
+        const { data: gameQ } = await supabaseClient
+          .from('multiplayer_game_questions')
+          .select('question_id, question_order')
+          .eq('game_id', gameId)
+          .order('question_order', { ascending: true });
 
-      if (gqErr || !gameQ || gameQ.length === 0) return [];
+        if (gameQ && gameQ.length > 0) {
+          const qIds = gameQ.map(item => item.question_id);
+          const { data: rawQ } = await supabaseClient.from('questions').select('*').in('id', qIds);
+          if (rawQ && rawQ.length > 0) {
+            const formatted = this._formatQuestions(rawQ);
+            const ordered = [];
+            gameQ.forEach(item => {
+              const found = formatted.find(q => q.id === item.question_id);
+              if (found) ordered.push(found);
+            });
+            if (ordered.length > 0) return ordered;
+          }
+        }
+      }
 
-      const qIds = gameQ.map(item => item.question_id);
-      const { data: rawQ } = await supabaseClient
-        .from('questions')
-        .select('*')
-        .in('id', qIds);
+      // Fallback query if multiplayer_game_questions not present
+      const gameObj = await this.getMultiplayerGameByCode(roomCode);
+      let query = supabaseClient.from('questions').select('*').eq('is_active', true);
+      if (gameObj && gameObj.term_id) query = query.eq('term_id', gameObj.term_id);
+      if (gameObj && gameObj.topic_id) query = query.eq('topic_id', gameObj.topic_id);
 
-      const formatted = this._formatQuestions(rawQ || []);
-      const ordered = [];
-      gameQ.forEach(item => {
-        const found = formatted.find(q => q.id === item.question_id);
-        if (found) ordered.push(found);
-      });
-      return ordered.length > 0 ? ordered : formatted;
+      let { data: fallbackQ } = await query.limit(30);
+      if (!fallbackQ || fallbackQ.length === 0) {
+        const { data: allQ } = await supabaseClient.from('questions').select('*').eq('is_active', true).limit(20);
+        fallbackQ = allQ || [];
+      }
+
+      const formatted = this._formatQuestions(fallbackQ);
+      const count = (gameObj && gameObj.question_count) ? gameObj.question_count : 10;
+      return formatted.slice(0, count);
     } catch (e) {
       console.error('Error fetching game questions:', e);
       return [];
@@ -813,16 +830,22 @@ const DB = {
   },
 
   async updateMultiplayerGameStatus(gameId, status, currentQIndex = 0) {
-    if (!supabaseClient || !gameId) return;
-    try {
-      const payload = { status: status, current_question_index: currentQIndex };
-      if (status === 'active' || status === 'starting') payload.started_at = new Date().toISOString();
-      if (status === 'finished' || status === 'cancelled') payload.ended_at = new Date().toISOString();
+    if (!gameId) return;
 
-      try { await supabaseClient.from('multiplayer_games').update(payload).eq('id', gameId); } catch (e) {}
-      try { await supabaseClient.from('quiz_lobbies').update({ status: status }).eq('id', gameId); } catch (e) {}
-    } catch (e) {
-      console.error('Error updating game status:', e);
+    const mpStatus = (status === 'in_progress') ? 'active' : (status === 'completed' ? 'finished' : status);
+    const qlStatus = (status === 'active' || status === 'starting') ? 'in_progress' : (status === 'finished' ? 'completed' : status);
+
+    const payloadMp = { status: mpStatus, current_question_index: currentQIndex };
+    if (mpStatus === 'active' || mpStatus === 'starting') payloadMp.started_at = new Date().toISOString();
+    if (mpStatus === 'finished' || mpStatus === 'cancelled') payloadMp.ended_at = new Date().toISOString();
+
+    const payloadQl = { status: qlStatus, current_question_index: currentQIndex, is_started: (qlStatus === 'in_progress'), is_finished: (qlStatus === 'completed') };
+
+    if (supabaseClient) {
+      try { await supabaseClient.from('multiplayer_games').update(payloadMp).eq('id', gameId); } catch (e) {}
+      try { await supabaseClient.from('multiplayer_games').update(payloadMp).eq('room_code', gameId); } catch (e) {}
+      try { await supabaseClient.from('quiz_lobbies').update(payloadQl).eq('id', gameId); } catch (e) {}
+      try { await supabaseClient.from('quiz_lobbies').update(payloadQl).eq('access_code', gameId); } catch (e) {}
     }
   },
 

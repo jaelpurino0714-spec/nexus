@@ -329,31 +329,38 @@ const Multiplayer = {
   async handleGameStatusUpdate(gameObj) {
     if (!gameObj) return;
 
-    if (gameObj.status === 'cancelled') {
+    const status = gameObj.status;
+
+    if (status === 'cancelled') {
+      this.stopLobbyPolling();
+      this.stopGameplayPolling();
       this.unsubscribeRealtime();
       alert('⚠️ The host has cancelled the game.');
       App.showScreen('homeScreen');
       return;
     }
 
-    if ((gameObj.status === 'starting' || gameObj.status === 'active') && App.currentScreen === 'mpLobbyWaitingScreen') {
-      // Host launched game -> fetch synced questions and start gameplay!
-      if (this.questionsList.length === 0) {
-        this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id);
-      }
+    if ((status === 'starting' || status === 'active' || status === 'in_progress') && App.currentScreen === 'mpLobbyWaitingScreen') {
+      this.stopLobbyPolling();
+      if (!this.currentGame) this.currentGame = gameObj;
+      const gId = this.currentGame ? this.currentGame.id : gameObj.id;
+      const rCode = this.currentGame ? this.currentGame.room_code : (gameObj.room_code || gameObj.access_code);
+
+      this.questionsList = await DB.getMultiplayerQuestions(gId, rCode);
       this.currentIndex = gameObj.current_question_index || 0;
       this.startMultiplayerQuizGameplay();
       return;
     }
 
-    if (gameObj.status === 'active' && App.currentScreen === 'mpQuizGameplayScreen') {
-      if (gameObj.current_question_index !== this.currentIndex) {
+    if ((status === 'active' || status === 'in_progress') && App.currentScreen === 'mpQuizGameplayScreen') {
+      if (gameObj.current_question_index !== undefined && gameObj.current_question_index !== this.currentIndex) {
         this.currentIndex = gameObj.current_question_index;
         this.renderCurrentQuestion();
       }
     }
 
-    if (gameObj.status === 'finished') {
+    if (status === 'finished' || status === 'completed') {
+      this.stopGameplayPolling();
       this.showFinalLeaderboard();
     }
   },
@@ -366,27 +373,31 @@ const Multiplayer = {
         this.stopLobbyPolling();
         return;
       }
-      if (this.currentGame) {
-        const gameData = await DB.getMultiplayerGameByCode(roomCode);
-        if (gameData) {
-          if (gameData.status === 'active' || gameData.status === 'in_progress' || gameData.status === 'starting') {
-            this.stopLobbyPolling();
-            this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id, roomCode);
-            this.currentIndex = gameData.current_question_index || 0;
-            this.startMultiplayerQuizGameplay();
-            return;
-          } else if (gameData.status === 'cancelled') {
-            this.stopLobbyPolling();
-            this.unsubscribeRealtime();
-            alert('⚠️ The host has cancelled the game.');
-            App.showScreen('homeScreen');
-            return;
-          }
+      const code = roomCode || (this.currentGame ? this.currentGame.room_code : null);
+      if (!code) return;
+
+      const gameData = await DB.getMultiplayerGameByCode(code);
+      if (gameData) {
+        if (gameData.status === 'active' || gameData.status === 'in_progress' || gameData.status === 'starting') {
+          this.stopLobbyPolling();
+          if (!this.currentGame) this.currentGame = gameData;
+          const gId = this.currentGame ? this.currentGame.id : gameData.id;
+
+          this.questionsList = await DB.getMultiplayerQuestions(gId, code);
+          this.currentIndex = gameData.current_question_index || 0;
+          this.startMultiplayerQuizGameplay();
+          return;
+        } else if (gameData.status === 'cancelled') {
+          this.stopLobbyPolling();
+          this.unsubscribeRealtime();
+          alert('⚠️ The host has cancelled the game.');
+          App.showScreen('homeScreen');
+          return;
         }
-        await this.refreshPlayersList();
-        this.renderLobbyUI();
       }
-    }, 1200);
+      await this.refreshPlayersList();
+      this.renderLobbyUI();
+    }, 1000);
   },
 
   stopLobbyPolling() {
