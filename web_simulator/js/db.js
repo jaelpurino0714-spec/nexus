@@ -7,7 +7,16 @@ const SUPABASE_URL = "https://bmebwqvdotwmtqcaxrnk.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtZWJ3cXZkb3R3bXRxY2F4cm5rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5NzUxNTQsImV4cCI6MjEwMTU1MTE1NH0._t0YaKroymMbtSnySVpe8Sw9uwUviAFYdkXeZADeVL8";
 
 const supabaseClient = (typeof window !== 'undefined' && window.supabase) 
-    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { persistSession: true },
+        realtime: {
+          params: {
+            eventsPerSecond: 10
+          },
+          timeout: 30000,
+          heartbeatIntervalMs: 15000
+        }
+      }) 
     : null;
 
 const DB = {

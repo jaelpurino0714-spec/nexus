@@ -262,7 +262,16 @@ const Multiplayer = {
 
   // 5. Supabase Realtime & BroadcastChannel Sync Engine
   subscribeToRealtime(roomCode) {
+    if (!roomCode) return;
+    const cleanCode = roomCode.toUpperCase().trim();
+
+    // Re-use active WebSocket channel if already subscribed to this room
+    if (this.currentRoomCode === cleanCode && this.realtimeChannel) {
+      return;
+    }
+
     this.unsubscribeRealtime();
+    this.currentRoomCode = cleanCode;
 
     const handleSync = async (updatedState) => {
       await this.refreshPlayersList();
@@ -279,7 +288,7 @@ const Multiplayer = {
     // BroadcastChannel sync
     if (typeof BroadcastChannel !== 'undefined') {
       try {
-        this.broadcastChannel = new BroadcastChannel('nexus_mp_channel_' + roomCode.toUpperCase().trim());
+        this.broadcastChannel = new BroadcastChannel('nexus_mp_channel_' + cleanCode);
         this.broadcastChannel.onmessage = (msg) => {
           if (msg.data && msg.data.state) {
             handleSync(msg.data.state);
@@ -290,7 +299,7 @@ const Multiplayer = {
 
     // Storage event sync
     this.storageListener = (e) => {
-      if (e.key === 'nexus_mp_lobby_' + roomCode.toUpperCase().trim()) {
+      if (e.key === 'nexus_mp_lobby_' + cleanCode) {
         try {
           const parsed = JSON.parse(e.newValue);
           handleSync(parsed);
@@ -302,7 +311,6 @@ const Multiplayer = {
     // 3. Supabase Realtime Channels (Broadcast + Presence + Postgres Changes)
     if (supabaseClient) {
       try {
-        const cleanCode = roomCode.toUpperCase().trim();
         const channelName = 'mp_game_' + cleanCode;
         const myUuid = DB.getUserUUID();
         const profile = DB.getStudentProfile() || { name: 'Player' };
@@ -389,11 +397,14 @@ const Multiplayer = {
   },
 
   unsubscribeRealtime() {
+    this.currentRoomCode = null;
     if (this.realtimeChannel && supabaseClient) {
-      try {
-        supabaseClient.removeChannel(this.realtimeChannel);
-      } catch (e) {}
+      const ch = this.realtimeChannel;
       this.realtimeChannel = null;
+      try { ch.untrack(); } catch (e) {}
+      setTimeout(() => {
+        try { supabaseClient.removeChannel(ch); } catch (e) {}
+      }, 100);
     }
     if (this.broadcastChannel) {
       try { this.broadcastChannel.close(); } catch (e) {}
