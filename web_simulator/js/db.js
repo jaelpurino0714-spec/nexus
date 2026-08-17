@@ -284,6 +284,15 @@ const DB = {
     return localStorage.getItem(this.STORAGE_USER_UUID);
   },
 
+  getUserUUID() {
+    let uuid = this.getStoredUUID();
+    if (!uuid) {
+      uuid = 'usr_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+      this.saveUserUUID(uuid);
+    }
+    return uuid;
+  },
+
   saveUserUUID(uuid) {
     localStorage.setItem(this.STORAGE_USER_UUID, uuid);
   },
