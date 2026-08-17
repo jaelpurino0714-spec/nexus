@@ -178,7 +178,7 @@ const Multiplayer = {
 
   async refreshPlayersList() {
     if (!this.currentGame) return;
-    this.playersList = await DB.getMultiplayerPlayers(this.currentGame.id);
+    this.playersList = await DB.getMultiplayerPlayers(this.currentGame.id, this.currentGame.room_code);
 
     // Identify current player
     const myUuid = DB.getUserUUID();
@@ -219,40 +219,78 @@ const Multiplayer = {
     if (this.isHost) {
       if (hostControls) hostControls.style.display = 'block';
       if (playerMsg) playerMsg.style.display = 'none';
-      if (startBtn) startBtn.disabled = (this.playersList.length < 1); // Allow minimum 1 for test, 2 for multi
+      if (startBtn) startBtn.disabled = (this.playersList.length < 1);
     } else {
       if (hostControls) hostControls.style.display = 'none';
       if (playerMsg) playerMsg.style.display = 'block';
     }
   },
 
-  // 5. Supabase Realtime Subscription Management
+  // 5. Supabase Realtime & BroadcastChannel Sync Engine
   subscribeToRealtime(roomCode) {
     this.unsubscribeRealtime();
 
-    if (!supabaseClient) return;
+    const handleSync = async (updatedState) => {
+      await this.refreshPlayersList();
+      if (updatedState && updatedState.status) {
+        this.handleGameStatusUpdate(updatedState);
+      }
+      if (App.currentScreen === 'mpLobbyWaitingScreen') {
+        this.renderLobbyUI();
+      } else if (App.currentScreen === 'mpQuizGameplayScreen') {
+        this.renderLiveScoreboard();
+      }
+    };
 
-    try {
-      const channelName = 'mp_game_' + roomCode;
-      this.realtimeChannel = supabaseClient
-        .channel(channelName)
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'multiplayer_players' }, async () => {
-          await this.refreshPlayersList();
-          if (App.currentScreen === 'mpLobbyWaitingScreen') {
-            this.renderLobbyUI();
-          } else if (App.currentScreen === 'mpQuizGameplayScreen') {
-            this.renderLiveScoreboard();
+    // BroadcastChannel sync
+    if (typeof BroadcastChannel !== 'undefined') {
+      try {
+        this.broadcastChannel = new BroadcastChannel('nexus_mp_channel_' + roomCode.toUpperCase().trim());
+        this.broadcastChannel.onmessage = (msg) => {
+          if (msg.data && msg.data.state) {
+            handleSync(msg.data.state);
           }
-        })
-        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'multiplayer_games' }, async (payload) => {
-          const updated = payload.new;
-          if (updated && updated.room_code === roomCode) {
-            this.handleGameStatusUpdate(updated);
-          }
-        })
-        .subscribe();
-    } catch (e) {
-      console.warn('Realtime subscription fallback:', e);
+        };
+      } catch (e) {}
+    }
+
+    // Storage event sync
+    this.storageListener = (e) => {
+      if (e.key === 'nexus_mp_lobby_' + roomCode.toUpperCase().trim()) {
+        try {
+          const parsed = JSON.parse(e.newValue);
+          handleSync(parsed);
+        } catch (err) {}
+      }
+    };
+    window.addEventListener('storage', this.storageListener);
+
+    // Supabase Realtime sync
+    if (supabaseClient) {
+      try {
+        const channelName = 'mp_game_' + roomCode;
+        this.realtimeChannel = supabaseClient
+          .channel(channelName)
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'multiplayer_players' }, async () => {
+            handleSync();
+          })
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'lobby_participants' }, async () => {
+            handleSync();
+          })
+          .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'multiplayer_games' }, async (payload) => {
+            if (payload.new && payload.new.room_code === roomCode) {
+              handleSync(payload.new);
+            }
+          })
+          .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'quiz_lobbies' }, async (payload) => {
+            if (payload.new && payload.new.access_code === roomCode) {
+              handleSync(payload.new);
+            }
+          })
+          .subscribe();
+      } catch (e) {
+        console.warn('Realtime subscription fallback:', e);
+      }
     }
   },
 
@@ -262,6 +300,14 @@ const Multiplayer = {
         supabaseClient.removeChannel(this.realtimeChannel);
       } catch (e) {}
       this.realtimeChannel = null;
+    }
+    if (this.broadcastChannel) {
+      try { this.broadcastChannel.close(); } catch (e) {}
+      this.broadcastChannel = null;
+    }
+    if (this.storageListener) {
+      window.removeEventListener('storage', this.storageListener);
+      this.storageListener = null;
     }
   },
 
