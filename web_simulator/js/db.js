@@ -832,6 +832,52 @@ const DB = {
       await supabaseClient.from('multiplayer_games').update({ qr_code_url: qrUrl }).eq('id', gameId);
       await supabaseClient.from('quiz_lobbies').update({ host_photo_url: qrUrl }).eq('id', gameId);
     } catch (e) {}
+  },
+
+  async getMultiplayerGameByCode(roomCode) {
+    if (!roomCode) return null;
+    const cleanCode = roomCode.toUpperCase().trim();
+
+    if (supabaseClient) {
+      try {
+        const { data: gData } = await supabaseClient
+          .from('multiplayer_games')
+          .select('*')
+          .eq('room_code', cleanCode)
+          .maybeSingle();
+
+        if (gData) return gData;
+
+        const { data: lData } = await supabaseClient
+          .from('quiz_lobbies')
+          .select('*')
+          .eq('access_code', cleanCode)
+          .maybeSingle();
+
+        if (lData) {
+          return {
+            id: lData.id,
+            room_code: lData.access_code,
+            status: lData.status === 'in_progress' ? 'active' : (lData.status || 'waiting'),
+            host_id: lData.host_id,
+            current_question_index: lData.current_question_index || 0
+          };
+        }
+      } catch (e) {}
+    }
+
+    const localState = this.getLocalLobbyState(cleanCode);
+    if (localState) {
+      return {
+        id: localState.gameId,
+        room_code: cleanCode,
+        status: localState.status || 'waiting',
+        host_id: localState.hostId,
+        current_question_index: localState.currentIndex || 0
+      };
+    }
+
+    return null;
   }
 };
 

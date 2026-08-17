@@ -186,8 +186,9 @@ const Multiplayer = {
     await this.refreshPlayersList();
     this.renderLobbyUI();
 
-    // Subscribe to Supabase Realtime Channel
+    // Subscribe to Supabase Realtime & Start Lobby Polling Engine
     this.subscribeToRealtime(cleanCode);
+    this.startLobbyPolling(cleanCode);
   },
 
   async refreshPlayersList() {
@@ -357,7 +358,78 @@ const Multiplayer = {
     }
   },
 
-  // 6. Host Controls: Start & Cancel Game
+  // 6. Lobby & Gameplay Polling Engine
+  startLobbyPolling(roomCode) {
+    this.stopLobbyPolling();
+    this.lobbyPollInterval = setInterval(async () => {
+      if (App.currentScreen !== 'mpLobbyWaitingScreen') {
+        this.stopLobbyPolling();
+        return;
+      }
+      if (this.currentGame) {
+        const gameData = await DB.getMultiplayerGameByCode(roomCode);
+        if (gameData) {
+          if (gameData.status === 'active' || gameData.status === 'in_progress' || gameData.status === 'starting') {
+            this.stopLobbyPolling();
+            this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id, roomCode);
+            this.currentIndex = gameData.current_question_index || 0;
+            this.startMultiplayerQuizGameplay();
+            return;
+          } else if (gameData.status === 'cancelled') {
+            this.stopLobbyPolling();
+            this.unsubscribeRealtime();
+            alert('⚠️ The host has cancelled the game.');
+            App.showScreen('homeScreen');
+            return;
+          }
+        }
+        await this.refreshPlayersList();
+        this.renderLobbyUI();
+      }
+    }, 1200);
+  },
+
+  stopLobbyPolling() {
+    if (this.lobbyPollInterval) {
+      clearInterval(this.lobbyPollInterval);
+      this.lobbyPollInterval = null;
+    }
+  },
+
+  startGameplayPolling(roomCode) {
+    this.stopGameplayPolling();
+    this.gameplayPollInterval = setInterval(async () => {
+      if (App.currentScreen !== 'mpQuizGameplayScreen') {
+        this.stopGameplayPolling();
+        return;
+      }
+      if (this.currentGame) {
+        const gameData = await DB.getMultiplayerGameByCode(roomCode);
+        if (gameData) {
+          if (gameData.status === 'finished') {
+            this.stopGameplayPolling();
+            this.showFinalLeaderboard();
+            return;
+          }
+          if (gameData.current_question_index !== undefined && gameData.current_question_index !== this.currentIndex) {
+            this.currentIndex = gameData.current_question_index;
+            this.renderCurrentQuestion();
+          }
+        }
+        await this.refreshPlayersList();
+        this.renderLiveScoreboard();
+      }
+    }, 1500);
+  },
+
+  stopGameplayPolling() {
+    if (this.gameplayPollInterval) {
+      clearInterval(this.gameplayPollInterval);
+      this.gameplayPollInterval = null;
+    }
+  },
+
+  // 7. Host Controls: Start & Cancel Game
   async hostStartGame() {
     if (!this.isHost || !this.currentGame) return;
 
@@ -365,11 +437,18 @@ const Multiplayer = {
       const btn = document.getElementById('mpStartGameBtn');
       if (btn) btn.disabled = true;
 
-      // Update game status in Supabase to active
+      const code = this.currentGame.room_code;
       await DB.updateMultiplayerGameStatus(this.currentGame.id, 'active', 0);
 
+      const localState = DB.getLocalLobbyState(code);
+      if (localState) {
+        localState.status = 'active';
+        localState.currentIndex = 0;
+        DB.saveLocalLobbyState(code, localState);
+      }
+
       if (this.questionsList.length === 0) {
-        this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id);
+        this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id, code);
       }
       this.currentIndex = 0;
       this.startMultiplayerQuizGameplay();
@@ -383,15 +462,26 @@ const Multiplayer = {
     if (!this.isHost || !this.currentGame) return;
 
     if (confirm('Are you sure you want to cancel this game for all players?')) {
+      const code = this.currentGame.room_code;
       await DB.updateMultiplayerGameStatus(this.currentGame.id, 'cancelled');
+      const localState = DB.getLocalLobbyState(code);
+      if (localState) {
+        localState.status = 'cancelled';
+        DB.saveLocalLobbyState(code, localState);
+      }
+      this.stopLobbyPolling();
       this.unsubscribeRealtime();
       App.showScreen('homeScreen');
     }
   },
 
-  // 7. Multiplayer Synchronized Trivia Gameplay
+  // 8. Multiplayer Synchronized Trivia Gameplay
   startMultiplayerQuizGameplay() {
+    this.stopLobbyPolling();
     App.showScreen('mpQuizGameplayScreen');
+    if (this.currentGame) {
+      this.startGameplayPolling(this.currentGame.room_code);
+    }
     this.renderCurrentQuestion();
   },
 
@@ -685,6 +775,8 @@ const Multiplayer = {
   },
 
   resetState() {
+    this.stopLobbyPolling();
+    this.stopGameplayPolling();
     this.unsubscribeRealtime();
     clearInterval(this.timerInterval);
     this.currentGame = null;
