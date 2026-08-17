@@ -217,7 +217,14 @@ const Multiplayer = {
 
     // Filter joined players (excluding the host)
     const hostUuid = this.currentGame ? this.currentGame.host_id : null;
-    const joinedOnly = this.playersList.filter(p => !p.is_host && p.user_id !== hostUuid);
+    let joinedOnly = this.playersList.filter(p => !p.is_host && p.user_id !== hostUuid);
+
+    if (joinedOnly.length === 0 && this.playersList.length > 0) {
+      joinedOnly = this.playersList.filter(p => p.user_id !== hostUuid);
+    }
+    if (joinedOnly.length === 0 && this.playersList.length > 1) {
+      joinedOnly = this.playersList.slice(1);
+    }
 
     if (countEl) countEl.textContent = `Joined Players (${joinedOnly.length}/10)`;
     if (listEl) {
@@ -246,7 +253,7 @@ const Multiplayer = {
     if (this.isHost) {
       if (hostControls) hostControls.style.display = 'block';
       if (playerMsg) playerMsg.style.display = 'none';
-      if (startBtn) startBtn.disabled = (joinedOnly.length < 1);
+      if (startBtn) startBtn.disabled = false;
     } else {
       if (hostControls) hostControls.style.display = 'none';
       if (playerMsg) playerMsg.style.display = 'block';

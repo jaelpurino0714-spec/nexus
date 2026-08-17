@@ -333,7 +333,11 @@ const DB = {
   },
 
   getUserUUID() {
-    let uuid = this.getStoredUUID();
+    let uuid = null;
+    try {
+      uuid = sessionStorage.getItem('nexus_session_tab_uuid');
+    } catch (e) {}
+
     const isValidUUID = uuid && uuid.length === 36 && uuid.includes('-');
     if (!isValidUUID) {
       uuid = (typeof crypto !== 'undefined' && crypto.randomUUID) 
@@ -343,6 +347,9 @@ const DB = {
             const v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
           });
+      try {
+        sessionStorage.setItem('nexus_session_tab_uuid', uuid);
+      } catch (e) {}
       this.saveUserUUID(uuid);
     }
     return uuid;
