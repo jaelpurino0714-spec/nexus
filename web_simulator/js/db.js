@@ -679,21 +679,50 @@ const DB = {
   async getMultiplayerPlayers(gameId, roomCode) {
     let players = [];
 
-    if (supabaseClient && gameId) {
+    if (supabaseClient) {
       try {
-        const { data: p1, error: e1 } = await supabaseClient
-          .from('multiplayer_players')
-          .select('*')
-          .eq('game_id', gameId)
-          .order('score', { ascending: false });
+        let targetGameIds = [gameId].filter(Boolean);
 
-        if (!e1 && p1 && p1.length > 0) {
-          players = p1;
-        } else {
+        // Lookup exact Supabase game id by roomCode
+        if (roomCode) {
+          const cleanCode = roomCode.toUpperCase().trim();
+          const { data: g } = await supabaseClient
+            .from('multiplayer_games')
+            .select('id')
+            .eq('room_code', cleanCode)
+            .maybeSingle();
+
+          if (g && g.id && !targetGameIds.includes(g.id)) {
+            targetGameIds.push(g.id);
+          }
+
+          const { data: l } = await supabaseClient
+            .from('quiz_lobbies')
+            .select('id')
+            .eq('access_code', cleanCode)
+            .maybeSingle();
+
+          if (l && l.id && !targetGameIds.includes(l.id)) {
+            targetGameIds.push(l.id);
+          }
+        }
+
+        for (const targetId of targetGameIds) {
+          const { data: p1 } = await supabaseClient
+            .from('multiplayer_players')
+            .select('*')
+            .eq('game_id', targetId)
+            .order('score', { ascending: false });
+
+          if (p1 && p1.length > 0) {
+            players = p1;
+            break;
+          }
+
           const { data: p2 } = await supabaseClient
             .from('lobby_participants')
             .select('*')
-            .eq('lobby_id', gameId);
+            .eq('lobby_id', targetId);
 
           if (p2 && p2.length > 0) {
             players = p2.map(p => ({
@@ -709,6 +738,7 @@ const DB = {
               is_finished: p.is_finished || false,
               is_host: false
             }));
+            break;
           }
         }
       } catch (e) {

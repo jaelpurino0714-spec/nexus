@@ -207,13 +207,17 @@ const Multiplayer = {
     const playerMsg = document.getElementById('mpPlayerWaitingMsg');
     const startBtn = document.getElementById('mpStartGameBtn');
 
-    if (countEl) countEl.textContent = `Joined Players (${this.playersList.length}/10)`;
+    // Filter joined players (excluding the host)
+    const hostUuid = this.currentGame ? this.currentGame.host_id : null;
+    const joinedOnly = this.playersList.filter(p => !p.is_host && p.user_id !== hostUuid);
+
+    if (countEl) countEl.textContent = `Joined Players (${joinedOnly.length}/10)`;
     if (listEl) {
       listEl.innerHTML = '';
-      if (this.playersList.length === 0) {
+      if (joinedOnly.length === 0) {
         listEl.innerHTML = '<div style="color:#94A3B8; padding:16px; text-align:center;">Waiting for players to join...</div>';
       } else {
-        this.playersList.forEach(p => {
+        joinedOnly.forEach(p => {
           const card = document.createElement('div');
           card.className = 'lobby-part-card';
           const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
@@ -221,8 +225,8 @@ const Multiplayer = {
             <div class="part-info-left">
               <img src="${p.photo_url || defaultAvatar}" class="part-avatar" alt="${p.display_name}">
               <div>
-                <h5 style="margin:0; font-size:0.9rem; color:#1E293B;">${p.display_name} ${p.is_host ? '<span class="badge" style="background:#DDD6FE; color:#6D28D9; padding:2px 6px; border-radius:6px; font-size:0.7rem;">HOST</span>' : ''}</h5>
-                <span style="font-size:0.72rem; color:#64748B;">Ready to play</span>
+                <h5 style="margin:0; font-size:0.9rem; color:#1E293B;">${p.display_name}</h5>
+                <span style="font-size:0.72rem; color:#10B981; font-weight:600;">● Joined & Ready</span>
               </div>
             </div>
           `;
@@ -234,7 +238,7 @@ const Multiplayer = {
     if (this.isHost) {
       if (hostControls) hostControls.style.display = 'block';
       if (playerMsg) playerMsg.style.display = 'none';
-      if (startBtn) startBtn.disabled = (this.playersList.length < 1);
+      if (startBtn) startBtn.disabled = (joinedOnly.length < 1);
     } else {
       if (hostControls) hostControls.style.display = 'none';
       if (playerMsg) playerMsg.style.display = 'block';
@@ -526,51 +530,90 @@ const Multiplayer = {
       nextBtn.disabled = false;
     }
 
-    // Render Answer Options
+    // Render Answer Options (Host Mode vs Player Mode)
     const container = document.getElementById('mpAnswersContainer');
     if (container) {
       container.innerHTML = '';
 
-      if (q.type === 'tf') {
-        ['True', 'False'].forEach(label => {
-          const btn = document.createElement('button');
-          btn.className = 'answer-option-btn tf-option-btn';
-          btn.innerHTML = `<span>${label}</span>`;
-          btn.onclick = () => this.handleAnswerSubmit(label);
-          container.appendChild(btn);
-        });
-      } else if (q.type === 'id') {
-        const wrap = document.createElement('div');
-        wrap.className = 'identification-wrapper';
-        wrap.style.display = 'flex';
-        wrap.style.flexDirection = 'column';
-        wrap.style.gap = '10px';
-        wrap.innerHTML = `
-          <input type="text" id="mpIdInput" placeholder="Type answer here..." class="identification-input-field" autocomplete="off">
-          <button id="mpIdSubmitBtn" class="next-question-btn">Submit Answer ➡</button>
-        `;
-        container.appendChild(wrap);
+      if (this.isHost) {
+        // Host viewing mode notice banner
+        const hostNotice = document.createElement('div');
+        hostNotice.style.cssText = 'background:#EEF2FF; border:1px solid #C7D2FE; color:#3730A3; padding:10px 14px; border-radius:12px; font-weight:700; font-size:0.85rem; text-align:center; margin-bottom:12px;';
+        hostNotice.innerHTML = '👑 <b>Host Viewing Mode</b> — Viewing question & live player scoreboard. Press <b>Next Question ➡</b> when ready.';
+        container.appendChild(hostNotice);
 
-        const inputEl = document.getElementById('mpIdInput');
-        const subBtn = document.getElementById('mpIdSubmitBtn');
-        if (subBtn) subBtn.onclick = () => this.handleAnswerSubmit(inputEl.value);
-        if (inputEl) {
-          inputEl.onkeyup = (e) => { if (e.key === 'Enter') subBtn.click(); };
-          setTimeout(() => inputEl.focus(), 100);
+        // Display read-only option choices for host
+        if (q.type === 'tf') {
+          ['True', 'False'].forEach(label => {
+            const btn = document.createElement('button');
+            btn.className = 'answer-option-btn tf-option-btn';
+            btn.disabled = true;
+            btn.style.opacity = '0.85';
+            btn.style.cursor = 'default';
+            btn.innerHTML = `<span>${label}</span>`;
+            container.appendChild(btn);
+          });
+        } else if (q.type === 'id') {
+          const wrap = document.createElement('div');
+          wrap.innerHTML = `<div style="padding:12px; background:#F8FAFC; border:1px dashed #CBD5E1; border-radius:10px; color:#475569; text-align:center; font-weight:600;">Identification Question — Waiting for joined players to type answers.</div>`;
+          container.appendChild(wrap);
+        } else {
+          const prefixes = ['A', 'B', 'C', 'D'];
+          (q.options || []).forEach((optText, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'answer-option-btn';
+            btn.disabled = true;
+            btn.style.opacity = '0.85';
+            btn.style.cursor = 'default';
+            btn.innerHTML = `
+              <div class="option-badge-pill"><span class="badge-letter">${prefixes[idx] || 'A'}</span></div>
+              <span>${optText}</span>
+            `;
+            container.appendChild(btn);
+          });
         }
       } else {
-        // Multiple Choice
-        const prefixes = ['A', 'B', 'C', 'D'];
-        (q.options || []).forEach((optText, idx) => {
-          const btn = document.createElement('button');
-          btn.className = 'answer-option-btn';
-          btn.innerHTML = `
-            <div class="option-badge-pill"><span class="badge-letter">${prefixes[idx] || 'A'}</span></div>
-            <span>${optText}</span>
+        // Player interactive mode
+        if (q.type === 'tf') {
+          ['True', 'False'].forEach(label => {
+            const btn = document.createElement('button');
+            btn.className = 'answer-option-btn tf-option-btn';
+            btn.innerHTML = `<span>${label}</span>`;
+            btn.onclick = () => this.handleAnswerSubmit(label);
+            container.appendChild(btn);
+          });
+        } else if (q.type === 'id') {
+          const wrap = document.createElement('div');
+          wrap.className = 'identification-wrapper';
+          wrap.style.display = 'flex';
+          wrap.style.flexDirection = 'column';
+          wrap.style.gap = '10px';
+          wrap.innerHTML = `
+            <input type="text" id="mpIdInput" placeholder="Type answer here..." class="identification-input-field" autocomplete="off">
+            <button id="mpIdSubmitBtn" class="next-question-btn">Submit Answer ➡</button>
           `;
-          btn.onclick = () => this.handleAnswerSubmit(idx);
-          container.appendChild(btn);
-        });
+          container.appendChild(wrap);
+
+          const inputEl = document.getElementById('mpIdInput');
+          const subBtn = document.getElementById('mpIdSubmitBtn');
+          if (subBtn) subBtn.onclick = () => this.handleAnswerSubmit(inputEl.value);
+          if (inputEl) {
+            inputEl.onkeyup = (e) => { if (e.key === 'Enter') subBtn.click(); };
+            setTimeout(() => inputEl.focus(), 100);
+          }
+        } else {
+          const prefixes = ['A', 'B', 'C', 'D'];
+          (q.options || []).forEach((optText, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'answer-option-btn';
+            btn.innerHTML = `
+              <div class="option-badge-pill"><span class="badge-letter">${prefixes[idx] || 'A'}</span></div>
+              <span>${optText}</span>
+            `;
+            btn.onclick = () => this.handleAnswerSubmit(idx);
+            container.appendChild(btn);
+          });
+        }
       }
     }
 
@@ -601,7 +644,7 @@ const Multiplayer = {
 
   // 8. Answer Submission & Scoring
   async handleAnswerSubmit(userChoice) {
-    if (this.hasAnsweredCurrent) return;
+    if (this.isHost || this.hasAnsweredCurrent) return;
     this.hasAnsweredCurrent = true;
     clearInterval(this.timerInterval);
 
