@@ -458,9 +458,11 @@ const DB = {
   async createMultiplayerGame(config) {
     const userUuid = this.getUserUUID();
     const profile = this.getActiveProfile();
+    profile.id = userUuid;
     try {
       await this.saveStudentProfile(profile);
     } catch (e) {}
+
     const roomCode = this.generate6CharRoomCode();
 
     let selectedQuestions = [];
@@ -533,8 +535,21 @@ const DB = {
               game_id: gameData.id,
               user_id: userUuid,
               display_name: profile.name || 'Host',
-              photo_url: profile.photo || null,
+              photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null,
               is_host: true
+            });
+          } catch (e) {}
+
+          // Fallback table entry
+          try {
+            await supabaseClient.from('quiz_lobbies').insert({
+              id: gameData.id,
+              access_code: roomCode,
+              host_id: userUuid,
+              host_name: profile.name || 'Host',
+              quiz_title: 'Multiplayer Trivia',
+              question_count: selectedQuestions.length || 10,
+              status: 'waiting'
             });
           } catch (e) {}
         } else {
@@ -563,7 +578,7 @@ const DB = {
                 lobby_id: gameData.id,
                 student_id: userUuid,
                 student_name: profile.name || 'Host',
-                photo_url: profile.photo || null
+                photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null
               });
             } catch (e) {}
           }
@@ -589,6 +604,7 @@ const DB = {
       },
       participants: [{
         user_id: userUuid,
+        id: userUuid,
         display_name: profile.name || 'Host',
         photo_url: profile.photo || null,
         is_host: true,
@@ -610,9 +626,13 @@ const DB = {
 
     const userUuid = this.getUserUUID();
     const profile = this.getActiveProfile();
+    profile.id = userUuid;
+
+    // Save student profile to Supabase first to satisfy profiles FK constraint
     try {
       await this.saveStudentProfile(profile);
     } catch (e) {}
+
     let game = null;
 
     if (supabaseClient) {
@@ -676,45 +696,49 @@ const DB = {
 
     // Insert or Upsert Player into Supabase
     if (supabaseClient && !game.isLocalOnly) {
-      if (game.isQuizLobbies) {
-        try {
-          await supabaseClient.from('lobby_participants').upsert({
-            lobby_id: game.id,
-            student_id: userUuid,
-            student_name: profile.name || 'Player',
-            photo_url: profile.photo || null
-          }, { onConflict: 'lobby_id,student_id' });
-        } catch (e) {
-          try {
-            await supabaseClient.from('lobby_participants').insert({
-              lobby_id: game.id,
-              student_id: userUuid,
-              student_name: profile.name || 'Player',
-              photo_url: profile.photo || null
-            });
-          } catch (err) {}
+      // 1. Upsert / Insert into multiplayer_players
+      try {
+        const payloadMp = {
+          game_id: game.id,
+          user_id: userUuid,
+          display_name: profile.name || 'Player',
+          photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null,
+          is_host: isHost
+        };
+        const { error: upErr } = await supabaseClient
+          .from('multiplayer_players')
+          .upsert(payloadMp, { onConflict: 'game_id,user_id' });
+
+        if (upErr) {
+          await supabaseClient.from('multiplayer_players').insert(payloadMp);
         }
-      } else {
+      } catch (e) {
         try {
-          await supabaseClient.from('multiplayer_players').upsert({
+          await supabaseClient.from('multiplayer_players').insert({
             game_id: game.id,
-            user_id: userUuid,
             display_name: profile.name || 'Player',
-            photo_url: profile.photo || null,
+            photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null,
             is_host: isHost
-          }, { onConflict: 'game_id,user_id' });
-        } catch (e) {
-          try {
-            await supabaseClient.from('multiplayer_players').insert({
-              game_id: game.id,
-              user_id: userUuid,
-              display_name: profile.name || 'Player',
-              photo_url: profile.photo || null,
-              is_host: isHost
-            });
-          } catch (err) {}
-        }
+          });
+        } catch (err) {}
       }
+
+      // 2. Dual fallback insert into lobby_participants
+      try {
+        const payloadLobby = {
+          lobby_id: game.id,
+          student_id: userUuid,
+          student_name: profile.name || 'Player',
+          photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null
+        };
+        const { error: lErr } = await supabaseClient
+          .from('lobby_participants')
+          .upsert(payloadLobby, { onConflict: 'lobby_id,student_id' });
+
+        if (lErr) {
+          await supabaseClient.from('lobby_participants').insert(payloadLobby);
+        }
+      } catch (e) {}
     }
 
     // Always update local lobby state for local/multi-tab sync
@@ -729,7 +753,7 @@ const DB = {
       };
     }
     if (!localState.participants) localState.participants = [];
-    const exists = localState.participants.some(p => (p.user_id === userUuid || p.id === userUuid));
+    const exists = localState.participants.some(p => (p.user_id === userUuid || p.id === userUuid || p.display_name === profile.name));
     if (!exists) {
       localState.participants.push({
         user_id: userUuid,
@@ -753,28 +777,35 @@ const DB = {
     // 1. Fetch from Supabase tables if connected
     if (supabaseClient) {
       try {
-        let targetGameIds = [gameId].filter(Boolean);
+        let targetGameIds = [];
+        if (gameId) targetGameIds.push(gameId);
 
         if (roomCode) {
           const cleanCode = roomCode.toUpperCase().trim();
-          const { data: g } = await supabaseClient
+          const { data: gList } = await supabaseClient
             .from('multiplayer_games')
             .select('id')
-            .eq('room_code', cleanCode)
-            .maybeSingle();
+            .eq('room_code', cleanCode);
 
-          if (g && g.id && !targetGameIds.includes(g.id)) {
-            targetGameIds.push(g.id);
+          if (gList && gList.length > 0) {
+            gList.forEach(g => {
+              if (g && g.id && !targetGameIds.includes(g.id)) {
+                targetGameIds.push(g.id);
+              }
+            });
           }
 
-          const { data: l } = await supabaseClient
+          const { data: lList } = await supabaseClient
             .from('quiz_lobbies')
             .select('id')
-            .eq('access_code', cleanCode)
-            .maybeSingle();
+            .eq('access_code', cleanCode);
 
-          if (l && l.id && !targetGameIds.includes(l.id)) {
-            targetGameIds.push(l.id);
+          if (lList && lList.length > 0) {
+            lList.forEach(l => {
+              if (l && l.id && !targetGameIds.includes(l.id)) {
+                targetGameIds.push(l.id);
+              }
+            });
           }
         }
 
@@ -782,8 +813,7 @@ const DB = {
           const { data: p1 } = await supabaseClient
             .from('multiplayer_players')
             .select('*')
-            .eq('game_id', targetId)
-            .order('score', { ascending: false });
+            .eq('game_id', targetId);
 
           if (p1 && p1.length > 0) {
             p1.forEach(p => {

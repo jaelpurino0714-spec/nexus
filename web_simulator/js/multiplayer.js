@@ -157,6 +157,10 @@ const Multiplayer = {
         this.startMultiplayerQuizGameplay();
       } else {
         await this.enterLobbyWaitingScreen(code);
+        this.sendRealtimeBroadcast('player_joined', {
+          user_id: DB.getUserUUID(),
+          display_name: (DB.getStudentProfile() || {}).name || 'Player'
+        });
       }
     } catch (e) {
       console.error(e);
@@ -372,7 +376,11 @@ const Multiplayer = {
         this.realtimeChannel.on('broadcast', { event: 'game_action' }, (payload) => {
           if (payload && payload.payload) {
             const data = payload.payload;
-            if (data.action === 'start_game') {
+            if (data.action === 'player_joined' || data.action === 'join') {
+              this.refreshPlayersList().then(() => {
+                if (App.currentScreen === 'mpLobbyWaitingScreen') this.renderLobbyUI();
+              });
+            } else if (data.action === 'start_game') {
               this.handleGameStatusUpdate({ status: 'active', current_question_index: 0 });
             } else if (data.action === 'next_question') {
               this.handleGameStatusUpdate({ status: 'active', current_question_index: data.index });
