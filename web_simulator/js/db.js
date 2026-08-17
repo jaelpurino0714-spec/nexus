@@ -470,21 +470,28 @@ const DB = {
           question_id: q.id,
           question_order: idx + 1
         }));
-        await supabaseClient.from('multiplayer_game_questions').insert(questionEntries).catch(() => {});
+        try {
+          await supabaseClient.from('multiplayer_game_questions').insert(questionEntries);
+        } catch (e) {
+          console.warn('Error inserting game questions:', e);
+        }
       }
 
       // 5. Insert Host Player into multiplayer_players
       if (gameData && gameData.id) {
-        await supabaseClient
-          .from('multiplayer_players')
-          .insert({
-            game_id: gameData.id,
-            user_id: userUuid,
-            display_name: profile.name || 'Host',
-            photo_url: profile.photo || null,
-            is_host: true
-          })
-          .catch(() => {});
+        try {
+          await supabaseClient
+            .from('multiplayer_players')
+            .insert({
+              game_id: gameData.id,
+              user_id: userUuid,
+              display_name: profile.name || 'Host',
+              photo_url: profile.photo || null,
+              is_host: true
+            });
+        } catch (e) {
+          console.warn('Error inserting host player:', e);
+        }
       }
 
       gameData.formattedQuestions = formattedQuestions;
@@ -650,8 +657,10 @@ const DB = {
           is_correct: isCorrect,
           response_time: responseTime || 0,
           points_earned: pointsEarned || 0
-        })
-        .catch(() => {});
+        });
+    } catch (e) {
+      console.warn('Error inserting multiplayer answer:', e);
+    }
 
       // Update player score & stats
       const { data: player } = await supabaseClient
