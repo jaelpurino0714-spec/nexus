@@ -658,9 +658,6 @@ const DB = {
           response_time: responseTime || 0,
           points_earned: pointsEarned || 0
         });
-    } catch (e) {
-      console.warn('Error inserting multiplayer answer:', e);
-    }
 
       // Update player score & stats
       const { data: player } = await supabaseClient
