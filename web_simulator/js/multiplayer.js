@@ -201,11 +201,45 @@ const Multiplayer = {
 
   async refreshPlayersList() {
     if (!this.currentGame) return;
-    this.playersList = await DB.getMultiplayerPlayers(this.currentGame.id, this.currentGame.room_code);
+    const roomCode = this.currentGame.room_code || this.currentRoomCode;
+    const fetched = await DB.getMultiplayerPlayers(this.currentGame.id, roomCode);
+
+    const mergedMap = new Map();
+    (fetched || []).forEach(p => {
+      const key = p.user_id || p.id || p.display_name;
+      if (key) mergedMap.set(key, p);
+    });
+
+    if (this.realtimeChannel && typeof this.realtimeChannel.presenceState === 'function') {
+      try {
+        const presenceObj = this.realtimeChannel.presenceState();
+        Object.values(presenceObj).forEach(presences => {
+          (presences || []).forEach(p => {
+            const key = p.user_id || p.id || p.display_name;
+            if (key && !mergedMap.has(key)) {
+              mergedMap.set(key, {
+                id: p.user_id || key,
+                user_id: p.user_id || key,
+                display_name: p.display_name || p.name || 'Player',
+                photo_url: p.photo_url || p.photo || null,
+                is_host: !!p.is_host,
+                score: 0,
+                correct_answers: 0,
+                wrong_answers: 0
+              });
+            }
+          });
+        });
+      } catch (e) {}
+    }
+
+    this.playersList = Array.from(mergedMap.values());
 
     // Identify current player
     const myUuid = DB.getUserUUID();
-    this.currentPlayer = this.playersList.find(p => p.user_id === myUuid || p.is_host === this.isHost) || this.playersList[0];
+    this.currentPlayer = this.playersList.find(p => p.user_id === myUuid || p.id === myUuid) ||
+                         this.playersList.find(p => (p.is_host && this.isHost)) ||
+                         this.playersList[0];
   },
 
   renderLobbyUI() {
@@ -218,7 +252,7 @@ const Multiplayer = {
     const hostUuid = this.currentGame ? this.currentGame.host_id : null;
     const allPlayers = this.playersList || [];
 
-    if (countEl) countEl.textContent = `Lobby Participants (${allPlayers.length}/10)`;
+    if (countEl) countEl.textContent = `Joined Players (${allPlayers.length}/10)`;
     if (listEl) {
       listEl.innerHTML = '';
       if (allPlayers.length === 0) {
@@ -227,13 +261,15 @@ const Multiplayer = {
         allPlayers.forEach(p => {
           const card = document.createElement('div');
           card.className = 'lobby-part-card';
-          const isHostEntry = p.is_host || p.user_id === hostUuid;
+          const isHostEntry = p.is_host || p.user_id === hostUuid || p.id === hostUuid;
+          const displayName = p.display_name || p.name || p.student_name || 'Player';
+          const photoUrl = p.photo_url || p.photo || null;
           const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
           card.innerHTML = `
             <div class="part-info-left">
-              <img src="${p.photo_url || defaultAvatar}" class="part-avatar" alt="${p.display_name}">
+              <img src="${photoUrl || defaultAvatar}" class="part-avatar" alt="${displayName}">
               <div>
-                <h5 style="margin:0; font-size:0.9rem; color:#1E293B;">${p.display_name} ${isHostEntry ? '👑' : ''}</h5>
+                <h5 style="margin:0; font-size:0.9rem; color:#1E293B;">${displayName} ${isHostEntry ? '👑' : ''}</h5>
                 <span style="font-size:0.72rem; color:${isHostEntry ? '#D97706' : '#10B981'}; font-weight:600;">
                   ${isHostEntry ? '👑 Host (Lobby Leader)' : '● Joined & Ready'}
                 </span>

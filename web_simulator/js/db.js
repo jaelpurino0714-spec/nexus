@@ -650,6 +650,20 @@ const DB = {
       }
     }
 
+    // Fallback to local lobby state if not found in Supabase
+    if (!game) {
+      const localState = this.getLocalLobbyState(cleanCode);
+      if (localState) {
+        game = {
+          id: localState.gameId || ('game_' + cleanCode),
+          room_code: cleanCode,
+          status: localState.status || 'waiting',
+          host_id: localState.hostId || null,
+          isLocalOnly: true
+        };
+      }
+    }
+
     if (!game) {
       throw new Error('Room not found! Check code or make sure host created the lobby.');
     }
@@ -657,6 +671,8 @@ const DB = {
     if (game.status === 'finished' || game.status === 'completed' || game.status === 'cancelled') {
       throw new Error('This game session has ended!');
     }
+
+    const isHost = (game.host_id === userUuid);
 
     // Insert or Upsert Player into Supabase
     if (supabaseClient && !game.isLocalOnly) {
@@ -685,7 +701,7 @@ const DB = {
             user_id: userUuid,
             display_name: profile.name || 'Player',
             photo_url: profile.photo || null,
-            is_host: (game.host_id === userUuid)
+            is_host: isHost
           }, { onConflict: 'game_id,user_id' });
         } catch (e) {
           try {
@@ -694,23 +710,51 @@ const DB = {
               user_id: userUuid,
               display_name: profile.name || 'Player',
               photo_url: profile.photo || null,
-              is_host: (game.host_id === userUuid)
+              is_host: isHost
             });
           } catch (err) {}
         }
       }
     }
+
+    // Always update local lobby state for local/multi-tab sync
+    let localState = this.getLocalLobbyState(cleanCode);
+    if (!localState) {
+      localState = {
+        code: cleanCode,
+        gameId: game.id,
+        hostId: game.host_id,
+        status: game.status || 'waiting',
+        participants: []
+      };
+    }
+    if (!localState.participants) localState.participants = [];
+    const exists = localState.participants.some(p => (p.user_id === userUuid || p.id === userUuid));
+    if (!exists) {
+      localState.participants.push({
+        user_id: userUuid,
+        id: userUuid,
+        display_name: profile.name || 'Player',
+        photo_url: profile.photo || null,
+        is_host: isHost,
+        score: 0,
+        correct_answers: 0,
+        wrong_answers: 0
+      });
+      this.saveLocalLobbyState(cleanCode, localState);
+    }
+
     return game;
   },
 
   async getMultiplayerPlayers(gameId, roomCode) {
-    let players = [];
+    const playerMap = new Map();
 
+    // 1. Fetch from Supabase tables if connected
     if (supabaseClient) {
       try {
         let targetGameIds = [gameId].filter(Boolean);
 
-        // Lookup exact Supabase game id by roomCode
         if (roomCode) {
           const cleanCode = roomCode.toUpperCase().trim();
           const { data: g } = await supabaseClient
@@ -742,8 +786,24 @@ const DB = {
             .order('score', { ascending: false });
 
           if (p1 && p1.length > 0) {
-            players = p1;
-            break;
+            p1.forEach(p => {
+              const key = p.user_id || p.id || p.display_name;
+              if (key && !playerMap.has(key)) {
+                playerMap.set(key, {
+                  id: p.id || p.user_id,
+                  game_id: p.game_id,
+                  user_id: p.user_id || p.id,
+                  display_name: p.display_name || p.name || 'Player',
+                  photo_url: p.photo_url || p.photo || null,
+                  score: p.score || 0,
+                  correct_answers: p.correct_answers || 0,
+                  wrong_answers: p.wrong_answers || 0,
+                  current_question_index: p.current_question_index || 0,
+                  is_finished: p.is_finished || false,
+                  is_host: !!p.is_host
+                });
+              }
+            });
           }
 
           const { data: p2 } = await supabaseClient
@@ -752,20 +812,24 @@ const DB = {
             .eq('lobby_id', targetId);
 
           if (p2 && p2.length > 0) {
-            players = p2.map(p => ({
-              id: p.id,
-              game_id: p.lobby_id,
-              user_id: p.student_id,
-              display_name: p.student_name,
-              photo_url: p.photo_url,
-              score: p.score || 0,
-              correct_answers: p.correct_count || 0,
-              wrong_answers: p.wrong_count || 0,
-              current_question_index: p.current_question_index || 0,
-              is_finished: p.is_finished || false,
-              is_host: false
-            }));
-            break;
+            p2.forEach(p => {
+              const key = p.student_id || p.id || p.student_name;
+              if (key && !playerMap.has(key)) {
+                playerMap.set(key, {
+                  id: p.id,
+                  game_id: p.lobby_id,
+                  user_id: p.student_id || p.id,
+                  display_name: p.student_name || 'Player',
+                  photo_url: p.photo_url || null,
+                  score: p.score || 0,
+                  correct_answers: p.correct_count || 0,
+                  wrong_answers: p.wrong_count || 0,
+                  current_question_index: p.current_question_index || 0,
+                  is_finished: p.is_finished || false,
+                  is_host: false
+                });
+              }
+            });
           }
         }
       } catch (e) {
@@ -773,7 +837,33 @@ const DB = {
       }
     }
 
-    return players;
+    // 2. Merge with Local Lobby State
+    const cleanCode = roomCode ? roomCode.toUpperCase().trim() : null;
+    if (cleanCode) {
+      const localState = this.getLocalLobbyState(cleanCode);
+      if (localState && Array.isArray(localState.participants)) {
+        localState.participants.forEach(p => {
+          const key = p.user_id || p.id || p.display_name || p.name;
+          if (key && !playerMap.has(key)) {
+            playerMap.set(key, {
+              id: p.id || p.user_id,
+              game_id: gameId,
+              user_id: p.user_id || p.id,
+              display_name: p.display_name || p.name || 'Player',
+              photo_url: p.photo_url || p.photo || null,
+              score: p.score || 0,
+              correct_answers: p.correct_answers || 0,
+              wrong_answers: p.wrong_answers || 0,
+              current_question_index: p.current_question_index || 0,
+              is_finished: p.is_finished || false,
+              is_host: !!p.is_host
+            });
+          }
+        });
+      }
+    }
+
+    return Array.from(playerMap.values());
   },
 
   async getMultiplayerQuestions(gameId, roomCode) {

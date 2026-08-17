@@ -738,7 +738,7 @@ const Quiz = {
     const hostBox = document.getElementById('lobbyHostBox');
     const hostActions = document.getElementById('lobbyHostActions');
 
-    const lobbyData = this.getLobbyData(this.lobbyAccessCode) || this.currentLobbyData;
+    const lobbyData = this.currentLobbyData || this.getLobbyData(this.lobbyAccessCode);
     const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👑</text></svg>";
 
     const teacherSession = JSON.parse(localStorage.getItem('nexus_teacher_session') || 'null');
@@ -774,26 +774,29 @@ const Quiz = {
       this.lobbyParticipants = lobbyData.participants;
     }
 
-    document.getElementById('lobbyPartCount').textContent = `Participants Joined (${this.lobbyParticipants.length})`;
+    const participants = this.lobbyParticipants || [];
+    document.getElementById('lobbyPartCount').textContent = `Participants Joined (${participants.length})`;
     const listEl = document.getElementById('lobbyPartList');
     listEl.innerHTML = '';
 
-    if (this.lobbyParticipants.length === 0) {
+    if (participants.length === 0) {
       listEl.innerHTML = `
         <div style="text-align:center; padding:20px; color:#94A3B8; font-size:0.85rem; font-weight:600;">
           No participants joined yet. Share code <b style="color:#6D28D9;">${this.lobbyAccessCode}</b> to join!
         </div>
       `;
     } else {
-      this.lobbyParticipants.forEach((p, idx) => {
+      participants.forEach((p, idx) => {
         const card = document.createElement('div');
         card.className = 'lobby-part-card';
+        const displayName = p.name || p.display_name || 'Student Player';
+        const photoUrl = p.photo || p.photo_url || null;
         const partAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
         card.innerHTML = `
           <div class="part-info-left">
-            <img src="${p.photo || partAvatar}" class="part-avatar" alt="${p.name}">
+            <img src="${photoUrl || partAvatar}" class="part-avatar" alt="${displayName}">
             <div>
-              <h5 style="margin:0; font-size:0.85rem; color:#1E293B;">${p.name}</h5>
+              <h5 style="margin:0; font-size:0.85rem; color:#1E293B;">${displayName}</h5>
               <span style="font-size:0.72rem; color:#64748B;">${p.grade || 'Student'}</span>
             </div>
           </div>
