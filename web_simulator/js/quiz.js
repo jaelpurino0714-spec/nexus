@@ -107,6 +107,10 @@ const Quiz = {
   customCreatedQuestions: [],
   creatorCurrentIndex: 0,
   isHost: false,
+  broadcastChannel: null,
+  storageListener: null,
+  lobbySyncInterval: null,
+  currentLobbyData: null,
 
   hideAllModals() {
     ['customHubModal', 'hostTypeModal', 'preGameCustomizeModal', 'customCreatorModal', 'joinCodeModal', 'modeSelectorModal', 'postTestFormatModal', 'participantProfileModal'].forEach(id => {
@@ -290,12 +294,8 @@ const Quiz = {
     this.hidePreGameCustomizeModal();
 
     if (this.customFlowType === 'host_builtin') {
-      this.isHost = true;
-      this.resetLobbyParticipants = true;
-      this.generateLobbyCode();
       await this.prepareBuiltinQuestions();
-      this.renderLobbyScreen();
-      App.showScreen('lobbyScreen');
+      this.startHostLobby();
     } else {
       this.startQuiz(this.currentMode, this.currentQuestionFormat);
     }
@@ -541,19 +541,182 @@ const Quiz = {
     this.customTimeLimitSec = timeVal;
     this.customQuestionCount = totalQ;
     this.customMaxParticipants = maxPart;
-    this.isHost = true;
-    this.resetLobbyParticipants = true;
-
-    this.generateLobbyCode();
     this.questionsList = [...this.customCreatedQuestions];
     this.hideCustomCreatorModal();
-    this.renderLobbyScreen();
-    App.showScreen('lobbyScreen');
+    this.startHostLobby();
   },
 
   generateLobbyCode() {
     const codeNum = Math.floor(1000000 + Math.random() * 9000000);
     this.lobbyAccessCode = String(codeNum);
+  },
+
+  // Real-time Lobby Storage & Broadcast Sync Engine
+  getLobbyData(code) {
+    if (!code) return null;
+    const raw = localStorage.getItem('nexus_lobby_' + code);
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw);
+    } catch (e) {
+      return null;
+    }
+  },
+
+  saveLobbyData(lobbyObj) {
+    if (!lobbyObj || !lobbyObj.code) return;
+    lobbyObj.lastUpdated = Date.now();
+    localStorage.setItem('nexus_lobby_' + lobbyObj.code, JSON.stringify(lobbyObj));
+    if (this.broadcastChannel) {
+      try {
+        this.broadcastChannel.postMessage({ type: 'LOBBY_UPDATE', data: lobbyObj });
+      } catch (e) {}
+    }
+  },
+
+  initLobbySync(code) {
+    this.stopLobbySync();
+    this.lobbyAccessCode = code;
+
+    try {
+      this.broadcastChannel = new BroadcastChannel('nexus_lobby_ch_' + code);
+      this.broadcastChannel.onmessage = (event) => {
+        if (event.data && event.data.data) {
+          this.handleLobbySyncUpdate(event.data.data);
+        }
+      };
+    } catch (e) {
+      this.broadcastChannel = null;
+    }
+
+    this.storageListener = (e) => {
+      if (e.key === ('nexus_lobby_' + code) && e.newValue) {
+        try {
+          const updated = JSON.parse(e.newValue);
+          this.handleLobbySyncUpdate(updated);
+        } catch (err) {}
+      }
+    };
+    window.addEventListener('storage', this.storageListener);
+
+    this.lobbySyncInterval = setInterval(() => {
+      const data = this.getLobbyData(code);
+      if (data) {
+        this.handleLobbySyncUpdate(data);
+      }
+    }, 500);
+  },
+
+  stopLobbySync() {
+    if (this.broadcastChannel) {
+      try { this.broadcastChannel.close(); } catch (e) {}
+      this.broadcastChannel = null;
+    }
+    if (this.storageListener) {
+      window.removeEventListener('storage', this.storageListener);
+      this.storageListener = null;
+    }
+    if (this.lobbySyncInterval) {
+      clearInterval(this.lobbySyncInterval);
+      this.lobbySyncInterval = null;
+    }
+  },
+
+  handleLobbySyncUpdate(lobbyData) {
+    if (!lobbyData) return;
+    this.currentLobbyData = lobbyData;
+
+    const myId = DB.getUserUUID();
+    if (!this.isHost && lobbyData.kickedIds && lobbyData.kickedIds.includes(myId)) {
+      this.stopLobbySync();
+      alert('⚠️ You have been kicked from the lobby by the host.');
+      App.showScreen('homeScreen');
+      return;
+    }
+
+    if (!this.isHost && lobbyData.status === 'cancelled') {
+      this.stopLobbySync();
+      alert('⚠️ The host has ended the lobby.');
+      App.showScreen('homeScreen');
+      return;
+    }
+
+    if (!this.isHost && lobbyData.status === 'in_game' && App.currentScreen === 'lobbyScreen') {
+      this.questionsList = [...(lobbyData.settings.questionsList || [])];
+      this.customTimeLimitSec = lobbyData.settings.timeLimitSec || 20;
+      this.customQuestionCount = lobbyData.settings.questionCount || 15;
+      this.currentMode = lobbyData.settings.mode || 'pre-test';
+      this.currentQuestionFormat = lobbyData.settings.format || 'multiple_choice';
+      this.currentTopic = lobbyData.settings.topic || 'Custom Science';
+      this.startQuiz(this.currentMode, this.currentQuestionFormat);
+      return;
+    }
+
+    if (App.currentScreen === 'lobbyScreen') {
+      this.lobbyParticipants = lobbyData.participants || [];
+      this.renderLobbyScreen();
+    }
+
+    if (this.isHost && App.currentScreen === 'hostLiveDashboardScreen') {
+      this.lobbyParticipants = lobbyData.participants || [];
+      this.renderHostLiveDashboard();
+    }
+  },
+
+  updateParticipantLobbyProgress() {
+    if (!this.lobbyAccessCode || this.isHost) return;
+    const lobbyData = this.getLobbyData(this.lobbyAccessCode);
+    if (!lobbyData || !lobbyData.participants) return;
+
+    const myId = DB.getUserUUID();
+    const profile = DB.getStudentProfile() || { name: 'Student Player' };
+    const p = lobbyData.participants.find(item => item.id === myId || item.name === profile.name);
+    if (p) {
+      p.currentQ = this.currentIndex + 1;
+      p.correct = this.correctCount;
+      p.incorrect = this.incorrectCount;
+      p.points = this.totalScorePoints;
+      p.finished = (this.currentIndex >= (this.questionsList.length - 1));
+      this.saveLobbyData(lobbyData);
+    }
+  },
+
+  startHostLobby() {
+    this.generateLobbyCode();
+    this.isHost = true;
+
+    const profile = DB.getStudentProfile() || { name: 'Host Teacher', gradeLevel: 'Instructor', photo: '' };
+    const myId = DB.getUserUUID();
+
+    const initialLobby = {
+      code: this.lobbyAccessCode,
+      hostId: myId,
+      host: {
+        id: myId,
+        name: profile.name || 'Host Teacher',
+        grade: profile.section || profile.gradeLevel || 'Instructor',
+        photo: profile.photo || ''
+      },
+      status: 'waiting',
+      settings: {
+        timeLimitSec: this.customTimeLimitSec || 20,
+        questionCount: this.customQuestionCount || 15,
+        maxParticipants: this.customMaxParticipants || 30,
+        mode: this.currentMode || 'pre-test',
+        format: this.currentQuestionFormat || 'multiple_choice',
+        topic: this.currentTopic || 'Custom Science',
+        questionsList: this.questionsList || []
+      },
+      participants: [],
+      kickedIds: [],
+      lastUpdated: Date.now()
+    };
+
+    this.lobbyParticipants = [];
+    this.saveLobbyData(initialLobby);
+    this.initLobbySync(this.lobbyAccessCode);
+    this.renderLobbyScreen();
+    App.showScreen('lobbyScreen');
   },
 
   renderLobbyScreen() {
@@ -564,38 +727,36 @@ const Quiz = {
     const hostBox = document.getElementById('lobbyHostBox');
     const hostActions = document.getElementById('lobbyHostActions');
 
-    const profile = DB.getStudentProfile() || { name: 'Host Teacher', gradeLevel: 'Instructor', photo: '' };
+    const lobbyData = this.getLobbyData(this.lobbyAccessCode) || this.currentLobbyData;
+    const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👑</text></svg>";
+
+    const hostName = (lobbyData && lobbyData.host) ? lobbyData.host.name : 'Host Teacher';
+    const hostPhoto = (lobbyData && lobbyData.host) ? lobbyData.host.photo : '';
 
     if (this.isHost) {
       roleBadge.textContent = 'HOST LOBBY';
       hostBox.innerHTML = `
-        <img src="${profile.photo || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23DDD6FE\'/><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'40\' fill=\'%236D28D9\'>👑</text></svg>'}" class="part-avatar" alt="Host">
+        <img src="${hostPhoto || defaultAvatar}" class="part-avatar" alt="Host">
         <div>
-          <h4 style="margin:0; font-size:0.95rem; color:#1E293B;">${profile.name} (Host)</h4>
+          <h4 style="margin:0; font-size:0.95rem; color:#1E293B;">${hostName} (Host)</h4>
           <span style="font-size:0.75rem; color:#64748B;">Waiting for players to enter code ${this.lobbyAccessCode}...</span>
         </div>
       `;
       hostActions.style.display = 'block';
-
-      // Real participants list (starts empty for host lobby, no fake/bot accounts)
-      if (!this.lobbyParticipants || this.resetLobbyParticipants) {
-        this.lobbyParticipants = [];
-        this.resetLobbyParticipants = false;
-      }
     } else {
       roleBadge.textContent = 'PARTICIPANT LOBBY';
       hostBox.innerHTML = `
-        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👑</text></svg>" class="part-avatar" alt="Host">
+        <img src="${hostPhoto || defaultAvatar}" class="part-avatar" alt="Host">
         <div>
-          <h4 style="margin:0; font-size:0.95rem; color:#1E293B;">Host: Prof. DepEd Science</h4>
+          <h4 style="margin:0; font-size:0.95rem; color:#1E293B;">Host: ${hostName}</h4>
           <span style="font-size:0.75rem; color:#64748B;">Waiting for host to press Start Quiz...</span>
         </div>
       `;
       hostActions.style.display = 'none';
+    }
 
-      this.lobbyParticipants = [
-        { name: profile.name, grade: profile.section || profile.gradeLevel, points: profile.totalPoints || 0, streak: profile.streak || 0, photo: profile.photo }
-      ];
+    if (lobbyData && lobbyData.participants) {
+      this.lobbyParticipants = lobbyData.participants;
     }
 
     document.getElementById('lobbyPartCount').textContent = `Participants Joined (${this.lobbyParticipants.length})`;
@@ -612,10 +773,10 @@ const Quiz = {
       this.lobbyParticipants.forEach((p, idx) => {
         const card = document.createElement('div');
         card.className = 'lobby-part-card';
-        const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
+        const partAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
         card.innerHTML = `
           <div class="part-info-left">
-            <img src="${p.photo || defaultAvatar}" class="part-avatar" alt="${p.name}">
+            <img src="${p.photo || partAvatar}" class="part-avatar" alt="${p.name}">
             <div>
               <h5 style="margin:0; font-size:0.85rem; color:#1E293B;">${p.name}</h5>
               <span style="font-size:0.72rem; color:#64748B;">${p.grade || 'Student'}</span>
@@ -636,6 +797,13 @@ const Quiz = {
   kickParticipant(idx) {
     const p = this.lobbyParticipants[idx];
     if (p && confirm(`Are you sure you want to kick ${p.name} from the lobby?`)) {
+      const lobbyData = this.getLobbyData(this.lobbyAccessCode);
+      if (lobbyData) {
+        lobbyData.kickedIds = lobbyData.kickedIds || [];
+        if (p.id) lobbyData.kickedIds.push(p.id);
+        lobbyData.participants = lobbyData.participants.filter((item, i) => i !== idx);
+        this.saveLobbyData(lobbyData);
+      }
       this.lobbyParticipants.splice(idx, 1);
       this.renderLobbyScreen();
     }
@@ -670,16 +838,83 @@ const Quiz = {
       return;
     }
 
+    const lobbyData = this.getLobbyData(val);
+    if (!lobbyData) {
+      errorEl.textContent = '⚠️ Lobby not found! Make sure the host has started the lobby.';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    if (lobbyData.status === 'in_game') {
+      errorEl.textContent = '⚠️ This quiz session has already started!';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    if (lobbyData.status === 'cancelled') {
+      errorEl.textContent = '⚠️ This lobby was cancelled by the host.';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    const myId = DB.getUserUUID();
+    if (lobbyData.kickedIds && lobbyData.kickedIds.includes(myId)) {
+      errorEl.textContent = '⚠️ You were kicked from this lobby.';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    if (lobbyData.participants.length >= (lobbyData.settings.maxParticipants || 30)) {
+      errorEl.textContent = '⚠️ Lobby is full!';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
     errorEl.classList.add('hidden');
     this.lobbyAccessCode = val;
     this.isHost = false;
+
+    const profile = DB.getStudentProfile() || { name: 'Student Player', gradeLevel: 'Student', photo: '' };
+    
+    const existingIndex = lobbyData.participants.findIndex(p => p.id === myId || p.name === profile.name);
+    const myPartObj = {
+      id: myId,
+      name: profile.name || 'Student Player',
+      grade: profile.section || profile.gradeLevel || 'Student',
+      photo: profile.photo || '',
+      points: profile.totalPoints || 0,
+      streak: 0,
+      currentQ: 1,
+      correct: 0,
+      incorrect: 0,
+      finished: false
+    };
+
+    if (existingIndex >= 0) {
+      lobbyData.participants[existingIndex] = myPartObj;
+    } else {
+      lobbyData.participants.push(myPartObj);
+    }
+
+    this.saveLobbyData(lobbyData);
+    this.initLobbySync(val);
     this.hideJoinCodeModal();
     this.renderLobbyScreen();
     App.showScreen('lobbyScreen');
   },
 
   exitLobby() {
-    App.showScreen('homeScreen');
+    if (confirm('Are you sure you want to exit the lobby?')) {
+      if (this.isHost) {
+        const lobbyData = this.getLobbyData(this.lobbyAccessCode);
+        if (lobbyData) {
+          lobbyData.status = 'cancelled';
+          this.saveLobbyData(lobbyData);
+        }
+      }
+      this.stopLobbySync();
+      App.showScreen('homeScreen');
+    }
   },
 
   startHostQuizGame() {
@@ -687,6 +922,11 @@ const Quiz = {
       if (this.lobbyParticipants.length < 1) {
         alert('⚠️ At least 1 participant must join the lobby before you can start the quiz!');
         return;
+      }
+      const lobbyData = this.getLobbyData(this.lobbyAccessCode);
+      if (lobbyData) {
+        lobbyData.status = 'in_game';
+        this.saveLobbyData(lobbyData);
       }
       this.startHostTrackingDashboard();
     } else {
@@ -698,57 +938,8 @@ const Quiz = {
     const formattedCode = `${this.lobbyAccessCode.slice(0,3)} ${this.lobbyAccessCode.slice(3,6)} ${this.lobbyAccessCode.slice(6)}`;
     document.getElementById('hostLiveCode').textContent = formattedCode;
     
-    // Initial tracking state for real participants
-    this.lobbyParticipants.forEach(p => {
-      p.currentQ = p.currentQ || 1;
-      p.correct = p.correct || 0;
-      p.incorrect = p.incorrect || 0;
-      p.points = p.points || 0;
-      p.finished = false;
-    });
-
     App.showScreen('hostLiveDashboardScreen');
     this.renderHostLiveDashboard();
-
-    if (this.hostTrackInterval) clearInterval(this.hostTrackInterval);
-    this.hostTrackInterval = setInterval(() => {
-      this.simulateHostLiveTracking();
-    }, 2000);
-  },
-
-  simulateHostLiveTracking() {
-    let allFinished = true;
-    const totalQ = this.customQuestionCount || 15;
-
-    this.lobbyParticipants.forEach(p => {
-      if (!p.finished) {
-        allFinished = false;
-        if (Math.random() > 0.3) {
-          const isCorrect = Math.random() > 0.25;
-          if (isCorrect) {
-            p.correct = (p.correct || 0) + 1;
-            p.points = (p.points || 0) + 120;
-          } else {
-            p.incorrect = (p.incorrect || 0) + 1;
-          }
-          p.currentQ = (p.currentQ || 1) + 1;
-          if (p.currentQ > totalQ) {
-            p.currentQ = totalQ;
-            p.finished = true;
-          }
-        }
-      }
-    });
-
-    this.renderHostLiveDashboard();
-
-    if (allFinished) {
-      clearInterval(this.hostTrackInterval);
-      document.getElementById('hostLiveStatusLabel').textContent = '✅ All Participants Finished! Auto-switching to Final Leaderboard...';
-      setTimeout(() => {
-        this.finishQuizHostView();
-      }, 1800);
-    }
   },
 
   renderHostLiveDashboard() {
@@ -756,8 +947,11 @@ const Quiz = {
     if (!tbody) return;
     tbody.innerHTML = '';
 
-    const sorted = [...this.lobbyParticipants].sort((a, b) => (b.points || 0) - (a.points || 0));
-    const totalQ = this.customQuestionCount || 15;
+    const lobbyData = this.getLobbyData(this.lobbyAccessCode);
+    const participants = (lobbyData && lobbyData.participants) ? lobbyData.participants : this.lobbyParticipants;
+
+    const sorted = [...participants].sort((a, b) => (b.points || 0) - (a.points || 0));
+    const totalQ = this.customQuestionCount || (this.questionsList ? this.questionsList.length : 15);
 
     sorted.forEach((p, idx) => {
       const tr = document.createElement('tr');
@@ -771,6 +965,11 @@ const Quiz = {
       `;
       tbody.appendChild(tr);
     });
+
+    const allFinished = sorted.length > 0 && sorted.every(p => p.finished);
+    if (allFinished) {
+      document.getElementById('hostLiveStatusLabel').textContent = '✅ All Participants Finished!';
+    }
   },
 
   endHostQuizEarly() {
@@ -1086,6 +1285,7 @@ const Quiz = {
       void streakEl.offsetWidth; // trigger reflow
       if (this.streak > 0) streakEl.classList.add('streak-pop');
     }
+    this.updateParticipantLobbyProgress();
   },
 
   handleTimeOut() {
@@ -1146,6 +1346,7 @@ const Quiz = {
     if (feedback) feedback.className = 'feedback-banner wrong';
     if (statusTextEl) statusTextEl.textContent = `⏱ Time Expired!`;
     if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${ansHint}</b>`;
+    this.updateParticipantLobbyProgress();
   },
 
   finishQuiz() {
