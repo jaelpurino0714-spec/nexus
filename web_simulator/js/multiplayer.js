@@ -388,6 +388,38 @@ const Multiplayer = {
     document.getElementById('mpHostQuestionText').textContent = q.question;
     document.getElementById('mpHostAnswerCount').textContent = `0 / ${this.playersList.length} Answered`;
 
+    // Render Host Choice Cards Overview
+    const overviewEl = document.getElementById('mpHostAnswersOverview');
+    if (overviewEl) {
+      overviewEl.innerHTML = '';
+      const typeId = q.question_type_id || 1;
+      let choicesMap = {};
+
+      if (typeId === 2 || (!q.choice_c && !q.choice_d && (q.correct_answer === 'True' || q.correct_answer === 'False' || q.correct_answer === 'TRUE' || q.correct_answer === 'FALSE'))) {
+        choicesMap = { A: 'True', B: 'False' };
+      } else {
+        choicesMap = {
+          A: q.choice_a || q.option_a || 'Option A',
+          B: q.choice_b || q.option_b || 'Option B',
+          C: q.choice_c || q.option_c || 'Option C',
+          D: q.choice_d || q.option_d || 'Option D'
+        };
+      }
+
+      Object.keys(choicesMap).forEach(key => {
+        if (choicesMap[key]) {
+          const card = document.createElement('div');
+          card.className = 'answer-option-btn';
+          card.style.cursor = 'default';
+          card.innerHTML = `
+            <span class="option-badge-pill"><span class="badge-letter">${key}</span></span>
+            <span class="option-text" style="font-weight:600; color:#1E293B;">${choicesMap[key]}</span>
+          `;
+          overviewEl.appendChild(card);
+        }
+      });
+    }
+
     const startedAt = new Date().toISOString();
     this.questionStartedAt = startedAt;
     this.questionDurationSec = q.time_limit || 20;
@@ -397,11 +429,12 @@ const Multiplayer = {
       questionNumber: index + 1,
       questionId: q.id,
       questionText: q.question,
+      questionTypeId: q.question_type_id || 1,
       choices: {
-        a: q.choice_a || q.option_a,
-        b: q.choice_b || q.option_b,
-        c: q.choice_c || q.option_c,
-        d: q.choice_d || q.option_d
+        a: q.choice_a || q.option_a || (q.question_type_id === 2 ? 'True' : null),
+        b: q.choice_b || q.option_b || (q.question_type_id === 2 ? 'False' : null),
+        c: q.choice_c || q.option_c || null,
+        d: q.choice_d || q.option_d || null
       },
       startedAt: startedAt,
       duration: this.questionDurationSec
@@ -464,20 +497,59 @@ const Multiplayer = {
     this.questionStartedAt = data.startedAt;
     this.questionDurationSec = data.duration || 20;
 
-    // Render Answer Choices WITHOUT exposing correct answer!
     const container = document.getElementById('mpPlayerAnswersContainer');
-    container.innerHTML = '';
+    if (container) {
+      container.innerHTML = '';
+      const typeId = data.questionTypeId || 1;
 
-    const choices = data.choices || {};
-    const keys = Object.keys(choices).filter(k => choices[k]);
+      if (typeId === 3) {
+        // Identification Question: Render Text Input & Submit Button
+        const inputWrap = document.createElement('div');
+        inputWrap.style.gridColumn = '1 / -1';
+        inputWrap.style.display = 'flex';
+        inputWrap.style.flexDirection = 'column';
+        inputWrap.style.gap = '12px';
+        inputWrap.innerHTML = `
+          <input type="text" id="mpPlayerTextInput" placeholder="Type your answer here..." class="customize-input" style="font-size:1.2rem; font-weight:700; text-align:center; padding:14px;" />
+          <button id="mpSubmitTextBtn" class="primary-btn bottom-start-btn" onclick="Multiplayer.submitPlayerTextChoice('${data.questionId}')">
+            Submit Answer ➔
+          </button>
+        `;
+        container.appendChild(inputWrap);
+      } else {
+        // Multiple Choice or True/False: Render styled .answer-option-btn
+        const rawChoices = data.choices || {};
+        let choicesMap = {};
 
-    keys.forEach(k => {
-      const btn = document.createElement('button');
-      btn.className = 'answer-btn';
-      btn.innerHTML = `<span class="opt-key">${k.toUpperCase()}:</span> ${choices[k]}`;
-      btn.onclick = () => this.submitPlayerChoice(data.questionId, k, btn);
-      container.appendChild(btn);
-    });
+        if (typeId === 2 || (rawChoices.a === 'True' && rawChoices.b === 'False')) {
+          choicesMap = {
+            A: rawChoices.a || 'True',
+            B: rawChoices.b || 'False'
+          };
+        } else {
+          choicesMap = {
+            A: rawChoices.a || rawChoices.A,
+            B: rawChoices.b || rawChoices.B,
+            C: rawChoices.c || rawChoices.C,
+            D: rawChoices.d || rawChoices.D
+          };
+        }
+
+        Object.keys(choicesMap).forEach(key => {
+          const val = choicesMap[key];
+          if (val) {
+            const btn = document.createElement('button');
+            btn.className = 'answer-option-btn';
+            btn.innerHTML = `
+              <span class="option-badge-pill"><span class="badge-letter">${key}</span></span>
+              <span class="option-text" style="font-weight:700; text-align:left; color:#3B0764;">${val}</span>
+            `;
+            btn.onclick = () => this.submitPlayerChoice(data.questionId, key, btn);
+            container.appendChild(btn);
+          }
+        });
+      }
+    }
 
     this.startSynchronizedTimer('mpPlayerTimerValue', data.startedAt, data.duration, () => {
       this.disablePlayerChoices();
@@ -488,12 +560,16 @@ const Multiplayer = {
     if (this.hasAnsweredCurrent) return;
     this.hasAnsweredCurrent = true;
     this.disablePlayerChoices();
-    if (btnEl) btnEl.classList.add('selected');
 
-    const elapsedSec = (new Date() - new Date(this.questionStartedAt)) / 1000;
+    if (btnEl) {
+      btnEl.style.borderColor = '#6D28D9';
+      btnEl.style.background = '#EDE9FE';
+    }
+
+    const elapsedSec = this.questionStartedAt ? Math.max(0.1, (Date.now() - new Date(this.questionStartedAt).getTime()) / 1000) : 1;
 
     const result = await DB.submitPlayerAnswer(
-      this.currentGame.id,
+      this.currentGame ? this.currentGame.id : null,
       DB.getUserUUID(),
       questionId,
       selectedChoice,
@@ -513,11 +589,22 @@ const Multiplayer = {
     }
   },
 
+  async submitPlayerTextChoice(questionId) {
+    const input = document.getElementById('mpPlayerTextInput');
+    const btn = document.getElementById('mpSubmitTextBtn');
+    if (!input) return;
+    const textVal = input.value.trim();
+    if (!textVal) return;
+
+    if (btn) btn.disabled = true;
+    await this.submitPlayerChoice(questionId, textVal, null);
+  },
+
   disablePlayerChoices() {
     const container = document.getElementById('mpPlayerAnswersContainer');
     if (container) {
-      const btns = container.querySelectorAll('.answer-btn');
-      btns.forEach(b => b.disabled = true);
+      const elements = container.querySelectorAll('.answer-option-btn, #mpSubmitTextBtn, #mpPlayerTextInput');
+      elements.forEach(b => b.disabled = true);
     }
   },
 
@@ -553,13 +640,17 @@ const Multiplayer = {
   startSynchronizedTimer(timerElementId, startedAtIso, durationSec, onExpire) {
     if (this.timerInterval) clearInterval(this.timerInterval);
 
-    const startTime = new Date(startedAtIso).getTime();
+    let startTime = startedAtIso ? new Date(startedAtIso).getTime() : Date.now();
+    if (isNaN(startTime) || startTime > Date.now()) {
+      startTime = Date.now();
+    }
     const durationMs = (durationSec || 20) * 1000;
 
     const updateTimer = () => {
-      const now = new Date().getTime();
+      const now = Date.now();
       const elapsedMs = now - startTime;
-      const remainingMs = Math.max(0, durationMs - elapsedMs);
+      let remainingMs = Math.max(0, durationMs - elapsedMs);
+
       const remainingSec = (remainingMs / 1000).toFixed(2);
 
       const el = document.getElementById(timerElementId);

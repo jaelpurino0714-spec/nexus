@@ -896,6 +896,42 @@ const DB = {
     return Array.from(playerMap.values());
   },
 
+  _formatQuestions(list) {
+    if (!Array.isArray(list)) return [];
+    return list.map(q => {
+      let typeId = q.question_type_id || 1;
+      let choiceA = q.choice_a || q.option_a || '';
+      let choiceB = q.choice_b || q.option_b || '';
+      let choiceC = q.choice_c || q.option_c || '';
+      let choiceD = q.choice_d || q.option_d || '';
+
+      if (typeId === 2 || (!choiceC && !choiceD && (q.correct_answer === 'True' || q.correct_answer === 'False' || q.correct_answer === 'TRUE' || q.correct_answer === 'FALSE'))) {
+        choiceA = 'True';
+        choiceB = 'False';
+        choiceC = '';
+        choiceD = '';
+        typeId = 2;
+      }
+
+      return {
+        id: q.id,
+        question: q.question || 'Science Question',
+        choice_a: choiceA,
+        choice_b: choiceB,
+        choice_c: choiceC,
+        choice_d: choiceD,
+        option_a: choiceA,
+        option_b: choiceB,
+        option_c: choiceC,
+        option_d: choiceD,
+        correct_answer: q.correct_answer,
+        explanation: q.explanation,
+        time_limit: q.time_limit || 20,
+        question_type_id: typeId
+      };
+    });
+  },
+
   async getMultiplayerQuestions(gameId, roomCode) {
     if (!supabaseClient) return [];
 
