@@ -25,29 +25,60 @@ const Auth = {
     }
   },
 
+  // Helper: Client-side Image Resizing & Compression (max 200px JPEG)
+  compressImage(file, maxDimension, quality, callback) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxDimension) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          }
+        } else {
+          if (height > maxDimension) {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+        callback(compressedDataUrl);
+      };
+      img.onerror = () => callback(e.target.result);
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  },
+
   // Handle Photo Upload in Student Setup
   handlePhotoUpload(event) {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.uploadedPhotoData = e.target.result;
+      this.compressImage(file, 200, 0.7, (compressedData) => {
+        this.uploadedPhotoData = compressedData;
         document.getElementById('avatarPreview').src = this.uploadedPhotoData;
         this.validateStudentForm();
-      };
-      reader.readAsDataURL(file);
+      });
     }
   },
 
   handleEditPhotoUpload(event) {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.editPhotoData = e.target.result;
+      this.compressImage(file, 200, 0.7, (compressedData) => {
+        this.editPhotoData = compressedData;
         document.getElementById('editAvatarPreview').src = this.editPhotoData;
-      };
-      reader.readAsDataURL(file);
+      });
     }
   },
 

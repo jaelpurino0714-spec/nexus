@@ -179,9 +179,46 @@ const DB = {
     return null;
   },
 
+  purgeOldStorage() {
+    try {
+      const keys = Object.keys(localStorage);
+      keys.forEach(k => {
+        if (k.startsWith('nexus_lobby_')) {
+          localStorage.removeItem(k);
+        }
+      });
+      const rawProfile = localStorage.getItem(this.STORAGE_PROFILE);
+      if (rawProfile && rawProfile.length > 50000) {
+        try {
+          const profile = JSON.parse(rawProfile);
+          if (profile.photo && profile.photo.length > 30000) {
+            profile.photo = '';
+            localStorage.setItem(this.STORAGE_PROFILE, JSON.stringify(profile));
+          }
+        } catch (err) {}
+      }
+    } catch (e) {
+      console.warn('Error purging storage:', e);
+    }
+  },
+
+  safeSetItem(key, value) {
+    try {
+      localStorage.setItem(key, value);
+    } catch (e) {
+      console.warn(`Storage setItem error for key "${key}":`, e);
+      this.purgeOldStorage();
+      try {
+        localStorage.setItem(key, value);
+      } catch (err2) {
+        console.error(`Storage setItem failed after purge for "${key}":`, err2);
+      }
+    }
+  },
+
   async saveStudentProfile(profile) {
     this._cachedProfile = profile;
-    localStorage.setItem(this.STORAGE_PROFILE, JSON.stringify(profile));
+    this.safeSetItem(this.STORAGE_PROFILE, JSON.stringify(profile));
 
     if (supabaseClient && profile.id) {
       try {
@@ -236,7 +273,7 @@ const DB = {
   async saveQuizResult(result) {
     const list = this.getQuizResults();
     list.push(result);
-    localStorage.setItem(this.STORAGE_RESULTS, JSON.stringify(list));
+    this.safeSetItem(this.STORAGE_RESULTS, JSON.stringify(list));
 
     if (supabaseClient) {
       try {
@@ -273,7 +310,7 @@ const DB = {
     const list = this.getUnlockedAchievements();
     if (!list.includes(achId)) {
       list.push(achId);
-      localStorage.setItem(this.STORAGE_ACHIEVEMENTS, JSON.stringify(list));
+      this.safeSetItem(this.STORAGE_ACHIEVEMENTS, JSON.stringify(list));
       if (typeof TaskSystem !== 'undefined') {
         TaskSystem.completeTask(`ach_xp_${achId}`, `Achievement Unlocked`, 15);
       }
@@ -294,13 +331,13 @@ const DB = {
   },
 
   saveUserUUID(uuid) {
-    localStorage.setItem(this.STORAGE_USER_UUID, uuid);
+    this.safeSetItem(this.STORAGE_USER_UUID, uuid);
   },
 
   saveCustomQuiz(quizObj) {
     const list = JSON.parse(localStorage.getItem('nexus_custom_quizzes') || '[]');
     list.push(quizObj);
-    localStorage.setItem('nexus_custom_quizzes', JSON.stringify(list));
+    this.safeSetItem('nexus_custom_quizzes', JSON.stringify(list));
   },
 
   getCustomQuizzes() {
