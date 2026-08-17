@@ -1086,10 +1086,6 @@ const Quiz = {
       void streakEl.offsetWidth; // trigger reflow
       if (this.streak > 0) streakEl.classList.add('streak-pop');
     }
-    
-    setTimeout(() => {
-      this.nextQuestion();
-    }, 1400);
   },
 
   handleTimeOut() {
@@ -1150,10 +1146,6 @@ const Quiz = {
     if (feedback) feedback.className = 'feedback-banner wrong';
     if (statusTextEl) statusTextEl.textContent = `⏱ Time Expired!`;
     if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${ansHint}</b>`;
-
-    setTimeout(() => {
-      this.nextQuestion();
-    }, 1400);
   },
 
   finishQuiz() {
