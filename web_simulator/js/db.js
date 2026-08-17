@@ -1079,11 +1079,21 @@ const DB = {
     const mpStatus = (status === 'in_progress') ? 'active' : (status === 'completed' ? 'finished' : status);
     const qlStatus = (status === 'active' || status === 'starting') ? 'in_progress' : (status === 'finished' ? 'completed' : status);
 
-    const payloadMp = { status: mpStatus, current_question_index: currentQIndex };
-    if (mpStatus === 'active' || mpStatus === 'starting') payloadMp.started_at = new Date().toISOString();
-    if (mpStatus === 'finished' || mpStatus === 'cancelled') payloadMp.ended_at = new Date().toISOString();
+    const nowIso = new Date().toISOString();
+    const payloadMp = {
+      status: mpStatus,
+      current_question_index: currentQIndex,
+      question_start_time: nowIso
+    };
+    if (mpStatus === 'active' || mpStatus === 'starting') payloadMp.started_at = nowIso;
+    if (mpStatus === 'finished' || mpStatus === 'cancelled') payloadMp.ended_at = nowIso;
 
-    const payloadQl = { status: qlStatus, current_question_index: currentQIndex, is_started: (qlStatus === 'in_progress'), is_finished: (qlStatus === 'completed') };
+    const payloadQl = {
+      status: qlStatus,
+      current_question_index: currentQIndex,
+      is_started: (qlStatus === 'in_progress'),
+      is_finished: (qlStatus === 'completed')
+    };
 
     if (supabaseClient) {
       try { await supabaseClient.from('multiplayer_games').update(payloadMp).eq('id', gameId); } catch (e) {}

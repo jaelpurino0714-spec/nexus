@@ -1,6 +1,6 @@
 /* ==========================================================================
    NEXUS KAHOOT-STYLE REALTIME MULTIPLAYER TRIVIA ENGINE
-   Uses Supabase Realtime Channels (game:<game_id>), Presence (connected user state),
+   Uses Supabase Realtime Channels (game_room_<pin>), Presence (connected user state),
    and Broadcast (ephemeral sub-50ms game events) with Supabase Postgres.
    ========================================================================== */
 
@@ -14,6 +14,8 @@ const Multiplayer = {
   questionsList: [],
   currentIndex: 0,
   timerInterval: null,
+  hostLobbyPollInterval: null,
+  playerSyncInterval: null,
   questionStartedAt: null,
   questionDurationSec: 20,
   hasAnsweredCurrent: false,
@@ -29,6 +31,8 @@ const Multiplayer = {
     this.hasAnsweredCurrent = false;
     this.answeredCount = 0;
     if (this.timerInterval) clearInterval(this.timerInterval);
+    if (this.hostLobbyPollInterval) clearInterval(this.hostLobbyPollInterval);
+    if (this.playerSyncInterval) clearInterval(this.playerSyncInterval);
     this.unsubscribeRealtime();
   },
 
@@ -174,7 +178,8 @@ const Multiplayer = {
         App.showScreen('mpPlayerGameScreen');
         this.questionsList = await DB.getMultiplayerQuestions(game.id, game.room_code);
         this.currentIndex = game.current_question_index || 0;
-        this.startPlayerGameplay();
+        this.playerRenderQuestion(this.currentIndex, game);
+        this.startPlayerGameSyncPolling();
       } else {
         await this.enterPlayerLobbyScreen(game, nicknameVal);
       }
@@ -189,7 +194,7 @@ const Multiplayer = {
     }
   },
 
-  // 5. Host Lobby Screen Management
+  // 5. Host Lobby Screen Management & Dual DB/Presence Sync
   async enterHostLobbyScreen(game) {
     App.showScreen('mpHostLobbyScreen');
     const pinDisplay = document.getElementById('mpPinDisplay');
@@ -201,25 +206,123 @@ const Multiplayer = {
       qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(joinUrl)}`;
     }
 
-    await this.subscribeToGameChannel(game.id, 'host', (DB.getStudentProfile() || {}).name || 'Host');
+    await this.subscribeToGameChannel(game.room_code || game.id, 'host', (DB.getStudentProfile() || {}).name || 'Host');
+    await this.startHostLobbyPolling();
+  },
+
+  async startHostLobbyPolling() {
+    if (this.hostLobbyPollInterval) clearInterval(this.hostLobbyPollInterval);
+
+    const poll = async () => {
+      if (!this.currentGame || App.currentScreen !== 'mpHostLobbyScreen') {
+        clearInterval(this.hostLobbyPollInterval);
+        return;
+      }
+      await this.syncHostRoster();
+    };
+
+    await poll();
+    this.hostLobbyPollInterval = setInterval(poll, 1500);
+  },
+
+  async syncHostRoster() {
+    if (!this.currentGame) return;
+
+    // A. Query Postgres database table for joined players
+    const dbPlayers = await DB.getMultiplayerPlayers(this.currentGame.id, this.currentGame.room_code);
+
+    const mergedMap = new Map();
+    (dbPlayers || []).forEach(p => {
+      if (!p.is_host) {
+        const key = p.user_id || p.id || p.display_name;
+        if (key) mergedMap.set(key, {
+          id: key,
+          playerName: p.display_name || p.student_name || 'Player',
+          photoUrl: p.photo_url || p.photo || null,
+          role: 'player'
+        });
+      }
+    });
+
+    // B. Merge with Supabase Realtime Presence state
+    if (this.realtimeChannel && typeof this.realtimeChannel.presenceState === 'function') {
+      try {
+        const presenceObj = this.realtimeChannel.presenceState();
+        Object.values(presenceObj).forEach(presences => {
+          (presences || []).forEach(p => {
+            if (p.role === 'player' && p.playerName) {
+              const key = p.playerId || p.user_id || p.playerName;
+              if (key && !mergedMap.has(key)) {
+                mergedMap.set(key, {
+                  id: key,
+                  playerName: p.playerName,
+                  photoUrl: p.photoUrl || null,
+                  role: 'player'
+                });
+              }
+            }
+          });
+        });
+      } catch (e) {}
+    }
+
+    this.playersList = Array.from(mergedMap.values());
     this.refreshHostPresenceRoster();
   },
 
-  // 6. Player Lobby Screen Management
+  // 6. Player Lobby Screen Management & Cross-Device Sync Polling
   async enterPlayerLobbyScreen(game, nickname) {
     App.showScreen('mpPlayerLobbyScreen');
     const badge = document.getElementById('mpPlayerNicknameBadge');
     const tag = document.getElementById('mpPlayerChannelTag');
     if (badge) badge.textContent = nickname;
-    if (tag) tag.textContent = `game:${game.id}`;
+    if (tag) tag.textContent = `PIN: ${game.room_code}`;
 
-    await this.subscribeToGameChannel(game.id, 'player', nickname);
+    await this.subscribeToGameChannel(game.room_code || game.id, 'player', nickname);
+    this.startPlayerGameSyncPolling();
   },
 
-  // 7. Supabase Realtime Channel (`game:<game_id>`) with Presence & Broadcast
-  async subscribeToGameChannel(gameId, role, name) {
-    if (!gameId) return;
-    const channelName = 'game:' + gameId;
+  startPlayerGameSyncPolling() {
+    if (this.playerSyncInterval) clearInterval(this.playerSyncInterval);
+
+    const poll = async () => {
+      if (!this.currentGame || this.isHost) {
+        clearInterval(this.playerSyncInterval);
+        return;
+      }
+
+      try {
+        const game = await DB.getMultiplayerGameByCode(this.currentGame.room_code);
+        if (!game) return;
+
+        // Transition player from lobby to game when host starts!
+        if ((game.status === 'active' || game.status === 'starting' || game.status === 'in_progress') && App.currentScreen === 'mpPlayerLobbyScreen') {
+          if (this.questionsList.length === 0) {
+            this.questionsList = await DB.getMultiplayerQuestions(game.id, game.room_code);
+          }
+          App.showScreen('mpPlayerGameScreen');
+          const currentIdx = game.current_question_index || 0;
+          this.playerRenderQuestion(currentIdx, game);
+        } else if (game.status === 'active' && App.currentScreen === 'mpPlayerGameScreen') {
+          const dbIndex = game.current_question_index || 0;
+          if (dbIndex !== this.currentIndex) {
+            this.playerRenderQuestion(dbIndex, game);
+          }
+        } else if (game.status === 'finished' && App.currentScreen !== 'mpLeaderboardScreen') {
+          const finalLeaderboard = await DB.getGameLeaderboard(game.id);
+          this.renderLeaderboardScreen('🏆 Final Podium Leaderboard', finalLeaderboard);
+        }
+      } catch (e) {}
+    };
+
+    this.playerSyncInterval = setInterval(poll, 1500);
+  },
+
+  // 7. Supabase Realtime Channel (`game_room_<pin>`) with Presence & Broadcast
+  async subscribeToGameChannel(roomCodeOrId, role, name) {
+    if (!roomCodeOrId) return;
+    const cleanPin = String(roomCodeOrId).toUpperCase().trim();
+    const channelName = 'game_room_' + cleanPin;
 
     this.unsubscribeRealtime();
     this.currentChannelName = channelName;
@@ -236,11 +339,11 @@ const Multiplayer = {
           }
         });
 
-        // A. PRESENCE: Live online tracking & unexpected disconnect handling
+        // A. PRESENCE: Live online tracking
         this.realtimeChannel
-          .on('presence', { event: 'sync' }, () => this.handlePresenceUpdate())
-          .on('presence', { event: 'join' }, () => this.handlePresenceUpdate())
-          .on('presence', { event: 'leave' }, () => this.handlePresenceUpdate());
+          .on('presence', { event: 'sync' }, () => this.syncHostRoster())
+          .on('presence', { event: 'join' }, () => this.syncHostRoster())
+          .on('presence', { event: 'leave' }, () => this.syncHostRoster());
 
         // B. BROADCAST: Ephemeral game events
         this.realtimeChannel.on('broadcast', { event: 'game_event' }, (payload) => {
@@ -267,29 +370,6 @@ const Multiplayer = {
         console.warn('Realtime subscription error:', e);
       }
     }
-  },
-
-  handlePresenceUpdate() {
-    if (!this.realtimeChannel || typeof this.realtimeChannel.presenceState !== 'function') return;
-
-    try {
-      const presenceObj = this.realtimeChannel.presenceState();
-      const onlinePlayers = [];
-
-      Object.values(presenceObj).forEach(presences => {
-        (presences || []).forEach(p => {
-          if (p.role === 'player' && p.playerName) {
-            onlinePlayers.push(p);
-          }
-        });
-      });
-
-      this.playersList = onlinePlayers;
-
-      if (App.currentScreen === 'mpHostLobbyScreen') {
-        this.refreshHostPresenceRoster();
-      }
-    } catch (e) {}
   },
 
   refreshHostPresenceRoster() {
@@ -476,7 +556,7 @@ const Multiplayer = {
     }
   },
 
-  // 9. Player Broadcast Event Callbacks
+  // 9. Player Broadcast Event Callbacks & Question Rendering
   onGameStart(data) {
     if (!this.isHost) {
       App.showScreen('mpPlayerGameScreen');
@@ -485,25 +565,39 @@ const Multiplayer = {
 
   onQuestionStart(data) {
     if (this.isHost) return;
+    this.playerRenderQuestion(data.questionNumber - 1, {
+      question_start_time: data.startedAt
+    });
+  },
+
+  async playerRenderQuestion(index, gameObj) {
     App.showScreen('mpPlayerGameScreen');
+    this.currentIndex = index;
     this.hasAnsweredCurrent = false;
+
+    if (this.questionsList.length === 0 && this.currentGame) {
+      this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id, this.currentGame.room_code);
+    }
+
+    const q = this.questionsList[index];
+    if (!q) return;
 
     const banner = document.getElementById('mpPlayerFeedbackBanner');
     if (banner) banner.className = 'feedback-banner hidden';
 
-    document.getElementById('mpPlayerQCounter').textContent = `Question ${data.questionNumber} of ${this.questionsList.length || 10}`;
-    document.getElementById('mpPlayerQuestionText').textContent = data.questionText;
+    document.getElementById('mpPlayerQCounter').textContent = `Question ${index + 1} of ${this.questionsList.length || 10}`;
+    document.getElementById('mpPlayerQuestionText').textContent = q.question;
 
-    this.questionStartedAt = data.startedAt;
-    this.questionDurationSec = data.duration || 20;
+    const startedAt = (gameObj && gameObj.question_start_time) ? gameObj.question_start_time : new Date().toISOString();
+    this.questionStartedAt = startedAt;
+    this.questionDurationSec = q.time_limit || 20;
 
     const container = document.getElementById('mpPlayerAnswersContainer');
     if (container) {
       container.innerHTML = '';
-      const typeId = data.questionTypeId || 1;
+      const typeId = q.question_type_id || 1;
 
       if (typeId === 3) {
-        // Identification Question: Render Text Input & Submit Button
         const inputWrap = document.createElement('div');
         inputWrap.style.gridColumn = '1 / -1';
         inputWrap.style.display = 'flex';
@@ -511,27 +605,21 @@ const Multiplayer = {
         inputWrap.style.gap = '12px';
         inputWrap.innerHTML = `
           <input type="text" id="mpPlayerTextInput" placeholder="Type your answer here..." class="customize-input" style="font-size:1.2rem; font-weight:700; text-align:center; padding:14px;" />
-          <button id="mpSubmitTextBtn" class="primary-btn bottom-start-btn" onclick="Multiplayer.submitPlayerTextChoice('${data.questionId}')">
+          <button id="mpSubmitTextBtn" class="primary-btn bottom-start-btn" onclick="Multiplayer.submitPlayerTextChoice('${q.id}')">
             Submit Answer ➔
           </button>
         `;
         container.appendChild(inputWrap);
       } else {
-        // Multiple Choice or True/False: Render styled .answer-option-btn
-        const rawChoices = data.choices || {};
         let choicesMap = {};
-
-        if (typeId === 2 || (rawChoices.a === 'True' && rawChoices.b === 'False')) {
-          choicesMap = {
-            A: rawChoices.a || 'True',
-            B: rawChoices.b || 'False'
-          };
+        if (typeId === 2 || (!q.choice_c && !q.choice_d && (q.correct_answer === 'True' || q.correct_answer === 'False' || q.correct_answer === 'TRUE' || q.correct_answer === 'FALSE'))) {
+          choicesMap = { A: 'True', B: 'False' };
         } else {
           choicesMap = {
-            A: rawChoices.a || rawChoices.A,
-            B: rawChoices.b || rawChoices.B,
-            C: rawChoices.c || rawChoices.C,
-            D: rawChoices.d || rawChoices.D
+            A: q.choice_a || q.option_a || 'Option A',
+            B: q.choice_b || q.option_b || 'Option B',
+            C: q.choice_c || q.option_c || 'Option C',
+            D: q.choice_d || q.option_d || 'Option D'
           };
         }
 
@@ -544,14 +632,14 @@ const Multiplayer = {
               <span class="option-badge-pill"><span class="badge-letter">${key}</span></span>
               <span class="option-text" style="font-weight:700; text-align:left; color:#3B0764;">${val}</span>
             `;
-            btn.onclick = () => this.submitPlayerChoice(data.questionId, key, btn);
+            btn.onclick = () => this.submitPlayerChoice(q.id, key, btn);
             container.appendChild(btn);
           }
         });
       }
     }
 
-    this.startSynchronizedTimer('mpPlayerTimerValue', data.startedAt, data.duration, () => {
+    this.startSynchronizedTimer('mpPlayerTimerValue', startedAt, this.questionDurationSec, () => {
       this.disablePlayerChoices();
     });
   },
@@ -686,7 +774,7 @@ const Multiplayer = {
           const displayName = p.display_name || p.name || 'Player';
           card.innerHTML = `
             <div class="part-info-left" style="justify-content:space-between; width:100%;">
-              <div style="display:flex; align-align:center; gap:10px;">
+              <div style="display:flex; align-items:center; gap:10px;">
                 <span style="font-size:1.4rem;">${rankTag}</span>
                 <div>
                   <h5 style="margin:0; font-size:1rem; color:#1E293B; font-weight:700;">${displayName}</h5>
