@@ -42,8 +42,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         return '/student/home';
       }
 
-      if (status == AuthStatus.authenticatedTeacher && isLoggingIn) {
-        return '/teacher/dashboard';
+      if (status == AuthStatus.authenticatedTeacher) {
+        final isStudentRoute = state.matchedLocation.startsWith('/student');
+        if (isLoggingIn || isStudentRoute) {
+          return '/teacher/dashboard';
+        }
       }
 
       return null;

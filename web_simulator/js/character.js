@@ -366,6 +366,7 @@ const CharacterSystem = {
   },
 
   triggerGenderSelectionModal(oldStage, newStage, newXP, isExistingUser = false) {
+    if (localStorage.getItem(DB.STORAGE_TEACHER)) return;
     this._pendingEvolutionData = { oldStage, newStage, newXP, isExistingUser };
     this._selectedGender = null;
     
@@ -431,6 +432,7 @@ const CharacterSystem = {
   },
 
   openCharacterModal() {
+    if (localStorage.getItem(DB.STORAGE_TEACHER)) return;
     let modal = document.getElementById('myCharacterPetModal');
     if (!modal) {
       modal = document.createElement('div');
@@ -908,6 +910,7 @@ const CharacterSystem = {
   },
 
   renderHomeCharacterCard() {
+    if (localStorage.getItem(DB.STORAGE_TEACHER)) return;
     const container = document.getElementById('homeCharacterCard');
     if (!container) return;
 
@@ -1022,6 +1025,7 @@ const CharacterSystem = {
   },
 
   openOutfitShopModal(activeTab = 'wardrobe') {
+    if (localStorage.getItem(DB.STORAGE_TEACHER)) return;
     let modal = document.getElementById('outfitShopModal');
     if (!modal) {
       modal = document.createElement('div');
@@ -1229,6 +1233,7 @@ const CharacterSystem = {
   },
 
   triggerEvolutionModal(oldStage, newStage, currentXP) {
+    if (localStorage.getItem(DB.STORAGE_TEACHER)) return;
     const modal = document.getElementById('evolutionModal');
     if (!modal) return;
 

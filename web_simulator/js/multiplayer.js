@@ -37,7 +37,12 @@ const Multiplayer = {
 
   goHome() {
     this.resetState();
-    App.showScreen('homeScreen');
+    const teacher = localStorage.getItem(DB.STORAGE_TEACHER);
+    if (teacher) {
+      App.showScreen('teacherDashboardScreen');
+    } else {
+      App.showScreen('homeScreen');
+    }
   },
 
   // 1. Host Flow: Open Host Create Screen & Populate Term/Topic Dropdowns

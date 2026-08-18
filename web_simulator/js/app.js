@@ -31,6 +31,22 @@ const App = {
   },
 
   showScreen(screenId) {
+    const teacher = localStorage.getItem(DB.STORAGE_TEACHER);
+    const teacherAllowedScreens = [
+      'teacherDashboardScreen',
+      'teacherLoginScreen',
+      'loginSelectionScreen',
+      'mpHostCreateScreen',
+      'mpHostLobbyScreen',
+      'mpHostGameScreen',
+      'hostLiveDashboardScreen',
+      'mpLeaderboardScreen'
+    ];
+
+    if (teacher && !teacherAllowedScreens.includes(screenId)) {
+      screenId = 'teacherDashboardScreen';
+    }
+
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const target = document.getElementById(screenId);
     if (target) {
