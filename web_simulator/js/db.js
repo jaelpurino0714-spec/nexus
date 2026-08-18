@@ -6,8 +6,11 @@
 const SUPABASE_URL = "https://bmebwqvdotwmtqcaxrnk.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtZWJ3cXZkb3R3bXRxY2F4cm5rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5NzUxNTQsImV4cCI6MjEwMTU1MTE1NH0._t0YaKroymMbtSnySVpe8Sw9uwUviAFYdkXeZADeVL8";
 
+var supabaseClient = null;
+
 function getSupabaseClient() {
   if (typeof window !== 'undefined' && window._supabaseClientInstance) {
+    supabaseClient = window._supabaseClientInstance;
     return window._supabaseClientInstance;
   }
   if (typeof window !== 'undefined' && window.supabase && typeof window.supabase.createClient === 'function') {
@@ -21,6 +24,7 @@ function getSupabaseClient() {
         }
       });
       window.supabaseClient = window._supabaseClientInstance;
+      supabaseClient = window._supabaseClientInstance;
       return window._supabaseClientInstance;
     } catch (e) {
       console.warn('Error creating Supabase client:', e);
@@ -29,18 +33,9 @@ function getSupabaseClient() {
   return null;
 }
 
-var supabaseClient = getSupabaseClient();
+supabaseClient = getSupabaseClient();
 if (typeof window !== 'undefined') {
-  try {
-    Object.defineProperty(window, 'supabaseClient', {
-      get() {
-        return getSupabaseClient();
-      },
-      configurable: true
-    });
-  } catch (e) {
-    window.supabaseClient = supabaseClient;
-  }
+  window.supabaseClient = supabaseClient || getSupabaseClient();
 }
 
 const DB = {
