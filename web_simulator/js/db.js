@@ -370,11 +370,21 @@ var DB = {
       try {
         await supabaseClient.from('profiles').upsert({
           id: profile.id,
-          role: 'student',
-          name: profile.name,
+          role: profile.role || 'student',
+          name: profile.name || profile.full_name,
+          full_name: profile.full_name || profile.name,
+          username: profile.username || '',
           grade_level: profile.gradeLevel || '',
           section: profile.section || '',
           photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null,
+          character_name: profile.petName || null,
+          character_gender: profile.gender || null,
+          character_xp: profile.characterXP || 0,
+          character_stage: profile.characterStage || 'baby',
+          current_streak: profile.streak || 0,
+          longest_streak: profile.longestStreak || 0,
+          coins: profile.coins !== undefined ? profile.coins : 50,
+          unlocked_outfits: profile.unlockedOutfits || ['default'],
           device_id: profile.id,
           created_at: profile.createdAt || new Date().toISOString()
         });
@@ -404,6 +414,15 @@ var DB = {
         gradeLevel: data.grade_level || '',
         section: data.section || '',
         photo: data.photo_url || null,
+        petName: data.character_name || null,
+        gender: data.character_gender || null,
+        characterXP: data.character_xp || 0,
+        characterStage: data.character_stage || 'baby',
+        streak: data.current_streak || 0,
+        longestStreak: data.longest_streak || 0,
+        coins: data.coins !== undefined ? data.coins : 50,
+        unlockedOutfits: data.unlocked_outfits || ['default'],
+        totalPoints: data.total_points || 0,
         createdAt: data.created_at || new Date().toISOString()
       };
     } catch (e) {

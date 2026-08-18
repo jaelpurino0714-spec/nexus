@@ -144,50 +144,54 @@ const Auth = {
       let profile = null;
 
       if (client && client.auth) {
-        try {
-          const internalEmail = this.formatInternalEmail(username);
-          const { data, error } = await client.auth.signInWithPassword({
-            email: internalEmail,
-            password: password
-          });
+        const internalEmail = this.formatInternalEmail(username);
+        const { data, error } = await client.auth.signInWithPassword({
+          email: internalEmail,
+          password: password
+        });
 
-          if (!error && data && data.user) {
-            const user = data.user;
-            profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(user.id) : null;
-            if (!profile) {
-              const userRole = (user.user_metadata && user.user_metadata.role) ? user.user_metadata.role : 'student';
-              const fullName = (user.user_metadata && user.user_metadata.full_name) ? user.user_metadata.full_name : username;
-              profile = {
-                id: user.id,
-                role: userRole,
-                name: fullName,
-                full_name: fullName,
-                username: username,
-                createdAt: new Date().toISOString()
-              };
-            }
-          } else if (error && error.message && error.message.toLowerCase().includes('rate limit')) {
-            console.warn('Supabase rate limit hit on sign in, checking local fallback.');
+        if (error) {
+          // Check if username exists in profiles table for accurate error message
+          const { data: profCheck } = await client
+            .from('profiles')
+            .select('id, username')
+            .eq('username', username)
+            .maybeSingle();
+
+          if (!profCheck) {
+            throw new Error(`Account with username "${username}" does not exist. Please check spelling or create an account.`);
+          } else {
+            throw new Error('Incorrect password. Please try again.');
           }
-        } catch (e) {
-          console.warn('Supabase sign-in warning:', e);
         }
-      }
 
-      // Local fallback if Supabase auth was unavailable or rate-limited
-      if (!profile) {
+        const user = data.user;
+        if (!user) {
+          throw new Error('Authentication session could not be established.');
+        }
+
+        // Fetch user's full profile from Supabase
+        profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(user.id) : null;
+        if (!profile) {
+          const userRole = (user.user_metadata && user.user_metadata.role) ? user.user_metadata.role : 'student';
+          const fullName = (user.user_metadata && user.user_metadata.full_name) ? user.user_metadata.full_name : username;
+          profile = {
+            id: user.id,
+            role: userRole,
+            name: fullName,
+            full_name: fullName,
+            username: username,
+            createdAt: new Date().toISOString()
+          };
+          if (db && db.saveStudentProfile) await db.saveStudentProfile(profile);
+        }
+      } else {
+        // Fallback local sign in only if client unavailable
         const localProf = db.getStudentProfile ? db.getStudentProfile() : null;
         if (localProf && localProf.username && localProf.username.toLowerCase() === username) {
           profile = localProf;
         } else {
-          const uuid = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'usr-' + Date.now();
-          profile = {
-            id: uuid,
-            role: 'student',
-            name: username,
-            username: username,
-            createdAt: new Date().toISOString()
-          };
+          throw new Error('Database connection unavailable. Please check your connection.');
         }
       }
 
@@ -253,90 +257,83 @@ const Auth = {
       let profile = null;
 
       if (client && client.auth) {
-        try {
-          // Check username availability in Supabase profiles
-          const { data: existingUser } = await client.from('profiles').select('id, username').eq('username', username).maybeSingle();
-          if (existingUser) {
-            throw new Error(`Username "${username}" is already taken. Please choose another.`);
-          }
+        // 1. Check if username is already taken in Supabase profiles
+        const { data: existingUser } = await client
+          .from('profiles')
+          .select('id, username')
+          .eq('username', username)
+          .maybeSingle();
 
-          const internalEmail = this.formatInternalEmail(username);
-          const { data, error } = await client.auth.signUp({
-            email: internalEmail,
-            password: password,
-            options: {
-              data: {
-                full_name: fullName,
-                username: username,
-                role: role
-              }
-            }
-          });
+        if (existingUser) {
+          throw new Error(`Username "${username}" is already taken. Please choose another.`);
+        }
 
-          if (error) {
-            if (error.message && (error.message.toLowerCase().includes('rate limit') || error.status === 429)) {
-              console.warn('Supabase email rate limit reached during sign up. Falling back to local account creation.');
-            } else if (!error.message.includes('already registered')) {
-              console.warn('Supabase sign up warning:', error.message);
-            }
-          }
-
-          if (data && data.user) {
-            const user = data.user;
-            if (!data.session) {
-              try {
-                await client.auth.signInWithPassword({
-                  email: internalEmail,
-                  password: password
-                });
-              } catch (_) {}
-            }
-
-            profile = {
-              id: user.id,
-              role: role,
-              name: fullName,
+        // 2. Sign up via Supabase Auth
+        const internalEmail = this.formatInternalEmail(username);
+        const { data, error } = await client.auth.signUp({
+          email: internalEmail,
+          password: password,
+          options: {
+            data: {
               full_name: fullName,
               username: username,
-              createdAt: new Date().toISOString()
-            };
-
-            try {
-              await client.from('profiles').upsert({
-                id: user.id,
-                role: role,
-                name: fullName,
-                full_name: fullName,
-                username: username,
-                created_at: new Date().toISOString()
-              });
-            } catch (e) {
-              console.warn('Profile table insert warning:', e);
+              role: role
             }
           }
-        } catch (e) {
-          if (e.message && e.message.includes('already taken')) {
-            throw e;
-          }
-          console.warn('Supabase sign up exception:', e);
-        }
-      }
+        });
 
-      // Local fallback account creation if Supabase rate-limited or offline
-      if (!profile) {
-        const uuid = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'usr-' + Date.now();
+        if (error) {
+          if (error.message && (error.message.toLowerCase().includes('rate limit') || error.status === 429)) {
+            throw new Error('Supabase email rate limit exceeded. Please wait a few minutes before creating a new account or try signing in.');
+          }
+          throw error;
+        }
+
+        const user = data.user;
+        if (!user) throw new Error('Failed to create account. Please try again.');
+
+        // Auto sign-in if session was not established automatically
+        if (!data.session) {
+          try {
+            await client.auth.signInWithPassword({
+              email: internalEmail,
+              password: password
+            });
+          } catch (_) {}
+        }
+
+        // 3. Create & Save Profile in Supabase
         profile = {
-          id: uuid,
+          id: user.id,
           role: role,
           name: fullName,
           full_name: fullName,
           username: username,
           createdAt: new Date().toISOString()
         };
+
+        try {
+          await client.from('profiles').upsert({
+            id: user.id,
+            role: role,
+            name: fullName,
+            full_name: fullName,
+            username: username,
+            created_at: new Date().toISOString()
+          });
+        } catch (e) {
+          console.warn('Profile table insert warning:', e);
+        }
+      } else {
+        throw new Error('Database connection unavailable. Please refresh the page.');
       }
 
-      if (db && db.saveStudentProfile) await db.saveStudentProfile(profile);
-      if (db && db.saveUserUUID) db.saveUserUUID(profile.id);
+      if (profile && db && db.saveStudentProfile) {
+        await db.saveStudentProfile(profile);
+      }
+      if (profile && db && db.saveUserUUID) {
+        db.saveUserUUID(profile.id);
+      }
 
       if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
 
