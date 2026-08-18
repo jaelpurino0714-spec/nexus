@@ -38,7 +38,7 @@ if (typeof window !== 'undefined') {
   window.supabaseClient = supabaseClient || getSupabaseClient();
 }
 
-const DB = {
+var DB = {
   // UUID validator helper
   isValidUuid(val) {
     if (typeof val !== 'string') return false;

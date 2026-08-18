@@ -104,6 +104,21 @@ const Auth = {
     return null;
   },
 
+  getDB() {
+    if (typeof window !== 'undefined' && window.DB) return window.DB;
+    if (typeof DB !== 'undefined') return DB;
+    return {
+      fetchProfileFromSupabase: async () => null,
+      saveStudentProfile: (p) => localStorage.setItem('nexus_student_profile', JSON.stringify(p)),
+      safeSetItem: (k, v) => localStorage.setItem(k, v),
+      saveUserUUID: (id) => localStorage.setItem('nexus_user_uuid', id),
+      getUserUUID: () => 'usr-' + Date.now(),
+      clearSession: () => localStorage.clear(),
+      STORAGE_PROFILE: 'nexus_student_profile',
+      STORAGE_TEACHER: 'nexus_teacher_session'
+    };
+  },
+
   async handleSignIn() {
     this.clearError();
     const username = document.getElementById('signInUsername').value.trim().toLowerCase();
@@ -120,6 +135,7 @@ const Auth = {
 
     try {
       const client = this.getClient();
+      const db = this.getDB();
       if (client && client.auth) {
         const internalEmail = this.formatInternalEmail(username);
         const { data, error } = await client.auth.signInWithPassword({
@@ -138,7 +154,7 @@ const Auth = {
         }
 
         const user = data.user;
-        let profile = await DB.fetchProfileFromSupabase(user.id);
+        let profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(user.id) : null;
 
         if (!profile) {
           const userRole = (user.user_metadata && user.user_metadata.role) ? user.user_metadata.role : 'student';
@@ -151,33 +167,33 @@ const Auth = {
             username: username,
             createdAt: new Date().toISOString()
           };
-          await DB.saveStudentProfile(profile);
+          if (db.saveStudentProfile) await db.saveStudentProfile(profile);
         } else {
-          DB.safeSetItem(DB.STORAGE_PROFILE, JSON.stringify(profile));
+          if (db.safeSetItem) db.safeSetItem(db.STORAGE_PROFILE || 'nexus_student_profile', JSON.stringify(profile));
         }
 
-        DB.saveUserUUID(user.id);
-        App.updateUserHeader();
+        if (db.saveUserUUID) db.saveUserUUID(user.id);
+        if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
 
         if (profile.role === 'teacher') {
-          localStorage.setItem(DB.STORAGE_TEACHER, JSON.stringify(profile));
-          App.showScreen('teacherHomeScreen');
+          localStorage.setItem(db.STORAGE_TEACHER || 'nexus_teacher_session', JSON.stringify(profile));
+          if (typeof App !== 'undefined' && App.showScreen) App.showScreen('teacherHomeScreen');
         } else {
-          localStorage.removeItem(DB.STORAGE_TEACHER);
-          App.showScreen('homeScreen');
+          localStorage.removeItem(db.STORAGE_TEACHER || 'nexus_teacher_session');
+          if (typeof App !== 'undefined' && App.showScreen) App.showScreen('homeScreen');
         }
       } else {
         // Fallback local sign in
         const profile = {
-          id: DB.getUserUUID(),
+          id: db.getUserUUID ? db.getUserUUID() : 'usr-' + Date.now(),
           role: 'student',
           name: username,
           username: username,
           createdAt: new Date().toISOString()
         };
-        DB.saveStudentProfile(profile);
-        App.updateUserHeader();
-        App.showScreen('homeScreen');
+        if (db.saveStudentProfile) db.saveStudentProfile(profile);
+        if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
+        if (typeof App !== 'undefined' && App.showScreen) App.showScreen('homeScreen');
       }
     } catch (err) {
       this.showError(err.message || 'Authentication failed.');
@@ -221,6 +237,7 @@ const Auth = {
 
     try {
       const client = this.getClient();
+      const db = this.getDB();
       if (client && client.auth) {
         // 1. Check if username is taken
         const { data: existingUser } = await client.from('profiles').select('id, username').eq('username', username).maybeSingle();
@@ -270,16 +287,16 @@ const Auth = {
           console.warn('Profile table insert warning:', e);
         }
 
-        DB.saveStudentProfile(profile);
-        DB.saveUserUUID(user.id);
-        App.updateUserHeader();
+        if (db.saveStudentProfile) db.saveStudentProfile(profile);
+        if (db.saveUserUUID) db.saveUserUUID(user.id);
+        if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
 
         if (role === 'teacher') {
-          localStorage.setItem(DB.STORAGE_TEACHER, JSON.stringify(profile));
-          App.showScreen('teacherHomeScreen');
+          localStorage.setItem(db.STORAGE_TEACHER || 'nexus_teacher_session', JSON.stringify(profile));
+          if (typeof App !== 'undefined' && App.showScreen) App.showScreen('teacherHomeScreen');
         } else {
-          localStorage.removeItem(DB.STORAGE_TEACHER);
-          App.showScreen('homeScreen');
+          localStorage.removeItem(db.STORAGE_TEACHER || 'nexus_teacher_session');
+          if (typeof App !== 'undefined' && App.showScreen) App.showScreen('homeScreen');
         }
       } else {
         const uuid = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'usr-' + Date.now();
@@ -290,16 +307,16 @@ const Auth = {
           username: username,
           createdAt: new Date().toISOString()
         };
-        DB.saveStudentProfile(profile);
-        DB.saveUserUUID(uuid);
-        App.updateUserHeader();
+        if (db.saveStudentProfile) db.saveStudentProfile(profile);
+        if (db.saveUserUUID) db.saveUserUUID(uuid);
+        if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
 
         if (role === 'teacher') {
-          localStorage.setItem(DB.STORAGE_TEACHER, JSON.stringify(profile));
-          App.showScreen('teacherHomeScreen');
+          localStorage.setItem(db.STORAGE_TEACHER || 'nexus_teacher_session', JSON.stringify(profile));
+          if (typeof App !== 'undefined' && App.showScreen) App.showScreen('teacherHomeScreen');
         } else {
-          localStorage.removeItem(DB.STORAGE_TEACHER);
-          App.showScreen('homeScreen');
+          localStorage.removeItem(db.STORAGE_TEACHER || 'nexus_teacher_session');
+          if (typeof App !== 'undefined' && App.showScreen) App.showScreen('homeScreen');
         }
       }
     } catch (err) {
