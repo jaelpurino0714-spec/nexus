@@ -1174,29 +1174,36 @@ const DB = {
     if (['a', 'b', 'c', 'd'].includes(userLower)) {
       if (dbLower === userLower) return true;
       const textForUserLetter = choicesMap[userLower];
-      if (textForUserLetter && (textForUserLetter === dbLower || textForUserLetter === eqLower || textForUserLetter.includes(dbLower) || dbLower.includes(textForUserLetter))) {
+      if (textForUserLetter && (textForUserLetter === dbLower || textForUserLetter === eqLower)) {
+        return true;
+      }
+      if (textForUserLetter && dbLower.length > 2 && (textForUserLetter.includes(dbLower) || dbLower.includes(textForUserLetter))) {
         return true;
       }
     }
 
     // If dbCorrect is a letter A/B/C/D (or index 0..3)
     if (['a', 'b', 'c', 'd'].includes(dbLower)) {
+      if (dbLower === userLower) return true;
       const textForDbLetter = choicesMap[dbLower];
-      if (textForDbLetter && (textForDbLetter === userLower || textForDbLetter.includes(userLower) || userLower.includes(textForDbLetter))) {
+      if (textForDbLetter && (textForDbLetter === userLower || textForDbLetter === eqLower)) {
+        return true;
+      }
+      if (textForDbLetter && userLower.length > 2 && (textForDbLetter.includes(userLower) || userLower.includes(textForDbLetter))) {
         return true;
       }
     }
 
     // 3. True / False handling
-    const trueSyns = ['true', 't', 'a', '1', '0'];
-    const falseSyns = ['false', 'f', 'b', '2', '1'];
+    const trueSyns = ['true', 't'];
+    const falseSyns = ['false', 'f'];
     if (q.question_type_id === 2 || q.question_type === 'true_false' || (choicesMap.a === 'true' && choicesMap.b === 'false')) {
       if (trueSyns.includes(dbLower) && trueSyns.includes(userLower)) return true;
       if (falseSyns.includes(dbLower) && falseSyns.includes(userLower)) return true;
     }
 
-    // 4. Substring / Counterpart fallback for text/identification answer
-    if (userLower.length >= 1 && (eqLower.length >= 1 || dbLower.length >= 1)) {
+    // 4. Substring / Counterpart fallback for text/identification answer (minimum length 3)
+    if (userLower.length >= 3 && (eqLower.length >= 3 || dbLower.length >= 3)) {
       const targetText = eqLower || dbLower;
       if (userLower === targetText || userLower.includes(targetText) || targetText.includes(userLower)) return true;
     }

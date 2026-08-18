@@ -1300,8 +1300,11 @@ const Quiz = {
       const buttons = document.querySelectorAll('.answer-option-btn');
       buttons.forEach((btn, idx) => {
         btn.disabled = true;
-        if (idx === correctIndex || (isCorrect && idx === userSelection)) btn.classList.add('correct-choice');
-        else if (idx === userSelection && !isCorrect) btn.classList.add('wrong-choice');
+        if (idx === correctIndex) {
+          btn.classList.add('correct-choice');
+        } else if (idx === userSelection && !isCorrect) {
+          btn.classList.add('wrong-choice');
+        }
       });
     }
 
