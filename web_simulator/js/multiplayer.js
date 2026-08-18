@@ -299,7 +299,6 @@ const Multiplayer = {
         const game = await DB.getMultiplayerGameByCode(this.currentGame.room_code);
         if (!game) return;
 
-        // Transition player from lobby to game when host starts!
         if ((game.status === 'active' || game.status === 'starting' || game.status === 'in_progress') && App.currentScreen === 'mpPlayerLobbyScreen') {
           if (this.questionsList.length === 0) {
             this.questionsList = await DB.getMultiplayerQuestions(game.id, game.room_code);
@@ -307,9 +306,10 @@ const Multiplayer = {
           App.showScreen('mpPlayerGameScreen');
           const currentIdx = game.current_question_index || 0;
           this.playerRenderQuestion(currentIdx, game);
-        } else if (game.status === 'active' && App.currentScreen === 'mpPlayerGameScreen') {
+        } else if ((game.status === 'active' || game.status === 'in_progress') && App.currentScreen === 'mpPlayerGameScreen') {
           const dbIndex = game.current_question_index || 0;
-          if (dbIndex !== this.currentIndex) {
+          const qStartTime = game.question_start_time || '';
+          if (dbIndex !== this.currentIndex || (qStartTime && qStartTime !== this.lastRenderedQuestionTime)) {
             this.playerRenderQuestion(dbIndex, game);
           }
         } else if (game.status === 'finished' && App.currentScreen !== 'mpLeaderboardScreen') {
@@ -525,6 +525,10 @@ const Multiplayer = {
     this.questionStartedAt = startedAt;
     this.questionDurationSec = q.time_limit || 20;
 
+    if (this.currentGame && this.currentGame.id) {
+      DB.updateMultiplayerGameStatus(this.currentGame.id, 'active', index);
+    }
+
     // Send QUESTION_START Broadcast payload WITHOUT correct_answer!
     this.sendBroadcast('QUESTION_START', {
       questionNumber: index + 1,
@@ -538,7 +542,8 @@ const Multiplayer = {
         d: q.choice_d || q.option_d || null
       },
       startedAt: startedAt,
-      duration: this.questionDurationSec
+      duration: this.questionDurationSec,
+      serverTime: Date.now()
     });
 
     this.startSynchronizedTimer('mpHostTimerValue', startedAt, this.questionDurationSec, () => {
@@ -668,8 +673,10 @@ const Multiplayer = {
 
   onQuestionStart(data) {
     if (this.isHost) return;
-    this.playerRenderQuestion(data.questionNumber - 1, {
-      question_start_time: data.startedAt
+    const qIndex = (data.questionNumber || 1) - 1;
+    this.playerRenderQuestion(qIndex, {
+      question_start_time: data.startedAt || new Date().toISOString(),
+      serverTime: data.serverTime || Date.now()
     });
   },
 
@@ -691,9 +698,29 @@ const Multiplayer = {
     document.getElementById('mpPlayerQCounter').textContent = `Question ${index + 1} of ${this.questionsList.length || 10}`;
     document.getElementById('mpPlayerQuestionText').textContent = q.question;
 
-    const startedAt = (gameObj && gameObj.question_start_time) ? gameObj.question_start_time : new Date().toISOString();
-    this.questionStartedAt = startedAt;
     this.questionDurationSec = q.time_limit || 20;
+
+    let startedAt = (gameObj && gameObj.question_start_time) ? gameObj.question_start_time : null;
+    this.lastRenderedQuestionTime = startedAt;
+
+    const now = Date.now();
+    if (startedAt) {
+      let startTime = new Date(startedAt).getTime();
+      if (gameObj && gameObj.serverTime) {
+        const clockOffset = now - gameObj.serverTime;
+        startTime += clockOffset;
+      }
+      const elapsedSec = (now - startTime) / 1000;
+      if (isNaN(startTime) || elapsedSec < -2 || elapsedSec >= this.questionDurationSec) {
+        startedAt = new Date().toISOString();
+        this.lastRenderedQuestionTime = startedAt;
+      }
+    } else {
+      startedAt = new Date().toISOString();
+      this.lastRenderedQuestionTime = startedAt;
+    }
+
+    this.questionStartedAt = startedAt;
 
     const container = document.getElementById('mpPlayerAnswersContainer');
     if (container) {
@@ -731,20 +758,40 @@ const Multiplayer = {
           if (val) {
             const btn = document.createElement('button');
             btn.className = 'answer-option-btn';
+            btn.type = 'button';
             btn.innerHTML = `
               <span class="option-badge-pill"><span class="badge-letter">${key}</span></span>
               <span class="option-text" style="font-weight:700; text-align:left; color:#3B0764;">${val}</span>
             `;
-            btn.onclick = () => this.submitPlayerChoice(q.id, key, btn);
+            btn.onclick = (e) => {
+              if (e) e.preventDefault();
+              this.submitPlayerChoice(q.id, key, btn);
+            };
             container.appendChild(btn);
           }
         });
       }
     }
 
+    this.enablePlayerChoices();
+
     this.startSynchronizedTimer('mpPlayerTimerValue', startedAt, this.questionDurationSec, () => {
       this.disablePlayerChoices();
     });
+  },
+
+  enablePlayerChoices() {
+    const container = document.getElementById('mpPlayerAnswersContainer');
+    if (container) {
+      const elements = container.querySelectorAll('.answer-option-btn, #mpSubmitTextBtn, #mpPlayerTextInput');
+      elements.forEach(b => {
+        b.disabled = false;
+        b.style.pointerEvents = 'auto';
+        b.style.opacity = '1';
+        b.style.borderColor = '';
+        b.style.background = '';
+      });
+    }
   },
 
   async submitPlayerChoice(questionId, selectedChoice, btnEl) {
@@ -755,19 +802,8 @@ const Multiplayer = {
     if (btnEl) {
       btnEl.style.borderColor = '#6D28D9';
       btnEl.style.background = '#EDE9FE';
+      btnEl.style.opacity = '1';
     }
-
-    const elapsedSec = this.questionStartedAt ? Math.max(0.1, (Date.now() - new Date(this.questionStartedAt).getTime()) / 1000) : 1;
-
-    const result = await DB.submitPlayerAnswer(
-      this.currentGame ? this.currentGame.id : null,
-      DB.getUserUUID(),
-      questionId,
-      selectedChoice,
-      elapsedSec
-    );
-
-    this.sendBroadcast('PLAYER_ANSWERED', { playerId: DB.getUserUUID() });
 
     const banner = document.getElementById('mpPlayerFeedbackBanner');
     const statusText = document.getElementById('mpPlayerFeedbackText');
@@ -775,8 +811,35 @@ const Multiplayer = {
 
     if (banner && statusText && subText) {
       banner.className = 'feedback-banner';
-      statusText.textContent = result.is_correct ? '✅ Correct Answer!' : '❌ Incorrect Answer';
-      subText.textContent = `+${result.points_earned || 0} points earned!`;
+      statusText.textContent = '⏳ Answer Submitted!';
+      subText.textContent = 'Validating score with server...';
+    }
+
+    const elapsedSec = this.questionStartedAt ? Math.max(0.1, (Date.now() - new Date(this.questionStartedAt).getTime()) / 1000) : 1;
+
+    try {
+      const result = await DB.submitPlayerAnswer(
+        this.currentGame ? this.currentGame.id : null,
+        DB.getUserUUID(),
+        questionId,
+        selectedChoice,
+        elapsedSec
+      );
+
+      this.sendBroadcast('PLAYER_ANSWERED', {
+        playerId: DB.getUserUUID(),
+        playerName: (DB.getStudentProfile() || {}).name || 'Player'
+      });
+
+      if (banner && statusText && subText) {
+        statusText.textContent = result.is_correct ? '✅ Correct Answer!' : '❌ Incorrect Answer';
+        subText.textContent = `+${result.points_earned || 0} points earned!`;
+      }
+    } catch (e) {
+      console.warn('Answer submit fallback:', e);
+      if (banner && statusText) {
+        statusText.textContent = '✅ Answer Recorded!';
+      }
     }
   },
 
@@ -795,7 +858,11 @@ const Multiplayer = {
     const container = document.getElementById('mpPlayerAnswersContainer');
     if (container) {
       const elements = container.querySelectorAll('.answer-option-btn, #mpSubmitTextBtn, #mpPlayerTextInput');
-      elements.forEach(b => b.disabled = true);
+      elements.forEach(b => {
+        b.disabled = true;
+        b.style.pointerEvents = 'none';
+        b.style.opacity = '0.7';
+      });
     }
   },
 
@@ -832,7 +899,7 @@ const Multiplayer = {
     if (this.timerInterval) clearInterval(this.timerInterval);
 
     let startTime = startedAtIso ? new Date(startedAtIso).getTime() : Date.now();
-    if (isNaN(startTime) || startTime > Date.now()) {
+    if (isNaN(startTime) || startTime > Date.now() + 2000) {
       startTime = Date.now();
     }
     const durationMs = (durationSec || 20) * 1000;
@@ -848,13 +915,14 @@ const Multiplayer = {
       if (el) el.textContent = `${remainingSec}s`;
 
       if (remainingMs <= 0) {
-        clearInterval(this.timerInterval);
+        if (this.timerInterval) clearInterval(this.timerInterval);
+        this.timerInterval = null;
         if (typeof onExpire === 'function') onExpire();
       }
     };
 
     updateTimer();
-    this.timerInterval = setInterval(updateTimer, 100);
+    this.timerInterval = setInterval(updateTimer, 50);
   },
 
   // 11. Render Leaderboard & Podium Standings
