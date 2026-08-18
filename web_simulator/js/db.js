@@ -1474,6 +1474,7 @@ var DB = {
 
 if (typeof window !== 'undefined') {
   window.DB = DB;
+  window.db = DB;
 }
 
 
