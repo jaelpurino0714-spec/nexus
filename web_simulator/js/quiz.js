@@ -990,6 +990,35 @@ const Quiz = {
   },
 
   finishQuizHostView() {
+    const lobbyData = this.getLobbyData(this.lobbyAccessCode);
+    const participants = (lobbyData && lobbyData.participants) ? lobbyData.participants : this.lobbyParticipants;
+    const totalQ = (lobbyData && lobbyData.settings && lobbyData.settings.questionCount)
+      ? lobbyData.settings.questionCount
+      : ((this.questionsList && this.questionsList.length > 0) ? this.questionsList.length : (this.customQuestionCount || 15));
+
+    const sorted = [...participants].sort((a, b) => (b.points || 0) - (a.points || 0));
+
+    const analyticsData = {
+      gameId: 'quiz_lobby_' + (this.lobbyAccessCode || Date.now()),
+      roomCode: this.lobbyAccessCode || '000000',
+      title: (lobbyData && lobbyData.settings && lobbyData.settings.topic) ? lobbyData.settings.topic : 'Science Host Quiz',
+      totalQuestions: totalQ,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+      participants: sorted.map(p => {
+        const correct = p.correct || 0;
+        const pct = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
+        return {
+          name: p.name || 'Participant',
+          points: p.points || 0,
+          correct: correct,
+          totalQuestions: totalQ,
+          correctRatio: `${correct}/${totalQ}`,
+          accuracyPct: pct
+        };
+      })
+    };
+
+    DB.saveHostedGameAnalytics(analyticsData);
     App.showScreen('homeScreen');
     alert('Host Live Quiz finished! Final participant scores saved.');
   },

@@ -429,7 +429,7 @@ const TeacherPortal = {
                         ${p.accuracyPct}%
                       </span>
                     </td>
-                    <td style="padding: 10px; font-weight: 700; color: #0284C7;">${p.correct} / ${p.totalQuestions}</td>
+                    <td style="padding: 10px; font-weight: 700; color: #0284C7;">${p.correctRatio || `${p.correct}/${p.totalQuestions}`}</td>
                   </tr>
                 `).join('')}
               </tbody>

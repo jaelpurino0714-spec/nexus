@@ -682,6 +682,7 @@ const Multiplayer = {
             points: p.score || p.points || 0,
             correct: correct,
             totalQuestions: totalQ,
+            correctRatio: `${correct}/${totalQ}`,
             accuracyPct: pct
           };
         })
