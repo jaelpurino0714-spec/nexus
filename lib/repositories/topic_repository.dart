@@ -9,7 +9,7 @@ abstract class TopicRepository {
 }
 
 class TopicRepositoryImpl implements TopicRepository {
-  final _client = SupabaseService.instance.client;
+  SupabaseClient get _client => SupabaseService.instance.client;
 
   @override
   Future<List<TermModel>> getTermsWithTopics() async {

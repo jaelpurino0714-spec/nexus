@@ -4,7 +4,7 @@ import '../models/teacher_analytics_model.dart';
 import 'supabase_service.dart';
 
 class AnalyticsService {
-  final _client = SupabaseService.instance.client;
+  SupabaseClient get _client => SupabaseService.instance.client;
 
   Future<StudentAnalyticsModel> fetchStudentAnalytics(String studentId) async {
     final response = await _client

@@ -4,6 +4,15 @@
    ========================================================================== */
 
 const App = {
+  get db() {
+    if (typeof window !== 'undefined' && window.DB) return window.DB;
+    if (typeof window !== 'undefined' && window.db) return window.db;
+    return typeof DB !== 'undefined' ? DB : null;
+  },
+  get DB() {
+    return this.db;
+  },
+
   init() {
     this.bindEvents();
     this.checkInitialAuth();
@@ -225,7 +234,14 @@ const Settings = {
       });
     }
   }
-};
+if (typeof window !== 'undefined') {
+  window.App = App;
+  window.app = App;
+  if (typeof DB !== 'undefined') {
+    App.db = DB;
+    App.DB = DB;
+  }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   App.init();

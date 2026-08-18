@@ -4,7 +4,7 @@ import '../models/quiz_attempt_model.dart';
 import 'supabase_service.dart';
 
 class QuizService {
-  final _client = SupabaseService.instance.client;
+  SupabaseClient get _client => SupabaseService.instance.client;
 
   Future<QuizAttemptModel> saveQuizAttempt({
     required String studentId,

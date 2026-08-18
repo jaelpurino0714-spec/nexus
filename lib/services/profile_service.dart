@@ -5,7 +5,7 @@ import '../models/profile_model.dart';
 import 'supabase_service.dart';
 
 class ProfileService {
-  final SupabaseClient _client = SupabaseService.instance.client;
+  SupabaseClient get _client => SupabaseService.instance.client;
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   static const String _userUuidKey = 'nexus_user_uuid';
   static const String _userRoleKey = 'nexus_user_role';

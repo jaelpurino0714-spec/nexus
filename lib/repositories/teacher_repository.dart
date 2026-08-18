@@ -10,7 +10,7 @@ abstract class TeacherRepository {
 }
 
 class TeacherRepositoryImpl implements TeacherRepository {
-  final _client = SupabaseService.instance.client;
+  SupabaseClient get _client => SupabaseService.instance.client;
 
   @override
   Future<void> createCustomQuiz({

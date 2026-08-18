@@ -10,7 +10,7 @@ class PreparedQuestion {
 }
 
 class QuestionService {
-  final _client = SupabaseService.instance.client;
+  SupabaseClient get _client => SupabaseService.instance.client;
 
   Future<List<QuestionModel>> fetchActiveQuestionsByTopic(
     String topicId, {

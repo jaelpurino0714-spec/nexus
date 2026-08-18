@@ -106,7 +106,12 @@ const Auth = {
 
   getDB() {
     if (typeof window !== 'undefined' && window.DB) return window.DB;
+    if (typeof window !== 'undefined' && window.db) return window.db;
     if (typeof DB !== 'undefined') return DB;
+    if (typeof db !== 'undefined') return db;
+    if (typeof App !== 'undefined' && App.db) return App.db;
+    if (typeof App !== 'undefined' && App.DB) return App.DB;
+    if (typeof window !== 'undefined' && window.App && window.App.db) return window.App.db;
     return {
       fetchProfileFromSupabase: async () => null,
       saveStudentProfile: (p) => localStorage.setItem('nexus_student_profile', JSON.stringify(p)),
@@ -448,7 +453,8 @@ const Auth = {
   },
 
   updateProfile() {
-    const profile = DB.getStudentProfile() || {};
+    const db = this.getDB();
+    const profile = (db && db.getStudentProfile) ? db.getStudentProfile() || {} : {};
     profile.name = document.getElementById('editNameInput').value.trim();
     profile.gradeLevel = document.getElementById('editGradeInput').value;
     profile.section = document.getElementById('editSectionInput').value.trim();
@@ -456,9 +462,16 @@ const Auth = {
       profile.photo = this.editPhotoData;
     }
 
-    DB.saveStudentProfile(profile);
-    App.updateUserHeader();
+    if (db && db.saveStudentProfile) {
+      db.saveStudentProfile(profile);
+    }
+    if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
     alert('Profile updated successfully!');
-    App.showScreen('settingsScreen');
+    if (typeof App !== 'undefined' && App.showScreen) App.showScreen('settingsScreen');
   }
 };
+
+if (typeof window !== 'undefined') {
+  window.Auth = Auth;
+  window.auth = Auth;
+}

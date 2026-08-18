@@ -3,7 +3,7 @@ import '../models/achievement_model.dart';
 import 'supabase_service.dart';
 
 class AchievementService {
-  final _client = SupabaseService.instance.client;
+  SupabaseClient get _client => SupabaseService.instance.client;
 
   Future<List<AchievementModel>> getStudentAchievements(String studentId) async {
     final allAchievementsResponse = await _client.from('achievements').select();

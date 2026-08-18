@@ -3,8 +3,8 @@
    Replaces all local hardcoded mock data with live Supabase PostgreSQL backend
    ========================================================================== */
 
-const SUPABASE_URL = "https://bmebwqvdotwmtqcaxrnk.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtZWJ3cXZkb3R3bXRxY2F4cm5rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5NzUxNTQsImV4cCI6MjEwMTU1MTE1NH0._t0YaKroymMbtSnySVpe8Sw9uwUviAFYdkXeZADeVL8";
+var SUPABASE_URL = "https://bmebwqvdotwmtqcaxrnk.supabase.co";
+var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtZWJ3cXZkb3R3bXRxY2F4cm5rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5NzUxNTQsImV4cCI6MjEwMTU1MTE1NH0._t0YaKroymMbtSnySVpe8Sw9uwUviAFYdkXeZADeVL8";
 
 var supabaseClient = null;
 
@@ -1475,6 +1475,10 @@ var DB = {
 if (typeof window !== 'undefined') {
   window.DB = DB;
   window.db = DB;
+  if (typeof App !== 'undefined') {
+    App.db = DB;
+    App.DB = DB;
+  }
 }
 
 

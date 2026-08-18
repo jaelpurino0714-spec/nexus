@@ -16,7 +16,7 @@ abstract class QuestionRepository {
 
 class QuestionRepositoryImpl implements QuestionRepository {
   final QuestionService _questionService;
-  final _client = SupabaseService.instance.client;
+  SupabaseClient get _client => SupabaseService.instance.client;
 
   QuestionRepositoryImpl(this._questionService);
 

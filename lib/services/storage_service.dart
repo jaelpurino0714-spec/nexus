@@ -3,7 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'supabase_service.dart';
 
 class StorageService {
-  final SupabaseClient _client = SupabaseService.instance.client;
+  SupabaseClient get _client => SupabaseService.instance.client;
   static const String _bucketName = 'profile-images';
 
   Future<String?> uploadProfileImage(File file, String userId) async {
