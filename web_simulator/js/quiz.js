@@ -1293,7 +1293,7 @@ const Quiz = {
       let correctIndex = typeof q.answer === 'number' ? q.answer : -1;
       if (correctIndex < 0) {
         const corrLetter = String(q.correct_answer || q.correctAnswer || 'A').toUpperCase();
-        const letterToIndex = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+        const letterToIndex = { 'A': 0, 'B': 1, 'C': 2, 'D': 3, '0': 0, '1': 1, '2': 2, '3': 3 };
         if (letterToIndex[corrLetter] !== undefined) correctIndex = letterToIndex[corrLetter];
       }
 

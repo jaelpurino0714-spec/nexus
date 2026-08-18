@@ -1146,9 +1146,18 @@ const DB = {
     const eqCorrect = String(q.equivalent_answer || q.equivalentAnswer || q.counterpart || '').trim();
     const userSel = String(selectedChoice).trim();
 
-    const dbLower = dbCorrect.toLowerCase();
-    const eqLower = eqCorrect.toLowerCase();
-    const userLower = userSel.toLowerCase();
+    const letterMap = { 'a': 'a', 'b': 'b', 'c': 'c', 'd': 'd', '0': 'a', '1': 'b', '2': 'c', '3': 'd' };
+
+    let dbLower = dbCorrect.toLowerCase();
+    let eqLower = eqCorrect.toLowerCase();
+    let userLower = userSel.toLowerCase();
+
+    if (letterMap[userLower]) {
+      userLower = letterMap[userLower];
+    }
+    if (letterMap[dbLower]) {
+      dbLower = letterMap[dbLower];
+    }
 
     // 1. Direct case-insensitive equality
     if (userLower === dbLower || (eqLower && userLower === eqLower)) return true;
@@ -1161,7 +1170,7 @@ const DB = {
       d: String(q.choice_d || q.option_d || q.optionD || (q.options ? q.options[3] : '') || '').trim().toLowerCase()
     };
 
-    // If user selected A/B/C/D letter
+    // If user selected A/B/C/D letter (or index 0..3)
     if (['a', 'b', 'c', 'd'].includes(userLower)) {
       if (dbLower === userLower) return true;
       const textForUserLetter = choicesMap[userLower];
@@ -1170,7 +1179,7 @@ const DB = {
       }
     }
 
-    // If dbCorrect is a letter A/B/C/D
+    // If dbCorrect is a letter A/B/C/D (or index 0..3)
     if (['a', 'b', 'c', 'd'].includes(dbLower)) {
       const textForDbLetter = choicesMap[dbLower];
       if (textForDbLetter && (textForDbLetter === userLower || textForDbLetter.includes(userLower) || userLower.includes(textForDbLetter))) {
@@ -1179,8 +1188,8 @@ const DB = {
     }
 
     // 3. True / False handling
-    const trueSyns = ['true', 't', 'a', '1'];
-    const falseSyns = ['false', 'f', 'b', '2'];
+    const trueSyns = ['true', 't', 'a', '1', '0'];
+    const falseSyns = ['false', 'f', 'b', '2', '1'];
     if (q.question_type_id === 2 || q.question_type === 'true_false' || (choicesMap.a === 'true' && choicesMap.b === 'false')) {
       if (trueSyns.includes(dbLower) && trueSyns.includes(userLower)) return true;
       if (falseSyns.includes(dbLower) && falseSyns.includes(userLower)) return true;

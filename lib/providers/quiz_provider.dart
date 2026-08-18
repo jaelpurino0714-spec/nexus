@@ -222,6 +222,12 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
           (sel.startsWith('f') && corr.startsWith('f'));
     } else {
       // Multiple Choice answer checking logic
+      Map<String, String> indexToLetter = {
+        '0': 'A',
+        '1': 'B',
+        '2': 'C',
+        '3': 'D',
+      };
       Map<String, String> optionMap = {
         'A': currentQ.optionA.trim(),
         'B': currentQ.optionB.trim(),
@@ -229,8 +235,8 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
         'D': (currentQ.optionD ?? '').trim(),
       };
 
-      String upperSel = selStr.toUpperCase();
-      String upperCorr = corrStr.toUpperCase();
+      String upperSel = indexToLetter[selStr.toUpperCase()] ?? selStr.toUpperCase();
+      String upperCorr = indexToLetter[corrStr.toUpperCase()] ?? corrStr.toUpperCase();
 
       if (upperSel == upperCorr) {
         isCorrect = true;

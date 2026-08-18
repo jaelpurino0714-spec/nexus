@@ -79,14 +79,20 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
             (sel.startsWith('t') && corr.startsWith('t')) ||
             (sel.startsWith('f') && corr.startsWith('f'));
       } else {
+        Map<String, String> indexToLetter = {
+          '0': 'A',
+          '1': 'B',
+          '2': 'C',
+          '3': 'D',
+        };
         Map<String, String> optionMap = {
           'A': currentQ.optionA.trim(),
           'B': currentQ.optionB.trim(),
           'C': (currentQ.optionC ?? '').trim(),
           'D': (currentQ.optionD ?? '').trim(),
         };
-        String upperSel = selStr.toUpperCase();
-        String upperCorr = corrStr.toUpperCase();
+        String upperSel = indexToLetter[selStr.toUpperCase()] ?? selStr.toUpperCase();
+        String upperCorr = indexToLetter[corrStr.toUpperCase()] ?? corrStr.toUpperCase();
 
         if (upperSel == upperCorr) {
           isCorrect = true;
