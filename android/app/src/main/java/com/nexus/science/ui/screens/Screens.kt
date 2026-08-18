@@ -31,8 +31,7 @@ import com.nexus.science.viewmodel.QuizState
 // ---------------- 1. LOGIN SELECTION SCREEN ----------------
 @Composable
 fun LoginSelectionScreen(
-    onSelectStudent: () -> Unit,
-    onSelectTeacher: () -> Unit
+    onSelectStudent: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -85,28 +84,6 @@ fun LoginSelectionScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // Teacher Role Card
-                Surface(
-                    onClick = onSelectTeacher,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    color = BgSubtle
-                ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = "👩‍🏫", fontSize = 32.sp)
-                        Spacer(modifier = Modifier.width(16.dp))
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text("Teacher", fontWeight = FontWeight.Bold, color = PrimaryPurpleDark)
-                            Text("Manage quizzes & view analytics", fontSize = 12.sp, color = TextMuted)
-                        }
-                        Icon(Icons.Default.ArrowForward, contentDescription = null, tint = PrimaryPurple)
-                    }
-                }
             }
         }
     }
@@ -229,142 +206,7 @@ fun StudentSetupScreen(
     }
 }
 
-// ---------------- 2B. TEACHER LOGIN SCREEN ----------------
-@Composable
-fun TeacherLoginScreen(
-    onLoginTeacher: (String, String) -> Boolean,
-    errorMessage: String?,
-    onBack: () -> Unit,
-    onSuccess: () -> Unit
-) {
-    var name by remember { mutableStateOf("") }
-    var passcode by remember { mutableStateOf("") }
-    var localError by remember { mutableStateOf<String?>(null) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BgMain)
-            .padding(24.dp)
-    ) {
-        IconButton(onClick = onBack) {
-            Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = PrimaryPurpleDark)
-        }
-
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(containerColor = BgCard),
-            elevation = CardDefaults.cardElevation(8.dp)
-        ) {
-            Column(
-                modifier = Modifier.padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "🔐", fontSize = 48.sp)
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = "Teacher Access",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = PrimaryPurpleDark
-                )
-                Text(
-                    text = "Enter your name & teacher passcode",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = TextMuted
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
-                    label = { Text("Teacher Name") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                OutlinedTextField(
-                    value = passcode,
-                    onValueChange = { passcode = it },
-                    label = { Text("Teacher Passcode") },
-                    visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                val activeError = localError ?: errorMessage
-                if (activeError != null) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = activeError,
-                        color = ErrorRed,
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Button(
-                    onClick = {
-                        val success = onLoginTeacher(name, passcode)
-                        if (success) {
-                            onSuccess()
-                        } else {
-                            localError = if (name.isBlank()) "Please enter teacher name" else "Invalid Passcode"
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = PrimaryPurple)
-                ) {
-                    Text("Enter Teacher Portal", fontWeight = FontWeight.Bold)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun TeacherDashboardScreen(
-    teacherName: String,
-    onLogout: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BgMain)
-            .padding(24.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(text = "👩‍🏫 Teacher Portal", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = PrimaryPurpleDark)
-                Text(text = "Welcome, $teacherName", fontSize = 14.sp, color = TextMuted)
-            }
-            Button(
-                onClick = onLogout,
-                colors = ButtonDefaults.buttonColors(containerColor = ErrorRed)
-            ) {
-                Text("Log Out", color = Color.White)
-            }
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = BgCard)
-        ) {
-            Column(modifier = Modifier.padding(20.dp)) {
-                Text("Classroom Analytics & Quizzes", fontWeight = FontWeight.Bold, color = PrimaryPurpleDark)
-                Spacer(modifier = Modifier.height(8.dp))
-                Text("Manage DepEd Science warmth-ups and export classroom data.", fontSize = 13.sp, color = TextMuted)
-            }
-        }
-    }
-}
 
 // ---------------- 3. HOME NAVIGATION HUB ----------------
 @Composable

@@ -17,12 +17,8 @@ const App = {
 
   checkInitialAuth() {
     const student = DB.getStudentProfile();
-    const teacher = localStorage.getItem(DB.STORAGE_TEACHER);
 
-    if (teacher) {
-      Analytics.renderDashboard();
-      this.showScreen('teacherDashboardScreen');
-    } else if (student) {
+    if (student) {
       this.updateUserHeader();
       this.showScreen('homeScreen');
     } else {
@@ -31,22 +27,6 @@ const App = {
   },
 
   showScreen(screenId) {
-    const teacher = localStorage.getItem(DB.STORAGE_TEACHER);
-    const teacherAllowedScreens = [
-      'teacherDashboardScreen',
-      'teacherLoginScreen',
-      'loginSelectionScreen',
-      'mpHostCreateScreen',
-      'mpHostLobbyScreen',
-      'mpHostGameScreen',
-      'hostLiveDashboardScreen',
-      'mpLeaderboardScreen'
-    ];
-
-    if (teacher && !teacherAllowedScreens.includes(screenId)) {
-      screenId = 'teacherDashboardScreen';
-    }
-
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const target = document.getElementById(screenId);
     if (target) {
@@ -71,14 +51,7 @@ const App = {
 
   updateUserHeader() {
     const profile = DB.getStudentProfile();
-    const teacher = localStorage.getItem(DB.STORAGE_TEACHER);
     const badge = document.getElementById('userBadge');
-
-    if (teacher) {
-      badge.style.display = 'inline-block';
-      badge.textContent = 'Teacher';
-      return;
-    }
 
     if (!profile) {
       badge.style.display = 'none';

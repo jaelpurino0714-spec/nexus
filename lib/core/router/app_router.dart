@@ -5,7 +5,6 @@ import '../../providers/auth_provider.dart';
 import '../../screens/splash_screen.dart';
 import '../../screens/login_selection_screen.dart';
 import '../../screens/student_profile_setup_screen.dart';
-import '../../screens/teacher_login_screen.dart';
 import '../../screens/student_home_screen.dart';
 import '../../screens/term_selection_screen.dart';
 import '../../screens/topic_selection_screen.dart';
@@ -13,7 +12,6 @@ import '../../screens/test_mode_selection_screen.dart';
 import '../../screens/quiz_runner_screen.dart';
 import '../../screens/quiz_result_screen.dart';
 import '../../screens/student_analytics_screen.dart';
-import '../../screens/teacher_dashboard_screen.dart';
 import '../../screens/custom_play_screen.dart';
 import '../../screens/host_quiz_screen.dart';
 import '../../screens/join_quiz_screen.dart';
@@ -31,8 +29,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       final isLoggingIn = state.matchedLocation == '/' ||
           state.matchedLocation == '/login' ||
-          state.matchedLocation == '/student/profile-setup' ||
-          state.matchedLocation == '/teacher/login';
+          state.matchedLocation == '/student/profile-setup';
 
       if (status == AuthStatus.unauthenticated && !isLoggingIn) {
         return '/login';
@@ -40,13 +37,6 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       if (status == AuthStatus.authenticatedStudent && isLoggingIn) {
         return '/student/home';
-      }
-
-      if (status == AuthStatus.authenticatedTeacher) {
-        final isStudentRoute = state.matchedLocation.startsWith('/student');
-        if (isLoggingIn || isStudentRoute) {
-          return '/teacher/dashboard';
-        }
       }
 
       return null;
@@ -64,14 +54,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/student/profile-setup',
         builder: (context, state) => const StudentProfileSetupScreen(),
       ),
-      GoRoute(
-        path: '/teacher/login',
-        builder: (context, state) => const TeacherLoginScreen(),
-      ),
-      GoRoute(
-        path: '/teacher/dashboard',
-        builder: (context, state) => const TeacherDashboardScreen(),
-      ),
+
 
       // ShellRoute for Student Application
       ShellRoute(

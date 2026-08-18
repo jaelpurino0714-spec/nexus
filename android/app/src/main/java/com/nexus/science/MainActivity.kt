@@ -38,23 +38,18 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val userState by authViewModel.currentUser.collectAsState(initial = null)
 
-                    val startDestination = when {
-                        userState?.role == "teacher" -> "teacher_dashboard"
-                        userState != null -> "home"
-                        else -> "login_selection"
-                    }
+                    val startDestination = if (userState != null) "home" else "login_selection"
 
                     NavHost(navController = navController, startDestination = startDestination) {
                         composable("login_selection") {
                             LoginSelectionScreen(
                                 onSelectStudent = {
-                                    if (userState != null && userState?.role == "student") {
+                                    if (userState != null) {
                                         navController.navigate("home")
                                     } else {
                                         navController.navigate("student_setup")
                                     }
-                                },
-                                onSelectTeacher = { navController.navigate("teacher_login") }
+                                }
                             )
                         }
 
@@ -67,34 +62,6 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 onBack = { navController.popBackStack() }
-                            )
-                        }
-
-                        composable("teacher_login") {
-                            val teacherError by authViewModel.teacherError.collectAsState()
-                            TeacherLoginScreen(
-                                onLoginTeacher = { name, passcode ->
-                                    authViewModel.loginTeacher(name, passcode)
-                                },
-                                errorMessage = teacherError,
-                                onBack = { navController.popBackStack() },
-                                onSuccess = {
-                                    navController.navigate("teacher_dashboard") {
-                                        popUpTo("login_selection") { inclusive = true }
-                                    }
-                                }
-                            )
-                        }
-
-                        composable("teacher_dashboard") {
-                            TeacherDashboardScreen(
-                                teacherName = userState?.name ?: "Teacher",
-                                onLogout = {
-                                    authViewModel.logout()
-                                    navController.navigate("login_selection") {
-                                        popUpTo(0) { inclusive = true }
-                                    }
-                                }
                             )
                         }
 

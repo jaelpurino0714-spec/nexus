@@ -683,21 +683,12 @@ const Quiz = {
     this.generateLobbyCode();
     this.isHost = true;
 
-    const teacherSession = JSON.parse(localStorage.getItem('nexus_teacher_session') || 'null');
     const profile = DB.getStudentProfile();
     const myId = DB.getUserUUID();
 
-    const hostName = (teacherSession && teacherSession.name)
-      ? teacherSession.name
-      : (profile && profile.name)
-        ? profile.name
-        : 'Host Instructor';
-
-    const hostGrade = (teacherSession)
-      ? 'Instructor'
-      : (profile ? (profile.section || profile.gradeLevel || 'Student') : 'Host');
-
-    const hostPhoto = (profile ? profile.photo : '');
+    const hostName = (profile && profile.name) ? profile.name : 'Host Instructor';
+    const hostGrade = profile ? (profile.section || profile.gradeLevel || 'Student') : 'Host';
+    const hostPhoto = profile ? profile.photo : '';
 
     const initialLobby = {
       code: this.lobbyAccessCode,
@@ -741,9 +732,8 @@ const Quiz = {
     const lobbyData = this.currentLobbyData || this.getLobbyData(this.lobbyAccessCode);
     const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👑</text></svg>";
 
-    const teacherSession = JSON.parse(localStorage.getItem('nexus_teacher_session') || 'null');
     const profile = DB.getStudentProfile();
-    const fallbackHostName = (teacherSession && teacherSession.name) ? teacherSession.name : ((profile && profile.name) ? profile.name : 'Host Instructor');
+    const fallbackHostName = (profile && profile.name) ? profile.name : 'Host Instructor';
 
     const hostName = (lobbyData && lobbyData.host && lobbyData.host.name) ? lobbyData.host.name : fallbackHostName;
     const hostPhoto = (lobbyData && lobbyData.host && lobbyData.host.photo) ? lobbyData.host.photo : (profile ? profile.photo : '');

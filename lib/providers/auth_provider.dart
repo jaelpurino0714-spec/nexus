@@ -19,7 +19,7 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   );
 });
 
-enum AuthStatus { uninitialized, authenticatedStudent, authenticatedTeacher, unauthenticated }
+enum AuthStatus { uninitialized, authenticatedStudent, unauthenticated }
 
 class AuthState {
   final AuthStatus status;
@@ -56,15 +56,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> checkSession() async {
     final userId = await _authRepo.getSavedUserId();
-    final userRole = await _authRepo.getSavedUserRole();
 
-    if (userId != null && userRole != null) {
+    if (userId != null) {
       final profile = await _profileRepo.getProfile(userId);
       if (profile != null) {
         state = state.copyWith(
-          status: userRole == 'teacher'
-              ? AuthStatus.authenticatedTeacher
-              : AuthStatus.authenticatedStudent,
+          status: AuthStatus.authenticatedStudent,
           profile: profile,
         );
         return;
@@ -74,20 +71,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(status: AuthStatus.unauthenticated);
   }
 
-  Future<bool> loginTeacher(String passcode, String teacherName) async {
-    final profile = await _authRepo.loginTeacher(passcode, teacherName);
-    if (profile != null) {
-      state = state.copyWith(
-        status: AuthStatus.authenticatedTeacher,
-        profile: profile,
-      );
-      return true;
-    } else {
-      state = state.copyWith(errorMessage: 'Invalid teacher passcode.');
-      return false;
-    }
-  }
-
   Future<void> logout() async {
     await _authRepo.logout();
     state = AuthState(status: AuthStatus.unauthenticated);
@@ -95,9 +78,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   void setProfile(ProfileModel profile) {
     state = state.copyWith(
-      status: profile.role == 'teacher'
-          ? AuthStatus.authenticatedTeacher
-          : AuthStatus.authenticatedStudent,
+      status: AuthStatus.authenticatedStudent,
       profile: profile,
     );
   }

@@ -240,19 +240,6 @@ const DB = {
 
   getActiveProfile() {
     const userUuid = this.getUserUUID();
-    const teacherRaw = localStorage.getItem(this.STORAGE_TEACHER);
-    if (teacherRaw) {
-      try {
-        const teacher = JSON.parse(teacherRaw);
-        return {
-          id: userUuid,
-          role: 'teacher',
-          name: teacher.name ? (teacher.name.toLowerCase().includes('prof') || teacher.name.toLowerCase().includes('teacher') ? teacher.name : 'Prof. ' + teacher.name) : 'Teacher Host',
-          photo: teacher.photo || null,
-          isTeacher: true
-        };
-      } catch (e) {}
-    }
 
     const student = this.getStudentProfile();
     if (student) {

@@ -61,15 +61,6 @@
               </div>
               <span class="arrow">➔</span>
             </button>
-
-            <button class="role-card teacher-role" onclick="Auth.selectRole('teacher')">
-              <span class="role-icon">👩‍🏫</span>
-              <div class="role-info">
-                <h3>Teacher</h3>
-                <p>Manage quizzes, view class analytics & export data</p>
-              </div>
-              <span class="arrow">➔</span>
-            </button>
           </div>
         </div>
       </section>
@@ -119,35 +110,6 @@
               Save Profile
             </button>
           </div>
-        </div>
-      </section>
-
-      <!-- ================= 3. TEACHER LOGIN SCREEN ================= -->
-      <section id="teacherLoginScreen" class="screen">
-        <div class="modal-card">
-          <button class="back-link" onclick="App.showScreen('loginSelectionScreen')">← Back</button>
-          <div class="modal-header">
-            <span class="modal-icon">🔐</span>
-            <h2>Teacher Access</h2>
-            <p>Enter your credentials to manage quizzes</p>
-          </div>
-
-          <div class="form-group">
-            <label for="teacherNameInput">Teacher Name</label>
-            <input type="text" id="teacherNameInput" placeholder="e.g. Mr. Santos / Ms. Cruz">
-          </div>
-
-          <div class="form-group">
-            <label for="teacherPasscodeInput">Passcode</label>
-            <div class="passcode-wrapper">
-              <input type="password" id="teacherPasscodeInput" placeholder="Enter teacher passcode (Default: 123456)">
-            </div>
-            <small class="passcode-hint">Default passcode: <b>123456</b> or <b>NEXUS10</b></small>
-          </div>
-
-          <div id="teacherErrorMsg" class="warning-msg" style="display: none;">Invalid Passcode</div>
-
-          <button class="primary-btn teacher-btn" onclick="Auth.loginTeacher()">Enter Teacher Portal</button>
         </div>
       </section>
 
@@ -1030,137 +992,7 @@
         </div>
       </section>
 
-      <!-- ================= 9. TEACHER PORTAL & ANALYTICS ================= -->
-      <section id="teacherDashboardScreen" class="screen">
-        <div class="teacher-container">
-          <div class="teacher-header">
-            <div>
-              <h2>Teacher Portal</h2>
-              <p id="teacherGreeting">Welcome, Teacher!</p>
-            </div>
-            <button class="logout-btn" onclick="Auth.logoutTeacher()">Log Out</button>
-          </div>
 
-          <div class="teacher-tabs">
-            <button id="tabAnalyticsBtn" class="tab-btn active" onclick="Analytics.switchTab('analytics')">📊 Analytics</button>
-            <button id="tabCustomQuizBtn" class="tab-btn" onclick="Analytics.switchTab('customQuiz')">✏️ Custom Quizzes</button>
-          </div>
-
-          <!-- Tab 1: Class Analytics -->
-          <div id="teacherAnalyticsTab" class="tab-content active">
-            <div class="stats-overview-grid">
-              <div class="overview-card">
-                <span class="ov-icon">👥</span>
-                <div id="totalStudentsCount" class="ov-val">1</div>
-                <div class="ov-label">Active Students</div>
-              </div>
-
-              <div class="overview-card">
-                <span class="ov-icon">📝</span>
-                <div id="totalQuizzesTaken" class="ov-val">0</div>
-                <div class="ov-label">Quizzes Completed</div>
-              </div>
-
-              <div class="overview-card">
-                <span class="ov-icon">🎯</span>
-                <div id="classAverageScore" class="ov-val">0%</div>
-                <div class="ov-label">Class Avg Score</div>
-              </div>
-            </div>
-
-            <div class="action-bar-right">
-              <button class="primary-btn export-btn" onclick="Analytics.exportCSV()">📥 Export Data (CSV)</button>
-            </div>
-
-            <div class="section-divider">Student Results Breakdown</div>
-            <div class="table-responsive">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Student Name</th>
-                    <th>Section</th>
-                    <th>Quizzes</th>
-                    <th>Avg Score</th>
-                    <th>Highest Streak</th>
-                  </tr>
-                </thead>
-                <tbody id="studentResultsTableBody">
-                  <!-- Populated dynamically -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Tab 2: Custom Quiz Creation -->
-          <div id="teacherCustomQuizTab" class="tab-content">
-            <div class="custom-quiz-builder">
-              <h3>Create Custom Class Quiz</h3>
-              <p class="subtitle">Add customized questions for Grade 10 Science topics</p>
-
-              <div class="form-group">
-                <label for="quizTitleInput">Quiz Title</label>
-                <input type="text" id="quizTitleInput" placeholder="e.g. Plate Tectonics Daily Drill">
-              </div>
-
-              <div class="form-group">
-                <label for="quizTermSelect">Science Term</label>
-                <select id="quizTermSelect">
-                  <option value="1">Term 1: Earth Science</option>
-                  <option value="2">Term 2: Biology & EM Spectrum</option>
-                  <option value="3">Term 3: Chemistry & Physics</option>
-                </select>
-              </div>
-
-              <div class="question-builder-card">
-                <h4>Add New Question</h4>
-                
-                <div class="form-group">
-                  <label for="newQText">Question Prompt</label>
-                  <input type="text" id="newQText" placeholder="Enter question text...">
-                </div>
-
-                <div class="form-group">
-                  <label for="newQOptionA">Option A</label>
-                  <input type="text" id="newQOptionA" placeholder="Option A text">
-                </div>
-                <div class="form-group">
-                  <label for="newQOptionB">Option B</label>
-                  <input type="text" id="newQOptionB" placeholder="Option B text">
-                </div>
-                <div class="form-group">
-                  <label for="newQOptionC">Option C</label>
-                  <input type="text" id="newQOptionC" placeholder="Option C text">
-                </div>
-                <div class="form-group">
-                  <label for="newQOptionD">Option D</label>
-                  <input type="text" id="newQOptionD" placeholder="Option D text">
-                </div>
-
-                <div class="form-group">
-                  <label for="correctOptionSelect">Correct Answer</label>
-                  <select id="correctOptionSelect">
-                    <option value="0">Option A</option>
-                    <option value="1">Option B</option>
-                    <option value="2">Option C</option>
-                    <option value="3">Option D</option>
-                  </select>
-                </div>
-
-                <button class="secondary-btn" onclick="Analytics.addQuestionToDraft()">+ Add Question to Quiz</button>
-              </div>
-
-              <div class="draft-questions-list">
-                <h4>Quiz Questions (<span id="draftQCount">0</span>)</h4>
-                <ul id="draftQuestionsUl" class="questions-ul">
-                  <!-- Draft questions rendered here -->
-                </ul>
-              </div>
-
-              <button class="primary-btn save-quiz-btn" onclick="Analytics.saveCustomQuiz()">Save Quiz for Students</button>
-            </div>
-          </div>
-        </div>
-      </section>
 
     </main>
   </div>
