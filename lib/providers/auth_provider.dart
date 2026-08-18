@@ -88,7 +88,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
       }
     }
 
-    state = state.copyWith(status: AuthStatus.unauthenticated, isLoading: false);
+    final defaultProfile = ProfileModel(
+      id: 'usr-default',
+      role: 'student',
+      name: 'Nexus Student',
+      fullName: 'Nexus Student',
+      username: 'student',
+      createdAt: DateTime.now(),
+    );
+
+    state = state.copyWith(
+      status: AuthStatus.authenticatedStudent,
+      profile: defaultProfile,
+      isLoading: false,
+    );
   }
 
   Future<bool> signUp({
