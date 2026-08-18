@@ -210,23 +210,40 @@ const TeacherPortal = {
       const optB = document.getElementById('builderOptB').value.trim();
       const optC = document.getElementById('builderOptC').value.trim();
       const optD = document.getElementById('builderOptD').value.trim();
-      const correct = parseInt(document.getElementById('builderCorrect').value);
+      const correctIndex = parseInt(document.getElementById('builderCorrect').value, 10);
 
       if (!optA || !optB || !optC || !optD) {
         alert('Please fill out all 4 options for Multiple Choice.');
         return;
       }
       qObj.options = [optA, optB, optC, optD];
-      qObj.optionA = optA;
-      qObj.optionB = optB;
-      qObj.optionC = optC;
-      qObj.optionD = optD;
-      qObj.answer = correct;
+      qObj.choice_a = optA;
+      qObj.choice_b = optB;
+      qObj.choice_c = optC;
+      qObj.choice_d = optD;
+      qObj.option_a = optA;
+      qObj.option_b = optB;
+      qObj.option_c = optC;
+      qObj.option_d = optD;
+      qObj.question_type_id = 1;
+      qObj.question_type = 'multiple_choice';
+
+      const letterMap = { 0: 'A', 1: 'B', 2: 'C', 3: 'D' };
+      const ansLetter = letterMap[correctIndex] || 'A';
+      qObj.correct_answer = ansLetter;
+      qObj.correctAnswer = ansLetter;
+      qObj.answer = ansLetter;
     } else if (fmt === 'true_false') {
       const corrVal = document.getElementById('builderTFCorrect').value;
       qObj.options = ['True', 'False'];
-      qObj.optionA = 'True';
-      qObj.optionB = 'False';
+      qObj.choice_a = 'True';
+      qObj.choice_b = 'False';
+      qObj.option_a = 'True';
+      qObj.option_b = 'False';
+      qObj.question_type_id = 2;
+      qObj.question_type = 'true_false';
+      qObj.correct_answer = corrVal;
+      qObj.correctAnswer = corrVal;
       qObj.answer = corrVal;
     } else if (fmt === 'identification') {
       const corrVal = document.getElementById('builderIdCorrect').value.trim();
@@ -235,6 +252,10 @@ const TeacherPortal = {
         return;
       }
       qObj.options = [];
+      qObj.question_type_id = 3;
+      qObj.question_type = 'identification';
+      qObj.correct_answer = corrVal;
+      qObj.correctAnswer = corrVal;
       qObj.answer = corrVal;
     }
 

@@ -524,12 +524,15 @@ const Multiplayer = {
         if (typeId === 2 || (!q.choice_c && !q.choice_d && (q.correct_answer === 'True' || q.correct_answer === 'False' || q.correct_answer === 'TRUE' || q.correct_answer === 'FALSE'))) {
           choicesMap = { A: 'True', B: 'False' };
         } else {
-          choicesMap = {
-            A: q.choice_a || q.option_a || (q.options ? q.options[0] : 'Option A'),
-            B: q.choice_b || q.option_b || (q.options ? q.options[1] : 'Option B'),
-            C: q.choice_c || q.option_c || (q.options ? q.options[2] : 'Option C'),
-            D: q.choice_d || q.option_d || (q.options ? q.options[3] : 'Option D')
-          };
+          const cA = q.choice_a || q.option_a || q.optionA || (q.options ? q.options[0] : null) || (q.choices ? q.choices.a : null);
+          const cB = q.choice_b || q.option_b || q.optionB || (q.options ? q.options[1] : null) || (q.choices ? q.choices.b : null);
+          const cC = q.choice_c || q.option_c || q.optionC || (q.options ? q.options[2] : null) || (q.choices ? q.choices.c : null);
+          const cD = q.choice_d || q.option_d || q.optionD || (q.options ? q.options[3] : null) || (q.choices ? q.choices.d : null);
+
+          if (cA && String(cA).trim() !== '') choicesMap.A = cA;
+          if (cB && String(cB).trim() !== '') choicesMap.B = cB;
+          if (cC && String(cC).trim() !== '') choicesMap.C = cC;
+          if (cD && String(cD).trim() !== '') choicesMap.D = cD;
         }
 
         Object.keys(choicesMap).forEach(key => {
@@ -818,12 +821,15 @@ const Multiplayer = {
         if (typeId === 2 || (!q.choice_c && !q.choice_d && (q.correct_answer === 'True' || q.correct_answer === 'False' || q.correct_answer === 'TRUE' || q.correct_answer === 'FALSE'))) {
           choicesMap = { A: 'True', B: 'False' };
         } else {
-          choicesMap = {
-            A: q.choice_a || q.option_a || 'Option A',
-            B: q.choice_b || q.option_b || 'Option B',
-            C: q.choice_c || q.option_c || 'Option C',
-            D: q.choice_d || q.option_d || 'Option D'
-          };
+          const cA = q.choice_a || q.option_a || q.optionA || (q.options ? q.options[0] : null) || (q.choices ? q.choices.a : null);
+          const cB = q.choice_b || q.option_b || q.optionB || (q.options ? q.options[1] : null) || (q.choices ? q.choices.b : null);
+          const cC = q.choice_c || q.option_c || q.optionC || (q.options ? q.options[2] : null) || (q.choices ? q.choices.c : null);
+          const cD = q.choice_d || q.option_d || q.optionD || (q.options ? q.options[3] : null) || (q.choices ? q.choices.d : null);
+
+          if (cA && String(cA).trim() !== '') choicesMap.A = cA;
+          if (cB && String(cB).trim() !== '') choicesMap.B = cB;
+          if (cC && String(cC).trim() !== '') choicesMap.C = cC;
+          if (cD && String(cD).trim() !== '') choicesMap.D = cD;
         }
 
         Object.keys(choicesMap).forEach(key => {
