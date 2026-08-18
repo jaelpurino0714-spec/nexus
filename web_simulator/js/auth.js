@@ -269,6 +269,16 @@ const Auth = {
         const user = data.user;
         if (!user) throw new Error('Failed to create account.');
 
+        // Auto sign-in if session was not established automatically
+        if (!data.session) {
+          try {
+            await client.auth.signInWithPassword({
+              email: internalEmail,
+              password: password
+            });
+          } catch (_) {}
+        }
+
         // 3. Insert Profile
         const profile = {
           id: user.id,
@@ -292,15 +302,15 @@ const Auth = {
           console.warn('Profile table insert warning:', e);
         }
 
-        if (db.saveStudentProfile) db.saveStudentProfile(profile);
-        if (db.saveUserUUID) db.saveUserUUID(user.id);
+        if (db && db.saveStudentProfile) await db.saveStudentProfile(profile);
+        if (db && db.saveUserUUID) db.saveUserUUID(user.id);
         if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
 
         if (role === 'teacher') {
-          localStorage.setItem(db.STORAGE_TEACHER || 'nexus_teacher_session', JSON.stringify(profile));
+          localStorage.setItem((db ? db.STORAGE_TEACHER : null) || 'nexus_teacher_session', JSON.stringify(profile));
           if (typeof App !== 'undefined' && App.showScreen) App.showScreen('teacherHomeScreen');
         } else {
-          localStorage.removeItem(db.STORAGE_TEACHER || 'nexus_teacher_session');
+          localStorage.removeItem((db ? db.STORAGE_TEACHER : null) || 'nexus_teacher_session');
           if (typeof App !== 'undefined' && App.showScreen) App.showScreen('homeScreen');
         }
       } else {

@@ -382,6 +382,8 @@ var DB = {
         console.warn('Error saving profile to Supabase:', e);
       }
     }
+  },
+
   async fetchProfileFromSupabase(userId) {
     if (!supabaseClient || !userId) return null;
     try {

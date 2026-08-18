@@ -234,6 +234,8 @@ const Settings = {
       });
     }
   }
+};
+
 if (typeof window !== 'undefined') {
   window.App = App;
   window.app = App;
