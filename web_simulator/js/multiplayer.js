@@ -17,7 +17,7 @@ const Multiplayer = {
   hostLobbyPollInterval: null,
   playerSyncInterval: null,
   questionStartedAt: null,
-  answeredPlayerSet: new Set(),
+  lastRenderedQuestionKey: null,
 
   resetState() {
     this.currentGame = null;
@@ -29,6 +29,7 @@ const Multiplayer = {
     this.hasAnsweredCurrent = false;
     this.answeredCount = 0;
     this.answeredPlayerSet = new Set();
+    this.lastRenderedQuestionKey = null;
     if (this.timerInterval) clearInterval(this.timerInterval);
     if (this.hostLobbyPollInterval) clearInterval(this.hostLobbyPollInterval);
     if (this.playerSyncInterval) clearInterval(this.playerSyncInterval);
@@ -305,11 +306,16 @@ const Multiplayer = {
           }
           App.showScreen('mpPlayerGameScreen');
           const currentIdx = game.current_question_index || 0;
+          const qStartTime = game.question_start_time || '';
+          this.lastRenderedQuestionKey = `${currentIdx}_${qStartTime}`;
           this.playerRenderQuestion(currentIdx, game);
         } else if ((game.status === 'active' || game.status === 'in_progress') && App.currentScreen === 'mpPlayerGameScreen') {
           const dbIndex = game.current_question_index || 0;
           const qStartTime = game.question_start_time || '';
-          if (dbIndex !== this.currentIndex || (qStartTime && qStartTime !== this.lastRenderedQuestionTime)) {
+          const qKey = `${dbIndex}_${qStartTime}`;
+
+          if (qKey !== this.lastRenderedQuestionKey) {
+            this.lastRenderedQuestionKey = qKey;
             this.playerRenderQuestion(dbIndex, game);
           }
         } else if (game.status === 'finished' && App.currentScreen !== 'mpLeaderboardScreen') {
@@ -674,10 +680,14 @@ const Multiplayer = {
   onQuestionStart(data) {
     if (this.isHost) return;
     const qIndex = (data.questionNumber || 1) - 1;
-    this.playerRenderQuestion(qIndex, {
-      question_start_time: data.startedAt || new Date().toISOString(),
-      serverTime: data.serverTime || Date.now()
-    });
+    const qKey = `${qIndex}_${data.startedAt || ''}`;
+    if (qKey !== this.lastRenderedQuestionKey) {
+      this.lastRenderedQuestionKey = qKey;
+      this.playerRenderQuestion(qIndex, {
+        question_start_time: data.startedAt || new Date().toISOString(),
+        serverTime: data.serverTime || Date.now()
+      });
+    }
   },
 
   async playerRenderQuestion(index, gameObj) {
@@ -701,8 +711,6 @@ const Multiplayer = {
     this.questionDurationSec = q.time_limit || 20;
 
     let startedAt = (gameObj && gameObj.question_start_time) ? gameObj.question_start_time : null;
-    this.lastRenderedQuestionTime = startedAt;
-
     const now = Date.now();
     if (startedAt) {
       let startTime = new Date(startedAt).getTime();
@@ -713,11 +721,9 @@ const Multiplayer = {
       const elapsedSec = (now - startTime) / 1000;
       if (isNaN(startTime) || elapsedSec < -2 || elapsedSec >= this.questionDurationSec) {
         startedAt = new Date().toISOString();
-        this.lastRenderedQuestionTime = startedAt;
       }
     } else {
       startedAt = new Date().toISOString();
-      this.lastRenderedQuestionTime = startedAt;
     }
 
     this.questionStartedAt = startedAt;
@@ -763,10 +769,14 @@ const Multiplayer = {
               <span class="option-badge-pill"><span class="badge-letter">${key}</span></span>
               <span class="option-text" style="font-weight:700; text-align:left; color:#3B0764;">${val}</span>
             `;
-            btn.onclick = (e) => {
-              if (e) e.preventDefault();
+            const handleSelect = (e) => {
+              if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+              }
               this.submitPlayerChoice(q.id, key, btn);
             };
+            btn.onclick = handleSelect;
             container.appendChild(btn);
           }
         });
