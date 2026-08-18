@@ -510,15 +510,30 @@ const DB = {
       if (quizObj.questions && Array.isArray(quizObj.questions)) {
         for (const q of quizObj.questions) {
           try {
+            const optA = q.choice_a || q.option_a || q.optionA || (q.options ? q.options[0] : null);
+            const optB = q.choice_b || q.option_b || q.optionB || (q.options ? q.options[1] : null);
+            const optC = q.choice_c || q.option_c || q.optionC || (q.options ? q.options[2] : null);
+            const optD = q.choice_d || q.option_d || q.optionD || (q.options ? q.options[3] : null);
+
+            let eqAns = q.equivalent_answer || q.equivalentAnswer || q.counterpart;
+            if (!eqAns && (q.question_type === 'multiple_choice' || q.question_type_id === 1)) {
+              const corr = String(q.correct_answer || q.correctAnswer || q.answer || 'A').toUpperCase();
+              if (corr === 'A' || corr === '0') eqAns = optA;
+              else if (corr === 'B' || corr === '1') eqAns = optB;
+              else if (corr === 'C' || corr === '2') eqAns = optC;
+              else if (corr === 'D' || corr === '3') eqAns = optD;
+            }
+
             await supabaseClient.from('questions').upsert({
               id: this.isValidUuid(q.id) ? q.id : undefined,
               question: q.question,
               question_type_id: q.question_type_id || (q.question_type === 'true_false' ? 2 : (q.question_type === 'identification' ? 3 : 1)),
-              choice_a: q.choice_a || q.option_a || (q.options ? q.options[0] : null),
-              choice_b: q.choice_b || q.option_b || (q.options ? q.options[1] : null),
-              choice_c: q.choice_c || q.option_c || (q.options ? q.options[2] : null),
-              choice_d: q.choice_d || q.option_d || (q.options ? q.options[3] : null),
+              choice_a: optA,
+              choice_b: optB,
+              choice_c: optC,
+              choice_d: optD,
               correct_answer: q.correct_answer || q.correctAnswer || q.answer,
+              equivalent_answer: eqAns,
               term_id: quizObj.term || 1,
               is_active: true
             });
@@ -614,19 +629,43 @@ const DB = {
 
     let selectedQuestions = [];
     if (config.customQuestions && config.customQuestions.length > 0) {
-      selectedQuestions = config.customQuestions.map((q, idx) => ({
-        id: q.id || `custom_q_${idx}`,
-        question: q.question || q.prompt || 'Custom Question',
-        options: q.options || [q.optionA, q.optionB, q.optionC, q.optionD].filter(Boolean),
-        optionA: q.options ? q.options[0] : (q.optionA || ''),
-        optionB: q.options ? q.options[1] : (q.optionB || ''),
-        optionC: q.options ? q.options[2] : (q.optionC || ''),
-        optionD: q.options ? q.options[3] : (q.optionD || ''),
-        answer: q.answer !== undefined ? q.answer : (q.correctAnswer || 0),
-        correct_answer: q.answer !== undefined ? q.answer : (q.correctAnswer || 0),
-        question_type: q.questionType || q.type || 'multiple_choice',
-        time_limit: config.timeLimit || 20
-      }));
+      selectedQuestions = config.customQuestions.map((q, idx) => {
+        const optA = q.options ? q.options[0] : (q.optionA || q.choice_a || q.option_a || '');
+        const optB = q.options ? q.options[1] : (q.optionB || q.choice_b || q.option_b || '');
+        const optC = q.options ? q.options[2] : (q.optionC || q.choice_c || q.option_c || '');
+        const optD = q.options ? q.options[3] : (q.optionD || q.choice_d || q.option_d || '');
+
+        let corrAns = q.answer !== undefined ? q.answer : (q.correctAnswer || q.correct_answer || 0);
+        let eqAns = q.equivalent_answer || q.equivalentAnswer || q.counterpart;
+        if (!eqAns && (q.questionType === 'multiple_choice' || q.question_type === 'multiple_choice' || q.question_type_id === 1)) {
+          const cStr = String(corrAns).toUpperCase();
+          if (cStr === 'A' || cStr === '0') eqAns = optA;
+          else if (cStr === 'B' || cStr === '1') eqAns = optB;
+          else if (cStr === 'C' || cStr === '2') eqAns = optC;
+          else if (cStr === 'D' || cStr === '3') eqAns = optD;
+        }
+
+        return {
+          id: q.id || `custom_q_${idx}`,
+          question: q.question || q.prompt || 'Custom Question',
+          options: q.options || [optA, optB, optC, optD].filter(Boolean),
+          optionA: optA,
+          optionB: optB,
+          optionC: optC,
+          optionD: optD,
+          choice_a: optA,
+          choice_b: optB,
+          choice_c: optC,
+          choice_d: optD,
+          answer: corrAns,
+          correct_answer: corrAns,
+          correctAnswer: corrAns,
+          equivalent_answer: eqAns,
+          counterpart: q.counterpart || eqAns,
+          question_type: q.questionType || q.question_type || q.type || 'multiple_choice',
+          time_limit: config.timeLimit || 20
+        };
+      });
     } else if (supabaseClient) {
       try {
         let qTypeId = null;
@@ -1101,30 +1140,32 @@ const DB = {
   },
 
   evaluateAnswerCorrectness(q, selectedChoice) {
-    if (!q || !q.correct_answer || !selectedChoice) return false;
+    if (!q || selectedChoice === undefined || selectedChoice === null) return false;
 
-    const dbCorrect = String(q.correct_answer).trim();
+    const dbCorrect = String(q.correct_answer || q.correctAnswer || q.answer || '').trim();
+    const eqCorrect = String(q.equivalent_answer || q.equivalentAnswer || q.counterpart || '').trim();
     const userSel = String(selectedChoice).trim();
 
     const dbLower = dbCorrect.toLowerCase();
+    const eqLower = eqCorrect.toLowerCase();
     const userLower = userSel.toLowerCase();
 
     // 1. Direct case-insensitive equality
-    if (dbLower === userLower) return true;
+    if (userLower === dbLower || (eqLower && userLower === eqLower)) return true;
 
     // 2. Map choices
     const choicesMap = {
-      a: String(q.choice_a || q.option_a || '').trim().toLowerCase(),
-      b: String(q.choice_b || q.option_b || '').trim().toLowerCase(),
-      c: String(q.choice_c || q.option_c || '').trim().toLowerCase(),
-      d: String(q.choice_d || q.option_d || '').trim().toLowerCase()
+      a: String(q.choice_a || q.option_a || q.optionA || (q.options ? q.options[0] : '') || '').trim().toLowerCase(),
+      b: String(q.choice_b || q.option_b || q.optionB || (q.options ? q.options[1] : '') || '').trim().toLowerCase(),
+      c: String(q.choice_c || q.option_c || q.optionC || (q.options ? q.options[2] : '') || '').trim().toLowerCase(),
+      d: String(q.choice_d || q.option_d || q.optionD || (q.options ? q.options[3] : '') || '').trim().toLowerCase()
     };
 
     // If user selected A/B/C/D letter
     if (['a', 'b', 'c', 'd'].includes(userLower)) {
       if (dbLower === userLower) return true;
       const textForUserLetter = choicesMap[userLower];
-      if (textForUserLetter && (textForUserLetter === dbLower || textForUserLetter.includes(dbLower) || dbLower.includes(textForUserLetter))) {
+      if (textForUserLetter && (textForUserLetter === dbLower || textForUserLetter === eqLower || textForUserLetter.includes(dbLower) || dbLower.includes(textForUserLetter))) {
         return true;
       }
     }
@@ -1140,14 +1181,15 @@ const DB = {
     // 3. True / False handling
     const trueSyns = ['true', 't', 'a', '1'];
     const falseSyns = ['false', 'f', 'b', '2'];
-    if (q.question_type_id === 2 || (choicesMap.a === 'true' && choicesMap.b === 'false')) {
+    if (q.question_type_id === 2 || q.question_type === 'true_false' || (choicesMap.a === 'true' && choicesMap.b === 'false')) {
       if (trueSyns.includes(dbLower) && trueSyns.includes(userLower)) return true;
       if (falseSyns.includes(dbLower) && falseSyns.includes(userLower)) return true;
     }
 
-    // 4. Substring fallback for text answer
-    if (userLower.length > 2 && dbLower.length > 2) {
-      if (userLower.includes(dbLower) || dbLower.includes(userLower)) return true;
+    // 4. Substring / Counterpart fallback for text/identification answer
+    if (userLower.length >= 1 && (eqLower.length >= 1 || dbLower.length >= 1)) {
+      const targetText = eqLower || dbLower;
+      if (userLower === targetText || userLower.includes(targetText) || targetText.includes(userLower)) return true;
     }
 
     return false;

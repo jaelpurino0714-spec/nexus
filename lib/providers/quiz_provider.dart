@@ -207,12 +207,42 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
     final currentQ = state!.currentQuestion!.question;
     bool isCorrect = false;
 
+    final selStr = selectedAnswer.trim();
+    final corrStr = currentQ.correctAnswer.trim();
+
     if (currentQ.questionType == 'identification') {
-      final sel = selectedAnswer.trim().toLowerCase();
-      final corr = currentQ.correctAnswer.trim().toLowerCase();
+      final sel = selStr.toLowerCase();
+      final corr = corrStr.toLowerCase();
       isCorrect = sel.isNotEmpty && (sel == corr || corr.contains(sel) || sel.contains(corr));
+    } else if (currentQ.questionType == 'true_false') {
+      final sel = selStr.toLowerCase();
+      final corr = corrStr.toLowerCase();
+      isCorrect = (sel == corr) ||
+          (sel.startsWith('t') && corr.startsWith('t')) ||
+          (sel.startsWith('f') && corr.startsWith('f'));
     } else {
-      isCorrect = selectedAnswer.trim().toUpperCase() == currentQ.correctAnswer.trim().toUpperCase();
+      // Multiple Choice answer checking logic
+      Map<String, String> optionMap = {
+        'A': currentQ.optionA.trim(),
+        'B': currentQ.optionB.trim(),
+        'C': (currentQ.optionC ?? '').trim(),
+        'D': (currentQ.optionD ?? '').trim(),
+      };
+
+      String upperSel = selStr.toUpperCase();
+      String upperCorr = corrStr.toUpperCase();
+
+      if (upperSel == upperCorr) {
+        isCorrect = true;
+      } else if (optionMap.containsKey(upperSel)) {
+        String selOptionText = optionMap[upperSel]!.toUpperCase();
+        isCorrect = (selOptionText == upperCorr) ||
+                    (upperCorr.length == 1 && upperSel == upperCorr);
+      } else if (optionMap.containsKey(upperCorr)) {
+        String corrOptionText = optionMap[upperCorr]!.toUpperCase();
+        isCorrect = (upperSel == corrOptionText) ||
+                    (corrOptionText.isNotEmpty && (upperSel.contains(corrOptionText) || corrOptionText.contains(upperSel)));
+      }
     }
 
     int newScore = state!.score + (isCorrect ? 10 : 0);

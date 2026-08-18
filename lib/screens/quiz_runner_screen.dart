@@ -65,12 +65,40 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
     if (quizState != null && quizState.currentQuestion != null) {
       final currentQ = quizState.currentQuestion!.question;
       bool isCorrect = false;
+      final selStr = ans.trim();
+      final corrStr = currentQ.correctAnswer.trim();
+
       if (currentQ.questionType == 'identification') {
-        final sel = ans.trim().toLowerCase();
-        final corr = currentQ.correctAnswer.trim().toLowerCase();
+        final sel = selStr.toLowerCase();
+        final corr = corrStr.toLowerCase();
         isCorrect = sel.isNotEmpty && (sel == corr || corr.contains(sel) || sel.contains(corr));
+      } else if (currentQ.questionType == 'true_false') {
+        final sel = selStr.toLowerCase();
+        final corr = corrStr.toLowerCase();
+        isCorrect = (sel == corr) ||
+            (sel.startsWith('t') && corr.startsWith('t')) ||
+            (sel.startsWith('f') && corr.startsWith('f'));
       } else {
-        isCorrect = ans.trim().toUpperCase() == currentQ.correctAnswer.trim().toUpperCase();
+        Map<String, String> optionMap = {
+          'A': currentQ.optionA.trim(),
+          'B': currentQ.optionB.trim(),
+          'C': (currentQ.optionC ?? '').trim(),
+          'D': (currentQ.optionD ?? '').trim(),
+        };
+        String upperSel = selStr.toUpperCase();
+        String upperCorr = corrStr.toUpperCase();
+
+        if (upperSel == upperCorr) {
+          isCorrect = true;
+        } else if (optionMap.containsKey(upperSel)) {
+          String selOptionText = optionMap[upperSel]!.toUpperCase();
+          isCorrect = (selOptionText == upperCorr) ||
+                      (upperCorr.length == 1 && upperSel == upperCorr);
+        } else if (optionMap.containsKey(upperCorr)) {
+          String corrOptionText = optionMap[upperCorr]!.toUpperCase();
+          isCorrect = (upperSel == corrOptionText) ||
+                      (corrOptionText.isNotEmpty && (upperSel.contains(corrOptionText) || corrOptionText.contains(upperSel)));
+        }
       }
 
       ref.read(characterProvider.notifier).triggerFloatingReaction(

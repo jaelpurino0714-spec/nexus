@@ -1252,10 +1252,16 @@ const Quiz = {
     if (timeSpentSec < 3) this.fastAnswersCount++;
 
     let isCorrect = false;
+    if (typeof DB !== 'undefined' && DB.evaluateAnswerCorrectness) {
+      isCorrect = DB.evaluateAnswerCorrectness(q, userSelection);
+    }
+
     if (this.currentQuestionFormat === 'true_false') {
-      const correctStr = String(q.rawAnswer || (q.options ? q.options[q.answer] : '') || 'True').trim().toLowerCase();
+      const correctStr = String(q.rawAnswer || q.equivalent_answer || q.correct_answer || (q.options ? q.options[q.answer] : '') || 'True').trim().toLowerCase();
       const selStr = String(userSelection).trim().toLowerCase();
-      isCorrect = (correctStr === selStr || (correctStr.startsWith('t') && selStr.startsWith('t')) || (correctStr.startsWith('f') && selStr.startsWith('f')));
+      if (typeof DB === 'undefined' || !DB.evaluateAnswerCorrectness) {
+        isCorrect = (correctStr === selStr || (correctStr.startsWith('t') && selStr.startsWith('t')) || (correctStr.startsWith('f') && selStr.startsWith('f')));
+      }
 
       const buttons = document.querySelectorAll('.tf-option-btn');
       buttons.forEach(btn => {
@@ -1264,9 +1270,11 @@ const Quiz = {
         else if (btn.textContent.trim().toLowerCase().includes(selStr) && !isCorrect) btn.classList.add('wrong-choice');
       });
     } else if (this.currentQuestionFormat === 'identification') {
-      const correctStr = String(q.rawAnswer || (q.options ? q.options[q.answer] : '') || '').trim().toLowerCase();
+      const correctStr = String(q.rawAnswer || q.counterpart || q.equivalent_answer || q.correct_answer || (q.options ? q.options[q.answer] : '') || '').trim().toLowerCase();
       const selStr = String(userSelection).trim().toLowerCase();
-      isCorrect = (selStr !== '' && (correctStr === selStr || correctStr.includes(selStr) || selStr.includes(correctStr)));
+      if (typeof DB === 'undefined' || !DB.evaluateAnswerCorrectness) {
+        isCorrect = (selStr !== '' && (correctStr === selStr || correctStr.includes(selStr) || selStr.includes(correctStr)));
+      }
 
       const inputEl = document.getElementById('identificationInput');
       const submitBtn = document.getElementById('identificationSubmitBtn');
@@ -1274,11 +1282,25 @@ const Quiz = {
       if (submitBtn) submitBtn.disabled = true;
     } else {
       // Multiple Choice
-      isCorrect = (userSelection === q.answer);
+      if (typeof DB === 'undefined' || !DB.evaluateAnswerCorrectness) {
+        const letterMap = { 0: 'A', 1: 'B', 2: 'C', 3: 'D' };
+        const userLetter = letterMap[userSelection] || String(userSelection).toUpperCase();
+        const corrStr = String(q.correct_answer || q.correctAnswer || q.answer || '').toUpperCase();
+        const eqStr = String(q.equivalent_answer || q.equivalentAnswer || '').toUpperCase();
+        isCorrect = (userSelection === q.answer) || (userLetter === corrStr) || (eqStr && String(userSelection).toUpperCase() === eqStr);
+      }
+
+      let correctIndex = typeof q.answer === 'number' ? q.answer : -1;
+      if (correctIndex < 0) {
+        const corrLetter = String(q.correct_answer || q.correctAnswer || 'A').toUpperCase();
+        const letterToIndex = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+        if (letterToIndex[corrLetter] !== undefined) correctIndex = letterToIndex[corrLetter];
+      }
+
       const buttons = document.querySelectorAll('.answer-option-btn');
       buttons.forEach((btn, idx) => {
         btn.disabled = true;
-        if (idx === q.answer) btn.classList.add('correct-choice');
+        if (idx === correctIndex || (isCorrect && idx === userSelection)) btn.classList.add('correct-choice');
         else if (idx === userSelection && !isCorrect) btn.classList.add('wrong-choice');
       });
     }

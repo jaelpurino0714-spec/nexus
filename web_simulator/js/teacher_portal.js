@@ -216,7 +216,8 @@ const TeacherPortal = {
         alert('Please fill out all 4 options for Multiple Choice.');
         return;
       }
-      qObj.options = [optA, optB, optC, optD];
+      const opts = [optA, optB, optC, optD];
+      qObj.options = opts;
       qObj.choice_a = optA;
       qObj.choice_b = optB;
       qObj.choice_c = optC;
@@ -225,14 +226,23 @@ const TeacherPortal = {
       qObj.option_b = optB;
       qObj.option_c = optC;
       qObj.option_d = optD;
+      qObj.optionA = optA;
+      qObj.optionB = optB;
+      qObj.optionC = optC;
+      qObj.optionD = optD;
       qObj.question_type_id = 1;
       qObj.question_type = 'multiple_choice';
 
       const letterMap = { 0: 'A', 1: 'B', 2: 'C', 3: 'D' };
       const ansLetter = letterMap[correctIndex] || 'A';
+      const eqText = opts[correctIndex] || optA;
+
       qObj.correct_answer = ansLetter;
       qObj.correctAnswer = ansLetter;
       qObj.answer = ansLetter;
+      qObj.equivalent_answer = eqText;
+      qObj.equivalentAnswer = eqText;
+      qObj.letter_map = { A: optA, B: optB, C: optC, D: optD };
     } else if (fmt === 'true_false') {
       const corrVal = document.getElementById('builderTFCorrect').value;
       qObj.options = ['True', 'False'];
@@ -240,11 +250,15 @@ const TeacherPortal = {
       qObj.choice_b = 'False';
       qObj.option_a = 'True';
       qObj.option_b = 'False';
+      qObj.optionA = 'True';
+      qObj.optionB = 'False';
       qObj.question_type_id = 2;
       qObj.question_type = 'true_false';
       qObj.correct_answer = corrVal;
       qObj.correctAnswer = corrVal;
       qObj.answer = corrVal;
+      qObj.equivalent_answer = corrVal;
+      qObj.equivalentAnswer = corrVal;
     } else if (fmt === 'identification') {
       const corrVal = document.getElementById('builderIdCorrect').value.trim();
       if (!corrVal) {
@@ -257,6 +271,9 @@ const TeacherPortal = {
       qObj.correct_answer = corrVal;
       qObj.correctAnswer = corrVal;
       qObj.answer = corrVal;
+      qObj.counterpart = corrVal;
+      qObj.equivalent_answer = corrVal;
+      qObj.equivalentAnswer = corrVal;
     }
 
     this._builderDrafts.push(qObj);
@@ -273,12 +290,20 @@ const TeacherPortal = {
 
     document.getElementById('builderQCount').textContent = this._builderDrafts.length;
     const ul = document.getElementById('builderQuestionsList');
-    ul.innerHTML = this._builderDrafts.map((q, idx) => `
+    ul.innerHTML = this._builderDrafts.map((q, idx) => {
+      let ansLabel = q.answer;
+      if (q.questionType === 'multiple_choice' && q.equivalent_answer) {
+        ansLabel = `${q.answer} - ${q.equivalent_answer}`;
+      } else if (q.questionType === 'identification') {
+        ansLabel = q.counterpart || q.answer;
+      }
+      return `
       <li>
         <b>Q${idx+1} [${q.questionType.replace('_', ' ')}]:</b> ${q.question}
-        <span style="color:#10B981; font-weight:bold;">(Ans: ${q.answer})</span>
+        <span style="color:#10B981; font-weight:bold;">(Ans: ${ansLabel})</span>
       </li>
-    `).join('');
+    `;
+    }).join('');
   },
 
   saveCreatedGame() {

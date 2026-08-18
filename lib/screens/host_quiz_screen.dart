@@ -76,10 +76,36 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
     }
 
     String corr = _correctAnswerController.text.trim();
+    String optA = '';
+    String optB = '';
+    String? optC;
+    String? optD;
+
     if (_customAnswerMode == 'multiple_choice') {
-      if (_choiceAController.text.trim().isEmpty || _choiceBController.text.trim().isEmpty) {
+      optA = _choiceAController.text.trim();
+      optB = _choiceBController.text.trim();
+      optC = _choiceCController.text.trim();
+      optD = _choiceDController.text.trim();
+
+      if (optA.isEmpty || optB.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Choice A and Choice B are required!'), backgroundColor: Colors.redAccent),
+          const SnackBar(content: Text('Choice A and Choice B are required for Multiple Choice!'), backgroundColor: Colors.redAccent),
+        );
+        return;
+      }
+      if (corr.isEmpty) corr = 'A';
+    } else if (_customAnswerMode == 'true_false') {
+      optA = 'True';
+      optB = 'False';
+      if (corr.isEmpty) corr = 'True';
+    } else if (_customAnswerMode == 'identification') {
+      optA = '';
+      optB = '';
+      optC = null;
+      optD = null;
+      if (corr.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please type the counterpart answer phrase for identification!'), backgroundColor: Colors.redAccent),
         );
         return;
       }
@@ -92,11 +118,11 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
       quizType: 'custom',
       question: qText,
       questionType: _customAnswerMode,
-      optionA: _choiceAController.text.trim().isNotEmpty ? _choiceAController.text.trim() : 'True',
-      optionB: _choiceBController.text.trim().isNotEmpty ? _choiceBController.text.trim() : 'False',
-      optionC: _choiceCController.text.trim(),
-      optionD: _choiceDController.text.trim(),
-      correctAnswer: corr.isNotEmpty ? corr : 'True',
+      optionA: optA,
+      optionB: optB,
+      optionC: optC,
+      optionD: optD,
+      correctAnswer: corr,
       difficulty: 'Medium',
       timeLimit: int.tryParse(_timeLimitController.text) ?? 20,
       isActive: true,
@@ -156,6 +182,14 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
         _saveCurrentCustomQuestion();
       }
       questionsToHost = List.from(_customQuestions);
+
+      // Persist created teacher questions asynchronously to question repo
+      final qRepo = ref.read(questionRepositoryProvider);
+      for (final q in questionsToHost) {
+        try {
+          await qRepo.addQuestion(q);
+        } catch (_) {}
+      }
     } else {
       // Fetch built-in questions
       final qRepo = ref.read(questionRepositoryProvider);
