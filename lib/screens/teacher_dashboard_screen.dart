@@ -40,6 +40,54 @@ class TeacherDashboardScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAlignment.start,
             children: [
+              // Teacher Quick Actions & Student Features (Except Custom)
+              Container(
+                margin: const EdgeInsets.only(bottom: 20),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF4F46E5), Color(0xFF3730A3)],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  crossAlignment: CrossAlignment.start,
+                  children: [
+                    const Text(
+                      '👩‍🏫 Teacher Navigation & Tools',
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        ActionChip(
+                          avatar: const Text('👑'),
+                          label: const Text('Host Game'),
+                          onPressed: () => context.push('/student/host-quiz'),
+                        ),
+                        ActionChip(
+                          avatar: const Text('🔑'),
+                          label: const Text('Join Game'),
+                          onPressed: () => context.push('/student/join-quiz'),
+                        ),
+                        ActionChip(
+                          avatar: const Text('🎮'),
+                          label: const Text('Play Science Quiz'),
+                          onPressed: () => context.push('/student/terms'),
+                        ),
+                        ActionChip(
+                          avatar: const Text('⚙️'),
+                          label: const Text('Settings'),
+                          onPressed: () => context.push('/student/analytics'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
               Row(
                 children: [
                   Expanded(child: _card('Class Average', '${stats.classAverage.toStringAsFixed(1)}%', Colors.blue)),

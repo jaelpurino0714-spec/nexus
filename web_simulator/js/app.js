@@ -30,7 +30,20 @@ const App = {
     }
   },
 
+  getHomeScreen() {
+    const teacherRaw = localStorage.getItem(DB.STORAGE_TEACHER);
+    return teacherRaw ? 'teacherHomeScreen' : 'homeScreen';
+  },
+
+  goHome() {
+    this.showScreen(this.getHomeScreen());
+  },
+
   showScreen(screenId) {
+    if (screenId === 'homeScreen' && localStorage.getItem(DB.STORAGE_TEACHER)) {
+      screenId = 'teacherHomeScreen';
+    }
+
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const target = document.getElementById(screenId);
     if (target) {
@@ -47,7 +60,7 @@ const App = {
 
     if (screenId === 'homeScreen' || screenId === 'teacherHomeScreen') {
       this.updateUserHeader();
-      if (screenId === 'homeScreen' && typeof CharacterSystem !== 'undefined') {
+      if (typeof CharacterSystem !== 'undefined') {
         CharacterSystem.renderHomeCharacterCard();
       }
     }

@@ -119,7 +119,7 @@
             </div>
           </div>
 
-          <div style="background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.06);">
+          <div style="background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.06); margin-bottom: 20px;">
             <h3 style="margin: 0 0 14px 0; color: #4C1D95; font-size: 1.1rem;">Teacher Quick Actions</h3>
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
               <button class="teacher-action-btn" style="background: linear-gradient(135deg, #6366F1, #4F46E5); border: none; color: white; padding: 18px 12px; border-radius: 16px; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="Multiplayer.initCreateGameFlow()">
@@ -139,6 +139,29 @@
                 <strong style="font-size: 0.95rem; display: block; margin-top: 6px;">Analytics</strong>
               </button>
             </div>
+          </div>
+
+          <!-- All Student Navigation Features (Except Custom) -->
+          <div class="home-nav-bottom">
+            <button class="home-nav-btn play-btn" onclick="App.showScreen('playScreen')">
+              <span class="btn-icon">🎮</span>
+              <span class="btn-text">Play</span>
+            </button>
+
+            <button class="home-nav-btn character-btn" style="background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%); color: white;" onclick="CharacterSystem.openCharacterModal()">
+              <span class="btn-icon">🐾</span>
+              <span class="btn-text">My Character</span>
+            </button>
+
+            <button class="home-nav-btn experiment-btn" onclick="Experiment.showTermSelection()">
+              <span class="btn-icon">🧪</span>
+              <span class="btn-text">Experiment Simulator</span>
+            </button>
+
+            <button class="home-nav-btn settings-btn" onclick="App.showScreen('settingsScreen')">
+              <span class="btn-icon">⚙️</span>
+              <span class="btn-text">Settings</span>
+            </button>
           </div>
         </div>
       </section>
