@@ -113,7 +113,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       return true;
     } catch (e) {
-      final cleanMsg = e.toString().replaceAll(RegExp(r'^(Exception|AuthException):\s*'), '');
+      String cleanMsg = e.toString().replaceAll(RegExp(r'^(Exception|AuthException):\s*'), '');
+      if (cleanMsg.toLowerCase().contains('rate limit') || cleanMsg.contains('429')) {
+        cleanMsg = 'Too many attempts. Please try again in a moment.';
+      }
       state = state.copyWith(
         isLoading: false,
         errorMessage: cleanMsg,
@@ -140,7 +143,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       return true;
     } catch (e) {
-      final cleanMsg = e.toString().replaceAll(RegExp(r'^(Exception|AuthException):\s*'), '');
+      String cleanMsg = e.toString().replaceAll(RegExp(r'^(Exception|AuthException):\s*'), '');
+      if (cleanMsg.toLowerCase().contains('rate limit') || cleanMsg.contains('429')) {
+        cleanMsg = 'Too many attempts. Please try again in a moment.';
+      }
       state = state.copyWith(
         isLoading: false,
         errorMessage: cleanMsg,

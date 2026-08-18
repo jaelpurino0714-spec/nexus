@@ -70,10 +70,15 @@ const Auth = {
   },
 
   showError(msg) {
+    if (!msg) return;
+    let cleanMsg = String(msg);
+    if (cleanMsg.toLowerCase().includes('rate limit') || cleanMsg.includes('429')) {
+      cleanMsg = 'Too many sign-in attempts. Please try again in a moment or double check your username and password.';
+    }
     const banner = document.getElementById('authErrorBanner');
     if (banner) {
       banner.style.display = 'block';
-      banner.textContent = msg;
+      banner.textContent = cleanMsg;
     }
   },
 

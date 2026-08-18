@@ -168,10 +168,21 @@ class ProfileService {
 
       return profile;
     } catch (e) {
-      if (e.toString().toLowerCase().contains('rate limit')) {
+      final errStr = e.toString().toLowerCase();
+      if (errStr.contains('rate limit') || errStr.contains('429') || errStr.contains('too many requests')) {
+        try {
+          final res = await _client.from('profiles').select().eq('username', cleanUsername).maybeSingle();
+          if (res != null) {
+            final profile = ProfileModel.fromJson(res);
+            await _secureStorage.write(key: _userUuidKey, value: profile.id);
+            await _secureStorage.write(key: _userRoleKey, value: profile.role);
+            return profile;
+          }
+        } catch (_) {}
+
         final savedUserId = await getSavedUserId();
         final savedRole = await getSavedUserRole() ?? 'student';
-        final profile = ProfileModel(
+        return ProfileModel(
           id: savedUserId ?? const Uuid().v4(),
           role: savedRole,
           name: cleanUsername,
@@ -179,9 +190,8 @@ class ProfileService {
           username: cleanUsername,
           createdAt: DateTime.now(),
         );
-        return profile;
       }
-      // Detailed user-friendly diagnostics if non-rate-limit AuthException
+
       final exists = await isUsernameTaken(cleanUsername);
       if (!exists) {
         throw AuthException('Account with username "$cleanUsername" does not exist.');
