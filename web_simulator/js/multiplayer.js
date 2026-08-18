@@ -935,19 +935,49 @@ const Multiplayer = {
     this.timerInterval = setInterval(updateTimer, 50);
   },
 
-  // 11. Render Leaderboard & Podium Standings
+  openLeaveGameModal() {
+    const modal = document.getElementById('leaveGameConfirmModal');
+    if (modal) modal.classList.remove('hidden');
+  },
+
+  closeLeaveGameModal() {
+    const modal = document.getElementById('leaveGameConfirmModal');
+    if (modal) modal.classList.add('hidden');
+  },
+
+  async confirmLeaveGame() {
+    this.closeLeaveGameModal();
+    if (this.currentGame && this.currentGame.id) {
+      const userUuid = DB.getUserUUID();
+      await DB.leaveMultiplayerGame(this.currentGame.id, userUuid);
+      this.sendBroadcast('PLAYER_LEFT', { playerId: userUuid });
+    }
+    this.goHome();
+  },
+
+  // 11. Render Leaderboard & Podium Standings (Excludes Host, Accurately Ranks Joined Participants)
   renderLeaderboardScreen(title, standings) {
     App.showScreen('mpLeaderboardScreen');
     const titleEl = document.getElementById('mpLeaderboardTitle');
     const rosterEl = document.getElementById('mpLeaderboardRoster');
     if (titleEl) titleEl.textContent = title;
 
+    // Filter out host entries so ONLY joined participants appear on the leaderboard
+    const participantStandings = (standings || []).filter(p => {
+      if (p.is_host || p.isHost) return false;
+      if (this.currentGame && (p.user_id === this.currentGame.host_id || p.id === this.currentGame.host_id)) return false;
+      return true;
+    });
+
+    // Sort by score descending for accurate participant ranking
+    participantStandings.sort((a, b) => (b.score || 0) - (a.score || 0));
+
     if (rosterEl) {
       rosterEl.innerHTML = '';
-      if (!standings || standings.length === 0) {
-        rosterEl.innerHTML = '<div style="color:#94A3B8; text-align:center; padding:16px;">No scores recorded.</div>';
+      if (participantStandings.length === 0) {
+        rosterEl.innerHTML = '<div style="color:#94A3B8; text-align:center; padding:16px;">No participant scores recorded.</div>';
       } else {
-        standings.forEach((p, idx) => {
+        participantStandings.forEach((p, idx) => {
           const card = document.createElement('div');
           card.className = 'lobby-part-card';
           const medals = ['🥇', '🥈', '🥉'];

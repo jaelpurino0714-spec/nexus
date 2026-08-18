@@ -684,7 +684,7 @@
             ● Connected to Realtime Channel <span id="mpPlayerChannelTag" style="color:#6D28D9;">game:...</span>
           </div>
 
-          <button class="cancel-btn" style="width:100%; margin-top:24px;" onclick="Multiplayer.leavePlayerLobby()">Leave Game</button>
+          <button class="cancel-btn" style="width:100%; margin-top:24px;" onclick="Multiplayer.openLeaveGameModal()">Leave Game 🚪</button>
         </div>
       </section>
 
@@ -747,8 +747,11 @@
       <!-- ================= MULTIPLAYER: PLAYER GAMEPLAY SCREEN ================= -->
       <section id="mpPlayerGameScreen" class="screen">
         <div class="play-container">
-          <div class="gameplay-header-row">
-            <span id="mpPlayerQCounter" class="q-count-badge">Question 1 of 10</span>
+          <div class="gameplay-header-row" style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span id="mpPlayerQCounter" class="q-count-badge">Question 1 of 10</span>
+              <button class="cancel-btn" style="padding:4px 10px; font-size:0.78rem; background:#FEE2E2; color:#DC2626; border:none; font-weight:700;" onclick="Multiplayer.openLeaveGameModal()">Leave Game 🚪</button>
+            </div>
             <div class="speed-timer-card" style="margin:0; padding:6px 14px;">
               <span id="mpPlayerTimerValue" class="speed-timer-value" style="font-size:1.1rem;">20.00s</span>
             </div>
@@ -769,6 +772,26 @@
           </div>
         </div>
       </section>
+
+      <!-- Two-Step Leave Game Confirmation Modal -->
+      <div id="leaveGameConfirmModal" class="mode-modal hidden" style="z-index: 9999;">
+        <div class="mode-modal-content" style="max-width: 440px; width: 90%; text-align: center;">
+          <div style="font-size: 3rem; margin-bottom: 8px;">🚪</div>
+          <h3 style="margin: 0 0 8px 0; color: #DC2626;">Leave Game?</h3>
+          <p style="font-size: 0.9rem; color: #64748B; margin-bottom: 20px; line-height: 1.4;">
+            Are you sure you want to leave this game? Your answers will <b>not be recorded</b> and you will be removed from the leaderboard.
+          </p>
+
+          <div style="display: flex; gap: 10px;">
+            <button class="cancel-btn" style="flex: 1; background: #FEE2E2; color: #DC2626; border: none; font-weight: 700; padding: 12px;" onclick="Multiplayer.confirmLeaveGame()">
+              Yes, Leave Game 🚪
+            </button>
+            <button class="primary-btn" style="flex: 1; padding: 12px;" onclick="Multiplayer.closeLeaveGameModal()">
+              Cancel (Stay)
+            </button>
+          </div>
+        </div>
+      </div>
 
       <!-- ================= MULTIPLAYER: LEADERBOARD & PODIUM SCREEN ================= -->
       <section id="mpLeaderboardScreen" class="screen">

@@ -1164,14 +1164,36 @@ const DB = {
     try {
       const { data: players } = await supabaseClient
         .from('multiplayer_players')
-        .select('id, display_name, score, correct_answers, wrong_answers')
+        .select('id, user_id, display_name, score, correct_answers, wrong_answers, is_host')
         .eq('game_id', gameId)
+        .eq('is_host', false)
         .order('score', { ascending: false });
 
-      return players || [];
+      return (players || []).filter(p => !p.is_host);
     } catch (e) {
       console.error('Error fetching game leaderboard:', e);
       return [];
+    }
+  },
+
+  async leaveMultiplayerGame(gameId, userUuid) {
+    if (!gameId || !userUuid) return;
+    if (supabaseClient) {
+      try {
+        await supabaseClient
+          .from('multiplayer_players')
+          .delete()
+          .eq('game_id', gameId)
+          .eq('user_id', userUuid);
+      } catch (e) {}
+
+      try {
+        await supabaseClient
+          .from('multiplayer_player_answers')
+          .delete()
+          .eq('game_id', gameId)
+          .eq('player_id', userUuid);
+      } catch (e) {}
     }
   },
 
