@@ -259,13 +259,13 @@ const Quiz = {
     const maxPartVal = parseInt(document.getElementById('customMaxParticipants').value, 10) || 50;
     const errorEl = document.getElementById('customizeErrorMsg');
 
-    if (isNaN(timeVal) || timeVal < 5) {
-      errorEl.textContent = '⚠️ Time limit must be at least 5 seconds (undertime rejected)!';
+    if (isNaN(timeVal) || timeVal < 10) {
+      errorEl.textContent = '⚠️ Time limit must be at least 10 seconds (minimum 10s required)!';
       errorEl.classList.remove('hidden');
       return;
     }
     if (timeVal > 60) {
-      errorEl.textContent = '⚠️ Time limit cannot exceed 60 seconds (overtime rejected)!';
+      errorEl.textContent = '⚠️ Time limit cannot exceed 60 seconds (maximum 60s allowed)!';
       errorEl.classList.remove('hidden');
       return;
     }

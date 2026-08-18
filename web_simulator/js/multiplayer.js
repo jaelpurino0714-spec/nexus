@@ -106,6 +106,7 @@ const Multiplayer = {
     const topicSelect = document.getElementById('mpTopicSelect');
     const mediumSelect = document.getElementById('mpMediumSelect');
     const countSelect = document.getElementById('mpCountSelect');
+    const timeSelect = document.getElementById('mpTimeSelect');
     const errEl = document.getElementById('mpCreateError');
 
     if (errEl) errEl.classList.add('hidden');
@@ -114,7 +115,8 @@ const Multiplayer = {
       termId: termSelect ? termSelect.value : null,
       topicId: topicSelect ? topicSelect.value : null,
       answerMedium: mediumSelect ? mediumSelect.value : 'multiple_choice',
-      questionCount: countSelect ? parseInt(countSelect.value, 10) : 10
+      questionCount: countSelect ? Math.min(30, Math.max(1, parseInt(countSelect.value, 10) || 10)) : 10,
+      timeLimit: timeSelect ? Math.min(60, Math.max(10, parseInt(timeSelect.value, 10) || 20)) : 20
     };
 
     try {

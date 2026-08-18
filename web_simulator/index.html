@@ -457,6 +457,56 @@
 
 
 
+      <!-- ================= PRE-GAME CUSTOMIZE MODAL ================= -->
+      <div id="preGameCustomizeModal" class="mode-modal hidden">
+        <div class="mode-modal-content" style="max-width: 480px; width: 90%;">
+          <h3 id="customizeModalTitle">Custom Play Setup</h3>
+          <p id="customizeModalSub">Configure your custom time limit and question count</p>
+
+          <div class="customize-form" style="margin-top: 14px; text-align: left;">
+            <div class="form-group">
+              <label for="customTimeLimit">⏱️ Time Limit per Question (Seconds, Min 10s - Max 60s):</label>
+              <div style="display: flex; gap: 8px; align-items: center; margin-top: 4px;">
+                <input type="number" id="customTimeLimit" min="10" max="60" value="20" class="customize-input" style="font-weight: 700; font-size: 1.1rem; text-align: center;">
+                <span style="font-size: 0.85rem; font-weight: 600; color: #64748B;">sec</span>
+              </div>
+              <div style="display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;">
+                <button type="button" class="tag" style="background:#E0E7FF; color:#3730A3; cursor:pointer;" onclick="document.getElementById('customTimeLimit').value=10">10s (Min)</button>
+                <button type="button" class="tag" style="background:#E0E7FF; color:#3730A3; cursor:pointer;" onclick="document.getElementById('customTimeLimit').value=15">15s</button>
+                <button type="button" class="tag" style="background:#E0E7FF; color:#3730A3; cursor:pointer;" onclick="document.getElementById('customTimeLimit').value=20">20s</button>
+                <button type="button" class="tag" style="background:#E0E7FF; color:#3730A3; cursor:pointer;" onclick="document.getElementById('customTimeLimit').value=30">30s</button>
+                <button type="button" class="tag" style="background:#E0E7FF; color:#3730A3; cursor:pointer;" onclick="document.getElementById('customTimeLimit').value=45">45s</button>
+                <button type="button" class="tag" style="background:#E0E7FF; color:#3730A3; cursor:pointer;" onclick="document.getElementById('customTimeLimit').value=60">60s (Max)</button>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label for="customQuestionCount">❓ Question Count (Max 30 Questions):</label>
+              <select id="customQuestionCount" class="customize-input">
+                <option value="5">5 Questions</option>
+                <option value="10">10 Questions</option>
+                <option value="15" selected>15 Questions</option>
+                <option value="20">20 Questions</option>
+                <option value="25">25 Questions</option>
+                <option value="30">30 Questions (Maximum)</option>
+              </select>
+            </div>
+
+            <div id="maxParticipantsGroup" class="form-group hidden" style="margin-top: 14px;">
+              <label for="customMaxParticipants">👥 Max Participants:</label>
+              <input type="number" id="customMaxParticipants" min="1" max="100" value="50" class="customize-input">
+            </div>
+
+            <div id="customizeErrorMsg" class="customize-error-msg hidden" style="color: #DC2626; font-size: 0.85rem; font-weight: 700; margin-top: 10px;"></div>
+
+            <div style="display: flex; gap: 10px; margin-top: 18px;">
+              <button id="startCustomizeBtn" class="primary-btn" style="flex: 1;" onclick="Quiz.confirmCustomSettingsAndStart()">Start Single Player 🚀</button>
+              <button class="cancel-btn" style="width: auto; padding: 10px 18px;" onclick="Quiz.hidePreGameCustomizeModal()">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ================= CUSTOM HUB MODAL ================= -->
       <div id="customHubModal" class="mode-modal hidden">
         <div class="mode-modal-content">
@@ -518,12 +568,26 @@
             </div>
 
             <div class="form-group">
-              <label for="mpCountSelect">❓ Number of Questions:</label>
+              <label for="mpCountSelect">❓ Number of Questions (Max 30):</label>
               <select id="mpCountSelect" class="customize-input">
                 <option value="5">5 Questions</option>
                 <option value="10" selected>10 Questions</option>
                 <option value="15">15 Questions</option>
                 <option value="20">20 Questions</option>
+                <option value="25">25 Questions</option>
+                <option value="30">30 Questions (Maximum)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="mpTimeSelect">⏱️ Time Limit per Question (Max 60s):</label>
+              <select id="mpTimeSelect" class="customize-input">
+                <option value="10">10 Seconds (Minimum)</option>
+                <option value="15">15 Seconds</option>
+                <option value="20" selected>20 Seconds (Default)</option>
+                <option value="30">30 Seconds</option>
+                <option value="45">45 Seconds</option>
+                <option value="60">60 Seconds (Maximum)</option>
               </select>
             </div>
 

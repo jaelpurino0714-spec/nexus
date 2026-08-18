@@ -561,13 +561,19 @@ const DB = {
             questions = fallbackRes.data || [];
           }
         }
+        const qCount = Math.min(30, Math.max(1, config.questionCount || 10));
         const shuffled = [...questions].sort(() => Math.random() - 0.5);
-        selectedQuestions = shuffled.slice(0, config.questionCount || 10);
+        selectedQuestions = shuffled.slice(0, qCount);
       } catch (e) {
         console.warn('Questions query error, using local fallback:', e);
       }
     }
-    const formattedQuestions = this._formatQuestions(selectedQuestions);
+
+    const tLimit = Math.min(60, Math.max(10, config.timeLimit || 20));
+    const formattedQuestions = this._formatQuestions(selectedQuestions).map(q => ({
+      ...q,
+      time_limit: tLimit
+    }));
 
     let gameData = {
       id: 'game_' + roomCode + '_' + Date.now(),
