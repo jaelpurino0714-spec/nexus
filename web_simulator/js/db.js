@@ -19,7 +19,12 @@ const supabaseClient = (typeof window !== 'undefined' && window.supabase)
       }) 
     : null;
 
-const DB = {
+  // UUID validator helper
+  isValidUuid(val) {
+    if (typeof val !== 'string') return false;
+    return /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(val);
+  },
+
   // Storage Key Constants
   STORAGE_PROFILE: 'nexus_student_profile',
   STORAGE_RESULTS: 'nexus_quiz_results',
@@ -590,6 +595,9 @@ const DB = {
       time_limit: tLimit
     }));
 
+    const termUuid = this.isValidUuid(config.termId) ? config.termId : null;
+    const topicUuid = this.isValidUuid(config.topicId) ? config.topicId : null;
+
     let gameData = {
       id: 'game_' + roomCode + '_' + Date.now(),
       room_code: roomCode,
@@ -602,15 +610,14 @@ const DB = {
     };
 
     if (supabaseClient) {
-      // 1. Try multiplayer_games table
       try {
         const { data: gRes, error: gErr } = await supabaseClient
           .from('multiplayer_games')
           .insert({
             room_code: roomCode,
             host_id: userUuid,
-            term_id: config.termId || null,
-            topic_id: config.topicId || null,
+            term_id: termUuid,
+            topic_id: topicUuid,
             answer_medium: config.answerMedium || 'multiple_choice',
             question_count: selectedQuestions.length || config.questionCount || 10,
             status: 'waiting',
@@ -620,16 +627,25 @@ const DB = {
           .single();
 
         if (!gErr && gRes) {
-          gameData = gRes;
+          gameData = {
+            ...gameData,
+            ...gRes,
+            formattedQuestions: formattedQuestions
+          };
           if (selectedQuestions.length > 0) {
-            const qEntries = selectedQuestions.map((q, idx) => ({
-              game_id: gameData.id,
-              question_id: q.id,
-              question_order: idx + 1
-            }));
-            try {
-              await supabaseClient.from('multiplayer_game_questions').insert(qEntries);
-            } catch (e) {}
+            const qEntries = selectedQuestions
+              .map((q, idx) => ({
+                game_id: gameData.id,
+                question_id: this.isValidUuid(q.id) ? q.id : null,
+                question_order: idx + 1
+              }))
+              .filter(e => e.question_id !== null);
+
+            if (qEntries.length > 0) {
+              try {
+                await supabaseClient.from('multiplayer_game_questions').insert(qEntries);
+              } catch (e) {}
+            }
           }
           try {
             await supabaseClient.from('multiplayer_players').insert({
@@ -641,44 +657,12 @@ const DB = {
             });
           } catch (e) {}
 
-          // Fallback table entry
           try {
             await supabaseClient.from('quiz_lobbies').insert({
               id: gameData.id,
               access_code: roomCode,
               host_id: userUuid,
               host_name: profile.name || 'Host',
-              quiz_title: 'Multiplayer Trivia',
-              question_count: selectedQuestions.length || 10,
-              status: 'waiting'
-            });
-          } catch (e) {}
-        } else {
-          // 2. Try quiz_lobbies fallback table
-          const { data: lRes } = await supabaseClient
-            .from('quiz_lobbies')
-            .insert({
-              access_code: roomCode,
-              host_id: userUuid,
-              host_name: profile.name || 'Host',
-              quiz_title: 'Multiplayer Trivia',
-              term_id: config.termId || null,
-              topic_id: config.topicId || null,
-              time_limit_per_question: 10,
-              question_count: selectedQuestions.length || 10,
-              status: 'waiting'
-            })
-            .select()
-            .single();
-
-          if (lRes) {
-            gameData = lRes;
-            gameData.room_code = roomCode;
-            try {
-              await supabaseClient.from('lobby_participants').insert({
-                lobby_id: gameData.id,
-                student_id: userUuid,
-                student_name: profile.name || 'Host',
                 photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null
               });
             } catch (e) {}

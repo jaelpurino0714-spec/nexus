@@ -205,6 +205,10 @@ const Multiplayer = {
   },
 
   // 5. Host Lobby Screen Management & Dual DB/Presence Sync
+  showHostLobbyScreen(game) {
+    return this.enterHostLobbyScreen(game || this.currentGame);
+  },
+
   async enterHostLobbyScreen(game) {
     App.showScreen('mpHostLobbyScreen');
     const pinDisplay = document.getElementById('mpPinDisplay');

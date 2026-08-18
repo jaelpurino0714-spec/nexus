@@ -364,7 +364,7 @@ const TeacherPortal = {
     Multiplayer.currentGame = game;
     Multiplayer.questionsList = game.formattedQuestions || quiz.questions;
     Multiplayer.isHost = true;
-    Multiplayer.showHostLobbyScreen();
+    await Multiplayer.enterHostLobbyScreen(game);
   },
 
   duplicateGame(quizId) {
