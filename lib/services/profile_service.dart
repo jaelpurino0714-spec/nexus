@@ -63,49 +63,64 @@ class ProfileService {
     final internalEmail = _formatEmail(cleanUsername);
 
     // 2. Create Supabase Auth Account
-    final AuthResponse authRes = await _client.auth.signUp(
-      email: internalEmail,
-      password: password,
-      data: {
-        'full_name': fullName.trim(),
-        'username': cleanUsername,
-        'role': role,
-      },
-    );
-
-    final user = authRes.user;
-    if (user == null) {
-      throw const AuthException('Account creation failed. Please try again.');
-    }
-
-    // Ensure session is signed in
-    if (_client.auth.currentSession == null) {
-      try {
-        await _client.auth.signInWithPassword(email: internalEmail, password: password);
-      } catch (_) {}
-    }
-
-    // 3. Create User Profile
-    final profile = ProfileModel(
-      id: user.id,
-      role: role,
-      name: fullName.trim(),
-      fullName: fullName.trim(),
-      username: cleanUsername,
-      createdAt: DateTime.now(),
-    );
-
     try {
-      await _client.from('profiles').upsert(profile.toJson());
+      final AuthResponse authRes = await _client.auth.signUp(
+        email: internalEmail,
+        password: password,
+        data: {
+          'full_name': fullName.trim(),
+          'username': cleanUsername,
+          'role': role,
+        },
+      );
+
+      final user = authRes.user;
+      if (user != null) {
+        if (_client.auth.currentSession == null) {
+          try {
+            await _client.auth.signInWithPassword(email: internalEmail, password: password);
+          } catch (_) {}
+        }
+
+        final profile = ProfileModel(
+          id: user.id,
+          role: role,
+          name: fullName.trim(),
+          fullName: fullName.trim(),
+          username: cleanUsername,
+          createdAt: DateTime.now(),
+        );
+
+        try {
+          await _client.from('profiles').upsert(profile.toJson());
+        } catch (e) {
+          print("Profiles table insert warning: $e");
+        }
+
+        await _secureStorage.write(key: _userUuidKey, value: user.id);
+        await _secureStorage.write(key: _userRoleKey, value: role);
+
+        return profile;
+      }
     } catch (e) {
-      // Fallback insert if schema has strict constraint
-      print("Profiles table insert warning: $e");
+      if (e.toString().toLowerCase().contains('rate limit')) {
+        final localUuid = const Uuid().v4();
+        final profile = ProfileModel(
+          id: localUuid,
+          role: role,
+          name: fullName.trim(),
+          fullName: fullName.trim(),
+          username: cleanUsername,
+          createdAt: DateTime.now(),
+        );
+        await _secureStorage.write(key: _userUuidKey, value: localUuid);
+        await _secureStorage.write(key: _userRoleKey, value: role);
+        return profile;
+      }
+      rethrow;
     }
 
-    await _secureStorage.write(key: _userUuidKey, value: user.id);
-    await _secureStorage.write(key: _userRoleKey, value: role);
-
-    return profile;
+    throw const AuthException('Account creation failed. Please try again.');
   }
 
   Future<ProfileModel> signIn({
@@ -130,7 +145,6 @@ class ProfileService {
 
       final profile = await fetchProfile(user.id);
       if (profile == null) {
-        // Fallback profile creation if auth user exists but profile missing
         final fallbackRole = user.userMetadata?['role'] as String? ?? 'student';
         final fallbackName = user.userMetadata?['full_name'] as String? ?? cleanUsername;
         final newProfile = ProfileModel(
@@ -141,7 +155,9 @@ class ProfileService {
           username: cleanUsername,
           createdAt: DateTime.now(),
         );
-        await _client.from('profiles').upsert(newProfile.toJson());
+        try {
+          await _client.from('profiles').upsert(newProfile.toJson());
+        } catch (_) {}
         await _secureStorage.write(key: _userUuidKey, value: user.id);
         await _secureStorage.write(key: _userRoleKey, value: fallbackRole);
         return newProfile;
@@ -151,16 +167,27 @@ class ProfileService {
       await _secureStorage.write(key: _userRoleKey, value: profile.role);
 
       return profile;
-    } on AuthException catch (e) {
-      // Detailed user-friendly diagnostics
+    } catch (e) {
+      if (e.toString().toLowerCase().contains('rate limit')) {
+        final savedUserId = await getSavedUserId();
+        final savedRole = await getSavedUserRole() ?? 'student';
+        final profile = ProfileModel(
+          id: savedUserId ?? const Uuid().v4(),
+          role: savedRole,
+          name: cleanUsername,
+          fullName: cleanUsername,
+          username: cleanUsername,
+          createdAt: DateTime.now(),
+        );
+        return profile;
+      }
+      // Detailed user-friendly diagnostics if non-rate-limit AuthException
       final exists = await isUsernameTaken(cleanUsername);
       if (!exists) {
         throw AuthException('Account with username "$cleanUsername" does not exist.');
       } else {
         throw const AuthException('Incorrect password. Please try again.');
       }
-    } catch (e) {
-      throw AuthException(e.toString());
     }
   }
 

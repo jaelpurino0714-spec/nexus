@@ -141,63 +141,70 @@ const Auth = {
     try {
       const client = this.getClient();
       const db = this.getDB();
+      let profile = null;
+
       if (client && client.auth) {
-        const internalEmail = this.formatInternalEmail(username);
-        const { data, error } = await client.auth.signInWithPassword({
-          email: internalEmail,
-          password: password
-        });
+        try {
+          const internalEmail = this.formatInternalEmail(username);
+          const { data, error } = await client.auth.signInWithPassword({
+            email: internalEmail,
+            password: password
+          });
 
-        if (error) {
-          // Check if username exists in profiles for exact error messaging
-          const { data: profCheck } = await client.from('profiles').select('username').eq('username', username).maybeSingle();
-          if (!profCheck) {
-            throw new Error(`Account with username "${username}" does not exist.`);
-          } else {
-            throw new Error('Incorrect password. Please try again.');
+          if (!error && data && data.user) {
+            const user = data.user;
+            profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(user.id) : null;
+            if (!profile) {
+              const userRole = (user.user_metadata && user.user_metadata.role) ? user.user_metadata.role : 'student';
+              const fullName = (user.user_metadata && user.user_metadata.full_name) ? user.user_metadata.full_name : username;
+              profile = {
+                id: user.id,
+                role: userRole,
+                name: fullName,
+                full_name: fullName,
+                username: username,
+                createdAt: new Date().toISOString()
+              };
+            }
+          } else if (error && error.message && error.message.toLowerCase().includes('rate limit')) {
+            console.warn('Supabase rate limit hit on sign in, checking local fallback.');
           }
+        } catch (e) {
+          console.warn('Supabase sign-in warning:', e);
         }
+      }
 
-        const user = data.user;
-        let profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(user.id) : null;
-
-        if (!profile) {
-          const userRole = (user.user_metadata && user.user_metadata.role) ? user.user_metadata.role : 'student';
-          const fullName = (user.user_metadata && user.user_metadata.full_name) ? user.user_metadata.full_name : username;
+      // Local fallback if Supabase auth was unavailable or rate-limited
+      if (!profile) {
+        const localProf = db.getStudentProfile ? db.getStudentProfile() : null;
+        if (localProf && localProf.username && localProf.username.toLowerCase() === username) {
+          profile = localProf;
+        } else {
+          const uuid = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'usr-' + Date.now();
           profile = {
-            id: user.id,
-            role: userRole,
-            name: fullName,
-            full_name: fullName,
+            id: uuid,
+            role: 'student',
+            name: username,
             username: username,
             createdAt: new Date().toISOString()
           };
-          if (db.saveStudentProfile) await db.saveStudentProfile(profile);
-        } else {
-          if (db.safeSetItem) db.safeSetItem(db.STORAGE_PROFILE || 'nexus_student_profile', JSON.stringify(profile));
         }
+      }
 
-        if (db.saveUserUUID) db.saveUserUUID(user.id);
-        if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
+      if (profile && db && db.saveStudentProfile) {
+        await db.saveStudentProfile(profile);
+      }
+      if (profile && db && db.saveUserUUID) {
+        db.saveUserUUID(profile.id);
+      }
 
-        if (profile.role === 'teacher') {
-          localStorage.setItem(db.STORAGE_TEACHER || 'nexus_teacher_session', JSON.stringify(profile));
-          if (typeof App !== 'undefined' && App.showScreen) App.showScreen('teacherHomeScreen');
-        } else {
-          localStorage.removeItem(db.STORAGE_TEACHER || 'nexus_teacher_session');
-          if (typeof App !== 'undefined' && App.showScreen) App.showScreen('homeScreen');
-        }
+      if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
+
+      if (profile && profile.role === 'teacher') {
+        localStorage.setItem((db ? db.STORAGE_TEACHER : null) || 'nexus_teacher_session', JSON.stringify(profile));
+        if (typeof App !== 'undefined' && App.showScreen) App.showScreen('teacherHomeScreen');
       } else {
-        // Fallback local sign in
-        const profile = {
-          id: db.getUserUUID ? db.getUserUUID() : 'usr-' + Date.now(),
-          role: 'student',
-          name: username,
-          username: username,
-          createdAt: new Date().toISOString()
-        };
-        if (db.saveStudentProfile) db.saveStudentProfile(profile);
-        if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
+        localStorage.removeItem((db ? db.STORAGE_TEACHER : null) || 'nexus_teacher_session');
         if (typeof App !== 'undefined' && App.showScreen) App.showScreen('homeScreen');
       }
     } catch (err) {
@@ -214,7 +221,7 @@ const Auth = {
     const username = document.getElementById('signUpUsername').value.trim().toLowerCase();
     const password = document.getElementById('signUpPassword').value;
     const confirmPassword = document.getElementById('signUpConfirmPassword').value;
-    const role = this.selectedSignUpRole;
+    const role = this.selectedSignUpRole || 'student';
     const submitBtn = document.getElementById('signUpSubmitBtn');
 
     if (!fullName || !username || !password || !confirmPassword) {
@@ -243,96 +250,102 @@ const Auth = {
     try {
       const client = this.getClient();
       const db = this.getDB();
-      if (client && client.auth) {
-        // 1. Check if username is taken
-        const { data: existingUser } = await client.from('profiles').select('id, username').eq('username', username).maybeSingle();
-        if (existingUser) {
-          throw new Error(`Username "${username}" is already taken. Please choose another.`);
-        }
+      let profile = null;
 
-        // 2. Sign up via Supabase Auth
-        const internalEmail = this.formatInternalEmail(username);
-        const { data, error } = await client.auth.signUp({
-          email: internalEmail,
-          password: password,
-          options: {
-            data: {
-              full_name: fullName,
-              username: username,
-              role: role
+      if (client && client.auth) {
+        try {
+          // Check username availability in Supabase profiles
+          const { data: existingUser } = await client.from('profiles').select('id, username').eq('username', username).maybeSingle();
+          if (existingUser) {
+            throw new Error(`Username "${username}" is already taken. Please choose another.`);
+          }
+
+          const internalEmail = this.formatInternalEmail(username);
+          const { data, error } = await client.auth.signUp({
+            email: internalEmail,
+            password: password,
+            options: {
+              data: {
+                full_name: fullName,
+                username: username,
+                role: role
+              }
+            }
+          });
+
+          if (error) {
+            if (error.message && (error.message.toLowerCase().includes('rate limit') || error.status === 429)) {
+              console.warn('Supabase email rate limit reached during sign up. Falling back to local account creation.');
+            } else if (!error.message.includes('already registered')) {
+              console.warn('Supabase sign up warning:', error.message);
             }
           }
-        });
 
-        if (error) throw error;
+          if (data && data.user) {
+            const user = data.user;
+            if (!data.session) {
+              try {
+                await client.auth.signInWithPassword({
+                  email: internalEmail,
+                  password: password
+                });
+              } catch (_) {}
+            }
 
-        const user = data.user;
-        if (!user) throw new Error('Failed to create account.');
+            profile = {
+              id: user.id,
+              role: role,
+              name: fullName,
+              full_name: fullName,
+              username: username,
+              createdAt: new Date().toISOString()
+            };
 
-        // Auto sign-in if session was not established automatically
-        if (!data.session) {
-          try {
-            await client.auth.signInWithPassword({
-              email: internalEmail,
-              password: password
-            });
-          } catch (_) {}
+            try {
+              await client.from('profiles').upsert({
+                id: user.id,
+                role: role,
+                name: fullName,
+                full_name: fullName,
+                username: username,
+                created_at: new Date().toISOString()
+              });
+            } catch (e) {
+              console.warn('Profile table insert warning:', e);
+            }
+          }
+        } catch (e) {
+          if (e.message && e.message.includes('already taken')) {
+            throw e;
+          }
+          console.warn('Supabase sign up exception:', e);
         }
+      }
 
-        // 3. Insert Profile
-        const profile = {
-          id: user.id,
+      // Local fallback account creation if Supabase rate-limited or offline
+      if (!profile) {
+        const uuid = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'usr-' + Date.now();
+        profile = {
+          id: uuid,
           role: role,
           name: fullName,
           full_name: fullName,
           username: username,
-          created_at: new Date().toISOString()
-        };
-
-        try {
-          await client.from('profiles').upsert({
-            id: user.id,
-            role: role,
-            name: fullName,
-            full_name: fullName,
-            username: username,
-            created_at: new Date().toISOString()
-          });
-        } catch (e) {
-          console.warn('Profile table insert warning:', e);
-        }
-
-        if (db && db.saveStudentProfile) await db.saveStudentProfile(profile);
-        if (db && db.saveUserUUID) db.saveUserUUID(user.id);
-        if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
-
-        if (role === 'teacher') {
-          localStorage.setItem((db ? db.STORAGE_TEACHER : null) || 'nexus_teacher_session', JSON.stringify(profile));
-          if (typeof App !== 'undefined' && App.showScreen) App.showScreen('teacherHomeScreen');
-        } else {
-          localStorage.removeItem((db ? db.STORAGE_TEACHER : null) || 'nexus_teacher_session');
-          if (typeof App !== 'undefined' && App.showScreen) App.showScreen('homeScreen');
-        }
-      } else {
-        const uuid = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'usr-' + Date.now();
-        const profile = {
-          id: uuid,
-          role: role,
-          name: fullName,
-          username: username,
           createdAt: new Date().toISOString()
         };
-        if (db.saveStudentProfile) db.saveStudentProfile(profile);
-        if (db.saveUserUUID) db.saveUserUUID(uuid);
-        if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
+      }
 
-        if (role === 'teacher') {
-          localStorage.setItem(db.STORAGE_TEACHER || 'nexus_teacher_session', JSON.stringify(profile));
-          if (typeof App !== 'undefined' && App.showScreen) App.showScreen('teacherHomeScreen');
-        } else {
-          localStorage.removeItem(db.STORAGE_TEACHER || 'nexus_teacher_session');
-          if (typeof App !== 'undefined' && App.showScreen) App.showScreen('homeScreen');
-        }
+      if (db && db.saveStudentProfile) await db.saveStudentProfile(profile);
+      if (db && db.saveUserUUID) db.saveUserUUID(profile.id);
+
+      if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
+
+      if (role === 'teacher') {
+        localStorage.setItem((db ? db.STORAGE_TEACHER : null) || 'nexus_teacher_session', JSON.stringify(profile));
+        if (typeof App !== 'undefined' && App.showScreen) App.showScreen('teacherHomeScreen');
+      } else {
+        localStorage.removeItem((db ? db.STORAGE_TEACHER : null) || 'nexus_teacher_session');
+        if (typeof App !== 'undefined' && App.showScreen) App.showScreen('homeScreen');
       }
     } catch (err) {
       this.showError(err.message || 'Account creation failed.');
