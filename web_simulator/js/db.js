@@ -664,10 +664,9 @@ const DB = {
               access_code: roomCode,
               host_id: userUuid,
               host_name: profile.name || 'Host',
-                photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null
-              });
-            } catch (e) {}
-          }
+              photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null
+            });
+          } catch (e) {}
         }
       } catch (e) {
         console.warn('Supabase lobby creation fallback engaged:', e);
