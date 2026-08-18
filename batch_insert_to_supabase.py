@@ -28,10 +28,10 @@ def post_data(table, data):
 
 # 1. Upsert Terms
 terms_data = [
-    {"id": "a0000000-0000-0000-0000-000000000001", "name": "Term 1", "title": "1st Quarter: Earth and Space", "order_no": 1},
-    {"id": "a0000000-0000-0000-0000-000000000002", "name": "Term 2", "title": "2nd Quarter: Force, Motion & Energy", "order_no": 2},
-    {"id": "a0000000-0000-0000-0000-000000000003", "name": "Term 3", "title": "3rd Quarter: Living Things & Environment", "order_no": 3},
-    {"id": "a0000000-0000-0000-0000-000000000004", "name": "Term 4", "title": "4th Quarter: Matter & Its Interactions", "order_no": 4},
+    {"id": "a0000000-0000-0000-0000-000000000001", "name": "Term 1", "title": "Term 1: Earth and Space", "order_no": 1},
+    {"id": "a0000000-0000-0000-0000-000000000002", "name": "Term 2", "title": "Term 2: Force, Motion & Energy", "order_no": 2},
+    {"id": "a0000000-0000-0000-0000-000000000003", "name": "Term 3", "title": "Term 3: Living Things & Environment", "order_no": 3},
+    {"id": "a0000000-0000-0000-0000-000000000004", "name": "Term 4", "title": "Term 4: Matter & Its Interactions", "order_no": 4},
 ]
 print("Posting terms...")
 post_data("terms", terms_data)

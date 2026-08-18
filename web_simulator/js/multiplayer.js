@@ -61,7 +61,7 @@ const Multiplayer = {
         terms.forEach((t, i) => {
           const opt = document.createElement('option');
           opt.value = t.id;
-          opt.textContent = t.title || t.name || `Term ${i + 1}`;
+          opt.textContent = DB.formatTermTitle ? DB.formatTermTitle(t.title || t.name, t.order_no || i + 1) : (t.title || t.name || `Term ${i + 1}`);
           termSelect.appendChild(opt);
         });
       }

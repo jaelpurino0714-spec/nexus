@@ -34,6 +34,21 @@ const DB = {
   // --------------------------------------------------------------------------
   // 1. QUESTION BANK & CURRICULUM (SUPABASE LIVE QUERY API)
   // --------------------------------------------------------------------------
+  formatTermTitle(rawTitle, orderNo) {
+    if (!rawTitle) return `Term ${orderNo || 1}`;
+    let formatted = rawTitle
+      .replace(/1st Quarter:/gi, 'Term 1:')
+      .replace(/2nd Quarter:/gi, 'Term 2:')
+      .replace(/3rd Quarter:/gi, 'Term 3:')
+      .replace(/4th Quarter:/gi, 'Term 4:')
+      .replace(/1st Quarter/gi, 'Term 1')
+      .replace(/2nd Quarter/gi, 'Term 2')
+      .replace(/3rd Quarter/gi, 'Term 3')
+      .replace(/4th Quarter/gi, 'Term 4')
+      .replace(/Quarter/gi, 'Term');
+    return formatted;
+  },
+
   async getTerms() {
     if (!supabaseClient) return [];
     try {
@@ -42,7 +57,14 @@ const DB = {
         .select('*')
         .order('order_no', { ascending: true });
       if (error) throw error;
-      return data || [];
+      if (data) {
+        return data.map(t => ({
+          ...t,
+          title: this.formatTermTitle(t.title, t.order_no),
+          name: t.name ? t.name.replace(/Quarter/gi, 'Term') : `Term ${t.order_no || 1}`
+        }));
+      }
+      return [];
     } catch (e) {
       console.error('Error fetching terms from Supabase:', e);
       return [];
