@@ -298,81 +298,111 @@ const Auth = {
       let profile = null;
 
       if (client) {
-        // 1. Check if username is already taken in Supabase profiles
+        const internalEmail = this.formatInternalEmail(username);
+
+        // 1. Check if user already exists in profiles table
         const { data: existingUser } = await client
           .from('profiles')
-          .select('id, username')
+          .select('*')
           .eq('username', username)
           .maybeSingle();
 
         if (existingUser) {
-          throw new Error(`Username "${username}" is already taken. Please choose another or Sign In.`);
-        }
+          // Attempt sign in to existing account
+          if (client.auth) {
+            try {
+              const { data: authData } = await client.auth.signInWithPassword({
+                email: internalEmail,
+                password: password
+              });
+              if (authData && authData.user) {
+                profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(authData.user.id) : null;
+              }
+            } catch (_) {}
+          }
 
-        // 2. Sign up via Supabase Auth
-        const internalEmail = this.formatInternalEmail(username);
-        let createdUserId = null;
+          if (!profile) {
+            profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(existingUser.id) : {
+              id: existingUser.id,
+              role: existingUser.role || role,
+              name: existingUser.full_name || existingUser.name || fullName,
+              full_name: existingUser.full_name || existingUser.name || fullName,
+              username: username,
+              createdAt: existingUser.created_at || new Date().toISOString()
+            };
+          }
+        } else {
+          // 2. New account creation
+          let createdUserId = null;
 
-        if (client.auth) {
-          try {
-            const { data, error } = await client.auth.signUp({
-              email: internalEmail,
-              password: password,
-              options: {
-                data: {
-                  full_name: fullName,
-                  username: username,
-                  role: role
+          if (client.auth) {
+            try {
+              const { data, error } = await client.auth.signUp({
+                email: internalEmail,
+                password: password,
+                options: {
+                  data: {
+                    full_name: fullName,
+                    username: username,
+                    role: role
+                  }
+                }
+              });
+
+              if (data && data.user) {
+                createdUserId = data.user.id;
+                if (!data.session) {
+                  try {
+                    await client.auth.signInWithPassword({
+                      email: internalEmail,
+                      password: password
+                    });
+                  } catch (_) {}
                 }
               }
-            });
-
-            if (data && data.user) {
-              createdUserId = data.user.id;
-              if (!data.session) {
-                try {
-                  await client.auth.signInWithPassword({
-                    email: internalEmail,
-                    password: password
-                  });
-                } catch (_) {}
-              }
-            } else if (error) {
-              console.warn('Supabase Auth signUp notice:', error.message);
+            } catch (e) {
+              console.warn('Supabase Auth signUp exception:', e);
             }
+          }
+
+          if (!createdUserId) {
+            createdUserId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'usr-' + Date.now();
+          }
+
+          profile = {
+            id: createdUserId,
+            role: role,
+            name: fullName,
+            full_name: fullName,
+            username: username,
+            createdAt: new Date().toISOString()
+          };
+
+          try {
+            await client.from('profiles').upsert({
+              id: createdUserId,
+              role: role,
+              name: fullName,
+              full_name: fullName,
+              username: username,
+              created_at: new Date().toISOString()
+            });
           } catch (e) {
-            console.warn('Supabase Auth signUp exception:', e);
+            console.warn('Profile table insert warning:', e);
           }
         }
+      }
 
-        if (!createdUserId) {
-          createdUserId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'usr-' + Date.now();
-        }
-
-        // 3. Create & Save Profile in Supabase
+      if (!profile) {
+        const uuid = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'usr-' + Date.now();
         profile = {
-          id: createdUserId,
+          id: uuid,
           role: role,
           name: fullName,
           full_name: fullName,
           username: username,
           createdAt: new Date().toISOString()
         };
-
-        try {
-          await client.from('profiles').upsert({
-            id: createdUserId,
-            role: role,
-            name: fullName,
-            full_name: fullName,
-            username: username,
-            created_at: new Date().toISOString()
-          });
-        } catch (e) {
-          console.warn('Profile table insert warning:', e);
-        }
-      } else {
-        throw new Error('Database connection unavailable. Please refresh the page.');
       }
 
       if (profile && db && db.saveStudentProfile) {
