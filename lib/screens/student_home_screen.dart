@@ -114,6 +114,16 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
                           runSpacing: 10,
                           children: [
                             ActionChip(
+                              avatar: const Text('📁'),
+                              label: const Text('My Games'),
+                              onPressed: () => context.push('/teacher/dashboard'),
+                            ),
+                            ActionChip(
+                              avatar: const Text('📊'),
+                              label: const Text('Analytics'),
+                              onPressed: () => context.push('/teacher/dashboard'),
+                            ),
+                            ActionChip(
                               avatar: const Text('👑'),
                               label: const Text('Host Game'),
                               onPressed: () => context.push('/student/host-quiz'),
@@ -122,11 +132,6 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
                               avatar: const Text('🔑'),
                               label: const Text('Join Game'),
                               onPressed: () => context.push('/student/join-quiz'),
-                            ),
-                            ActionChip(
-                              avatar: const Text('📊'),
-                              label: const Text('Analytics'),
-                              onPressed: () => context.push('/teacher/dashboard'),
                             ),
                           ],
                         ),
@@ -256,20 +261,10 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
               ListTile(
                 leading: const CircleAvatar(backgroundColor: Color(0xFFEDE9FE), child: Text('🔑')),
                 title: const Text('Join Quiz', style: TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: const Text('Enter 7-digit access code to join host lobby'),
+                subtitle: const Text('Enter 6-digit access code to join host lobby'),
                 onTap: () {
                   Navigator.pop(ctx);
                   context.push('/student/join-quiz');
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: const CircleAvatar(backgroundColor: Color(0xFFFEF3C7), child: Text('👑')),
-                title: const Text('Host Quiz', style: TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: const Text('Create live quiz lobby using Built-in or Custom questions'),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  context.push('/student/host-quiz');
                 },
               ),
               const Divider(),
