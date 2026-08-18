@@ -359,7 +359,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
               DropdownButtonFormField<TermModel>(
                 value: _selectedTerm,
                 decoration: const InputDecoration(labelText: 'Select Term', border: OutlineInputBorder()),
-                items: terms.map((t) => DropdownMenuItem(value: t, child: Text(t.title.isNotEmpty ? t.title : t.name))).toList(),
+                items: terms.take(3).map((t) => DropdownMenuItem(value: t, child: Text(t.name.isNotEmpty ? t.name : 'Term ${t.orderNo}'))).toList(),
                 onChanged: (val) {
                   setState(() {
                     _selectedTerm = val;

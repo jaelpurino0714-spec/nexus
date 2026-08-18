@@ -53,15 +53,16 @@ const Multiplayer = {
       termSelect.innerHTML = '';
       if (terms.length === 0) {
         termSelect.innerHTML = `
-          <option value="term-1">Term 1 (Physical & Chemical Science)</option>
-          <option value="term-2">Term 2 (Earth & Climate Systems)</option>
-          <option value="term-3">Term 3 (Physics & Electricity)</option>
+          <option value="term-1">Term 1</option>
+          <option value="term-2">Term 2</option>
+          <option value="term-3">Term 3</option>
         `;
       } else {
-        terms.forEach((t, i) => {
+        const top3 = terms.slice(0, 3);
+        top3.forEach((t, i) => {
           const opt = document.createElement('option');
           opt.value = t.id;
-          opt.textContent = DB.formatTermTitle ? DB.formatTermTitle(t.title || t.name, t.order_no || i + 1) : (t.title || t.name || `Term ${i + 1}`);
+          opt.textContent = t.name || `Term ${t.order_no || i + 1}`;
           termSelect.appendChild(opt);
         });
       }
