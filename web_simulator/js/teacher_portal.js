@@ -287,21 +287,76 @@ const TeacherPortal = {
     this.openMyGames();
   },
 
-  async hostCustomGame(quizId) {
+  hostCustomGame(quizId) {
     const customQuizzes = DB.getCustomQuizzes() || [];
     const quiz = customQuizzes.find(q => q.id === quizId);
     if (!quiz) return;
 
     this.closeModal('myGamesModal');
+    const modal = this.ensureModalContainer('customGameHostSetupModal');
 
-    // Automatically generate Game PIN and lobby code directly without showing edit term/time screen!
+    modal.innerHTML = `
+      <div class="modal-card" style="max-width: 480px; width: 90%;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <h3 style="margin: 0; color: #4C1D95;">👑 Host Game: ${quiz.title}</h3>
+          <button class="close-modal-btn" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #666;" onclick="TeacherPortal.closeModal('customGameHostSetupModal')">✕</button>
+        </div>
+
+        <p style="font-size: 0.88rem; color: #64748B; margin-bottom: 16px;">Set participant limit and time per question to generate your Game PIN.</p>
+
+        <div class="form-group" style="margin-bottom: 14px; text-align: left;">
+          <label style="font-weight: bold; font-size: 0.85rem; color: #1E293B;">👥 Number of Participants:</label>
+          <select id="customHostMaxParticipants" class="customize-input" style="margin-top: 4px;">
+            <option value="5">5 Participants</option>
+            <option value="10">10 Participants</option>
+            <option value="20">20 Participants</option>
+            <option value="30">30 Participants</option>
+            <option value="50" selected>50 Participants (Default)</option>
+            <option value="100">100 Participants</option>
+            <option value="200">200 Participants</option>
+            <option value="500">500 Participants</option>
+            <option value="9999">Unlimited (Maximum Supported)</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px; text-align: left;">
+          <label style="font-weight: bold; font-size: 0.85rem; color: #1E293B;">⏱️ Time per Question:</label>
+          <select id="customHostTimeLimit" class="customize-input" style="margin-top: 4px;">
+            <option value="10">10 Seconds</option>
+            <option value="15">15 Seconds</option>
+            <option value="20" selected>20 Seconds (Default)</option>
+            <option value="30">30 Seconds</option>
+            <option value="45">45 Seconds</option>
+            <option value="60">60 Seconds</option>
+          </select>
+        </div>
+
+        <button class="primary-btn" style="width: 100%; padding: 12px; font-weight: 700;" onclick="TeacherPortal.startCustomGameHost('${quiz.id}')">
+          Start Hosting & Generate Code 🚀
+        </button>
+      </div>
+    `;
+    modal.classList.remove('hidden');
+  },
+
+  async startCustomGameHost(quizId) {
+    const customQuizzes = DB.getCustomQuizzes() || [];
+    const quiz = customQuizzes.find(q => q.id === quizId);
+    if (!quiz) return;
+
+    const maxPart = parseInt(document.getElementById('customHostMaxParticipants').value, 10) || 50;
+    const timeLim = parseInt(document.getElementById('customHostTimeLimit').value, 10) || 20;
+
+    this.closeModal('customGameHostSetupModal');
+
     const config = {
       termId: quiz.term || 1,
       topicId: quiz.id,
       quizTitle: quiz.title,
       customQuestions: quiz.questions,
       questionCount: quiz.questions ? quiz.questions.length : 10,
-      timeLimit: 20
+      timeLimit: timeLim,
+      maxParticipants: maxPart
     };
 
     Multiplayer.resetState();
