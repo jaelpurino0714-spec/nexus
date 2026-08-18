@@ -634,9 +634,6 @@ const Multiplayer = {
         }
       });
     }
-
-    // Lock client inputs across all connected players
-    this.hostLockAnswers();
   },
 
   hostLockAnswers() {
