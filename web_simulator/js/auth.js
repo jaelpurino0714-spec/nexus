@@ -90,6 +90,20 @@ const Auth = {
     return `${clean}@nexus-trivia.app`;
   },
 
+  getClient() {
+    if (typeof getSupabaseClient === 'function') {
+      const c = getSupabaseClient();
+      if (c) return c;
+    }
+    if (typeof window !== 'undefined' && window.supabaseClient) {
+      return window.supabaseClient;
+    }
+    if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+      return supabaseClient;
+    }
+    return null;
+  },
+
   async handleSignIn() {
     this.clearError();
     const username = document.getElementById('signInUsername').value.trim().toLowerCase();
@@ -105,16 +119,17 @@ const Auth = {
     submitBtn.textContent = 'Signing in... ⏳';
 
     try {
-      if (supabaseClient && supabaseClient.auth) {
+      const client = this.getClient();
+      if (client && client.auth) {
         const internalEmail = this.formatInternalEmail(username);
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
+        const { data, error } = await client.auth.signInWithPassword({
           email: internalEmail,
           password: password
         });
 
         if (error) {
           // Check if username exists in profiles for exact error messaging
-          const { data: profCheck } = await supabaseClient.from('profiles').select('username').eq('username', username).maybeSingle();
+          const { data: profCheck } = await client.from('profiles').select('username').eq('username', username).maybeSingle();
           if (!profCheck) {
             throw new Error(`Account with username "${username}" does not exist.`);
           } else {
@@ -205,16 +220,17 @@ const Auth = {
     submitBtn.textContent = 'Creating Account... ⏳';
 
     try {
-      if (supabaseClient && supabaseClient.auth) {
+      const client = this.getClient();
+      if (client && client.auth) {
         // 1. Check if username is taken
-        const { data: existingUser } = await supabaseClient.from('profiles').select('id, username').eq('username', username).maybeSingle();
+        const { data: existingUser } = await client.from('profiles').select('id, username').eq('username', username).maybeSingle();
         if (existingUser) {
           throw new Error(`Username "${username}" is already taken. Please choose another.`);
         }
 
         // 2. Sign up via Supabase Auth
         const internalEmail = this.formatInternalEmail(username);
-        const { data, error } = await supabaseClient.auth.signUp({
+        const { data, error } = await client.auth.signUp({
           email: internalEmail,
           password: password,
           options: {
@@ -242,7 +258,7 @@ const Auth = {
         };
 
         try {
-          await supabaseClient.from('profiles').upsert({
+          await client.from('profiles').upsert({
             id: user.id,
             role: role,
             name: fullName,
@@ -398,9 +414,10 @@ const Auth = {
   },
 
   async logout() {
-    if (supabaseClient && supabaseClient.auth) {
+    const client = this.getClient();
+    if (client && client.auth) {
       try {
-        await supabaseClient.auth.signOut();
+        await client.auth.signOut();
       } catch (e) {}
     }
     DB.clearSession();
