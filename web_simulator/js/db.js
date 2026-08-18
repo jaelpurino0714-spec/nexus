@@ -19,6 +19,7 @@ const supabaseClient = (typeof window !== 'undefined' && window.supabase)
       }) 
     : null;
 
+const DB = {
   // UUID validator helper
   isValidUuid(val) {
     if (typeof val !== 'string') return false;
