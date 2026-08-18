@@ -85,35 +85,48 @@ const TeacherPortal = {
 
         <div class="form-group" style="margin-bottom: 10px;">
           <label style="font-weight: bold; font-size: 0.85rem;">Game / Quiz Title *</label>
-          <input type="text" id="builderTitle" placeholder="e.g. Term 1 Plate Tectonics Challenge" class="customize-input">
+          <input type="text" id="builderTitle" placeholder="e.g. Term 1 Science Challenge" class="customize-input">
         </div>
 
-        <div class="form-group" style="margin-bottom: 14px;">
+        <div class="form-group" style="margin-bottom: 10px;">
           <label style="font-weight: bold; font-size: 0.85rem;">Science Term</label>
           <select id="builderTerm" class="customize-input">
-            <option value="1">Term 1: Earth Science & Ecosystems</option>
-            <option value="2">Term 2: Biology & EM Spectrum</option>
-            <option value="3">Term 3: Chemistry & Physics</option>
+            <option value="1">Term 1</option>
+            <option value="2">Term 2</option>
+            <option value="3">Term 3</option>
           </select>
         </div>
 
         <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 14px; border-radius: 12px; margin-bottom: 14px;">
           <h4 style="margin: 0 0 10px 0; color: #334155; font-size: 0.95rem;">Add Question</h4>
-          <input type="text" id="builderQPrompt" placeholder="Question prompt..." class="customize-input" style="margin-bottom: 8px;">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-            <input type="text" id="builderOptA" placeholder="Option A" class="customize-input">
-            <input type="text" id="builderOptB" placeholder="Option B" class="customize-input">
-            <input type="text" id="builderOptC" placeholder="Option C" class="customize-input">
-            <input type="text" id="builderOptD" placeholder="Option D" class="customize-input">
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <select id="builderCorrect" class="customize-input" style="width: auto;">
-              <option value="0">Correct: Option A</option>
-              <option value="1">Correct: Option B</option>
-              <option value="2">Correct: Option C</option>
-              <option value="3">Correct: Option D</option>
+          
+          <div class="form-group" style="margin-bottom: 8px;">
+            <label style="font-weight: 600; font-size: 0.8rem; color: #475569;">Answer Format</label>
+            <select id="builderQFormat" class="customize-input" onchange="TeacherPortal.onBuilderFormatChanged()">
+              <option value="multiple_choice" selected>Multiple Choice (4 Options)</option>
+              <option value="true_false">True or False</option>
+              <option value="identification">Identification (Short Answer)</option>
             </select>
-            <button class="secondary-btn" style="font-size: 0.82rem;" onclick="TeacherPortal.addQuestionToDraft()">+ Add Question</button>
+          </div>
+
+          <input type="text" id="builderQPrompt" placeholder="Question prompt..." class="customize-input" style="margin-bottom: 8px;">
+          
+          <div id="builderInputsContainer">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+              <input type="text" id="builderOptA" placeholder="Option A" class="customize-input">
+              <input type="text" id="builderOptB" placeholder="Option B" class="customize-input">
+              <input type="text" id="builderOptC" placeholder="Option C" class="customize-input">
+              <input type="text" id="builderOptD" placeholder="Option D" class="customize-input">
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <select id="builderCorrect" class="customize-input" style="width: auto;">
+                <option value="0">Correct: Option A</option>
+                <option value="1">Correct: Option B</option>
+                <option value="2">Correct: Option C</option>
+                <option value="3">Correct: Option D</option>
+              </select>
+              <button class="secondary-btn" style="font-size: 0.82rem;" onclick="TeacherPortal.addQuestionToDraft()">+ Add Question</button>
+            </div>
           </div>
         </div>
 
@@ -133,35 +146,118 @@ const TeacherPortal = {
 
   _builderDrafts: [],
 
+  onBuilderFormatChanged() {
+    const fmt = document.getElementById('builderQFormat').value;
+    const container = document.getElementById('builderInputsContainer');
+    if (!container) return;
+
+    if (fmt === 'multiple_choice') {
+      container.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+          <input type="text" id="builderOptA" placeholder="Option A" class="customize-input">
+          <input type="text" id="builderOptB" placeholder="Option B" class="customize-input">
+          <input type="text" id="builderOptC" placeholder="Option C" class="customize-input">
+          <input type="text" id="builderOptD" placeholder="Option D" class="customize-input">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <select id="builderCorrect" class="customize-input" style="width: auto;">
+            <option value="0">Correct: Option A</option>
+            <option value="1">Correct: Option B</option>
+            <option value="2">Correct: Option C</option>
+            <option value="3">Correct: Option D</option>
+          </select>
+          <button class="secondary-btn" style="font-size: 0.82rem;" onclick="TeacherPortal.addQuestionToDraft()">+ Add Question</button>
+        </div>
+      `;
+    } else if (fmt === 'true_false') {
+      container.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+          <label style="font-weight:600; font-size:0.85rem;">Correct Answer:</label>
+          <select id="builderTFCorrect" class="customize-input" style="width: 40%;">
+            <option value="True">True</option>
+            <option value="False">False</option>
+          </select>
+          <button class="secondary-btn" style="font-size: 0.82rem;" onclick="TeacherPortal.addQuestionToDraft()">+ Add Question</button>
+        </div>
+      `;
+    } else if (fmt === 'identification') {
+      container.innerHTML = `
+        <div style="display: flex; gap: 8px; align-items: center; margin-top: 8px;">
+          <input type="text" id="builderIdCorrect" placeholder="Correct answer word/phrase..." class="customize-input" style="flex: 1;">
+          <button class="secondary-btn" style="font-size: 0.82rem; white-space: nowrap;" onclick="TeacherPortal.addQuestionToDraft()">+ Add Question</button>
+        </div>
+      `;
+    }
+  },
+
   addQuestionToDraft() {
     const prompt = document.getElementById('builderQPrompt').value.trim();
-    const optA = document.getElementById('builderOptA').value.trim();
-    const optB = document.getElementById('builderOptB').value.trim();
-    const optC = document.getElementById('builderOptC').value.trim();
-    const optD = document.getElementById('builderOptD').value.trim();
-    const correct = parseInt(document.getElementById('builderCorrect').value);
+    const fmt = document.getElementById('builderQFormat').value;
 
-    if (!prompt || !optA || !optB || !optC || !optD) {
-      alert('Please complete the question prompt and all 4 options.');
+    if (!prompt) {
+      alert('Please enter a question prompt.');
       return;
     }
 
-    this._builderDrafts.push({
+    let qObj = {
       id: 'q_' + Date.now(),
       question: prompt,
-      options: [optA, optB, optC, optD],
-      answer: correct
-    });
+      questionType: fmt
+    };
 
+    if (fmt === 'multiple_choice') {
+      const optA = document.getElementById('builderOptA').value.trim();
+      const optB = document.getElementById('builderOptB').value.trim();
+      const optC = document.getElementById('builderOptC').value.trim();
+      const optD = document.getElementById('builderOptD').value.trim();
+      const correct = parseInt(document.getElementById('builderCorrect').value);
+
+      if (!optA || !optB || !optC || !optD) {
+        alert('Please fill out all 4 options for Multiple Choice.');
+        return;
+      }
+      qObj.options = [optA, optB, optC, optD];
+      qObj.optionA = optA;
+      qObj.optionB = optB;
+      qObj.optionC = optC;
+      qObj.optionD = optD;
+      qObj.answer = correct;
+    } else if (fmt === 'true_false') {
+      const corrVal = document.getElementById('builderTFCorrect').value;
+      qObj.options = ['True', 'False'];
+      qObj.optionA = 'True';
+      qObj.optionB = 'False';
+      qObj.answer = corrVal;
+    } else if (fmt === 'identification') {
+      const corrVal = document.getElementById('builderIdCorrect').value.trim();
+      if (!corrVal) {
+        alert('Please enter the correct answer word or phrase.');
+        return;
+      }
+      qObj.options = [];
+      qObj.answer = corrVal;
+    }
+
+    this._builderDrafts.push(qObj);
     document.getElementById('builderQPrompt').value = '';
-    document.getElementById('builderOptA').value = '';
-    document.getElementById('builderOptB').value = '';
-    document.getElementById('builderOptC').value = '';
-    document.getElementById('builderOptD').value = '';
+
+    if (fmt === 'multiple_choice') {
+      document.getElementById('builderOptA').value = '';
+      document.getElementById('builderOptB').value = '';
+      document.getElementById('builderOptC').value = '';
+      document.getElementById('builderOptD').value = '';
+    } else if (fmt === 'identification') {
+      document.getElementById('builderIdCorrect').value = '';
+    }
 
     document.getElementById('builderQCount').textContent = this._builderDrafts.length;
     const ul = document.getElementById('builderQuestionsList');
-    ul.innerHTML = this._builderDrafts.map((q, idx) => `<li><b>Q${idx+1}:</b> ${q.question}</li>`).join('');
+    ul.innerHTML = this._builderDrafts.map((q, idx) => `
+      <li>
+        <b>Q${idx+1} [${q.questionType.replace('_', ' ')}]:</b> ${q.question}
+        <span style="color:#10B981; font-weight:bold;">(Ans: ${q.answer})</span>
+      </li>
+    `).join('');
   },
 
   saveCreatedGame() {
@@ -191,14 +287,29 @@ const TeacherPortal = {
     this.openMyGames();
   },
 
-  hostCustomGame(quizId) {
+  async hostCustomGame(quizId) {
     const customQuizzes = DB.getCustomQuizzes() || [];
     const quiz = customQuizzes.find(q => q.id === quizId);
     if (!quiz) return;
 
     this.closeModal('myGamesModal');
-    Multiplayer.questionsList = quiz.questions;
-    Multiplayer.initCreateGameFlow();
+
+    // Automatically generate Game PIN and lobby code directly without showing edit term/time screen!
+    const config = {
+      termId: quiz.term || 1,
+      topicId: quiz.id,
+      quizTitle: quiz.title,
+      customQuestions: quiz.questions,
+      questionCount: quiz.questions ? quiz.questions.length : 10,
+      timeLimit: 20
+    };
+
+    Multiplayer.resetState();
+    const game = await DB.createMultiplayerGame(config);
+    Multiplayer.currentGame = game;
+    Multiplayer.questionsList = game.formattedQuestions || quiz.questions;
+    Multiplayer.isHost = true;
+    Multiplayer.showHostLobbyScreen();
   },
 
   duplicateGame(quizId) {
@@ -225,70 +336,70 @@ const TeacherPortal = {
     this.openMyGames();
   },
 
-
-
   // 3. TEACHER ANALYTICS WORKFLOW
   openAnalytics() {
     const modal = this.ensureModalContainer('teacherAnalyticsModal');
-    const student = DB.getStudentProfile();
-    const results = DB.getQuizResults() || [];
+    const latestHostedGame = DB.getLatestHostedGameAnalytics();
 
-    let avgScore = 0;
-    if (results.length > 0) {
-      avgScore = Math.round(results.reduce((acc, r) => acc + (r.scorePct || 0), 0) / results.length);
-    }
-
-    modal.innerHTML = `
-      <div class="modal-card" style="max-width: 620px; width: 90%;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <h3 style="margin: 0; color: #4C1D95;">📊 Class Performance Analytics</h3>
-          <button class="close-modal-btn" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #666;" onclick="TeacherPortal.closeModal('teacherAnalyticsModal')">✕</button>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; text-align: center;">
-          <div style="background: #EFF6FF; padding: 12px; border-radius: 12px; border: 1px solid #BFDBFE;">
-            <span style="font-size: 0.8rem; color: #1E40AF; font-weight: 600;">Active Students</span>
-            <h3 style="margin: 4px 0 0 0; color: #1E3A8A;">${student ? 1 : 0}</h3>
+    let hostedGameSection = '';
+    if (latestHostedGame) {
+      const parts = latestHostedGame.participants || [];
+      hostedGameSection = `
+        <div style="background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 14px; padding: 16px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div>
+              <span class="tag" style="background: #E0E7FF; color: #3730A3; font-weight: 700; margin-bottom: 4px; display: inline-block;">MOST PREVIOUSLY HOSTED GAME</span>
+              <h4 style="margin: 2px 0 0 0; color: #0F172A; font-size: 1.05rem;">${latestHostedGame.title || 'Science Host Game'} (PIN: ${latestHostedGame.roomCode})</h4>
+            </div>
+            <span style="font-size: 0.78rem; color: #64748B; font-weight: 600;">${latestHostedGame.date || ''}</span>
           </div>
-          <div style="background: #F3E8FF; padding: 12px; border-radius: 12px; border: 1px solid #DDD6FE;">
-            <span style="font-size: 0.8rem; color: #6B21A8; font-weight: 600;">Quizzes Taken</span>
-            <h3 style="margin: 4px 0 0 0; color: #581C87;">${results.length}</h3>
-          </div>
-          <div style="background: #ECFDF5; padding: 12px; border-radius: 12px; border: 1px solid #A7F3D0;">
-            <span style="font-size: 0.8rem; color: #065F46; font-weight: 600;">Class Avg Score</span>
-            <h3 style="margin: 4px 0 0 0; color: #064E3B;">${avgScore}%</h3>
-          </div>
-        </div>
 
-        <button class="primary-btn" style="width: 100%; margin-bottom: 14px; background: #0284C7;" onclick="Analytics.exportCSV()">
-          📥 Export Classroom Results (CSV)
-        </button>
-
-        <div>
-          <h4 style="margin: 0 0 8px 0; color: #334155;">Student Score History</h4>
-          <div style="max-height: 220px; overflow-y: auto; border: 1px solid #E2E8F0; border-radius: 10px;">
+          <div style="max-height: 220px; overflow-y: auto; border: 1px solid #E2E8F0; border-radius: 10px; background: white;">
             <table class="data-table" style="width: 100%; font-size: 0.82rem;">
               <thead>
-                <tr style="background: #F1F5F9;">
-                  <th style="padding: 8px;">Student</th>
-                  <th style="padding: 8px;">Term</th>
-                  <th style="padding: 8px;">Score</th>
-                  <th style="padding: 8px;">Streak</th>
+                <tr style="background: #F1F5F9; text-align: left;">
+                  <th style="padding: 10px;">Participant</th>
+                  <th style="padding: 10px;">Total Points</th>
+                  <th style="padding: 10px;">Accuracy</th>
+                  <th style="padding: 10px;">Correct / Total</th>
                 </tr>
               </thead>
               <tbody>
-                ${results.length === 0 ? '<tr><td colspan="4" style="text-align:center; padding:16px;">No quiz records available yet.</td></tr>' : results.map(r => `
+                ${parts.length === 0 ? '<tr><td colspan="4" style="text-align:center; padding:16px; color:#94A3B8;">No participant responses recorded.</td></tr>' : parts.map(p => `
                   <tr>
-                    <td style="padding: 8px;"><b>${student ? student.name : 'Student'}</b></td>
-                    <td style="padding: 8px;">Term ${r.term}</td>
-                    <td style="padding: 8px;"><span class="tag" style="background:${r.scorePct >= 50 ? '#4CAF50' : '#F44336'}">${r.scorePct}%</span></td>
-                    <td style="padding: 8px;">🔥 ${r.maxStreak || 0}</td>
+                    <td style="padding: 10px; font-weight: 700; color: #1E293B;">👤 ${p.name}</td>
+                    <td style="padding: 10px; font-weight: 800; color: #6D28D9;">${(p.points || 0).toLocaleString()} pts</td>
+                    <td style="padding: 10px;">
+                      <span class="tag" style="background:${p.accuracyPct >= 50 ? '#DCFCE7' : '#FEE2E2'}; color:${p.accuracyPct >= 50 ? '#166534' : '#991B1B'}; font-weight:700;">
+                        ${p.accuracyPct}%
+                      </span>
+                    </td>
+                    <td style="padding: 10px; font-weight: 700; color: #0284C7;">${p.correct} / ${p.totalQuestions}</td>
                   </tr>
                 `).join('')}
               </tbody>
             </table>
           </div>
         </div>
+      `;
+    } else {
+      hostedGameSection = `
+        <div style="background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 14px; padding: 20px; margin-bottom: 16px; text-align: center; color: #64748B;">
+          <div style="font-size: 2rem; margin-bottom: 6px;">📊</div>
+          <h4 style="margin: 0 0 4px 0; color: #334155;">No Hosted Game Analytics Recorded Yet</h4>
+          <p style="font-size: 0.85rem; margin: 0;">Host a live game to view participant names, total points, accuracy, and correct answers breakdown!</p>
+        </div>
+      `;
+    }
+
+    modal.innerHTML = `
+      <div class="modal-card" style="max-width: 640px; width: 90%;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="margin: 0; color: #4C1D95;">📊 Class Performance & Game Analytics</h3>
+          <button class="close-modal-btn" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #666;" onclick="TeacherPortal.closeModal('teacherAnalyticsModal')">✕</button>
+        </div>
+
+        ${hostedGameSection}
       </div>
     `;
     modal.classList.remove('hidden');

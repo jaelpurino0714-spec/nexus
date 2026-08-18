@@ -536,11 +536,26 @@ const DB = {
     const roomCode = this.generate6CharRoomCode();
 
     let selectedQuestions = [];
-    if (supabaseClient) {
+    if (config.customQuestions && config.customQuestions.length > 0) {
+      selectedQuestions = config.customQuestions.map((q, idx) => ({
+        id: q.id || `custom_q_${idx}`,
+        question: q.question || q.prompt || 'Custom Question',
+        options: q.options || [q.optionA, q.optionB, q.optionC, q.optionD].filter(Boolean),
+        optionA: q.options ? q.options[0] : (q.optionA || ''),
+        optionB: q.options ? q.options[1] : (q.optionB || ''),
+        optionC: q.options ? q.options[2] : (q.optionC || ''),
+        optionD: q.options ? q.options[3] : (q.optionD || ''),
+        answer: q.answer !== undefined ? q.answer : (q.correctAnswer || 0),
+        correct_answer: q.answer !== undefined ? q.answer : (q.correctAnswer || 0),
+        question_type: q.questionType || q.type || 'multiple_choice',
+        time_limit: config.timeLimit || 20
+      }));
+    } else if (supabaseClient) {
       try {
-        let qTypeId = 1;
+        let qTypeId = null;
         if (config.answerMedium === 'true_false') qTypeId = 2;
         else if (config.answerMedium === 'identification') qTypeId = 3;
+        else if (config.answerMedium === 'multiple_choice') qTypeId = 1;
 
         let query = supabaseClient.from('questions').select('*').eq('is_active', true);
         if (config.topicId) query = query.eq('topic_id', config.topicId);
@@ -1268,6 +1283,24 @@ const DB = {
     }
 
     return null;
+  },
+
+  saveHostedGameAnalytics(data) {
+    if (!data) return;
+    try {
+      localStorage.setItem('nexus_latest_hosted_game_analytics', JSON.stringify(data));
+    } catch (e) {
+      console.warn('Error saving hosted game analytics:', e);
+    }
+  },
+
+  getLatestHostedGameAnalytics() {
+    try {
+      const raw = localStorage.getItem('nexus_latest_hosted_game_analytics');
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
   }
 };
 

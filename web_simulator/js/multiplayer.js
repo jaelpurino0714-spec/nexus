@@ -108,6 +108,7 @@ const Multiplayer = {
     const mediumSelect = document.getElementById('mpMediumSelect');
     const countSelect = document.getElementById('mpCountSelect');
     const timeSelect = document.getElementById('mpTimeSelect');
+    const maxPartSelect = document.getElementById('mpMaxParticipantsSelect');
     const errEl = document.getElementById('mpCreateError');
 
     if (errEl) errEl.classList.add('hidden');
@@ -117,7 +118,8 @@ const Multiplayer = {
       topicId: topicSelect ? topicSelect.value : null,
       answerMedium: mediumSelect ? mediumSelect.value : 'multiple_choice',
       questionCount: countSelect ? Math.min(30, Math.max(1, parseInt(countSelect.value, 10) || 10)) : 10,
-      timeLimit: timeSelect ? Math.min(60, Math.max(10, parseInt(timeSelect.value, 10) || 20)) : 20
+      timeLimit: timeSelect ? Math.min(60, Math.max(10, parseInt(timeSelect.value, 10) || 20)) : 20,
+      maxParticipants: maxPartSelect ? parseInt(maxPartSelect.value, 10) || 9999 : 9999
     };
 
     try {
@@ -658,6 +660,30 @@ const Multiplayer = {
     } else {
       await DB.updateMultiplayerGameStatus(this.currentGame.id, 'finished');
       const finalLeaderboard = await DB.getGameLeaderboard(this.currentGame.id);
+
+      const totalQ = this.questionsList ? this.questionsList.length : 10;
+      const participantStandings = (finalLeaderboard || []).filter(p => !p.is_host && !p.isHost);
+
+      const analyticsData = {
+        gameId: this.currentGame ? this.currentGame.id : 'game_' + Date.now(),
+        roomCode: this.currentGame ? (this.currentGame.room_code || this.currentGame.access_code) : '000000',
+        title: this.currentGame ? (this.currentGame.title || 'Science Host Quiz') : 'Science Host Quiz',
+        totalQuestions: totalQ,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+        participants: participantStandings.map(p => {
+          const correct = p.correct_answers || p.correct || 0;
+          const pct = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
+          return {
+            name: p.display_name || p.name || 'Participant',
+            points: p.score || p.points || 0,
+            correct: correct,
+            totalQuestions: totalQ,
+            accuracyPct: pct
+          };
+        })
+      };
+
+      DB.saveHostedGameAnalytics(analyticsData);
       this.sendBroadcast('GAME_FINISH', { finalLeaderboard });
       this.renderLeaderboardScreen('🏆 Final Podium Leaderboard', finalLeaderboard);
     }
