@@ -480,15 +480,86 @@ const DB = {
     this.safeSetItem(this.STORAGE_USER_UUID, uuid);
   },
 
-  saveCustomQuiz(quizObj) {
+  async saveCustomQuiz(quizObj) {
+    if (!quizObj) return;
+
+    // 1. Save to LocalStorage immediately
     const list = JSON.parse(localStorage.getItem('nexus_custom_quizzes') || '[]');
-    list.push(quizObj);
+    const existingIdx = list.findIndex(q => q.id === quizObj.id);
+    if (existingIdx >= 0) {
+      list[existingIdx] = quizObj;
+    } else {
+      list.push(quizObj);
+    }
     this.safeSetItem('nexus_custom_quizzes', JSON.stringify(list));
+
+    // 2. Sync to Supabase if client available
+    if (supabaseClient) {
+      const userUuid = this.getUserUUID();
+      try {
+        await supabaseClient.from('custom_quizzes').upsert({
+          id: this.isValidUuid(quizObj.id) ? quizObj.id : undefined,
+          title: quizObj.title,
+          term_id: quizObj.term || 1,
+          created_by: userUuid,
+          questions_json: quizObj.questions
+        });
+      } catch (e) {}
+
+      // Upsert individual questions into Supabase question bank for full query resilience
+      if (quizObj.questions && Array.isArray(quizObj.questions)) {
+        for (const q of quizObj.questions) {
+          try {
+            await supabaseClient.from('questions').upsert({
+              id: this.isValidUuid(q.id) ? q.id : undefined,
+              question: q.question,
+              question_type_id: q.question_type_id || (q.question_type === 'true_false' ? 2 : (q.question_type === 'identification' ? 3 : 1)),
+              choice_a: q.choice_a || q.option_a || (q.options ? q.options[0] : null),
+              choice_b: q.choice_b || q.option_b || (q.options ? q.options[1] : null),
+              choice_c: q.choice_c || q.option_c || (q.options ? q.options[2] : null),
+              choice_d: q.choice_d || q.option_d || (q.options ? q.options[3] : null),
+              correct_answer: q.correct_answer || q.correctAnswer || q.answer,
+              term_id: quizObj.term || 1,
+              is_active: true
+            });
+          } catch (e) {}
+        }
+      }
+    }
   },
 
   getCustomQuizzes() {
     const raw = localStorage.getItem('nexus_custom_quizzes');
-    return raw ? JSON.parse(raw) : [];
+    let localList = raw ? JSON.parse(raw) : [];
+
+    if (supabaseClient) {
+      supabaseClient
+        .from('custom_quizzes')
+        .select('*')
+        .then(({ data: remoteQuizzes }) => {
+          if (remoteQuizzes && remoteQuizzes.length > 0) {
+            let updated = false;
+            remoteQuizzes.forEach(rq => {
+              const parsed = {
+                id: rq.id,
+                title: rq.title,
+                term: rq.term_id,
+                questions: rq.questions_json || []
+              };
+              if (!localList.some(l => l.id === parsed.id || l.title === parsed.title)) {
+                localList.push(parsed);
+                updated = true;
+              }
+            });
+            if (updated) {
+              localStorage.setItem('nexus_custom_quizzes', JSON.stringify(localList));
+            }
+          }
+        })
+        .catch(() => {});
+    }
+
+    return localList;
   },
 
   clearSession() {
