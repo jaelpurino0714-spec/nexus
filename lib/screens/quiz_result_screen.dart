@@ -84,7 +84,7 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
 
             if (xpGained > 0)
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 8),
+                margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 4),
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFEF08A),
@@ -95,9 +95,28 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
                   '⭐ +$xpGained Companion XP Earned!',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.w900,
                     color: Color(0xFF854D0E),
+                  ),
+                ),
+              ),
+            if (pct >= 100)
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFDCFCE7),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0xFF86EFAC)),
+                ),
+                child: const Text(
+                  '🪙 +25 Science Coins (100% Perfect Score!) 🎉',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w900,
+                    color: Color(0xFF166534),
                   ),
                 ),
               ),

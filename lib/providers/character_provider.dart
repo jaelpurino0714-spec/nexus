@@ -305,10 +305,10 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
       xpGained += 15;
     }
 
-    // 1b. Calculate Science Coins Gained: +5 coins per correct answer + 20 bonus coins for 100%
-    int coinsGained = (correctAnswers * 5);
-    if (percentageScore >= 100) {
-      coinsGained += 20;
+    // 1b. Calculate Science Coins Gained: 25 coins ONLY if 100% of questions are correct (0 wrong answers)
+    int coinsGained = 0;
+    if (percentageScore >= 100 && correctAnswers == totalQuestions && totalQuestions > 0) {
+      coinsGained = 25;
     }
     final newCoins = oldProfile.coins + coinsGained;
 

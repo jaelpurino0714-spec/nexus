@@ -1478,9 +1478,9 @@ const Quiz = {
         TaskSystem.completeTask(`streak_${Date.now()}`, `Streak Bonus (🔥 ${this.maxStreak})`, 5);
       }
 
-      // 6. Award Science Coins for Perfect Test Score (0 Wrong Answers)
-      if (this.incorrectCount === 0 && totalQ > 0) {
-        const bonusCoins = 25; // 25 Science Coins awarded for 0 wrong answers
+      // 6. Award Science Coins ONLY for 100% Perfect Test Score (100% Correct, 0 Wrong Answers)
+      if (this.incorrectCount === 0 && this.correctCount === totalQ && totalQ > 0) {
+        const bonusCoins = 25; // 25 Science Coins awarded only for 100% correct
         if (typeof ProgressionSystem !== 'undefined' && ProgressionSystem.addCoins) {
           ProgressionSystem.addCoins(bonusCoins);
         }
@@ -1505,9 +1505,9 @@ const Quiz = {
     document.getElementById('resultIncorrectCount').textContent = this.incorrectCount;
 
     const coinBanner = document.getElementById('perfectScoreCoinBanner');
-    if (this.incorrectCount === 0 && totalQ > 0) {
+    if (this.incorrectCount === 0 && this.correctCount === totalQ && totalQ > 0) {
       if (coinBanner) {
-        coinBanner.innerHTML = `🪙 <b>PERFECT SCORE BONUS!</b> +25 Science Coins (0 Wrong Answers) 🎉`;
+        coinBanner.innerHTML = `🪙 <b>PERFECT SCORE BONUS!</b> +25 Science Coins (100% Correct) 🎉`;
         coinBanner.classList.remove('hidden');
       }
     } else {
