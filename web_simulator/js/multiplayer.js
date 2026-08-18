@@ -478,7 +478,8 @@ const Multiplayer = {
       await DB.updateMultiplayerGameStatus(this.currentGame.id, 'active', 0);
 
       this.currentIndex = 0;
-      this.sendBroadcast('GAME_START', { questionNumber: 1, startedAt: new Date().toISOString(), duration: 20 });
+      const initialDuration = (this.questionsList[0] && this.questionsList[0].time_limit) ? this.questionsList[0].time_limit : ((this.currentGame && this.currentGame.time_limit) ? this.currentGame.time_limit : 20);
+      this.sendBroadcast('GAME_START', { questionNumber: 1, startedAt: new Date().toISOString(), duration: initialDuration });
       this.hostRenderQuestion(0);
     } catch (e) {
       console.error(e);
@@ -502,57 +503,33 @@ const Multiplayer = {
     document.getElementById('mpHostQCounter').textContent = `Question ${index + 1} of ${this.questionsList.length}`;
     document.getElementById('mpHostQuestionText').textContent = q.question;
 
-    // Render Host Choice Cards Overview
+    // Host Perspective: Keep clean question view; answer revealed only when host clicks "Show Answer 💡"
     const overviewEl = document.getElementById('mpHostAnswersOverview');
     if (overviewEl) {
       overviewEl.innerHTML = '';
-      const typeId = q.question_type_id || 1;
-      let choicesMap = {};
-
-      if (typeId === 2 || (!q.choice_c && !q.choice_d && (q.correct_answer === 'True' || q.correct_answer === 'False' || q.correct_answer === 'TRUE' || q.correct_answer === 'FALSE'))) {
-        choicesMap = { A: 'True', B: 'False' };
-      } else {
-        choicesMap = {
-          A: q.choice_a || q.option_a || 'Option A',
-          B: q.choice_b || q.option_b || 'Option B',
-          C: q.choice_c || q.option_c || 'Option C',
-          D: q.choice_d || q.option_d || 'Option D'
-        };
-      }
-
-      Object.keys(choicesMap).forEach(key => {
-        if (choicesMap[key]) {
-          const card = document.createElement('div');
-          card.className = 'answer-option-btn';
-          card.style.cursor = 'default';
-          card.innerHTML = `
-            <span class="option-badge-pill"><span class="badge-letter">${key}</span></span>
-            <span class="option-text" style="font-weight:600; color:#1E293B;">${choicesMap[key]}</span>
-          `;
-          overviewEl.appendChild(card);
-        }
-      });
     }
 
     this.refreshHostPlayerAnswerStatuses();
 
     const startedAt = new Date().toISOString();
     this.questionStartedAt = startedAt;
-    this.questionDurationSec = q.time_limit || 20;
+    this.questionDurationSec = (q && q.time_limit) ? q.time_limit : ((this.currentGame && this.currentGame.time_limit) ? this.currentGame.time_limit : 20);
 
     if (this.currentGame && this.currentGame.id) {
       DB.updateMultiplayerGameStatus(this.currentGame.id, 'active', index);
     }
 
-    // Send QUESTION_START Broadcast payload WITHOUT correct_answer!
+    const typeId = q.question_type_id || (q.question_type === 'true_false' ? 2 : (q.question_type === 'identification' ? 3 : 1));
+
+    // Send QUESTION_START Broadcast payload
     this.sendBroadcast('QUESTION_START', {
       questionNumber: index + 1,
       questionId: q.id,
       questionText: q.question,
-      questionTypeId: q.question_type_id || 1,
+      questionTypeId: typeId,
       choices: {
-        a: q.choice_a || q.option_a || (q.question_type_id === 2 ? 'True' : null),
-        b: q.choice_b || q.option_b || (q.question_type_id === 2 ? 'False' : null),
+        a: q.choice_a || q.option_a || (typeId === 2 ? 'True' : null),
+        b: q.choice_b || q.option_b || (typeId === 2 ? 'False' : null),
         c: q.choice_c || q.option_c || null,
         d: q.choice_d || q.option_d || null
       },
@@ -716,7 +693,9 @@ const Multiplayer = {
       this.lastRenderedQuestionKey = qKey;
       this.playerRenderQuestion(qIndex, {
         question_start_time: data.startedAt || new Date().toISOString(),
-        serverTime: data.serverTime || Date.now()
+        serverTime: data.serverTime || Date.now(),
+        duration: data.duration,
+        questionTypeId: data.questionTypeId
       });
     }
   },
@@ -730,16 +709,15 @@ const Multiplayer = {
       this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id, this.currentGame.room_code);
     }
 
-    const q = this.questionsList[index];
-    if (!q) return;
+    const q = this.questionsList[index] || {};
 
     const banner = document.getElementById('mpPlayerFeedbackBanner');
     if (banner) banner.className = 'feedback-banner hidden';
 
     document.getElementById('mpPlayerQCounter').textContent = `Question ${index + 1} of ${this.questionsList.length || 10}`;
-    document.getElementById('mpPlayerQuestionText').textContent = q.question;
+    document.getElementById('mpPlayerQuestionText').textContent = q.question || 'Question';
 
-    this.questionDurationSec = q.time_limit || 20;
+    this.questionDurationSec = (q && q.time_limit) ? q.time_limit : ((gameObj && gameObj.duration) ? gameObj.duration : ((this.currentGame && this.currentGame.time_limit) ? this.currentGame.time_limit : 20));
 
     let startedAt = (gameObj && gameObj.question_start_time) ? gameObj.question_start_time : null;
     const now = Date.now();
@@ -762,7 +740,7 @@ const Multiplayer = {
     const container = document.getElementById('mpPlayerAnswersContainer');
     if (container) {
       container.innerHTML = '';
-      const typeId = q.question_type_id || 1;
+      const typeId = (gameObj && gameObj.questionTypeId) ? gameObj.questionTypeId : (q.question_type_id || (q.question_type === 'true_false' ? 2 : (q.question_type === 'identification' ? 3 : 1)));
 
       if (typeId === 3) {
         const inputWrap = document.createElement('div');
