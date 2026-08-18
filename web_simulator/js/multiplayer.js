@@ -503,10 +503,48 @@ const Multiplayer = {
     document.getElementById('mpHostQCounter').textContent = `Question ${index + 1} of ${this.questionsList.length}`;
     document.getElementById('mpHostQuestionText').textContent = q.question;
 
-    // Host Perspective: Keep clean question view; answer revealed only when host clicks "Show Answer 💡"
+    const typeId = q.question_type_id || (q.question_type === 'true_false' || q.type === 'true_false' ? 2 : (q.question_type === 'identification' || q.type === 'identification' ? 3 : 1));
+
+    // Teacher Perspective: Display question and choices Overview
     const overviewEl = document.getElementById('mpHostAnswersOverview');
     if (overviewEl) {
       overviewEl.innerHTML = '';
+      if (typeId === 3) {
+        const card = document.createElement('div');
+        card.className = 'answer-option-btn';
+        card.style.cursor = 'default';
+        card.style.gridColumn = '1 / -1';
+        card.style.textAlign = 'center';
+        card.innerHTML = `
+          <span style="font-weight:700; color:#4C1D95;">📝 Identification Question (Text Input)</span>
+        `;
+        overviewEl.appendChild(card);
+      } else {
+        let choicesMap = {};
+        if (typeId === 2 || (!q.choice_c && !q.choice_d && (q.correct_answer === 'True' || q.correct_answer === 'False' || q.correct_answer === 'TRUE' || q.correct_answer === 'FALSE'))) {
+          choicesMap = { A: 'True', B: 'False' };
+        } else {
+          choicesMap = {
+            A: q.choice_a || q.option_a || (q.options ? q.options[0] : 'Option A'),
+            B: q.choice_b || q.option_b || (q.options ? q.options[1] : 'Option B'),
+            C: q.choice_c || q.option_c || (q.options ? q.options[2] : 'Option C'),
+            D: q.choice_d || q.option_d || (q.options ? q.options[3] : 'Option D')
+          };
+        }
+
+        Object.keys(choicesMap).forEach(key => {
+          if (choicesMap[key]) {
+            const card = document.createElement('div');
+            card.className = 'answer-option-btn';
+            card.style.cursor = 'default';
+            card.innerHTML = `
+              <span class="option-badge-pill"><span class="badge-letter">${key}</span></span>
+              <span class="option-text" style="font-weight:600; color:#1E293B;">${choicesMap[key]}</span>
+            `;
+            overviewEl.appendChild(card);
+          }
+        });
+      }
     }
 
     this.refreshHostPlayerAnswerStatuses();
@@ -519,19 +557,30 @@ const Multiplayer = {
       DB.updateMultiplayerGameStatus(this.currentGame.id, 'active', index);
     }
 
-    const typeId = q.question_type_id || (q.question_type === 'true_false' ? 2 : (q.question_type === 'identification' ? 3 : 1));
+    const choicesObj = {
+      a: q.choice_a || q.option_a || (q.options ? q.options[0] : (typeId === 2 ? 'True' : null)),
+      b: q.choice_b || q.option_b || (q.options ? q.options[1] : (typeId === 2 ? 'False' : null)),
+      c: q.choice_c || q.option_c || (q.options ? q.options[2] : null),
+      d: q.choice_d || q.option_d || (q.options ? q.options[3] : null)
+    };
 
-    // Send QUESTION_START Broadcast payload
+    // Send QUESTION_START Broadcast payload with full custom question info
     this.sendBroadcast('QUESTION_START', {
       questionNumber: index + 1,
       questionId: q.id,
       questionText: q.question,
       questionTypeId: typeId,
-      choices: {
-        a: q.choice_a || q.option_a || (typeId === 2 ? 'True' : null),
-        b: q.choice_b || q.option_b || (typeId === 2 ? 'False' : null),
-        c: q.choice_c || q.option_c || null,
-        d: q.choice_d || q.option_d || null
+      choices: choicesObj,
+      customQuestion: {
+        id: q.id,
+        question: q.question,
+        question_type_id: typeId,
+        question_type: q.question_type || q.type,
+        choice_a: choicesObj.a,
+        choice_b: choicesObj.b,
+        choice_c: choicesObj.c,
+        choice_d: choicesObj.d,
+        correct_answer: q.correct_answer || q.correctAnswer
       },
       startedAt: startedAt,
       duration: this.questionDurationSec,
@@ -689,6 +738,15 @@ const Multiplayer = {
     if (this.isHost) return;
     const qIndex = (data.questionNumber || 1) - 1;
     const qKey = `${qIndex}_${data.startedAt || ''}`;
+
+    if (data.customQuestion) {
+      if (!this.questionsList) this.questionsList = [];
+      this.questionsList[qIndex] = {
+        ...this.questionsList[qIndex],
+        ...data.customQuestion
+      };
+    }
+
     if (qKey !== this.lastRenderedQuestionKey) {
       this.lastRenderedQuestionKey = qKey;
       this.playerRenderQuestion(qIndex, {

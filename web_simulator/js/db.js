@@ -1083,15 +1083,25 @@ const DB = {
   },
 
   async submitPlayerAnswer(gameId, userUuid, questionId, selectedChoice, responseTimeSec = 0) {
-    if (!supabaseClient || !gameId) return { is_correct: false, points_earned: 0 };
+    if (!gameId) return { is_correct: false, points_earned: 0 };
 
     try {
       // 1. Fetch Question details to validate answer authoritatively
-      const { data: q } = await supabaseClient
-        .from('questions')
-        .select('correct_answer, time_limit, question_type_id, choice_a, choice_b, choice_c, choice_d')
-        .eq('id', questionId)
-        .maybeSingle();
+      let q = null;
+      if (typeof Multiplayer !== 'undefined' && Multiplayer.questionsList && Multiplayer.questionsList.length > 0) {
+        q = Multiplayer.questionsList.find(item => item && (item.id === questionId || item.id == questionId));
+      }
+
+      if (!q && supabaseClient && this.isValidUuid(questionId)) {
+        try {
+          const { data: dbQ } = await supabaseClient
+            .from('questions')
+            .select('correct_answer, time_limit, question_type_id, choice_a, choice_b, choice_c, choice_d')
+            .eq('id', questionId)
+            .maybeSingle();
+          if (dbQ) q = dbQ;
+        } catch (err) {}
+      }
 
       const isCorrect = this.evaluateAnswerCorrectness(q, selectedChoice);
 
