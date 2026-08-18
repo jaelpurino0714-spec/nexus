@@ -265,11 +265,10 @@ const Auth = {
     const fullName = document.getElementById('signUpFullName').value.trim();
     const username = document.getElementById('signUpUsername').value.trim().toLowerCase();
     const password = document.getElementById('signUpPassword').value;
-    const confirmPassword = document.getElementById('signUpConfirmPassword').value;
     const role = this.selectedSignUpRole || 'student';
     const submitBtn = document.getElementById('signUpSubmitBtn');
 
-    if (!fullName || !username || !password || !confirmPassword) {
+    if (!fullName || !username || !password) {
       this.showError('Please fill out all required fields.');
       return;
     }
@@ -281,11 +280,6 @@ const Auth = {
 
     if (password.length < 6) {
       this.showError('Password must be at least 6 characters.');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      this.showError('Passwords do not match.');
       return;
     }
 
@@ -328,6 +322,7 @@ const Auth = {
               name: existingUser.full_name || existingUser.name || fullName,
               full_name: existingUser.full_name || existingUser.name || fullName,
               username: username,
+              photo: this.uploadedPhotoData || existingUser.photo_url || null,
               createdAt: existingUser.created_at || new Date().toISOString()
             };
           }
@@ -375,6 +370,7 @@ const Auth = {
             name: fullName,
             full_name: fullName,
             username: username,
+            photo: this.uploadedPhotoData || null,
             createdAt: new Date().toISOString()
           };
 
@@ -385,6 +381,7 @@ const Auth = {
               name: fullName,
               full_name: fullName,
               username: username,
+              photo_url: (this.uploadedPhotoData && this.uploadedPhotoData.length < 50000) ? this.uploadedPhotoData : null,
               created_at: new Date().toISOString()
             });
           } catch (e) {
@@ -401,6 +398,7 @@ const Auth = {
           name: fullName,
           full_name: fullName,
           username: username,
+          photo: this.uploadedPhotoData || null,
           createdAt: new Date().toISOString()
         };
       }
