@@ -49,7 +49,8 @@ class MainActivity : ComponentActivity() {
                                     } else {
                                         navController.navigate("student_setup")
                                     }
-                                }
+                                },
+                                onSelectTeacher = { navController.navigate("teacher_login") }
                             )
                         }
 
@@ -62,6 +63,22 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 onBack = { navController.popBackStack() }
+                            )
+                        }
+
+                        composable("teacher_login") {
+                            val teacherError by authViewModel.teacherError.collectAsState()
+                            TeacherLoginScreen(
+                                onLoginTeacher = { name, passcode ->
+                                    authViewModel.loginTeacher(name, passcode)
+                                },
+                                errorMessage = teacherError,
+                                onBack = { navController.popBackStack() },
+                                onSuccess = {
+                                    navController.navigate("home") {
+                                        popUpTo("login_selection") { inclusive = true }
+                                    }
+                                }
                             )
                         }
 

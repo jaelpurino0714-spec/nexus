@@ -17,6 +17,9 @@ import '../../screens/host_quiz_screen.dart';
 import '../../screens/join_quiz_screen.dart';
 import '../../screens/full_character_screen.dart';
 
+import '../../screens/teacher_login_screen.dart';
+import '../../screens/teacher_dashboard_screen.dart';
+
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
 
@@ -29,13 +32,14 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       final isLoggingIn = state.matchedLocation == '/' ||
           state.matchedLocation == '/login' ||
-          state.matchedLocation == '/student/profile-setup';
+          state.matchedLocation == '/student/profile-setup' ||
+          state.matchedLocation == '/teacher/login';
 
       if (status == AuthStatus.unauthenticated && !isLoggingIn) {
         return '/login';
       }
 
-      if (status == AuthStatus.authenticatedStudent && isLoggingIn) {
+      if ((status == AuthStatus.authenticatedStudent || status == AuthStatus.authenticatedTeacher) && isLoggingIn) {
         return '/student/home';
       }
 
@@ -53,6 +57,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/student/profile-setup',
         builder: (context, state) => const StudentProfileSetupScreen(),
+      ),
+      GoRoute(
+        path: '/teacher/login',
+        builder: (context, state) => const TeacherLoginScreen(),
+      ),
+      GoRoute(
+        path: '/teacher/dashboard',
+        builder: (context, state) => const TeacherDashboardScreen(),
       ),
 
 

@@ -61,7 +61,45 @@
               </div>
               <span class="arrow">➔</span>
             </button>
+
+            <button class="role-card teacher-role" onclick="Auth.selectRole('teacher')">
+              <span class="role-icon">👩‍🏫</span>
+              <div class="role-info">
+                <h3>Teacher</h3>
+                <p>Host games, manage classes & view analytics</p>
+              </div>
+              <span class="arrow">➔</span>
+            </button>
           </div>
+        </div>
+      </section>
+
+      <!-- ================= 2. TEACHER LOGIN SCREEN ================= -->
+      <section id="teacherLoginScreen" class="screen">
+        <div class="modal-card">
+          <button class="back-link" onclick="App.showScreen('loginSelectionScreen')">← Back</button>
+          <div class="modal-header">
+            <span class="modal-icon">🔐</span>
+            <h2>Teacher Access</h2>
+            <p>Enter your name & passcode to unlock teacher tools</p>
+          </div>
+
+          <div class="form-group">
+            <label for="teacherNameInput">Teacher Name</label>
+            <input type="text" id="teacherNameInput" placeholder="e.g. Prof. Santos / Ms. Cruz">
+          </div>
+
+          <div class="form-group">
+            <label for="teacherPasscodeInput">Passcode</label>
+            <div class="passcode-wrapper">
+              <input type="password" id="teacherPasscodeInput" placeholder="Enter passcode (Default: 123456)">
+            </div>
+            <small class="passcode-hint">Default passcode: <b>123456</b> or <b>NEXUS10</b></small>
+          </div>
+
+          <div id="teacherErrorMsg" class="warning-msg" style="display: none;">Invalid Passcode</div>
+
+          <button class="primary-btn teacher-btn" onclick="Auth.loginTeacher()">Enter Teacher Portal</button>
         </div>
       </section>
 
@@ -135,6 +173,40 @@
           <div class="banner-badge">DepEd MELCs Aligned</div>
           <h3>Daily Science Warm-Up</h3>
           <p>Boost your alertness and test your Grade 10 Science recall in 5 minutes!</p>
+        </div>
+
+        <!-- Teacher Quick Actions Hub (Unlocked when logged in as Teacher) -->
+        <div id="teacherHubCard" class="teacher-hub-card hidden" style="background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%); color: white; padding: 18px 20px; border-radius: 18px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div>
+              <span class="banner-badge" style="background: rgba(255,255,255,0.25); color: white; margin-bottom: 4px; display: inline-block;">👩‍🏫 Teacher Workspace</span>
+              <h3 style="margin: 0; font-size: 1.15rem; color: white;">Teacher Quick Actions</h3>
+            </div>
+            <button class="logout-btn" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: white; padding: 6px 14px; border-radius: 20px; font-weight: 700; cursor: pointer;" onclick="Auth.logout()">Log Out 🚪</button>
+          </div>
+          
+          <div class="teacher-hub-grid" style="display: grid; grid-template-columns: repeat( auto-fit, minmax(130px, 1fr) ); gap: 10px;">
+            <button class="teacher-action-btn" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 12px; border-radius: 14px; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="Multiplayer.initCreateGameFlow()">
+              <div style="font-size: 1.6rem;">👑</div>
+              <strong style="font-size: 0.85rem; display: block; margin-top: 4px;">Host Game</strong>
+            </button>
+            <button class="teacher-action-btn" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 12px; border-radius: 14px; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="App.showScreen('mpPlayerJoinScreen')">
+              <div style="font-size: 1.6rem;">🔑</div>
+              <strong style="font-size: 0.85rem; display: block; margin-top: 4px;">Join Game</strong>
+            </button>
+            <button class="teacher-action-btn" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 12px; border-radius: 14px; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="TeacherPortal.openMyGames()">
+              <div style="font-size: 1.6rem;">📁</div>
+              <strong style="font-size: 0.85rem; display: block; margin-top: 4px;">My Games</strong>
+            </button>
+            <button class="teacher-action-btn" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 12px; border-radius: 14px; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="TeacherPortal.openMyClasses()">
+              <div style="font-size: 1.6rem;">🏫</div>
+              <strong style="font-size: 0.85rem; display: block; margin-top: 4px;">My Classes</strong>
+            </button>
+            <button class="teacher-action-btn" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 12px; border-radius: 14px; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="TeacherPortal.openAnalytics()">
+              <div style="font-size: 1.6rem;">📊</div>
+              <strong style="font-size: 0.85rem; display: block; margin-top: 4px;">Analytics</strong>
+            </button>
+          </div>
         </div>
 
         <!-- PRD Home Navigation Buttons placed at bottom of Home screen -->
@@ -1006,6 +1078,7 @@
   <script src="js/multiplayer.js?v=3.4"></script>
   <script src="js/quiz.js?v=3.4"></script>
   <script src="js/analytics.js?v=3.4"></script>
+  <script src="js/teacher_portal.js?v=3.4"></script>
   <script src="js/experiment.js?v=3.4"></script>
   <script src="js/character.js?v=3.4"></script>
   <script src="js/app.js?v=3.4"></script>

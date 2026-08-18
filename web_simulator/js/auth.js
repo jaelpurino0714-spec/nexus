@@ -11,12 +11,16 @@ const Auth = {
   // Step 1: Role Selection Popup
   selectRole(role) {
     this.selectedRole = role;
-    const existing = DB.getStudentProfile();
-    if (existing) {
-      App.showScreen('homeScreen');
+    if (role === 'teacher') {
+      App.showScreen('teacherLoginScreen');
     } else {
-      App.showScreen('studentProfileSetupScreen');
-      this.validateStudentForm();
+      const existing = DB.getStudentProfile();
+      if (existing) {
+        App.showScreen('homeScreen');
+      } else {
+        App.showScreen('studentProfileSetupScreen');
+        this.validateStudentForm();
+      }
     }
   },
 
@@ -125,10 +129,45 @@ const Auth = {
     App.showScreen('homeScreen');
   },
 
+  async loginTeacher() {
+    const name = document.getElementById('teacherNameInput').value.trim();
+    const passcode = document.getElementById('teacherPasscodeInput').value.trim();
+    const errorMsg = document.getElementById('teacherErrorMsg');
+
+    if (!name) {
+      errorMsg.style.display = 'block';
+      errorMsg.textContent = 'Please enter your teacher name';
+      return;
+    }
+
+    const isValid = await DB.isValidPasscode(passcode);
+    if (isValid) {
+      errorMsg.style.display = 'none';
+      const uuid = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'tch-' + Date.now();
+      const teacherSession = {
+        id: uuid,
+        role: 'teacher',
+        name: name,
+        loggedInAt: new Date().toISOString()
+      };
+      localStorage.setItem(DB.STORAGE_TEACHER, JSON.stringify(teacherSession));
+      DB.saveUserUUID(uuid);
+      App.updateUserHeader();
+      App.showScreen('homeScreen');
+    } else {
+      errorMsg.style.display = 'block';
+      errorMsg.textContent = 'Invalid Teacher Passcode';
+    }
+  },
+
   logout() {
     DB.clearSession();
     App.updateUserHeader();
     App.showScreen('loginSelectionScreen');
+  },
+
+  logoutTeacher() {
+    this.logout();
   },
 
   updateProfile() {

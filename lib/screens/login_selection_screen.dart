@@ -72,7 +72,51 @@ class LoginSelectionScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Icon(Icons.arrow_forward_ios, color: Colors.purple[700], size: 18),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Teacher Card
+              InkWell(
+                onTap: () => context.push('/teacher/login'),
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.deepOrange.withOpacity(0.2)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.orange.withOpacity(0.08),
+                        blurRadius: 15,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      const Text('👩‍🏫', style: TextStyle(fontSize: 36)),
+                      const SizedBox(width: 16),
+                      const Expanded(
+                        child: Column(
+                          crossAlignment: CrossAlignment.start,
+                          children: [
+                            Text(
+                              'Teacher',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Manage quizzes, view class analytics & export data',
+                              style: TextStyle(fontSize: 13, color: Colors.black54),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(Icons.arrow_forward_ios, color: Colors.deepOrange[700], size: 18),
                     ],
                   ),
                 ),

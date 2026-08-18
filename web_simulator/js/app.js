@@ -17,8 +17,9 @@ const App = {
 
   checkInitialAuth() {
     const student = DB.getStudentProfile();
+    const teacherRaw = localStorage.getItem(DB.STORAGE_TEACHER);
 
-    if (student) {
+    if (student || teacherRaw) {
       this.updateUserHeader();
       this.showScreen('homeScreen');
     } else {
@@ -51,15 +52,38 @@ const App = {
 
   updateUserHeader() {
     const profile = DB.getStudentProfile();
+    const teacherRaw = localStorage.getItem(DB.STORAGE_TEACHER);
     const badge = document.getElementById('userBadge');
+    const teacherCard = document.getElementById('teacherHubCard');
 
-    if (!profile) {
-      badge.style.display = 'none';
+    let teacher = null;
+    if (teacherRaw) {
+      try { teacher = JSON.parse(teacherRaw); } catch(e) {}
+    }
+
+    if (teacher) {
+      if (badge) {
+        badge.style.display = 'inline-block';
+        badge.textContent = 'Teacher';
+      }
+      if (teacherCard) teacherCard.classList.remove('hidden');
+
+      document.getElementById('homeUserName').textContent = `Welcome, ${teacher.name}!`;
+      document.getElementById('homeUserSub').textContent = `DepEd Educator • Science Instructor`;
       return;
     }
 
-    badge.style.display = 'inline-block';
-    badge.textContent = profile.gradeLevel || 'Student';
+    if (teacherCard) teacherCard.classList.add('hidden');
+
+    if (!profile) {
+      if (badge) badge.style.display = 'none';
+      return;
+    }
+
+    if (badge) {
+      badge.style.display = 'inline-block';
+      badge.textContent = profile.gradeLevel || 'Student';
+    }
 
     document.getElementById('homeUserName').textContent = `Welcome, ${profile.name}!`;
     document.getElementById('homeUserSub').textContent = `${profile.gradeLevel} • Section ${profile.section}`;

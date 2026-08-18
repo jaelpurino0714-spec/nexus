@@ -240,6 +240,19 @@ const DB = {
 
   getActiveProfile() {
     const userUuid = this.getUserUUID();
+    const teacherRaw = localStorage.getItem(this.STORAGE_TEACHER);
+    if (teacherRaw) {
+      try {
+        const teacher = JSON.parse(teacherRaw);
+        return {
+          id: userUuid,
+          role: 'teacher',
+          name: teacher.name || 'Prof. Teacher',
+          photo: teacher.photo || null,
+          isTeacher: true
+        };
+      } catch (e) {}
+    }
 
     const student = this.getStudentProfile();
     if (student) {
@@ -259,6 +272,27 @@ const DB = {
       photo: null,
       isTeacher: false
     };
+  },
+
+  async isValidPasscode(passcode) {
+    if (!passcode) return false;
+    const clean = passcode.trim();
+    if (['123456', 'NEXUS10'].includes(clean)) return true;
+    if (!supabaseClient) return false;
+    try {
+      const { data, error } = await supabaseClient
+        .from('teacher_passcodes')
+        .select('*')
+        .eq('passcode', clean)
+        .eq('active', true)
+        .maybeSingle();
+
+      if (error) throw error;
+      return data !== null;
+    } catch (e) {
+      console.warn('Teacher passcode validation fallback:', e);
+      return false;
+    }
   },
 
   safeSetItem(key, value) {

@@ -4,6 +4,7 @@ import '../services/profile_service.dart';
 abstract class AuthRepository {
   Future<String?> getSavedUserId();
   Future<String?> getSavedUserRole();
+  Future<ProfileModel?> loginTeacher(String passcode, String teacherName);
   Future<void> logout();
 }
 
@@ -17,6 +18,10 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<String?> getSavedUserRole() => _profileService.getSavedUserRole();
+
+  @override
+  Future<ProfileModel?> loginTeacher(String passcode, String teacherName) =>
+      _profileService.verifyTeacherPasscode(passcode, teacherName);
 
   @override
   Future<void> logout() => _profileService.logout();

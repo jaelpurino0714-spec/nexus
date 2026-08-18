@@ -31,7 +31,8 @@ import com.nexus.science.viewmodel.QuizState
 // ---------------- 1. LOGIN SELECTION SCREEN ----------------
 @Composable
 fun LoginSelectionScreen(
-    onSelectStudent: () -> Unit
+    onSelectStudent: () -> Unit,
+    onSelectTeacher: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -48,7 +49,7 @@ fun LoginSelectionScreen(
         ) {
             Column(
                 modifier = Modifier.padding(24.dp),
-                horizontalAlignment = Alignment.CenterAlignment
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = "👋", fontSize = 48.sp)
                 Spacer(modifier = Modifier.height(12.dp))
@@ -79,6 +80,29 @@ fun LoginSelectionScreen(
                         Column(modifier = Modifier.weight(1f)) {
                             Text("Student", fontWeight = FontWeight.Bold, color = PrimaryPurpleDark)
                             Text("Join warm-ups, earn badges", fontSize = 12.sp, color = TextMuted)
+                        }
+                        Icon(Icons.Default.ArrowForward, contentDescription = null, tint = PrimaryPurple)
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Teacher Role Card
+                Surface(
+                    onClick = onSelectTeacher,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    color = BgSubtle
+                ) {
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = "👩‍🏫", fontSize = 32.sp)
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("Teacher", fontWeight = FontWeight.Bold, color = PrimaryPurpleDark)
+                            Text("Host games, manage classes & analytics", fontSize = 12.sp, color = TextMuted)
                         }
                         Icon(Icons.Default.ArrowForward, contentDescription = null, tint = PrimaryPurple)
                     }
