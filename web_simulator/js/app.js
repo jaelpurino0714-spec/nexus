@@ -19,7 +19,10 @@ const App = {
     const student = DB.getStudentProfile();
     const teacherRaw = localStorage.getItem(DB.STORAGE_TEACHER);
 
-    if (student || teacherRaw) {
+    if (teacherRaw) {
+      this.updateUserHeader();
+      this.showScreen('teacherHomeScreen');
+    } else if (student) {
       this.updateUserHeader();
       this.showScreen('homeScreen');
     } else {
@@ -42,9 +45,9 @@ const App = {
       CharacterSystem.updateFloatingCompanion(screenId);
     }
 
-    if (screenId === 'homeScreen') {
+    if (screenId === 'homeScreen' || screenId === 'teacherHomeScreen') {
       this.updateUserHeader();
-      if (typeof CharacterSystem !== 'undefined') {
+      if (screenId === 'homeScreen' && typeof CharacterSystem !== 'undefined') {
         CharacterSystem.renderHomeCharacterCard();
       }
     }
@@ -54,7 +57,6 @@ const App = {
     const profile = DB.getStudentProfile();
     const teacherRaw = localStorage.getItem(DB.STORAGE_TEACHER);
     const badge = document.getElementById('userBadge');
-    const teacherCard = document.getElementById('teacherHubCard');
 
     let teacher = null;
     if (teacherRaw) {
@@ -66,14 +68,10 @@ const App = {
         badge.style.display = 'inline-block';
         badge.textContent = 'Teacher';
       }
-      if (teacherCard) teacherCard.classList.remove('hidden');
-
-      document.getElementById('homeUserName').textContent = `Welcome, ${teacher.name}!`;
-      document.getElementById('homeUserSub').textContent = `DepEd Educator • Science Instructor`;
+      const teacherTitle = document.getElementById('teacherHomeTitle');
+      if (teacherTitle) teacherTitle.textContent = `Welcome, ${teacher.name}!`;
       return;
     }
-
-    if (teacherCard) teacherCard.classList.add('hidden');
 
     if (!profile) {
       if (badge) badge.style.display = 'none';

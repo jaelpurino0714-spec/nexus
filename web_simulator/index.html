@@ -103,6 +103,46 @@
         </div>
       </section>
 
+      <!-- ================= 2B. TEACHER HOME SCREEN ================= -->
+      <section id="teacherHomeScreen" class="screen">
+        <div class="play-container" style="max-width: 560px; margin: 0 auto;">
+          <div class="welcome-card" style="background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%); color: white; margin-bottom: 20px;">
+            <div class="user-greeting" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 2.2rem;">👩‍🏫</span>
+                <div>
+                  <h2 id="teacherHomeTitle" style="margin: 0; color: white;">Welcome, Teacher!</h2>
+                  <span class="user-subtext" style="color: rgba(255,255,255,0.8);">DepEd Science Educator</span>
+                </div>
+              </div>
+              <button class="logout-btn" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 700; cursor: pointer;" onclick="Auth.logout()">Log Out 🚪</button>
+            </div>
+          </div>
+
+          <div style="background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.06);">
+            <h3 style="margin: 0 0 14px 0; color: #4C1D95; font-size: 1.1rem;">Teacher Quick Actions</h3>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+              <button class="teacher-action-btn" style="background: linear-gradient(135deg, #6366F1, #4F46E5); border: none; color: white; padding: 18px 12px; border-radius: 16px; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="Multiplayer.initCreateGameFlow()">
+                <div style="font-size: 2rem;">👑</div>
+                <strong style="font-size: 0.95rem; display: block; margin-top: 6px;">Host Game</strong>
+              </button>
+              <button class="teacher-action-btn" style="background: linear-gradient(135deg, #0EA5E9, #0284C7); border: none; color: white; padding: 18px 12px; border-radius: 16px; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="App.showScreen('mpPlayerJoinScreen')">
+                <div style="font-size: 2rem;">🔑</div>
+                <strong style="font-size: 0.95rem; display: block; margin-top: 6px;">Join Game</strong>
+              </button>
+              <button class="teacher-action-btn" style="background: linear-gradient(135deg, #10B981, #059669); border: none; color: white; padding: 18px 12px; border-radius: 16px; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="TeacherPortal.openMyGames()">
+                <div style="font-size: 2rem;">📁</div>
+                <strong style="font-size: 0.95rem; display: block; margin-top: 6px;">My Games</strong>
+              </button>
+              <button class="teacher-action-btn" style="background: linear-gradient(135deg, #8B5CF6, #6D28D9); border: none; color: white; padding: 18px 12px; border-radius: 16px; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="TeacherPortal.openAnalytics()">
+                <div style="font-size: 2rem;">📊</div>
+                <strong style="font-size: 0.95rem; display: block; margin-top: 6px;">Analytics</strong>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ================= 2. STUDENT PROFILE SETUP ================= -->
       <section id="studentProfileSetupScreen" class="screen">
         <div class="profile-setup-card">
@@ -173,36 +213,6 @@
           <div class="banner-badge">DepEd MELCs Aligned</div>
           <h3>Daily Science Warm-Up</h3>
           <p>Boost your alertness and test your Grade 10 Science recall in 5 minutes!</p>
-        </div>
-
-        <!-- Teacher Quick Actions Hub (Unlocked when logged in as Teacher) -->
-        <div id="teacherHubCard" class="teacher-hub-card hidden" style="background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%); color: white; padding: 18px 20px; border-radius: 18px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <div>
-              <span class="banner-badge" style="background: rgba(255,255,255,0.25); color: white; margin-bottom: 4px; display: inline-block;">👩‍🏫 Teacher Workspace</span>
-              <h3 style="margin: 0; font-size: 1.15rem; color: white;">Teacher Quick Actions</h3>
-            </div>
-            <button class="logout-btn" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: white; padding: 6px 14px; border-radius: 20px; font-weight: 700; cursor: pointer;" onclick="Auth.logout()">Log Out 🚪</button>
-          </div>
-          
-          <div class="teacher-hub-grid" style="display: grid; grid-template-columns: repeat( auto-fit, minmax(130px, 1fr) ); gap: 10px;">
-            <button class="teacher-action-btn" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 12px; border-radius: 14px; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="Multiplayer.initCreateGameFlow()">
-              <div style="font-size: 1.6rem;">👑</div>
-              <strong style="font-size: 0.85rem; display: block; margin-top: 4px;">Host Game</strong>
-            </button>
-            <button class="teacher-action-btn" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 12px; border-radius: 14px; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="App.showScreen('mpPlayerJoinScreen')">
-              <div style="font-size: 1.6rem;">🔑</div>
-              <strong style="font-size: 0.85rem; display: block; margin-top: 4px;">Join Game</strong>
-            </button>
-            <button class="teacher-action-btn" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 12px; border-radius: 14px; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="TeacherPortal.openMyGames()">
-              <div style="font-size: 1.6rem;">📁</div>
-              <strong style="font-size: 0.85rem; display: block; margin-top: 4px;">My Games</strong>
-            </button>
-            <button class="teacher-action-btn" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 12px; border-radius: 14px; text-align: center; cursor: pointer; transition: all 0.2s;" onclick="TeacherPortal.openAnalytics()">
-              <div style="font-size: 1.6rem;">📊</div>
-              <strong style="font-size: 0.85rem; display: block; margin-top: 4px;">Analytics</strong>
-            </button>
-          </div>
         </div>
 
         <!-- PRD Home Navigation Buttons placed at bottom of Home screen -->

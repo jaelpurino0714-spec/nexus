@@ -83,62 +83,6 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
                 ),
                 const SizedBox(height: 24),
 
-                // Teacher Workspace Hub (Rendered when authenticated as Teacher)
-                if (authState.status == AuthStatus.authenticatedTeacher || authState.profile?.role == 'teacher')
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF4F46E5), Color(0xFF3730A3)],
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF4F46E5).withOpacity(0.3),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAlignment: CrossAlignment.start,
-                      children: [
-                        const Text(
-                          '👩‍🏫 Teacher Workspace',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                        const SizedBox(height: 12),
-                        Wrap(
-                          spacing: 10,
-                          runSpacing: 10,
-                          children: [
-                            ActionChip(
-                              avatar: const Text('📁'),
-                              label: const Text('My Games'),
-                              onPressed: () => context.push('/teacher/dashboard'),
-                            ),
-                            ActionChip(
-                              avatar: const Text('📊'),
-                              label: const Text('Analytics'),
-                              onPressed: () => context.push('/teacher/dashboard'),
-                            ),
-                            ActionChip(
-                              avatar: const Text('👑'),
-                              label: const Text('Host Game'),
-                              onPressed: () => context.push('/student/host-quiz'),
-                            ),
-                            ActionChip(
-                              avatar: const Text('🔑'),
-                              label: const Text('Join Game'),
-                              onPressed: () => context.push('/student/join-quiz'),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-
                 // 2. Play Button
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(

@@ -153,7 +153,7 @@ const Auth = {
       localStorage.setItem(DB.STORAGE_TEACHER, JSON.stringify(teacherSession));
       DB.saveUserUUID(uuid);
       App.updateUserHeader();
-      App.showScreen('homeScreen');
+      App.showScreen('teacherHomeScreen');
     } else {
       errorMsg.style.display = 'block';
       errorMsg.textContent = 'Invalid Teacher Passcode';
