@@ -363,6 +363,32 @@ const DB = {
         console.warn('Error saving profile to Supabase:', e);
       }
     }
+  async fetchProfileFromSupabase(userId) {
+    if (!supabaseClient || !userId) return null;
+    try {
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle();
+
+      if (error || !data) return null;
+
+      return {
+        id: data.id,
+        role: data.role || 'student',
+        name: data.full_name || data.name || 'User',
+        full_name: data.full_name || data.name || 'User',
+        username: data.username || '',
+        gradeLevel: data.grade_level || '',
+        section: data.section || '',
+        photo: data.photo_url || null,
+        createdAt: data.created_at || new Date().toISOString()
+      };
+    } catch (e) {
+      console.warn('Error fetching profile from Supabase:', e);
+      return null;
+    }
   },
 
   // --------------------------------------------------------------------------

@@ -25,22 +25,26 @@ class AuthState {
   final AuthStatus status;
   final ProfileModel? profile;
   final String? errorMessage;
+  final bool isLoading;
 
   AuthState({
     required this.status,
     this.profile,
     this.errorMessage,
+    this.isLoading = false,
   });
 
   AuthState copyWith({
     AuthStatus? status,
     ProfileModel? profile,
     String? errorMessage,
+    bool? isLoading,
   }) {
     return AuthState(
       status: status ?? this.status,
       profile: profile ?? this.profile,
-      errorMessage: errorMessage ?? this.errorMessage,
+      errorMessage: errorMessage,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }
@@ -55,6 +59,19 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> checkSession() async {
+    try {
+      final activeProfile = await _authRepo.getCurrentSessionProfile();
+      if (activeProfile != null) {
+        state = state.copyWith(
+          status: activeProfile.role == 'teacher' ? AuthStatus.authenticatedTeacher : AuthStatus.authenticatedStudent,
+          profile: activeProfile,
+          errorMessage: null,
+          isLoading: false,
+        );
+        return;
+      }
+    } catch (_) {}
+
     final userId = await _authRepo.getSavedUserId();
     final userRole = await _authRepo.getSavedUserRole();
 
@@ -64,29 +81,95 @@ class AuthNotifier extends StateNotifier<AuthState> {
         state = state.copyWith(
           status: userRole == 'teacher' ? AuthStatus.authenticatedTeacher : AuthStatus.authenticatedStudent,
           profile: profile,
+          errorMessage: null,
+          isLoading: false,
         );
         return;
       }
     }
 
-    state = state.copyWith(status: AuthStatus.unauthenticated);
+    state = state.copyWith(status: AuthStatus.unauthenticated, isLoading: false);
+  }
+
+  Future<bool> signUp({
+    required String fullName,
+    required String username,
+    required String password,
+    required String role,
+  }) async {
+    state = state.copyWith(isLoading: true, errorMessage: null);
+    try {
+      final profile = await _authRepo.signUp(
+        fullName: fullName,
+        username: username,
+        password: password,
+        role: role,
+      );
+      state = state.copyWith(
+        status: profile.role == 'teacher' ? AuthStatus.authenticatedTeacher : AuthStatus.authenticatedStudent,
+        profile: profile,
+        isLoading: false,
+        errorMessage: null,
+      );
+      return true;
+    } catch (e) {
+      final cleanMsg = e.toString().replaceAll(RegExp(r'^(Exception|AuthException):\s*'), '');
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: cleanMsg,
+      );
+      return false;
+    }
+  }
+
+  Future<bool> signIn({
+    required String username,
+    required String password,
+  }) async {
+    state = state.copyWith(isLoading: true, errorMessage: null);
+    try {
+      final profile = await _authRepo.signIn(
+        username: username,
+        password: password,
+      );
+      state = state.copyWith(
+        status: profile.role == 'teacher' ? AuthStatus.authenticatedTeacher : AuthStatus.authenticatedStudent,
+        profile: profile,
+        isLoading: false,
+        errorMessage: null,
+      );
+      return true;
+    } catch (e) {
+      final cleanMsg = e.toString().replaceAll(RegExp(r'^(Exception|AuthException):\s*'), '');
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: cleanMsg,
+      );
+      return false;
+    }
   }
 
   Future<bool> loginTeacher(String passcode, String teacherName) async {
+    state = state.copyWith(isLoading: true, errorMessage: null);
     final profile = await _authRepo.loginTeacher(passcode, teacherName);
     if (profile != null) {
       state = state.copyWith(
         status: AuthStatus.authenticatedTeacher,
         profile: profile,
+        isLoading: false,
       );
       return true;
     } else {
-      state = state.copyWith(errorMessage: 'Invalid teacher passcode.');
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'Invalid teacher passcode.',
+      );
       return false;
     }
   }
 
   Future<void> logout() async {
+    state = state.copyWith(isLoading: true);
     await _authRepo.logout();
     state = AuthState(status: AuthStatus.unauthenticated);
   }
@@ -96,6 +179,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
       status: profile.role == 'teacher' ? AuthStatus.authenticatedTeacher : AuthStatus.authenticatedStudent,
       profile: profile,
     );
+  }
+
+  void clearError() {
+    state = state.copyWith(errorMessage: null);
   }
 }
 

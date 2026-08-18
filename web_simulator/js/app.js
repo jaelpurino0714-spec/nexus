@@ -15,7 +15,30 @@ const App = {
     };
   },
 
-  checkInitialAuth() {
+  async checkInitialAuth() {
+    if (typeof supabaseClient !== 'undefined' && supabaseClient && supabaseClient.auth) {
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session && session.user) {
+          const profile = await DB.fetchProfileFromSupabase(session.user.id);
+          if (profile) {
+            DB.safeSetItem(DB.STORAGE_PROFILE, JSON.stringify(profile));
+            this.updateUserHeader();
+            if (profile.role === 'teacher') {
+              localStorage.setItem(DB.STORAGE_TEACHER, JSON.stringify(profile));
+              this.showScreen('teacherHomeScreen');
+            } else {
+              localStorage.removeItem(DB.STORAGE_TEACHER);
+              this.showScreen('homeScreen');
+            }
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('Supabase session check warning:', e);
+      }
+    }
+
     const student = DB.getStudentProfile();
     const teacherRaw = localStorage.getItem(DB.STORAGE_TEACHER);
 

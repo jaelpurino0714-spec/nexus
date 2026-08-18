@@ -2,6 +2,8 @@ class ProfileModel {
   final String id;
   final String role; // 'student' | 'teacher'
   final String name;
+  final String fullName;
+  final String username;
   final String? gradeLevel;
   final String? section;
   final String? photoUrl;
@@ -27,6 +29,8 @@ class ProfileModel {
     required this.id,
     required this.role,
     required this.name,
+    String? fullName,
+    String? username,
     this.gradeLevel,
     this.section,
     this.photoUrl,
@@ -44,13 +48,17 @@ class ProfileModel {
     this.lastCharacterInteraction,
     this.coins = 50,
     this.unlockedOutfits = const ['default'],
-  });
+  })  : fullName = (fullName != null && fullName.isNotEmpty) ? fullName : name,
+        username = username ?? '';
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
+    final nameStr = (json['full_name'] as String?) ?? (json['name'] as String?) ?? 'User';
     return ProfileModel(
       id: json['id'] as String,
-      role: json['role'] as String,
+      role: json['role'] as String? ?? 'student',
       name: json['name'] as String,
+      fullName: nameStr,
+      username: (json['username'] as String?) ?? '',
       gradeLevel: json['grade_level'] as String?,
       section: json['section'] as String?,
       photoUrl: json['photo_url'] as String?,
@@ -80,6 +88,8 @@ class ProfileModel {
       'id': id,
       'role': role,
       'name': name,
+      'full_name': fullName,
+      'username': username,
       'grade_level': gradeLevel,
       'section': section,
       'photo_url': photoUrl,
@@ -104,6 +114,8 @@ class ProfileModel {
     String? id,
     String? role,
     String? name,
+    String? fullName,
+    String? username,
     String? gradeLevel,
     String? section,
     String? photoUrl,
@@ -126,6 +138,8 @@ class ProfileModel {
       id: id ?? this.id,
       role: role ?? this.role,
       name: name ?? this.name,
+      fullName: fullName ?? this.fullName,
+      username: username ?? this.username,
       gradeLevel: gradeLevel ?? this.gradeLevel,
       section: section ?? this.section,
       photoUrl: photoUrl ?? this.photoUrl,

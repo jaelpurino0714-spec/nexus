@@ -10,12 +10,180 @@ class ProfileService {
   static const String _userUuidKey = 'nexus_user_uuid';
   static const String _userRoleKey = 'nexus_user_role';
 
+  String _formatEmail(String username) {
+    final clean = username.trim().toLowerCase().replaceAll(RegExp(r'[^a-z0-9_]'), '');
+    return '$clean@nexus-trivia.app';
+  }
+
   Future<String?> getSavedUserId() async {
     return await _secureStorage.read(key: _userUuidKey);
   }
 
   Future<String?> getSavedUserRole() async {
     return await _secureStorage.read(key: _userRoleKey);
+  }
+
+  Future<bool> isUsernameTaken(String username) async {
+    try {
+      final clean = username.trim().toLowerCase();
+      if (clean.isEmpty) return false;
+
+      final response = await _client
+          .from('profiles')
+          .select('id, username')
+          .eq('username', clean)
+          .maybeSingle();
+
+      return response != null;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<ProfileModel> signUp({
+    required String fullName,
+    required String username,
+    required String password,
+    required String role,
+  }) async {
+    final cleanUsername = username.trim().toLowerCase();
+    if (cleanUsername.length < 3) {
+      throw const AuthException('Username must be at least 3 characters long.');
+    }
+    if (password.length < 6) {
+      throw const AuthException('Password must be at least 6 characters long.');
+    }
+
+    // 1. Check if username is taken
+    final taken = await isUsernameTaken(cleanUsername);
+    if (taken) {
+      throw AuthException('Username "$cleanUsername" is already taken. Please choose another.');
+    }
+
+    final internalEmail = _formatEmail(cleanUsername);
+
+    // 2. Create Supabase Auth Account
+    final AuthResponse authRes = await _client.auth.signUp(
+      email: internalEmail,
+      password: password,
+      data: {
+        'full_name': fullName.trim(),
+        'username': cleanUsername,
+        'role': role,
+      },
+    );
+
+    final user = authRes.user;
+    if (user == null) {
+      throw const AuthException('Account creation failed. Please try again.');
+    }
+
+    // Ensure session is signed in
+    if (_client.auth.currentSession == null) {
+      try {
+        await _client.auth.signInWithPassword(email: internalEmail, password: password);
+      } catch (_) {}
+    }
+
+    // 3. Create User Profile
+    final profile = ProfileModel(
+      id: user.id,
+      role: role,
+      name: fullName.trim(),
+      fullName: fullName.trim(),
+      username: cleanUsername,
+      createdAt: DateTime.now(),
+    );
+
+    try {
+      await _client.from('profiles').upsert(profile.toJson());
+    } catch (e) {
+      // Fallback insert if schema has strict constraint
+      print("Profiles table insert warning: $e");
+    }
+
+    await _secureStorage.write(key: _userUuidKey, value: user.id);
+    await _secureStorage.write(key: _userRoleKey, value: role);
+
+    return profile;
+  }
+
+  Future<ProfileModel> signIn({
+    required String username,
+    required String password,
+  }) async {
+    final cleanUsername = username.trim().toLowerCase();
+    if (cleanUsername.isEmpty || password.isEmpty) {
+      throw const AuthException('Please enter both username and password.');
+    }
+
+    final internalEmail = _formatEmail(cleanUsername);
+
+    try {
+      final AuthResponse authRes = await _client.auth.signInWithPassword(
+        email: internalEmail,
+        password: password,
+      );
+
+      final user = authRes.user;
+      if (user == null) throw const AuthException('Authentication session could not be established.');
+
+      final profile = await fetchProfile(user.id);
+      if (profile == null) {
+        // Fallback profile creation if auth user exists but profile missing
+        final fallbackRole = user.userMetadata?['role'] as String? ?? 'student';
+        final fallbackName = user.userMetadata?['full_name'] as String? ?? cleanUsername;
+        final newProfile = ProfileModel(
+          id: user.id,
+          role: fallbackRole,
+          name: fallbackName,
+          fullName: fallbackName,
+          username: cleanUsername,
+          createdAt: DateTime.now(),
+        );
+        await _client.from('profiles').upsert(newProfile.toJson());
+        await _secureStorage.write(key: _userUuidKey, value: user.id);
+        await _secureStorage.write(key: _userRoleKey, value: fallbackRole);
+        return newProfile;
+      }
+
+      await _secureStorage.write(key: _userUuidKey, value: profile.id);
+      await _secureStorage.write(key: _userRoleKey, value: profile.role);
+
+      return profile;
+    } on AuthException catch (e) {
+      // Detailed user-friendly diagnostics
+      final exists = await isUsernameTaken(cleanUsername);
+      if (!exists) {
+        throw AuthException('Account with username "$cleanUsername" does not exist.');
+      } else {
+        throw const AuthException('Incorrect password. Please try again.');
+      }
+    } catch (e) {
+      throw AuthException(e.toString());
+    }
+  }
+
+  Future<ProfileModel?> getCurrentSessionProfile() async {
+    final session = _client.auth.currentSession;
+    if (session == null) return null;
+
+    final profile = await fetchProfile(session.user.id);
+    if (profile != null) {
+      await _secureStorage.write(key: _userUuidKey, value: profile.id);
+      await _secureStorage.write(key: _userRoleKey, value: profile.role);
+    }
+    return profile;
+  }
+
+  Future<ProfileModel?> fetchProfile(String userId) async {
+    try {
+      final response = await _client.from('profiles').select().eq('id', userId).maybeSingle();
+      if (response == null) return null;
+      return ProfileModel.fromJson(response);
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<ProfileModel> createStudentProfile({
@@ -26,11 +194,12 @@ class ProfileService {
     String? deviceId,
     String? gender,
   }) async {
-    final String uuid = const Uuid().v4();
+    final String uuid = _client.auth.currentUser?.id ?? const Uuid().v4();
     final profile = ProfileModel(
       id: uuid,
       role: 'student',
       name: name,
+      fullName: name,
       gradeLevel: gradeLevel,
       section: section,
       photoUrl: photoUrl,
@@ -41,7 +210,7 @@ class ProfileService {
       characterXp: 0,
     );
 
-    await _client.from('profiles').insert(profile.toJson());
+    await _client.from('profiles').upsert(profile.toJson());
     await _secureStorage.write(key: _userUuidKey, value: uuid);
     await _secureStorage.write(key: _userRoleKey, value: 'student');
 
@@ -58,25 +227,20 @@ class ProfileService {
 
     if (response == null) return null;
 
-    final String uuid = const Uuid().v4();
+    final String uuid = _client.auth.currentUser?.id ?? const Uuid().v4();
     final profile = ProfileModel(
       id: uuid,
       role: 'teacher',
       name: teacherName,
+      fullName: teacherName,
       createdAt: DateTime.now(),
     );
 
-    await _client.from('profiles').insert(profile.toJson());
+    await _client.from('profiles').upsert(profile.toJson());
     await _secureStorage.write(key: _userUuidKey, value: uuid);
     await _secureStorage.write(key: _userRoleKey, value: 'teacher');
 
     return profile;
-  }
-
-  Future<ProfileModel?> fetchProfile(String userId) async {
-    final response = await _client.from('profiles').select().eq('id', userId).maybeSingle();
-    if (response == null) return null;
-    return ProfileModel.fromJson(response);
   }
 
   Future<ProfileModel?> updateCharacterData(ProfileModel updatedProfile) async {
@@ -94,19 +258,20 @@ class ProfileService {
             'longest_streak': updatedProfile.longestStreak,
             'last_activity_date': updatedProfile.lastActivityDate,
             'last_character_interaction': updatedProfile.lastCharacterInteraction?.toIso8601String(),
+            'coins': updatedProfile.coins,
           })
           .eq('id', updatedProfile.id);
     } catch (e) {
-      // Graceful fallback if database column missing or network offline
       print("ProfileService updateCharacterData warning: $e");
     }
     return updatedProfile;
   }
 
-
   Future<void> logout() async {
+    try {
+      await _client.auth.signOut();
+    } catch (_) {}
     await _secureStorage.delete(key: _userUuidKey);
     await _secureStorage.delete(key: _userRoleKey);
   }
 }
-

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/auth_provider.dart';
 import '../../screens/splash_screen.dart';
+import '../../screens/auth_screen.dart';
 import '../../screens/login_selection_screen.dart';
 import '../../screens/student_profile_setup_screen.dart';
 import '../../screens/student_home_screen.dart';
@@ -39,7 +40,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         return '/login';
       }
 
-      if ((status == AuthStatus.authenticatedStudent || status == AuthStatus.authenticatedTeacher) && isLoggingIn) {
+      if (status == AuthStatus.authenticatedTeacher && isLoggingIn) {
+        return '/teacher/dashboard';
+      }
+
+      if (status == AuthStatus.authenticatedStudent && isLoggingIn) {
         return '/student/home';
       }
 
@@ -52,7 +57,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/login',
-        builder: (context, state) => const LoginSelectionScreen(),
+        builder: (context, state) => const AuthScreen(),
       ),
       GoRoute(
         path: '/student/profile-setup',
