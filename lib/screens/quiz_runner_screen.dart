@@ -465,13 +465,11 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
             ),
             const SizedBox(width: 8),
             Expanded(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  text,
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF334155)),
-                ),
+              child: Text(
+                text,
+                style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: Color(0xFF334155), height: 1.25),
+                maxLines: 3,
+                overflow: TextOverflow.visible,
               ),
             ),
           ],
