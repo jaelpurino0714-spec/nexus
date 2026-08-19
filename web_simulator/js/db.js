@@ -1533,8 +1533,8 @@ var DB = {
       Multiplayer.playersList.forEach(p => addOrUpdatePlayer(p));
     }
 
-    // 3. Fallback to local lobby state if roomCode provided
-    if (mergedMap.size === 0 && roomCode) {
+    // 3. Always merge with local lobby state if roomCode provided
+    if (roomCode) {
       const localState = this.getLocalLobbyState(roomCode);
       if (localState && localState.participants) {
         localState.participants.forEach(p => addOrUpdatePlayer(p));

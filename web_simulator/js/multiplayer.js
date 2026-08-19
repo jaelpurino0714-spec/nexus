@@ -302,6 +302,41 @@ const Multiplayer = {
       } catch (e) {}
     }
 
+    // C. Preserve existing in-memory scores from this.playersList (e.g. from PLAYER_ANSWERED broadcasts)
+    if (this.playersList && this.playersList.length > 0) {
+      this.playersList.forEach(existingP => {
+        const name = existingP.playerName || existingP.display_name || existingP.name;
+        let matchedKey = null;
+        for (const [key, item] of mergedMap.entries()) {
+          if ((existingP.id && item.id === existingP.id) || (existingP.user_id && item.user_id === existingP.user_id) || (name && item.display_name === name)) {
+            matchedKey = key;
+            break;
+          }
+        }
+        if (matchedKey) {
+          const item = mergedMap.get(matchedKey);
+          if ((existingP.score || 0) > (item.score || 0)) {
+            item.score = existingP.score;
+          }
+          if ((existingP.correct_answers || 0) > (item.correct_answers || 0)) {
+            item.correct_answers = existingP.correct_answers;
+          }
+        } else if (name) {
+          mergedMap.set(existingP.id || name, {
+            id: existingP.id || name,
+            user_id: existingP.user_id || existingP.id || name,
+            playerName: name,
+            display_name: name,
+            photoUrl: existingP.photoUrl || null,
+            score: existingP.score || 0,
+            correct_answers: existingP.correct_answers || 0,
+            wrong_answers: existingP.wrong_answers || 0,
+            role: 'player'
+          });
+        }
+      });
+    }
+
     this.playersList = Array.from(mergedMap.values());
     this.refreshHostPresenceRoster();
   },
@@ -1112,25 +1147,49 @@ const Multiplayer = {
     if (titleEl) titleEl.textContent = title;
 
     let list = standings || [];
-    if ((!list || list.length === 0) && this.playersList && this.playersList.length > 0) {
-      list = this.playersList.map(p => ({
-        id: p.id || p.user_id,
-        user_id: p.user_id || p.id,
-        display_name: p.playerName || p.name || p.display_name || 'Player',
-        score: p.score || 0,
-        correct_answers: p.correct_answers || p.correct || 0,
-        is_host: false
-      }));
+    const mergedStandingsMap = new Map();
+
+    const addStandingItem = (item) => {
+      if (!item) return;
+      const isHost = item.is_host || item.isHost || (this.currentGame && this.currentGame.host_id && (item.user_id === this.currentGame.host_id || item.id === this.currentGame.host_id));
+      if (isHost) return;
+
+      const name = item.display_name || item.playerName || item.name || 'Player';
+      const score = Number(item.score || item.points || 0);
+      const correct = Number(item.correct_answers || item.correct || 0);
+
+      let existingKey = null;
+      for (const [key, existing] of mergedStandingsMap.entries()) {
+        if ((item.user_id && existing.user_id === item.user_id) || (item.id && existing.id === item.id) || (name && existing.display_name === name)) {
+          existingKey = key;
+          break;
+        }
+      }
+
+      if (existingKey) {
+        const existing = mergedStandingsMap.get(existingKey);
+        existing.score = Math.max(existing.score, score);
+        existing.correct_answers = Math.max(existing.correct_answers, correct);
+      } else {
+        const key = item.user_id || item.id || name;
+        mergedStandingsMap.set(key, {
+          id: key,
+          user_id: item.user_id || key,
+          display_name: name,
+          playerName: name,
+          score: score,
+          correct_answers: correct,
+          is_host: false
+        });
+      }
+    };
+
+    (list || []).forEach(addStandingItem);
+    if (this.playersList && this.playersList.length > 0) {
+      this.playersList.forEach(addStandingItem);
     }
 
-    // Filter out host entries so ONLY joined participants appear on the leaderboard
-    const participantStandings = (list || []).filter(p => {
-      if (p.is_host || p.isHost) return false;
-      if (this.currentGame && this.currentGame.host_id && (p.user_id === this.currentGame.host_id || p.id === this.currentGame.host_id)) return false;
-      return true;
-    });
-
-    // Sort by score descending for accurate participant ranking
+    const participantStandings = Array.from(mergedStandingsMap.values());
     participantStandings.sort((a, b) => (b.score || 0) - (a.score || 0));
 
     if (rosterEl) {

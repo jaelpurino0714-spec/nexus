@@ -391,9 +391,12 @@ class LobbyService {
             ));
           } else {
             final part = lobby.participants[existingIdx];
-            part.score = p['score'] ?? part.score;
-            part.correctCount = p['correct_answers'] ?? part.correctCount;
-            part.wrongCount = p['wrong_answers'] ?? part.wrongCount;
+            final dbScore = p['score'] as int? ?? 0;
+            final dbCorrect = p['correct_answers'] as int? ?? 0;
+            final dbWrong = p['wrong_answers'] as int? ?? 0;
+            part.score = dbScore > part.score ? dbScore : part.score;
+            part.correctCount = dbCorrect > part.correctCount ? dbCorrect : part.correctCount;
+            part.wrongCount = dbWrong > part.wrongCount ? dbWrong : part.wrongCount;
             part.currentQuestionIndex = p['current_question_index'] ?? part.currentQuestionIndex;
             part.isFinished = p['is_finished'] ?? part.isFinished;
             part.totalQuestions = totalQCount;
