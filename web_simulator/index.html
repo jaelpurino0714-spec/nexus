@@ -325,7 +325,22 @@
                 <div class="term-topics term-1-topics">Changes, Reactions, Equations & Homeostasis</div>
                 <span class="term-action term-1-action">Select Term ➔</span>
               </div>
-              <div class="term-graphic term-1-graphic">🧪</div>
+              <div class="term-graphic term-1-graphic">
+                <svg width="70" height="70" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 0 12px rgba(192, 132, 252, 0.75));">
+                  <path d="M25 8H39M32 8V23L48.5 50.5C50.8 54.3 48.1 59 43.6 59H20.4C15.9 59 13.2 54.3 15.5 50.5L32 23" stroke="#C084FC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M21 44C26.5 41.5 37.5 46.5 43 44L46.8 50.5C47.8 52.2 46.6 54.5 44.6 54.5H19.4C17.4 54.5 16.2 52.2 17.2 50.5L21 44Z" fill="url(#term1_liquid)" opacity="0.95"/>
+                  <path d="M20 44.5C26 42 38 47 44 44.5" stroke="#F472B6" stroke-width="2" stroke-linecap="round"/>
+                  <circle cx="28" cy="38" r="2.2" fill="#F472B6" opacity="0.8"/>
+                  <circle cx="35" cy="32" r="1.6" fill="#E9D5FF" opacity="0.9"/>
+                  <circle cx="31" cy="24" r="1.2" fill="#E9D5FF" opacity="0.7"/>
+                  <defs>
+                    <linearGradient id="term1_liquid" x1="16" y1="44" x2="48" y2="55" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#E879F9"/>
+                      <stop offset="1" stop-color="#7C3AED"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
             </button>
 
             <!-- Term 2 -->
@@ -336,7 +351,22 @@
                 <div class="term-topics term-2-topics">Ecosystems, Plate Tectonics & Climate</div>
                 <span class="term-action term-2-action">Select Term ➔</span>
               </div>
-              <div class="term-graphic term-2-graphic">🌍</div>
+              <div class="term-graphic term-2-graphic">
+                <svg width="70" height="70" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.75));">
+                  <circle cx="32" cy="27" r="17" fill="url(#term2_globe)" stroke="#FBBF24" stroke-width="2.5"/>
+                  <path d="M20 22C24 19.5 29 23 33 21C37 19 41 22.5 44 21.5" stroke="#B45309" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M16 27C21 24.5 28 31 35 27C41 23 45 29 48 27" stroke="#B45309" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M21 33C25 35 30 31 34 34.5C38 38 42 33 44 33" stroke="#B45309" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M14 27C14 37 22 45 32 45C42 45 50 37 50 27" stroke="#FDE047" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M32 45V55M22 55H42" stroke="#FDE047" stroke-width="3.5" stroke-linecap="round"/>
+                  <defs>
+                    <linearGradient id="term2_globe" x1="15" y1="10" x2="49" y2="44" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#F59E0B"/>
+                      <stop offset="1" stop-color="#78350F"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
             </button>
 
             <!-- Term 3 -->
@@ -347,7 +377,20 @@
                 <div class="term-topics term-3-topics">Physics Mechanics & Electricity</div>
                 <span class="term-action term-3-action">Select Term ➔</span>
               </div>
-              <div class="term-graphic term-3-graphic">⚡</div>
+              <div class="term-graphic term-3-graphic">
+                <svg width="70" height="70" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 0 14px rgba(52, 211, 153, 0.85));">
+                  <path d="M36 5L15 34H32L27 59L49 29H32L36 5Z" fill="url(#term3_bolt)" stroke="#A7F3D0" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M12 18L14 22L18 24L14 26L12 30L10 26L6 24L10 22L12 18Z" fill="#67E8F9" opacity="0.8"/>
+                  <path d="M50 42L51.5 45L54.5 46.5L51.5 48L50 51L48.5 48L45.5 46.5L48.5 45L50 42Z" fill="#67E8F9" opacity="0.8"/>
+                  <defs>
+                    <linearGradient id="term3_bolt" x1="15" y1="5" x2="49" y2="59" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#67E8F9"/>
+                      <stop offset="0.5" stop-color="#34D399"/>
+                      <stop offset="1" stop-color="#059669"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
             </button>
           </div>
         </div>
@@ -382,26 +425,78 @@
           <div class="term-buttons-group">
             <!-- Term 1 -->
             <button class="term-btn term-1-btn" onclick="Experiment.selectTerm(1)">
-              <div class="term-badge">TERM 1</div>
-              <div class="term-title">First Term</div>
-              <div class="term-topics">Changes, Reactions, Equations & Homeostasis</div>
-              <span class="term-action">Select Term ➔</span>
+              <div class="term-info">
+                <div class="term-badge term-1-badge">TERM 1</div>
+                <div class="term-title">First Term</div>
+                <div class="term-topics term-1-topics">Changes, Reactions, Equations & Homeostasis</div>
+                <span class="term-action term-1-action">Select Term ➔</span>
+              </div>
+              <div class="term-graphic term-1-graphic">
+                <svg width="70" height="70" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 0 12px rgba(192, 132, 252, 0.75));">
+                  <path d="M25 8H39M32 8V23L48.5 50.5C50.8 54.3 48.1 59 43.6 59H20.4C15.9 59 13.2 54.3 15.5 50.5L32 23" stroke="#C084FC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M21 44C26.5 41.5 37.5 46.5 43 44L46.8 50.5C47.8 52.2 46.6 54.5 44.6 54.5H19.4C17.4 54.5 16.2 52.2 17.2 50.5L21 44Z" fill="url(#term1_liquid_exp)" opacity="0.95"/>
+                  <path d="M20 44.5C26 42 38 47 44 44.5" stroke="#F472B6" stroke-width="2" stroke-linecap="round"/>
+                  <circle cx="28" cy="38" r="2.2" fill="#F472B6" opacity="0.8"/>
+                  <circle cx="35" cy="32" r="1.6" fill="#E9D5FF" opacity="0.9"/>
+                  <circle cx="31" cy="24" r="1.2" fill="#E9D5FF" opacity="0.7"/>
+                  <defs>
+                    <linearGradient id="term1_liquid_exp" x1="16" y1="44" x2="48" y2="55" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#E879F9"/>
+                      <stop offset="1" stop-color="#7C3AED"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
             </button>
 
             <!-- Term 2 -->
             <button class="term-btn term-2-btn" onclick="Experiment.selectTerm(2)">
-              <div class="term-badge">TERM 2</div>
-              <div class="term-title">Second Term</div>
-              <div class="term-topics">Ecosystems, Biotechnology, Plate Tectonics & Climate</div>
-              <span class="term-action">Select Term ➔</span>
+              <div class="term-info">
+                <div class="term-badge term-2-badge">TERM 2</div>
+                <div class="term-title">Second Term</div>
+                <div class="term-topics term-2-topics">Ecosystems, Biotechnology, Plate Tectonics & Climate</div>
+                <span class="term-action term-2-action">Select Term ➔</span>
+              </div>
+              <div class="term-graphic term-2-graphic">
+                <svg width="70" height="70" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.75));">
+                  <circle cx="32" cy="27" r="17" fill="url(#term2_globe_exp)" stroke="#FBBF24" stroke-width="2.5"/>
+                  <path d="M20 22C24 19.5 29 23 33 21C37 19 41 22.5 44 21.5" stroke="#B45309" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M16 27C21 24.5 28 31 35 27C41 23 45 29 48 27" stroke="#B45309" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M21 33C25 35 30 31 34 34.5C38 38 42 33 44 33" stroke="#B45309" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M14 27C14 37 22 45 32 45C42 45 50 37 50 27" stroke="#FDE047" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M32 45V55M22 55H42" stroke="#FDE047" stroke-width="3.5" stroke-linecap="round"/>
+                  <defs>
+                    <linearGradient id="term2_globe_exp" x1="15" y1="10" x2="49" y2="44" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#F59E0B"/>
+                      <stop offset="1" stop-color="#78350F"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
             </button>
 
             <!-- Term 3 -->
             <button class="term-btn term-3-btn" onclick="Experiment.selectTerm(3)">
-              <div class="term-badge">TERM 3</div>
-              <div class="term-title">Third Term</div>
-              <div class="term-topics">Projectile Motion, Momentum & Electricity</div>
-              <span class="term-action">Select Term ➔</span>
+              <div class="term-info">
+                <div class="term-badge term-3-badge">TERM 3</div>
+                <div class="term-title">Third Term</div>
+                <div class="term-topics term-3-topics">Projectile Motion, Momentum & Electricity</div>
+                <span class="term-action term-3-action">Select Term ➔</span>
+              </div>
+              <div class="term-graphic term-3-graphic">
+                <svg width="70" height="70" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 0 14px rgba(52, 211, 153, 0.85));">
+                  <path d="M36 5L15 34H32L27 59L49 29H32L36 5Z" fill="url(#term3_bolt_exp)" stroke="#A7F3D0" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M12 18L14 22L18 24L14 26L12 30L10 26L6 24L10 22L12 18Z" fill="#67E8F9" opacity="0.8"/>
+                  <path d="M50 42L51.5 45L54.5 46.5L51.5 48L50 51L48.5 48L45.5 46.5L48.5 45L50 42Z" fill="#67E8F9" opacity="0.8"/>
+                  <defs>
+                    <linearGradient id="term3_bolt_exp" x1="15" y1="5" x2="49" y2="59" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#67E8F9"/>
+                      <stop offset="0.5" stop-color="#34D399"/>
+                      <stop offset="1" stop-color="#059669"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
             </button>
           </div>
         </div>
