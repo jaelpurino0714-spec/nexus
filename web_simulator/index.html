@@ -26,6 +26,20 @@
   </div>
 
   <div class="app-container">
+    <!-- Native Mobile Phone Status Bar -->
+    <div class="phone-status-bar">
+      <span class="status-time" id="phoneStatusTime">9:41</span>
+      <div class="phone-camera-notch">
+        <span class="notch-lens"></span>
+        <span class="notch-speaker"></span>
+      </div>
+      <div class="status-icons">
+        <span class="status-icon">📶</span>
+        <span class="status-icon">⚡</span>
+        <span class="status-icon">🔋</span>
+      </div>
+    </div>
+
     <!-- Header Bar -->
     <header class="app-header">
       <div class="logo-group">
@@ -1208,6 +1222,10 @@
 
 
     </main>
+    <!-- Native Mobile Gesture Home Indicator Bar -->
+    <div class="phone-home-indicator">
+      <div class="home-bar-pill"></div>
+    </div>
   </div>
 
 
@@ -1223,5 +1241,18 @@
   <script src="js/experiment.js?v=4.0"></script>
   <script src="js/character.js?v=4.0"></script>
   <script src="js/app.js?v=4.0"></script>
+  <script>
+    function updatePhoneClock() {
+      const timeEl = document.getElementById('phoneStatusTime');
+      if (timeEl) {
+        const now = new Date();
+        let h = now.getHours();
+        let m = now.getMinutes().toString().padStart(2, '0');
+        timeEl.textContent = `${h}:${m}`;
+      }
+    }
+    setInterval(updatePhoneClock, 1000);
+    updatePhoneClock();
+  </script>
 </body>
 </html>

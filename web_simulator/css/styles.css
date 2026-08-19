@@ -104,21 +104,116 @@ body {
   }
 }
 
-/* Container Frame - Mobile Simulator View */
+/* Container Frame - Native Smartphone Device View */
 .app-container {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 440px;
-  height: 92vh;
-  max-height: 880px;
+  max-width: 412px;
+  height: 94vh;
+  max-height: 870px;
   background-color: var(--bg-main);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 0 8px rgba(167, 139, 250, 0.4), 0 0 35px var(--purple-glow);
+  border-radius: 46px;
+  border: 12px solid #0F172A;
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.7),
+    0 0 0 2px rgba(255, 255, 255, 0.15),
+    0 0 50px rgba(139, 92, 246, 0.35);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smartphone Physical Side Buttons */
+.app-container::before {
+  content: '';
+  position: absolute;
+  left: -15px;
+  top: 110px;
+  width: 3px;
+  height: 50px;
+  background: #334155;
+  border-radius: 3px 0 0 3px;
+  box-shadow: 0 65px 0 #334155;
+}
+
+.app-container::after {
+  content: '';
+  position: absolute;
+  right: -15px;
+  top: 140px;
+  width: 3px;
+  height: 75px;
+  background: #334155;
+  border-radius: 0 3px 3px 0;
+}
+
+/* Native Mobile Status Bar */
+.phone-status-bar {
+  height: 34px;
+  background: #FFFFFF;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #1F2937;
+  user-select: none;
+  z-index: 20;
+  border-bottom: 1px solid rgba(0,0,0,0.03);
+}
+
+.phone-camera-notch {
+  width: 86px;
+  height: 18px;
+  background: #0F172A;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: -3px;
+}
+
+.notch-lens {
+  width: 6px;
+  height: 6px;
+  background: #1E293B;
+  border-radius: 50%;
+  border: 1px solid #334155;
+}
+
+.notch-speaker {
+  width: 30px;
+  height: 3px;
+  background: #334155;
+  border-radius: 4px;
+}
+
+.status-icons {
+  display: flex;
+  gap: 4px;
+  font-size: 0.72rem;
+}
+
+/* Native Home Indicator Bar at Bottom */
+.phone-home-indicator {
+  height: 20px;
+  background: var(--bg-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+}
+
+.home-bar-pill {
+  width: 130px;
+  height: 4px;
+  background: #94A3B8;
+  border-radius: 4px;
+  opacity: 0.8;
 }
 
 /* Fullscreen toggle class for standalone viewing */
@@ -127,7 +222,30 @@ body.fullscreen-mode .app-container {
   height: 100vh;
   max-height: 100vh;
   border-radius: 0;
+  border: none;
   box-shadow: none;
+}
+
+/* Responsive Viewport for Physical Smartphone Screens */
+@media (max-width: 480px) {
+  body {
+    padding: 0;
+    background: var(--bg-main);
+  }
+  
+  .app-container {
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  .app-container::before,
+  .app-container::after {
+    display: none;
+  }
 }
 
 /* App Header */
