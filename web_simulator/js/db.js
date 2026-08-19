@@ -1335,48 +1335,114 @@ var DB = {
         pointsEarned = Math.round(1000 * timeRatio);
       }
 
-      // 3. Find Player ID in multiplayer_players
-      const { data: player } = await supabaseClient
-        .from('multiplayer_players')
-        .select('id, score, correct_answers, wrong_answers')
-        .eq('game_id', gameId)
-        .or(`user_id.eq.${userUuid},id.eq.${userUuid}`)
-        .maybeSingle();
+      const profile = this.getActiveProfile();
+      const displayName = profile.name || 'Player';
 
-      if (player) {
-        const pId = player.id;
+      // 3. Find Player in Supabase multiplayer_players
+      let targetPlayer = null;
 
-        // Insert record into multiplayer_answers
+      if (supabaseClient) {
         try {
-          await supabaseClient
-            .from('multiplayer_answers')
-            .insert({
-              game_id: gameId,
-              player_id: pId,
-              question_id: questionId,
-              answer: String(selectedChoice),
-              is_correct: isCorrect,
-              response_time: responseTimeSec,
-              points_earned: pointsEarned
-            });
-        } catch (err) {}
-
-        // Update player score & stats
-        const newScore = (player.score || 0) + pointsEarned;
-        const newCorrect = (player.correct_answers || 0) + (isCorrect ? 1 : 0);
-        const newWrong = (player.wrong_answers || 0) + (isCorrect ? 0 : 1);
-
-        try {
-          await supabaseClient
+          const { data: allPlayers } = await supabaseClient
             .from('multiplayer_players')
-            .update({
-              score: newScore,
-              correct_answers: newCorrect,
-              wrong_answers: newWrong,
-              last_seen: new Date().toISOString()
-            })
-            .eq('id', pId);
-        } catch (err) {}
+            .select('*')
+            .eq('game_id', gameId);
+
+          if (allPlayers && allPlayers.length > 0) {
+            targetPlayer = allPlayers.find(p => 
+              (userUuid && (p.user_id === userUuid || p.id === userUuid)) || 
+              (p.display_name && p.display_name === displayName)
+            );
+          }
+
+          if (targetPlayer) {
+            const pId = targetPlayer.id;
+
+            // Insert record into multiplayer_answers
+            if (this.isValidUuid(questionId)) {
+              try {
+                await supabaseClient
+                  .from('multiplayer_answers')
+                  .insert({
+                    game_id: gameId,
+                    player_id: pId,
+                    question_id: questionId,
+                    answer: String(selectedChoice),
+                    is_correct: isCorrect,
+                    response_time: responseTimeSec,
+                    points_earned: pointsEarned
+                  });
+              } catch (err) {}
+            }
+
+            // Update player score & stats
+            const newScore = (targetPlayer.score || 0) + pointsEarned;
+            const newCorrect = (targetPlayer.correct_answers || 0) + (isCorrect ? 1 : 0);
+            const newWrong = (targetPlayer.wrong_answers || 0) + (isCorrect ? 0 : 1);
+
+            targetPlayer.score = newScore;
+            targetPlayer.correct_answers = newCorrect;
+            targetPlayer.wrong_answers = newWrong;
+
+            try {
+              await supabaseClient
+                .from('multiplayer_players')
+                .update({
+                  score: newScore,
+                  correct_answers: newCorrect,
+                  wrong_answers: newWrong,
+                  current_question_index: (targetPlayer.current_question_index || 0) + 1,
+                  last_seen: new Date().toISOString()
+                })
+                .eq('id', pId);
+            } catch (err) {}
+          } else {
+            // Player record missing in Supabase - insert now!
+            const newPlayerPayload = {
+              game_id: gameId,
+              user_id: this.isValidUuid(userUuid) ? userUuid : null,
+              display_name: displayName,
+              photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null,
+              score: pointsEarned,
+              correct_answers: isCorrect ? 1 : 0,
+              wrong_answers: isCorrect ? 0 : 1,
+              is_host: false
+            };
+            try {
+              const { data: createdP } = await supabaseClient
+                .from('multiplayer_players')
+                .insert(newPlayerPayload)
+                .select()
+                .single();
+              if (createdP) targetPlayer = createdP;
+            } catch (_) {}
+          }
+        } catch (e) {
+          console.warn('Supabase answer submit error:', e);
+        }
+      }
+
+      // 4. Always update in-memory Multiplayer.playersList for zero-latency leaderboard updates
+      if (typeof Multiplayer !== 'undefined' && Multiplayer.playersList) {
+        let memPlayer = Multiplayer.playersList.find(p => 
+          (userUuid && (p.id === userUuid || p.user_id === userUuid)) || 
+          (p.playerName && p.playerName === displayName) ||
+          (p.name && p.name === displayName)
+        );
+        if (!memPlayer) {
+          memPlayer = {
+            id: userUuid,
+            playerName: displayName,
+            score: 0,
+            correct_answers: 0,
+            wrong_answers: 0,
+            is_host: false
+          };
+          Multiplayer.playersList.push(memPlayer);
+        }
+        memPlayer.score = (memPlayer.score || 0) + pointsEarned;
+        memPlayer.correct_answers = (memPlayer.correct_answers || 0) + (isCorrect ? 1 : 0);
+        memPlayer.wrong_answers = (memPlayer.wrong_answers || 0) + (isCorrect ? 0 : 1);
       }
 
       return { is_correct: isCorrect, points_earned: pointsEarned };
@@ -1390,21 +1456,94 @@ var DB = {
     return this.submitPlayerAnswer(gameId, playerId, questionId, answerText, responseTime);
   },
 
-  async getGameLeaderboard(gameId) {
-    if (!supabaseClient || !gameId) return [];
-    try {
-      const { data: players } = await supabaseClient
-        .from('multiplayer_players')
-        .select('id, user_id, display_name, score, correct_answers, wrong_answers, is_host')
-        .eq('game_id', gameId)
-        .eq('is_host', false)
-        .order('score', { ascending: false });
+  async getGameLeaderboard(gameId, roomCode) {
+    const mergedMap = new Map();
 
-      return (players || []).filter(p => !p.is_host);
-    } catch (e) {
-      console.error('Error fetching game leaderboard:', e);
-      return [];
+    // 1. Fetch from Supabase multiplayer_players
+    if (supabaseClient && gameId) {
+      try {
+        const { data: dbPlayers } = await supabaseClient
+          .from('multiplayer_players')
+          .select('*')
+          .eq('game_id', gameId);
+
+        if (dbPlayers && dbPlayers.length > 0) {
+          dbPlayers.forEach(p => {
+            if (!p.is_host) {
+              const key = p.user_id || p.id || p.display_name;
+              mergedMap.set(key, {
+                id: key,
+                user_id: p.user_id || p.id,
+                display_name: p.display_name || 'Player',
+                photo_url: p.photo_url || null,
+                score: p.score || 0,
+                correct_answers: p.correct_answers || 0,
+                wrong_answers: p.wrong_answers || 0,
+                is_host: false
+              });
+            }
+          });
+        }
+      } catch (e) {
+        console.warn('Error querying Supabase leaderboard:', e);
+      }
     }
+
+    // 2. Merge with Multiplayer.playersList in memory
+    if (typeof Multiplayer !== 'undefined' && Multiplayer.playersList) {
+      Multiplayer.playersList.forEach(p => {
+        if (!p.is_host && !p.isHost) {
+          const key = p.id || p.user_id || p.playerName || p.name;
+          const displayName = p.playerName || p.name || p.display_name || 'Player';
+          if (key) {
+            if (!mergedMap.has(key)) {
+              mergedMap.set(key, {
+                id: key,
+                user_id: p.user_id || key,
+                display_name: displayName,
+                photo_url: p.photoUrl || p.photo || null,
+                score: p.score || 0,
+                correct_answers: p.correct_answers || p.correct || 0,
+                wrong_answers: p.wrong_answers || p.wrong || 0,
+                is_host: false
+              });
+            } else {
+              const existing = mergedMap.get(key);
+              if ((p.score || 0) > (existing.score || 0)) {
+                existing.score = p.score;
+                existing.correct_answers = p.correct_answers || p.correct || existing.correct_answers;
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // 3. Fallback to local lobby state if roomCode provided
+    if (mergedMap.size === 0 && roomCode) {
+      const localState = this.getLocalLobbyState(roomCode);
+      if (localState && localState.participants) {
+        localState.participants.forEach(p => {
+          if (!p.is_host) {
+            const key = p.id || p.user_id || p.display_name;
+            mergedMap.set(key, {
+              id: key,
+              user_id: key,
+              display_name: p.display_name || p.name || 'Player',
+              photo_url: p.photo_url || null,
+              score: p.score || 0,
+              correct_answers: p.correct_answers || 0,
+              wrong_answers: p.wrong_answers || 0,
+              is_host: false
+            });
+          }
+        });
+      }
+    }
+
+    const leaderboard = Array.from(mergedMap.values());
+    leaderboard.sort((a, b) => (b.score || 0) - (a.score || 0));
+    return leaderboard;
   },
 
   async leaveMultiplayerGame(gameId, userUuid) {

@@ -348,6 +348,9 @@ class LobbyService {
       final lobby = _lobbies[roomCode];
       if (lobby != null && playersData != null) {
         for (final p in playersData) {
+          final isHost = p['is_host'] == true;
+          if (isHost) continue;
+
           final pId = p['user_id']?.toString() ?? p['id']?.toString() ?? p['display_name'];
           final name = p['display_name'] as String? ?? 'Player';
           final photo = p['photo_url'] as String?;
@@ -364,6 +367,13 @@ class LobbyService {
               currentQuestionIndex: p['current_question_index'] ?? 0,
               isFinished: p['is_finished'] ?? false,
             ));
+          } else {
+            final part = lobby.participants[existingIdx];
+            part.score = p['score'] ?? part.score;
+            part.correctCount = p['correct_answers'] ?? part.correctCount;
+            part.wrongCount = p['wrong_answers'] ?? part.wrongCount;
+            part.currentQuestionIndex = p['current_question_index'] ?? part.currentQuestionIndex;
+            part.isFinished = p['is_finished'] ?? part.isFinished;
           }
         }
         _notifyLobby(lobby);

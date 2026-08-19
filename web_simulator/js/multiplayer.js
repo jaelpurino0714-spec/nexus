@@ -680,7 +680,7 @@ const Multiplayer = {
 
   async hostShowResults() {
     if (!this.currentGame) return;
-    const leaderboard = await DB.getGameLeaderboard(this.currentGame.id);
+    const leaderboard = await DB.getGameLeaderboard(this.currentGame.id, this.currentGame.room_code);
     this.sendBroadcast('SHOW_RESULTS', { questionNumber: this.currentIndex + 1, leaderboard });
     this.renderLeaderboardScreen('Current Standings 📊', leaderboard);
   },
@@ -692,7 +692,7 @@ const Multiplayer = {
       this.hostRenderQuestion(nextIdx);
     } else {
       await DB.updateMultiplayerGameStatus(this.currentGame.id, 'finished');
-      const finalLeaderboard = await DB.getGameLeaderboard(this.currentGame.id);
+      const finalLeaderboard = await DB.getGameLeaderboard(this.currentGame.id, this.currentGame.room_code);
 
       const totalQ = this.questionsList ? this.questionsList.length : 10;
       const participantStandings = (finalLeaderboard || []).filter(p => !p.is_host && !p.isHost);
@@ -1035,8 +1035,20 @@ const Multiplayer = {
     const rosterEl = document.getElementById('mpLeaderboardRoster');
     if (titleEl) titleEl.textContent = title;
 
+    let list = standings || [];
+    if ((!list || list.length === 0) && this.playersList && this.playersList.length > 0) {
+      list = this.playersList.map(p => ({
+        id: p.id || p.user_id,
+        user_id: p.user_id || p.id,
+        display_name: p.playerName || p.name || p.display_name || 'Player',
+        score: p.score || 0,
+        correct_answers: p.correct_answers || p.correct || 0,
+        is_host: false
+      }));
+    }
+
     // Filter out host entries so ONLY joined participants appear on the leaderboard
-    const participantStandings = (standings || []).filter(p => {
+    const participantStandings = (list || []).filter(p => {
       if (p.is_host || p.isHost) return false;
       if (this.currentGame && (p.user_id === this.currentGame.host_id || p.id === this.currentGame.host_id)) return false;
       return true;
@@ -1055,7 +1067,7 @@ const Multiplayer = {
           card.className = 'lobby-part-card';
           const medals = ['🥇', '🥈', '🥉'];
           const rankTag = idx < 3 ? medals[idx] : `#${idx + 1}`;
-          const displayName = p.display_name || p.name || 'Player';
+          const displayName = p.display_name || p.name || p.playerName || 'Player';
           card.innerHTML = `
             <div class="part-info-left" style="justify-content:space-between; width:100%;">
               <div style="display:flex; align-items:center; gap:10px;">
@@ -1065,7 +1077,7 @@ const Multiplayer = {
                   <span style="font-size:0.75rem; color:#64748B;">Correct: ${p.correct_answers || 0}</span>
                 </div>
               </div>
-              <span style="font-weight:800; color:#6D28D9; font-size:1.1rem;">${p.score || 0} pts</span>
+              <span style="font-weight:800; color:#6D28D9; font-size:1.1rem;">${(p.score || 0).toLocaleString()} pts</span>
             </div>
           `;
           rosterEl.appendChild(card);
