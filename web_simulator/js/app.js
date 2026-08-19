@@ -142,6 +142,8 @@ const App = {
       try { teacher = JSON.parse(teacherRaw); } catch(e) {}
     }
 
+    const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
+
     if (teacher) {
       if (badge) {
         badge.style.display = 'inline-block';
@@ -149,6 +151,12 @@ const App = {
       }
       const teacherTitle = document.getElementById('teacherHomeTitle');
       if (teacherTitle) teacherTitle.textContent = `Welcome, ${teacher.name}!`;
+
+      const teacherPhoto = teacher.photo || teacher.photo_url || (profile ? (profile.photo || profile.photo_url) : null);
+      const teacherAvatarEl = document.getElementById('teacherUserAvatar');
+      if (teacherAvatarEl) {
+        teacherAvatarEl.src = teacherPhoto || defaultAvatar;
+      }
       return;
     }
 
@@ -167,17 +175,19 @@ const App = {
     const sectionVal = (profile.section && profile.section !== 'undefined' && profile.section.trim() !== '') ? profile.section : '';
     const subText = sectionVal ? `${grade} • Section ${sectionVal}` : `${grade} • Science`;
     
-    document.getElementById('homeUserName').textContent = `Welcome, ${nameVal}!`;
-    document.getElementById('homeUserSub').textContent = subText;
+    const homeNameEl = document.getElementById('homeUserName');
+    if (homeNameEl) homeNameEl.textContent = `Welcome, ${nameVal}!`;
+    const homeSubEl = document.getElementById('homeUserSub');
+    if (homeSubEl) homeSubEl.textContent = subText;
     
-    if (profile.photo) {
-      document.getElementById('homeUserAvatar').src = profile.photo;
-      document.getElementById('editAvatarPreview').src = profile.photo;
-    } else {
-      const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
-      document.getElementById('homeUserAvatar').src = defaultAvatar;
-      document.getElementById('editAvatarPreview').src = defaultAvatar;
-    }
+    const userPhoto = profile.photo || profile.photo_url;
+    const homeAvatarEl = document.getElementById('homeUserAvatar');
+    const editAvatarEl = document.getElementById('editAvatarPreview');
+    const setupAvatarEl = document.getElementById('setupAvatarPreview');
+
+    if (homeAvatarEl) homeAvatarEl.src = userPhoto || defaultAvatar;
+    if (editAvatarEl) editAvatarEl.src = userPhoto || defaultAvatar;
+    if (setupAvatarEl) setupAvatarEl.src = userPhoto || defaultAvatar;
 
     // Update Quick Stats Pills
     document.getElementById('homeTotalPoints').textContent = (profile.totalPoints || 0).toLocaleString();

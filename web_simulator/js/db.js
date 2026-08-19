@@ -271,10 +271,10 @@ var DB = {
         }
       });
       const rawProfile = localStorage.getItem(this.STORAGE_PROFILE);
-      if (rawProfile && rawProfile.length > 50000) {
+      if (rawProfile && rawProfile.length > 500000) {
         try {
           const profile = JSON.parse(rawProfile);
-          if (profile.photo && profile.photo.length > 30000) {
+          if (profile.photo && profile.photo.length > 400000) {
             profile.photo = '';
             localStorage.setItem(this.STORAGE_PROFILE, JSON.stringify(profile));
           }
@@ -379,7 +379,7 @@ var DB = {
           username: profile.username || '',
           grade_level: profile.gradeLevel || '',
           section: profile.section || '',
-          photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null,
+          photo_url: (profile.photo && profile.photo.length < 500000) ? profile.photo : null,
           character_name: profile.petName || null,
           character_gender: profile.gender || null,
           character_xp: profile.characterXP || 0,

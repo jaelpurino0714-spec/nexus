@@ -465,9 +465,11 @@ const Auth = {
   handlePhotoUpload(event) {
     const file = event.target.files[0];
     if (file) {
-      this.compressImage(file, 200, 0.7, (compressedData) => {
+      this.compressImage(file, 150, 0.65, (compressedData) => {
         this.uploadedPhotoData = compressedData;
-        document.getElementById('avatarPreview').src = this.uploadedPhotoData;
+        document.querySelectorAll('#avatarPreview, #setupAvatarPreview, #editAvatarPreview, #homeUserAvatar, #teacherUserAvatar').forEach(img => {
+          if (img) img.src = this.uploadedPhotoData;
+        });
         this.validateStudentForm();
       });
     }
@@ -476,17 +478,23 @@ const Auth = {
   handleEditPhotoUpload(event) {
     const file = event.target.files[0];
     if (file) {
-      this.compressImage(file, 200, 0.7, (compressedData) => {
+      this.compressImage(file, 150, 0.65, (compressedData) => {
         this.editPhotoData = compressedData;
-        document.getElementById('editAvatarPreview').src = this.editPhotoData;
+        document.querySelectorAll('#avatarPreview, #setupAvatarPreview, #editAvatarPreview, #homeUserAvatar, #teacherUserAvatar').forEach(img => {
+          if (img) img.src = this.editPhotoData;
+        });
       });
     }
   },
 
   validateStudentForm() {
-    const name = document.getElementById('studentNameInput').value.trim();
-    const grade = document.getElementById('studentGradeInput').value;
-    const section = document.getElementById('studentSectionInput').value.trim();
+    const nameInput = document.getElementById('studentNameInput');
+    const gradeInput = document.getElementById('studentGradeInput');
+    const sectionInput = document.getElementById('studentSectionInput');
+
+    const name = nameInput ? nameInput.value.trim() : '';
+    const grade = gradeInput ? gradeInput.value : 'Grade 10';
+    const section = sectionInput ? sectionInput.value.trim() : '';
     const photo = this.uploadedPhotoData;
 
     const saveBtn = document.getElementById('saveProfileBtn');
@@ -507,9 +515,13 @@ const Auth = {
   },
 
   saveStudentProfile() {
-    const name = document.getElementById('studentNameInput').value.trim();
-    const grade = document.getElementById('studentGradeInput').value;
-    const section = document.getElementById('studentSectionInput').value.trim();
+    const nameInput = document.getElementById('studentNameInput');
+    const gradeInput = document.getElementById('studentGradeInput');
+    const sectionInput = document.getElementById('studentSectionInput');
+
+    const name = nameInput ? nameInput.value.trim() : 'Student';
+    const grade = gradeInput ? gradeInput.value : 'Grade 10';
+    const section = sectionInput ? sectionInput.value.trim() : '';
     const uuid = DB.getUserUUID();
 
     const profile = {
@@ -550,19 +562,46 @@ const Auth = {
   updateProfile() {
     const db = this.getDB();
     const profile = (db && db.getStudentProfile) ? db.getStudentProfile() || {} : {};
-    profile.name = document.getElementById('editNameInput').value.trim();
-    profile.gradeLevel = document.getElementById('editGradeInput').value;
-    profile.section = document.getElementById('editSectionInput').value.trim();
+    const teacherStorageKey = (db && db.STORAGE_TEACHER) ? db.STORAGE_TEACHER : 'nexus_teacher_session';
+    const teacherRaw = localStorage.getItem(teacherStorageKey);
+    let teacher = null;
+    if (teacherRaw) {
+      try { teacher = JSON.parse(teacherRaw); } catch(e) {}
+    }
+
+    const editNameEl = document.getElementById('editNameInput');
+    const editGradeEl = document.getElementById('editGradeInput');
+    const editSectionEl = document.getElementById('editSectionInput');
+
+    if (editNameEl && editNameEl.value.trim()) profile.name = editNameEl.value.trim();
+    if (editGradeEl && editGradeEl.value) profile.gradeLevel = editGradeEl.value;
+    if (editSectionEl && editSectionEl.value.trim()) profile.section = editSectionEl.value.trim();
+
     if (this.editPhotoData) {
       profile.photo = this.editPhotoData;
+      if (teacher) {
+        teacher.photo = this.editPhotoData;
+        localStorage.setItem(teacherStorageKey, JSON.stringify(teacher));
+      }
     }
 
     if (db && db.saveStudentProfile) {
       db.saveStudentProfile(profile);
     }
+
+    const client = this.getClient();
+    if (client && profile.id) {
+      client.from('profiles').update({
+        full_name: profile.name || profile.full_name,
+        photo_url: profile.photo || null
+      }).eq('id', profile.id).then(() => {}).catch(e => console.warn('Supabase profile update warning:', e));
+    }
+
     if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
     alert('Profile updated successfully!');
-    if (typeof App !== 'undefined' && App.showScreen) App.showScreen('settingsScreen');
+    if (typeof App !== 'undefined' && App.showScreen) {
+      App.showScreen(App.getHomeScreen ? App.getHomeScreen() : 'homeScreen');
+    }
   }
 };
 
