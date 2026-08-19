@@ -1767,12 +1767,13 @@
 .answer-option-btn span:not(.option-badge-pill):not(.badge-letter) {
   flex: 1;
   min-width: 0;
-  font-size: 0.88rem;
+  font-size: clamp(0.74rem, 2.1vw, 0.88rem);
   line-height: 1.25;
   color: #3B0764;
-  word-break: break-word;
-  overflow-wrap: break-word;
+  word-break: normal;
+  overflow-wrap: normal;
   white-space: normal;
+  hyphens: none;
 }
 
 .answer-option-btn:hover:not(:disabled) {
