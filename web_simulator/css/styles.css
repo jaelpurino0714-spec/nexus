@@ -112,13 +112,13 @@ body {
   max-width: 412px;
   height: 94vh;
   max-height: 870px;
-  background-color: var(--bg-main);
+  background-color: #130E2E;
   border-radius: 46px;
-  border: 12px solid #0F172A;
+  border: 12px solid #0B071E;
   box-shadow: 
-    0 30px 80px rgba(0, 0, 0, 0.7),
-    0 0 0 2px rgba(255, 255, 255, 0.15),
-    0 0 50px rgba(139, 92, 246, 0.35);
+    0 30px 80px rgba(0, 0, 0, 0.8),
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 0 50px rgba(124, 58, 237, 0.35);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -152,23 +152,23 @@ body {
 /* Native Mobile Status Bar */
 .phone-status-bar {
   height: 34px;
-  background: #FFFFFF;
+  background: #130E2E;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
   font-size: 0.78rem;
   font-weight: 800;
-  color: #1F2937;
+  color: #FFFFFF;
   user-select: none;
   z-index: 20;
-  border-bottom: 1px solid rgba(0,0,0,0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .phone-camera-notch {
   width: 86px;
   height: 18px;
-  background: #0F172A;
+  background: #090518;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -180,7 +180,7 @@ body {
 .notch-lens {
   width: 6px;
   height: 6px;
-  background: #1E293B;
+  background: #1E163B;
   border-radius: 50%;
   border: 1px solid #334155;
 }
@@ -201,7 +201,7 @@ body {
 /* Native Home Indicator Bar at Bottom */
 .phone-home-indicator {
   height: 20px;
-  background: var(--bg-main);
+  background: #130E2E;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -230,7 +230,7 @@ body.fullscreen-mode .app-container {
 @media (max-width: 600px) {
   body {
     padding: 0;
-    background: var(--bg-main);
+    background: #130E2E;
   }
   
   .app-container {
@@ -253,13 +253,13 @@ body.fullscreen-mode .app-container {
 /* App Header */
 .app-header {
   height: 68px;
-  background: linear-gradient(180deg, #FFFFFF 0%, #F5F3FF 100%);
+  background: #130E2E;
   padding: 0 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1.5px solid var(--accent-light);
-  box-shadow: 0 4px 15px rgba(91, 33, 182, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .logo-group {
@@ -277,7 +277,7 @@ body.fullscreen-mode .app-container {
   font-family: var(--font-heading);
   font-size: 1.35rem;
   font-weight: 800;
-  color: var(--primary-purple-dark);
+  color: #FFFFFF;
   letter-spacing: 0.5px;
   line-height: 1.1;
 }
@@ -285,7 +285,7 @@ body.fullscreen-mode .app-container {
 .app-subtitle {
   font-size: 0.72rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: #A78BFA;
   display: block;
 }
 
@@ -296,25 +296,28 @@ body.fullscreen-mode .app-container {
 }
 
 .user-badge {
-  background-color: var(--accent-light);
-  color: var(--primary-purple-dark);
+  background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+  color: #FFFFFF;
   font-size: 0.75rem;
   font-weight: 700;
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: var(--radius-full);
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
 }
 
 .icon-btn {
-  background: var(--bg-subtle);
-  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
   font-size: 1.1rem;
   padding: 6px 10px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: transform 0.15s ease;
+  transition: transform 0.15s ease, background 0.15s ease;
 }
 
 .icon-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
   transform: scale(1.05);
 }
 
