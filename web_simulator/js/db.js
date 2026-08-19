@@ -1524,7 +1524,9 @@ var DB = {
       // Find if already present in map by id or name
       let existingKey = null;
       for (const [key, item] of mergedMap.entries()) {
-        if ((p.user_id && item.user_id === p.user_id) || (p.id && item.id === p.id) || (name && item.display_name === name)) {
+        if ((p.user_id && item.user_id === p.user_id) || 
+            (p.id && item.id === p.id) || 
+            (name && item.display_name.trim().toLowerCase() === name.trim().toLowerCase())) {
           existingKey = key;
           break;
         }
@@ -1532,16 +1534,14 @@ var DB = {
 
       if (existingKey) {
         const item = mergedMap.get(existingKey);
-        if (score >= item.score) {
-          item.score = score;
-          item.correct_answers = correct;
-          item.wrong_answers = wrong;
-        }
+        item.score = Math.max(item.score || 0, score);
+        item.correct_answers = Math.max(item.correct_answers || 0, correct);
+        item.wrong_answers = Math.max(item.wrong_answers || 0, wrong);
         if (p.photo_url || p.photoUrl || p.photo) {
           item.photo_url = p.photo_url || p.photoUrl || p.photo;
         }
       } else {
-        const key = p.user_id || p.id || name || ('p_' + Math.random());
+        const key = p.user_id || p.id || name.trim().toLowerCase() || ('p_' + Math.random());
         mergedMap.set(key, {
           id: key,
           user_id: p.user_id || key,

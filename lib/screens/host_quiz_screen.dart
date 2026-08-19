@@ -48,12 +48,17 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
   final TextEditingController _maxParticipantsController = TextEditingController(text: '50');
   int _questionCount = 10;
 
+  // Host Dashboard live tracking states
+  int _hostCurrentQuestionIndex = 0;
+  Timer? _hostTimer;
+
   // Created Lobby reference & subscription
   QuizLobby? _activeLobby;
   StreamSubscription<QuizLobby>? _lobbySubscription;
 
   @override
   void dispose() {
+    _hostTimer?.cancel();
     _lobbySubscription?.cancel();
     _questionTextController.dispose();
     _choiceAController.dispose();
@@ -64,6 +69,39 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
     _timeLimitController.dispose();
     _maxParticipantsController.dispose();
     super.dispose();
+  }
+
+  void _startHostLiveTimer() {
+    _hostTimer?.cancel();
+    _hostTimer = Timer.periodic(const Duration(seconds: 2), (_) {
+      if (_currentStep == 3 && mounted && _activeLobby != null) {
+        final updated = LobbyService.instance.getLobby(_activeLobby!.accessCode);
+        if (updated != null) {
+          setState(() {
+            _activeLobby = updated;
+          });
+        }
+      }
+    });
+  }
+
+  String _getFormattedCorrectAnswer(QuestionModel q) {
+    final corr = q.correctAnswer.trim();
+    if (q.questionType == 'multiple_choice') {
+      final upperCorr = corr.toUpperCase();
+      String optText = '';
+      if (upperCorr == 'A' || upperCorr == '0') optText = q.optionA;
+      else if (upperCorr == 'B' || upperCorr == '1') optText = q.optionB;
+      else if (upperCorr == 'C' || upperCorr == '2') optText = q.optionC ?? '';
+      else if (upperCorr == 'D' || upperCorr == '3') optText = q.optionD ?? '';
+      else optText = corr;
+
+      if (optText.isNotEmpty && optText != corr) {
+        return '$upperCorr: $optText';
+      }
+      return corr;
+    }
+    return corr;
   }
 
   void _saveCurrentCustomQuestion() {
@@ -244,6 +282,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
   void _onStartQuizFromHost() {
     if (_activeLobby == null) return;
     LobbyService.instance.startQuiz(_activeLobby!.accessCode);
+    _startHostLiveTimer();
     setState(() {
       _currentStep = 3; // Live Host Dashboard
     });
@@ -266,7 +305,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAlignment.start,
+          crossAlignment: CrossAlignment.start,
           children: [
             Text('Grade & Section: ${participant.gradeLevel} - ${participant.section}'),
             const SizedBox(height: 8),
@@ -584,7 +623,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAlignment.start,
+          crossAlignment: CrossAlignment.start,
           children: [
             const Text('⏱️ Time Limit (5–60s)', style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 6),
@@ -721,6 +760,12 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
       });
 
     final bool allFinished = sortedParticipants.isNotEmpty && sortedParticipants.every((p) => p.isFinished);
+    final List<QuestionModel> questions = lobby.questions;
+    final bool hasQuestions = questions.isNotEmpty;
+    if (_hostCurrentQuestionIndex >= questions.length && questions.isNotEmpty) {
+      _hostCurrentQuestionIndex = questions.length - 1;
+    }
+    final currentQ = hasQuestions ? questions[_hostCurrentQuestionIndex] : null;
 
     return Column(
       crossAlignment: CrossAlignment.stretch,
@@ -743,7 +788,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
                   Icon(Icons.circle, color: allFinished ? Colors.green.shade700 : Colors.red.shade700, size: 10),
                   const SizedBox(width: 6),
                   Text(
-                    allFinished ? 'GAME COMPLETED' : 'LIVE TRACKING ONLY',
+                    allFinished ? 'GAME COMPLETED' : 'LIVE TRACKING',
                     style: TextStyle(
                       color: allFinished ? Colors.green.shade900 : Colors.red.shade900,
                       fontWeight: FontWeight.bold,
@@ -755,7 +800,82 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
+
+        // Host Question & Correct Answer Card
+        if (currentQ != null)
+          Card(
+            elevation: 3,
+            color: const Color(0xFF1E1B4B),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAlignment: CrossAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'QUESTION ${_hostCurrentQuestionIndex + 1} OF ${questions.length}',
+                        style: const TextStyle(color: Colors.amberAccent, fontWeight: FontWeight.w900, fontSize: 12, letterSpacing: 1),
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back_ios, color: Colors.white70, size: 16),
+                            onPressed: _hostCurrentQuestionIndex > 0
+                                ? () => setState(() => _hostCurrentQuestionIndex--)
+                                : null,
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.arrow_forward_ios, color: Colors.white70, size: 16),
+                            onPressed: _hostCurrentQuestionIndex + 1 < questions.length
+                                ? () => setState(() => _hostCurrentQuestionIndex++)
+                                : null,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    currentQ.question,
+                    style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF065F46),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: const Color(0xFF34D399), width: 1.5),
+                    ),
+                    child: Row(
+                      children: [
+                        const Text('💡 CORRECT ANSWER: ', style: TextStyle(color: Color(0xFFA7F3D0), fontWeight: FontWeight.w900, fontSize: 12)),
+                        Expanded(
+                          child: Text(
+                            _getFormattedCorrectAnswer(currentQ),
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.black, fontSize: 14),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+        const SizedBox(height: 12),
+        const Text(
+          'Participant Live Scores & Correct Answers',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF334155)),
+        ),
+        const SizedBox(height: 8),
 
         Expanded(
           child: sortedParticipants.isEmpty
@@ -809,8 +929,8 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
                                   const SizedBox(height: 4),
                                   Row(
                                     children: [
-                                      Text('✔️ ${p.correctCount}  ', style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
-                                      Text('❌ ${p.wrongCount}', style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                                      Text('✔️ ${p.correctCount} Correct  ', style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+                                      Text('❌ ${p.wrongCount} Wrong', style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
                                     ],
                                   ),
                                 ],

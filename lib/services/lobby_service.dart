@@ -55,7 +55,7 @@ class QuizLobby {
   bool isStarted;
   bool isFinished;
   final List<LobbyParticipant> participants;
-  final String? id;
+  String? id;
 
   QuizLobby({
     required this.accessCode,
@@ -142,6 +142,7 @@ class LobbyService {
 
       if (res != null && res['id'] != null) {
         final gameId = res['id'].toString();
+        lobby.id = gameId;
         _listenToRoomRealtime(code, gameId);
       }
     } catch (e) {
@@ -285,7 +286,7 @@ class LobbyService {
     if (lobby == null) return;
 
     final participant = lobby.participants.firstWhere(
-      (p) => p.id == participantId,
+      (p) => p.id == participantId || p.name == participantId,
       orElse: () => LobbyParticipant(id: participantId, name: 'Student'),
     );
 
@@ -309,10 +310,15 @@ class LobbyService {
           'current_question_index': questionIndex,
           'is_finished': isFinished,
         };
+
         if (participantId.startsWith('temp_')) {
           client.from('multiplayer_players').update(updateData).eq('game_id', lobby.id!).eq('display_name', participant.name);
         } else {
-          client.from('multiplayer_players').update(updateData).eq('game_id', lobby.id!).eq('user_id', participantId);
+          try {
+            client.from('multiplayer_players').update(updateData).eq('game_id', lobby.id!).eq('user_id', participantId);
+          } catch (_) {
+            client.from('multiplayer_players').update(updateData).eq('game_id', lobby.id!).eq('display_name', participant.name);
+          }
         }
       } catch (e) {
         print('Supabase updateParticipantProgress warning: $e');
@@ -322,8 +328,22 @@ class LobbyService {
     _notifyLobby(lobby);
   }
 
+  Timer? _pollingTimer;
+
   void _listenToRoomRealtime(String roomCode, String? gameId) {
     if (gameId == null) return;
+
+    // Start periodic polling timer every 2s for live host dashboard updates
+    _pollingTimer?.cancel();
+    _pollingTimer = Timer.periodic(const Duration(seconds: 2), (_) {
+      final lobby = _lobbies[roomCode];
+      if (lobby == null || lobby.isFinished) {
+        _pollingTimer?.cancel();
+        return;
+      }
+      _refreshRoomFromSupabase(roomCode, gameId);
+    });
+
     try {
       final client = SupabaseService.instance.client;
       client.channel('game_room_$roomCode')
@@ -366,52 +386,62 @@ class LobbyService {
           .eq('game_id', gameId);
 
       final lobby = _lobbies[roomCode];
-      if (lobby != null && playersData != null) {
-        final totalQCount = lobby.questions.isNotEmpty ? lobby.questions.length : 10;
-        for (final p in playersData) {
-          final isHost = p['is_host'] == true;
-          if (isHost) continue;
+      if (lobby != null) {
+        if (lobby.id == null) lobby.id = gameId;
 
-          final pId = p['user_id']?.toString() ?? p['id']?.toString() ?? p['display_name'];
-          final name = p['display_name'] as String? ?? 'Player';
-          final photo = p['photo_url'] as String?;
+        if (playersData != null) {
+          final totalQCount = lobby.questions.isNotEmpty ? lobby.questions.length : 10;
+          for (final p in playersData) {
+            final isHost = p['is_host'] == true;
+            if (isHost) continue;
 
-          final existingIdx = lobby.participants.indexWhere((part) => part.id == pId || part.name == name);
-          if (existingIdx == -1) {
-            lobby.participants.add(LobbyParticipant(
-              id: pId,
-              name: name,
-              photoUrl: photo,
-              totalQuestions: totalQCount,
-              score: p['score'] ?? 0,
-              correctCount: p['correct_answers'] ?? 0,
-              wrongCount: p['wrong_answers'] ?? 0,
-              currentQuestionIndex: p['current_question_index'] ?? 0,
-              isFinished: p['is_finished'] ?? false,
-            ));
-          } else {
-            final part = lobby.participants[existingIdx];
-            final dbScore = p['score'] as int? ?? 0;
-            final dbCorrect = p['correct_answers'] as int? ?? 0;
-            final dbWrong = p['wrong_answers'] as int? ?? 0;
-            part.score = dbScore > part.score ? dbScore : part.score;
-            part.correctCount = dbCorrect > part.correctCount ? dbCorrect : part.correctCount;
-            part.wrongCount = dbWrong > part.wrongCount ? dbWrong : part.wrongCount;
-            part.currentQuestionIndex = p['current_question_index'] ?? part.currentQuestionIndex;
-            part.isFinished = p['is_finished'] ?? part.isFinished;
-            part.totalQuestions = totalQCount;
+            final pId = p['user_id']?.toString() ?? p['id']?.toString() ?? p['display_name']?.toString() ?? 'Player';
+            final name = p['display_name'] as String? ?? 'Player';
+            final photo = p['photo_url'] as String?;
+
+            final existingIdx = lobby.participants.indexWhere((part) =>
+              (p['user_id'] != null && part.id == p['user_id'].toString()) ||
+              (p['id'] != null && part.id == p['id'].toString()) ||
+              part.id == pId ||
+              part.name.trim().toLowerCase() == name.trim().toLowerCase()
+            );
+
+            if (existingIdx == -1) {
+              lobby.participants.add(LobbyParticipant(
+                id: pId,
+                name: name,
+                photoUrl: photo,
+                totalQuestions: totalQCount,
+                score: p['score'] ?? 0,
+                correctCount: p['correct_answers'] ?? 0,
+                wrongCount: p['wrong_answers'] ?? 0,
+                currentQuestionIndex: p['current_question_index'] ?? 0,
+                isFinished: p['is_finished'] ?? false,
+              ));
+            } else {
+              final part = lobby.participants[existingIdx];
+              part.score = p['score'] as int? ?? part.score;
+              part.correctCount = p['correct_answers'] as int? ?? part.correctCount;
+              part.wrongCount = p['wrong_answers'] as int? ?? part.wrongCount;
+              part.currentQuestionIndex = p['current_question_index'] as int? ?? part.currentQuestionIndex;
+              part.isFinished = p['is_finished'] as bool? ?? part.isFinished;
+              part.totalQuestions = totalQCount;
+            }
           }
+          if (lobby.participants.isNotEmpty && lobby.participants.every((p) => p.isFinished)) {
+            lobby.isFinished = true;
+          }
+          _notifyLobby(lobby);
         }
-        if (lobby.participants.isNotEmpty && lobby.participants.every((p) => p.isFinished)) {
-          lobby.isFinished = true;
-        }
-        _notifyLobby(lobby);
       }
-    } catch (_) {}
+    } catch (e) {
+      print('Refresh room error: $e');
+    }
   }
 
   void _notifyLobby(QuizLobby lobby) {
     _lobbyStreamController.add(lobby);
   }
 }
+
 
