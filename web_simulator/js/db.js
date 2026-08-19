@@ -1445,10 +1445,18 @@ var DB = {
         memPlayer.wrong_answers = (memPlayer.wrong_answers || 0) + (isCorrect ? 0 : 1);
       }
 
-      return { is_correct: isCorrect, points_earned: pointsEarned };
+      let finalTotalScore = pointsEarned;
+      if (targetPlayer && targetPlayer.score !== undefined) {
+        finalTotalScore = targetPlayer.score;
+      } else if (typeof Multiplayer !== 'undefined' && Multiplayer.playersList) {
+        const memP = Multiplayer.playersList.find(p => (userUuid && (p.id === userUuid || p.user_id === userUuid)));
+        if (memP && memP.score !== undefined) finalTotalScore = memP.score;
+      }
+
+      return { is_correct: isCorrect, points_earned: pointsEarned, total_score: finalTotalScore };
     } catch (e) {
       console.error('Error submitting player answer:', e);
-      return { is_correct: false, points_earned: 0 };
+      return { is_correct: false, points_earned: 0, total_score: 0 };
     }
   },
 

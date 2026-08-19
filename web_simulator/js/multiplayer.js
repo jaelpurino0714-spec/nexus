@@ -769,19 +769,35 @@ const Multiplayer = {
 
   onPlayerAnswered(data) {
     if (!this.isHost) return;
-    const { playerId, playerName, pointsEarned, isCorrect } = data;
+    const { playerId, playerName, pointsEarned, totalScore, isCorrect } = data;
 
     if (!this.answeredPlayerSet) this.answeredPlayerSet = new Set();
     if (playerId) this.answeredPlayerSet.add(playerId);
     if (playerName) this.answeredPlayerSet.add(playerName);
 
     if (this.playersList && this.playersList.length > 0) {
-      const p = this.playersList.find(item => 
+      let p = this.playersList.find(item => 
         (playerId && (item.id === playerId || item.user_id === playerId)) ||
         (playerName && (item.playerName === playerName || item.name === playerName || item.display_name === playerName))
       );
+      if (!p && (playerName || playerId)) {
+        p = {
+          id: playerId || playerName,
+          user_id: playerId,
+          playerName: playerName || 'Player',
+          display_name: playerName || 'Player',
+          score: 0,
+          correct_answers: 0,
+          wrong_answers: 0,
+          role: 'player'
+        };
+        this.playersList.push(p);
+      }
+
       if (p) {
-        if (pointsEarned !== undefined) {
+        if (totalScore !== undefined && totalScore !== null) {
+          p.score = totalScore;
+        } else if (pointsEarned !== undefined) {
           p.score = (p.score || 0) + pointsEarned;
         }
         if (isCorrect !== undefined) {
@@ -970,6 +986,7 @@ const Multiplayer = {
         playerId: DB.getUserUUID(),
         playerName: (DB.getStudentProfile() || {}).name || 'Player',
         pointsEarned: result.points_earned || 0,
+        totalScore: result.total_score !== undefined ? result.total_score : (result.points_earned || 0),
         isCorrect: result.is_correct || false
       });
 
