@@ -35,14 +35,16 @@ class _JoinQuizScreenState extends ConsumerState<JoinQuizScreen> {
     }
 
     final authState = ref.read(authProvider);
-    final studentName = authState.profile?.name ?? 'Student Participant';
+    final studentUsername = (authState.profile?.username != null && authState.profile!.username.trim().isNotEmpty)
+        ? authState.profile!.username.trim()
+        : (authState.profile?.name ?? 'Student Participant');
     final studentId = authState.profile?.id ?? 'temp_student_${DateTime.now().millisecondsSinceEpoch}';
     final studentPhoto = authState.profile?.photoUrl;
 
     final success = await LobbyService.instance.joinLobby(
       accessCode: code,
       participantId: studentId,
-      participantName: studentName,
+      participantName: studentUsername,
       photoUrl: studentPhoto,
     );
 

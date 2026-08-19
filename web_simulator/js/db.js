@@ -303,10 +303,12 @@ var DB = {
 
     const student = this.getStudentProfile();
     if (student) {
+      const studentUsername = student.username || student.name || 'Student Player';
       return {
         id: userUuid,
         role: 'student',
-        name: student.name || 'Student Player',
+        name: studentUsername,
+        username: studentUsername,
         photo: student.photo || null,
         isTeacher: false
       };
@@ -316,6 +318,7 @@ var DB = {
       id: userUuid,
       role: 'student',
       name: 'Player ' + Math.floor(100 + Math.random() * 900),
+      username: 'Player ' + Math.floor(100 + Math.random() * 900),
       photo: null,
       isTeacher: false
     };
@@ -1449,8 +1452,49 @@ var DB = {
       if (targetPlayer && targetPlayer.score !== undefined) {
         finalTotalScore = targetPlayer.score;
       } else if (typeof Multiplayer !== 'undefined' && Multiplayer.playersList) {
-        const memP = Multiplayer.playersList.find(p => (userUuid && (p.id === userUuid || p.user_id === userUuid)));
+        const memP = Multiplayer.playersList.find(p => (userUuid && (p.id === userUuid || p.user_id === userUuid)) || (p.playerName === displayName));
         if (memP && memP.score !== undefined) finalTotalScore = memP.score;
+      }
+
+      // 5. Update local lobby state in localStorage & dispatch sync trigger for zero-delay Host tab updates
+      let roomCodeToSync = null;
+      if (typeof Multiplayer !== 'undefined' && Multiplayer.currentGame) {
+        roomCodeToSync = Multiplayer.currentGame.room_code || Multiplayer.currentGame.access_code;
+      }
+      if (roomCodeToSync) {
+        const cleanCode = roomCodeToSync.toUpperCase().trim();
+        let localState = this.getLocalLobbyState(cleanCode);
+        if (localState) {
+          if (!localState.participants) localState.participants = [];
+          let p = localState.participants.find(part => 
+            (userUuid && (part.user_id === userUuid || part.id === userUuid)) || 
+            (displayName && (part.display_name === displayName || part.username === displayName || part.name === displayName))
+          );
+          if (p) {
+            p.score = finalTotalScore;
+            p.correct_answers = (p.correct_answers || 0) + (isCorrect ? 1 : 0);
+            p.wrong_answers = (p.wrong_answers || 0) + (isCorrect ? 0 : 1);
+          } else {
+            localState.participants.push({
+              id: userUuid,
+              user_id: userUuid,
+              display_name: displayName,
+              username: displayName,
+              score: finalTotalScore,
+              correct_answers: isCorrect ? 1 : 0,
+              wrong_answers: isCorrect ? 0 : 1
+            });
+          }
+          this.saveLocalLobbyState(cleanCode, localState);
+          this.safeSetItem('nexus_mp_sync_trigger_' + cleanCode, JSON.stringify({
+            roomCode: cleanCode,
+            userUuid: userUuid,
+            displayName: displayName,
+            score: finalTotalScore,
+            correct: isCorrect ? 1 : 0,
+            ts: Date.now()
+          }));
+        }
       }
 
       return { is_correct: isCorrect, points_earned: pointsEarned, total_score: finalTotalScore };

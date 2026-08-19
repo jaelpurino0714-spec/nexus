@@ -153,7 +153,7 @@ const Multiplayer = {
 
     const profile = DB.getStudentProfile() || {};
     if (pinInput) pinInput.value = '';
-    if (nameInput) nameInput.value = profile.name || '';
+    if (nameInput) nameInput.value = profile.username || profile.name || '';
     if (errEl) errEl.classList.add('hidden');
 
     App.showScreen('mpPlayerJoinScreen');
@@ -168,7 +168,8 @@ const Multiplayer = {
 
     if (errEl) errEl.classList.add('hidden');
     const pinVal = (pinInput ? pinInput.value : '').toUpperCase().trim();
-    const nicknameVal = (nameInput ? nameInput.value : '').trim() || 'Player';
+    const profile = DB.getStudentProfile() || {};
+    const nicknameVal = (nameInput ? nameInput.value : '').trim() || profile.username || profile.name || 'Player';
 
     if (pinVal.length !== 6) {
       if (errEl) {
@@ -831,7 +832,7 @@ const Multiplayer = {
 
       if (p) {
         if (totalScore !== undefined && totalScore !== null) {
-          p.score = totalScore;
+          p.score = Math.max(p.score || 0, totalScore);
         } else if (pointsEarned !== undefined) {
           p.score = (p.score || 0) + pointsEarned;
         }
@@ -1254,3 +1255,30 @@ const Multiplayer = {
     }
   }
 };
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (e) => {
+    if (e.key && (e.key.startsWith('nexus_mp_sync_trigger_') || e.key.startsWith('nexus_lobby_'))) {
+      if (typeof Multiplayer !== 'undefined' && Multiplayer.isHost && Multiplayer.currentGame) {
+        if (e.key.startsWith('nexus_mp_sync_trigger_') && e.newValue) {
+          try {
+            const data = JSON.parse(e.newValue);
+            if (data && data.displayName && data.score !== undefined) {
+              if (Multiplayer.playersList && Multiplayer.playersList.length > 0) {
+                let p = Multiplayer.playersList.find(item =>
+                  (data.userUuid && (item.id === data.userUuid || item.user_id === data.userUuid)) ||
+                  (item.playerName === data.displayName || item.display_name === data.displayName || item.name === data.displayName)
+                );
+                if (p) {
+                  p.score = Math.max(p.score || 0, data.score || 0);
+                  if (data.correct) p.correct_answers = (p.correct_answers || 0) + data.correct;
+                }
+              }
+            }
+          } catch (_) {}
+        }
+        Multiplayer.syncHostRoster();
+      }
+    }
+  });
+}
