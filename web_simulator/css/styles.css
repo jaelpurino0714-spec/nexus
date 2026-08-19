@@ -227,7 +227,7 @@ body.fullscreen-mode .app-container {
 }
 
 /* Responsive Viewport for Physical Smartphone Screens */
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   body {
     padding: 0;
     background: var(--bg-main);
@@ -243,8 +243,10 @@ body.fullscreen-mode .app-container {
   }
 
   .app-container::before,
-  .app-container::after {
-    display: none;
+  .app-container::after,
+  .phone-status-bar,
+  .phone-home-indicator {
+    display: none !important;
   }
 }
 

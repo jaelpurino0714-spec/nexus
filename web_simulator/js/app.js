@@ -140,8 +140,13 @@ const App = {
       badge.textContent = profile.gradeLevel || 'Student';
     }
 
-    document.getElementById('homeUserName').textContent = `Welcome, ${profile.name}!`;
-    document.getElementById('homeUserSub').textContent = `${profile.gradeLevel} • Section ${profile.section}`;
+    const nameVal = (profile.name && profile.name !== 'undefined' && profile.name.trim() !== '') ? profile.name : 'Student';
+    const grade = (profile.gradeLevel && profile.gradeLevel !== 'undefined' && profile.gradeLevel.trim() !== '') ? profile.gradeLevel : 'Grade 10';
+    const sectionVal = (profile.section && profile.section !== 'undefined' && profile.section.trim() !== '') ? profile.section : '';
+    const subText = sectionVal ? `${grade} • Section ${sectionVal}` : `${grade} • Science`;
+    
+    document.getElementById('homeUserName').textContent = `Welcome, ${nameVal}!`;
+    document.getElementById('homeUserSub').textContent = subText;
     
     if (profile.photo) {
       document.getElementById('homeUserAvatar').src = profile.photo;
