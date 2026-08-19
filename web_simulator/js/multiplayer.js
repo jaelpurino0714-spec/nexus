@@ -249,12 +249,19 @@ const Multiplayer = {
     (dbPlayers || []).forEach(p => {
       if (!p.is_host) {
         const key = p.user_id || p.id || p.display_name;
-        if (key) mergedMap.set(key, {
-          id: key,
-          playerName: p.display_name || p.student_name || 'Player',
-          photoUrl: p.photo_url || p.photo || null,
-          role: 'player'
-        });
+        if (key) {
+          mergedMap.set(key, {
+            id: key,
+            user_id: p.user_id || key,
+            playerName: p.display_name || p.student_name || 'Player',
+            display_name: p.display_name || p.student_name || 'Player',
+            photoUrl: p.photo_url || p.photo || null,
+            score: p.score || 0,
+            correct_answers: p.correct_answers || 0,
+            wrong_answers: p.wrong_answers || 0,
+            role: 'player'
+          });
+        }
       }
     });
 
@@ -266,13 +273,28 @@ const Multiplayer = {
           (presences || []).forEach(p => {
             if (p.role === 'player' && p.playerName) {
               const key = p.playerId || p.user_id || p.playerName;
-              if (key && !mergedMap.has(key)) {
-                mergedMap.set(key, {
-                  id: key,
-                  playerName: p.playerName,
-                  photoUrl: p.photoUrl || null,
-                  role: 'player'
-                });
+              if (key) {
+                if (!mergedMap.has(key)) {
+                  mergedMap.set(key, {
+                    id: key,
+                    user_id: p.user_id || key,
+                    playerName: p.playerName,
+                    display_name: p.playerName,
+                    photoUrl: p.photoUrl || null,
+                    score: p.score || 0,
+                    correct_answers: p.correct_answers || 0,
+                    wrong_answers: p.wrong_answers || 0,
+                    role: 'player'
+                  });
+                } else {
+                  const existing = mergedMap.get(key);
+                  if (p.score && p.score > existing.score) {
+                    existing.score = p.score;
+                  }
+                  if (p.correct_answers && p.correct_answers > existing.correct_answers) {
+                    existing.correct_answers = p.correct_answers;
+                  }
+                }
               }
             }
           });
@@ -623,6 +645,7 @@ const Multiplayer = {
             ? '<span style="color:#059669; background:#D1FAE5; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">🟢 Answered</span>'
             : '<span style="color:#6B21A8; background:#F3E8FF; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">⏳ Thinking...</span>';
 
+          const scoreBadge = `<span style="font-weight:800; color:#6D28D9; font-size:0.85rem; margin-right:8px;">${(p.score || 0).toLocaleString()} pts</span>`;
           const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
 
           card.innerHTML = `
@@ -631,7 +654,10 @@ const Multiplayer = {
                 <img src="${p.photoUrl || defaultAvatar}" class="part-avatar" style="width:32px; height:32px;" alt="${p.playerName}">
                 <h5 style="margin:0; font-size:0.9rem; color:#1E293B; font-weight:700;">${p.playerName}</h5>
               </div>
-              ${statusBadge}
+              <div style="display:flex; align-items:center;">
+                ${scoreBadge}
+                ${statusBadge}
+              </div>
             </div>
           `;
           listEl.appendChild(card);
@@ -730,11 +756,37 @@ const Multiplayer = {
     }
   },
 
-  // 9. Player Broadcast Event Callbacks & Question Rendering
   onGameStart(data) {
     if (!this.isHost) {
       App.showScreen('mpPlayerGameScreen');
     }
+  },
+
+  onPlayerAnswered(data) {
+    if (!this.isHost) return;
+    const { playerId, playerName, pointsEarned, isCorrect } = data;
+
+    if (!this.answeredPlayerSet) this.answeredPlayerSet = new Set();
+    if (playerId) this.answeredPlayerSet.add(playerId);
+    if (playerName) this.answeredPlayerSet.add(playerName);
+
+    if (this.playersList && this.playersList.length > 0) {
+      const p = this.playersList.find(item => 
+        (playerId && (item.id === playerId || item.user_id === playerId)) ||
+        (playerName && (item.playerName === playerName || item.name === playerName || item.display_name === playerName))
+      );
+      if (p) {
+        if (pointsEarned !== undefined) {
+          p.score = (p.score || 0) + pointsEarned;
+        }
+        if (isCorrect !== undefined) {
+          p.correct_answers = (p.correct_answers || 0) + (isCorrect ? 1 : 0);
+          p.wrong_answers = (p.wrong_answers || 0) + (isCorrect ? 0 : 1);
+        }
+      }
+    }
+
+    this.refreshHostPlayerAnswerStatuses();
   },
 
   onQuestionStart(data) {
