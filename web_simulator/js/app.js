@@ -94,6 +94,15 @@ const App = {
       target.classList.add('active');
     }
 
+    const appContainer = document.querySelector('.app-container');
+    if (appContainer) {
+      if (screenId === 'homeScreen') {
+        appContainer.classList.add('student-home-active');
+      } else {
+        appContainer.classList.remove('student-home-active');
+      }
+    }
+
     if (typeof Quiz !== 'undefined' && Quiz.hideAllModals) {
       Quiz.hideAllModals();
     }
