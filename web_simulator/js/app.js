@@ -19,9 +19,22 @@ const App = {
   },
 
   bindEvents() {
-    document.getElementById('toggleFrameBtn').onclick = () => {
-      document.body.classList.toggle('fullscreen-mode');
-    };
+    const toggleBtn = document.getElementById('toggleFrameBtn');
+    if (toggleBtn) {
+      toggleBtn.onclick = () => {
+        document.body.classList.toggle('fullscreen-mode');
+      };
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('button, [role="button"], .primary-btn, .secondary-btn, .home-nav-btn, .term-btn, .topic-card, .teacher-action-btn, .icon-btn, .stat-pill, .role-card, .back-link, .logout-btn, .quiz-choice-btn, .quiz-nav-btn, .option-card, .avatar-wrapper');
+      if (btn && !btn.disabled) {
+        btn.classList.remove('btn-clicked');
+        void btn.offsetWidth;
+        btn.classList.add('btn-clicked');
+        setTimeout(() => btn.classList.remove('btn-clicked'), 220);
+      }
+    });
   },
 
   async checkInitialAuth() {

@@ -519,3 +519,80 @@ body.fullscreen-mode .app-container {
   border-color: var(--primary-purple);
   box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.15);
 }
+
+/* ==========================================================================
+   GLOBAL CLICK & PRESS ANIMATIONS FOR ALL BUTTONS
+   ========================================================================== */
+
+button,
+[role="button"],
+.primary-btn,
+.secondary-btn,
+.home-nav-btn,
+.play-btn,
+.character-btn,
+.experiment-btn,
+.custom-play-btn,
+.settings-btn,
+.term-btn,
+.topic-card,
+.teacher-action-btn,
+.icon-btn,
+.stat-pill,
+.role-card,
+.back-link,
+.logout-btn,
+.quiz-choice-btn,
+.quiz-nav-btn,
+.option-card,
+.avatar-wrapper,
+.teacher-btn,
+.save-btn {
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.15s ease, 
+              filter 0.15s ease, 
+              background 0.15s ease !important;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+button:active:not(:disabled),
+[role="button"]:active,
+.primary-btn:active:not(:disabled),
+.secondary-btn:active,
+.home-nav-btn:active,
+.play-btn:active,
+.character-btn:active,
+.experiment-btn:active,
+.custom-play-btn:active,
+.settings-btn:active,
+.term-btn:active,
+.topic-card:active,
+.teacher-action-btn:active,
+.icon-btn:active,
+.stat-pill:active,
+.role-card:active,
+.back-link:active,
+.logout-btn:active,
+.quiz-choice-btn:active,
+.quiz-nav-btn:active,
+.option-card:active,
+.avatar-wrapper:active,
+.teacher-btn:active,
+.save-btn:active:not(:disabled) {
+  transform: scale(0.94) translateY(2px) !important;
+  filter: brightness(0.92) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Keyframe Click Bounce Animation Class */
+@keyframes buttonClickBounce {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.92) translateY(2px); filter: brightness(0.9); }
+  80% { transform: scale(1.02) translateY(-1px); }
+  100% { transform: scale(1); }
+}
+
+.btn-clicked {
+  animation: buttonClickBounce 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
