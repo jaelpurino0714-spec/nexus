@@ -712,7 +712,15 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
     if (lobby == null) return Container();
 
     final sortedParticipants = List<LobbyParticipant>.from(lobby.participants)
-      ..sort((a, b) => b.score.compareTo(a.score));
+      ..sort((a, b) {
+        int comp = b.score.compareTo(a.score);
+        if (comp != 0) return comp;
+        int comp2 = b.correctCount.compareTo(a.correctCount);
+        if (comp2 != 0) return comp2;
+        return a.name.compareTo(b.name);
+      });
+
+    final bool allFinished = sortedParticipants.isNotEmpty && sortedParticipants.every((p) => p.isFinished);
 
     return Column(
       crossAlignment: CrossAlignment.stretch,
@@ -720,15 +728,28 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Live Host Dashboard', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF4C1D95))),
+            Text(
+              allFinished ? '🏆 Final Leaderboard' : 'Live Host Dashboard',
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF4C1D95)),
+            ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(color: Colors.red.shade100, borderRadius: BorderRadius.circular(20)),
+              decoration: BoxDecoration(
+                color: allFinished ? Colors.green.shade100 : Colors.red.shade100,
+                borderRadius: BorderRadius.circular(20),
+              ),
               child: Row(
                 children: [
-                  Icon(Icons.circle, color: Colors.red.shade700, size: 10),
+                  Icon(Icons.circle, color: allFinished ? Colors.green.shade700 : Colors.red.shade700, size: 10),
                   const SizedBox(width: 6),
-                  Text('LIVE TRACKING ONLY', style: TextStyle(color: Colors.red.shade900, fontWeight: FontWeight.bold, fontSize: 11)),
+                  Text(
+                    allFinished ? 'GAME COMPLETED' : 'LIVE TRACKING ONLY',
+                    style: TextStyle(
+                      color: allFinished ? Colors.green.shade900 : Colors.red.shade900,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -737,67 +758,92 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
         const SizedBox(height: 16),
 
         Expanded(
-          child: ListView.builder(
-            itemCount: sortedParticipants.length,
-            itemBuilder: (context, idx) {
-              final p = sortedParticipants[idx];
-              final rank = idx + 1;
+          child: sortedParticipants.isEmpty
+              ? const Center(child: Text('No participants in this hosted game.'))
+              : ListView.builder(
+                  itemCount: sortedParticipants.length,
+                  itemBuilder: (context, idx) {
+                    final p = sortedParticipants[idx];
+                    final rank = idx + 1;
+                    final rankBadge = rank == 1 ? '🥇' : (rank == 2 ? '🥈' : (rank == 3 ? '🥉' : '#$rank'));
 
-              return Card(
-                elevation: 3,
-                margin: const EdgeInsets.only(bottom: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: rank == 1 ? Colors.amber : (rank == 2 ? Colors.grey.shade400 : (rank == 3 ? Colors.brown.shade300 : Colors.purple.shade100)),
-                        child: Text('#$rank', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                    return Card(
+                      elevation: rank <= 3 ? 4 : 2,
+                      margin: const EdgeInsets.only(bottom: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        side: rank == 1
+                            ? const BorderSide(color: Colors.amber, width: 2)
+                            : (rank == 2
+                                ? BorderSide(color: Colors.grey.shade400, width: 1.5)
+                                : (rank == 3
+                                    ? BorderSide(color: Colors.brown.shade300, width: 1.5)
+                                    : BorderSide.none)),
                       ),
-                      const SizedBox(width: 14),
-
-                      Expanded(
-                        child: Column(
-                          crossAlignment: CrossAlignment.start,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
                           children: [
-                            Text(p.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                            const SizedBox(height: 4),
-                            Text('Question ${p.currentQuestionIndex + 1} / ${p.totalQuestions}'),
-                            const SizedBox(height: 4),
-                            Row(
+                            CircleAvatar(
+                              backgroundColor: rank == 1
+                                  ? Colors.amber
+                                  : (rank == 2
+                                      ? Colors.grey.shade400
+                                      : (rank == 3 ? Colors.brown.shade300 : Colors.purple.shade100)),
+                              child: Text(
+                                rankBadge,
+                                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16),
+                              ),
+                            ),
+                            const SizedBox(width: 14),
+
+                            Expanded(
+                              child: Column(
+                                crossAlignment: CrossAlignment.start,
+                                children: [
+                                  Text(p.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                                  const SizedBox(height: 4),
+                                  Text(p.isFinished
+                                      ? 'Completed (${p.totalQuestions}/${p.totalQuestions})'
+                                      : 'Question ${p.currentQuestionIndex + 1} / ${p.totalQuestions}'),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      Text('✔️ ${p.correctCount}  ', style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+                                      Text('❌ ${p.wrongCount}', style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            Column(
+                              crossAlignment: CrossAlignment.end,
                               children: [
-                                Text('✔️ ${p.correctCount}  ', style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
-                                Text('❌ ${p.wrongCount}', style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                                Text('${p.score} pts', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.black, color: Color(0xFF673AB7))),
+                                const SizedBox(height: 4),
+                                Text(
+                                  p.isFinished ? 'Finished ✅' : 'In Progress ⏳',
+                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: p.isFinished ? Colors.green : Colors.orange),
+                                ),
                               ],
                             ),
                           ],
                         ),
                       ),
-
-                      Column(
-                        crossAlignment: CrossAlignment.end,
-                        children: [
-                          Text('${p.score} pts', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.black, color: Color(0xFF673AB7))),
-                          const SizedBox(height: 4),
-                          Text(p.isFinished ? 'Finished ✅' : 'In Progress ⏳', style: TextStyle(fontSize: 12, color: p.isFinished ? Colors.green : Colors.orange)),
-                        ],
-                      ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
         ),
 
-        if (lobby.isFinished) ...[
+        if (allFinished || lobby.isFinished) ...[
           const SizedBox(height: 12),
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.all(18),
               backgroundColor: Colors.amber.shade700,
               foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
             ),
             icon: const Icon(Icons.emoji_events, size: 28),
             label: const Text('Final Leaderboard Complete!', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),

@@ -299,6 +299,26 @@ class LobbyService {
       lobby.isFinished = true;
     }
 
+    if (lobby.id != null) {
+      try {
+        final client = SupabaseService.instance.client;
+        final updateData = {
+          'score': score,
+          'correct_answers': correctCount,
+          'wrong_answers': wrongCount,
+          'current_question_index': questionIndex,
+          'is_finished': isFinished,
+        };
+        if (participantId.startsWith('temp_')) {
+          client.from('multiplayer_players').update(updateData).eq('game_id', lobby.id!).eq('display_name', participant.name);
+        } else {
+          client.from('multiplayer_players').update(updateData).eq('game_id', lobby.id!).eq('user_id', participantId);
+        }
+      } catch (e) {
+        print('Supabase updateParticipantProgress warning: $e');
+      }
+    }
+
     _notifyLobby(lobby);
   }
 
@@ -347,6 +367,7 @@ class LobbyService {
 
       final lobby = _lobbies[roomCode];
       if (lobby != null && playersData != null) {
+        final totalQCount = lobby.questions.isNotEmpty ? lobby.questions.length : 10;
         for (final p in playersData) {
           final isHost = p['is_host'] == true;
           if (isHost) continue;
@@ -361,6 +382,7 @@ class LobbyService {
               id: pId,
               name: name,
               photoUrl: photo,
+              totalQuestions: totalQCount,
               score: p['score'] ?? 0,
               correctCount: p['correct_answers'] ?? 0,
               wrongCount: p['wrong_answers'] ?? 0,
@@ -374,7 +396,11 @@ class LobbyService {
             part.wrongCount = p['wrong_answers'] ?? part.wrongCount;
             part.currentQuestionIndex = p['current_question_index'] ?? part.currentQuestionIndex;
             part.isFinished = p['is_finished'] ?? part.isFinished;
+            part.totalQuestions = totalQCount;
           }
+        }
+        if (lobby.participants.isNotEmpty && lobby.participants.every((p) => p.isFinished)) {
+          lobby.isFinished = true;
         }
         _notifyLobby(lobby);
       }
