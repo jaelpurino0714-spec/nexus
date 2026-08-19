@@ -1470,20 +1470,46 @@
   margin-bottom: 10px;
 }
 
-.term-action {
-  font-size: 0.88rem;
-  font-weight: 800;
-  display: inline-block;
+.topic-item-btn {
+  background: linear-gradient(135deg, rgba(25, 18, 55, 0.95) 0%, rgba(35, 22, 75, 0.95) 100%) !important;
+  border: 1.5px solid rgba(139, 92, 246, 0.5) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2) !important;
+  border-radius: 22px !important;
+  padding: 18px 20px !important;
+  min-height: 105px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, filter 0.2s ease;
 }
 
-.term-graphic {
-  font-size: 3.6rem;
+.topic-item-btn:hover {
+  transform: translateY(-2px) scale(1.01) !important;
+  filter: brightness(1.12);
+  box-shadow: 0 12px 30px rgba(139, 92, 246, 0.35) !important;
+  border-color: #8B5CF6 !important;
+}
+
+.topic-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  text-align: left;
+}
+
+.topic-graphic {
+  font-size: 3.2rem;
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  user-select: none;
+  filter: drop-shadow(0 4px 15px rgba(139, 92, 246, 0.6));
   flex-shrink: 0;
+  user-select: none;
+  margin-left: 12px;
 }
 
 /* Term 1 Styling - Purple Glass */

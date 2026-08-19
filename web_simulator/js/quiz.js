@@ -61,6 +61,22 @@ const Quiz = {
     App.showScreen('topicScreen');
   },
 
+  getTopicIcon(topicName) {
+    if (!topicName) return '🧪';
+    const t = topicName.toLowerCase();
+    if (t.includes('balancing') || t.includes('balance') || t.includes('scale')) return '⚖️';
+    if (t.includes('equation') || t.includes('math') || t.includes('formula')) return '📝';
+    if (t.includes('acid') || t.includes('base') || t.includes('salt')) return '🧪';
+    if (t.includes('reaction') || t.includes('change')) return '🧪';
+    if (t.includes('chemical') || t.includes('element') || t.includes('atom')) return '🧪';
+    if (t.includes('ecosystem') || t.includes('biodiversity') || t.includes('flow')) return '🌿';
+    if (t.includes('plate') || t.includes('tectonic') || t.includes('volcano') || t.includes('earthquake')) return '🌋';
+    if (t.includes('climate') || t.includes('weather') || t.includes('atmosphere')) return '🌍';
+    if (t.includes('electricity') || t.includes('magnetism') || t.includes('current')) return '⚡';
+    if (t.includes('physics') || t.includes('motion') || t.includes('force') || t.includes('energy')) return '🔬';
+    return '🧪';
+  },
+
   // 2. Render Topics for Selected Term (Dynamically from Supabase)
   async renderTopics() {
     const termNames = { 1: 'First Term Topics', 2: 'Second Term Topics', 3: 'Third Term Topics' };
@@ -68,7 +84,7 @@ const Quiz = {
     document.getElementById('topicScreenSub').textContent = `Choose a DepEd Grade 10 Science topic to begin`;
 
     const container = document.getElementById('topicsListGroup');
-    container.innerHTML = '<div style="text-align:center; padding:20px;">Loading topics from Supabase...</div>';
+    container.innerHTML = '<div style="text-align:center; padding:20px; color:#C4B5FD;">Loading topics from Supabase...</div>';
 
     let topics = [];
     const terms = await DB.getTerms();
@@ -86,12 +102,16 @@ const Quiz = {
     topics.forEach((topicObj, idx) => {
       const topicName = topicObj.title;
       const topicId = topicObj.id;
+      const icon = this.getTopicIcon(topicName);
       const btn = document.createElement('button');
       btn.className = `term-btn topic-item-btn`;
       btn.onclick = () => this.selectTopic(topicName, topicId);
       btn.innerHTML = `
-        <div class="term-title" style="margin: 0; font-size: 1.05rem; line-height: 1.3;">${topicName}</div>
-        <span class="term-action" style="margin-top: 6px;">Select Topic ➔</span>
+        <div class="topic-info">
+          <div class="term-title" style="color: #FFFFFF; font-size: 1.12rem; font-weight: 800; margin-bottom: 6px; line-height: 1.3;">${topicName}</div>
+          <span class="term-action" style="color: #C084FC; font-weight: 800; font-size: 0.88rem;">Select Topic ➔</span>
+        </div>
+        <div class="topic-graphic">${icon}</div>
       `;
       container.appendChild(btn);
     });

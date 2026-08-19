@@ -125,11 +125,12 @@ body {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Home & Term Selection Active Dark Theme - Applied ONLY when Home or Term Selection is active */
+/* Home, Term & Topic Selection Active Dark Theme */
 .app-container.student-home-active,
 .app-container:has(#homeScreen.active),
 .app-container:has(#teacherHomeScreen.active),
-.app-container:has(#playScreen.active) {
+.app-container:has(#playScreen.active),
+.app-container:has(#topicScreen.active) {
   background-color: #130E2E;
   border-color: #0B071E;
   box-shadow: 
@@ -181,7 +182,8 @@ body {
 .app-container.student-home-active .phone-status-bar,
 .app-container:has(#homeScreen.active) .phone-status-bar,
 .app-container:has(#teacherHomeScreen.active) .phone-status-bar,
-.app-container:has(#playScreen.active) .phone-status-bar {
+.app-container:has(#playScreen.active) .phone-status-bar,
+.app-container:has(#topicScreen.active) .phone-status-bar {
   background: #130E2E;
   color: #FFFFFF;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -202,7 +204,8 @@ body {
 .app-container.student-home-active .phone-camera-notch,
 .app-container:has(#homeScreen.active) .phone-camera-notch,
 .app-container:has(#teacherHomeScreen.active) .phone-camera-notch,
-.app-container:has(#playScreen.active) .phone-camera-notch {
+.app-container:has(#playScreen.active) .phone-camera-notch,
+.app-container:has(#topicScreen.active) .phone-camera-notch {
   background: #090518;
 }
 
@@ -217,7 +220,8 @@ body {
 .app-container.student-home-active .notch-lens,
 .app-container:has(#homeScreen.active) .notch-lens,
 .app-container:has(#teacherHomeScreen.active) .notch-lens,
-.app-container:has(#playScreen.active) .notch-lens {
+.app-container:has(#playScreen.active) .notch-lens,
+.app-container:has(#topicScreen.active) .notch-lens {
   background: #1E163B;
 }
 
@@ -247,7 +251,8 @@ body {
 .app-container.student-home-active .phone-home-indicator,
 .app-container:has(#homeScreen.active) .phone-home-indicator,
 .app-container:has(#teacherHomeScreen.active) .phone-home-indicator,
-.app-container:has(#playScreen.active) .phone-home-indicator {
+.app-container:has(#playScreen.active) .phone-home-indicator,
+.app-container:has(#topicScreen.active) .phone-home-indicator {
   background: #130E2E;
 }
 
@@ -279,7 +284,8 @@ body.fullscreen-mode .app-container {
   body.student-home-active,
   body:has(#homeScreen.active),
   body:has(#teacherHomeScreen.active),
-  body:has(#playScreen.active) {
+  body:has(#playScreen.active),
+  body:has(#topicScreen.active) {
     background: #130E2E;
   }
   
@@ -315,7 +321,8 @@ body.fullscreen-mode .app-container {
 .app-container.student-home-active .app-header,
 .app-container:has(#homeScreen.active) .app-header,
 .app-container:has(#teacherHomeScreen.active) .app-header,
-.app-container:has(#playScreen.active) .app-header {
+.app-container:has(#playScreen.active) .app-header,
+.app-container:has(#topicScreen.active) .app-header {
   background: #130E2E;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -344,7 +351,8 @@ body.fullscreen-mode .app-container {
 .app-container.student-home-active .app-name,
 .app-container:has(#homeScreen.active) .app-name,
 .app-container:has(#teacherHomeScreen.active) .app-name,
-.app-container:has(#playScreen.active) .app-name {
+.app-container:has(#playScreen.active) .app-name,
+.app-container:has(#topicScreen.active) .app-name {
   color: #FFFFFF;
 }
 
@@ -358,7 +366,8 @@ body.fullscreen-mode .app-container {
 .app-container.student-home-active .app-subtitle,
 .app-container:has(#homeScreen.active) .app-subtitle,
 .app-container:has(#teacherHomeScreen.active) .app-subtitle,
-.app-container:has(#playScreen.active) .app-subtitle {
+.app-container:has(#playScreen.active) .app-subtitle,
+.app-container:has(#topicScreen.active) .app-subtitle {
   color: #A78BFA;
 }
 
@@ -380,7 +389,8 @@ body.fullscreen-mode .app-container {
 .app-container.student-home-active .user-badge,
 .app-container:has(#homeScreen.active) .user-badge,
 .app-container:has(#teacherHomeScreen.active) .user-badge,
-.app-container:has(#playScreen.active) .user-badge {
+.app-container:has(#playScreen.active) .user-badge,
+.app-container:has(#topicScreen.active) .user-badge {
   background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
   color: #FFFFFF;
   padding: 4px 12px;
@@ -400,7 +410,8 @@ body.fullscreen-mode .app-container {
 .app-container.student-home-active .icon-btn,
 .app-container:has(#homeScreen.active) .icon-btn,
 .app-container:has(#teacherHomeScreen.active) .icon-btn,
-.app-container:has(#playScreen.active) .icon-btn {
+.app-container:has(#playScreen.active) .icon-btn,
+.app-container:has(#topicScreen.active) .icon-btn {
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: #FFFFFF;
@@ -413,7 +424,8 @@ body.fullscreen-mode .app-container {
 .app-container.student-home-active .icon-btn:hover,
 .app-container:has(#homeScreen.active) .icon-btn:hover,
 .app-container:has(#teacherHomeScreen.active) .icon-btn:hover,
-.app-container:has(#playScreen.active) .icon-btn:hover {
+.app-container:has(#playScreen.active) .icon-btn:hover,
+.app-container:has(#topicScreen.active) .icon-btn:hover {
   background: rgba(255, 255, 255, 0.2);
 }
 

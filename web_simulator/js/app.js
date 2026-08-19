@@ -109,7 +109,7 @@ const App = {
 
     const appContainer = document.querySelector('.app-container');
     if (appContainer) {
-      if (screenId === 'homeScreen' || screenId === 'teacherHomeScreen' || screenId === 'playScreen') {
+      if (screenId === 'homeScreen' || screenId === 'teacherHomeScreen' || screenId === 'playScreen' || screenId === 'topicScreen') {
         appContainer.classList.add('student-home-active');
       } else {
         appContainer.classList.remove('student-home-active');
