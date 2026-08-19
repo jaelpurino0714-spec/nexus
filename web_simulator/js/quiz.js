@@ -836,79 +836,25 @@ const Quiz = {
     document.getElementById('participantProfileModal').classList.remove('hidden');
   },
 
-  submitJoinCode() {
-    const val = document.getElementById('joinAccessCodeInput').value.trim();
+  async submitJoinCode() {
+    const val = (document.getElementById('joinAccessCodeInput')?.value || '').trim().toUpperCase();
     const errorEl = document.getElementById('joinErrorMsg');
 
-    if (!val || val.length !== 7 || isNaN(val)) {
-      errorEl.textContent = '⚠️ Please enter a valid 7-digit access code!';
-      errorEl.classList.remove('hidden');
+    if (!val || val.length < 5 || val.length > 8) {
+      if (errorEl) {
+        errorEl.textContent = '⚠️ Please enter a valid room access code!';
+        errorEl.classList.remove('hidden');
+      }
       return;
     }
 
-    const lobbyData = this.getLobbyData(val);
-    if (!lobbyData) {
-      errorEl.textContent = '⚠️ Lobby not found! Make sure the host has started the lobby.';
-      errorEl.classList.remove('hidden');
-      return;
-    }
-
-    if (lobbyData.status === 'in_game') {
-      errorEl.textContent = '⚠️ This quiz session has already started!';
-      errorEl.classList.remove('hidden');
-      return;
-    }
-
-    if (lobbyData.status === 'cancelled') {
-      errorEl.textContent = '⚠️ This lobby was cancelled by the host.';
-      errorEl.classList.remove('hidden');
-      return;
-    }
-
-    const myId = DB.getUserUUID();
-    if (lobbyData.kickedIds && lobbyData.kickedIds.includes(myId)) {
-      errorEl.textContent = '⚠️ You were kicked from this lobby.';
-      errorEl.classList.remove('hidden');
-      return;
-    }
-
-    if (lobbyData.participants.length >= (lobbyData.settings.maxParticipants || 30)) {
-      errorEl.textContent = '⚠️ Lobby is full!';
-      errorEl.classList.remove('hidden');
-      return;
-    }
-
-    errorEl.classList.add('hidden');
-    this.lobbyAccessCode = val;
-    this.isHost = false;
-
-    const profile = DB.getStudentProfile() || { name: 'Student Player', gradeLevel: 'Student', photo: '' };
-    
-    const existingIndex = lobbyData.participants.findIndex(p => p.id === myId || p.name === profile.name);
-    const myPartObj = {
-      id: myId,
-      name: profile.name || 'Student Player',
-      grade: profile.section || profile.gradeLevel || 'Student',
-      photo: profile.photo || '',
-      points: profile.totalPoints || 0,
-      streak: 0,
-      currentQ: 1,
-      correct: 0,
-      incorrect: 0,
-      finished: false
-    };
-
-    if (existingIndex >= 0) {
-      lobbyData.participants[existingIndex] = myPartObj;
-    } else {
-      lobbyData.participants.push(myPartObj);
-    }
-
-    this.saveLobbyData(lobbyData);
-    this.initLobbySync(val);
+    const pinInput = document.getElementById('mpPinInput');
+    if (pinInput) pinInput.value = val;
     this.hideJoinCodeModal();
-    this.renderLobbyScreen();
-    App.showScreen('lobbyScreen');
+
+    if (typeof Multiplayer !== 'undefined' && Multiplayer.submitJoinLobby) {
+      return Multiplayer.submitJoinLobby();
+    }
   },
 
   exitLobby() {

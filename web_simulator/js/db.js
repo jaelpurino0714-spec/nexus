@@ -788,20 +788,47 @@ var DB = {
 
     if (supabaseClient) {
       try {
-        const { data: gRes, error: gErr } = await supabaseClient
+        // Save host student profile to Supabase first so profiles FK constraint passes!
+        try {
+          await this.saveStudentProfile(profile);
+        } catch (_) {}
+
+        let gRes = null;
+        let gErr = null;
+
+        const insertPayload = {
+          room_code: roomCode,
+          host_id: userUuid,
+          term_id: termUuid,
+          topic_id: topicUuid,
+          answer_medium: config.answerMedium || 'multiple_choice',
+          question_count: selectedQuestions.length || config.questionCount || 10,
+          status: 'waiting',
+          current_question_index: 0
+        };
+
+        const resObj = await supabaseClient
           .from('multiplayer_games')
-          .insert({
-            room_code: roomCode,
-            host_id: userUuid,
-            term_id: termUuid,
-            topic_id: topicUuid,
-            answer_medium: config.answerMedium || 'multiple_choice',
-            question_count: selectedQuestions.length || config.questionCount || 10,
-            status: 'waiting',
-            current_question_index: 0
-          })
+          .insert(insertPayload)
           .select()
           .single();
+
+        gRes = resObj.data;
+        gErr = resObj.error;
+
+        // Fallback if host_id FK constraint failed
+        if (gErr) {
+          console.warn('multiplayer_games insert retry without host_id:', gErr);
+          delete insertPayload.host_id;
+          const retryRes = await supabaseClient
+            .from('multiplayer_games')
+            .insert(insertPayload)
+            .select()
+            .single();
+
+          gRes = retryRes.data;
+          gErr = retryRes.error;
+        }
 
         if (!gErr && gRes) {
           gameData = {
@@ -881,8 +908,8 @@ var DB = {
 
   async joinMultiplayerGame(roomCode) {
     const cleanCode = (roomCode || '').toUpperCase().trim();
-    if (cleanCode.length !== 6) {
-      throw new Error('Room code must be exactly 6 characters!');
+    if (cleanCode.length < 5 || cleanCode.length > 8) {
+      throw new Error('Room code must be 5 to 8 characters long!');
     }
 
     const userUuid = this.getUserUUID();
@@ -898,7 +925,7 @@ var DB = {
 
     if (supabaseClient) {
       try {
-        // 1. Try multiplayer_games
+        // 1. Try multiplayer_games by room_code
         const { data: gData } = await supabaseClient
           .from('multiplayer_games')
           .select('*')
@@ -908,7 +935,7 @@ var DB = {
         if (gData) {
           game = gData;
         } else {
-          // 2. Try quiz_lobbies
+          // 2. Try quiz_lobbies by access_code
           const { data: lData } = await supabaseClient
             .from('quiz_lobbies')
             .select('*')

@@ -106,6 +106,19 @@ ALTER TABLE public.multiplayer_players ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.multiplayer_game_questions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.multiplayer_answers ENABLE ROW LEVEL SECURITY;
 
+-- Create quiz_lobbies table if not existing
+CREATE TABLE IF NOT EXISTS public.quiz_lobbies (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    access_code TEXT UNIQUE NOT NULL,
+    host_id UUID,
+    host_name TEXT NOT NULL DEFAULT 'Host',
+    photo_url TEXT,
+    status TEXT NOT NULL DEFAULT 'waiting',
+    question_count INT NOT NULL DEFAULT 10,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+ALTER TABLE public.quiz_lobbies ENABLE ROW LEVEL SECURITY;
+
 -- Safely drop existing policies if re-running
 DO $$
 BEGIN
@@ -123,9 +136,13 @@ BEGIN
 
     DROP POLICY IF EXISTS "Allow select on multiplayer_answers" ON public.multiplayer_answers;
     DROP POLICY IF EXISTS "Allow insert on multiplayer_answers" ON public.multiplayer_answers;
+
+    DROP POLICY IF EXISTS "Allow select on quiz_lobbies" ON public.quiz_lobbies;
+    DROP POLICY IF EXISTS "Allow insert on quiz_lobbies" ON public.quiz_lobbies;
+    DROP POLICY IF EXISTS "Allow update on quiz_lobbies" ON public.quiz_lobbies;
 END $$;
 
--- Policy definitions (Permissive for web_simulator client operations)
+-- Policy definitions (Permissive for web_simulator and Flutter client operations)
 CREATE POLICY "Allow select on multiplayer_games" ON public.multiplayer_games FOR SELECT USING (true);
 CREATE POLICY "Allow insert on multiplayer_games" ON public.multiplayer_games FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow update on multiplayer_games" ON public.multiplayer_games FOR UPDATE USING (true);
@@ -141,6 +158,10 @@ CREATE POLICY "Allow insert on multiplayer_game_questions" ON public.multiplayer
 CREATE POLICY "Allow select on multiplayer_answers" ON public.multiplayer_answers FOR SELECT USING (true);
 CREATE POLICY "Allow insert on multiplayer_answers" ON public.multiplayer_answers FOR INSERT WITH CHECK (true);
 
+CREATE POLICY "Allow select on quiz_lobbies" ON public.quiz_lobbies FOR SELECT USING (true);
+CREATE POLICY "Allow insert on quiz_lobbies" ON public.quiz_lobbies FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow update on quiz_lobbies" ON public.quiz_lobbies FOR UPDATE USING (true);
+
 -- 7. Add Tables to Supabase Realtime Publication
 DO $$
 BEGIN
@@ -148,6 +169,7 @@ BEGIN
         ALTER PUBLICATION supabase_realtime ADD TABLE public.multiplayer_games;
         ALTER PUBLICATION supabase_realtime ADD TABLE public.multiplayer_players;
         ALTER PUBLICATION supabase_realtime ADD TABLE public.multiplayer_answers;
+        ALTER PUBLICATION supabase_realtime ADD TABLE public.quiz_lobbies;
     END IF;
 EXCEPTION WHEN OTHERS THEN
     RAISE NOTICE 'Realtime publication update skipped: %', SQLERRM;

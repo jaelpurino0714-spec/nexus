@@ -25,11 +25,11 @@ class _JoinQuizScreenState extends ConsumerState<JoinQuizScreen> {
     super.dispose();
   }
 
-  void _onJoinLobby() {
-    final code = _codeController.text.trim();
-    if (code.length != 7) {
+  void _onJoinLobby() async {
+    final code = _codeController.text.trim().toUpperCase();
+    if (code.length < 5 || code.length > 8) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid 7-digit lobby access code!'), backgroundColor: Colors.redAccent),
+        const SnackBar(content: Text('Please enter a valid room access code!'), backgroundColor: Colors.redAccent),
       );
       return;
     }
@@ -39,7 +39,7 @@ class _JoinQuizScreenState extends ConsumerState<JoinQuizScreen> {
     final studentId = authState.profile?.id ?? 'temp_student_${DateTime.now().millisecondsSinceEpoch}';
     final studentPhoto = authState.profile?.photoUrl;
 
-    final success = LobbyService.instance.joinLobby(
+    final success = await LobbyService.instance.joinLobby(
       accessCode: code,
       participantId: studentId,
       participantName: studentName,
@@ -47,9 +47,11 @@ class _JoinQuizScreenState extends ConsumerState<JoinQuizScreen> {
     );
 
     if (!success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid lobby access code or quiz already started!'), backgroundColor: Colors.redAccent),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Room not found or quiz already started! Check room code.'), backgroundColor: Colors.redAccent),
+        );
+      }
       return;
     }
 
@@ -61,7 +63,7 @@ class _JoinQuizScreenState extends ConsumerState<JoinQuizScreen> {
     });
 
     _lobbySub = LobbyService.instance.lobbyStream.listen((updatedLobby) {
-      if (updatedLobby.accessCode == code && mounted) {
+      if ((updatedLobby.accessCode == code || updatedLobby.accessCode.toUpperCase() == code) && mounted) {
         setState(() {
           _joinedLobby = updatedLobby;
         });

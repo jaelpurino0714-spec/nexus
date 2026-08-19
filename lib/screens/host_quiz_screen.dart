@@ -218,7 +218,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
     final hostName = authState.profile?.name ?? 'Host Teacher';
     final hostPhoto = authState.profile?.photoUrl;
 
-    final lobby = LobbyService.instance.createLobby(
+    final lobby = await LobbyService.instance.createLobby(
       hostName: hostName,
       hostPhotoUrl: hostPhoto,
       quizTitle: _isCustomQuestionsMode ? 'Custom Host Quiz' : (_selectedTopic?.title ?? 'Built-in Quiz'),
