@@ -1084,10 +1084,10 @@ const Quiz = {
         const btn = document.createElement('button');
         btn.className = 'answer-option-btn tf-option-btn';
         btn.innerHTML = `
-          <div class="option-badge-pill">
+          <span class="option-badge-pill">
             <span class="badge-letter">${tf.letter}</span>
-          </div>
-          <span>${tf.label}</span>
+          </span>
+          <span class="option-text">${tf.label}</span>
         `;
         btn.onclick = () => this.handleAnswer(tf.label);
         container.appendChild(btn);
@@ -1133,10 +1133,10 @@ const Quiz = {
         const btn = document.createElement('button');
         btn.className = 'answer-option-btn';
         btn.innerHTML = `
-          <div class="option-badge-pill">
+          <span class="option-badge-pill">
             <span class="badge-letter">${prefixes[index] || 'A'}</span>
-          </div>
-          <span>${optText}</span>
+          </span>
+          <span class="option-text">${optText}</span>
         `;
         btn.onclick = () => this.handleAnswer(index);
         container.appendChild(btn);
