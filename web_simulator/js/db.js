@@ -1459,6 +1459,51 @@ var DB = {
   async getGameLeaderboard(gameId, roomCode) {
     const mergedMap = new Map();
 
+    const addOrUpdatePlayer = (p) => {
+      if (!p) return;
+      const isHost = p.is_host || p.isHost || (this.currentGame && this.currentGame.host_id && (p.user_id === this.currentGame.host_id || p.id === this.currentGame.host_id));
+      if (isHost) return;
+
+      const name = p.display_name || p.playerName || p.name || 'Player';
+      const score = Number(p.score || p.points || 0);
+      const correct = Number(p.correct_answers || p.correct || 0);
+      const wrong = Number(p.wrong_answers || p.wrong || 0);
+
+      // Find if already present in map by id or name
+      let existingKey = null;
+      for (const [key, item] of mergedMap.entries()) {
+        if ((p.user_id && item.user_id === p.user_id) || (p.id && item.id === p.id) || (name && item.display_name === name)) {
+          existingKey = key;
+          break;
+        }
+      }
+
+      if (existingKey) {
+        const item = mergedMap.get(existingKey);
+        if (score >= item.score) {
+          item.score = score;
+          item.correct_answers = correct;
+          item.wrong_answers = wrong;
+        }
+        if (p.photo_url || p.photoUrl || p.photo) {
+          item.photo_url = p.photo_url || p.photoUrl || p.photo;
+        }
+      } else {
+        const key = p.user_id || p.id || name || ('p_' + Math.random());
+        mergedMap.set(key, {
+          id: key,
+          user_id: p.user_id || key,
+          display_name: name,
+          playerName: name,
+          photo_url: p.photo_url || p.photoUrl || p.photo || null,
+          score: score,
+          correct_answers: correct,
+          wrong_answers: wrong,
+          is_host: false
+        });
+      }
+    };
+
     // 1. Fetch from Supabase multiplayer_players
     if (supabaseClient && gameId) {
       try {
@@ -1468,21 +1513,7 @@ var DB = {
           .eq('game_id', gameId);
 
         if (dbPlayers && dbPlayers.length > 0) {
-          dbPlayers.forEach(p => {
-            if (!p.is_host) {
-              const key = p.user_id || p.id || p.display_name;
-              mergedMap.set(key, {
-                id: key,
-                user_id: p.user_id || p.id,
-                display_name: p.display_name || 'Player',
-                photo_url: p.photo_url || null,
-                score: p.score || 0,
-                correct_answers: p.correct_answers || 0,
-                wrong_answers: p.wrong_answers || 0,
-                is_host: false
-              });
-            }
-          });
+          dbPlayers.forEach(p => addOrUpdatePlayer(p));
         }
       } catch (e) {
         console.warn('Error querying Supabase leaderboard:', e);
@@ -1491,53 +1522,14 @@ var DB = {
 
     // 2. Merge with Multiplayer.playersList in memory
     if (typeof Multiplayer !== 'undefined' && Multiplayer.playersList) {
-      Multiplayer.playersList.forEach(p => {
-        if (!p.is_host && !p.isHost) {
-          const key = p.id || p.user_id || p.playerName || p.name;
-          const displayName = p.playerName || p.name || p.display_name || 'Player';
-          if (key) {
-            if (!mergedMap.has(key)) {
-              mergedMap.set(key, {
-                id: key,
-                user_id: p.user_id || key,
-                display_name: displayName,
-                photo_url: p.photoUrl || p.photo || null,
-                score: p.score || 0,
-                correct_answers: p.correct_answers || p.correct || 0,
-                wrong_answers: p.wrong_answers || p.wrong || 0,
-                is_host: false
-              });
-            } else {
-              const existing = mergedMap.get(key);
-              if ((p.score || 0) > (existing.score || 0)) {
-                existing.score = p.score;
-                existing.correct_answers = p.correct_answers || p.correct || existing.correct_answers;
-              }
-            }
-          }
-        }
-      });
+      Multiplayer.playersList.forEach(p => addOrUpdatePlayer(p));
     }
 
     // 3. Fallback to local lobby state if roomCode provided
     if (mergedMap.size === 0 && roomCode) {
       const localState = this.getLocalLobbyState(roomCode);
       if (localState && localState.participants) {
-        localState.participants.forEach(p => {
-          if (!p.is_host) {
-            const key = p.id || p.user_id || p.display_name;
-            mergedMap.set(key, {
-              id: key,
-              user_id: key,
-              display_name: p.display_name || p.name || 'Player',
-              photo_url: p.photo_url || null,
-              score: p.score || 0,
-              correct_answers: p.correct_answers || 0,
-              wrong_answers: p.wrong_answers || 0,
-              is_host: false
-            });
-          }
-        });
+        localState.participants.forEach(p => addOrUpdatePlayer(p));
       }
     }
 

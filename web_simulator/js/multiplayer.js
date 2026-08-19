@@ -721,7 +721,11 @@ const Multiplayer = {
       const finalLeaderboard = await DB.getGameLeaderboard(this.currentGame.id, this.currentGame.room_code);
 
       const totalQ = this.questionsList ? this.questionsList.length : 10;
-      const participantStandings = (finalLeaderboard || []).filter(p => !p.is_host && !p.isHost);
+      const participantStandings = (finalLeaderboard || []).filter(p => {
+        if (p.is_host || p.isHost) return false;
+        if (this.currentGame && this.currentGame.host_id && (p.user_id === this.currentGame.host_id || p.id === this.currentGame.host_id)) return false;
+        return true;
+      });
 
       const analyticsData = {
         gameId: this.currentGame ? this.currentGame.id : 'game_' + Date.now(),
@@ -730,11 +734,12 @@ const Multiplayer = {
         totalQuestions: totalQ,
         date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
         participants: participantStandings.map(p => {
-          const correct = p.correct_answers || p.correct || 0;
+          const correct = Number(p.correct_answers || p.correct || 0);
+          const points = Number(p.score || p.points || 0);
           const pct = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
           return {
-            name: p.display_name || p.name || 'Participant',
-            points: p.score || p.points || 0,
+            name: p.display_name || p.playerName || p.name || 'Participant',
+            points: points,
             correct: correct,
             totalQuestions: totalQ,
             correctRatio: `${correct}/${totalQ}`,
@@ -963,7 +968,9 @@ const Multiplayer = {
 
       this.sendBroadcast('PLAYER_ANSWERED', {
         playerId: DB.getUserUUID(),
-        playerName: (DB.getStudentProfile() || {}).name || 'Player'
+        playerName: (DB.getStudentProfile() || {}).name || 'Player',
+        pointsEarned: result.points_earned || 0,
+        isCorrect: result.is_correct || false
       });
 
       if (banner && statusText && subText) {
@@ -1102,7 +1109,7 @@ const Multiplayer = {
     // Filter out host entries so ONLY joined participants appear on the leaderboard
     const participantStandings = (list || []).filter(p => {
       if (p.is_host || p.isHost) return false;
-      if (this.currentGame && (p.user_id === this.currentGame.host_id || p.id === this.currentGame.host_id)) return false;
+      if (this.currentGame && this.currentGame.host_id && (p.user_id === this.currentGame.host_id || p.id === this.currentGame.host_id)) return false;
       return true;
     });
 
