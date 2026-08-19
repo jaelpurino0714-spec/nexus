@@ -658,7 +658,7 @@ const Multiplayer = {
     const countEl = document.getElementById('mpHostAnswerCount');
     const badgeEl = document.getElementById('mpHostResponseBadge');
 
-    const total = this.playersList.length || 0;
+    const total = this.playersList ? this.playersList.length : 0;
     const answeredCount = this.answeredPlayerSet ? this.answeredPlayerSet.size : 0;
 
     if (countEl) countEl.textContent = `${answeredCount} / ${total} Answered`;
@@ -666,12 +666,16 @@ const Multiplayer = {
 
     if (listEl) {
       listEl.innerHTML = '';
-      if (this.playersList.length === 0) {
+      if (!this.playersList || this.playersList.length === 0) {
         listEl.innerHTML = '<div style="color:#94A3B8; padding:12px; text-align:center;">No participants connected</div>';
       } else {
         this.playersList.forEach(p => {
           const pId = p.id || p.user_id || p.playerName;
-          const hasAnswered = this.answeredPlayerSet && (this.answeredPlayerSet.has(pId) || this.answeredPlayerSet.has(p.playerName));
+          const pName = p.playerName || p.display_name || p.name || 'Player';
+          const hasAnswered = this.answeredPlayerSet && (
+            (pId && this.answeredPlayerSet.has(String(pId).trim())) ||
+            (pName && this.answeredPlayerSet.has(String(pName).trim()))
+          );
 
           const card = document.createElement('div');
           card.className = 'lobby-part-card';
@@ -681,17 +685,15 @@ const Multiplayer = {
             ? '<span style="color:#059669; background:#D1FAE5; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">🟢 Answered</span>'
             : '<span style="color:#6B21A8; background:#F3E8FF; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">⏳ Thinking...</span>';
 
-          const scoreBadge = `<span style="font-weight:800; color:#6D28D9; font-size:0.85rem; margin-right:8px;">${(p.score || 0).toLocaleString()} pts</span>`;
           const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
 
           card.innerHTML = `
             <div class="part-info-left" style="justify-content:space-between; width:100%; align-items:center;">
               <div style="display:flex; align-items:center; gap:8px;">
-                <img src="${p.photoUrl || defaultAvatar}" class="part-avatar" style="width:32px; height:32px;" alt="${p.playerName}">
-                <h5 style="margin:0; font-size:0.9rem; color:#1E293B; font-weight:700;">${p.playerName}</h5>
+                <img src="${p.photoUrl || defaultAvatar}" class="part-avatar" style="width:32px; height:32px;" alt="${pName}">
+                <h5 style="margin:0; font-size:0.9rem; color:#1E293B; font-weight:700;">${pName}</h5>
               </div>
               <div style="display:flex; align-items:center;">
-                ${scoreBadge}
                 ${statusBadge}
               </div>
             </div>
@@ -804,12 +806,12 @@ const Multiplayer = {
   },
 
   onPlayerAnswered(data) {
-    if (!this.isHost) return;
+    if (!this.isHost || !data) return;
     const { playerId, playerName, pointsEarned, totalScore, isCorrect } = data;
 
     if (!this.answeredPlayerSet) this.answeredPlayerSet = new Set();
-    if (playerId) this.answeredPlayerSet.add(playerId);
-    if (playerName) this.answeredPlayerSet.add(playerName);
+    const key = (playerId && String(playerId).trim()) || (playerName && String(playerName).trim());
+    if (key) this.answeredPlayerSet.add(key);
 
     if (this.playersList && this.playersList.length > 0) {
       let p = this.playersList.find(item => 
@@ -1058,14 +1060,6 @@ const Multiplayer = {
         b.style.pointerEvents = 'none';
         b.style.opacity = '0.7';
       });
-    }
-  },
-
-  onPlayerAnswered(data) {
-    if (this.isHost && data) {
-      if (data.playerId) this.answeredPlayerSet.add(data.playerId);
-      if (data.playerName) this.answeredPlayerSet.add(data.playerName);
-      this.refreshHostPlayerAnswerStatuses();
     }
   },
 
