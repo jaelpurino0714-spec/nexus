@@ -2025,18 +2025,18 @@
 .answer-option-btn {
   background: linear-gradient(135deg, rgba(20, 12, 48, 0.95) 0%, rgba(12, 7, 32, 0.95) 100%);
   border: 1.5px solid rgba(139, 92, 246, 0.35);
-  border-radius: 18px;
-  padding: 10px 12px;
+  border-radius: 16px;
+  padding: 8px 10px;
   text-align: left;
   font-family: var(--font-body);
-  font-size: 0.86rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: #FFFFFF;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
   min-height: 64px;
   height: 100%;
@@ -2049,14 +2049,15 @@
 .answer-option-btn span:not(.option-badge-pill):not(.badge-letter) {
   flex: 1;
   min-width: 0;
-  font-size: clamp(0.72rem, 1.8vw, 0.86rem);
+  font-size: clamp(0.70rem, 1.7vw, 0.82rem);
   line-height: 1.25;
   color: #FFFFFF !important;
   font-weight: 600;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
-  hyphens: auto;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  word-wrap: normal !important;
+  white-space: normal !important;
+  hyphens: none !important;
 }
 
 .answer-option-btn:hover:not(:disabled) {
@@ -2069,9 +2070,9 @@
 .option-badge-pill {
   background: rgba(30, 16, 68, 0.9);
   border: 1.5px solid rgba(168, 85, 247, 0.5);
-  border-radius: 12px;
-  width: 38px;
-  height: 38px;
+  border-radius: 10px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2079,7 +2080,7 @@
 }
 
 .badge-letter {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 800;
   color: #d946ef;
 }
