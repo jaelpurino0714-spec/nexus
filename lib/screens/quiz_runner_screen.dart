@@ -121,21 +121,22 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
         );
   }
 
-
   @override
   Widget build(BuildContext context) {
     final quizState = ref.watch(quizProvider);
 
     if (quizState == null || quizState.questions.isEmpty) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        backgroundColor: Color(0xFF060214),
+        body: Center(child: CircularProgressIndicator(color: Color(0xFF00F2FE))),
       );
     }
 
     if (quizState.isCompleted) {
       Future.microtask(() => context.go('/student/result'));
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        backgroundColor: Color(0xFF060214),
+        body: Center(child: CircularProgressIndicator(color: Color(0xFF00F2FE))),
       );
     }
 
@@ -143,10 +144,14 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
     final qType = currentQ.question.questionType;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF1F5F9),
+      backgroundColor: const Color(0xFF060214),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF00F2FE)),
+          onPressed: () => context.pop(),
+        ),
         title: Column(
           crossAxisAlignment: CrossAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -155,9 +160,9 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
               children: [
                 Text(
                   'Question ${quizState.currentIndex + 1} of ${quizState.questions.length}',
-                  style: const TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 12, color: Color(0xFF9CA3AF), fontWeight: FontWeight.bold),
                 ),
-                const Text(' • ', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                const Text(' • ', style: TextStyle(color: Color(0xFF9CA3AF), fontSize: 12)),
                 Text(
                   'Points: ${quizState.totalPoints}',
                   style: const TextStyle(fontSize: 12, color: Color(0xFFF59E0B), fontWeight: FontWeight.w800),
@@ -166,9 +171,9 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFEF4444).withOpacity(0.12),
+                    color: const Color(0xFFEF4444).withOpacity(0.15),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: const Color(0xFFEF4444).withOpacity(0.25)),
+                    border: Border.all(color: const Color(0xFFEF4444).withOpacity(0.3)),
                   ),
                   child: Text(
                     '🔥 ${quizState.streak}',
@@ -181,15 +186,15 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
               decoration: BoxDecoration(
-                color: const Color(0xFF8B5CF6).withOpacity(0.12),
+                color: const Color(0xFFA855F7).withOpacity(0.15),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFF8B5CF6).withOpacity(0.25)),
+                border: Border.all(color: const Color(0xFFA855F7).withOpacity(0.3)),
               ),
               child: Text(
                 '${widget.quizType.toUpperCase()} (${widget.questionType.toUpperCase()}) • ${widget.topicTitle}',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 11, color: Color(0xFF6D28D9), fontWeight: FontWeight.w700),
+                style: const TextStyle(fontSize: 11, color: Color(0xFFC084FC), fontWeight: FontWeight.w700),
               ),
             ),
           ],
@@ -204,7 +209,7 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               ),
               onPressed: () => context.pop(),
-              icon: const Icon(Icons.pause, size: 16),
+              icon: const Icon(Icons.pause_rounded, size: 16),
               label: const Text('Exit Quiz', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
             ),
           ),
@@ -219,11 +224,16 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
               decoration: BoxDecoration(
-                color: const Color(0xFF0B0F19),
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(color: const Color(0xFFEF4444).withOpacity(0.4), width: 1.5),
-                boxShadow: const [
-                  BoxShadow(color: Colors.black26, blurRadius: 12, offset: Offset(0, 4)),
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF130A2A), Color(0xFF090518)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFFA855F7).withOpacity(0.4), width: 1.5),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withOpacity(0.6), blurRadius: 16, offset: const Offset(0, 4)),
+                  BoxShadow(color: const Color(0xFFA855F7).withOpacity(0.15), blurRadius: 20),
                 ],
               ),
               child: Row(
@@ -232,9 +242,10 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                   Container(
                     width: 44,
                     height: 44,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF111827),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1E1044),
                       shape: BoxShape.circle,
+                      border: Border.all(color: const Color(0xFFA855F7).withOpacity(0.5), width: 1.5),
                     ),
                     child: const Center(
                       child: Text('⚡', style: TextStyle(fontSize: 22)),
@@ -248,14 +259,14 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
-                          color: Color(0xFFF59E0B),
-                          letterSpacing: 0.5,
+                          color: Color(0xFFC084FC),
+                          letterSpacing: 0.6,
                         ),
                       ),
                       Text(
                         '${quizState.secondsRemaining < 10 ? "0" : ""}${quizState.secondsRemaining}.00s',
                         style: const TextStyle(
-                          fontSize: 22,
+                          fontSize: 24,
                           fontWeight: FontWeight.w800,
                           color: Colors.white,
                         ),
@@ -267,14 +278,20 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
             ),
             const SizedBox(height: 16),
 
-            // Main Light Question Card
+            // Main Dark Question Card
             Container(
-              padding: const EdgeInsets.all(22.0),
+              padding: const EdgeInsets.all(24.0),
               decoration: BoxDecoration(
-                color: const Color(0xFFF8FAFC),
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF09041A), Color(0xFF0D0626)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 borderRadius: BorderRadius.circular(24),
-                boxShadow: const [
-                  BoxShadow(color: Colors.black12, blurRadius: 14, offset: Offset(0, 4)),
+                border: Border.all(color: const Color(0xFF9333EA).withOpacity(0.4), width: 1.5),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withOpacity(0.7), blurRadius: 30, offset: const Offset(0, 8)),
+                  BoxShadow(color: const Color(0xFF9333EA).withOpacity(0.15), blurRadius: 25),
                 ],
               ),
               child: Column(
@@ -283,10 +300,10 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                     currentQ.question.question,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      fontSize: 17,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1E293B),
-                      height: 1.35,
+                      color: Colors.white,
+                      height: 1.4,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -294,55 +311,72 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                   if (qType == 'identification') ...[
                     TextField(
                       controller: _idInputController,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
                       decoration: InputDecoration(
                         hintText: 'Type your answer here...',
+                        hintStyle: const TextStyle(color: Color(0xFF71717A)),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: const Color(0xFF120A2E),
                         contentPadding: const EdgeInsets.all(18),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(18),
-                          borderSide: const BorderSide(color: Color(0xFFCBD5E1), width: 2),
+                          borderSide: BorderSide(color: const Color(0xFFA855F7).withOpacity(0.5), width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(18),
-                          borderSide: const BorderSide(color: Color(0xFF8B5CF6), width: 2),
+                          borderSide: const BorderSide(color: Color(0xFF00F2FE), width: 2),
                         ),
                       ),
                       onSubmitted: (val) => _submitUserAnswer(val),
                     ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        backgroundColor: const Color(0xFF10B981),
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        elevation: 4,
-                      ),
-                      onPressed: () => _submitUserAnswer(_idInputController.text),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Submit Answer', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                          SizedBox(width: 8),
-                          CircleAvatar(
-                            radius: 12,
-                            backgroundColor: Color(0xFF2563EB),
-                            child: Icon(Icons.arrow_forward, size: 14, color: Colors.white),
+                    const SizedBox(height: 18),
+                    Container(
+                      width: double.infinity,
+                      height: 52,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFA855F7), Color(0xFF06B6D4)],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFA855F7).withOpacity(0.35),
+                            blurRadius: 16,
+                            offset: const Offset(0, 4),
                           ),
                         ],
+                      ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        ),
+                        onPressed: () => _submitUserAnswer(_idInputController.text),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Submit Answer',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                            SizedBox(width: 8),
+                            Icon(Icons.arrow_forward_rounded, size: 20, color: Colors.white),
+                          ],
+                        ),
                       ),
                     ),
                   ] else if (qType == 'true_false') ...[
                     Row(
                       children: [
                         Expanded(
-                          child: _buildOptionButton('True', 'T', '✅', () => _submitUserAnswer('True')),
+                          child: _buildOptionButton('True', 'T', () => _submitUserAnswer('True')),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 14),
                         Expanded(
-                          child: _buildOptionButton('False', 'F', '❌', () => _submitUserAnswer('False')),
+                          child: _buildOptionButton('False', 'F', () => _submitUserAnswer('False')),
                         ),
                       ],
                     ),
@@ -351,35 +385,31 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       crossAxisCount: 2,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 14,
+                      mainAxisSpacing: 14,
                       childAspectRatio: 1.6,
                       children: [
                         _buildOptionButton(
                           currentQ.shuffledOptions.isNotEmpty ? currentQ.shuffledOptions[0] : 'Option A',
                           'A',
-                          _getOptionIcon(currentQ.shuffledOptions.isNotEmpty ? currentQ.shuffledOptions[0] : '', 0),
                           () => _submitUserAnswer(currentQ.shuffledOptions[0]),
                         ),
                         if (currentQ.shuffledOptions.length > 1)
                           _buildOptionButton(
                             currentQ.shuffledOptions[1],
                             'B',
-                            _getOptionIcon(currentQ.shuffledOptions[1], 1),
                             () => _submitUserAnswer(currentQ.shuffledOptions[1]),
                           ),
                         if (currentQ.shuffledOptions.length > 2)
                           _buildOptionButton(
                             currentQ.shuffledOptions[2],
                             'C',
-                            _getOptionIcon(currentQ.shuffledOptions[2], 2),
                             () => _submitUserAnswer(currentQ.shuffledOptions[2]),
                           ),
                         if (currentQ.shuffledOptions.length > 3)
                           _buildOptionButton(
                             currentQ.shuffledOptions[3],
                             'D',
-                            _getOptionIcon(currentQ.shuffledOptions[3], 3),
                             () => _submitUserAnswer(currentQ.shuffledOptions[3]),
                           ),
                       ],
@@ -394,85 +424,70 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
     );
   }
 
-  String _getOptionIcon(String text, int index) {
-    if (text.isEmpty) return ['🧪', '⚛️', '🔬', '⚡'][index % 4];
-    final lower = text.toLowerCase();
-    
-    if (lower.contains('heat') || lower.contains('fire') || lower.contains('temperature') || lower.contains('warm') || lower.contains('thermal') || lower.contains('burn') || lower.contains('combust')) {
-      return '🔥';
-    }
-    if (lower.contains('gas') || lower.contains('vapor') || lower.contains('evaporat') || lower.contains('bubble') || lower.contains('air') || lower.contains('oxygen') || lower.contains('carbon')) {
-      return '💨';
-    }
-    if (lower.contains('liquid') || lower.contains('water') || lower.contains('fluid') || lower.contains('solution') || lower.contains('acid') || lower.contains('base') || lower.contains('aqueous')) {
-      return '💧';
-    }
-    if (lower.contains('solid') || lower.contains('precipitat') || lower.contains('down') || lower.contains('crystal') || lower.contains('sediment') || lower.contains('metal') || lower.contains('rock')) {
-      return '🔻';
-    }
-    if (lower.contains('electricity') || lower.contains('power') || lower.contains('voltage') || lower.contains('current') || lower.contains('charge') || lower.contains('electron') || lower.contains('energy')) {
-      return '⚡';
-    }
-    if (lower.contains('light') || lower.contains('sun') || lower.contains('solar') || lower.contains('photon') || lower.contains('ray')) {
-      return '☀️';
-    }
-    if (lower.contains('force') || lower.contains('motion') || lower.contains('speed') || lower.contains('velocity') || lower.contains('accel') || lower.contains('projectile') || lower.contains('momentum') || lower.contains('collision')) {
-      return '🚀';
-    }
-    if (lower.contains('cell') || lower.contains('dna') || lower.contains('gene') || lower.contains('bio') || lower.contains('organism') || lower.contains('homeostasis') || lower.contains('life')) {
-      return '🧬';
-    }
-    if (lower.contains('earth') || lower.contains('plate') || lower.contains('tectonic') || lower.contains('volcano') || lower.contains('climate') || lower.contains('ecosystem') || lower.contains('global')) {
-      return '🌍';
-    }
-    if (lower.contains('chemical') || lower.contains('reaction') || lower.contains('atom') || lower.contains('element') || lower.contains('compound') || lower.contains('molecule')) {
-      return '⚛️';
-    }
-    
-    final fallbacks = ['🧪', '⚛️', '🔬', '⚡'];
-    return fallbacks[index % fallbacks.length];
-  }
-
-  Widget _buildOptionButton(String text, String letter, String icon, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(18),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: const Color(0xFFE2E8F0), width: 2),
-          boxShadow: const [
-            BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2)),
-          ],
+  Widget _buildOptionButton(String text, String letter, VoidCallback onTap) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xEA140C30), Color(0xEA0C0720)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: const Color(0xFFEDE9FE),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                children: [
-                  Text(letter, style: const TextStyle(fontWeight: FontWeight.w800, color: Color(0xFF6D28D9), fontSize: 13)),
-                  const SizedBox(width: 4),
-                  Text(icon, style: const TextStyle(fontSize: 12)),
-                ],
-              ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: const Color(0xFF9333EA).withOpacity(0.4),
+          width: 1.5,
+        ),
+        boxShadow: const [
+          BoxShadow(color: Colors.black45, blurRadius: 10, offset: Offset(0, 4)),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(20),
+          splashColor: const Color(0xFF00F2FE).withOpacity(0.15),
+          highlightColor: const Color(0xFFA855F7).withOpacity(0.08),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: Row(
+              children: [
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1E1044),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFA855F7).withOpacity(0.5), width: 1.5),
+                  ),
+                  child: Center(
+                    child: Text(
+                      letter,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w900,
+                        color: Color(0xFFD946EF),
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    text,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      height: 1.25,
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.visible,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                text,
-                style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: Color(0xFF334155), height: 1.25),
-                maxLines: 3,
-                overflow: TextOverflow.visible,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
