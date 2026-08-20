@@ -319,69 +319,109 @@
   margin-top: 4px;
 }
 
-/* PRD Home Navigation UI placed at bottom of screen */
+/* Home Navigation UI placed at lower part of screen with Glowing Sci-Fi Theme */
 .home-nav-bottom {
-  margin-top: 14px;
+  margin-top: auto;
+  padding-top: 18px;
+  padding-bottom: 24px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .home-nav-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 16px 20px;
+  gap: 12px;
+  padding: 16px 22px;
   border-radius: 9999px;
-  border: none;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
   font-family: var(--font-heading);
   font-size: 1.15rem;
   font-weight: 800;
   color: #FFFFFF;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.home-nav-btn .btn-icon {
+  font-size: 1.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 16px rgba(0, 242, 254, 0.6));
+  transition: transform 0.25s ease;
+}
+
+.home-nav-btn:hover .btn-icon {
+  transform: scale(1.2) rotate(6deg);
 }
 
 .home-nav-btn:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-  filter: brightness(1.08);
+  transform: translateY(-3px) scale(1.02);
+  filter: brightness(1.15);
 }
 
 .home-nav-btn:active {
-  transform: translateY(0) scale(0.99);
+  transform: translateY(0) scale(0.98);
 }
 
-/* Play Button: Vibrant Green/Teal Gradient */
+/* Play Button: Neon Emerald Gradient & Glow */
 .play-btn {
-  background: linear-gradient(90deg, #10B981 0%, #34D399 100%);
-  color: white;
+  background: linear-gradient(90deg, #059669 0%, #10B981 100%);
+  border-color: rgba(52, 211, 153, 0.6);
+  box-shadow: 0 0 22px rgba(16, 185, 129, 0.5), 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
-/* My Character Button: Vibrant Ocean Blue Gradient */
+.play-btn .btn-icon {
+  filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.9)) drop-shadow(0 0 16px rgba(16, 185, 129, 0.7));
+}
+
+/* My Character Button: Neon Ocean Blue Gradient & Glow */
 .character-btn {
-  background: linear-gradient(90deg, #2563EB 0%, #60A5FA 100%);
-  color: white;
+  background: linear-gradient(90deg, #2563EB 0%, #3B82F6 100%);
+  border-color: rgba(96, 165, 250, 0.6);
+  box-shadow: 0 0 22px rgba(59, 130, 246, 0.5), 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
-/* Experiment Simulator Button: Vibrant Mint/Teal Gradient */
+.character-btn .btn-icon {
+  filter: drop-shadow(0 0 8px rgba(147, 197, 253, 0.9)) drop-shadow(0 0 16px rgba(59, 130, 246, 0.7));
+}
+
+/* Experiment Simulator Button: Neon Mint/Teal Gradient & Glow */
 .experiment-btn {
-  background: linear-gradient(90deg, #0D9488 0%, #2DD4BF 100%);
-  color: white;
+  background: linear-gradient(90deg, #0F766E 0%, #14B8A6 100%);
+  border-color: rgba(45, 212, 191, 0.6);
+  box-shadow: 0 0 22px rgba(20, 184, 166, 0.5), 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
-/* Custom Play Button: Vibrant Hot Pink/Magenta Gradient */
+.experiment-btn .btn-icon {
+  filter: drop-shadow(0 0 8px rgba(153, 246, 228, 0.9)) drop-shadow(0 0 16px rgba(20, 184, 166, 0.7));
+}
+
+/* Custom Play Button: Neon Hot Pink/Magenta Gradient & Glow */
 .custom-play-btn {
-  background: linear-gradient(90deg, #EC4899 0%, #F472B6 100%);
-  color: white;
+  background: linear-gradient(90deg, #BE185D 0%, #EC4899 100%);
+  border-color: rgba(244, 114, 182, 0.6);
+  box-shadow: 0 0 22px rgba(236, 72, 153, 0.5), 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
-/* Settings Button: Cool Slate Gray Gradient */
+.custom-play-btn .btn-icon {
+  filter: drop-shadow(0 0 8px rgba(251, 207, 232, 0.9)) drop-shadow(0 0 16px rgba(236, 72, 153, 0.7));
+}
+
+/* Settings Button: Neon Slate/Purple Gray Gradient & Glow */
 .settings-btn {
   background: linear-gradient(90deg, #475569 0%, #64748B 100%);
-  color: white;
+  border-color: rgba(148, 163, 184, 0.6);
+  box-shadow: 0 0 22px rgba(100, 116, 139, 0.4), 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+.settings-btn .btn-icon {
+  filter: drop-shadow(0 0 8px rgba(226, 232, 240, 0.9)) drop-shadow(0 0 16px rgba(148, 163, 184, 0.7));
 }
 
 /* Experiment Simulator Card Components */
