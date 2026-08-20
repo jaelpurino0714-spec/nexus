@@ -191,7 +191,8 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
       if (state!.secondsRemaining > 1) {
         state = state!.copyWith(secondsRemaining: state!.secondsRemaining - 1);
       } else {
-        submitAnswer(selectedAnswer: 'NO_ANSWER', timeTaken: state!.currentQuestion!.question.timeLimit);
+        state = state!.copyWith(secondsRemaining: 0);
+        timer.cancel();
       }
     });
   }

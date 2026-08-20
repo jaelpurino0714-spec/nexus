@@ -1180,7 +1180,7 @@ const Quiz = {
 
       if (this.timeRemainingSec <= 0) {
         clearInterval(this.timerInterval);
-        this.handleTimeOut();
+        // Do not auto-popup feedback card on timeout; wait for user to pick an answer
       }
     }, 1000);
   },
@@ -1295,7 +1295,7 @@ const Quiz = {
       if (this.streak > this.maxStreak) this.maxStreak = this.streak;
       this.sessionTopicStats[this.currentTopic].correct++;
 
-      const timeBonus = this.timeRemainingSec * 10;
+      const timeBonus = Math.max(0, this.timeRemainingSec) * 10;
       let multiplier = 1.0;
       if (this.streak >= 5) multiplier = 2.0;
       else if (this.streak >= 3) multiplier = 1.5;
@@ -1367,7 +1367,15 @@ const Quiz = {
     const statusTextEl = document.getElementById('feedbackText');
     const subTextEl = document.getElementById('feedbackAnswerSub');
 
-    const ansHint = q.rawAnswer || (q.options ? q.options[q.answer] : '');
+    const prefixes = ['A', 'B', 'C', 'D'];
+    let correctDisplay = '';
+    if (q.options && typeof q.answer === 'number' && q.options[q.answer]) {
+      correctDisplay = `${prefixes[q.answer] || ''}: ${q.options[q.answer]}`;
+    } else if (q.rawAnswer || q.correct_answer) {
+      correctDisplay = q.rawAnswer || q.correct_answer;
+    } else if (q.choice_a || q.option_a) {
+      correctDisplay = q.choice_a || q.option_a;
+    }
 
     // Disable input options according to question format
     if (this.currentQuestionFormat === 'true_false') {
@@ -1391,8 +1399,8 @@ const Quiz = {
     }
 
     if (feedback) feedback.className = 'feedback-banner wrong';
-    if (statusTextEl) statusTextEl.textContent = `⏱ Time Expired!`;
-    if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${ansHint}</b>`;
+    if (statusTextEl) statusTextEl.textContent = `❌ Incorrect!`;
+    if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${correctDisplay}</b>`;
     this.updateParticipantLobbyProgress();
   },
 
