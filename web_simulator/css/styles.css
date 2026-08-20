@@ -5,14 +5,14 @@
 
 :root {
   /* Color Palette - Vibrant Deep Purple Theme */
-  --bg-main: #F4F0FF;
-  --bg-card: #FFFFFF;
-  --bg-subtle: #EDE9FE;
+  --bg-main: #130E2E;
+  --bg-card: #1E163B;
+  --bg-subtle: rgba(255, 255, 255, 0.12);
   --primary-purple: #8B5CF6;
   --primary-purple-dark: #5B21B6;
   --primary-purple-gradient: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
   --accent-purple: #A855F7;
-  --accent-light: #DDD6FE;
+  --accent-light: rgba(221, 214, 254, 0.15);
   --purple-glow: rgba(139, 92, 246, 0.35);
   
   /* Navigation Button Colors per PRD */
@@ -30,11 +30,11 @@
   --term-3-text: #FFFFFF;
 
   /* Text & Neutral */
-  --text-dark: #1F2937;
-  --text-muted: #6B7280;
+  --text-dark: #FFFFFF;
+  --text-muted: #A78BFA;
   --text-light: #FFFFFF;
-  --border-color: #E5E7EB;
-  --shadow-color: rgba(91, 33, 182, 0.15);
+  --border-color: rgba(255, 255, 255, 0.12);
+  --shadow-color: rgba(0, 0, 0, 0.4);
 
   /* Functional Status */
   --success-green: #10B981;
@@ -61,8 +61,8 @@
 
 body {
   font-family: var(--font-body);
-  background: radial-gradient(circle at 50% 20%, #4C1D95 0%, #1E1B4B 60%, #0F172A 100%);
-  color: var(--text-dark);
+  background: #130E2E;
+  color: #FFFFFF;
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -112,31 +112,23 @@ body {
   max-width: 412px;
   height: 94vh;
   max-height: 870px;
-  background-color: var(--bg-main);
+  background-color: #130E2E;
   border-radius: 46px;
   border: 12px solid #0F172A;
   box-shadow: 
-    0 30px 80px rgba(0, 0, 0, 0.7),
-    0 0 0 2px rgba(255, 255, 255, 0.15),
-    0 0 50px rgba(139, 92, 246, 0.35);
+    0 30px 80px rgba(0, 0, 0, 0.8),
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 0 50px rgba(124, 58, 237, 0.35);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Home, Term & Topic Selection Active Dark Theme */
-.app-container.student-home-active,
-.app-container:has(#homeScreen.active),
-.app-container:has(#teacherHomeScreen.active),
-.app-container:has(#playScreen.active),
-.app-container:has(#topicScreen.active) {
+/* Active Dark Theme */
+.app-container {
   background-color: #130E2E;
   border-color: #0B071E;
-  box-shadow: 
-    0 30px 80px rgba(0, 0, 0, 0.8),
-    0 0 0 2px rgba(255, 255, 255, 0.1),
-    0 0 50px rgba(124, 58, 237, 0.35);
 }
 
 /* Smartphone Physical Side Buttons */
@@ -166,33 +158,23 @@ body {
 /* Native Mobile Status Bar */
 .phone-status-bar {
   height: 34px;
-  background: #FFFFFF;
+  background: #130E2E;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
   font-size: 0.78rem;
   font-weight: 800;
-  color: #1F2937;
+  color: #FFFFFF;
   user-select: none;
   z-index: 20;
-  border-bottom: 1px solid rgba(0,0,0,0.03);
-}
-
-.app-container.student-home-active .phone-status-bar,
-.app-container:has(#homeScreen.active) .phone-status-bar,
-.app-container:has(#teacherHomeScreen.active) .phone-status-bar,
-.app-container:has(#playScreen.active) .phone-status-bar,
-.app-container:has(#topicScreen.active) .phone-status-bar {
-  background: #130E2E;
-  color: #FFFFFF;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .phone-camera-notch {
   width: 86px;
   height: 18px;
-  background: #0F172A;
+  background: #090518;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -201,28 +183,12 @@ body {
   margin-top: -3px;
 }
 
-.app-container.student-home-active .phone-camera-notch,
-.app-container:has(#homeScreen.active) .phone-camera-notch,
-.app-container:has(#teacherHomeScreen.active) .phone-camera-notch,
-.app-container:has(#playScreen.active) .phone-camera-notch,
-.app-container:has(#topicScreen.active) .phone-camera-notch {
-  background: #090518;
-}
-
 .notch-lens {
   width: 6px;
   height: 6px;
-  background: #1E293B;
+  background: #1E163B;
   border-radius: 50%;
   border: 1px solid #334155;
-}
-
-.app-container.student-home-active .notch-lens,
-.app-container:has(#homeScreen.active) .notch-lens,
-.app-container:has(#teacherHomeScreen.active) .notch-lens,
-.app-container:has(#playScreen.active) .notch-lens,
-.app-container:has(#topicScreen.active) .notch-lens {
-  background: #1E163B;
 }
 
 .notch-speaker {
@@ -241,19 +207,11 @@ body {
 /* Native Home Indicator Bar at Bottom */
 .phone-home-indicator {
   height: 20px;
-  background: var(--bg-main);
+  background: #130E2E;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 20;
-}
-
-.app-container.student-home-active .phone-home-indicator,
-.app-container:has(#homeScreen.active) .phone-home-indicator,
-.app-container:has(#teacherHomeScreen.active) .phone-home-indicator,
-.app-container:has(#playScreen.active) .phone-home-indicator,
-.app-container:has(#topicScreen.active) .phone-home-indicator {
-  background: #130E2E;
 }
 
 .home-bar-pill {
@@ -278,14 +236,6 @@ body.fullscreen-mode .app-container {
 @media (max-width: 600px) {
   body {
     padding: 0;
-    background: var(--bg-main);
-  }
-  
-  body.student-home-active,
-  body:has(#homeScreen.active),
-  body:has(#teacherHomeScreen.active),
-  body:has(#playScreen.active),
-  body:has(#topicScreen.active) {
     background: #130E2E;
   }
   
@@ -309,21 +259,11 @@ body.fullscreen-mode .app-container {
 /* App Header */
 .app-header {
   height: 68px;
-  background: linear-gradient(180deg, #FFFFFF 0%, #F5F3FF 100%);
+  background: #130E2E;
   padding: 0 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1.5px solid var(--accent-light);
-  box-shadow: 0 4px 15px rgba(91, 33, 182, 0.06);
-}
-
-.app-container.student-home-active .app-header,
-.app-container:has(#homeScreen.active) .app-header,
-.app-container:has(#teacherHomeScreen.active) .app-header,
-.app-container:has(#playScreen.active) .app-header,
-.app-container:has(#topicScreen.active) .app-header {
-  background: #130E2E;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
@@ -343,32 +283,16 @@ body.fullscreen-mode .app-container {
   font-family: var(--font-heading);
   font-size: 1.35rem;
   font-weight: 800;
-  color: var(--primary-purple-dark);
+  color: #FFFFFF;
   letter-spacing: 0.5px;
   line-height: 1.1;
-}
-
-.app-container.student-home-active .app-name,
-.app-container:has(#homeScreen.active) .app-name,
-.app-container:has(#teacherHomeScreen.active) .app-name,
-.app-container:has(#playScreen.active) .app-name,
-.app-container:has(#topicScreen.active) .app-name {
-  color: #FFFFFF;
 }
 
 .app-subtitle {
   font-size: 0.72rem;
   font-weight: 600;
-  color: var(--text-muted);
-  display: block;
-}
-
-.app-container.student-home-active .app-subtitle,
-.app-container:has(#homeScreen.active) .app-subtitle,
-.app-container:has(#teacherHomeScreen.active) .app-subtitle,
-.app-container:has(#playScreen.active) .app-subtitle,
-.app-container:has(#topicScreen.active) .app-subtitle {
   color: #A78BFA;
+  display: block;
 }
 
 .header-actions {
@@ -378,28 +302,19 @@ body.fullscreen-mode .app-container {
 }
 
 .user-badge {
-  background-color: var(--accent-light);
-  color: var(--primary-purple-dark);
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-}
-
-.app-container.student-home-active .user-badge,
-.app-container:has(#homeScreen.active) .user-badge,
-.app-container:has(#teacherHomeScreen.active) .user-badge,
-.app-container:has(#playScreen.active) .user-badge,
-.app-container:has(#topicScreen.active) .user-badge {
   background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
   color: #FFFFFF;
+  font-size: 0.75rem;
+  font-weight: 700;
   padding: 4px 12px;
+  border-radius: var(--radius-full);
   box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
 }
 
 .icon-btn {
-  background: var(--bg-subtle);
-  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
   font-size: 1.1rem;
   padding: 6px 10px;
   border-radius: var(--radius-sm);
@@ -407,17 +322,8 @@ body.fullscreen-mode .app-container {
   transition: transform 0.15s ease, background 0.15s ease;
 }
 
-.app-container.student-home-active .icon-btn,
-.app-container:has(#homeScreen.active) .icon-btn,
-.app-container:has(#teacherHomeScreen.active) .icon-btn,
-.app-container:has(#playScreen.active) .icon-btn,
-.app-container:has(#topicScreen.active) .icon-btn {
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #FFFFFF;
-}
-
 .icon-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
   transform: scale(1.05);
 }
 
