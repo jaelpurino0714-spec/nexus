@@ -57,7 +57,17 @@ class _TestModeSelectionScreenState extends State<TestModeSelectionScreen> {
     );
   }
 
-  Widget _buildCardHeader(String text) {
+  Widget _buildCardHeader(String text, {bool isWhiteTitle = false}) {
+    if (isWhiteTitle) {
+      return Text(
+        text,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+        ),
+      );
+    }
     return ShaderMask(
       shaderCallback: (bounds) => const LinearGradient(
         colors: [Color(0xFFD8B4FE), Color(0xFFC084FC)],
@@ -75,11 +85,117 @@ class _TestModeSelectionScreenState extends State<TestModeSelectionScreen> {
     );
   }
 
+  Widget _circleText(String label, Color color) {
+    return Container(
+      width: 12,
+      height: 12,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: color, width: 1.2),
+      ),
+      child: Center(
+        child: Text(
+          label,
+          style: TextStyle(color: color, fontSize: 6.5, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMultipleChoiceIcon() {
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color(0xFF140C2D),
+        border: Border.all(color: const Color(0xFFA855F7).withOpacity(0.6), width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFA855F7).withOpacity(0.3),
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      child: Center(
+        child: SizedBox(
+          width: 28,
+          height: 28,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _circleText('A', const Color(0xFF00F2FE)),
+                  const SizedBox(width: 3),
+                  _circleText('B', const Color(0xFFEC4899)),
+                ],
+              ),
+              const SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _circleText('C', const Color(0xFFA855F7)),
+                  const SizedBox(width: 3),
+                  _circleText('D', const Color(0xFFEAB308)),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTrueFalseIcon() {
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color(0xFF140C2D),
+        border: Border.all(color: const Color(0xFFA855F7).withOpacity(0.6), width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFA855F7).withOpacity(0.3),
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      child: const Center(
+        child: Icon(Icons.scale_rounded, color: Color(0xFFFACC15), size: 24),
+      ),
+    );
+  }
+
+  Widget _buildIdentificationIcon() {
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color(0xFF140C2D),
+        border: Border.all(color: const Color(0xFFA855F7).withOpacity(0.6), width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFA855F7).withOpacity(0.3),
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      child: const Center(
+        child: Icon(Icons.edit_rounded, color: Color(0xFFEC4899), size: 24),
+      ),
+    );
+  }
+
   Widget _buildModeCard({
     required Widget leadingIcon,
     required String title,
     required String subtitle,
     required VoidCallback onTap,
+    bool isWhiteTitle = false,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
@@ -113,28 +229,13 @@ class _TestModeSelectionScreenState extends State<TestModeSelectionScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.05),
-                    border: Border.all(color: Colors.white.withOpacity(0.1)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFFA855F7).withOpacity(0.2),
-                        blurRadius: 8,
-                      ),
-                    ],
-                  ),
-                  child: Center(child: leadingIcon),
-                ),
+                leadingIcon,
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAlignment.start,
                     children: [
-                      _buildCardHeader(title),
+                      _buildCardHeader(title, isWhiteTitle: isWhiteTitle),
                       const SizedBox(height: 4),
                       Text(
                         subtitle,
@@ -238,7 +339,7 @@ class _TestModeSelectionScreenState extends State<TestModeSelectionScreen> {
                         text: TextSpan(
                           style: const TextStyle(fontSize: 14, color: Color(0xFF9CA3AF)),
                           children: [
-                            const TextSpan(text: 'Selected: '),
+                            TextSpan(text: _showPostTestOptions ? 'Post-Test: ' : 'Selected: '),
                             TextSpan(
                               text: widget.topicTitle,
                               style: const TextStyle(
@@ -253,13 +354,31 @@ class _TestModeSelectionScreenState extends State<TestModeSelectionScreen> {
 
                       if (!_showPostTestOptions) ...[
                         _buildModeCard(
-                          leadingIcon: const Text('⏱️', style: TextStyle(fontSize: 22)),
+                          leadingIcon: Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white.withOpacity(0.05),
+                              border: Border.all(color: Colors.white.withOpacity(0.1)),
+                            ),
+                            child: const Center(child: Text('⏱️', style: TextStyle(fontSize: 22))),
+                          ),
                           title: 'Pre-Test',
                           subtitle: 'Load 15 multiple-choice questions from selected topic',
                           onTap: _startPreTest,
                         ),
                         _buildModeCard(
-                          leadingIcon: const Text('🎯', style: TextStyle(fontSize: 22)),
+                          leadingIcon: Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white.withOpacity(0.05),
+                              border: Border.all(color: Colors.white.withOpacity(0.1)),
+                            ),
+                            child: const Center(child: Text('🎯', style: TextStyle(fontSize: 22))),
+                          ),
                           title: 'Post-Test',
                           subtitle: 'Choose question format: Multiple Choice, True/False, or Identification',
                           onTap: () {
@@ -270,54 +389,59 @@ class _TestModeSelectionScreenState extends State<TestModeSelectionScreen> {
                         ),
                       ] else ...[
                         _buildModeCard(
-                          leadingIcon: const Text('🔘', style: TextStyle(fontSize: 22)),
+                          leadingIcon: _buildMultipleChoiceIcon(),
                           title: 'Multiple Choice',
                           subtitle: 'Multiple-choice questions with 4 choices',
+                          isWhiteTitle: true,
                           onTap: () => _startPostTest('multiple_choice'),
                         ),
                         _buildModeCard(
-                          leadingIcon: const Text('⚖️', style: TextStyle(fontSize: 22)),
+                          leadingIcon: _buildTrueFalseIcon(),
                           title: 'True or False',
                           subtitle: 'Questions with 2 options (True / False)',
+                          isWhiteTitle: true,
                           onTap: () => _startPostTest('true_false'),
                         ),
                         _buildModeCard(
-                          leadingIcon: const Text('✍️', style: TextStyle(fontSize: 22)),
+                          leadingIcon: _buildIdentificationIcon(),
                           title: 'Identification',
                           subtitle: 'Questions with small text input box for typing answers',
+                          isWhiteTitle: true,
                           onTap: () => _startPostTest('identification'),
                         ),
                       ],
 
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 12),
 
-                      // Cancel / Back Button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: OutlinedButton(
-                          onPressed: () {
-                            if (_showPostTestOptions) {
-                              setState(() {
-                                _showPostTestOptions = false;
-                              });
-                            } else {
-                              context.pop();
-                            }
-                          },
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: Colors.white.withOpacity(0.05),
-                            side: BorderSide(color: Colors.white.withOpacity(0.1), width: 1.5),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
+                      // Cancel / Back Pill Button
+                      Center(
+                        child: SizedBox(
+                          width: _showPostTestOptions ? 140 : double.infinity,
+                          height: 48,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              if (_showPostTestOptions) {
+                                setState(() {
+                                  _showPostTestOptions = false;
+                                });
+                              } else {
+                                context.pop();
+                              }
+                            },
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: const Color(0xCC120B28),
+                              side: BorderSide(color: const Color(0xFFA855F7).withOpacity(0.4), width: 1.5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(9999),
+                              ),
                             ),
-                          ),
-                          child: Text(
-                            _showPostTestOptions ? 'Back' : 'Cancel',
-                            style: const TextStyle(
-                              color: Color(0xFFF1F5F9),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                            child: Text(
+                              _showPostTestOptions ? 'Back' : 'Cancel',
+                              style: const TextStyle(
+                                color: Color(0xFFC084FC),
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),

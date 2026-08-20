@@ -236,7 +236,7 @@ const Quiz = {
       // Post-Test: open question format selector modal
       const postLabelEl = document.getElementById('postTestTopicLabel');
       if (postLabelEl) {
-        postLabelEl.innerHTML = `Selected: <span class="topic-highlight">${this.currentTopic}</span>`;
+        postLabelEl.innerHTML = `Post-Test: <span class="topic-highlight">${this.currentTopic}</span>`;
       }
       document.getElementById('postTestFormatModal').classList.remove('hidden');
     }

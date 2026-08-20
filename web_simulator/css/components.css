@@ -1759,6 +1759,51 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+.format-icon-wrapper {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  border-radius: 50%;
+  border: 2px solid rgba(168, 85, 247, 0.5);
+  background: rgba(20, 12, 45, 0.6);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.format-card-title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-family: var(--font-heading, 'Inter', sans-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 3px 0;
+}
+
+.back-pill-btn {
+  background: rgba(18, 11, 40, 0.8);
+  border: 1.5px solid rgba(168, 85, 247, 0.4);
+  color: #c084fc;
+  font-family: var(--font-heading, 'Inter', sans-serif);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 10px 42px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-block;
+  margin: 10px auto 0 auto;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.15);
+}
+
+.back-pill-btn:hover {
+  background: rgba(35, 20, 70, 0.9);
+  border-color: rgba(168, 85, 247, 0.7);
+  color: #ffffff;
+  box-shadow: 0 0 18px rgba(168, 85, 247, 0.35);
+}
+
 /* ---------------- 5. GAMEPLAY UI & ACTIVE QUIZ CARD STYLING ---------------- */
 .gameplay-container {
   display: flex;

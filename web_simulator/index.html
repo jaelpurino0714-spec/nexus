@@ -578,15 +578,27 @@
         <div class="mode-modal-content">
           <div class="modal-handle"></div>
           <h3 class="gradient-title">Select Question Format</h3>
-          <p id="postTestTopicLabel" class="selected-topic-label">Selected: <span class="topic-highlight">Post-Test Format</span></p>
+          <p id="postTestTopicLabel" class="selected-topic-label">Post-Test: <span class="topic-highlight">Physical vs. Chemical Change</span></p>
 
           <div class="mode-options">
             <button class="mode-card" onclick="Quiz.selectQuestionFormat('multiple_choice')">
-              <div class="mode-icon-wrapper">
-                <span class="mode-icon">🔘</span>
+              <div class="mode-icon-wrapper format-icon-wrapper">
+                <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
+                  <circle cx="11" cy="11" r="6.5" stroke="#00f2fe" stroke-width="2" fill="none"/>
+                  <text x="11" y="14" font-size="8.5" font-weight="bold" fill="#00f2fe" text-anchor="middle" font-family="sans-serif">A</text>
+                  
+                  <circle cx="25" cy="11" r="6.5" stroke="#ec4899" stroke-width="2" fill="none"/>
+                  <text x="25" y="14" font-size="8.5" font-weight="bold" fill="#ec4899" text-anchor="middle" font-family="sans-serif">B</text>
+                  
+                  <circle cx="11" cy="25" r="6.5" stroke="#a855f7" stroke-width="2" fill="none"/>
+                  <text x="11" y="28" font-size="8.5" font-weight="bold" fill="#a855f7" text-anchor="middle" font-family="sans-serif">C</text>
+                  
+                  <circle cx="25" cy="25" r="6.5" stroke="#eab308" stroke-width="2" fill="none"/>
+                  <text x="25" y="28" font-size="8.5" font-weight="bold" fill="#eab308" text-anchor="middle" font-family="sans-serif">D</text>
+                </svg>
               </div>
               <div class="mode-card-text">
-                <h4>Multiple Choice</h4>
+                <h4 class="format-card-title">Multiple Choice</h4>
                 <p>Multiple-choice questions with 4 choices</p>
               </div>
               <div class="mode-card-arrow">
@@ -595,11 +607,18 @@
             </button>
 
             <button class="mode-card" onclick="Quiz.selectQuestionFormat('true_false')">
-              <div class="mode-icon-wrapper">
-                <span class="mode-icon">⚖️</span>
+              <div class="mode-icon-wrapper format-icon-wrapper">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3v17" stroke="#facc15" stroke-width="2"/>
+                  <path d="M5 20h14" stroke="#facc15" stroke-width="2"/>
+                  <path d="M4 7h16" stroke="#facc15" stroke-width="2"/>
+                  <path d="M7 7l-3 6a2 2 0 0 0 4 0l-1-6z" stroke="#eab308" stroke-width="1.8" fill="none"/>
+                  <path d="M17 7l-3 6a2 2 0 0 0 4 0l-1-6z" stroke="#eab308" stroke-width="1.8" fill="none"/>
+                  <circle cx="12" cy="3" r="1.5" fill="#facc15"/>
+                </svg>
               </div>
               <div class="mode-card-text">
-                <h4>True or False</h4>
+                <h4 class="format-card-title">True or False</h4>
                 <p>Questions with 2 options (True / False)</p>
               </div>
               <div class="mode-card-arrow">
@@ -608,11 +627,15 @@
             </button>
 
             <button class="mode-card" onclick="Quiz.selectQuestionFormat('identification')">
-              <div class="mode-icon-wrapper">
-                <span class="mode-icon">✍️</span>
+              <div class="mode-icon-wrapper format-icon-wrapper">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" stroke="#ec4899" stroke-width="2" fill="none"/>
+                  <path d="M15 5l4 4" stroke="#facc15" stroke-width="2"/>
+                  <path d="M4 21c2-1 4-1 6 0" stroke="#00f2fe" stroke-width="2"/>
+                </svg>
               </div>
               <div class="mode-card-text">
-                <h4>Identification</h4>
+                <h4 class="format-card-title">Identification</h4>
                 <p>Questions with small text input box for typing answers</p>
               </div>
               <div class="mode-card-arrow">
@@ -621,7 +644,9 @@
             </button>
           </div>
 
-          <button class="cancel-btn" onclick="Quiz.hidePostTestFormatModal()">Cancel</button>
+          <div style="text-align: center;">
+            <button class="back-pill-btn" onclick="Quiz.hidePostTestFormatModal()">Back</button>
+          </div>
         </div>
       </div>
 
