@@ -115,6 +115,13 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
       ref.read(characterProvider.notifier).triggerFloatingReaction(
             isCorrect ? 'correct_answer' : 'wrong_answer',
           );
+
+      // Auto-advance to next question after a 1.5-second delay
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        if (mounted && _hasAnswered) {
+          _proceedNextQuestion();
+        }
+      });
     }
   }
 
@@ -533,7 +540,8 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                             ),
                           ),
                           const SizedBox(height: 6),
-                          if (!_isAnswerCorrect)
+                          if (!_isAnswerCorrect) ...[
+                            const SizedBox(height: 6),
                             Text(
                               'Correct Answer: ${currentQ.question.correctAnswer}',
                               style: const TextStyle(
@@ -543,51 +551,7 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                               ),
                               textAlign: TextAlign.center,
                             ),
-                          const SizedBox(height: 14),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 52,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [Color(0xFF9333EA), Color(0xFF06B6D4)],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
-                                ),
-                                borderRadius: BorderRadius.circular(9999),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xFF9333EA).withOpacity(0.4),
-                                    blurRadius: 16,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  shadowColor: Colors.transparent,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9999)),
-                                ),
-                                onPressed: _proceedNextQuestion,
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Next Question',
-                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.white),
-                                    ),
-                                    SizedBox(width: 10),
-                                    CircleAvatar(
-                                      radius: 14,
-                                      backgroundColor: Colors.white24,
-                                      child: Icon(Icons.arrow_forward_rounded, size: 16, color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                          ],
                         ],
                       ),
                     ),

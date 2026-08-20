@@ -1333,6 +1333,13 @@ const Quiz = {
       if (this.streak > 0) streakEl.classList.add('streak-pop');
     }
     this.updateParticipantLobbyProgress();
+
+    // Auto-advance to next question after 1.5 seconds delay
+    setTimeout(() => {
+      if (App.currentScreen === 'gameplayScreen') {
+        this.nextQuestion();
+      }
+    }, 1500);
   },
 
   handleTimeOut() {
