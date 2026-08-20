@@ -209,7 +209,10 @@ const Quiz = {
   selectTopic(topicName, topicId) {
     this.currentTopic = topicName;
     this.currentTopicId = topicId;
-    document.getElementById('selectedTopicLabel').textContent = `Selected: ${topicName}`;
+    const labelEl = document.getElementById('selectedTopicLabel');
+    if (labelEl) {
+      labelEl.innerHTML = `Selected: <span class="topic-highlight">${topicName}</span>`;
+    }
     document.getElementById('modeSelectorModal').classList.remove('hidden');
   },
 
@@ -231,7 +234,10 @@ const Quiz = {
       this.onFormatSelected();
     } else {
       // Post-Test: open question format selector modal
-      document.getElementById('postTestTopicLabel').textContent = `Post-Test: ${this.currentTopic}`;
+      const postLabelEl = document.getElementById('postTestTopicLabel');
+      if (postLabelEl) {
+        postLabelEl.innerHTML = `Selected: <span class="topic-highlight">${this.currentTopic}</span>`;
+      }
       document.getElementById('postTestFormatModal').classList.remove('hidden');
     }
   },

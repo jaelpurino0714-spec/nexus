@@ -537,23 +537,34 @@
       <!-- Mode Selector Modal (Pre-Test vs Post-Test) -->
       <div id="modeSelectorModal" class="mode-modal hidden">
         <div class="mode-modal-content">
-          <h3>Select Test Type</h3>
-          <p id="selectedTopicLabel">Topic Selected</p>
+          <div class="modal-handle"></div>
+          <h3 class="gradient-title">Select Test Type</h3>
+          <p id="selectedTopicLabel" class="selected-topic-label">Selected: <span class="topic-highlight">Topic Selected</span></p>
           
           <div class="mode-options">
             <button class="mode-card pre-test" onclick="Quiz.selectTestType('pre-test')">
-              <span class="mode-icon">⏱️</span>
-              <div>
+              <div class="mode-icon-wrapper">
+                <span class="mode-icon">⏱️</span>
+              </div>
+              <div class="mode-card-text">
                 <h4>Pre-Test</h4>
                 <p>Load 15 multiple-choice questions from selected topic</p>
+              </div>
+              <div class="mode-card-arrow">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </button>
 
             <button class="mode-card post-test" onclick="Quiz.selectTestType('post-test')">
-              <span class="mode-icon">🎯</span>
-              <div>
+              <div class="mode-icon-wrapper">
+                <span class="mode-icon">🎯</span>
+              </div>
+              <div class="mode-card-text">
                 <h4>Post-Test</h4>
                 <p>Choose question format: Multiple Choice, True/False, or Identification</p>
+              </div>
+              <div class="mode-card-arrow">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </button>
           </div>
@@ -565,36 +576,52 @@
       <!-- Post-Test Format Selector Modal -->
       <div id="postTestFormatModal" class="mode-modal hidden">
         <div class="mode-modal-content">
-          <h3>Select Question Format</h3>
-          <p id="postTestTopicLabel">Post-Test Format</p>
+          <div class="modal-handle"></div>
+          <h3 class="gradient-title">Select Question Format</h3>
+          <p id="postTestTopicLabel" class="selected-topic-label">Selected: <span class="topic-highlight">Post-Test Format</span></p>
 
           <div class="mode-options">
             <button class="mode-card" onclick="Quiz.selectQuestionFormat('multiple_choice')">
-              <span class="mode-icon">🔘</span>
-              <div>
+              <div class="mode-icon-wrapper">
+                <span class="mode-icon">🔘</span>
+              </div>
+              <div class="mode-card-text">
                 <h4>Multiple Choice</h4>
                 <p>Multiple-choice questions with 4 choices</p>
+              </div>
+              <div class="mode-card-arrow">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </button>
 
             <button class="mode-card" onclick="Quiz.selectQuestionFormat('true_false')">
-              <span class="mode-icon">⚖️</span>
-              <div>
+              <div class="mode-icon-wrapper">
+                <span class="mode-icon">⚖️</span>
+              </div>
+              <div class="mode-card-text">
                 <h4>True or False</h4>
                 <p>Questions with 2 options (True / False)</p>
+              </div>
+              <div class="mode-card-arrow">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </button>
 
             <button class="mode-card" onclick="Quiz.selectQuestionFormat('identification')">
-              <span class="mode-icon">✍️</span>
-              <div>
+              <div class="mode-icon-wrapper">
+                <span class="mode-icon">✍️</span>
+              </div>
+              <div class="mode-card-text">
                 <h4>Identification</h4>
                 <p>Questions with small text input box for typing answers</p>
+              </div>
+              <div class="mode-card-arrow">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </button>
           </div>
 
-          <button class="cancel-btn" onclick="Quiz.hidePostTestFormatModal()">Back</button>
+          <button class="cancel-btn" onclick="Quiz.hidePostTestFormatModal()">Cancel</button>
         </div>
       </div>
 
