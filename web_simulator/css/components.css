@@ -3696,19 +3696,20 @@
 }
 
 .recombinant-step-card {
-  background: #FFFFFF;
-  border: 1.5px solid #DDD6FE;
+  background: rgba(30, 22, 60, 0.9);
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
   border-radius: 14px;
   padding: 10px 14px;
   display: flex;
   align-items: center;
   gap: 10px;
   width: 90%;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  color: #E9D5FF;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
 
 .recombinant-step-card b {
-  color: #6D28D9;
+  color: #38BDF8;
   font-family: var(--font-heading);
 }
 

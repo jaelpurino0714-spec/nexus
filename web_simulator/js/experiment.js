@@ -4874,7 +4874,7 @@ const Experiment = {
         html += `
           <div class="homeo-body-card">
             <div style="font-size:1.8rem; margin-bottom:4px;">🏭 ➔ ⚡ ➔ 🗼 ➔ 🔌 ➔ 🏘️ ➔ 🏠</div>
-            <div style="font-size:0.82rem; font-weight:800; color:#334155;">Power Grid Stage: Ready to Transmit</div>
+            <div style="font-size:0.88rem; font-weight:800; color:#E9D5FF;">Power Grid Stage: Ready to Transmit</div>
           </div>
 
           <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startElectricitySimulation()">
@@ -4906,9 +4906,9 @@ const Experiment = {
                 <span><b>Step-Down Transformer:</b> Reduces voltage for safe local use</span>
               </div>
               <div style="color:#8B5CF6;">⬇️</div>
-              <div class="recombinant-step-card" style="border-color:#10B981; background:#ECFDF5;">
+              <div class="recombinant-step-card" style="border-color:#10B981; background:rgba(16, 185, 129, 0.25);">
                 <span style="font-size:1.5rem;">🏠</span>
-                <span style="color:#065F46;"><b>Home & Electric Meter:</b> Measures and uses electricity</span>
+                <span style="color:#67E8F9;"><b>Home & Electric Meter:</b> Measures and uses electricity</span>
               </div>
             </div>
 
@@ -4967,12 +4967,12 @@ const Experiment = {
 
         html += `
           <div class="exp-result-container ${isHigh ? 'physical-result' : 'chemical-result'}">
-            <div class="homeo-body-card" style="margin:0; width:100%; border-color:${isHigh ? '#86EFAC' : '#FCA5A5'}; background:${isHigh ? '#F0FDF4' : '#FEF2F2'};">
+            <div class="homeo-body-card" style="margin:0; width:100%; border-color:${isHigh ? '#34D399' : '#F87171'}; background:${isHigh ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'};">
               <div class="homeo-body-icon">${isHigh ? '⚡' : '🔥'}</div>
-              <div class="homeo-temp-display" style="color:${isHigh ? '#15803D' : '#B91C1C'};">
+              <div class="homeo-temp-display" style="color:${isHigh ? '#67E8F9' : '#FCA5A5'}; background:rgba(30, 22, 60, 0.95); border-color:${isHigh ? '#34D399' : '#F87171'};">
                 Power Loss Formula: P_loss = I² × R
               </div>
-              <div style="font-size:0.88rem; font-weight:800; color:${isHigh ? '#166534' : '#991B1B'}; margin-top:6px;">
+              <div style="font-size:0.88rem; font-weight:800; color:${isHigh ? '#A7F3D0' : '#FECDD3'}; margin-top:6px;">
                 ${isHigh ? '⚡ High Voltage → Lower Current → Less Energy Loss!' : '🔥 Low Voltage → Higher Current → Greater Energy Loss!'}
               </div>
             </div>
@@ -5158,9 +5158,9 @@ const Experiment = {
                   <span><b>Solar Panels</b> convert photons to electricity</span>
                 </div>
                 <div style="color:#10B981;">⬇️</div>
-                <div class="recombinant-step-card" style="border-color:#10B981; background:#ECFDF5;">
+                <div class="recombinant-step-card" style="border-color:#10B981; background:rgba(16, 185, 129, 0.25);">
                   <span style="font-size:1.5rem;">⚡</span>
-                  <span style="color:#065F46;"><b>Clean Electricity Generated!</b></span>
+                  <span style="color:#67E8F9;"><b>Clean Electricity Generated!</b></span>
                 </div>
               ` : `
                 <div class="recombinant-step-card">
@@ -5173,9 +5173,9 @@ const Experiment = {
                   <span><b>Combustion</b> generates steam turbine rotation</span>
                 </div>
                 <div style="color:#EF4444;">⬇️</div>
-                <div class="recombinant-step-card" style="border-color:#EF4444; background:#FEF2F2;">
+                <div class="recombinant-step-card" style="border-color:#EF4444; background:rgba(239, 68, 68, 0.25);">
                   <span style="font-size:1.5rem;">⚡</span>
-                  <span style="color:#991B1B;"><b>Electricity Generated (Fuel Consumed)</b></span>
+                  <span style="color:#FCA5A5;"><b>Electricity Generated (Fuel Consumed)</b></span>
                 </div>
               `}
             </div>
@@ -5188,11 +5188,11 @@ const Experiment = {
           <div class="exp-explanation-section" style="margin-top:14px;">
             <div class="exp-explain-block">
               <h5>Comparison Summary</h5>
-              <table style="width:100%; border-collapse:collapse; margin-top:6px; font-size:0.82rem;">
-                <tr style="background:#F1F5F9;">
-                  <th style="padding:6px; border:1px solid #CBD5E1;">Feature</th>
-                  <th style="padding:6px; border:1px solid #CBD5E1; color:#059669;">☀️ Solar</th>
-                  <th style="padding:6px; border:1px solid #CBD5E1; color:#B45309;">🪨 Coal</th>
+              <table style="width:100%; border-collapse:collapse; margin-top:6px; font-size:0.82rem; color:#E9D5FF;">
+                <tr style="background:rgba(139, 92, 246, 0.25);">
+                  <th style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3); color:#38BDF8;">Feature</th>
+                  <th style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3); color:#34D399;">☀️ Solar</th>
+                  <th style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3); color:#FDE047;">🪨 Coal</th>
                 </tr>
                 <tr>
                   <td style="padding:6px; border:1px solid #CBD5E1; font-weight:700;">Type</td>
