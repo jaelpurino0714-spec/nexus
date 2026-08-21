@@ -919,21 +919,23 @@
 
       <!-- ================= MULTIPLAYER: PLAYER LOBBY SCREEN ================= -->
       <section id="mpPlayerLobbyScreen" class="screen">
-        <div class="play-container" style="text-align:center;">
-          <div style="background:linear-gradient(135deg, #4F46E5, #3730A3); color:white; padding:32px 20px; border-radius:20px; box-shadow:0 10px 25px rgba(79, 70, 229, 0.3);">
-            <div style="font-size:3.5rem; margin-bottom:8px;">⏳</div>
-            <h2 id="mpPlayerLobbyTitle" style="margin:0 0 6px 0; color:white;">You're in!</h2>
-            <p id="mpPlayerLobbySub" style="color:rgba(255,255,255,0.85); font-size:1rem; margin:0 0 16px 0;">See your name on the host screen?</p>
-            <span id="mpPlayerNicknameBadge" style="background:rgba(255,255,255,0.25); color:white; padding:8px 20px; border-radius:30px; font-size:1.2rem; font-weight:800; letter-spacing:1px; display:inline-block;">
-              Player
+        <div class="play-container">
+          <div class="sub-settings-container" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 32px 24px; max-width: 480px; margin: 0 auto; box-shadow: 0 10px 40px rgba(0,0,0,0.6); text-align: center;">
+            <div style="font-size: 3.8rem; margin-bottom: 10px; filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.6));">⏳</div>
+            <h2 id="mpPlayerLobbyTitle" style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: #FFFFFF; margin: 0 0 6px 0;">You're in!</h2>
+            <p id="mpPlayerLobbySub" style="color: #A5A3C4; font-size: 0.92rem; margin: 0 0 20px 0;">See your name on the host screen?</p>
+            <span id="mpPlayerNicknameBadge" style="background: rgba(139, 92, 246, 0.25); border: 1.5px solid #8B5CF6; color: #FFFFFF; padding: 10px 28px; border-radius: 30px; font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px; box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);">
+              👤 Player
             </span>
-          </div>
 
-          <div style="margin-top:24px; padding:16px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:14px; color:#64748B; font-size:0.9rem; font-weight:600;">
-            ● Connected to Realtime Channel <span id="mpPlayerChannelTag" style="color:#6D28D9;">game:...</span>
-          </div>
+            <div style="padding: 14px; background: rgba(25, 17, 50, 0.95); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 16px; color: #A5A3C4; font-size: 0.88rem; font-weight: 600; margin-bottom: 20px;">
+              🟢 Connected to Realtime Channel <span id="mpPlayerChannelTag" style="color: #38BDF8; font-weight: 800;">game:...</span>
+            </div>
 
-          <button class="cancel-btn" style="width:100%; margin-top:24px;" onclick="Multiplayer.openLeaveGameModal()">Leave Game 🚪</button>
+            <button class="cancel-btn" style="width: 100%; background: rgba(30, 20, 60, 0.8); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 18px; padding: 14px; color: #FFFFFF; font-weight: 700; font-size: 1rem; font-family: var(--font-heading); cursor: pointer;" onclick="Multiplayer.openLeaveGameModal()">
+              Leave Game 🚪
+            </button>
+          </div>
         </div>
       </section>
 
@@ -947,44 +949,46 @@
             </div>
           </div>
 
-          <div class="question-card main-question-card" style="margin-top:12px;">
-            <h3 id="mpHostQuestionText" class="gameplay-question-text">Loading question...</h3>
+          <div class="question-card main-question-card" style="margin-top:12px; background: rgba(22, 14, 45, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 22px; padding: 24px;">
+            <h3 id="mpHostQuestionText" class="gameplay-question-text" style="color: #FFFFFF; font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800;">Loading question...</h3>
 
-            <div id="mpHostAnswersOverview" class="answers-grid">
+            <div id="mpHostAnswersOverview" class="answers-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
               <!-- Rendered for Host -->
             </div>
           </div>
 
           <!-- Host Control Bar & Progress Indicator -->
-          <div style="background:#FFFFFF; border:1px solid #E2E8F0; padding:16px; border-radius:16px; margin-top:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-            <div>
-              <span style="font-size:0.8rem; color:#64748B; font-weight:600;">RESPONSES RECEIVED</span>
-              <h4 id="mpHostAnswerCount" style="margin:2px 0 0 0; color:#1E293B; font-size:1.3rem;">0 / 0 Answered</h4>
+          <div style="background: rgba(22, 14, 45, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 22px; padding: 20px; margin-top: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.35);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <div>
+                <span style="font-size: 0.84rem; color: #A5A3C4; font-weight: 700; letter-spacing: 1px;">RESPONSES RECEIVED</span>
+                <h4 id="mpHostAnswerCount" style="margin: 4px 0 0 0; color: #FFFFFF; font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800;">0 / 0 Answered</h4>
+              </div>
             </div>
 
-            <div style="display:flex; gap:8px;">
-              <button id="mpShowAnswerBtn" class="primary-btn" style="background:#0284C7; padding:10px 18px; font-size:0.9rem;" onclick="Multiplayer.hostShowAnswer()">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+              <button id="mpShowAnswerBtn" class="primary-btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #FFFFFF; border-radius: 16px; padding: 14px; font-weight: 800; font-size: 0.9rem; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); font-family: var(--font-heading);" onclick="Multiplayer.hostShowAnswer()">
                 Show Answer 💡
               </button>
-              <button id="mpShowResultsBtn" class="primary-btn" style="background:#8B5CF6; padding:10px 18px; font-size:0.9rem;" onclick="Multiplayer.hostShowResults()">
+              <button id="mpShowResultsBtn" class="primary-btn" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: #FFFFFF; border-radius: 16px; padding: 14px; font-weight: 800; font-size: 0.9rem; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); font-family: var(--font-heading);" onclick="Multiplayer.hostShowResults()">
                 Show Results 📊
               </button>
-              <button id="mpHostNextQBtn" class="primary-btn" style="padding:10px 18px; font-size:0.9rem;" onclick="Multiplayer.hostNextQuestion()">
-                Next Question ➡
+              <button id="mpHostNextQBtn" class="primary-btn" style="background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%); color: #FFFFFF; border-radius: 16px; padding: 14px; font-weight: 800; font-size: 0.9rem; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); font-family: var(--font-heading);" onclick="Multiplayer.hostNextQuestion()">
+                Next Question ➔
               </button>
             </div>
           </div>
 
           <!-- Host Correct Answer Banner (Host View Only) -->
-          <div id="mpHostCorrectAnswerBanner" class="feedback-banner hidden" style="margin-top:14px; background:#EFF6FF; border:1px solid #93C5FD; color:#1E40AF; text-align:center;">
-            <div id="mpHostCorrectAnswerText" class="feedback-status-text" style="color:#1E40AF; font-size:1.15rem;">💡 Correct Answer: ...</div>
+          <div id="mpHostCorrectAnswerBanner" class="feedback-banner hidden" style="margin-top: 16px; background: rgba(8, 51, 68, 0.95); border: 1.5px solid #06B6D4; border-radius: 18px; padding: 16px 20px; color: #ECFEFF; text-align: center; box-shadow: 0 0 24px rgba(6, 182, 212, 0.35);">
+            <div id="mpHostCorrectAnswerText" class="feedback-status-text" style="color: #ECFEFF; font-size: 1.15rem; font-weight: 800; font-family: var(--font-heading);">💡 Correct Answer: ...</div>
           </div>
 
           <!-- Live Participant Response Status Roster -->
-          <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:16px; margin-top:14px; padding:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-              <h4 style="margin:0; font-size:0.95rem; color:#1E293B; font-weight:700;">👥 Participant Answer Status</h4>
-              <span id="mpHostResponseBadge" style="font-size:0.8rem; font-weight:600; color:#6D28D9; background:#F3E8FF; padding:4px 12px; border-radius:20px;">0 / 0 Answered</span>
+          <div style="background: rgba(22, 14, 45, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 22px; margin-top: 16px; padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <h4 style="margin: 0; font-size: 1rem; color: #FFFFFF; font-weight: 800; font-family: var(--font-heading);">👥 Participant Answer Status</h4>
+              <span id="mpHostResponseBadge" style="font-size: 0.85rem; font-weight: 700; color: #FFFFFF; background: rgba(139, 92, 246, 0.3); border: 1px solid rgba(168, 85, 247, 0.4); padding: 6px 14px; border-radius: 20px;">0 / 0 Answered</span>
             </div>
             <div id="mpHostLivePlayerStatusList" class="lobby-part-list">
               <!-- Live players rendered with 🟢 Answered or ⏳ Thinking... -->
@@ -999,24 +1003,24 @@
           <div class="gameplay-header-row" style="display:flex; justify-content:space-between; align-items:center;">
             <div style="display:flex; align-items:center; gap:8px;">
               <span id="mpPlayerQCounter" class="q-count-badge">Question 1 of 10</span>
-              <button class="cancel-btn" style="padding:4px 10px; font-size:0.78rem; background:#FEE2E2; color:#DC2626; border:none; font-weight:700;" onclick="Multiplayer.openLeaveGameModal()">Leave Game 🚪</button>
+              <button class="cancel-btn" style="padding: 6px 12px; font-size: 0.8rem; background: rgba(153, 27, 27, 0.6); border: 1px solid rgba(239, 68, 68, 0.4); color: white; border-radius: 12px; font-weight: 700; cursor: pointer;" onclick="Multiplayer.openLeaveGameModal()">Leave Game 🚪</button>
             </div>
             <div class="speed-timer-card" style="margin:0; padding:6px 14px;">
               <span id="mpPlayerTimerValue" class="speed-timer-value" style="font-size:1.1rem;">20.00s</span>
             </div>
           </div>
 
-          <div class="question-card main-question-card" style="margin-top:12px;">
-            <h3 id="mpPlayerQuestionText" class="gameplay-question-text">Loading question...</h3>
+          <div class="question-card main-question-card" style="margin-top: 12px; background: rgba(22, 14, 45, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 22px; padding: 24px;">
+            <h3 id="mpPlayerQuestionText" class="gameplay-question-text" style="color: #FFFFFF; font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800;">Loading question...</h3>
 
             <!-- Choice options shown to player (Answer keys protected!) -->
-            <div id="mpPlayerAnswersContainer" class="answers-grid">
+            <div id="mpPlayerAnswersContainer" class="answers-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
               <!-- Rendered dynamically -->
             </div>
 
-            <div id="mpPlayerFeedbackBanner" class="feedback-banner hidden">
-              <div id="mpPlayerFeedbackText" class="feedback-status-text">✅ Answer Submitted!</div>
-              <div id="mpPlayerFeedbackSub" class="feedback-answer-sub">Waiting for host to reveal results...</div>
+            <div id="mpPlayerFeedbackBanner" class="feedback-banner hidden" style="margin-top: 16px; background: rgba(8, 51, 68, 0.95); border: 1.5px solid #06B6D4; border-radius: 18px; padding: 16px; text-align: center;">
+              <div id="mpPlayerFeedbackText" class="feedback-status-text" style="color: #ECFEFF; font-weight: 800; font-size: 1.1rem; font-family: var(--font-heading);">✅ Answer Submitted!</div>
+              <div id="mpPlayerFeedbackSub" class="feedback-answer-sub" style="color: #A5A3C4; font-size: 0.88rem; margin-top: 4px;">Waiting for host to reveal results...</div>
             </div>
           </div>
         </div>
@@ -1024,18 +1028,18 @@
 
       <!-- Two-Step Leave Game Confirmation Modal -->
       <div id="leaveGameConfirmModal" class="mode-modal hidden" style="z-index: 9999;">
-        <div class="mode-modal-content" style="max-width: 440px; width: 90%; text-align: center;">
+        <div class="mode-modal-content" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 28px; max-width: 440px; width: 90%; text-align: center; color: white;">
           <div style="font-size: 3rem; margin-bottom: 8px;">🚪</div>
-          <h3 style="margin: 0 0 8px 0; color: #DC2626;">Leave Game?</h3>
-          <p style="font-size: 0.9rem; color: #64748B; margin-bottom: 20px; line-height: 1.4;">
+          <h3 style="margin: 0 0 8px 0; color: #F43F5E; font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">Leave Game?</h3>
+          <p style="font-size: 0.9rem; color: #A5A3C4; margin-bottom: 20px; line-height: 1.4;">
             Are you sure you want to leave this game? Your answers will <b>not be recorded</b> and you will be removed from the leaderboard.
           </p>
 
           <div style="display: flex; gap: 10px;">
-            <button class="cancel-btn" style="flex: 1; background: #FEE2E2; color: #DC2626; border: none; font-weight: 700; padding: 12px;" onclick="Multiplayer.confirmLeaveGame()">
+            <button class="cancel-btn" style="flex: 1; background: rgba(153, 27, 27, 0.6); border: 1px solid rgba(239, 68, 68, 0.4); color: white; border-radius: 14px; font-weight: 700; padding: 12px; cursor: pointer;" onclick="Multiplayer.confirmLeaveGame()">
               Yes, Leave Game 🚪
             </button>
-            <button class="primary-btn" style="flex: 1; padding: 12px;" onclick="Multiplayer.closeLeaveGameModal()">
+            <button class="primary-btn" style="flex: 1; padding: 12px; background: linear-gradient(90deg, #7c3aed 0%, #6d28d9 100%); color: white; border-radius: 14px; border: none; font-weight: 700; cursor: pointer;" onclick="Multiplayer.closeLeaveGameModal()">
               Cancel (Stay)
             </button>
           </div>
@@ -1044,18 +1048,18 @@
 
       <!-- ================= MULTIPLAYER: LEADERBOARD & PODIUM SCREEN ================= -->
       <section id="mpLeaderboardScreen" class="screen">
-        <div class="results-card" style="max-width:540px; margin:0 auto; padding:24px;">
-          <div class="results-header" style="text-align:center;">
-            <span id="mpLeaderboardTrophy" class="results-trophy" style="font-size:3.5rem;">🏆</span>
-            <h2 id="mpLeaderboardTitle">Leaderboard</h2>
-            <p id="mpLeaderboardSub">Current Rankings</p>
+        <div class="results-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; max-width: 520px; margin: 0 auto; padding: 28px 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);">
+          <div class="results-header" style="text-align: center;">
+            <span id="mpLeaderboardTrophy" class="results-trophy" style="font-size: 3.8rem; filter: drop-shadow(0 0 16px rgba(251, 191, 36, 0.6)); display: inline-block; margin-bottom: 6px;">🏆</span>
+            <h2 id="mpLeaderboardTitle" style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: #FFFFFF; margin: 0 0 4px 0;">Current Standings 📊</h2>
+            <p id="mpLeaderboardSub" style="color: #A5A3C4; font-size: 0.9rem; margin: 0;">Current Rankings</p>
           </div>
 
-          <div id="mpLeaderboardRoster" style="margin-top:20px;">
+          <div id="mpLeaderboardRoster" style="margin-top: 20px;">
             <!-- Standings list rendered dynamically -->
           </div>
 
-          <button id="mpLeaderboardHomeBtn" class="primary-btn bottom-start-btn" style="margin-top:20px;" onclick="Multiplayer.goHome()">
+          <button id="mpLeaderboardHomeBtn" class="primary-btn bottom-start-btn" style="width: 100%; background: linear-gradient(90deg, #10b981 0%, #059669 100%); color: #FFFFFF; font-weight: 800; font-size: 1.1rem; border-radius: 18px; border: none; padding: 16px; margin-top: 24px; cursor: pointer; box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35); font-family: var(--font-heading);" onclick="Multiplayer.goHome()">
             Back to Home 🏠
           </button>
         </div>

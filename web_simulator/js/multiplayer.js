@@ -1195,19 +1195,28 @@ const Multiplayer = {
         participantStandings.forEach((p, idx) => {
           const card = document.createElement('div');
           card.className = 'lobby-part-card';
+          card.style.background = 'rgba(25, 17, 50, 0.95)';
+          card.style.border = '1.5px solid rgba(139, 92, 246, 0.35)';
+          card.style.borderRadius = '20px';
+          card.style.padding = '16px 20px';
+          card.style.marginBottom = '12px';
+          card.style.display = 'flex';
+          card.style.alignItems = 'center';
+          card.style.justifyContent = 'space-between';
+
           const medals = ['🥇', '🥈', '🥉'];
           const rankTag = idx < 3 ? medals[idx] : `#${idx + 1}`;
           const displayName = p.display_name || p.name || p.playerName || 'Player';
           card.innerHTML = `
-            <div class="part-info-left" style="justify-content:space-between; width:100%;">
-              <div style="display:flex; align-items:center; gap:10px;">
-                <span style="font-size:1.4rem;">${rankTag}</span>
-                <div>
-                  <h5 style="margin:0; font-size:1rem; color:#1E293B; font-weight:700;">${displayName}</h5>
-                  <span style="font-size:0.75rem; color:#64748B;">Correct: ${p.correct_answers || 0}</span>
+            <div class="part-info-left" style="justify-content:space-between; width:100%; align-items:center;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.6rem; display:flex; align-items:center; justify-content:center;">${rankTag}</span>
+                <div style="text-align:left;">
+                  <h5 style="margin:0; font-size:1.05rem; color:#FFFFFF; font-weight:800; font-family:var(--font-heading);">${displayName}</h5>
+                  <span style="font-size:0.82rem; color:#A5A3C4; font-weight:500;">Correct: ${p.correct_answers || 0}</span>
                 </div>
               </div>
-              <span style="font-weight:800; color:#6D28D9; font-size:1.1rem;">${(p.score || 0).toLocaleString()} pts</span>
+              <span style="font-weight:900; color:#34D399; font-size:1.3rem; font-family:var(--font-heading);">${(p.score || 0).toLocaleString()} pts</span>
             </div>
           `;
           rosterEl.appendChild(card);
