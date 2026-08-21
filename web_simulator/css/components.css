@@ -428,11 +428,12 @@
 
 /* Experiment Simulator Card Components */
 .exp-sim-card {
-  background: #FFFFFF;
-  border: 1.5px solid #EDE9FE;
+  background: rgba(25, 18, 55, 0.88);
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
   border-radius: 20px;
   padding: 18px;
-  box-shadow: 0 10px 30px rgba(109, 40, 217, 0.06);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  color: #FFFFFF;
 }
 
 .exp-sim-header {
@@ -440,26 +441,28 @@
 }
 
 .exp-badge {
-  background: #F3E8FF;
-  color: #7C3AED;
-  font-size: 0.72rem;
+  background: #6D28D9;
+  color: #FFFFFF;
+  font-size: 0.75rem;
   font-weight: 800;
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 12px;
   display: inline-block;
   margin-bottom: 6px;
+  border: 1px solid rgba(167, 139, 250, 0.3);
 }
 
 .exp-sim-header h4 {
   font-family: var(--font-heading);
   font-size: 1.15rem;
-  color: #2E1065;
+  color: #FFFFFF;
   margin: 0;
+  font-weight: 800;
 }
 
 .exp-sim-canvas {
-  background: #FAF5FF;
-  border: 2px dashed #DDD6FE;
+  background: rgba(20, 14, 45, 0.75);
+  border: 1.5px dashed rgba(139, 92, 246, 0.4);
   border-radius: 16px;
   padding: 20px 16px;
   text-align: center;
@@ -467,6 +470,7 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  color: #C4B5FD;
 }
 
 .exp-icon-large {
@@ -477,7 +481,7 @@
 .exp-sim-status {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #5B21B6;
+  color: #C4B5FD;
   margin: 0;
 }
 
@@ -490,12 +494,12 @@
 }
 
 .sim-output-log {
-  background: #FFFFFF;
-  border: 1px solid #E9D5FF;
+  background: rgba(20, 14, 45, 0.85);
+  border: 1px solid rgba(139, 92, 246, 0.3);
   border-radius: 12px;
   padding: 12px 14px;
   font-size: 0.85rem;
-  color: #4C1D95;
+  color: #C4B5FD;
   width: 100%;
   box-sizing: border-box;
   text-align: left;
@@ -515,7 +519,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  background: #F3E8FF;
+  background: rgba(20, 14, 45, 0.85);
+  border: 1.5px solid rgba(139, 92, 246, 0.3);
   padding: 6px;
   border-radius: 18px;
 }
@@ -528,7 +533,7 @@
   font-family: var(--font-heading);
   font-size: 0.92rem;
   font-weight: 700;
-  color: #6D28D9;
+  color: #A78BFA;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -540,15 +545,15 @@
 .exp-mode-btn.active {
   background: #7C3AED;
   color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
 }
 
 .exp-activity-card {
-  background: #FFFFFF;
-  border: 1.5px solid #EDE9FE;
+  background: rgba(25, 18, 55, 0.88);
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
   border-radius: 24px;
   padding: 20px 18px;
-  box-shadow: 0 10px 30px rgba(109, 40, 217, 0.06);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -556,15 +561,15 @@
 
 .exp-sub-title {
   font-family: var(--font-heading);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 800;
-  color: #2E1065;
+  color: #FFFFFF;
   text-align: center;
 }
 
 .exp-instruction {
   font-size: 0.88rem;
-  color: #5B21B6;
+  color: #C4B5FD;
   text-align: center;
   margin: -6px 0 4px 0;
 }
@@ -576,9 +581,9 @@
 }
 
 .exp-item-card {
-  background: #F8FAFC;
-  border: 2px solid #E2E8F0;
-  border-radius: 18px;
+  background: rgba(26, 19, 56, 0.9);
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
+  border-radius: 20px;
   padding: 16px 12px;
   display: flex;
   flex-direction: column;
@@ -591,12 +596,13 @@
 .exp-item-card:hover {
   border-color: #A855F7;
   transform: translateY(-2px);
+  background: rgba(35, 24, 75, 0.95);
 }
 
 .exp-item-card.selected {
-  background: #F3E8FF;
-  border-color: #7C3AED;
-  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.18);
+  background: rgba(45, 25, 85, 0.95);
+  border-color: #EC4899;
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.35);
 }
 
 .exp-item-icon {
@@ -607,29 +613,31 @@
 .exp-item-name {
   font-family: var(--font-heading);
   font-size: 0.98rem;
-  font-weight: 700;
-  color: #2E1065;
+  font-weight: 800;
+  color: #FFFFFF;
 }
 
 .exp-item-sub {
   font-size: 0.75rem;
-  color: #6D28D9;
+  color: #A78BFA;
   margin-top: 2px;
 }
 
 .exp-select-badge {
   font-size: 0.72rem;
   font-weight: 800;
-  color: #7C3AED;
-  background: rgba(124, 58, 237, 0.1);
-  padding: 3px 10px;
-  border-radius: 10px;
+  color: #E9D5FF;
+  background: rgba(124, 58, 237, 0.25);
+  border: 1px solid rgba(124, 58, 237, 0.4);
+  padding: 4px 12px;
+  border-radius: 12px;
   margin-top: 8px;
 }
 
 .exp-item-card.selected .exp-select-badge {
   background: #7C3AED;
   color: #FFFFFF;
+  border-color: #8B5CF6;
 }
 
 .combine-action-btn {
@@ -639,27 +647,32 @@
   font-weight: 800;
   border-radius: 16px;
   background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
-  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.25);
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  color: #FFFFFF;
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
   transition: all 0.2s ease;
 }
 
 .combine-action-btn.disabled {
   opacity: 0.55;
   cursor: not-allowed;
-  box-shadow: none;
-  background: #94A3B8;
+  box-shadow: none !important;
+  background: rgba(35, 25, 65, 0.7) !important;
+  color: rgba(255, 255, 255, 0.35) !important;
+  border: 1.5px solid rgba(139, 92, 246, 0.2) !important;
 }
 
 /* Result Screen & Visual Animations */
 .exp-result-container {
-  background: #FAF5FF;
-  border: 2px solid #E9D5FF;
+  background: rgba(25, 18, 55, 0.88);
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
   border-radius: 20px;
   padding: 20px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  color: #FFFFFF;
 }
 
 .reaction-animation-box {
@@ -739,19 +752,21 @@
   font-family: var(--font-heading);
   font-size: 0.95rem;
   font-weight: 800;
-  padding: 6px 16px;
+  padding: 6px 18px;
   border-radius: 20px;
   color: #FFFFFF;
 }
 
 .result-badge.chemical {
   background: #7C3AED;
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+  border: 1px solid rgba(167, 139, 250, 0.3);
 }
 
 .result-badge.physical {
   background: #0284C7;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+  border: 1px solid rgba(125, 211, 252, 0.3);
 }
 
 .exp-explanation-section {
@@ -763,24 +778,24 @@
 }
 
 .exp-explain-block {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 14px 16px;
+  background: rgba(30, 22, 60, 0.9);
+  border: 1.5px solid rgba(139, 92, 246, 0.3);
+  border-radius: 18px;
+  padding: 16px 18px;
 }
 
 .exp-explain-block h5 {
   font-family: var(--font-heading);
-  font-size: 0.95rem;
+  font-size: 1.02rem;
   font-weight: 800;
-  color: #2E1065;
-  margin-bottom: 6px;
+  color: #FFFFFF;
+  margin-bottom: 8px;
 }
 
 .exp-explain-block p {
-  font-size: 0.86rem;
-  line-height: 1.45;
-  color: #334155;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #C4B5FD;
   margin: 0;
 }
 
@@ -790,29 +805,35 @@
 }
 
 .exp-explain-block ul li {
-  font-size: 0.86rem;
-  line-height: 1.45;
-  color: #334155;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #C4B5FD;
   margin-bottom: 4px;
 }
 
 .exp-key-idea-box {
   border-radius: 14px;
-  padding: 12px 14px;
+  padding: 14px 16px;
   font-size: 0.9rem;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .exp-key-idea-box.chemical-key {
-  background: #F3E8FF;
-  border-left: 4px solid #7C3AED;
-  color: #4C1D95;
+  background: rgba(124, 58, 237, 0.2);
+  border-left: 4px solid #A855F7;
+  color: #E9D5FF;
+  border-top: 1px solid rgba(168, 85, 247, 0.2);
+  border-right: 1px solid rgba(168, 85, 247, 0.2);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.2);
 }
 
 .exp-key-idea-box.physical-key {
-  background: #E0F2FE;
-  border-left: 4px solid #0284C7;
-  color: #075985;
+  background: rgba(2, 132, 199, 0.2);
+  border-left: 4px solid #38BDF8;
+  color: #E0F2FE;
+  border-top: 1px solid rgba(56, 189, 248, 0.2);
+  border-right: 1px solid rgba(56, 189, 248, 0.2);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
 }
 
 .reset-exp-btn {
@@ -861,9 +882,9 @@
 }
 
 .exp-explain-block ol li {
-  font-size: 0.86rem;
-  line-height: 1.45;
-  color: #334155;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #C4B5FD;
   margin-bottom: 4px;
 }
 
@@ -2942,13 +2963,14 @@
 
 .exp-item-card.readonly {
   cursor: default;
-  background: #F8FAFC;
-  border: 1.5px solid #E2E8F0;
+  background: rgba(26, 19, 56, 0.7);
+  border: 1.5px solid rgba(139, 92, 246, 0.25);
+  color: #FFFFFF;
 }
 
 .exp-item-card.readonly:hover {
   transform: none;
-  border-color: #E2E8F0;
+  border-color: rgba(139, 92, 246, 0.25);
 }
 
 .exp-condition-select-group {
@@ -2963,7 +2985,7 @@
   font-family: var(--font-heading);
   font-size: 0.88rem;
   font-weight: 800;
-  color: var(--primary-purple-dark);
+  color: #E2E8F0;
 }
 
 .exp-condition-buttons {
@@ -2973,29 +2995,30 @@
 }
 
 .exp-cond-btn {
-  background: #FFFFFF;
-  border: 2px solid var(--accent-light);
+  background: rgba(25, 18, 55, 0.85);
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
   border-radius: var(--radius-sm);
   padding: 12px 10px;
   font-family: var(--font-heading);
   font-size: 0.92rem;
   font-weight: 800;
-  color: var(--text-dark);
+  color: #C4B5FD;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
 .exp-cond-btn:hover {
-  border-color: var(--primary-purple);
-  background: #F5F3FF;
+  border-color: #A855F7;
+  background: rgba(45, 25, 85, 0.9);
+  color: #FFFFFF;
 }
 
 .exp-cond-btn.active {
-  background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+  background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
   color: #FFFFFF;
-  border-color: #6D28D9;
-  box-shadow: 0 4px 14px rgba(109, 40, 217, 0.3);
+  border-color: #8B5CF6;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
 }
 
 .start-reaction-btn {
