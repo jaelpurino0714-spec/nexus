@@ -1371,39 +1371,54 @@
 
       <!-- ================= 8.2 PROFILE EDIT SUB-MENU ================= -->
       <section id="settingsProfileSubScreen" class="screen">
-        <div class="sub-settings-container">
+        <div class="sub-settings-container" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);">
           <button class="back-link" onclick="App.showScreen('settingsScreen')">← Settings</button>
-          <h2>Edit Profile</h2>
+          <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: #FFFFFF; margin: 10px 0 16px 0;">Edit Profile</h2>
           
-          <div class="profile-photo-container">
-            <div class="avatar-wrapper" onclick="document.getElementById('editPhotoInput').click()">
-              <img id="editAvatarPreview" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23d1c4e9'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23673ab7'>👤</text></svg>" alt="Profile Photo">
-              <div class="camera-badge">📷</div>
+          <div class="profile-photo-container" style="text-align: center; margin-bottom: 20px;">
+            <div class="avatar-wrapper" style="position: relative; width: 130px; height: 130px; margin: 0 auto; border-radius: 50%; border: 3px solid #8B5CF6; box-shadow: 0 0 24px rgba(139, 92, 246, 0.5); overflow: visible; cursor: pointer; background: rgba(30, 20, 60, 0.9);" onclick="document.getElementById('editPhotoInput').click()">
+              <img id="editAvatarPreview" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23191132'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23a855f7'>👤</text></svg>" alt="Profile Photo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+              <div class="camera-badge" style="position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); width: 32px; height: 32px; border-radius: 50%; background: #191132; border: 1.5px solid #8B5CF6; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; color: #A855F7; box-shadow: 0 2px 8px rgba(0,0,0,0.4);">📷</div>
             </div>
             <input type="file" id="editPhotoInput" accept="image/*" style="display: none;" onchange="Auth.handleEditPhotoUpload(event)">
-            <p class="photo-hint">Tap icon to change photo</p>
+            <p class="photo-hint" style="color: #A5A3C4; font-size: 0.84rem; margin-top: 10px; font-weight: 500;">Tap icon to change photo</p>
           </div>
 
-          <div class="form-group">
-            <label for="editNameInput">Name</label>
-            <input type="text" id="editNameInput">
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label for="editNameInput" style="font-size: 0.88rem; font-weight: 700; color: #38BDF8; display: block; margin-bottom: 8px;">Name</label>
+            <input type="text" id="editNameInput" class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 16px; color: #FFFFFF; font-weight: 600; font-size: 1rem; padding: 14px 18px; outline: none; box-sizing: border-box; font-family: var(--font-heading);">
           </div>
 
-          <div class="form-group">
-            <label for="editGradeInput">Grade Level</label>
-            <select id="editGradeInput">
-              <option value="Grade 10">Grade 10</option>
-              <option value="Grade 9">Grade 9</option>
-              <option value="Grade 11">Grade 11</option>
-            </select>
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label for="editGradeInput" style="font-size: 0.88rem; font-weight: 700; color: #38BDF8; display: block; margin-bottom: 8px;">Grade Level</label>
+            <div style="position: relative;">
+              <select id="editGradeInput" class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 16px; color: #FFFFFF; font-weight: 600; font-size: 1rem; padding: 14px 18px; outline: none; appearance: none; box-sizing: border-box; font-family: var(--font-heading); cursor: pointer;">
+                <option value="Grade 10" style="background: #1E163B; color: #FFF;">Grade 10</option>
+                <option value="Grade 9" style="background: #1E163B; color: #FFF;">Grade 9</option>
+                <option value="Grade 11" style="background: #1E163B; color: #FFF;">Grade 11</option>
+              </select>
+              <div style="position: absolute; right: 18px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #A855F7; font-size: 0.85rem;">▼</div>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="editSectionInput">Section</label>
-            <input type="text" id="editSectionInput">
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label for="editSectionInput" style="font-size: 0.88rem; font-weight: 700; color: #38BDF8; display: block; margin-bottom: 8px;">Section</label>
+            <div style="position: relative;">
+              <select id="editSectionInput" class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 16px; color: #FFFFFF; font-weight: 600; font-size: 1rem; padding: 14px 18px; outline: none; appearance: none; box-sizing: border-box; font-family: var(--font-heading); cursor: pointer;">
+                <option value="" style="background: #1E163B; color: #888;">Select Section</option>
+                <option value="Einstein" style="background: #1E163B; color: #FFF;">Einstein</option>
+                <option value="Newton" style="background: #1E163B; color: #FFF;">Newton</option>
+                <option value="Galileo" style="background: #1E163B; color: #FFF;">Galileo</option>
+                <option value="Curie" style="background: #1E163B; color: #FFF;">Curie</option>
+                <option value="Tesla" style="background: #1E163B; color: #FFF;">Tesla</option>
+              </select>
+              <div style="position: absolute; right: 18px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #A855F7; font-size: 0.85rem;">▼</div>
+            </div>
           </div>
 
-          <button class="primary-btn" onclick="Auth.updateProfile()">Update Profile</button>
+          <button class="primary-btn" style="width: 100%; background: linear-gradient(90deg, #a855f7 0%, #6366f1 50%, #3b82f6 100%); color: #FFFFFF; font-weight: 800; font-size: 1.05rem; border-radius: 18px; border: none; padding: 16px 24px; box-shadow: 0 4px 20px rgba(168, 85, 247, 0.35); cursor: pointer; font-family: var(--font-heading); text-align: center; transition: all 0.2s ease;" onclick="Auth.updateProfile()">
+            Update Profile 🚀
+          </button>
         </div>
       </section>
 
