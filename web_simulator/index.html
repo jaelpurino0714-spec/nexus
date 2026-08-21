@@ -705,22 +705,33 @@
       <!-- ================= CUSTOM HUB MODAL ================= -->
       <div id="customHubModal" class="mode-modal hidden">
         <div class="mode-modal-content">
-          <h3>Trivia Modes 🎮</h3>
-          <p>Select your gameplay option</p>
+          <div class="modal-handle"></div>
+          <h3 class="gradient-title">Trivia Modes 🎮</h3>
+          <p class="selected-topic-label">Select your gameplay option</p>
           <div class="mode-options">
             <button class="mode-card" onclick="Quiz.selectCustomFlow('join')">
-              <span class="mode-icon">🔑</span>
-              <div>
+              <div class="mode-icon-wrapper">
+                <span class="mode-icon">🔑</span>
+              </div>
+              <div class="mode-card-text">
                 <h4>Join Game</h4>
                 <p>Enter 6-digit Game PIN provided by the host to join a live game</p>
+              </div>
+              <div class="mode-card-arrow">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </button>
 
             <button class="mode-card" onclick="Quiz.selectCustomFlow('custom_play')">
-              <span class="mode-icon">⚡</span>
-              <div>
+              <div class="mode-icon-wrapper">
+                <span class="mode-icon">⚡</span>
+              </div>
+              <div class="mode-card-text">
                 <h4>Single Player</h4>
                 <p>Play offline single-player quiz with customized settings</p>
+              </div>
+              <div class="mode-card-arrow">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </button>
           </div>
