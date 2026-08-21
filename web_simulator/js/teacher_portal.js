@@ -30,40 +30,40 @@ const TeacherPortal = {
     let listHtml = '';
     if (customQuizzes.length === 0) {
       listHtml = `
-        <div style="text-align: center; color: #64748B; padding: 24px 0;">
+        <div style="text-align: center; color: #A5A3C4; padding: 28px 0;">
           <div style="font-size: 2.5rem; margin-bottom: 8px;">📁</div>
           <p>No saved games yet! Click <b>+ Create New Game</b> to build your first quiz.</p>
         </div>
       `;
     } else {
       listHtml = customQuizzes.map(q => `
-        <div class="game-item-card" style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 14px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div class="game-item-card" style="background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.3); padding: 14px 18px; border-radius: 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
           <div>
-            <h4 style="margin: 0 0 4px 0; color: #1E293B;">${q.title}</h4>
-            <span style="font-size: 0.78rem; background: #E0E7FF; color: #3730A3; padding: 2px 8px; border-radius: 10px; font-weight: 600;">Term ${q.term || 1} • ${(q.questions || []).length} Questions</span>
+            <h4 style="margin: 0 0 4px 0; color: #FFFFFF; font-family: var(--font-heading); font-size: 1.05rem; font-weight: 800;">${q.title}</h4>
+            <span style="font-size: 0.8rem; color: #A5A3C4; font-weight: 500;">Term ${q.term || 1} • ${(q.questions || []).length} Questions</span>
           </div>
-          <div style="display: flex; gap: 6px;">
-            <button class="primary-btn" style="padding: 6px 12px; font-size: 0.8rem;" onclick="TeacherPortal.hostCustomGame('${q.id}')">Host 🚀</button>
-            <button class="secondary-btn" style="padding: 6px 12px; font-size: 0.8rem;" onclick="TeacherPortal.duplicateGame('${q.id}')">Duplicate 📋</button>
-            <button class="cancel-btn" style="padding: 6px 12px; font-size: 0.8rem; background: #FEE2E2; color: #DC2626; border: none;" onclick="TeacherPortal.deleteGame('${q.id}')">Delete 🗑️</button>
+          <div style="display: flex; gap: 8px;">
+            <button style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: white; border-radius: 12px; padding: 8px 14px; font-weight: 700; font-size: 0.85rem; border: none; cursor: pointer;" onclick="TeacherPortal.hostCustomGame('${q.id}')">Host 🚀</button>
+            <button style="background: rgba(30, 58, 138, 0.6); border: 1px solid rgba(59, 130, 246, 0.4); color: white; border-radius: 12px; padding: 8px 14px; font-weight: 700; font-size: 0.85rem; cursor: pointer;" onclick="TeacherPortal.duplicateGame('${q.id}')">Duplicate 📋</button>
+            <button style="background: rgba(153, 27, 27, 0.6); border: 1px solid rgba(239, 68, 68, 0.4); color: white; border-radius: 12px; padding: 8px 14px; font-weight: 700; font-size: 0.85rem; cursor: pointer;" onclick="TeacherPortal.deleteGame('${q.id}')">Delete 🗑️</button>
           </div>
         </div>
       `).join('');
     }
 
     modal.innerHTML = `
-      <div class="modal-card" style="max-width: 580px; width: 90%;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <h3 style="margin: 0; color: #4C1D95;">📁 My Games Workspace</h3>
-          <button class="close-modal-btn" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #666;" onclick="TeacherPortal.closeModal('myGamesModal')">✕</button>
+      <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); max-width: 580px; width: 90%; color: white;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+          <h3 style="margin: 0; color: #FFFFFF; font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800;">📁 My Games Workspace</h3>
+          <button class="close-modal-btn" style="background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #A5A3C4;" onclick="TeacherPortal.closeModal('myGamesModal')">✕</button>
         </div>
 
-        <button class="primary-btn" style="width: 100%; margin-bottom: 16px; background: linear-gradient(135deg, #10B981, #059669);" onclick="TeacherPortal.openGameBuilder()">
+        <button class="primary-btn" style="width: 100%; margin-bottom: 20px; background: linear-gradient(90deg, #10b981 0%, #059669 100%); color: #FFFFFF; font-weight: 800; font-size: 1.05rem; border-radius: 18px; border: none; padding: 16px; box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35); cursor: pointer; font-family: var(--font-heading);" onclick="TeacherPortal.openGameBuilder()">
           + Create New Science Game ✏️
         </button>
 
         <div class="games-list-section">
-          <h4 style="margin: 0 0 10px 0; color: #334155;">Saved Games & Drafts (${customQuizzes.length})</h4>
+          <h4 style="margin: 0 0 12px 0; color: #A5A3C4; font-size: 0.88rem; font-weight: 600;">Saved Games & Drafts (${customQuizzes.length})</h4>
           <div style="max-height: 320px; overflow-y: auto;">
             ${listHtml}
           </div>
@@ -77,67 +77,67 @@ const TeacherPortal = {
     this.closeModal('myGamesModal');
     const modal = this.ensureModalContainer('gameBuilderModal');
     modal.innerHTML = `
-      <div class="modal-card" style="max-width: 600px; width: 90%;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-          <h3 style="margin: 0; color: #4C1D95;">✏️ Create Custom Science Game</h3>
-          <button class="close-modal-btn" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #666;" onclick="TeacherPortal.closeModal('gameBuilderModal')">✕</button>
+      <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); max-width: 600px; width: 90%; color: white;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="margin: 0; color: #FFFFFF; font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800;">✏️ Create Custom Science Game</h3>
+          <button class="close-modal-btn" style="background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #A5A3C4;" onclick="TeacherPortal.closeModal('gameBuilderModal')">✕</button>
         </div>
 
-        <div class="form-group" style="margin-bottom: 10px;">
-          <label style="font-weight: bold; font-size: 0.85rem;">Game / Quiz Title *</label>
-          <input type="text" id="builderTitle" placeholder="e.g. Term 1 Science Challenge" class="customize-input">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label style="font-size: 0.88rem; font-weight: 700; color: #C084FC; display: block; margin-bottom: 6px;">Game / Quiz Title *</label>
+          <input type="text" id="builderTitle" placeholder="e.g. Term 1 Science Challenge" class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 16px; color: #FFFFFF; font-weight: 600; font-size: 0.95rem; padding: 12px 16px; outline: none; box-sizing: border-box; font-family: var(--font-heading);">
         </div>
 
-        <div class="form-group" style="margin-bottom: 10px;">
-          <label style="font-weight: bold; font-size: 0.85rem;">Science Term</label>
-          <select id="builderTerm" class="customize-input">
-            <option value="1">Term 1</option>
-            <option value="2">Term 2</option>
-            <option value="3">Term 3</option>
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label style="font-size: 0.88rem; font-weight: 700; color: #C084FC; display: block; margin-bottom: 6px;">Science Term</label>
+          <select id="builderTerm" class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 16px; color: #FFFFFF; font-weight: 600; font-size: 0.95rem; padding: 12px 16px; outline: none; box-sizing: border-box; font-family: var(--font-heading); cursor: pointer;">
+            <option value="1" style="background: #1E163B; color: #FFF;">Term 1</option>
+            <option value="2" style="background: #1E163B; color: #FFF;">Term 2</option>
+            <option value="3" style="background: #1E163B; color: #FFF;">Term 3</option>
           </select>
         </div>
 
-        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 14px; border-radius: 12px; margin-bottom: 14px;">
-          <h4 style="margin: 0 0 10px 0; color: #334155; font-size: 0.95rem;">Add Question</h4>
+        <div style="background: rgba(18, 12, 36, 0.8); border: 1.5px solid rgba(139, 92, 246, 0.3); padding: 16px; border-radius: 20px; margin-bottom: 16px;">
+          <h4 style="margin: 0 0 10px 0; color: #38BDF8; font-size: 0.95rem; font-weight: 800;">Add Question</h4>
           
-          <div class="form-group" style="margin-bottom: 8px;">
-            <label style="font-weight: 600; font-size: 0.8rem; color: #475569;">Answer Format</label>
-            <select id="builderQFormat" class="customize-input" onchange="TeacherPortal.onBuilderFormatChanged()">
-              <option value="multiple_choice" selected>Multiple Choice (4 Options)</option>
-              <option value="true_false">True or False</option>
-              <option value="identification">Identification (Short Answer)</option>
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label style="font-size: 0.84rem; font-weight: 700; color: #C084FC; display: block; margin-bottom: 4px;">Answer Format</label>
+            <select id="builderQFormat" class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 14px; color: #FFFFFF; font-weight: 600; font-size: 0.9rem; padding: 10px 14px; outline: none; box-sizing: border-box; font-family: var(--font-heading); cursor: pointer;" onchange="TeacherPortal.onBuilderFormatChanged()">
+              <option value="multiple_choice" selected style="background: #1E163B; color: #FFF;">Multiple Choice (4 Options)</option>
+              <option value="true_false" style="background: #1E163B; color: #FFF;">True or False</option>
+              <option value="identification" style="background: #1E163B; color: #FFF;">Identification (Short Answer)</option>
             </select>
           </div>
 
-          <input type="text" id="builderQPrompt" placeholder="Question prompt..." class="customize-input" style="margin-bottom: 8px;">
+          <input type="text" id="builderQPrompt" placeholder="Question prompt..." class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 14px; color: #FFFFFF; font-weight: 600; font-size: 0.9rem; padding: 10px 14px; outline: none; box-sizing: border-box; font-family: var(--font-heading); margin-bottom: 10px;">
           
           <div id="builderInputsContainer">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-              <input type="text" id="builderOptA" placeholder="Option A" class="customize-input">
-              <input type="text" id="builderOptB" placeholder="Option B" class="customize-input">
-              <input type="text" id="builderOptC" placeholder="Option C" class="customize-input">
-              <input type="text" id="builderOptD" placeholder="Option D" class="customize-input">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+              <input type="text" id="builderOptA" placeholder="Option A" class="customize-input" style="background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 12px; color: #FFFFFF; padding: 10px; font-size: 0.88rem;">
+              <input type="text" id="builderOptB" placeholder="Option B" class="customize-input" style="background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 12px; color: #FFFFFF; padding: 10px; font-size: 0.88rem;">
+              <input type="text" id="builderOptC" placeholder="Option C" class="customize-input" style="background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 12px; color: #FFFFFF; padding: 10px; font-size: 0.88rem;">
+              <input type="text" id="builderOptD" placeholder="Option D" class="customize-input" style="background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 12px; color: #FFFFFF; padding: 10px; font-size: 0.88rem;">
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <select id="builderCorrect" class="customize-input" style="width: auto;">
-                <option value="0">Correct: Option A</option>
-                <option value="1">Correct: Option B</option>
-                <option value="2">Correct: Option C</option>
-                <option value="3">Correct: Option D</option>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <select id="builderCorrect" class="customize-input" style="width: auto; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 12px; color: #FFFFFF; padding: 8px 12px; font-size: 0.85rem;">
+                <option value="0" style="background: #1E163B; color: #FFF;">Correct: Option A</option>
+                <option value="1" style="background: #1E163B; color: #FFF;">Correct: Option B</option>
+                <option value="2" style="background: #1E163B; color: #FFF;">Correct: Option C</option>
+                <option value="3" style="background: #1E163B; color: #FFF;">Correct: Option D</option>
               </select>
-              <button class="secondary-btn" style="font-size: 0.82rem;" onclick="TeacherPortal.addQuestionToDraft()">+ Add Question</button>
+              <button style="background: linear-gradient(90deg, #7c3aed 0%, #6d28d9 100%); color: white; border-radius: 14px; border: none; padding: 10px 18px; font-weight: 700; font-size: 0.85rem; cursor: pointer;" onclick="TeacherPortal.addQuestionToDraft()">+ Add Question</button>
             </div>
           </div>
         </div>
 
-        <div style="margin-bottom: 14px;">
-          <h4 style="margin: 0 0 6px 0; color: #334155;">Questions Added (<span id="builderQCount">0</span>)</h4>
-          <ul id="builderQuestionsList" style="max-height: 120px; overflow-y: auto; font-size: 0.85rem; padding-left: 20px; color: #475569;">
+        <div style="margin-bottom: 16px;">
+          <h4 style="margin: 0 0 6px 0; color: #A5A3C4; font-size: 0.88rem;">Questions Added (<span id="builderQCount">0</span>)</h4>
+          <ul id="builderQuestionsList" style="max-height: 120px; overflow-y: auto; font-size: 0.85rem; padding-left: 20px; color: #A5A3C4;">
             <!-- Questions rendered here -->
           </ul>
         </div>
 
-        <button class="primary-btn" style="width: 100%;" onclick="TeacherPortal.saveCreatedGame()">Save Game to My Games 💾</button>
+        <button class="primary-btn" style="width: 100%; background: linear-gradient(90deg, #a855f7 0%, #6366f1 100%); color: #FFFFFF; font-weight: 800; font-size: 1.05rem; border-radius: 18px; border: none; padding: 16px; box-shadow: 0 4px 20px rgba(168, 85, 247, 0.35); cursor: pointer; font-family: var(--font-heading);" onclick="TeacherPortal.saveCreatedGame()">Save Game to My Games 💾</button>
       </div>
     `;
     modal.classList.remove('hidden');
@@ -342,42 +342,42 @@ const TeacherPortal = {
     const modal = this.ensureModalContainer('customGameHostSetupModal');
 
     modal.innerHTML = `
-      <div class="modal-card" style="max-width: 480px; width: 90%;">
+      <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); max-width: 480px; width: 90%; color: white;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-          <h3 style="margin: 0; color: #4C1D95;">👑 Host Game: ${quiz.title}</h3>
-          <button class="close-modal-btn" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #666;" onclick="TeacherPortal.closeModal('customGameHostSetupModal')">✕</button>
+          <h3 style="margin: 0; color: #FFFFFF; font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800;">👑 Host Game: ${quiz.title}</h3>
+          <button class="close-modal-btn" style="background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #A5A3C4;" onclick="TeacherPortal.closeModal('customGameHostSetupModal')">✕</button>
         </div>
 
-        <p style="font-size: 0.88rem; color: #64748B; margin-bottom: 16px;">Set participant limit and time per question to generate your Game PIN.</p>
+        <p style="font-size: 0.88rem; color: #A5A3C4; margin-bottom: 18px;">Set participant limit and time per question to generate your Game PIN.</p>
 
-        <div class="form-group" style="margin-bottom: 14px; text-align: left;">
-          <label style="font-weight: bold; font-size: 0.85rem; color: #1E293B;">👥 Number of Participants:</label>
-          <select id="customHostMaxParticipants" class="customize-input" style="margin-top: 4px;">
-            <option value="5">5 Participants</option>
-            <option value="10">10 Participants</option>
-            <option value="20">20 Participants</option>
-            <option value="30">30 Participants</option>
-            <option value="50" selected>50 Participants (Default)</option>
-            <option value="100">100 Participants</option>
-            <option value="200">200 Participants</option>
-            <option value="500">500 Participants</option>
-            <option value="9999">Unlimited (Maximum Supported)</option>
+        <div class="form-group" style="margin-bottom: 16px; text-align: left;">
+          <label style="font-size: 0.88rem; font-weight: 700; color: #38BDF8; display: block; margin-bottom: 6px;">👥 Number of Participants:</label>
+          <select id="customHostMaxParticipants" class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 16px; color: #FFFFFF; font-weight: 600; font-size: 0.95rem; padding: 12px 16px; outline: none; box-sizing: border-box; font-family: var(--font-heading); cursor: pointer;">
+            <option value="5" style="background: #1E163B; color: #FFF;">5 Participants</option>
+            <option value="10" style="background: #1E163B; color: #FFF;">10 Participants</option>
+            <option value="20" style="background: #1E163B; color: #FFF;">20 Participants</option>
+            <option value="30" style="background: #1E163B; color: #FFF;">30 Participants</option>
+            <option value="50" selected style="background: #1E163B; color: #FFF;">50 Participants (Default)</option>
+            <option value="100" style="background: #1E163B; color: #FFF;">100 Participants</option>
+            <option value="200" style="background: #1E163B; color: #FFF;">200 Participants</option>
+            <option value="500" style="background: #1E163B; color: #FFF;">500 Participants</option>
+            <option value="9999" style="background: #1E163B; color: #FFF;">Unlimited (Maximum Supported)</option>
           </select>
         </div>
 
-        <div class="form-group" style="margin-bottom: 20px; text-align: left;">
-          <label style="font-weight: bold; font-size: 0.85rem; color: #1E293B;">⏱️ Time per Question:</label>
-          <select id="customHostTimeLimit" class="customize-input" style="margin-top: 4px;">
-            <option value="10">10 Seconds</option>
-            <option value="15">15 Seconds</option>
-            <option value="20" selected>20 Seconds (Default)</option>
-            <option value="30">30 Seconds</option>
-            <option value="45">45 Seconds</option>
-            <option value="60">60 Seconds</option>
+        <div class="form-group" style="margin-bottom: 22px; text-align: left;">
+          <label style="font-size: 0.88rem; font-weight: 700; color: #38BDF8; display: block; margin-bottom: 6px;">⏱️ Time per Question:</label>
+          <select id="customHostTimeLimit" class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 16px; color: #FFFFFF; font-weight: 600; font-size: 0.95rem; padding: 12px 16px; outline: none; box-sizing: border-box; font-family: var(--font-heading); cursor: pointer;">
+            <option value="10" style="background: #1E163B; color: #FFF;">10 Seconds</option>
+            <option value="15" style="background: #1E163B; color: #FFF;">15 Seconds</option>
+            <option value="20" selected style="background: #1E163B; color: #FFF;">20 Seconds (Default)</option>
+            <option value="30" style="background: #1E163B; color: #FFF;">30 Seconds</option>
+            <option value="45" style="background: #1E163B; color: #FFF;">45 Seconds</option>
+            <option value="60" style="background: #1E163B; color: #FFF;">60 Seconds</option>
           </select>
         </div>
 
-        <button class="primary-btn" style="width: 100%; padding: 12px; font-weight: 700;" onclick="TeacherPortal.startCustomGameHost('${quiz.id}')">
+        <button class="primary-btn" style="width: 100%; background: linear-gradient(90deg, #a855f7 0%, #6366f1 100%); color: #FFFFFF; font-weight: 800; font-size: 1.05rem; border-radius: 18px; border: none; padding: 16px; box-shadow: 0 4px 20px rgba(168, 85, 247, 0.35); cursor: pointer; font-family: var(--font-heading);" onclick="TeacherPortal.startCustomGameHost('${quiz.id}')">
           Start Hosting & Generate Code 🚀
         </button>
       </div>
