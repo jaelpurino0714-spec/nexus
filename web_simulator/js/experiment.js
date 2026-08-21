@@ -832,10 +832,10 @@ const Experiment = {
               💡 <b>Key Idea:</b> Chemical reaction = substances react and form one or more new substances.
             </div>
 
-            <div class="exp-explain-block" style="background:#FAF5FF; border-color:#DDD6FE;">
-              <h5 style="color:#6D28D9;">🧪 Suggested Reaction:</h5>
-              <p><b>Iron + Oxygen + Water → Rust (Iron Oxide)</b></p>
-              <p style="font-size:0.8rem; color:#5B21B6; margin-top:4px;">Water/moisture helps the rusting process happen, but oxygen is the substance reacting with the iron.</p>
+            <div class="exp-explain-block">
+              <h5 style="color:#38BDF8;">🧪 Suggested Reaction:</h5>
+              <p style="color:#E9D5FF;"><b>Iron + Oxygen + Water → Rust (Iron Oxide)</b></p>
+              <p style="font-size:0.8rem; color:#C4B5FD; margin-top:4px;">Water/moisture helps the rusting process happen, but oxygen is the substance reacting with the iron.</p>
             </div>
           </div>
 
@@ -1679,8 +1679,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🧪 EXPERIMENT 1 — Catalyst: Hydrogen Peroxide + Catalyst</div>
-          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
-            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate that a catalyst increases the rate of a reaction without being consumed by the reaction.
             </p>
           </div>
@@ -1805,8 +1805,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🧪 EXPERIMENT 2 — Inhibitor: Hydrogen Peroxide + Inhibitor</div>
-          <div class="exp-explain-block" style="background:#FEF2F2; border-color:#FCA5A5;">
-            <p style="font-size:0.88rem; color:#991B1B; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate that an inhibitor slows down a chemical reaction.
             </p>
           </div>
@@ -1925,7 +1925,7 @@ const Experiment = {
         <div class="exp-activity-card">
           <div class="exp-sub-title">📚 Final Learning Panel</div>
 
-          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+          <div class="exp-explain-block">
             <h5 style="color:#6D28D9; font-size:1.1rem;">⚡ Catalysts vs. Inhibitors</h5>
             <table class="comparison-table" style="margin-top:10px;">
               <thead>
@@ -2078,8 +2078,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🌡️ EXPERIMENT 1 — Body Temperature Regulation</div>
-          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
-            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how the human body maintains a stable internal temperature when the environment becomes too hot or too cold.
             </p>
           </div>
@@ -2215,8 +2215,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🍬 EXPERIMENT 2 — Blood Glucose Regulation</div>
-          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
-            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how the body keeps blood glucose within a suitable range after eating.
             </p>
           </div>
@@ -2359,7 +2359,7 @@ const Experiment = {
         <div class="exp-activity-card">
           <div class="exp-sub-title">📚 Final Homeostasis Panel</div>
 
-          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+          <div class="exp-explain-block">
             <h5 style="color:#6D28D9; font-size:1.1rem;">🔄 How Does Homeostasis Work?</h5>
             
             <div class="homeo-five-steps">
@@ -2391,7 +2391,7 @@ const Experiment = {
               💡 <b>Key Concept:</b> Homeostasis keeps the body's internal environment relatively stable through continuous adjustments.
             </div>
 
-            <div class="exp-explain-block" style="background:#FFF7ED; border-color:#FFD8A8;">
+            <div class="exp-explain-block">
               <h5 style="color:#9A3412;">🔄 Negative Feedback</h5>
               <p style="color:#7C2D12;">Both experiments demonstrate <b>negative feedback</b>:</p>
               <div style="font-family:var(--font-heading); font-size:0.92rem; font-weight:800; color:#C2410C; margin-top:6px; text-align:center;">
@@ -2501,8 +2501,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🦋 EXPERIMENT 1 — Natural Selection: Camouflage</div>
-          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
-            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how natural selection can cause a population to change when individuals with certain inherited traits survive and reproduce more successfully.
             </p>
           </div>
@@ -2630,8 +2630,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🦠 EXPERIMENT 2 — Antibiotic Resistance</div>
-          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
-            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how natural selection can lead to antibiotic resistance in a bacterial population.
             </p>
           </div>
@@ -2849,8 +2849,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🐇 EXPERIMENT 1 — Rabbit Population Growth</div>
-          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
-            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how a population can grow rapidly when resources are abundant and eventually approach the environment's carrying capacity.
             </p>
           </div>
@@ -2926,8 +2926,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🌱 EXPERIMENT 2 — Changing Carrying Capacity</div>
-          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
-            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how environmental changes can increase or decrease an ecosystem's carrying capacity.
             </p>
           </div>
@@ -3029,8 +3029,8 @@ const Experiment = {
         <div class="exp-activity-card">
           <div class="exp-sub-title">📚 Final Concept Panel — Population Growth & Carrying Capacity</div>
 
-          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
-            <h5 style="color:#6D28D9;">Population Growth</h5>
+          <div class="exp-explain-block">
+            <h5 style="color:#FFFFFF;">Population Growth</h5>
             <p>A population increases when births and immigration exceed deaths and emigration.</p>
 
             <h5 style="color:#6D28D9; margin-top:10px;">Carrying Capacity</h5>
@@ -3038,7 +3038,7 @@ const Experiment = {
           </div>
 
           <div class="exp-explanation-section" style="margin-top:14px;">
-            <div class="exp-explain-block" style="background:#FFF7ED; border-color:#FFD8A8;">
+            <div class="exp-explain-block">
               <h5 style="color:#9A3412;">Important Relationship</h5>
               <ul style="margin-top:4px;">
                 <li>More resources → Higher carrying capacity</li>
@@ -3116,8 +3116,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🧫 EXPERIMENT 1 — Yeast Fermentation</div>
-          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
-            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how microorganisms can be used in biotechnology to produce useful products through fermentation.
             </p>
           </div>
@@ -3179,8 +3179,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🧬 EXPERIMENT 2 — Recombinant DNA / Insulin Production</div>
-          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
-            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how biotechnology can use genetic engineering to produce useful biological products.
             </p>
           </div>
@@ -3261,8 +3261,8 @@ const Experiment = {
         <div class="exp-activity-card">
           <div class="exp-sub-title">📚 Final Biotechnology Panel</div>
 
-          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
-            <h5 style="color:#6D28D9;">Biotechnology</h5>
+          <div class="exp-explain-block">
+            <h5 style="color:#FFFFFF;">Biotechnology</h5>
             <p>The use of living organisms, cells, or biological processes to develop useful products and technologies.</p>
             
             <ul style="margin-top:8px;">
@@ -3342,8 +3342,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🌍 EXPERIMENT 1 — Divergent Plate Boundary</div>
-          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
-            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate what happens when two tectonic plates move away from each other.
             </p>
           </div>
@@ -3407,8 +3407,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🏔️ EXPERIMENT 2 — Convergent Plate Boundary</div>
-          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
-            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate what happens when two tectonic plates collide.
             </p>
           </div>
@@ -3473,8 +3473,8 @@ const Experiment = {
         <div class="exp-activity-card">
           <div class="exp-sub-title">📚 Final Plate Tectonics Panel</div>
 
-          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
-            <h5 style="color:#6D28D9;">Plate Tectonics</h5>
+          <div class="exp-explain-block">
+            <h5 style="color:#FFFFFF;">Plate Tectonics</h5>
             <p>Earth's crust is divided into moving tectonic plates driven by heat from Earth's core.</p>
 
             <ul style="margin-top:8px;">
@@ -3557,8 +3557,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🌍 EXPERIMENT 1 — Greenhouse Effect</div>
-          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
-            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how greenhouse gases help retain heat in Earth's atmosphere.
             </p>
           </div>
@@ -3630,8 +3630,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🌊 EXPERIMENT 2 — Ocean and Climate</div>
-          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
-            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how oceans influence Earth's climate by absorbing and storing heat.
             </p>
           </div>
@@ -3720,8 +3720,8 @@ const Experiment = {
         <div class="exp-activity-card">
           <div class="exp-sub-title">📚 Final Global Climate Panel</div>
 
-          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
-            <h5 style="color:#6D28D9;">Factors Affecting Climate</h5>
+          <div class="exp-explain-block">
+            <h5 style="color:#FFFFFF;">Factors Affecting Climate</h5>
             <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
               <span class="resource-pill">☀️ Solar energy</span>
               <span class="resource-pill">🌊 Oceans</span>
@@ -3796,8 +3796,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🌊 EXPERIMENT 1 — El Niño</div>
-          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
-            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how unusually warm surface waters in the central and eastern tropical Pacific can affect atmospheric circulation and weather patterns.
             </p>
           </div>
@@ -3863,8 +3863,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🌊 EXPERIMENT 2 — La Niña</div>
-          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
-            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how unusually cool surface waters in the central and eastern tropical Pacific affect global atmospheric circulation and weather patterns.
             </p>
           </div>
@@ -3932,8 +3932,8 @@ const Experiment = {
         <div class="exp-activity-card">
           <div class="exp-sub-title">📚 Final ENSO Panel</div>
 
-          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
-            <h5 style="color:#6D28D9;">El Niño–Southern Oscillation (ENSO)</h5>
+          <div class="exp-explain-block">
+            <h5 style="color:#FFFFFF;">El Niño–Southern Oscillation (ENSO)</h5>
             <p>A recurring climate pattern involving interactions between the tropical Pacific Ocean and atmosphere.</p>
             
             <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:0.82rem;">
@@ -4041,8 +4041,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">♻️ EXPERIMENT 1 — Waste Management</div>
-          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
-            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how proper waste segregation and recycling can reduce the amount of waste sent to landfills.
             </p>
           </div>
@@ -4126,8 +4126,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">⚡ EXPERIMENT 2 — Household Energy Conservation</div>
-          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
-            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how small changes in household energy use can reduce electricity consumption and environmental impact.
             </p>
           </div>
@@ -4246,8 +4246,8 @@ const Experiment = {
         <div class="exp-activity-card">
           <div class="exp-sub-title">📚 Final Sustainability Panel</div>
 
-          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
-            <h5 style="color:#6D28D9;">🌍 What Is Sustainability?</h5>
+          <div class="exp-explain-block">
+            <h5 style="color:#FFFFFF;">🌍 What Is Sustainability?</h5>
             <p>Sustainability means meeting present needs while protecting the ability of future generations to meet their needs.</p>
 
             <h5 style="color:#6D28D9; margin-top:10px;">Local Actions</h5>
@@ -4349,8 +4349,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🏀 EXPERIMENT 1 — Launch Angle and Range</div>
-          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
-            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how changing the launch angle affects the horizontal range of a projectile.
             </p>
           </div>
@@ -4448,8 +4448,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🏹 EXPERIMENT 2 — Initial Velocity and Projectile Motion</div>
-          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
-            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how increasing the initial velocity changes the distance and height of a projectile.
             </p>
           </div>
@@ -4530,8 +4530,8 @@ const Experiment = {
         <div class="exp-activity-card">
           <div class="exp-sub-title">📚 Final Projectile Motion Panel</div>
 
-          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
-            <h5 style="color:#6D28D9;">Projectile Motion = Horizontal Motion + Vertical Motion</h5>
+          <div class="exp-explain-block">
+            <h5 style="color:#FFFFFF;">Projectile Motion = Horizontal Motion + Vertical Motion</h5>
             
             <ul style="margin-top:8px;">
               <li><b>Horizontal Motion (➡️):</b> Approximately constant velocity (no horizontal acceleration).</li>
@@ -4628,8 +4628,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🚗 EXPERIMENT 1 — Momentum: Mass and Velocity</div>
-          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
-            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how mass and velocity affect momentum.
             </p>
           </div>
@@ -4703,8 +4703,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">💥 EXPERIMENT 2 — Collision and Conservation of Momentum</div>
-          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
-            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate that total momentum is conserved in an isolated collision.
             </p>
           </div>
@@ -4778,8 +4778,8 @@ const Experiment = {
         <div class="exp-activity-card">
           <div class="exp-sub-title">📚 Final Momentum & Collisions Panel</div>
 
-          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
-            <h5 style="color:#6D28D9;">Momentum and Collisions</h5>
+          <div class="exp-explain-block">
+            <h5 style="color:#FFFFFF;">Momentum and Collisions</h5>
             <p>Momentum (<i>p = mv</i>) measures an object's mass in motion. In collisions, momentum transfers between objects while total momentum remains conserved.</p>
           </div>
 
@@ -4864,8 +4864,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">⚡ EXPERIMENT 1 — Power Plant to Home</div>
-          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
-            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate the complete journey of electricity from a power plant to a household.
             </p>
           </div>
@@ -4934,8 +4934,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">⚡ EXPERIMENT 2 — Why High Voltage Is Used</div>
-          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
-            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate why electricity is transmitted at high voltage.
             </p>
           </div>
@@ -5020,8 +5020,8 @@ const Experiment = {
         <div class="exp-activity-card">
           <div class="exp-sub-title">📚 Final Electricity Distribution Panel</div>
 
-          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
-            <h5 style="color:#6D28D9;">Electricity Generation & Distribution</h5>
+          <div class="exp-explain-block">
+            <h5 style="color:#FFFFFF;">Electricity Generation & Distribution</h5>
             <p>Power plants generate electricity, step-up transformers raise voltage for long-distance grid transmission, and step-down transformers lower voltage to safe levels for homes.</p>
           </div>
 
@@ -5113,8 +5113,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">☀️ EXPERIMENT 1 — Solar vs. Fossil Fuel Energy</div>
-          <div class="exp-explain-block" style="background:#F0FDF4; border-color:#86EFAC;">
-            <p style="font-size:0.88rem; color:#166534; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Compare a renewable energy source with a non-renewable energy source.
             </p>
           </div>
@@ -5233,8 +5233,8 @@ const Experiment = {
       html += `
         <div class="exp-activity-card">
           <div class="exp-sub-title">🌬️ EXPERIMENT 2 — Renewable Energy Mix</div>
-          <div class="exp-explain-block" style="background:#FFFBEB; border-color:#FCD34D;">
-            <p style="font-size:0.88rem; color:#92400E; font-weight:700;">
+          <div class="exp-explain-block">
+            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
               <b>Goal:</b> Demonstrate how different renewable energy sources can contribute to electricity generation.
             </p>
           </div>
@@ -5320,7 +5320,7 @@ const Experiment = {
         <div class="exp-activity-card">
           <div class="exp-sub-title">📚 Final Energy Sources Panel</div>
 
-          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
+          <div class="exp-explain-block">
             <h5 style="color:#15803D;">♻️ Renewable Energy</h5>
             <p>☀️ Solar | 🌬️ Wind | 💧 Hydropower | 🌋 Geothermal</p>
             <div style="font-size:0.82rem; font-weight:700; color:#166534; margin-top:4px;">Naturally replenished by nature.</div>

@@ -778,13 +778,17 @@
 }
 
 .exp-explain-block {
-  background: rgba(30, 22, 60, 0.9);
-  border: 1.5px solid rgba(139, 92, 246, 0.3);
-  border-radius: 18px;
+  background: rgba(30, 20, 60, 0.95);
+  border-left: 4px solid #A855F7;
+  border-top: 1px solid rgba(168, 85, 247, 0.25);
+  border-right: 1px solid rgba(168, 85, 247, 0.25);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: 14px;
   padding: 16px 18px;
+  color: #E9D5FF;
 }
 
-.exp-explain-block h5 {
+.exp-explain-block h5, .exp-explain-block h6 {
   font-family: var(--font-heading);
   font-size: 1.02rem;
   font-weight: 800;
@@ -792,11 +796,16 @@
   margin-bottom: 8px;
 }
 
-.exp-explain-block p {
+.exp-explain-block p, .exp-explain-block div {
   font-size: 0.88rem;
   line-height: 1.5;
-  color: #C4B5FD;
+  color: #E9D5FF;
   margin: 0;
+}
+
+.exp-explain-block b, .exp-explain-block strong {
+  color: #FFFFFF;
+  font-weight: 800;
 }
 
 .exp-explain-block ul {
@@ -807,7 +816,7 @@
 .exp-explain-block ul li {
   font-size: 0.88rem;
   line-height: 1.5;
-  color: #C4B5FD;
+  color: #E9D5FF;
   margin-bottom: 4px;
 }
 
