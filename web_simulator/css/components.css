@@ -3167,9 +3167,10 @@
 }
 
 /* Final Learning Panel Objectives Box */
+/* Final Learning Panel Objectives Box */
 .exp-objective-box {
-  background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
-  border: 2px solid #86EFAC;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1.5px solid rgba(16, 185, 129, 0.4);
   border-radius: 18px;
   padding: 16px;
   margin-top: 12px;
@@ -3179,14 +3180,14 @@
   font-family: var(--font-heading);
   font-size: 1.05rem;
   font-weight: 800;
-  color: #166534;
+  color: #34D399;
   margin-bottom: 6px;
 }
 
 .exp-objective-box p {
   font-size: 0.88rem;
-  color: #15803D;
-  line-height: 1.4;
+  color: #A7F3D0;
+  line-height: 1.45;
 }
 
 .exp-obj-pills {
@@ -3203,32 +3204,32 @@
   font-size: 0.95rem;
   font-weight: 800;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .obj-pill.catalyst {
-  background: #DCFCE7;
-  color: #15803D;
-  border: 1.5px solid #4ADE80;
+  background: rgba(16, 185, 129, 0.25);
+  color: #67E8F9;
+  border: 1.5px solid #34D399;
 }
 
 .obj-pill.inhibitor {
-  background: #FEE2E2;
-  color: #B91C1C;
-  border: 1.5px solid #FCA5A5;
+  background: rgba(239, 68, 68, 0.25);
+  color: #FCA5A5;
+  border: 1.5px solid #F87171;
 }
 
 .exp-obj-sub {
   font-size: 0.84rem;
-  color: #166534;
+  color: #A7F3D0;
   font-weight: 600;
   margin-top: 6px;
 }
 
 /* ---------------- 9. Homeostasis Styles ---------------- */
 .homeo-body-card {
-  background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
-  border: 2px solid #3B82F6;
+  background: rgba(25, 18, 55, 0.88);
+  border: 2px solid rgba(139, 92, 246, 0.4);
   border-radius: 18px;
   padding: 16px;
   display: flex;
@@ -3236,59 +3237,60 @@
   align-items: center;
   gap: 10px;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.12);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   margin: 12px 0;
+  color: #FFFFFF;
 }
 
 .homeo-body-icon {
   font-size: 3.2rem;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+  filter: none;
 }
 
 .homeo-temp-display {
   font-family: var(--font-heading);
   font-size: 1.15rem;
   font-weight: 800;
-  color: #1E40AF;
-  background: #DBEAFE;
+  color: #60A5FA;
+  background: rgba(37, 99, 235, 0.25);
   padding: 6px 16px;
   border-radius: 20px;
-  border: 1px solid #BFDBFE;
+  border: 1px solid rgba(96, 165, 250, 0.4);
 }
 
 .homeo-temp-display.hot {
-  color: #991B1B;
-  background: #FEE2E2;
-  border-color: #FCA5A5;
+  color: #FCA5A5;
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(248, 113, 113, 0.4);
 }
 
 .homeo-temp-display.cold {
-  color: #0369A1;
-  background: #E0F2FE;
-  border-color: #7DD3FC;
+  color: #7DD3FC;
+  background: rgba(2, 132, 199, 0.25);
+  border-color: rgba(56, 189, 248, 0.4);
 }
 
 .homeo-glucose-display {
   font-family: var(--font-heading);
   font-size: 1.15rem;
   font-weight: 800;
-  color: #92400E;
-  background: #FEF3C7;
+  color: #FDE047;
+  background: rgba(245, 158, 11, 0.25);
   padding: 6px 16px;
   border-radius: 20px;
-  border: 1px solid #FCD34D;
+  border: 1px solid rgba(251, 191, 36, 0.4);
 }
 
 .homeo-glucose-display.high {
-  color: #991B1B;
-  background: #FEE2E2;
-  border-color: #FCA5A5;
+  color: #FCA5A5;
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(248, 113, 113, 0.4);
 }
 
 .homeo-glucose-display.low {
-  color: #1E40AF;
-  background: #DBEAFE;
-  border-color: #BFDBFE;
+  color: #93C5FD;
+  background: rgba(37, 99, 235, 0.25);
+  border-color: rgba(96, 165, 250, 0.4);
 }
 
 .homeo-stepper-box {
@@ -3300,14 +3302,14 @@
 }
 
 .homeo-step-card {
-  background: #FFFFFF;
-  border: 1.5px solid #E2E8F0;
+  background: rgba(30, 22, 60, 0.9);
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
   border-radius: 14px;
   padding: 10px 14px;
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
 .homeo-step-card .step-icon {
@@ -3318,13 +3320,13 @@
 .homeo-step-card .step-text {
   font-size: 0.88rem;
   font-weight: 700;
-  color: #1E293B;
+  color: #E2E8F0;
 }
 
 .homeo-arrow-divider {
   text-align: center;
   font-size: 1.1rem;
-  color: #8B5CF6;
+  color: #C084FC;
   margin: -2px 0;
 }
 
@@ -3333,11 +3335,12 @@
   box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
   font-size: 1rem;
   padding: 8px 18px;
+  color: #FFFFFF;
 }
 
 .homeo-flow-diagram {
-  background: #F8FAFC;
-  border: 1px dashed #CBD5E1;
+  background: rgba(20, 14, 45, 0.85);
+  border: 1px dashed rgba(139, 92, 246, 0.4);
   border-radius: 16px;
   padding: 14px;
   margin-top: 10px;
@@ -3347,7 +3350,7 @@
   font-family: var(--font-heading);
   font-size: 0.92rem;
   font-weight: 800;
-  color: #475569;
+  color: #C4B5FD;
   margin-bottom: 8px;
   text-align: center;
 }
@@ -3360,21 +3363,21 @@
 }
 
 .homeo-flow-pill {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
+  background: rgba(30, 22, 60, 0.9);
+  border: 1px solid rgba(139, 92, 246, 0.35);
   border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 0.82rem;
+  padding: 8px 14px;
+  font-size: 0.84rem;
   font-weight: 700;
-  color: #334155;
+  color: #FFFFFF;
   text-align: center;
   width: 90%;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
 
 .homeo-flow-arrow {
   font-size: 0.85rem;
-  color: #94A3B8;
+  color: #C084FC;
 }
 
 .homeo-five-steps {
@@ -3515,38 +3518,40 @@
 }
 
 .evo-term-card {
-  background: #FFFFFF;
-  border-left: 4px solid #3B82F6;
-  border-top: 1px solid #E2E8F0;
-  border-right: 1px solid #E2E8F0;
-  border-bottom: 1px solid #E2E8F0;
+  background: rgba(30, 22, 60, 0.9);
+  border-left: 4px solid #38BDF8;
+  border-top: 1px solid rgba(139, 92, 246, 0.3);
+  border-right: 1px solid rgba(139, 92, 246, 0.3);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.3);
   border-radius: 12px;
-  padding: 10px 14px;
+  padding: 12px 14px;
 }
 
 .evo-term-card h6 {
   font-family: var(--font-heading);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   font-weight: 800;
-  color: #1E40AF;
-  margin-bottom: 2px;
+  color: #38BDF8;
+  margin-bottom: 3px;
 }
 
 .evo-term-card p {
-  font-size: 0.82rem;
-  color: #475569;
+  font-size: 0.84rem;
+  color: #C4B5FD;
   margin: 0;
+  line-height: 1.45;
 }
 
 /* ---------------- 11. Carrying Capacity & Population Growth Styles ---------------- */
 .pop-graph-box {
-  background: #FFFFFF;
-  border: 1.5px solid #E2E8F0;
+  background: rgba(25, 18, 55, 0.88);
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
   border-radius: 16px;
   padding: 16px;
   width: 100%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   margin: 12px 0;
+  color: #FFFFFF;
 }
 
 .pop-graph-header {

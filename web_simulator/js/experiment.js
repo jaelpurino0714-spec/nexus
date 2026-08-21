@@ -2734,16 +2734,16 @@ const Experiment = {
         <div class="exp-activity-card">
           <div class="exp-sub-title">📚 Final Mechanisms of Evolution Panel</div>
 
-          <div class="exp-explain-block" style="background:#FAF5FF; border-color:#E9D5FF;">
-            <h5 style="color:#6D28D9; font-size:1.1rem;">🧬 Natural Selection</h5>
-            <div style="font-family:var(--font-heading); font-size:0.88rem; font-weight:800; color:#5B21B6; margin-top:6px; text-align:center;">
+          <div class="exp-explain-block">
+            <h5 style="color:#38BDF8; font-size:1.1rem;">🧬 Natural Selection</h5>
+            <div style="font-family:var(--font-heading); font-size:0.88rem; font-weight:800; color:#C4B5FD; margin-top:6px; text-align:center;">
               Variation → Selection Pressure → Differential Survival/Reproduction → Inherited Traits Become More Common
             </div>
           </div>
 
           <div class="exp-explanation-section" style="margin-top:14px;">
             <div class="exp-explain-block">
-              <h5>Key Terms</h5>
+              <h5 style="color:#FFFFFF;">Key Terms</h5>
               <div class="evo-terms-grid">
                 <div class="evo-term-card">
                   <h6>Variation</h6>
@@ -2764,7 +2764,7 @@ const Experiment = {
               </div>
             </div>
 
-            <div class="exp-key-idea-box chemical-key" style="background:#EFF6FF; border-color:#BFDBFE; color:#1E40AF;">
+            <div class="exp-key-idea-box chemical-key">
               💡 <b>Main Concept:</b> Evolution occurs at the population level over generations, not because individual organisms intentionally change their traits.
             </div>
 
