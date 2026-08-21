@@ -1828,6 +1828,36 @@
   box-sizing: border-box;
 }
 
+.preset-time-pill {
+  background: rgba(25, 17, 50, 0.9);
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
+  border-radius: 14px;
+  color: #E9D5FF;
+  padding: 10px 4px;
+  font-family: var(--font-heading, 'Inter', sans-serif);
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.preset-time-pill:hover {
+  border-color: #A855F7;
+  background: rgba(38, 25, 75, 0.95);
+  color: #FFFFFF;
+}
+
+.preset-time-pill.active {
+  border-color: #38BDF8;
+  background: rgba(25, 17, 50, 0.95);
+  color: #38BDF8;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+  font-weight: 800;
+}
+
 .cancel-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.2);

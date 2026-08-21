@@ -278,6 +278,35 @@ const Quiz = {
     }
   },
 
+  selectPresetTime(seconds, btnEl) {
+    const input = document.getElementById('customTimeLimit');
+    if (input) {
+      input.value = seconds;
+    }
+    const container = document.getElementById('timePresetGroup');
+    if (container) {
+      container.querySelectorAll('.preset-time-pill').forEach(btn => btn.classList.remove('active'));
+    }
+    if (btnEl) {
+      btnEl.classList.add('active');
+    }
+  },
+
+  onTimeLimitInput(val) {
+    const num = parseInt(val, 10);
+    const container = document.getElementById('timePresetGroup');
+    if (container) {
+      container.querySelectorAll('.preset-time-pill').forEach(btn => {
+        const btnVal = parseInt(btn.innerText, 10);
+        if (btnVal === num) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+  },
+
   // Validate & Confirm Pre-Game Customize Settings
   async confirmCustomSettingsAndStart() {
     const timeVal = parseInt(document.getElementById('customTimeLimit').value, 10);
