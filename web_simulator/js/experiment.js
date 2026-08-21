@@ -1143,7 +1143,7 @@ const Experiment = {
             <div class="exp-explain-block">
               <h5>General Reaction:</h5>
               <p><b>Acid + Base → Salt + Water</b></p>
-              <p style="font-size:0.84rem; color:#5B21B6; margin-top:4px;"><b>Example:</b> Hydrochloric Acid + Sodium Hydroxide → Sodium Chloride + Water<br><code>HCl + NaOH → NaCl + H₂O</code></p>
+              <p style="font-size:0.84rem; color:#C4B5FD; margin-top:4px;"><b>Example:</b> Hydrochloric Acid + Sodium Hydroxide → Sodium Chloride + Water<br><code>HCl + NaOH → NaCl + H₂O</code></p>
             </div>
 
             <div class="exp-explain-block">
@@ -1284,7 +1284,7 @@ const Experiment = {
               <div class="eq-symbol-item"><b>→</b> = Produces</div>
               <div class="eq-symbol-item"><b>2</b> = Coefficient</div>
             </div>
-            <div style="font-size:0.86rem; margin-top:8px; color:#334155;">
+            <div style="font-size:0.86rem; margin-top:8px; color:#E9D5FF;">
               • <b>Reactants:</b> ${isH2O ? 'Hydrogen and Oxygen' : 'Sodium and Chlorine'}<br>
               • <b>Product:</b> ${isH2O ? 'Water' : 'Sodium Chloride'}
             </div>
@@ -1305,10 +1305,10 @@ const Experiment = {
                 <p>${isH2O ? 'Oxygen: 2 atoms' : 'Chlorine: 2 atoms'}</p>
               </div>
             </div>
-            <div class="toast-banner" style="background:#DCFCE7; border-color:#86EFAC; color:#15803D; margin-top:10px;">
-              ✅ BALANCED EQUATION
+            <div class="toast-banner" style="background:rgba(16, 185, 129, 0.25); border-color:rgba(16, 185, 129, 0.4); color:#67E8F9; margin-top:10px;">
+              ✅ <b>BALANCED!</b> Left Side = Right Side! Great job!
             </div>
-            <p style="font-size:0.84rem; color:#334155; margin-top:6px;">
+            <p style="font-size:0.84rem; color:#E9D5FF; margin-top:6px;">
               The equation is balanced because the number of ${isH2O ? 'hydrogen and oxygen' : 'sodium and chlorine'} atoms is the same on both sides.
             </p>
           </div>
@@ -1348,7 +1348,7 @@ const Experiment = {
             <div class="exp-info-item"><b>Products:</b> The new substances formed by the reaction.</div>
             <div class="exp-info-item"><b>Coefficients:</b> Numbers placed in front of chemical formulas to show how many particles or molecules are involved.</div>
             <div class="exp-info-item"><b>Balanced Chemical Equation:</b> An equation where the number of atoms of each element is equal on both sides.</div>
-            <div class="exp-info-item" style="margin-top:4px; font-weight:700; color:#92400E;">💡 Important Rule: Never change the small numbers inside a chemical formula when balancing an equation. Change only the coefficients in front.</div>
+            <div class="exp-info-item" style="margin-top:4px; font-weight:700; color:#FDE047;">💡 Important Rule: Never change the small numbers inside a chemical formula when balancing an equation. Change only the coefficients in front.</div>
           </div>
         </div>
 
@@ -1461,11 +1461,11 @@ const Experiment = {
 
           <!-- Status Toast Banner -->
           ${isBalanced ? `
-            <div class="toast-banner" style="background:#DCFCE7; border-color:#86EFAC; color:#15803D; margin-top:10px; font-size:1.1rem; padding:12px;">
-              🎉 ✅ BALANCED!
+            <div class="toast-banner" style="background:rgba(16, 185, 129, 0.25); border-color:rgba(16, 185, 129, 0.4); color:#67E8F9; margin-top:10px; font-size:1.1rem; padding:12px;">
+              🎉 <b>CORRECT!</b> Chemical equation balanced perfectly!
             </div>
           ` : `
-            <div class="toast-banner" style="background:#FFFBEB; border-color:#F59E0B; color:#92400E; margin-top:10px;">
+            <div class="toast-banner" style="background:rgba(245, 158, 11, 0.2); border-color:rgba(245, 158, 11, 0.4); color:#FDE047; margin-top:10px;">
               ⚠️ Not balanced yet. Keep adjusting coefficients!
             </div>
           `}
@@ -1521,7 +1521,7 @@ const Experiment = {
           <div class="exp-explanation-section" style="margin-top:12px;">
             <div class="exp-explain-block">
               <h5>🧠 Explanation: Step-by-Step</h5>
-              <div style="font-weight:700; color:#5B21B6; font-size:0.95rem; margin-bottom:6px;">
+              <div style="font-weight:700; color:#38BDF8; font-size:0.95rem; margin-bottom:6px;">
                 Balanced Chemical Equation: ${isGuided ? '2H₂ + O₂ → 2H₂O' : '2Na + Cl₂ → 2NaCl'}
               </div>
               
@@ -1585,7 +1585,7 @@ const Experiment = {
         <!-- IMPORTANT RULE CARD -->
         <div class="rule-card">
           <div class="rule-title">⚠️ Important Rule</div>
-          <p style="margin:0; font-size:0.84rem; color:#78350F; line-height:1.4;">
+          <p style="margin:0; font-size:0.84rem; color:#E9D5FF; line-height:1.4;">
             When balancing chemical equations, <b>change only the coefficients</b>. Never change the subscripts in a chemical formula.
           </p>
           <div class="rule-example">
@@ -1886,7 +1886,7 @@ const Experiment = {
               }</p>
             </div>
 
-            <div class="exp-key-idea-box chemical-key" style="background:#FFF7ED; border-color:#FFD8A8; color:#9A3412;">
+            <div class="exp-key-idea-box chemical-key">
               💡 <b>Key Idea:</b> Inhibitor → slows down a reaction
             </div>
 
@@ -1931,20 +1931,20 @@ const Experiment = {
               <thead>
                 <tr>
                   <th>Aspect</th>
-                  <th style="color:#15803D;">🟢 Catalyst</th>
-                  <th style="color:#B91C1C;">🔴 Inhibitor</th>
+                  <th style="color:#34D399;">🟢 Catalyst</th>
+                  <th style="color:#FCA5A5;">🔴 Inhibitor</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><b>Effect</b></td>
-                  <td>Speeds up reaction</td>
-                  <td>Slows down reaction</td>
+                  <td style="font-weight:700; color:#38BDF8;">Effect on Rate</td>
+                  <td>Increases reaction rate</td>
+                  <td>Decreases reaction rate</td>
                 </tr>
                 <tr>
-                  <td><b>Activation energy</b></td>
-                  <td>Generally lowers it</td>
-                  <td>Can interfere with reaction pathways</td>
+                  <td style="font-weight:700; color:#38BDF8;">How it works</td>
+                  <td>Lowers activation energy</td>
+                  <td>Blocks active sites / slows reaction step</td>
                 </tr>
                 <tr>
                   <td><b>Purpose</b></td>
@@ -1961,15 +1961,14 @@ const Experiment = {
           </div>
 
           <div class="exp-explanation-section" style="margin-top:14px;">
-            <div class="exp-explain-block">
-              <h5>Key Concepts</h5>
-              <div style="margin-bottom:8px;">
-                <b>Catalyst:</b><br>
-                <span style="font-size:0.86rem; color:#475569;">A substance that increases the rate of a chemical reaction by providing an alternative pathway with lower activation energy, without being consumed overall.</span>
+            <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
+              <div style="background:rgba(30, 22, 60, 0.9); border:1px solid rgba(139, 92, 246, 0.35); border-radius:12px; padding:10px 14px;">
+                <div style="font-weight:800; color:#34D399; font-size:0.9rem;">🟢 Catalyst Definition</div>
+                <span style="font-size:0.86rem; color:#E9D5FF;">A substance that increases the rate of a chemical reaction by providing an alternative pathway with lower activation energy, without being consumed overall.</span>
               </div>
-              <div>
-                <b>Inhibitor:</b><br>
-                <span style="font-size:0.86rem; color:#475569;">A substance that decreases the rate of a chemical reaction by interfering with the reaction process.</span>
+              <div style="background:rgba(30, 22, 60, 0.9); border:1px solid rgba(139, 92, 246, 0.35); border-radius:12px; padding:10px 14px;">
+                <div style="font-weight:800; color:#FCA5A5; font-size:0.9rem;">🔴 Inhibitor Definition</div>
+                <span style="font-size:0.86rem; color:#E9D5FF;">A substance that decreases the rate of a chemical reaction by interfering with the reaction process.</span>
               </div>
             </div>
 
@@ -2319,7 +2318,7 @@ const Experiment = {
               }</p>
             </div>
 
-            <div class="exp-key-idea-box chemical-key" style="background:#FFF7ED; border-color:#FFD8A8; color:#9A3412;">
+            <div class="exp-key-idea-box chemical-key">
               💡 <b>Key Idea:</b> ${isEat ? 
                 'Blood glucose rises → insulin is released → cells take in glucose → blood glucose returns toward normal' : 
                 'Blood glucose falls → glucagon is released → stored glucose is released → blood glucose returns toward normal'
@@ -4483,26 +4482,26 @@ const Experiment = {
               <div class="homeo-body-icon">🏹</div>
               <div class="homeo-temp-display">Velocity Level: ${vel.toUpperCase()}</div>
               
-              <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:0.82rem;">
-                <tr style="background:#F1F5F9;">
-                  <th style="padding:6px; border:1px solid #CBD5E1;">Velocity</th>
-                  <th style="padding:6px; border:1px solid #CBD5E1;">Height</th>
-                  <th style="padding:6px; border:1px solid #CBD5E1;">Range</th>
+              <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:0.82rem; color:#E9D5FF;">
+                <tr style="background:rgba(139, 92, 246, 0.25);">
+                  <th style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3); color:#38BDF8;">Velocity</th>
+                  <th style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3); color:#38BDF8;">Height</th>
+                  <th style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3); color:#38BDF8;">Range</th>
                 </tr>
-                <tr style="${vel === 'low' ? 'background:#DCFCE7; font-weight:bold;' : ''}">
-                  <td style="padding:6px; border:1px solid #CBD5E1;">Low 🟢</td>
-                  <td style="padding:6px; border:1px solid #CBD5E1;">Lower (15m)</td>
-                  <td style="padding:6px; border:1px solid #CBD5E1;">Shorter (40m)</td>
+                <tr style="${vel === 'low' ? 'background:rgba(16, 185, 129, 0.25); font-weight:bold; color:#67E8F9;' : ''}">
+                  <td style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3);">Low 🟢</td>
+                  <td style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3);">Lower (15m)</td>
+                  <td style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3);">Shorter (40m)</td>
                 </tr>
-                <tr style="${vel === 'medium' ? 'background:#FEF3C7; font-weight:bold;' : ''}">
-                  <td style="padding:6px; border:1px solid #CBD5E1;">Medium 🟡</td>
-                  <td style="padding:6px; border:1px solid #CBD5E1;">Higher (35m)</td>
-                  <td style="padding:6px; border:1px solid #CBD5E1;">Longer (80m)</td>
+                <tr style="${vel === 'medium' ? 'background:rgba(245, 158, 11, 0.25); font-weight:bold; color:#FDE047;' : ''}">
+                  <td style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3);">Medium 🟡</td>
+                  <td style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3);">Higher (35m)</td>
+                  <td style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3);">Longer (80m)</td>
                 </tr>
-                <tr style="${vel === 'high' ? 'background:#FEE2E2; font-weight:bold;' : ''}">
-                  <td style="padding:6px; border:1px solid #CBD5E1;">High 🔴</td>
-                  <td style="padding:6px; border:1px solid #CBD5E1;">Highest (70m)</td>
-                  <td style="padding:6px; border:1px solid #CBD5E1;">Longest (150m)</td>
+                <tr style="${vel === 'high' ? 'background:rgba(239, 68, 68, 0.25); font-weight:bold; color:#FCA5A5;' : ''}">
+                  <td style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3);">High 🔴</td>
+                  <td style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3);">Highest (70m)</td>
+                  <td style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3);">Longest (150m)</td>
                 </tr>
               </table>
             </div>
@@ -4714,7 +4713,7 @@ const Experiment = {
         html += `
           <div class="homeo-body-card">
             <div style="font-size:1.8rem; margin-bottom:4px;">🛒 Cart A → 💥 ← Cart B 🛒</div>
-            <div style="font-size:0.82rem; font-weight:800; color:#334155;">
+            <div style="font-size:0.88rem; font-weight:800; color:#E9D5FF;">
               Cart A: 2 kg @ +3 m/s (p = +6) | Cart B: 2 kg @ -1 m/s (p = -2)
             </div>
           </div>
@@ -4728,11 +4727,11 @@ const Experiment = {
         html += `
           <div class="exp-result-container physical-result">
             <div class="homeo-body-card" style="margin:0; width:100%;">
-              <div style="font-size:0.88rem; font-weight:800; color:#1E293B;">
-                Before Collision: p_total = (2 × 3) + (2 × -1) = 6 - 2 = <b>4 kg·m/s</b>
+              <div style="font-size:0.92rem; font-weight:800; color:#FFFFFF;">
+                Before Collision: p_total = (2 × 3) + (2 × -1) = 6 - 2 = <b style="color:#38BDF8;">4 kg·m/s</b>
               </div>
-              <div style="font-size:0.88rem; font-weight:800; color:#15803D; margin-top:6px;">
-                After Collision: p_total = <b>4 kg·m/s</b>
+              <div style="font-size:0.92rem; font-weight:800; color:#34D399; margin-top:6px;">
+                After Collision: p_total = <b style="color:#67E8F9;">4 kg·m/s</b>
               </div>
             </div>
 
