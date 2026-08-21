@@ -1264,45 +1264,61 @@
       <section id="settingsScreen" class="screen">
         <div class="settings-container">
           <button class="back-link" onclick="App.showScreen('homeScreen')">← Home</button>
-          <h2>Settings & Overview</h2>
-          <p class="subtitle">Choose a menu option below</p>
+          <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: #FFFFFF; margin-top: 10px;">Settings & Overview</h2>
+          <p class="subtitle" style="color: #A5A3C4; font-size: 0.9rem; margin-bottom: 20px;">Choose a menu option below</p>
 
-          <!-- 3 Dedicated Settings Buttons -->
-          <div class="settings-menu-grid">
+          <!-- 4 Dedicated Settings Buttons -->
+          <div class="settings-menu-grid" style="display: flex; flex-direction: column; gap: 14px;">
             <button class="settings-menu-btn data-btn" onclick="Settings.openSubMenu('data')">
-              <span class="menu-icon">📊</span>
-              <div class="menu-info">
-                <h3>1. Data</h3>
-                <p>View performance statistics, streaks, and term/topic accuracy</p>
+              <div class="menu-icon-box">
+                <span class="menu-icon-inner">📊</span>
               </div>
-              <span class="arrow">➔</span>
+              <div class="menu-info" style="flex: 1;">
+                <h3 style="color: #38BDF8;">1. Data</h3>
+                <p style="color: #A5A3C4;">View performance statistics, streaks, and term/topic accuracy</p>
+              </div>
+              <div class="menu-arrow-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
             </button>
 
             <button class="settings-menu-btn profile-btn" onclick="Settings.openSubMenu('profile')">
-              <span class="menu-icon">👤</span>
-              <div class="menu-info">
-                <h3>2. Profile</h3>
-                <p>View & edit profile photo, name, grade level, and section</p>
+              <div class="menu-icon-box">
+                <span class="menu-icon-inner">👤</span>
               </div>
-              <span class="arrow">➔</span>
+              <div class="menu-info" style="flex: 1;">
+                <h3 style="color: #38BDF8;">2. Profile</h3>
+                <p style="color: #A5A3C4;">View & edit profile photo, name, grade level, and section</p>
+              </div>
+              <div class="menu-arrow-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
             </button>
 
             <button class="settings-menu-btn achievements-btn" onclick="Settings.openSubMenu('achievements')">
-              <span class="menu-icon">🏅</span>
-              <div class="menu-info">
-                <h3>3. Achievements</h3>
-                <p>View all 14 unlockable badges & milestones</p>
+              <div class="menu-icon-box">
+                <span class="menu-icon-inner">🏅</span>
               </div>
-              <span class="arrow">➔</span>
+              <div class="menu-info" style="flex: 1;">
+                <h3 style="color: #38BDF8;">3. Achievements</h3>
+                <p style="color: #A5A3C4;">View all 14 unlockable badges & milestones</p>
+              </div>
+              <div class="menu-arrow-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
             </button>
 
-            <button class="settings-menu-btn logout-btn-card" style="border: 2px solid #ef5350; background: #ffebee;" onclick="Auth.logout()">
-              <span class="menu-icon">🚪</span>
-              <div class="menu-info">
-                <h3 style="color: #c62828;">4. Log Out</h3>
-                <p style="color: #d32f2f;">Clear stored profile session and switch role</p>
+            <button class="settings-menu-btn logout-btn-card" onclick="Auth.logout()">
+              <div class="menu-icon-box logout-icon-box">
+                <span class="menu-icon-inner">🚪</span>
               </div>
-              <span class="arrow" style="color: #c62828;">➔</span>
+              <div class="menu-info" style="flex: 1;">
+                <h3 style="color: #F43F5E;">4. Log Out</h3>
+                <p style="color: #FCA5A5;">Clear stored profile session and switch role</p>
+              </div>
+              <div class="menu-arrow-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F43F5E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
             </button>
           </div>
         </div>
