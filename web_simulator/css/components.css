@@ -889,9 +889,12 @@
 }
 
 .exp-info-panel {
-  background: #FFFBEB;
-  border: 1.5px solid #FCD34D;
-  border-radius: 16px;
+  background: rgba(30, 20, 60, 0.95);
+  border-left: 4px solid #A855F7;
+  border-top: 1px solid rgba(168, 85, 247, 0.25);
+  border-right: 1px solid rgba(168, 85, 247, 0.25);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: 14px;
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
@@ -900,20 +903,21 @@
 
 .exp-info-panel h5 {
   font-family: var(--font-heading);
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   font-weight: 800;
-  color: #92400E;
+  color: #FFFFFF;
   margin: 0 0 4px 0;
 }
 
 .exp-info-item {
-  font-size: 0.85rem;
-  color: #78350F;
-  line-height: 1.4;
+  font-size: 0.88rem;
+  color: #E9D5FF;
+  line-height: 1.45;
 }
 
 .exp-info-item b {
-  color: #451A03;
+  color: #FFFFFF;
+  font-weight: 800;
 }
 
 /* Floating Interactive Character Companion (App Container) */

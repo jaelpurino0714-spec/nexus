@@ -1766,8 +1766,8 @@ const Experiment = {
               💡 <b>Key Idea:</b> Catalyst → lowers activation energy → increases reaction rate
             </div>
 
-            <div class="exp-info-panel" style="background:#EFF6FF; border-color:#BFDBFE;">
-              <div class="exp-info-item" style="color:#1E40AF;">
+            <div class="exp-info-panel">
+              <div class="exp-info-item">
                 ⚠️ <b>Important:</b> A catalyst is not used up in the overall reaction.
               </div>
             </div>
@@ -2708,8 +2708,8 @@ const Experiment = {
               💡 <b>Key Idea:</b> Natural selection can increase the frequency of inherited traits that help organisms survive in a particular environment.
             </div>
 
-            <div class="exp-info-panel" style="background:#FFFBEB; border-color:#FCD34D;">
-              <div class="exp-info-item" style="color:#92400E;">
+            <div class="exp-info-panel">
+              <div class="exp-info-item">
                 ⚠️ <b>Important Note:</b> Resistance can already exist because of inherited genetic variation. The antibiotic creates a selection pressure that favors resistant bacteria (it does not simply teach bacteria to become resistant).
               </div>
             </div>
@@ -3162,8 +3162,8 @@ const Experiment = {
               💡 <b>Key Idea:</b> Biotechnology uses living organisms or biological processes to produce useful products.
             </div>
 
-            <div class="exp-info-panel" style="background:#FFFBEB; border-color:#FCD34D;">
-              <div class="exp-info-item" style="color:#92400E;">
+            <div class="exp-info-panel">
+              <div class="exp-info-item">
                 🍞 <b>Real-Life Application (Bread-making):</b> Carbon dioxide produced by yeast gets trapped in dough and helps it rise.
               </div>
             </div>
@@ -3243,8 +3243,8 @@ const Experiment = {
               💡 <b>Key Idea:</b> Genetic engineering allows scientists to introduce specific genetic information into organisms to produce useful products.
             </div>
 
-            <div class="exp-info-panel" style="background:#EFF6FF; border-color:#BFDBFE;">
-              <div class="exp-info-item" style="color:#1E40AF;">
+            <div class="exp-info-panel">
+              <div class="exp-info-item">
                 💉 <b>Real-Life Application (Insulin Production):</b> Genetically engineered microorganisms are used to produce human insulin for diabetic medical treatment.
               </div>
             </div>
@@ -4211,14 +4211,14 @@ const Experiment = {
 
           <div class="exp-explanation-section" style="margin-top:14px;">
             ${!isEnergyOptimal ? `
-              <div class="exp-info-panel" style="background:#FEF2F2; border-color:#FCA5A5; margin-bottom:10px;">
-                <div class="exp-info-item" style="color:#991B1B;">
+              <div class="exp-info-panel" style="border-left-color:#EF4444; margin-bottom:10px;">
+                <div class="exp-info-item" style="color:#FCA5A5;">
                   ⚠️ <b>Still Wasting Energy:</b> Total energy is <b>${kwh} kWh</b>, which is above 4 kWh. The household is still wasting energy and didn't save enough energy! Turn off AC, lights, or unplug unused devices to reduce energy use to 4 kWh or below.
                 </div>
               </div>
             ` : `
-              <div class="exp-info-panel" style="background:#F0FDF4; border-color:#86EFAC; margin-bottom:10px;">
-                <div class="exp-info-item" style="color:#166534;">
+              <div class="exp-info-panel" style="border-left-color:#10B981; margin-bottom:10px;">
+                <div class="exp-info-item" style="color:#A7F3D0;">
                   🎉 <b>Excellent Energy Saving!</b> Total energy successfully reduced to <b>${kwh} kWh</b> (Saved ${reduction} kWh/day).
                 </div>
               </div>
@@ -4423,8 +4423,8 @@ const Experiment = {
               💡 <b>Key Idea:</b> Changing the launch angle changes the projectile's trajectory, flight time, and horizontal range.
             </div>
 
-            <div class="exp-info-panel" style="background:#FFFBEB; border-color:#FCD34D; margin-top:10px;">
-              <div style="font-weight:800; color:#92400E; font-size:0.88rem; margin-bottom:6px;">❓ Challenge: Which angle gives the greatest range when launch and landing heights are equal?</div>
+            <div class="exp-info-panel" style="margin-top:10px;">
+              <div style="font-weight:800; color:#FFFFFF; font-size:0.88rem; margin-bottom:6px;">❓ Challenge: Which angle gives the greatest range when launch and landing heights are equal?</div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
                 ${[15, 30, 45, 60, 75].map(a => `
                   <button class="exp-cond-btn ${this.projectileAnswer === String(a) ? 'active' : ''}" onclick="Experiment.answerProjectileChallenge('${a}')">${a}°</button>
@@ -4751,8 +4751,8 @@ const Experiment = {
               💡 <b>Key Idea:</b> Total momentum before collision = Total momentum after collision.
             </div>
 
-            <div class="exp-info-panel" style="background:#FFFBEB; border-color:#FCD34D; margin-top:10px;">
-              <div style="font-weight:800; color:#92400E; font-size:0.88rem; margin-bottom:6px;">❓ Challenge: What happens to total momentum after the collision?</div>
+            <div class="exp-info-panel" style="margin-top:10px;">
+              <div style="font-weight:800; color:#FFFFFF; font-size:0.88rem; margin-bottom:6px;">❓ Challenge: What happens to total momentum after the collision?</div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
                 <button class="exp-cond-btn ${this.momentumAnswer === 'inc' ? 'active' : ''}" onclick="Experiment.answerMomentumChallenge('inc')">Increases</button>
                 <button class="exp-cond-btn ${this.momentumAnswer === 'dec' ? 'active' : ''}" onclick="Experiment.answerMomentumChallenge('dec')">Decreases</button>
@@ -4993,8 +4993,8 @@ const Experiment = {
               💡 <b>Key Idea:</b> High voltage allows electricity to be transmitted more efficiently over long distances.
             </div>
 
-            <div class="exp-info-panel" style="background:#FFFBEB; border-color:#FCD34D; margin-top:10px;">
-              <div style="font-weight:800; color:#92400E; font-size:0.88rem; margin-bottom:6px;">❓ Challenge: Why is electricity transmitted at high voltage?</div>
+            <div class="exp-info-panel" style="margin-top:10px;">
+              <div style="font-weight:800; color:#FFFFFF; font-size:0.88rem; margin-bottom:6px;">❓ Challenge: Why is electricity transmitted at high voltage?</div>
               <div style="display:flex; flex-direction:column; gap:6px;">
                 <button class="exp-cond-btn ${this.electricityAnswer === 'curr' ? 'active' : ''}" onclick="Experiment.answerElectricityChallenge('curr')">To increase current</button>
                 <button class="exp-cond-btn ${this.electricityAnswer === 'loss' ? 'active' : ''}" onclick="Experiment.answerElectricityChallenge('loss')">To reduce current and minimize energy loss in transmission lines</button>
@@ -5292,8 +5292,8 @@ const Experiment = {
               💡 <b>Key Idea:</b> Renewable energy comes from resources that are naturally replenished, while non-renewable energy relies on finite resources.
             </div>
 
-            <div class="exp-info-panel" style="background:#FFFBEB; border-color:#FCD34D; margin-top:10px;">
-              <div style="font-weight:800; color:#92400E; font-size:0.88rem; margin-bottom:6px;">❓ Challenge: Which of these energy sources is non-renewable?</div>
+            <div class="exp-info-panel" style="margin-top:10px;">
+              <div style="font-weight:800; color:#FFFFFF; font-size:0.88rem; margin-bottom:6px;">❓ Challenge: Which of these energy sources is non-renewable?</div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
                 <button class="exp-cond-btn ${this.energyMixAnswer === 'solar' ? 'active' : ''}" onclick="Experiment.answerEnergyMixChallenge('solar')">☀️ Solar</button>
                 <button class="exp-cond-btn ${this.energyMixAnswer === 'wind' ? 'active' : ''}" onclick="Experiment.answerEnergyMixChallenge('wind')">🌬️ Wind</button>
