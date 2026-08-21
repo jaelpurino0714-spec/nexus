@@ -392,9 +392,9 @@ body.fullscreen-mode .app-container {
 }
 
 .secondary-btn {
-  background-color: white;
-  color: var(--primary-purple-dark);
-  border: 2px solid var(--accent-light);
+  background-color: rgba(30, 22, 60, 0.9);
+  color: #C4B5FD;
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
   font-family: var(--font-heading);
   font-weight: 700;
   padding: 12px 18px;
@@ -405,7 +405,9 @@ body.fullscreen-mode .app-container {
 }
 
 .secondary-btn:hover {
-  background-color: var(--bg-subtle);
+  background-color: rgba(45, 25, 85, 0.95);
+  border-color: #A855F7;
+  color: #FFFFFF;
 }
 
 .back-link {

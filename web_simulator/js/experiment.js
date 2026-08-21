@@ -2603,8 +2603,8 @@ const Experiment = {
               💡 <b>Key Idea:</b> Natural selection favors inherited traits that improve survival and reproduction in a particular environment.
             </div>
 
-            <div class="exp-info-panel" style="background:#EFF6FF; border-color:#BFDBFE;">
-              <div class="exp-info-item" style="color:#1E40AF;">
+            <div class="exp-info-panel">
+              <div class="exp-info-item" style="color:#C4B5FD;">
                 ⚠️ <b>Important Note:</b> The individual insect did not evolve during its lifetime. The population changed across generations because individuals with different inherited traits had different reproductive success.
               </div>
             </div>
@@ -2619,7 +2619,7 @@ const Experiment = {
             <button class="secondary-btn" style="flex:1;" onclick="Experiment.resetEvolutionActivity()">
               🔄 Reset Experiment
             </button>
-            <button class="secondary-btn" style="flex:1; background:#F3E8FF; border-color:#C084FC; color:#6D28D9;" onclick="Experiment.setEvolutionEnv('${isGreenEnv ? 'brown' : 'green'}')">
+            <button class="secondary-btn" style="flex:1; background:rgba(45, 25, 85, 0.9); border-color:#A855F7; color:#FFFFFF;" onclick="Experiment.setEvolutionEnv('${isGreenEnv ? 'brown' : 'green'}')">
               🔀 Switch Env (${isGreenEnv ? 'Brown 🟤' : 'Green 🌿'})
             </button>
           </div>
