@@ -60,100 +60,101 @@
 
       <!-- ================= 1. AUTHENTICATION LANDING & CREATION SCREEN ================= -->
       <section id="loginSelectionScreen" class="screen">
-        <div class="modal-card" style="max-width: 440px; margin: 0 auto; padding: 24px;">
-          <div class="modal-header" style="text-align: center; margin-bottom: 16px;">
-            <span class="modal-icon" style="font-size: 2.5rem;">🧬</span>
-            <h2 id="authHeaderTitle" style="font-size: 1.8rem; margin: 4px 0; color: #5B21B6;">Nexus Portal</h2>
-            <p id="authHeaderSub" style="font-size: 0.88rem; color: #666;">Sign in or create your account to begin</p>
+        <div class="modal-card" style="max-width: 440px; margin: 0 auto; padding: 28px 24px; background: #0B0C1E; border: 1.5px solid #2D1B69; border-radius: 28px; box-shadow: 0 10px 40px rgba(11, 12, 30, 0.9), 0 0 30px rgba(124, 58, 237, 0.15);">
+          <!-- Glowing Header Logo & Title -->
+          <div class="modal-header" style="text-align: center; margin-bottom: 22px;">
+            <div style="font-size: 3rem; margin-bottom: 6px; filter: drop-shadow(0 0 14px rgba(236,72,153,0.55));">🧬</div>
+            <h2 id="authHeaderTitle" style="font-size: 2.1rem; margin: 2px 0; color: #FFFFFF; font-weight: 800; letter-spacing: -0.5px;">Nexus <span style="color: #A855F7;">Portal</span></h2>
+            <p id="authHeaderSub" style="font-size: 0.88rem; color: #94A3B8; margin-top: 4px;">Sign in or create your account to begin</p>
           </div>
 
           <!-- Auth Navigation Tabs: Sign In / Create Account -->
-          <div style="display: flex; gap: 8px; background: #F3E8FF; padding: 4px; border-radius: 12px; margin-bottom: 16px;">
-            <button type="button" id="signInTabBtn" onclick="Auth.switchMode('signin')" style="flex: 1; padding: 8px 12px; border-radius: 10px; border: none; background: #7C3AED; color: white; font-weight: 700; cursor: pointer; font-size: 0.9rem;">Sign In 🔑</button>
-            <button type="button" id="signUpTabBtn" onclick="Auth.switchMode('signup')" style="flex: 1; padding: 8px 12px; border-radius: 10px; border: none; background: transparent; color: #6D28D9; font-weight: 700; cursor: pointer; font-size: 0.9rem;">Create Account ✨</button>
+          <div style="display: flex; gap: 8px; background: #0E0F26; padding: 5px; border-radius: 16px; border: 1px solid #231648; margin-bottom: 20px;">
+            <button type="button" id="signInTabBtn" onclick="Auth.switchMode('signin')" style="flex: 1; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%); color: #FFFFFF; font-weight: 700; cursor: pointer; font-size: 0.92rem; box-shadow: 0 4px 16px rgba(124,58,237,0.4); transition: all 0.2s;">Sign In 🔑</button>
+            <button type="button" id="signUpTabBtn" onclick="Auth.switchMode('signup')" style="flex: 1; padding: 10px 12px; border-radius: 12px; border: 1px solid transparent; background: transparent; color: #A5A3C4; font-weight: 600; cursor: pointer; font-size: 0.92rem; transition: all 0.2s;">Create Account ✨</button>
           </div>
 
           <!-- Error Alert Banner -->
-          <div id="authErrorBanner" class="warning-msg" style="display: none; background: #FEE2E2; border: 1px solid #FCA5A5; color: #991B1B; padding: 10px 14px; border-radius: 10px; font-size: 0.85rem; margin-bottom: 16px; font-weight: 600;"></div>
+          <div id="authErrorBanner" class="warning-msg" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid #EF4444; color: #FCA5A5; padding: 10px 14px; border-radius: 12px; font-size: 0.85rem; margin-bottom: 18px; font-weight: 600;"></div>
 
           <!-- ================= SIGN IN FORM ================= -->
           <form id="signInForm" style="display: block;" onsubmit="event.preventDefault(); Auth.handleSignIn();">
-            <div class="form-group" style="margin-bottom: 12px;">
-              <label for="signInUsername" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; color: #374151;">Login Identifier / Nickname</label>
-              <input type="text" id="signInUsername" placeholder="e.g. mariasantos10" required style="width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #DDD6FE; background: #FAF5FF; font-size: 0.9rem;">
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label for="signInUsername" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; color: #A5A3C4;">Login Identifier / Nickname</label>
+              <input type="text" id="signInUsername" placeholder="e.g. mariasantos10" required style="width: 100%; padding: 12px 14px; border-radius: 14px; border: 1px solid #231648; background: #0E0F26; color: #FFFFFF; font-size: 0.95rem; outline: none; transition: all 0.2s;">
             </div>
 
-            <div class="form-group" style="margin-bottom: 16px;">
-              <label for="signInPassword" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; color: #374151;">Password</label>
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label for="signInPassword" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; color: #A5A3C4;">Password</label>
               <div style="position: relative;">
-                <input type="password" id="signInPassword" placeholder="Enter password" required style="width: 100%; padding: 10px 36px 10px 12px; border-radius: 10px; border: 1px solid #DDD6FE; background: #FAF5FF; font-size: 0.9rem;">
-                <button type="button" onclick="Auth.togglePassword('signInPassword', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1rem; color: #6B7280;">👁️</button>
+                <input type="password" id="signInPassword" placeholder="Enter password" required style="width: 100%; padding: 12px 40px 12px 14px; border-radius: 14px; border: 1px solid #231648; background: #0E0F26; color: #FFFFFF; font-size: 0.95rem; outline: none; transition: all 0.2s;">
+                <button type="button" onclick="Auth.togglePassword('signInPassword', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #A855F7;">👁️</button>
               </div>
             </div>
 
-            <button type="submit" id="signInSubmitBtn" class="primary-btn" style="width: 100%; padding: 12px; border-radius: 12px; background: #7C3AED; color: white; border: none; font-weight: 700; font-size: 1rem; cursor: pointer; margin-bottom: 12px;">Sign In 🚀</button>
+            <button type="submit" id="signInSubmitBtn" class="primary-btn" style="width: 100%; padding: 14px; border-radius: 16px; background: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%); color: #FFFFFF; border: none; font-weight: 800; font-size: 1.05rem; cursor: pointer; box-shadow: 0 6px 20px rgba(124,58,237,0.45); margin-bottom: 16px; transition: all 0.2s;">Sign In 🚀</button>
 
             <div style="text-align: center;">
-              <span style="font-size: 0.85rem; color: #6B7280;">Don't have an account? </span>
-              <button type="button" onclick="Auth.switchMode('signup')" style="background: none; border: none; color: #7C3AED; font-weight: 700; font-size: 0.85rem; cursor: pointer; text-decoration: underline;">Create Account</button>
+              <span style="font-size: 0.88rem; color: #8E8CAE;">Don't have an account? </span>
+              <button type="button" onclick="Auth.switchMode('signup')" style="background: none; border: none; color: #C084FC; font-weight: 700; font-size: 0.88rem; cursor: pointer; text-decoration: underline;">Create Account</button>
             </div>
           </form>
 
           <!-- ================= CREATE ACCOUNT FORM ================= -->
           <form id="signUpForm" style="display: none;" onsubmit="event.preventDefault(); Auth.handleSignUp();">
-            <!-- Account Type Switcher -->
-            <div style="display: flex; gap: 10px; margin-bottom: 16px;">
-              <button type="button" id="roleBtnStudent" onclick="Auth.setRole('student')" style="flex: 1; padding: 10px; border-radius: 10px; border: 2px solid #7C3AED; background: #EDE9FE; font-weight: 700; cursor: pointer; color: #5B21B6;">👨‍🎓 Student</button>
-              <button type="button" id="roleBtnTeacher" onclick="Auth.setRole('teacher')" style="flex: 1; padding: 10px; border-radius: 10px; border: 2px solid transparent; background: #F3F4F6; font-weight: 700; cursor: pointer; color: #4B5563;">👩‍🏫 Teacher</button>
+            <!-- Account Type Switcher (Student vs Teacher) -->
+            <div style="display: flex; gap: 10px; margin-bottom: 18px;">
+              <button type="button" id="roleBtnStudent" onclick="Auth.setRole('student')" style="flex: 1; padding: 11px; border-radius: 14px; border: 1.5px solid #8B5CF6; background: rgba(124,58,237,0.18); font-weight: 700; cursor: pointer; color: #FFFFFF; box-shadow: 0 0 14px rgba(139,92,246,0.25); transition: all 0.2s;">🎓 Student</button>
+              <button type="button" id="roleBtnTeacher" onclick="Auth.setRole('teacher')" style="flex: 1; padding: 11px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(14,15,38,0.6); font-weight: 700; cursor: pointer; color: #A5A3C4; transition: all 0.2s;">👩‍🏫 Teacher</button>
             </div>
 
             <!-- Profile Photo Upload Container -->
-            <div class="profile-photo-container" style="text-align: center; margin-bottom: 16px;">
-              <div class="avatar-wrapper" onclick="document.getElementById('profilePhotoInput').click()" style="width: 80px; height: 80px; margin: 0 auto; border-radius: 50%; border: 3px solid #7C3AED; overflow: hidden; cursor: pointer; position: relative; background: #F3E8FF; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(124,58,237,0.15);">
-                <img id="avatarPreview" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23d1c4e9'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23673ab7'>👤</text></svg>" alt="Profile Photo" style="width: 100%; height: 100%; object-fit: cover;">
-                <div class="photo-overlay" style="position: absolute; bottom: 0; width: 100%; background: rgba(124,58,237,0.85); color: white; font-size: 0.7rem; text-align: center; padding: 2px 0; font-weight: 600;">📷 Upload</div>
+            <div class="profile-photo-container" style="text-align: center; margin-bottom: 18px;">
+              <div class="avatar-wrapper" onclick="document.getElementById('profilePhotoInput').click()" style="width: 86px; height: 86px; margin: 0 auto; border-radius: 50%; border: 2.5px solid #8B5CF6; overflow: hidden; cursor: pointer; position: relative; background: #131432; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(139,92,246,0.35);">
+                <img id="avatarPreview" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231E1B4B'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>" alt="Profile Photo" style="width: 100%; height: 100%; object-fit: cover;">
+                <div class="photo-overlay" style="position: absolute; bottom: 0; width: 100%; background: rgba(124,58,237,0.88); color: white; font-size: 0.72rem; text-align: center; padding: 3px 0; font-weight: 700;">☁️ Upload</div>
               </div>
               <input type="file" id="profilePhotoInput" accept="image/*" style="display: none;" onchange="Auth.handlePhotoUpload(event)">
-              <p style="font-size: 0.75rem; color: #6D28D9; margin-top: 4px; font-weight: 600;">Tap avatar to add optional profile photo 📷</p>
+              <p style="font-size: 0.78rem; color: #C4B5FD; margin-top: 6px; font-weight: 600;">Tap avatar to add optional profile photo 📷</p>
             </div>
 
-            <div class="form-group" style="margin-bottom: 12px;">
-              <label id="lblSignUpRealName" for="signUpFullName" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; color: #374151;">Real Student Name</label>
-              <input type="text" id="signUpFullName" placeholder="e.g. Maria Santos" required style="width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #DDD6FE; background: #FAF5FF; font-size: 0.9rem;">
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label id="lblSignUpRealName" for="signUpFullName" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; color: #A5A3C4;">Real Student Name</label>
+              <input type="text" id="signUpFullName" placeholder="e.g. Maria Santos" required style="width: 100%; padding: 12px 14px; border-radius: 14px; border: 1px solid #231648; background: #0E0F26; color: #FFFFFF; font-size: 0.95rem; outline: none; transition: all 0.2s;">
             </div>
 
-            <div class="form-group" style="margin-bottom: 12px;">
-              <label for="signUpUsername" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; color: #374151;">Nickname</label>
-              <input type="text" id="signUpUsername" placeholder="e.g. mariasantos10" required style="width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #DDD6FE; background: #FAF5FF; font-size: 0.9rem;">
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label for="signUpUsername" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; color: #A5A3C4;">Nickname</label>
+              <input type="text" id="signUpUsername" placeholder="e.g. mariasantos10" required style="width: 100%; padding: 12px 14px; border-radius: 14px; border: 1px solid #231648; background: #0E0F26; color: #FFFFFF; font-size: 0.95rem; outline: none; transition: all 0.2s;">
             </div>
 
             <!-- Teacher Code Field (Visible only for Teacher Account selection) -->
-            <div id="signUpTeacherCodeContainer" class="form-group" style="display: none; margin-bottom: 12px;">
-              <label for="signUpTeacherCode" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; color: #C2410C;">Teacher Access Code</label>
-              <input type="text" id="signUpTeacherCode" placeholder="Enter Teacher Code (e.g. NEXUS2026)" style="width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #FDBA74; background: #FFF7ED; font-size: 0.9rem;">
+            <div id="signUpTeacherCodeContainer" class="form-group" style="display: none; margin-bottom: 14px;">
+              <label for="signUpTeacherCode" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; color: #F97316;">Teacher Access Code</label>
+              <input type="text" id="signUpTeacherCode" placeholder="Enter Teacher Code (e.g. NEXUS2026)" style="width: 100%; padding: 12px 14px; border-radius: 14px; border: 1px solid #7C2D12; background: rgba(67, 20, 7, 0.4); color: #FFFFFF; font-size: 0.95rem; outline: none; transition: all 0.2s;">
             </div>
 
-            <div class="form-group" style="margin-bottom: 12px;">
-              <label for="signUpPassword" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; color: #374151;">Password</label>
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label for="signUpPassword" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; color: #A5A3C4;">Password</label>
               <div style="position: relative;">
-                <input type="password" id="signUpPassword" placeholder="Create password" required style="width: 100%; padding: 10px 36px 10px 12px; border-radius: 10px; border: 1px solid #DDD6FE; background: #FAF5FF; font-size: 0.9rem;">
-                <button type="button" onclick="Auth.togglePassword('signUpPassword', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1rem; color: #6B7280;">👁️</button>
+                <input type="password" id="signUpPassword" placeholder="Create password" required style="width: 100%; padding: 12px 40px 12px 14px; border-radius: 14px; border: 1px solid #231648; background: #0E0F26; color: #FFFFFF; font-size: 0.95rem; outline: none; transition: all 0.2s;">
+                <button type="button" onclick="Auth.togglePassword('signUpPassword', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #A855F7;">👁️</button>
               </div>
             </div>
 
-            <div class="form-group" style="margin-bottom: 16px;">
-              <label for="signUpConfirmPassword" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; color: #374151;">Rewrite Password</label>
+            <div class="form-group" style="margin-bottom: 18px;">
+              <label for="signUpConfirmPassword" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; color: #A5A3C4;">Rewrite Password</label>
               <div style="position: relative;">
-                <input type="password" id="signUpConfirmPassword" placeholder="Re-enter password" required style="width: 100%; padding: 10px 36px 10px 12px; border-radius: 10px; border: 1px solid #DDD6FE; background: #FAF5FF; font-size: 0.9rem;">
-                <button type="button" onclick="Auth.togglePassword('signUpConfirmPassword', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1rem; color: #6B7280;">👁️</button>
+                <input type="password" id="signUpConfirmPassword" placeholder="Re-enter password" required style="width: 100%; padding: 12px 40px 12px 14px; border-radius: 14px; border: 1px solid #231648; background: #0E0F26; color: #FFFFFF; font-size: 0.95rem; outline: none; transition: all 0.2s;">
+                <button type="button" onclick="Auth.togglePassword('signUpConfirmPassword', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #A855F7;">👁️</button>
               </div>
             </div>
 
-            <button type="submit" id="signUpSubmitBtn" class="primary-btn" style="width: 100%; padding: 12px; border-radius: 12px; background: #7C3AED; color: white; border: none; font-weight: 700; font-size: 1rem; cursor: pointer; margin-bottom: 12px;">Create Account ✨</button>
+            <button type="submit" id="signUpSubmitBtn" class="primary-btn" style="width: 100%; padding: 14px; border-radius: 16px; background: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%); color: #FFFFFF; border: none; font-weight: 800; font-size: 1.05rem; cursor: pointer; box-shadow: 0 6px 20px rgba(124,58,237,0.45); margin-bottom: 16px; transition: all 0.2s;">Create Account ✨</button>
 
             <div style="text-align: center;">
-              <span style="font-size: 0.85rem; color: #6B7280;">Already have an account? </span>
-              <button type="button" onclick="Auth.switchMode('signin')" style="background: none; border: none; color: #7C3AED; font-weight: 700; font-size: 0.85rem; cursor: pointer; text-decoration: underline;">Sign In</button>
+              <span style="font-size: 0.88rem; color: #8E8CAE;">Already have an account? </span>
+              <button type="button" onclick="Auth.switchMode('signin')" style="background: none; border: none; color: #C084FC; font-weight: 700; font-size: 0.88rem; cursor: pointer; text-decoration: underline;">Sign In</button>
             </div>
           </form>
         </div>

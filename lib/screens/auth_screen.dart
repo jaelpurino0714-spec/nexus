@@ -161,7 +161,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
     final displayedError = _localError ?? authState.errorMessage;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F3FF),
+      backgroundColor: const Color(0xFF090A1A),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -173,25 +173,46 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF8B5CF6).withOpacity(0.12),
+                    color: const Color(0xFF8B5CF6).withOpacity(0.15),
                     shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFFEC4899).withOpacity(0.4),
+                        blurRadius: 24,
+                      ),
+                    ],
                   ),
                   child: const Text('🧬', style: TextStyle(fontSize: 48)),
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  'NEXUS SCIENCE',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.black,
-                    color: Color(0xFF5B21B6),
-                    letterSpacing: 1.2,
+                RichText(
+                  text: const TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Nexus ',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'Portal',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w900,
+                          color: Color(0xFFA855F7),
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 4),
                 const Text(
-                  'Grade 10 Science Trivia & Learning System',
-                  style: TextStyle(fontSize: 13, color: Colors.black54, fontWeight: FontWeight.w500),
+                  'Sign in or create your account to begin',
+                  style: TextStyle(fontSize: 14, color: Color(0xFF94A3B8), fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 24),
 
@@ -199,13 +220,18 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
                 Container(
                   constraints: const BoxConstraints(maxWidth: 440),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
+                    color: const Color(0xFF0B0C1E),
+                    borderRadius: BorderRadius.circular(28),
+                    border: Border.all(color: const Color(0xFF2D1B69), width: 1.5),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF673AB7).withOpacity(0.12),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
+                        color: const Color(0xFF0B0C1E).withOpacity(0.9),
+                        blurRadius: 40,
+                        offset: const Offset(0, 10),
+                      ),
+                      BoxShadow(
+                        color: const Color(0xFF7C3AED).withOpacity(0.15),
+                        blurRadius: 30,
                       ),
                     ],
                   ),
@@ -213,23 +239,32 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
                     children: [
                       // Tab Bar (Sign In / Sign Up)
                       Container(
-                        margin: const EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF3E8FF),
-                          borderRadius: BorderRadius.circular(18),
+                          color: const Color(0xFF0E0F26),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: const Color(0xFF231648)),
                         ),
                         child: TabBar(
                           controller: _tabController,
                           indicator: BoxDecoration(
-                            color: const Color(0xFF7C3AED),
-                            borderRadius: BorderRadius.circular(14),
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF7C3AED), Color(0xFF6366F1)],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF7C3AED).withOpacity(0.4),
+                                blurRadius: 16,
+                              ),
+                            ],
                           ),
                           labelColor: Colors.white,
-                          unselectedLabelColor: const Color(0xFF6D28D9),
+                          unselectedLabelColor: const Color(0xFFA5A3C4),
                           labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                           tabs: const [
-                            Tab(text: 'Sign In'),
-                            Tab(text: 'Sign Up'),
+                            Tab(text: 'Sign In 🔑'),
+                            Tab(text: 'Create Account ✨'),
                           ],
                         ),
                       ),
@@ -293,28 +328,26 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
-        crossAxisAlignment: CrossAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: 8),
-          const Text(
-            'Welcome Back! 👋',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1E1B4B)),
-          ),
-          const Text(
-            'Sign in with your username & password',
-            style: TextStyle(fontSize: 13, color: Colors.black54),
-          ),
-          const SizedBox(height: 24),
-
           // Username / Nickname Field
           TextField(
             controller: _signInUsernameController,
+            style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               labelText: 'Login Identifier / Nickname',
-              prefixIcon: const Icon(Icons.person_outline, color: Color(0xFF7C3AED)),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+              labelStyle: const TextStyle(color: Color(0xFFA5A3C4)),
+              prefixIcon: const Icon(Icons.person_outline, color: Color(0xFFA855F7)),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: Color(0xFF231648)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: Color(0xFF8B5CF6), width: 1.5),
+              ),
               filled: true,
-              fillColor: const Color(0xFFFAF5FF),
+              fillColor: const Color(0xFF0E0F26),
             ),
           ),
           const SizedBox(height: 16),
@@ -323,40 +356,63 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
           TextField(
             controller: _signInPasswordController,
             obscureText: _signInObscurePassword,
+            style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               labelText: 'Password',
-              prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF7C3AED)),
+              labelStyle: const TextStyle(color: Color(0xFFA5A3C4)),
+              prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFFA855F7)),
               suffixIcon: IconButton(
                 icon: Icon(
                   _signInObscurePassword ? Icons.visibility_off : Icons.visibility,
-                  color: Colors.black45,
+                  color: const Color(0xFFA855F7),
                 ),
                 onPressed: () => setState(() => _signInObscurePassword = !_signInObscurePassword),
               ),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: Color(0xFF231648)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: Color(0xFF8B5CF6), width: 1.5),
+              ),
               filled: true,
-              fillColor: const Color(0xFFFAF5FF),
+              fillColor: const Color(0xFF0E0F26),
             ),
           ),
           const Spacer(),
 
           // Submit Button
-          ElevatedButton(
-            onPressed: isLoading ? null : _handleSignIn,
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              backgroundColor: const Color(0xFF7C3AED),
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              elevation: 3,
+          Container(
+            height: 52,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF7C3AED), Color(0xFF6366F1)],
+              ),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF7C3AED).withOpacity(0.45),
+                  blurRadius: 20,
+                  offset: const Offset(0, 6),
+                ),
+              ],
             ),
-            child: isLoading
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                  )
-                : const Text('Sign In', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            child: ElevatedButton(
+              onPressed: isLoading ? null : _handleSignIn,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              ),
+              child: isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                    )
+                  : const Text('Sign In 🚀', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+            ),
           ),
           const SizedBox(height: 12),
         ],
@@ -368,18 +424,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20.0),
       child: Column(
-        crossAxisAlignment: CrossAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            'Create Account ✨',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1E1B4B)),
-          ),
-          const Text(
-            'Join as a Student or Teacher to start learning',
-            style: TextStyle(fontSize: 13, color: Colors.black54),
-          ),
-          const SizedBox(height: 16),
-
           // Account Type Selector (Student vs Teacher)
           Row(
             children: [
@@ -388,20 +434,27 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
                   onTap: () => setState(() => _selectedRole = 'student'),
                   borderRadius: BorderRadius.circular(14),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 11),
                     decoration: BoxDecoration(
-                      color: _selectedRole == 'student' ? const Color(0xFFEDE9FE) : Colors.grey[100],
+                      color: _selectedRole == 'student' ? const Color(0xFF7C3AED).withOpacity(0.2) : const Color(0xFF0E0F26),
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                        color: _selectedRole == 'student' ? const Color(0xFF7C3AED) : Colors.transparent,
-                        width: 2,
+                        color: _selectedRole == 'student' ? const Color(0xFF8B5CF6) : const Color(0xFF231648),
+                        width: _selectedRole == 'student' ? 1.5 : 1.0,
                       ),
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('👨‍🎓 ', style: TextStyle(fontSize: 16)),
-                        Text('Student', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                        const Text('🎓 ', style: TextStyle(fontSize: 16)),
+                        Text(
+                          'Student',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: _selectedRole == 'student' ? Colors.white : const Color(0xFFA5A3C4),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -413,20 +466,27 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
                   onTap: () => setState(() => _selectedRole = 'teacher'),
                   borderRadius: BorderRadius.circular(14),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 11),
                     decoration: BoxDecoration(
-                      color: _selectedRole == 'teacher' ? const Color(0xFFFFEDD5) : Colors.grey[100],
+                      color: _selectedRole == 'teacher' ? Colors.orange.withOpacity(0.2) : const Color(0xFF0E0F26),
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                        color: _selectedRole == 'teacher' ? Colors.deepOrange : Colors.transparent,
-                        width: 2,
+                        color: _selectedRole == 'teacher' ? Colors.orangeAccent : const Color(0xFF231648),
+                        width: _selectedRole == 'teacher' ? 1.5 : 1.0,
                       ),
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('👩‍🏫 ', style: TextStyle(fontSize: 16)),
-                        Text('Teacher', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                        const Text('👩‍🏫 ', style: TextStyle(fontSize: 16)),
+                        Text(
+                          'Teacher',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: _selectedRole == 'teacher' ? Colors.white : const Color(0xFFA5A3C4),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -439,12 +499,21 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
           // Real Name Field
           TextField(
             controller: _signUpFullNameController,
+            style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               labelText: _selectedRole == 'teacher' ? 'Real Teacher Name' : 'Real Student Name',
-              prefixIcon: const Icon(Icons.badge_outlined, color: Color(0xFF7C3AED)),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+              labelStyle: const TextStyle(color: Color(0xFFA5A3C4)),
+              prefixIcon: const Icon(Icons.badge_outlined, color: Color(0xFFA855F7)),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: Color(0xFF231648)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: Color(0xFF8B5CF6), width: 1.5),
+              ),
               filled: true,
-              fillColor: const Color(0xFFFAF5FF),
+              fillColor: const Color(0xFF0E0F26),
             ),
           ),
           const SizedBox(height: 12),
@@ -452,12 +521,21 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
           // Nickname Field
           TextField(
             controller: _signUpUsernameController,
+            style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               labelText: 'Nickname',
-              prefixIcon: const Icon(Icons.alternate_email, color: Color(0xFF7C3AED)),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+              labelStyle: const TextStyle(color: Color(0xFFA5A3C4)),
+              prefixIcon: const Icon(Icons.alternate_email, color: Color(0xFFA855F7)),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: Color(0xFF231648)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: Color(0xFF8B5CF6), width: 1.5),
+              ),
               filled: true,
-              fillColor: const Color(0xFFFAF5FF),
+              fillColor: const Color(0xFF0E0F26),
             ),
           ),
           const SizedBox(height: 12),
@@ -466,12 +544,21 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
           if (_selectedRole == 'teacher') ...[
             TextField(
               controller: _signUpTeacherCodeController,
+              style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 labelText: 'Teacher Access Code',
-                prefixIcon: const Icon(Icons.vpn_key_outlined, color: Colors.deepOrange),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                labelStyle: const TextStyle(color: Colors.orangeAccent),
+                prefixIcon: const Icon(Icons.vpn_key_outlined, color: Colors.orangeAccent),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: Color(0xFF7C2D12)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: Colors.orangeAccent, width: 1.5),
+                ),
                 filled: true,
-                fillColor: const Color(0xFFFFEDD5),
+                fillColor: const Color(0xFF2A1005),
               ),
             ),
             const SizedBox(height: 12),
@@ -481,19 +568,28 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
           TextField(
             controller: _signUpPasswordController,
             obscureText: _signUpObscurePassword,
+            style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               labelText: 'Password',
-              prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF7C3AED)),
+              labelStyle: const TextStyle(color: Color(0xFFA5A3C4)),
+              prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFFA855F7)),
               suffixIcon: IconButton(
                 icon: Icon(
                   _signUpObscurePassword ? Icons.visibility_off : Icons.visibility,
-                  color: Colors.black45,
+                  color: const Color(0xFFA855F7),
                 ),
                 onPressed: () => setState(() => _signUpObscurePassword = !_signUpObscurePassword),
               ),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: Color(0xFF231648)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: Color(0xFF8B5CF6), width: 1.5),
+              ),
               filled: true,
-              fillColor: const Color(0xFFFAF5FF),
+              fillColor: const Color(0xFF0E0F26),
             ),
           ),
           const SizedBox(height: 12),
@@ -502,44 +598,65 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
           TextField(
             controller: _signUpConfirmPasswordController,
             obscureText: _signUpObscureConfirmPassword,
+            style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               labelText: 'Rewrite Password',
-              prefixIcon: const Icon(Icons.lock_reset, color: Color(0xFF7C3AED)),
+              labelStyle: const TextStyle(color: Color(0xFFA5A3C4)),
+              prefixIcon: const Icon(Icons.lock_reset, color: Color(0xFFA855F7)),
               suffixIcon: IconButton(
                 icon: Icon(
                   _signUpObscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
-                  color: Colors.black45,
+                  color: const Color(0xFFA855F7),
                 ),
                 onPressed: () => setState(() => _signUpObscureConfirmPassword = !_signUpObscureConfirmPassword),
               ),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: Color(0xFF231648)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: Color(0xFF8B5CF6), width: 1.5),
+              ),
               filled: true,
-              fillColor: const Color(0xFFFAF5FF),
+              fillColor: const Color(0xFF0E0F26),
             ),
           ),
           const SizedBox(height: 20),
 
           // Submit Button
-          ElevatedButton(
-            onPressed: isLoading ? null : _handleSignUp,
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              backgroundColor: _selectedRole == 'teacher' ? Colors.deepOrange : const Color(0xFF7C3AED),
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              elevation: 3,
+          Container(
+            height: 52,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF7C3AED), Color(0xFF6366F1)],
+              ),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF7C3AED).withOpacity(0.45),
+                  blurRadius: 20,
+                  offset: const Offset(0, 6),
+                ),
+              ],
             ),
-            child: isLoading
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                  )
-                : Text(
-                    'Create ${_selectedRole == "teacher" ? "Teacher" : "Student"} Account',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+            child: ElevatedButton(
+              onPressed: isLoading ? null : _handleSignUp,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              ),
+              child: isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                    )
+                  : const Text('Create Account ✨', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+            ),
           ),
+          const SizedBox(height: 12),
         ],
       ),
     );

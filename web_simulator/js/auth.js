@@ -19,17 +19,33 @@ const Auth = {
     const signUpForm = document.getElementById('signUpForm');
 
     if (mode === 'signin') {
-      signInBtn.style.background = '#7C3AED';
-      signInBtn.style.color = 'white';
+      signInBtn.style.background = 'linear-gradient(135deg, #7C3AED 0%, #6366F1 100%)';
+      signInBtn.style.color = '#FFFFFF';
+      signInBtn.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+      signInBtn.style.boxShadow = '0 4px 16px rgba(124, 58, 237, 0.4)';
+      signInBtn.style.fontWeight = '700';
+
       signUpBtn.style.background = 'transparent';
-      signUpBtn.style.color = '#6D28D9';
+      signUpBtn.style.color = '#A5A3C4';
+      signUpBtn.style.border = '1px solid transparent';
+      signUpBtn.style.boxShadow = 'none';
+      signUpBtn.style.fontWeight = '600';
+
       signInForm.style.display = 'block';
       signUpForm.style.display = 'none';
     } else {
-      signUpBtn.style.background = '#7C3AED';
-      signUpBtn.style.color = 'white';
+      signUpBtn.style.background = 'linear-gradient(135deg, #7C3AED 0%, #6366F1 100%)';
+      signUpBtn.style.color = '#FFFFFF';
+      signUpBtn.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+      signUpBtn.style.boxShadow = '0 4px 16px rgba(124, 58, 237, 0.4)';
+      signUpBtn.style.fontWeight = '700';
+
       signInBtn.style.background = 'transparent';
-      signInBtn.style.color = '#6D28D9';
+      signInBtn.style.color = '#A5A3C4';
+      signInBtn.style.border = '1px solid transparent';
+      signInBtn.style.boxShadow = 'none';
+      signInBtn.style.fontWeight = '600';
+
       signUpForm.style.display = 'block';
       signInForm.style.display = 'none';
     }
@@ -44,27 +60,31 @@ const Auth = {
 
     if (role === 'student') {
       if (btnStudent) {
-        btnStudent.style.background = '#EDE9FE';
-        btnStudent.style.border = '2px solid #7C3AED';
-        btnStudent.style.color = '#5B21B6';
+        btnStudent.style.background = 'rgba(124, 58, 237, 0.18)';
+        btnStudent.style.border = '1.5px solid #8B5CF6';
+        btnStudent.style.color = '#FFFFFF';
+        btnStudent.style.boxShadow = '0 0 14px rgba(139, 92, 246, 0.25)';
       }
       if (btnTeacher) {
-        btnTeacher.style.background = '#F3F4F6';
-        btnTeacher.style.border = '2px solid transparent';
-        btnTeacher.style.color = '#4B5563';
+        btnTeacher.style.background = 'rgba(14, 15, 38, 0.6)';
+        btnTeacher.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+        btnTeacher.style.color = '#A5A3C4';
+        btnTeacher.style.boxShadow = 'none';
       }
       if (codeContainer) codeContainer.style.display = 'none';
       if (lblRealName) lblRealName.textContent = 'Real Student Name';
     } else {
       if (btnTeacher) {
-        btnTeacher.style.background = '#FFEDD5';
-        btnTeacher.style.border = '2px solid #EA580C';
-        btnTeacher.style.color = '#C2410C';
+        btnTeacher.style.background = 'rgba(234, 88, 12, 0.2)';
+        btnTeacher.style.border = '1.5px solid #F97316';
+        btnTeacher.style.color = '#FFFFFF';
+        btnTeacher.style.boxShadow = '0 0 14px rgba(249, 115, 22, 0.3)';
       }
       if (btnStudent) {
-        btnStudent.style.background = '#F3F4F6';
-        btnStudent.style.border = '2px solid transparent';
-        btnStudent.style.color = '#4B5563';
+        btnStudent.style.background = 'rgba(14, 15, 38, 0.6)';
+        btnStudent.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+        btnStudent.style.color = '#A5A3C4';
+        btnStudent.style.boxShadow = 'none';
       }
       if (codeContainer) codeContainer.style.display = 'block';
       if (lblRealName) lblRealName.textContent = 'Real Teacher Name';
