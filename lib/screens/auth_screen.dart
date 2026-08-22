@@ -21,6 +21,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
   // Sign Up Controllers
   final _signUpFullNameController = TextEditingController();
   final _signUpUsernameController = TextEditingController();
+  final _signUpTeacherCodeController = TextEditingController();
   final _signUpPasswordController = TextEditingController();
   final _signUpConfirmPasswordController = TextEditingController();
   bool _signUpObscurePassword = true;
@@ -50,6 +51,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
     _signInPasswordController.dispose();
     _signUpFullNameController.dispose();
     _signUpUsernameController.dispose();
+    _signUpTeacherCodeController.dispose();
     _signUpPasswordController.dispose();
     _signUpConfirmPasswordController.dispose();
     super.dispose();
@@ -60,7 +62,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
     final password = _signInPasswordController.text;
 
     if (username.isEmpty || password.isEmpty) {
-      setState(() => _localError = 'Please fill out both Username and Password.');
+      setState(() => _localError = 'Please fill out both Login Identifier and Password.');
       return;
     }
 
@@ -83,16 +85,39 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
   Future<void> _handleSignUp() async {
     final fullName = _signUpFullNameController.text.trim();
     final username = _signUpUsernameController.text.trim();
+    final teacherCode = _signUpTeacherCodeController.text.trim();
     final password = _signUpPasswordController.text;
     final confirmPassword = _signUpConfirmPasswordController.text;
 
-    if (fullName.isEmpty || username.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-      setState(() => _localError = 'Please fill out all required fields.');
+    if (fullName.isEmpty) {
+      setState(() => _localError = 'Please enter your ${_selectedRole == "teacher" ? "Real Teacher Name" : "Real Student Name"}.');
+      return;
+    }
+
+    if (username.isEmpty) {
+      setState(() => _localError = 'Please enter a Nickname.');
       return;
     }
 
     if (username.length < 3) {
-      setState(() => _localError = 'Username must be at least 3 characters.');
+      setState(() => _localError = 'Nickname must be at least 3 characters.');
+      return;
+    }
+
+    if (_selectedRole == 'teacher') {
+      if (teacherCode.isEmpty) {
+        setState(() => _localError = 'Please enter a valid Teacher Code.');
+        return;
+      }
+      final validCodes = ['NEXUS-TEACHER-2026', 'NEXUS2026', 'NEXUS10', '123456', 'TEACHER2026'];
+      if (!validCodes.contains(teacherCode.toUpperCase())) {
+        setState(() => _localError = 'Invalid Teacher Code. Please verify your code with school administration.');
+        return;
+      }
+    }
+
+    if (password.isEmpty) {
+      setState(() => _localError = 'Please enter a Password.');
       return;
     }
 
@@ -101,8 +126,13 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
       return;
     }
 
+    if (confirmPassword.isEmpty) {
+      setState(() => _localError = 'Please rewrite your password in the Rewrite Password field.');
+      return;
+    }
+
     if (password != confirmPassword) {
-      setState(() => _localError = 'Passwords do not match.');
+      setState(() => _localError = 'Password and Rewrite Password must match.');
       return;
     }
 
@@ -112,6 +142,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
           username: username,
           password: password,
           role: _selectedRole,
+          confirmPassword: confirmPassword,
+          teacherCode: teacherCode,
         );
 
     if (success && mounted) {
@@ -274,11 +306,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
           ),
           const SizedBox(height: 24),
 
-          // Username Field
+          // Username / Nickname Field
           TextField(
             controller: _signInUsernameController,
             decoration: InputDecoration(
-              labelText: 'Username',
+              labelText: 'Login Identifier / Nickname',
               prefixIcon: const Icon(Icons.person_outline, color: Color(0xFF7C3AED)),
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
               filled: true,
@@ -404,11 +436,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
           ),
           const SizedBox(height: 14),
 
-          // Full Name Field
+          // Real Name Field
           TextField(
             controller: _signUpFullNameController,
             decoration: InputDecoration(
-              labelText: 'Full Name',
+              labelText: _selectedRole == 'teacher' ? 'Real Teacher Name' : 'Real Student Name',
               prefixIcon: const Icon(Icons.badge_outlined, color: Color(0xFF7C3AED)),
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
               filled: true,
@@ -417,11 +449,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
           ),
           const SizedBox(height: 12),
 
-          // Username Field
+          // Nickname Field
           TextField(
             controller: _signUpUsernameController,
             decoration: InputDecoration(
-              labelText: 'Username',
+              labelText: 'Nickname',
               prefixIcon: const Icon(Icons.alternate_email, color: Color(0xFF7C3AED)),
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
               filled: true,
@@ -430,12 +462,27 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
           ),
           const SizedBox(height: 12),
 
+          // Teacher Code Field (Shown only when Teacher is selected)
+          if (_selectedRole == 'teacher') ...[
+            TextField(
+              controller: _signUpTeacherCodeController,
+              decoration: InputDecoration(
+                labelText: 'Teacher Access Code',
+                prefixIcon: const Icon(Icons.vpn_key_outlined, color: Colors.deepOrange),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                filled: true,
+                fillColor: const Color(0xFFFFEDD5),
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
+
           // Password Field
           TextField(
             controller: _signUpPasswordController,
             obscureText: _signUpObscurePassword,
             decoration: InputDecoration(
-              labelText: 'Password (min 6 chars)',
+              labelText: 'Password',
               prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF7C3AED)),
               suffixIcon: IconButton(
                 icon: Icon(
@@ -451,12 +498,12 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
           ),
           const SizedBox(height: 12),
 
-          // Confirm Password Field
+          // Confirm Password Field (Rewrite Password)
           TextField(
             controller: _signUpConfirmPasswordController,
             obscureText: _signUpObscureConfirmPassword,
             decoration: InputDecoration(
-              labelText: 'Confirm Password',
+              labelText: 'Rewrite Password',
               prefixIcon: const Icon(Icons.lock_reset, color: Color(0xFF7C3AED)),
               suffixIcon: IconButton(
                 icon: Icon(

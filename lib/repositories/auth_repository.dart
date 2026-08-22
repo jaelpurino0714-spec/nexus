@@ -10,6 +10,8 @@ abstract class AuthRepository {
     required String username,
     required String password,
     required String role,
+    String? confirmPassword,
+    String? teacherCode,
   });
   Future<ProfileModel> signIn({
     required String username,
@@ -39,12 +41,16 @@ class AuthRepositoryImpl implements AuthRepository {
     required String username,
     required String password,
     required String role,
+    String? confirmPassword,
+    String? teacherCode,
   }) =>
       _profileService.signUp(
         fullName: fullName,
         username: username,
         password: password,
         role: role,
+        confirmPassword: confirmPassword,
+        teacherCode: teacherCode,
       );
 
   @override

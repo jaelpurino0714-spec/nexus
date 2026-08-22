@@ -88,18 +88,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
       }
     }
 
-    final defaultProfile = ProfileModel(
-      id: 'usr-default',
-      role: 'student',
-      name: 'Nexus Student',
-      fullName: 'Nexus Student',
-      username: 'student',
-      createdAt: DateTime.now(),
-    );
-
     state = state.copyWith(
-      status: AuthStatus.authenticatedStudent,
-      profile: defaultProfile,
+      status: AuthStatus.unauthenticated,
+      profile: null,
       isLoading: false,
     );
   }
@@ -109,6 +100,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String username,
     required String password,
     required String role,
+    String? confirmPassword,
+    String? teacherCode,
   }) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
@@ -117,6 +110,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         username: username,
         password: password,
         role: role,
+        confirmPassword: confirmPassword,
+        teacherCode: teacherCode,
       );
       state = state.copyWith(
         status: profile.role == 'teacher' ? AuthStatus.authenticatedTeacher : AuthStatus.authenticatedStudent,

@@ -61,29 +61,17 @@ const App = {
       }
     }
 
-    let student = DB.getStudentProfile();
     const teacherRaw = localStorage.getItem(DB.STORAGE_TEACHER);
+    const studentRaw = localStorage.getItem(DB.STORAGE_PROFILE);
 
     if (teacherRaw) {
       this.updateUserHeader();
       this.showScreen('teacherHomeScreen');
-    } else {
-      if (!student) {
-        student = {
-          id: DB.getUserUUID(),
-          role: 'student',
-          name: 'Nexus Student',
-          gradeLevel: 'Grade 10',
-          section: 'Science',
-          photo: null,
-          totalPoints: 0,
-          streak: 0,
-          createdAt: new Date().toISOString()
-        };
-        DB.saveStudentProfile(student);
-      }
+    } else if (studentRaw) {
       this.updateUserHeader();
       this.showScreen('homeScreen');
+    } else {
+      this.showScreen('loginSelectionScreen');
     }
   },
 

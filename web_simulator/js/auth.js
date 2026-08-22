@@ -39,21 +39,35 @@ const Auth = {
     this.selectedSignUpRole = role;
     const btnStudent = document.getElementById('roleBtnStudent');
     const btnTeacher = document.getElementById('roleBtnTeacher');
+    const codeContainer = document.getElementById('signUpTeacherCodeContainer');
+    const lblRealName = document.getElementById('lblSignUpRealName');
 
     if (role === 'student') {
-      btnStudent.style.background = '#EDE9FE';
-      btnStudent.style.border = '2px solid #7C3AED';
-      btnStudent.style.color = '#5B21B6';
-      btnTeacher.style.background = '#F3F4F6';
-      btnTeacher.style.border = '2px solid transparent';
-      btnTeacher.style.color = '#4B5563';
+      if (btnStudent) {
+        btnStudent.style.background = '#EDE9FE';
+        btnStudent.style.border = '2px solid #7C3AED';
+        btnStudent.style.color = '#5B21B6';
+      }
+      if (btnTeacher) {
+        btnTeacher.style.background = '#F3F4F6';
+        btnTeacher.style.border = '2px solid transparent';
+        btnTeacher.style.color = '#4B5563';
+      }
+      if (codeContainer) codeContainer.style.display = 'none';
+      if (lblRealName) lblRealName.textContent = 'Real Student Name';
     } else {
-      btnTeacher.style.background = '#FFEDD5';
-      btnTeacher.style.border = '2px solid #EA580C';
-      btnTeacher.style.color = '#C2410C';
-      btnStudent.style.background = '#F3F4F6';
-      btnStudent.style.border = '2px solid transparent';
-      btnStudent.style.color = '#4B5563';
+      if (btnTeacher) {
+        btnTeacher.style.background = '#FFEDD5';
+        btnTeacher.style.border = '2px solid #EA580C';
+        btnTeacher.style.color = '#C2410C';
+      }
+      if (btnStudent) {
+        btnStudent.style.background = '#F3F4F6';
+        btnStudent.style.border = '2px solid transparent';
+        btnStudent.style.color = '#4B5563';
+      }
+      if (codeContainer) codeContainer.style.display = 'block';
+      if (lblRealName) lblRealName.textContent = 'Real Teacher Name';
     }
   },
 
@@ -262,19 +276,43 @@ const Auth = {
 
   async handleSignUp() {
     this.clearError();
-    const fullName = document.getElementById('signUpFullName').value.trim();
-    const username = document.getElementById('signUpUsername').value.trim().toLowerCase();
-    const password = document.getElementById('signUpPassword').value;
+    const fullName = (document.getElementById('signUpFullName')?.value || '').trim();
+    const username = (document.getElementById('signUpUsername')?.value || '').trim().toLowerCase();
+    const teacherCode = (document.getElementById('signUpTeacherCode')?.value || '').trim();
+    const password = document.getElementById('signUpPassword')?.value || '';
+    const confirmPassword = document.getElementById('signUpConfirmPassword')?.value || '';
     const role = this.selectedSignUpRole || 'student';
     const submitBtn = document.getElementById('signUpSubmitBtn');
 
-    if (!fullName || !username || !password) {
-      this.showError('Please fill out all required fields.');
+    if (!fullName) {
+      this.showError(`Please enter your ${role === 'teacher' ? 'Real Teacher Name' : 'Real Student Name'}.`);
+      return;
+    }
+
+    if (!username) {
+      this.showError('Please enter a Nickname.');
       return;
     }
 
     if (username.length < 3) {
-      this.showError('Username must be at least 3 characters.');
+      this.showError('Nickname must be at least 3 characters.');
+      return;
+    }
+
+    if (role === 'teacher') {
+      if (!teacherCode) {
+        this.showError('Please enter a valid Teacher Code.');
+        return;
+      }
+      const validCodes = ['NEXUS-TEACHER-2026', 'NEXUS2026', 'NEXUS10', '123456', 'TEACHER2026'];
+      if (!validCodes.includes(teacherCode.toUpperCase())) {
+        this.showError('Invalid Teacher Code. Please verify your code with school administration.');
+        return;
+      }
+    }
+
+    if (!password) {
+      this.showError('Please enter a Password.');
       return;
     }
 
@@ -283,8 +321,20 @@ const Auth = {
       return;
     }
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Creating Account... ⏳';
+    if (!confirmPassword) {
+      this.showError('Please rewrite your password in the Rewrite Password field.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      this.showError('Password and Rewrite Password must match.');
+      return;
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating Account... ⏳';
+    }
 
     try {
       const client = this.getClient();
@@ -294,15 +344,15 @@ const Auth = {
       if (client) {
         const internalEmail = this.formatInternalEmail(username);
 
-        // 1. Check if user already exists in profiles table
+        // 1. Check if nickname/username already exists in profiles table
         const { data: existingUser } = await client
           .from('profiles')
           .select('*')
-          .eq('username', username)
+          .or(`username.eq.${username},nickname.eq.${username}`)
           .maybeSingle();
 
         if (existingUser) {
-          // Attempt sign in to existing account
+          // Attempt sign in to existing account if passwords match
           if (client.auth) {
             try {
               const { data: authData } = await client.auth.signInWithPassword({
@@ -316,15 +366,7 @@ const Auth = {
           }
 
           if (!profile) {
-            profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(existingUser.id) : {
-              id: existingUser.id,
-              role: existingUser.role || role,
-              name: existingUser.full_name || existingUser.name || fullName,
-              full_name: existingUser.full_name || existingUser.name || fullName,
-              username: username,
-              photo: this.uploadedPhotoData || existingUser.photo_url || null,
-              createdAt: existingUser.created_at || new Date().toISOString()
-            };
+            throw new Error(`An account with Nickname "${username}" already exists. Please Sign In or pick a different Nickname.`);
           }
         } else {
           // 2. New account creation
@@ -337,7 +379,9 @@ const Auth = {
                 password: password,
                 options: {
                   data: {
+                    real_name: fullName,
                     full_name: fullName,
+                    nickname: username,
                     username: username,
                     role: role
                   }
@@ -368,7 +412,9 @@ const Auth = {
             id: createdUserId,
             role: role,
             name: fullName,
+            real_name: fullName,
             full_name: fullName,
+            nickname: username,
             username: username,
             photo: this.uploadedPhotoData || null,
             createdAt: new Date().toISOString()
@@ -378,8 +424,10 @@ const Auth = {
             await client.from('profiles').upsert({
               id: createdUserId,
               role: role,
-              name: fullName,
+              real_name: fullName,
               full_name: fullName,
+              name: fullName,
+              nickname: username,
               username: username,
               photo_url: (this.uploadedPhotoData && this.uploadedPhotoData.length < 50000) ? this.uploadedPhotoData : null,
               created_at: new Date().toISOString()
@@ -396,7 +444,9 @@ const Auth = {
           id: uuid,
           role: role,
           name: fullName,
+          real_name: fullName,
           full_name: fullName,
+          nickname: username,
           username: username,
           photo: this.uploadedPhotoData || null,
           createdAt: new Date().toISOString()
@@ -422,8 +472,10 @@ const Auth = {
     } catch (err) {
       this.showError(err.message || 'Account creation failed.');
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Create Account ✨';
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Account ✨';
+      }
     }
   },
 

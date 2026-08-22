@@ -52,13 +52,14 @@ class ProfileModel {
         username = username ?? '';
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
-    final nameStr = (json['full_name'] as String?) ?? (json['name'] as String?) ?? 'User';
+    final realNameStr = (json['real_name'] as String?) ?? (json['full_name'] as String?) ?? (json['name'] as String?) ?? 'User';
+    final nicknameStr = (json['nickname'] as String?) ?? (json['username'] as String?) ?? '';
     return ProfileModel(
       id: json['id'] as String,
       role: json['role'] as String? ?? 'student',
-      name: json['name'] as String,
-      fullName: nameStr,
-      username: (json['username'] as String?) ?? '',
+      name: realNameStr,
+      fullName: realNameStr,
+      username: nicknameStr,
       gradeLevel: json['grade_level'] as String?,
       section: json['section'] as String?,
       photoUrl: json['photo_url'] as String?,
@@ -88,7 +89,9 @@ class ProfileModel {
       'id': id,
       'role': role,
       'name': name,
+      'real_name': name,
       'full_name': fullName,
+      'nickname': username,
       'username': username,
       'grade_level': gradeLevel,
       'section': section,

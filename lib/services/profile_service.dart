@@ -45,22 +45,50 @@ class ProfileService {
     required String username,
     required String password,
     required String role,
+    String? confirmPassword,
+    String? teacherCode,
   }) async {
-    final cleanUsername = username.trim().toLowerCase();
-    if (cleanUsername.length < 3) {
-      throw const AuthException('Username must be at least 3 characters long.');
+    final cleanFullName = fullName.trim();
+    final cleanNickname = username.trim().toLowerCase();
+
+    if (cleanFullName.isEmpty) {
+      throw AuthException('Please enter your ${role == 'teacher' ? 'Real Teacher Name' : 'Real Student Name'}.');
+    }
+    if (cleanNickname.isEmpty) {
+      throw const AuthException('Please enter a Nickname.');
+    }
+    if (cleanNickname.length < 3) {
+      throw const AuthException('Nickname must be at least 3 characters long.');
+    }
+
+    if (role == 'teacher') {
+      final code = (teacherCode ?? '').trim();
+      if (code.isEmpty) {
+        throw const AuthException('Please enter a valid Teacher Code.');
+      }
+      final validCodes = ['NEXUS-TEACHER-2026', 'NEXUS2026', 'NEXUS10', '123456', 'TEACHER2026'];
+      if (!validCodes.contains(code.toUpperCase())) {
+        throw const AuthException('Invalid Teacher Code. Please verify your code with school administration.');
+      }
+    }
+
+    if (password.isEmpty) {
+      throw const AuthException('Please enter a Password.');
     }
     if (password.length < 6) {
       throw const AuthException('Password must be at least 6 characters long.');
     }
-
-    // 1. Check if username is taken
-    final taken = await isUsernameTaken(cleanUsername);
-    if (taken) {
-      throw AuthException('Username "$cleanUsername" is already taken. Please choose another.');
+    if (confirmPassword != null && confirmPassword.isNotEmpty && password != confirmPassword) {
+      throw const AuthException('Password and Rewrite Password must match.');
     }
 
-    final internalEmail = _formatEmail(cleanUsername);
+    // 1. Check if nickname is taken
+    final taken = await isUsernameTaken(cleanNickname);
+    if (taken) {
+      throw AuthException('Nickname "$cleanNickname" is already taken. Please choose another.');
+    }
+
+    final internalEmail = _formatEmail(cleanNickname);
 
     // 2. Create Supabase Auth Account
     try {
@@ -68,8 +96,10 @@ class ProfileService {
         email: internalEmail,
         password: password,
         data: {
-          'full_name': fullName.trim(),
-          'username': cleanUsername,
+          'real_name': cleanFullName,
+          'full_name': cleanFullName,
+          'nickname': cleanNickname,
+          'username': cleanNickname,
           'role': role,
         },
       );
@@ -85,9 +115,9 @@ class ProfileService {
         final profile = ProfileModel(
           id: user.id,
           role: role,
-          name: fullName.trim(),
-          fullName: fullName.trim(),
-          username: cleanUsername,
+          name: cleanFullName,
+          fullName: cleanFullName,
+          username: cleanNickname,
           createdAt: DateTime.now(),
         );
 
@@ -108,9 +138,9 @@ class ProfileService {
         final profile = ProfileModel(
           id: localUuid,
           role: role,
-          name: fullName.trim(),
-          fullName: fullName.trim(),
-          username: cleanUsername,
+          name: cleanFullName,
+          fullName: cleanFullName,
+          username: cleanNickname,
           createdAt: DateTime.now(),
         );
         await _secureStorage.write(key: _userUuidKey, value: localUuid);

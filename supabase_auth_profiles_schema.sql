@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 );
 
 -- 2. Add missing columns safely if the table already existed
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS real_name TEXT;
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS nickname TEXT;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS username TEXT;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS full_name TEXT;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS name TEXT;
@@ -34,7 +36,8 @@ ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS unlocked_outfits JSONB DEFA
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
 
--- 3. Create Unique Index for Username Lookup (Partial index ignoring NULL)
+-- 3. Create Unique Indexes for Nickname & Username Lookup
+CREATE UNIQUE INDEX IF NOT EXISTS idx_profiles_nickname ON public.profiles(LOWER(nickname)) WHERE nickname IS NOT NULL;
 CREATE UNIQUE INDEX IF NOT EXISTS idx_profiles_username ON public.profiles(LOWER(username)) WHERE username IS NOT NULL;
 
 -- 4. Enable Row Level Security (RLS)
