@@ -820,9 +820,26 @@ const Multiplayer = {
     }
   },
 
-  hostShowAnswer() {
+  async hostShowAnswer() {
     const q = this.questionsList[this.currentIndex];
     if (!q) return;
+
+    if (this.currentGame) {
+      try {
+        const answeredList = await DB.getAnsweredPlayersForQuestion(this.currentGame.id, this.currentIndex);
+        if (answeredList && answeredList.length > 0) {
+          if (!this.answeredPlayerSet) this.answeredPlayerSet = new Set();
+          answeredList.forEach(item => {
+            if (item) {
+              const str = String(item).trim();
+              this.answeredPlayerSet.add(str);
+              this.answeredPlayerSet.add(str.toLowerCase());
+            }
+          });
+        }
+      } catch (e) {}
+    }
+    this.refreshHostPlayerAnswerStatuses();
 
     const banner = document.getElementById('mpHostCorrectAnswerBanner');
     const bannerText = document.getElementById('mpHostCorrectAnswerText');
@@ -1204,6 +1221,20 @@ const Multiplayer = {
       btnEl.classList.add('selected-choice');
       btnEl.style.opacity = '1';
     }
+
+    const myProfile = DB.getStudentProfile() || {};
+    const myName = myProfile.name || 'Player';
+    const myId = DB.getUserUUID();
+
+    this.sendBroadcast('PLAYER_ANSWERED', {
+      playerId: myId,
+      user_id: myId,
+      playerName: myName,
+      display_name: myName,
+      pointsEarned: 0,
+      totalScore: 0,
+      isCorrect: false
+    });
 
     const banner = document.getElementById('mpPlayerFeedbackBanner');
     const statusText = document.getElementById('mpPlayerFeedbackText');
