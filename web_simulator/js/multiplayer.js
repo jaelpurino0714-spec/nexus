@@ -394,9 +394,10 @@ const Multiplayer = {
             }
             await this.playerRenderQuestion(dbIndex, game);
           }
-        } else if (game.status === 'finished' && App.currentScreen !== 'mpLeaderboardScreen') {
-          const finalLeaderboard = await DB.getGameLeaderboard(game.id);
-          this.renderLeaderboardScreen('🏆 Final Podium Leaderboard', finalLeaderboard);
+        } else if ((game.status === 'show_results' || game.status === 'finished') && App.currentScreen !== 'mpLeaderboardScreen') {
+          const title = (game.status === 'finished') ? '🏆 Final Podium Leaderboard' : 'Current Standings 📊';
+          const leaderboard = await DB.getGameLeaderboard(game.id, game.room_code);
+          this.renderLeaderboardScreen(title, leaderboard);
         }
       } catch (e) {}
     };
@@ -549,22 +550,26 @@ const Multiplayer = {
   },
 
   handleBroadcastEvent(data) {
-    const { eventType } = data;
+    if (!data) return;
+    const eventType = data.eventType || data.event || data.type;
+    const payload = data.payload || data;
 
     if (eventType === 'GAME_START') {
-      this.onGameStart(data);
+      this.onGameStart(payload);
     } else if (eventType === 'QUESTION_START') {
-      this.onQuestionStart(data);
+      this.onQuestionStart(payload);
     } else if (eventType === 'PLAYER_ANSWERED') {
-      this.onPlayerAnswered(data);
+      this.onPlayerAnswered(payload);
     } else if (eventType === 'QUESTION_LOCK') {
-      this.onQuestionLock(data);
+      this.onQuestionLock(payload);
     } else if (eventType === 'SHOW_RESULTS') {
-      this.onShowResults(data);
+      this.onShowResults(payload);
     } else if (eventType === 'NEXT_QUESTION') {
-      this.onNextQuestion(data);
+      this.onNextQuestion(payload);
     } else if (eventType === 'GAME_FINISH') {
-      this.onGameFinish(data);
+      this.onGameFinish(payload);
+    } else if (eventType === 'PLAYER_KICKED') {
+      this.onPlayerKicked(payload);
     }
   },
 
@@ -1768,32 +1773,7 @@ const Multiplayer = {
     }
   },
 
-  handleBroadcastEvent(data) {
-    if (!data) return;
-    const eventType = data.event || data.type;
-    const payload = data.payload || data;
 
-    switch (eventType) {
-      case 'GAME_START':
-        this.onGameStart(payload);
-        break;
-      case 'QUESTION_START':
-        this.onQuestionStart(payload);
-        break;
-      case 'PLAYER_ANSWERED':
-        this.onPlayerAnswered(payload);
-        break;
-      case 'SHOW_RESULTS':
-        this.onShowResults(payload);
-        break;
-      case 'GAME_FINISH':
-        this.onGameFinish(payload);
-        break;
-      case 'PLAYER_KICKED':
-        this.onPlayerKicked(payload);
-        break;
-    }
-  },
 
   onPlayerKicked(payload) {
     if (this.isHost) return;
