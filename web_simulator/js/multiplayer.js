@@ -486,6 +486,10 @@ const Multiplayer = {
         });
       }
     }
+
+    if (this.isHost) {
+      this.saveCurrentHostAnalytics();
+    }
   },
 
   sendBroadcast(eventType, payload = {}) {
@@ -543,6 +547,7 @@ const Multiplayer = {
       this.currentIndex = 0;
       const initialDuration = (this.questionsList[0] && this.questionsList[0].time_limit) ? this.questionsList[0].time_limit : ((this.currentGame && this.currentGame.time_limit) ? this.currentGame.time_limit : 20);
       this.sendBroadcast('GAME_START', { questionNumber: 1, startedAt: new Date().toISOString(), duration: initialDuration });
+      this.saveCurrentHostAnalytics();
       this.hostRenderQuestion(0);
     } catch (e) {
       console.error(e);
@@ -656,6 +661,8 @@ const Multiplayer = {
     this.startSynchronizedTimer('mpHostTimerValue', startedAt, this.questionDurationSec, () => {
       this.hostLockAnswers();
     });
+
+    this.saveCurrentHostAnalytics();
   },
 
   refreshHostPlayerAnswerStatuses() {
@@ -801,6 +808,59 @@ const Multiplayer = {
     }
   },
 
+  saveCurrentHostAnalytics() {
+    if (!this.isHost || !this.currentGame) return;
+
+    const totalQ = (this.questionsList && this.questionsList.length > 0) ? this.questionsList.length : 10;
+    const mergedMap = new Map();
+
+    // Add ALL players who connected to the lobby/game (including players with 0 points)
+    if (this.playersList && this.playersList.length > 0) {
+      this.playersList.forEach(p => {
+        if (!p) return;
+        const isHost = p.is_host || p.isHost || (this.currentGame && (p.user_id === this.currentGame.host_id || p.id === this.currentGame.host_id));
+        if (isHost) return;
+
+        const name = p.playerName || p.display_name || p.name || 'Participant';
+        const key = p.user_id || p.id || name.trim().toLowerCase();
+        const score = Number(p.score || p.points || 0);
+        const correct = Number(p.correct_answers || p.correct || 0);
+
+        mergedMap.set(key, {
+          name: name,
+          points: score,
+          correct: correct,
+          totalQuestions: totalQ
+        });
+      });
+    }
+
+    const participantsList = Array.from(mergedMap.values()).map(p => {
+      const correct = Number(p.correct || 0);
+      const points = Number(p.points || 0);
+      const pct = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
+      return {
+        name: p.name,
+        points: points,
+        correct: correct,
+        totalQuestions: totalQ,
+        correctRatio: `${correct}/${totalQ}`,
+        accuracyPct: pct
+      };
+    });
+
+    const analyticsData = {
+      gameId: this.currentGame.id || 'game_' + Date.now(),
+      roomCode: this.currentGame.room_code || this.currentGame.access_code || '000000',
+      title: this.currentGame.title || 'Science Host Quiz',
+      totalQuestions: totalQ,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+      participants: participantsList
+    };
+
+    DB.saveHostedGameAnalytics(analyticsData);
+  },
+
   hostCancelGame() {
     if (confirm('Cancel game session?')) {
       this.unsubscribeRealtime();
@@ -855,6 +915,7 @@ const Multiplayer = {
     }
 
     this.refreshHostPlayerAnswerStatuses();
+    this.saveCurrentHostAnalytics();
   },
 
   onQuestionStart(data) {
