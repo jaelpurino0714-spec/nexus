@@ -242,19 +242,16 @@ const Multiplayer = {
 
   isHostPlayer(p) {
     if (!p) return false;
-    const hostId = (this.currentGame && this.currentGame.host_id) ? String(this.currentGame.host_id).trim() : null;
-    const myUuid = String(DB.getUserUUID()).trim();
-    const teacherProfile = DB.getTeacherProfile() || {};
-    const teacherName = (teacherProfile.name || 'Host').trim().toLowerCase();
-
-    const pId = p.id ? String(p.id).trim() : '';
-    const pUserId = p.user_id ? String(p.user_id).trim() : '';
-    const pName = (p.playerName || p.display_name || p.name || p.student_name || '').trim().toLowerCase();
-
     if (p.is_host === true || p.isHost === true || p.role === 'host') return true;
-    if (hostId && (pId === hostId || pUserId === hostId)) return true;
-    if (myUuid && (pId === myUuid || pUserId === myUuid)) return true;
-    if (pName === 'host' || (teacherName && pName === teacherName)) return true;
+    if (p.display_name === 'Host' || p.playerName === 'Host' || p.name === 'Host') return true;
+
+    if (this.currentGame && this.currentGame.host_id) {
+      const hostId = String(this.currentGame.host_id).trim();
+      if (hostId && hostId.length > 5) {
+        if (p.id && String(p.id).trim() === hostId) return true;
+        if (p.user_id && String(p.user_id).trim() === hostId) return true;
+      }
+    }
 
     return false;
   },
@@ -894,11 +891,13 @@ const Multiplayer = {
     const banner = document.getElementById('mpHostCorrectAnswerBanner');
     const bannerText = document.getElementById('mpHostCorrectAnswerText');
 
-    let displayAnswer = q.correct_answer || '';
-    if (q.question_type_id === 1) {
-      const key = String(q.correct_answer || '').toUpperCase();
-      const optText = q['choice_' + key.toLowerCase()] || q['option_' + key.toLowerCase()];
-      displayAnswer = optText ? `${key}: ${optText}` : key;
+    const rawAns = String(q.correct_answer || q.correctAnswer || q.answer || q.rawAnswer || '').trim();
+    let displayAnswer = rawAns;
+    const keyUpper = rawAns.toUpperCase();
+
+    if (['A', 'B', 'C', 'D'].includes(keyUpper)) {
+      const optText = q['choice_' + keyUpper.toLowerCase()] || q['option_' + keyUpper.toLowerCase()] || q['choice' + keyUpper] || q['option' + keyUpper];
+      displayAnswer = optText ? `${keyUpper}: ${optText}` : keyUpper;
     }
 
     if (banner && bannerText) {
@@ -918,7 +917,6 @@ const Multiplayer = {
       });
 
       let correctKey = '';
-      const rawAns = String(q.correct_answer || '').trim();
       if (rawAns) {
         const u = rawAns.toUpperCase();
         if (['A', 'B', 'C', 'D'].includes(u)) {
