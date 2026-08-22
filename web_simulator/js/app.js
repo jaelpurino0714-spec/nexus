@@ -101,6 +101,8 @@ const App = {
       screenId = 'teacherHomeScreen';
     }
 
+    this.currentScreen = screenId;
+
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const target = document.getElementById(screenId);
     if (target) {

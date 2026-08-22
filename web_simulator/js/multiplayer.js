@@ -367,23 +367,32 @@ const Multiplayer = {
         const game = await DB.getMultiplayerGameByCode(this.currentGame.room_code);
         if (!game) return;
 
-        if ((game.status === 'active' || game.status === 'starting' || game.status === 'in_progress') && App.currentScreen === 'mpPlayerLobbyScreen') {
-          if (this.questionsList.length === 0) {
+        const isLobbyActive = App.currentScreen === 'mpPlayerLobbyScreen' || 
+          (document.getElementById('mpPlayerLobbyScreen') && document.getElementById('mpPlayerLobbyScreen').classList.contains('active'));
+
+        const isGameScreenActive = App.currentScreen === 'mpPlayerGameScreen' ||
+          (document.getElementById('mpPlayerGameScreen') && document.getElementById('mpPlayerGameScreen').classList.contains('active'));
+
+        if ((game.status === 'active' || game.status === 'starting' || game.status === 'in_progress') && isLobbyActive) {
+          if (!this.questionsList || this.questionsList.length === 0) {
             this.questionsList = await DB.getMultiplayerQuestions(game.id, game.room_code);
           }
           App.showScreen('mpPlayerGameScreen');
           const currentIdx = game.current_question_index || 0;
           const qStartTime = game.question_start_time || '';
           this.lastRenderedQuestionKey = `${currentIdx}_${qStartTime}`;
-          this.playerRenderQuestion(currentIdx, game);
-        } else if ((game.status === 'active' || game.status === 'in_progress') && App.currentScreen === 'mpPlayerGameScreen') {
+          await this.playerRenderQuestion(currentIdx, game);
+        } else if ((game.status === 'active' || game.status === 'starting' || game.status === 'in_progress') && isGameScreenActive) {
           const dbIndex = game.current_question_index || 0;
           const qStartTime = game.question_start_time || '';
           const qKey = `${dbIndex}_${qStartTime}`;
 
-          if (qKey !== this.lastRenderedQuestionKey) {
+          if (qKey !== this.lastRenderedQuestionKey || !this.questionsList || this.questionsList.length === 0) {
             this.lastRenderedQuestionKey = qKey;
-            this.playerRenderQuestion(dbIndex, game);
+            if (!this.questionsList || this.questionsList.length === 0) {
+              this.questionsList = await DB.getMultiplayerQuestions(game.id, game.room_code);
+            }
+            await this.playerRenderQuestion(dbIndex, game);
           }
         } else if (game.status === 'finished' && App.currentScreen !== 'mpLeaderboardScreen') {
           const finalLeaderboard = await DB.getGameLeaderboard(game.id);
@@ -392,7 +401,7 @@ const Multiplayer = {
       } catch (e) {}
     };
 
-    this.playerSyncInterval = setInterval(poll, 1500);
+    this.playerSyncInterval = setInterval(poll, 1000);
   },
 
   // 7. Supabase Realtime Channel (`game_room_<pin>`) with Presence & Broadcast
@@ -581,7 +590,11 @@ const Multiplayer = {
 
       this.currentIndex = 0;
       const initialDuration = (this.questionsList[0] && this.questionsList[0].time_limit) ? this.questionsList[0].time_limit : ((this.currentGame && this.currentGame.time_limit) ? this.currentGame.time_limit : 20);
-      this.sendBroadcast('GAME_START', { questionNumber: 1, startedAt: new Date().toISOString(), duration: initialDuration });
+      const startIso = new Date().toISOString();
+
+      this.sendBroadcast('GAME_START', { questionNumber: 1, startedAt: startIso, duration: initialDuration });
+      this.sendBroadcast('QUESTION_START', { questionNumber: 1, startedAt: startIso, duration: initialDuration });
+
       this.saveCurrentHostAnalytics();
       this.hostRenderQuestion(0);
     } catch (e) {
@@ -943,9 +956,18 @@ const Multiplayer = {
     }
   },
 
-  onGameStart(data) {
+  async onGameStart(data) {
     if (!this.isHost) {
       App.showScreen('mpPlayerGameScreen');
+      const qIndex = (data && data.questionNumber) ? (data.questionNumber - 1) : 0;
+      if (!this.questionsList || this.questionsList.length === 0) {
+        if (this.currentGame) {
+          this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id, this.currentGame.room_code);
+        }
+      }
+      const qKey = `${qIndex}_${(data && data.startedAt) || ''}`;
+      this.lastRenderedQuestionKey = qKey;
+      await this.playerRenderQuestion(qIndex, data || {});
     }
   },
 
@@ -1022,7 +1044,7 @@ const Multiplayer = {
     this.currentIndex = index;
     this.hasAnsweredCurrent = false;
 
-    if (this.questionsList.length === 0 && this.currentGame) {
+    if ((!this.questionsList || this.questionsList.length === 0 || !this.questionsList[index]) && this.currentGame) {
       this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id, this.currentGame.room_code);
     }
 
