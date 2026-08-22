@@ -1687,6 +1687,7 @@ var DB = {
   saveHostedGameAnalytics(data) {
     if (!data) return;
     try {
+      this._lastHostedAnalytics = data;
       localStorage.setItem('nexus_latest_hosted_game_analytics', JSON.stringify(data));
     } catch (e) {
       console.warn('Error saving hosted game analytics:', e);
@@ -1696,10 +1697,9 @@ var DB = {
   getLatestHostedGameAnalytics() {
     try {
       const raw = localStorage.getItem('nexus_latest_hosted_game_analytics');
-      return raw ? JSON.parse(raw) : null;
-    } catch (e) {
-      return null;
-    }
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return this._lastHostedAnalytics || null;
   }
 };
 

@@ -455,27 +455,27 @@ const TeacherPortal = {
             <span style="font-size: 0.8rem; color: #A5A3C4; font-weight: 600;">${latestHostedGame.date || ''}</span>
           </div>
 
-          <div style="max-height: 240px; overflow-y: auto; border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; background: rgba(15, 10, 30, 0.8);">
-            <table class="data-table" style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+          <div style="max-height: 240px; overflow-y: auto; border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; background: rgba(15, 10, 30, 0.95);">
+            <table class="data-table" style="width: 100%; font-size: 0.85rem; border-collapse: collapse; background: rgba(15, 10, 30, 0.95) !important;">
               <thead>
-                <tr style="background: rgba(139, 92, 246, 0.25); text-align: left; border-bottom: 1px solid rgba(139, 92, 246, 0.3);">
-                  <th style="padding: 12px 14px; color: #C084FC; font-weight: 800; font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Participant</th>
-                  <th style="padding: 12px 14px; color: #C084FC; font-weight: 800; font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Total Points</th>
-                  <th style="padding: 12px 14px; color: #C084FC; font-weight: 800; font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Accuracy</th>
-                  <th style="padding: 12px 14px; color: #C084FC; font-weight: 800; font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Correct / Total</th>
+                <tr style="background: rgba(139, 92, 246, 0.25) !important; text-align: left; border-bottom: 1px solid rgba(139, 92, 246, 0.3);">
+                  <th style="padding: 12px 14px; color: #C084FC !important; font-weight: 800; font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Participant</th>
+                  <th style="padding: 12px 14px; color: #C084FC !important; font-weight: 800; font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Total Points</th>
+                  <th style="padding: 12px 14px; color: #C084FC !important; font-weight: 800; font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Accuracy</th>
+                  <th style="padding: 12px 14px; color: #C084FC !important; font-weight: 800; font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Correct / Total</th>
                 </tr>
               </thead>
               <tbody>
                 ${parts.length === 0 ? '<tr><td colspan="4" style="text-align:center; padding:20px; color:#A5A3C4; font-weight:600;">No participant responses recorded.</td></tr>' : parts.map(p => `
-                  <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
-                    <td style="padding: 12px 14px; font-weight: 700; color: #FFFFFF;">👤 ${p.name}</td>
-                    <td style="padding: 12px 14px; font-weight: 800; color: #C084FC;">${(p.points || 0).toLocaleString()} pts</td>
+                  <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.06); background: rgba(15, 10, 30, 0.95);">
+                    <td style="padding: 12px 14px; font-weight: 700; color: #FFFFFF !important;">👤 ${p.name}</td>
+                    <td style="padding: 12px 14px; font-weight: 800; color: #C084FC !important;">${(p.points || 0).toLocaleString()} pts</td>
                     <td style="padding: 12px 14px;">
                       <span class="tag" style="background:${p.accuracyPct >= 50 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}; color:${p.accuracyPct >= 50 ? '#34D399' : '#FCA5A5'}; border: 1px solid ${p.accuracyPct >= 50 ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)'}; font-weight:800; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem;">
                         ${p.accuracyPct}%
                       </span>
                     </td>
-                    <td style="padding: 12px 14px; font-weight: 800; color: #38BDF8;">${p.correctRatio || `${p.correct}/${p.totalQuestions}`}</td>
+                    <td style="padding: 12px 14px; font-weight: 800; color: #38BDF8 !important;">${p.correctRatio || `${p.correct}/${p.totalQuestions}`}</td>
                   </tr>
                 `).join('')}
               </tbody>

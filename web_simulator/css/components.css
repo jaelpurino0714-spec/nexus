@@ -2938,22 +2938,28 @@
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
+  background: rgba(15, 10, 30, 0.95) !important;
   border-radius: var(--radius-sm);
   overflow: hidden;
   font-size: 0.78rem;
+  color: #FFFFFF !important;
 }
 
 .data-table th, .data-table td {
   padding: 10px;
   text-align: left;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2) !important;
+  color: #FFFFFF !important;
 }
 
 .data-table th {
-  background: var(--bg-subtle);
-  color: var(--primary-purple-dark);
+  background: rgba(139, 92, 246, 0.25) !important;
+  color: #C084FC !important;
   font-weight: 800;
+}
+
+.data-table td {
+  color: #FFFFFF !important;
 }
 
 .custom-quiz-builder {
