@@ -355,25 +355,15 @@ const Auth = {
         const { data: existingUser } = await client
           .from('profiles')
           .select('*')
-          .or(`username.eq.${username},nickname.eq.${username}`)
+          .or(`username.ilike.${username},nickname.ilike.${username},username.eq.${username},nickname.eq.${username}`)
           .maybeSingle();
 
         if (existingUser) {
-          // Attempt sign in to existing account if passwords match
-          if (client.auth) {
-            try {
-              const { data: authData } = await client.auth.signInWithPassword({
-                email: internalEmail,
-                password: password
-              });
-              if (authData && authData.user) {
-                profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(authData.user.id) : null;
-              }
-            } catch (_) {}
-          }
-
-          if (!profile) {
-            throw new Error(`An account with Nickname "${username}" already exists. Please Sign In or pick a different Nickname.`);
+          if (existingUser.password && existingUser.password === password) {
+            // Passwords match! Log in to existing account seamlessly
+            profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(existingUser.id) : existingUser;
+          } else {
+            throw new Error(`An account with Nickname "${username}" already exists. Please Sign In or choose a different Nickname.`);
           }
         } else {
           // 2. New account creation
@@ -381,7 +371,7 @@ const Auth = {
 
           if (client.auth) {
             try {
-              const { data, error } = await client.auth.signUp({
+              const { data } = await client.auth.signUp({
                 email: internalEmail,
                 password: password,
                 options: {
@@ -399,14 +389,6 @@ const Auth = {
 
               if (data && data.user) {
                 createdUserId = data.user.id;
-                if (!data.session) {
-                  try {
-                    await client.auth.signInWithPassword({
-                      email: internalEmail,
-                      password: password
-                    });
-                  } catch (_) {}
-                }
               }
             } catch (e) {
               console.warn('Supabase Auth signUp exception:', e);
