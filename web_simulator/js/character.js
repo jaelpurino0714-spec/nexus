@@ -11,8 +11,8 @@ const EVOLUTION_STAGES = [
     id: 'baby', 
     stage: 1, 
     title: 'BABY', 
-    icon: '👶', 
-    image: 'assets/baby-character.png',
+    icon: '🤖', 
+    image: 'assets/nexus_mascot_baby.jpg',
     minXP: 0, 
     nextXP: 100, 
     color: '#38BDF8', 
@@ -24,7 +24,7 @@ const EVOLUTION_STAGES = [
     stage: 2, 
     title: 'STUDENT', 
     icon: '🎒', 
-    image: 'assets/student-character.png',
+    image: 'assets/nexus_mascot_student.jpg',
     minXP: 100, 
     nextXP: 300, 
     color: '#10B981', 
@@ -34,43 +34,43 @@ const EVOLUTION_STAGES = [
   { 
     id: 'graduate', 
     stage: 3, 
-    title: 'GRADUATE', 
-    icon: '🎓', 
-    image: 'assets/graduate-character.png',
+    title: 'SCIENTIST', 
+    icon: '🧪', 
+    image: 'assets/nexus_mascot_scientist.jpg',
     minXP: 300, 
     nextXP: 600, 
     color: '#8B5CF6', 
-    defaultQuote: "Mastering trivia & simulations!",
-    desc: 'Mastered science trivia & simulations!' 
+    defaultQuote: "Exploring science & mastering trivia!",
+    desc: 'Mastered science trivia & laboratory research!' 
   },
   { 
     id: 'worker', 
     stage: 4, 
-    title: 'WORKER', 
-    icon: '💼', 
-    image: 'assets/adult-character.png',
+    title: 'MASTER SCIENTIST', 
+    icon: '⚛️', 
+    image: 'assets/nexus_mascot_scientist.jpg',
     minXP: 600, 
     nextXP: Infinity, 
     color: '#F59E0B', 
     defaultQuote: "Working hard & applying science knowledge!",
-    desc: 'Science Professional & Industry Worker!' 
+    desc: 'Grandmaster Science Professional!' 
   }
 ];
 
 const GENDER_CHARACTER_IMAGES = {
   male: {
-    baby: 'assets/male/baby.png',
-    student: 'assets/male/student.png',
-    graduate: 'assets/male/graduate.png',
-    worker: 'assets/male/worker.png',
-    adult: 'assets/male/worker.png'
+    baby: 'assets/nexus_mascot_baby.jpg',
+    student: 'assets/nexus_mascot_student.jpg',
+    graduate: 'assets/nexus_mascot_scientist.jpg',
+    worker: 'assets/nexus_mascot_scientist.jpg',
+    adult: 'assets/nexus_mascot_scientist.jpg'
   },
   female: {
-    baby: 'assets/female/baby.png',
-    student: 'assets/female/student.png',
-    graduate: 'assets/female/graduate.png',
-    worker: 'assets/female/worker.png',
-    adult: 'assets/female/worker.png'
+    baby: 'assets/nexus_mascot_baby.jpg',
+    student: 'assets/nexus_mascot_student.jpg',
+    graduate: 'assets/nexus_mascot_scientist.jpg',
+    worker: 'assets/nexus_mascot_scientist.jpg',
+    adult: 'assets/nexus_mascot_scientist.jpg'
   }
 };
 
@@ -250,12 +250,7 @@ const ProgressionSystem = {
     // Check Evolution Threshold
     if (newStage.stage > oldStage.stage) {
       setTimeout(() => {
-        // If gender not selected yet and evolving to Student or beyond, prompt gender choice first!
-        if (!profile.gender && newStage.stage >= 2) {
-          CharacterSystem.triggerGenderSelectionModal(oldStage, newStage, newXP);
-        } else {
-          CharacterSystem.triggerEvolutionModal(oldStage, newStage, newXP);
-        }
+        CharacterSystem.triggerEvolutionModal(oldStage, newStage, newXP);
       }, 600);
     }
   }
@@ -578,7 +573,6 @@ const CharacterSystem = {
           </div>
           <div class="pet-header-avatars">
             <div class="pet-header-avatar-badge">${stage.icon}</div>
-            <div class="pet-header-avatar-badge" id="petHeaderGenderBadge">${profile.gender === 'female' ? '👧' : '👦'}</div>
           </div>
         </div>
 

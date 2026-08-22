@@ -79,9 +79,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
       pct = (currentLevelXP / neededXP).clamp(0.0, 1.0);
     }
 
-    final genderBadge = (stage.id != 'baby' && gender != null && gender.isNotEmpty)
-        ? (gender == 'female' ? ' 👧' : ' 👦')
-        : '';
+    final genderBadge = '';
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
