@@ -462,18 +462,18 @@ const Multiplayer = {
     if (rosterEl) {
       rosterEl.innerHTML = '';
       if (online.length === 0) {
-        rosterEl.innerHTML = '<div style="color:#94A3B8; padding:16px; text-align:center;">Waiting for players to enter PIN...</div>';
+        rosterEl.innerHTML = '<div style="color:#A5A3C4; padding:16px; text-align:center;">Waiting for players to enter PIN...</div>';
       } else {
         online.forEach(p => {
           const card = document.createElement('div');
           card.className = 'lobby-part-card';
-          const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
+          const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%23311042'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
           card.innerHTML = `
             <div class="part-info-left">
               <img src="${p.photoUrl || defaultAvatar}" class="part-avatar" alt="${p.playerName}">
               <div>
-                <h5 style="margin:0; font-size:0.95rem; color:#1E293B; font-weight:700;">${p.playerName}</h5>
-                <span style="font-size:0.75rem; color:#10B981; font-weight:600;">● Online in Lobby</span>
+                <h5 style="margin:0; font-size:0.95rem; color:#FFFFFF; font-weight:700;">${p.playerName}</h5>
+                <span style="font-size:0.75rem; color:#34D399; font-weight:600;">● Online in Lobby</span>
               </div>
             </div>
           `;
@@ -667,7 +667,7 @@ const Multiplayer = {
     if (listEl) {
       listEl.innerHTML = '';
       if (!this.playersList || this.playersList.length === 0) {
-        listEl.innerHTML = '<div style="color:#94A3B8; padding:12px; text-align:center;">No participants connected</div>';
+        listEl.innerHTML = '<div style="color:#A5A3C4; padding:12px; text-align:center;">No participants connected</div>';
       } else {
         this.playersList.forEach(p => {
           const pId = p.id || p.user_id || p.playerName;
@@ -682,16 +682,16 @@ const Multiplayer = {
           card.style.padding = '10px 14px';
 
           const statusBadge = hasAnswered 
-            ? '<span style="color:#059669; background:#D1FAE5; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">🟢 Answered</span>'
-            : '<span style="color:#6B21A8; background:#F3E8FF; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">⏳ Thinking...</span>';
+            ? '<span style="color:#34D399; background:rgba(16, 185, 129, 0.2); border:1px solid rgba(16, 185, 129, 0.4); padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">🟢 Answered</span>'
+            : '<span style="color:#C084FC; background:rgba(168, 85, 247, 0.2); border:1px solid rgba(168, 85, 247, 0.4); padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">⏳ Thinking...</span>';
 
-          const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
+          const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%23311042'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
 
           card.innerHTML = `
             <div class="part-info-left" style="justify-content:space-between; width:100%; align-items:center;">
               <div style="display:flex; align-items:center; gap:8px;">
                 <img src="${p.photoUrl || defaultAvatar}" class="part-avatar" style="width:32px; height:32px;" alt="${pName}">
-                <h5 style="margin:0; font-size:0.9rem; color:#1E293B; font-weight:700;">${pName}</h5>
+                <h5 style="margin:0; font-size:0.9rem; color:#FFFFFF; font-weight:700;">${pName}</h5>
               </div>
               <div style="display:flex; align-items:center;">
                 ${statusBadge}

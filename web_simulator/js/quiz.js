@@ -785,7 +785,7 @@ const Quiz = {
     const hostActions = document.getElementById('lobbyHostActions');
 
     const lobbyData = this.currentLobbyData || this.getLobbyData(this.lobbyAccessCode);
-    const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👑</text></svg>";
+    const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%23311042'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👑</text></svg>";
 
     const profile = DB.getStudentProfile();
     const fallbackHostName = (profile && profile.name) ? profile.name : 'Host Instructor';
@@ -798,8 +798,8 @@ const Quiz = {
       hostBox.innerHTML = `
         <img src="${hostPhoto || defaultAvatar}" class="part-avatar" alt="Host">
         <div>
-          <h4 style="margin:0; font-size:0.95rem; color:#1E293B;">${hostName} (Host)</h4>
-          <span style="font-size:0.75rem; color:#64748B;">Waiting for players to enter code ${this.lobbyAccessCode}...</span>
+          <h4 style="margin:0; font-size:0.95rem; color:#FFFFFF; font-weight:700;">${hostName} (Host)</h4>
+          <span style="font-size:0.75rem; color:#A5A3C4;">Waiting for players to enter code ${this.lobbyAccessCode}...</span>
         </div>
       `;
       hostActions.style.display = 'block';
@@ -808,8 +808,8 @@ const Quiz = {
       hostBox.innerHTML = `
         <img src="${hostPhoto || defaultAvatar}" class="part-avatar" alt="Host">
         <div>
-          <h4 style="margin:0; font-size:0.95rem; color:#1E293B;">Host: ${hostName}</h4>
-          <span style="font-size:0.75rem; color:#64748B;">Waiting for host to press Start Quiz...</span>
+          <h4 style="margin:0; font-size:0.95rem; color:#FFFFFF; font-weight:700;">Host: ${hostName}</h4>
+          <span style="font-size:0.75rem; color:#A5A3C4;">Waiting for host to press Start Quiz...</span>
         </div>
       `;
       hostActions.style.display = 'none';
@@ -826,8 +826,8 @@ const Quiz = {
 
     if (participants.length === 0) {
       listEl.innerHTML = `
-        <div style="text-align:center; padding:20px; color:#94A3B8; font-size:0.85rem; font-weight:600;">
-          No participants joined yet. Share code <b style="color:#6D28D9;">${this.lobbyAccessCode}</b> to join!
+        <div style="text-align:center; padding:20px; color:#A5A3C4; font-size:0.85rem; font-weight:600;">
+          No participants joined yet. Share code <b style="color:#C084FC;">${this.lobbyAccessCode}</b> to join!
         </div>
       `;
     } else {
@@ -836,13 +836,13 @@ const Quiz = {
         card.className = 'lobby-part-card';
         const displayName = p.name || p.display_name || 'Student Player';
         const photoUrl = p.photo || p.photo_url || null;
-        const partAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
+        const partAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%23311042'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
         card.innerHTML = `
           <div class="part-info-left">
             <img src="${photoUrl || partAvatar}" class="part-avatar" alt="${displayName}">
             <div>
-              <h5 style="margin:0; font-size:0.85rem; color:#1E293B;">${displayName}</h5>
-              <span style="font-size:0.72rem; color:#64748B;">${p.grade || 'Student'}</span>
+              <h5 style="margin:0; font-size:0.85rem; color:#FFFFFF; font-weight:700;">${displayName}</h5>
+              <span style="font-size:0.72rem; color:#A5A3C4;">${p.grade || 'Student'}</span>
             </div>
           </div>
           ${this.isHost ? `
@@ -876,15 +876,15 @@ const Quiz = {
     const p = this.lobbyParticipants[idx];
     if (!p) return;
     const body = document.getElementById('partProfileBody');
-    const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23DDD6FE'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%236D28D9'>👤</text></svg>";
+    const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%23311042'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
     body.innerHTML = `
       <div style="text-align:center; padding:12px 0;">
-        <img src="${p.photo || defaultAvatar}" style="width:60px; height:60px; border-radius:50%; margin-bottom:8px; object-fit:cover;" alt="${p.name}">
-        <h4 style="margin:0; font-size:1.1rem; color:#1E293B;">${p.name}</h4>
-        <p style="font-size:0.8rem; color:#64748B; margin:2px 0 12px 0;">${p.grade || 'Student'}</p>
-        <div style="display:flex; justify-content:space-around; background:#F8FAFC; padding:10px; border-radius:12px;">
-          <div><strong style="font-size:1rem; color:#6D28D9;">${p.points || 0}</strong><br><span style="font-size:0.7rem; color:#64748B;">Total Pts</span></div>
-          <div><strong style="font-size:1rem; color:#EF4444;">🔥 ${p.streak || 0}</strong><br><span style="font-size:0.7rem; color:#64748B;">Streak</span></div>
+        <img src="${p.photo || defaultAvatar}" style="width:60px; height:60px; border-radius:50%; margin-bottom:8px; object-fit:cover; border: 2px solid rgba(168, 85, 247, 0.4);" alt="${p.name}">
+        <h4 style="margin:0; font-size:1.1rem; color:#FFFFFF; font-weight:700;">${p.name}</h4>
+        <p style="font-size:0.8rem; color:#A5A3C4; margin:2px 0 12px 0;">${p.grade || 'Student'}</p>
+        <div style="display:flex; justify-content:space-around; background:rgba(255,255,255,0.06); border:1px solid rgba(139,92,246,0.25); padding:10px; border-radius:12px;">
+          <div><strong style="font-size:1rem; color:#C084FC;">${p.points || 0}</strong><br><span style="font-size:0.7rem; color:#A5A3C4;">Total Pts</span></div>
+          <div><strong style="font-size:1rem; color:#F87171;">🔥 ${p.streak || 0}</strong><br><span style="font-size:0.7rem; color:#A5A3C4;">Streak</span></div>
         </div>
       </div>
     `;
