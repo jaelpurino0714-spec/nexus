@@ -900,20 +900,14 @@ const Multiplayer = {
 
     this.questionDurationSec = (q && q.time_limit) ? q.time_limit : ((gameObj && gameObj.duration) ? gameObj.duration : ((this.currentGame && this.currentGame.time_limit) ? this.currentGame.time_limit : 20));
 
-    let startedAt = (gameObj && gameObj.question_start_time) ? gameObj.question_start_time : null;
+    const nowIso = new Date().toISOString();
+    let startedAt = (gameObj && gameObj.question_start_time) ? gameObj.question_start_time : nowIso;
     const now = Date.now();
-    if (startedAt) {
-      let startTime = new Date(startedAt).getTime();
-      if (gameObj && gameObj.serverTime) {
-        const clockOffset = now - gameObj.serverTime;
-        startTime += clockOffset;
-      }
-      const elapsedSec = (now - startTime) / 1000;
-      if (isNaN(startTime) || elapsedSec < -2 || elapsedSec >= this.questionDurationSec) {
-        startedAt = new Date().toISOString();
-      }
-    } else {
-      startedAt = new Date().toISOString();
+    let startTimeMs = new Date(startedAt).getTime();
+
+    // If timestamp is invalid or would cause immediate expiration due to device clock offset, reset to local time
+    if (isNaN(startTimeMs) || startTimeMs > now + 1000 || (now - startTimeMs) >= (this.questionDurationSec * 1000)) {
+      startedAt = nowIso;
     }
 
     this.questionStartedAt = startedAt;
@@ -958,18 +952,27 @@ const Multiplayer = {
             const btn = document.createElement('button');
             btn.className = 'answer-option-btn';
             btn.type = 'button';
+            btn.style.cursor = 'pointer';
+            btn.style.touchAction = 'manipulation';
+            btn.style.webkitTapHighlightColor = 'transparent';
             btn.innerHTML = `
               <span class="option-badge-pill"><span class="badge-letter">${key}</span></span>
-              <span class="option-text" style="font-weight:700; text-align:left; color:#3B0764;">${val}</span>
+              <span class="option-text" style="font-weight:700; text-align:left; color:#FFFFFF;">${val}</span>
             `;
+
+            let hasSubmitted = false;
             const handleSelect = (e) => {
+              if (hasSubmitted) return;
+              hasSubmitted = true;
               if (e) {
-                e.preventDefault();
+                if (e.cancelable) e.preventDefault();
                 e.stopPropagation();
               }
               this.submitPlayerChoice(q.id, key, btn);
             };
+
             btn.onclick = handleSelect;
+            btn.addEventListener('touchend', handleSelect, { passive: false });
             container.appendChild(btn);
           }
         });
@@ -993,6 +996,8 @@ const Multiplayer = {
         b.style.opacity = '1';
         b.style.borderColor = '';
         b.style.background = '';
+        b.style.cursor = 'pointer';
+        b.style.touchAction = 'manipulation';
       });
     }
   },
@@ -1096,15 +1101,20 @@ const Multiplayer = {
   startSynchronizedTimer(timerElementId, startedAtIso, durationSec, onExpire) {
     if (this.timerInterval) clearInterval(this.timerInterval);
 
-    let startTime = startedAtIso ? new Date(startedAtIso).getTime() : Date.now();
-    if (isNaN(startTime) || startTime > Date.now() + 2000) {
-      startTime = Date.now();
-    }
+    const now = Date.now();
+    let startTime = startedAtIso ? new Date(startedAtIso).getTime() : now;
     const durationMs = (durationSec || 20) * 1000;
 
+    // Safety guard against cross-device clock skew (e.g. phone clock vs host clock mismatch):
+    // If startTime is invalid, in future, or would result in <=0 remaining time on init,
+    // fallback to current local time so the user gets a working countdown and enabled choices.
+    if (isNaN(startTime) || startTime > now + 1000 || (now - startTime) >= durationMs) {
+      startTime = now;
+    }
+
     const updateTimer = () => {
-      const now = Date.now();
-      const elapsedMs = now - startTime;
+      const currentNow = Date.now();
+      const elapsedMs = currentNow - startTime;
       let remainingMs = Math.max(0, durationMs - elapsedMs);
 
       const remainingSec = (remainingMs / 1000).toFixed(2);
