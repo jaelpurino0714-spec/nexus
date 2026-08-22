@@ -240,6 +240,25 @@ const Multiplayer = {
     this.hostLobbyPollInterval = setInterval(poll, 1500);
   },
 
+  isHostPlayer(p) {
+    if (!p) return false;
+    const hostId = (this.currentGame && this.currentGame.host_id) ? String(this.currentGame.host_id).trim() : null;
+    const myUuid = String(DB.getUserUUID()).trim();
+    const teacherProfile = DB.getTeacherProfile() || {};
+    const teacherName = (teacherProfile.name || 'Host').trim().toLowerCase();
+
+    const pId = p.id ? String(p.id).trim() : '';
+    const pUserId = p.user_id ? String(p.user_id).trim() : '';
+    const pName = (p.playerName || p.display_name || p.name || p.student_name || '').trim().toLowerCase();
+
+    if (p.is_host === true || p.isHost === true || p.role === 'host') return true;
+    if (hostId && (pId === hostId || pUserId === hostId)) return true;
+    if (myUuid && (pId === myUuid || pUserId === myUuid)) return true;
+    if (pName === 'host' || (teacherName && pName === teacherName)) return true;
+
+    return false;
+  },
+
   async syncHostRoster() {
     if (!this.currentGame) return;
 
@@ -248,7 +267,7 @@ const Multiplayer = {
 
     const mergedMap = new Map();
     (dbPlayers || []).forEach(p => {
-      if (!p.is_host) {
+      if (!this.isHostPlayer(p)) {
         const key = p.user_id || p.id || p.display_name;
         if (key) {
           mergedMap.set(key, {
@@ -272,7 +291,7 @@ const Multiplayer = {
         const presenceObj = this.realtimeChannel.presenceState();
         Object.values(presenceObj).forEach(presences => {
           (presences || []).forEach(p => {
-            if (p.role === 'player' && p.playerName) {
+            if (!this.isHostPlayer(p) && p.playerName) {
               const key = p.playerId || p.user_id || p.playerName;
               if (key) {
                 if (!mergedMap.has(key)) {
@@ -306,6 +325,7 @@ const Multiplayer = {
     // C. Preserve existing in-memory scores from this.playersList (e.g. from PLAYER_ANSWERED broadcasts)
     if (this.playersList && this.playersList.length > 0) {
       this.playersList.forEach(existingP => {
+        if (this.isHostPlayer(existingP)) return;
         const name = existingP.playerName || existingP.display_name || existingP.name;
         let matchedKey = null;
         for (const [key, item] of mergedMap.entries()) {
@@ -338,7 +358,7 @@ const Multiplayer = {
       });
     }
 
-    this.playersList = Array.from(mergedMap.values());
+    this.playersList = Array.from(mergedMap.values()).filter(p => !this.isHostPlayer(p));
     this.refreshHostPresenceRoster();
   },
 
@@ -771,36 +791,36 @@ const Multiplayer = {
     const countEl = document.getElementById('mpHostAnswerCount');
     const badgeEl = document.getElementById('mpHostResponseBadge');
 
-    const total = this.playersList ? this.playersList.length : 0;
+    const activeParticipants = (this.playersList || []).filter(p => !this.isHostPlayer(p));
+    const total = activeParticipants.length;
     let answeredCount = 0;
-    if (this.playersList) {
-      this.playersList.forEach(p => {
-        const pId = p.id || p.user_id || p.playerId;
-        const pName = p.playerName || p.display_name || p.name || 'Player';
-        const pNameLower = String(pName).toLowerCase().trim();
 
-        const hasAns = (
-          (this.answeredPlayerSet && (
-            (pId && (this.answeredPlayerSet.has(String(pId).trim()) || this.answeredPlayerSet.has(String(pId).toLowerCase().trim()))) ||
-            (pName && (this.answeredPlayerSet.has(String(pName).trim()) || this.answeredPlayerSet.has(pNameLower))) ||
-            (p.user_id && this.answeredPlayerSet.has(String(p.user_id).trim()))
-          )) ||
-          localStorage.getItem(`nexus_ans_${this.currentIndex}_${pNameLower}`) === 'true' ||
-          (pId && localStorage.getItem(`nexus_ans_${this.currentIndex}_${String(pId).toLowerCase().trim()}`) === 'true')
-        );
-        if (hasAns) answeredCount++;
-      });
-    }
+    activeParticipants.forEach(p => {
+      const pId = p.id || p.user_id || p.playerId;
+      const pName = p.playerName || p.display_name || p.name || 'Player';
+      const pNameLower = String(pName).toLowerCase().trim();
+
+      const hasAns = (
+        (this.answeredPlayerSet && (
+          (pId && (this.answeredPlayerSet.has(String(pId).trim()) || this.answeredPlayerSet.has(String(pId).toLowerCase().trim()))) ||
+          (pName && (this.answeredPlayerSet.has(String(pName).trim()) || this.answeredPlayerSet.has(pNameLower))) ||
+          (p.user_id && this.answeredPlayerSet.has(String(p.user_id).trim()))
+        )) ||
+        localStorage.getItem(`nexus_ans_${this.currentIndex}_${pNameLower}`) === 'true' ||
+        (pId && localStorage.getItem(`nexus_ans_${this.currentIndex}_${String(pId).toLowerCase().trim()}`) === 'true')
+      );
+      if (hasAns) answeredCount++;
+    });
 
     if (countEl) countEl.textContent = `${answeredCount} / ${total} Answered`;
     if (badgeEl) badgeEl.textContent = `${answeredCount} / ${total} Answered`;
 
     if (listEl) {
       listEl.innerHTML = '';
-      if (!this.playersList || this.playersList.length === 0) {
+      if (activeParticipants.length === 0) {
         listEl.innerHTML = '<div style="color:#A5A3C4; padding:12px; text-align:center;">No participants connected</div>';
       } else {
-        this.playersList.forEach(p => {
+        activeParticipants.forEach(p => {
           const pId = p.id || p.user_id || p.playerId;
           const pName = p.playerName || p.display_name || p.name || 'Player';
           const pNameLower = String(pName).toLowerCase().trim();
