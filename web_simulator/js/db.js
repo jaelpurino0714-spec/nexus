@@ -1810,6 +1810,20 @@ var DB = {
       try { await supabaseClient.from('multiplayer_games').update(payloadMp).eq('room_code', gameId); } catch (e) {}
       try { await supabaseClient.from('quiz_lobbies').update(payloadQl).eq('id', gameId); } catch (e) {}
       try { await supabaseClient.from('quiz_lobbies').update(payloadQl).eq('access_code', gameId); } catch (e) {}
+
+      if ((mpStatus === 'active' || mpStatus === 'starting') && currentQIndex === 0) {
+        try {
+          await supabaseClient
+            .from('multiplayer_players')
+            .update({
+              score: 0,
+              correct_answers: 0,
+              wrong_answers: 0,
+              current_question_index: 0
+            })
+            .or(`game_id.eq.${gameId}`);
+        } catch (e) {}
+      }
     }
   },
 

@@ -610,6 +610,16 @@ const Multiplayer = {
     this.answeredCount = 0;
     this.answeredPlayerSet = new Set();
 
+    // Clear stale local answer triggers from previous sessions or questions
+    try {
+      const gKey = this.currentGame ? (this.currentGame.id || this.currentGame.room_code || 'game') : 'game';
+      Object.keys(localStorage).forEach(k => {
+        if (k.startsWith('nexus_ans_') || k.startsWith('nexus_mp_answer_trigger_')) {
+          localStorage.removeItem(k);
+        }
+      });
+    } catch (_) {}
+
     const banner = document.getElementById('mpHostCorrectAnswerBanner');
     if (banner) banner.classList.add('hidden');
 
