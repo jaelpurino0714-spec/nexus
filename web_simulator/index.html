@@ -921,7 +921,66 @@
       <section id="mpPlayerLobbyScreen" class="screen">
         <div class="play-container">
           <div class="sub-settings-container" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 32px 24px; max-width: 480px; margin: 0 auto; box-shadow: 0 10px 40px rgba(0,0,0,0.6); text-align: center;">
-            <div style="font-size: 3.8rem; margin-bottom: 10px; filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.6));">⏳</div>
+            <!-- Animated Floating 3D Hourglass Artwork -->
+            <div class="animated-hourglass-container">
+              <svg class="animated-hourglass" width="120" height="140" viewBox="0 0 130 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="capGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#4F46E5" />
+                    <stop offset="50%" stop-color="#2563EB" />
+                    <stop offset="100%" stop-color="#1E3A8A" />
+                  </linearGradient>
+                  <linearGradient id="capHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#60A5FA" stop-opacity="0.8" />
+                    <stop offset="100%" stop-color="#2563EB" stop-opacity="0.1" />
+                  </linearGradient>
+                  <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#93C5FD" stop-opacity="0.35" />
+                    <stop offset="50%" stop-color="#3B82F6" stop-opacity="0.15" />
+                    <stop offset="100%" stop-color="#1D4ED8" stop-opacity="0.4" />
+                  </linearGradient>
+                  <linearGradient id="sandGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#FCD34D" />
+                    <stop offset="50%" stop-color="#F59E0B" />
+                    <stop offset="100%" stop-color="#D97706" />
+                  </linearGradient>
+                  <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="8" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
+                  <filter id="sandGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="4" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
+                </defs>
+
+                <ellipse cx="65" cy="75" rx="45" ry="55" fill="#3B82F6" opacity="0.25" filter="url(#neonGlow)" />
+                <ellipse cx="65" cy="95" rx="25" ry="25" fill="#F59E0B" opacity="0.4" filter="url(#sandGlow)" />
+
+                <rect x="25" y="12" width="80" height="14" rx="7" fill="url(#capGrad)" stroke="#60A5FA" stroke-width="1.5" />
+                <rect x="30" y="14" width="70" height="4" rx="2" fill="url(#capHighlight)" />
+
+                <rect x="25" y="124" width="80" height="14" rx="7" fill="url(#capGrad)" stroke="#60A5FA" stroke-width="1.5" />
+                <rect x="30" y="126" width="70" height="4" rx="2" fill="url(#capHighlight)" />
+
+                <rect x="28" y="24" width="8" height="102" rx="4" fill="url(#capGrad)" stroke="#3B82F6" stroke-width="1" />
+                <rect x="94" y="24" width="8" height="102" rx="4" fill="url(#capGrad)" stroke="#3B82F6" stroke-width="1" />
+
+                <path d="M 38 24 C 38 52, 58 68, 62 75 C 58 82, 38 98, 38 126 L 92 126 C 92 98, 72 82, 68 75 C 72 68, 92 52, 92 24 Z" fill="url(#glassGrad)" stroke="#93C5FD" stroke-width="2.5" stroke-linejoin="round" />
+
+                <path d="M 44 48 C 50 62, 60 70, 65 72 C 70 70, 80 62, 86 48 Z" fill="url(#sandGrad)" />
+
+                <line x1="65" y1="72" x2="65" y2="108" stroke="#FCD34D" stroke-width="2.5" stroke-dasharray="4 2" stroke-linecap="round">
+                  <animate attributeName="stroke-dashoffset" values="0;-12" dur="0.6s" repeatCount="indefinite" />
+                </line>
+
+                <path d="M 42 125 Q 65 92 88 125 Z" fill="url(#sandGrad)" filter="url(#sandGlow)" />
+
+                <path d="M 43 30 C 42 45, 52 58, 58 64" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.6" />
+                <path d="M 87 30 C 88 45, 78 58, 72 64" stroke="#93C5FD" stroke-width="1.5" stroke-linecap="round" opacity="0.4" />
+                <path d="M 43 120 C 42 105, 52 92, 58 86" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.5" />
+              </svg>
+            </div>
             <h2 id="mpPlayerLobbyTitle" style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: #FFFFFF; margin: 0 0 6px 0;">You're in!</h2>
             <p id="mpPlayerLobbySub" style="color: #A5A3C4; font-size: 0.92rem; margin: 0 0 20px 0;">See your name on the host screen?</p>
             <span id="mpPlayerNicknameBadge" style="background: rgba(139, 92, 246, 0.25); border: 1.5px solid #8B5CF6; color: #FFFFFF; padding: 10px 28px; border-radius: 30px; font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px; box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);">

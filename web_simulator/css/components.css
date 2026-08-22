@@ -5478,6 +5478,38 @@
   background: none;
 }
 
+/* ==========================================================================
+   ANIMATED FLOATING 3D HOURGLASS (JOIN / HOST LOBBY WAITING SCREEN)
+   ========================================================================== */
+@keyframes hourglassFloat {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+    filter: drop-shadow(0 8px 18px rgba(139, 92, 246, 0.5));
+  }
+  50% {
+    transform: translateY(-16px) rotate(1.5deg);
+    filter: drop-shadow(0 24px 35px rgba(251, 191, 36, 0.8));
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+    filter: drop-shadow(0 8px 18px rgba(139, 92, 246, 0.5));
+  }
+}
+
+.animated-hourglass-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px 0 16px 0;
+  perspective: 1000px;
+}
+
+.animated-hourglass {
+  animation: hourglassFloat 2.8s ease-in-out infinite;
+  will-change: transform, filter;
+  transform-origin: center center;
+}
+
 
 
 
