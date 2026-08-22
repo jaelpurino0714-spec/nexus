@@ -792,27 +792,10 @@ const Multiplayer = {
           card.style.borderRadius = '16px';
           card.style.padding = '12px 16px';
           card.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.35)';
-          card.style.cursor = 'pointer';
-          card.style.transition = 'all 0.2s ease';
-          card.title = 'Click to view participant profile & photo';
-
-          card.onmouseover = function() {
-            this.style.borderColor = '#C084FC';
-            this.style.boxShadow = '0 0 20px rgba(168, 85, 247, 0.5)';
-            this.style.transform = 'translateY(-2px)';
-          };
-          card.onmouseout = function() {
-            this.style.borderColor = 'rgba(139, 92, 246, 0.35)';
-            this.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.35)';
-            this.style.transform = 'translateY(0)';
-          };
+          card.style.cursor = 'default';
 
           const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%232E1065'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
           const pPhoto = p.photoUrl || p.photo || defaultAvatar;
-
-          card.onclick = () => {
-            Multiplayer.viewParticipantProfile(pName, pPhoto, p);
-          };
 
           const statusBadge = hasAnswered 
             ? '<span style="color:#6EE7B7; background:rgba(16, 185, 129, 0.25); border:1px solid rgba(16, 185, 129, 0.4); padding:6px 14px; border-radius:20px; font-size:0.8rem; font-weight:700;">🟢 Answered</span>'
@@ -826,10 +809,7 @@ const Multiplayer = {
                      alt="${pName}">
                 <h5 style="margin:0; font-size:0.95rem; color:#FFFFFF; font-weight:700;">${pName}</h5>
               </div>
-              <div style="display:flex; align-items:center; gap:8px;">
-                <button style="background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(168, 85, 247, 0.35); color: #E9D5FF; font-size: 0.72rem; font-weight: 700; padding: 5px 10px; border-radius: 12px; cursor: pointer; pointer-events: none;">
-                  👤 Profile
-                </button>
+              <div style="display:flex; align-items:center;">
                 ${statusBadge}
               </div>
             </div>
