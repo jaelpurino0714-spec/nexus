@@ -473,13 +473,30 @@ const Multiplayer = {
           card.style.padding = '12px 16px';
           card.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.35)';
           const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%232E1065'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
+          const safeName = (p.playerName || 'Player').replace(/'/g, "\\'");
+          const safePhoto = (p.photoUrl || defaultAvatar).replace(/'/g, "\\'");
+
           card.innerHTML = `
-            <div class="part-info-left">
-              <img src="${p.photoUrl || defaultAvatar}" class="part-avatar" style="width:36px; height:36px; border-radius:50%; border:1.5px solid #7C3AED;" alt="${p.playerName}">
-              <div>
-                <h5 style="margin:0; font-size:0.95rem; color:#FFFFFF; font-weight:700;">${p.playerName}</h5>
-                <span style="font-size:0.75rem; color:#34D399; font-weight:600;">● Online in Lobby</span>
+            <div class="part-info-left" style="display:flex; align-items:center; justify-space-between; width:100%;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <img src="${p.photoUrl || defaultAvatar}" class="part-avatar" 
+                     style="width:44px; height:44px; border-radius:50%; border:2px solid #A855F7; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; object-fit:cover;" 
+                     title="Click to view profile picture"
+                     onclick="Multiplayer.viewParticipantProfile('${safeName}', '${safePhoto}')" 
+                     onmouseover="this.style.transform='scale(1.15)'; this.style.boxShadow='0 0 14px rgba(168, 85, 247, 0.8)';"
+                     onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';"
+                     alt="${p.playerName}">
+                <div>
+                  <h5 style="margin:0; font-size:0.98rem; color:#FFFFFF; font-weight:700;">${p.playerName}</h5>
+                  <span style="font-size:0.75rem; color:#34D399; font-weight:600;">● Online in Lobby</span>
+                </div>
               </div>
+              <button onclick="Multiplayer.viewParticipantProfile('${safeName}', '${safePhoto}')" 
+                      style="background: rgba(139, 92, 246, 0.25); border: 1px solid rgba(168, 85, 247, 0.4); color: #E9D5FF; font-size: 0.78rem; font-weight: 700; padding: 6px 14px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: all 0.2s;"
+                      onmouseover="this.style.background='rgba(139, 92, 246, 0.45)'; this.style.borderColor='#C084FC';"
+                      onmouseout="this.style.background='rgba(139, 92, 246, 0.25)'; this.style.borderColor='rgba(168, 85, 247, 0.4)';">
+                🖼️ View Photo
+              </button>
             </div>
           `;
           rosterEl.appendChild(card);
@@ -702,14 +719,26 @@ const Multiplayer = {
             : '<span style="color:#E9D5FF; background:rgba(124, 58, 237, 0.25); border:1px solid rgba(168, 85, 247, 0.4); padding:6px 14px; border-radius:20px; font-size:0.8rem; font-weight:700;">⏳ Thinking...</span>';
 
           const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%232E1065'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
+          const safeName = (pName || 'Player').replace(/'/g, "\\'");
+          const safePhoto = (p.photoUrl || defaultAvatar).replace(/'/g, "\\'");
 
           card.innerHTML = `
             <div class="part-info-left" style="justify-content:space-between; width:100%; align-items:center;">
-              <div style="display:flex; align-items:center; gap:10px;">
-                <img src="${p.photoUrl || defaultAvatar}" class="part-avatar" style="width:36px; height:36px; border-radius:50%; border:1.5px solid #7C3AED;" alt="${pName}">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <img src="${p.photoUrl || defaultAvatar}" class="part-avatar" 
+                     style="width:40px; height:40px; border-radius:50%; border:2px solid #A855F7; cursor:pointer; transition:transform 0.2s; object-fit:cover;" 
+                     title="Click to view profile picture"
+                     onclick="Multiplayer.viewParticipantProfile('${safeName}', '${safePhoto}')"
+                     onmouseover="this.style.transform='scale(1.15)'; this.style.boxShadow='0 0 12px #A855F7';"
+                     onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';"
+                     alt="${pName}">
                 <h5 style="margin:0; font-size:0.95rem; color:#FFFFFF; font-weight:700;">${pName}</h5>
               </div>
-              <div style="display:flex; align-items:center;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <button onclick="Multiplayer.viewParticipantProfile('${safeName}', '${safePhoto}')" 
+                        style="background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(168, 85, 247, 0.35); color: #E9D5FF; font-size: 0.72rem; font-weight: 700; padding: 5px 10px; border-radius: 12px; cursor: pointer;">
+                  🖼️ Photo
+                </button>
                 ${statusBadge}
               </div>
             </div>
@@ -1338,6 +1367,61 @@ const Multiplayer = {
       } catch (e) {}
       this.realtimeChannel = null;
     }
+  },
+
+  viewParticipantProfile(playerName, photoUrl) {
+    const modal = this.createAvatarModal();
+    const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%232E1065'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
+    const imgSrc = photoUrl || defaultAvatar;
+    const cleanName = playerName || 'Participant';
+
+    modal.innerHTML = `
+      <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); max-width: 380px; width: 85%; text-align: center; color: white; margin: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h4 style="margin: 0; color: #FFFFFF; font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800;">Participant Profile Picture</h4>
+          <button class="close-modal-btn" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); font-size: 1.1rem; cursor: pointer; color: #FFFFFF; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onclick="Multiplayer.closeAvatarModal()">✕</button>
+        </div>
+
+        <div style="position: relative; display: inline-block; margin: 12px 0 16px 0;">
+          <img src="${imgSrc}" style="width: 220px; height: 220px; object-fit: cover; border-radius: 50%; border: 3px solid #A855F7; box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);" alt="${cleanName}">
+        </div>
+
+        <h3 style="margin: 4px 0 6px 0; color: #FFFFFF; font-weight: 800; font-size: 1.35rem; font-family: var(--font-heading);">${cleanName}</h3>
+        <span style="display: inline-block; background: rgba(52, 211, 153, 0.2); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.4); font-weight: 700; font-size: 0.8rem; padding: 5px 14px; border-radius: 20px; margin-top: 4px;">● Connected in Game Lobby</span>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+  },
+
+  createAvatarModal() {
+    let modal = document.getElementById('mpParticipantPhotoModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'mpParticipantPhotoModal';
+      modal.className = 'modal-backdrop hidden';
+      modal.style.position = 'fixed';
+      modal.style.top = '0';
+      modal.style.left = '0';
+      modal.style.width = '100vw';
+      modal.style.height = '100vh';
+      modal.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
+      modal.style.backdropFilter = 'blur(8px)';
+      modal.style.display = 'flex';
+      modal.style.alignItems = 'center';
+      modal.style.justifyContent = 'center';
+      modal.style.zIndex = '99999';
+      modal.onclick = (e) => {
+        if (e.target === modal) this.closeAvatarModal();
+      };
+      document.body.appendChild(modal);
+    }
+    return modal;
+  },
+
+  closeAvatarModal() {
+    const modal = document.getElementById('mpParticipantPhotoModal');
+    if (modal) modal.classList.add('hidden');
   }
 };
 

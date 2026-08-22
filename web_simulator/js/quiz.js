@@ -884,12 +884,12 @@ const Quiz = {
     const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%23311042'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
     body.innerHTML = `
       <div style="text-align:center; padding:12px 0;">
-        <img src="${p.photo || defaultAvatar}" style="width:60px; height:60px; border-radius:50%; margin-bottom:8px; object-fit:cover; border: 2px solid rgba(168, 85, 247, 0.4);" alt="${p.name}">
-        <h4 style="margin:0; font-size:1.1rem; color:#FFFFFF; font-weight:700;">${p.name}</h4>
-        <p style="font-size:0.8rem; color:#A5A3C4; margin:2px 0 12px 0;">${p.grade || 'Student'}</p>
-        <div style="display:flex; justify-content:space-around; background:rgba(255,255,255,0.06); border:1px solid rgba(139,92,246,0.25); padding:10px; border-radius:12px;">
-          <div><strong style="font-size:1rem; color:#C084FC;">${p.points || 0}</strong><br><span style="font-size:0.7rem; color:#A5A3C4;">Total Pts</span></div>
-          <div><strong style="font-size:1rem; color:#F87171;">🔥 ${p.streak || 0}</strong><br><span style="font-size:0.7rem; color:#A5A3C4;">Streak</span></div>
+        <img src="${p.photo || defaultAvatar}" style="width:180px; height:180px; border-radius:50%; margin-bottom:12px; object-fit:cover; border: 3px solid #A855F7; box-shadow: 0 0 26px rgba(168, 85, 247, 0.6);" alt="${p.name}">
+        <h4 style="margin:0; font-size:1.25rem; color:#FFFFFF; font-weight:800; font-family: var(--font-heading);">${p.name}</h4>
+        <p style="font-size:0.85rem; color:#A5A3C4; margin:4px 0 14px 0;">${p.grade || 'Student'}</p>
+        <div style="display:flex; justify-content:space-around; background:rgba(255,255,255,0.06); border:1px solid rgba(139,92,246,0.25); padding:12px; border-radius:16px;">
+          <div><strong style="font-size:1.1rem; color:#C084FC;">${p.points || 0}</strong><br><span style="font-size:0.75rem; color:#A5A3C4;">Total Pts</span></div>
+          <div><strong style="font-size:1.1rem; color:#F87171;">🔥 ${p.streak || 0}</strong><br><span style="font-size:0.75rem; color:#A5A3C4;">Streak</span></div>
         </div>
       </div>
     `;
