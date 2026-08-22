@@ -1568,10 +1568,16 @@ var DB = {
     const realGameId = await this._resolveRealGameId(gameId || roomCode);
     const gId = realGameId || gameId;
 
+    const gameIdsToQuery = new Set();
+    if (gameId) gameIdsToQuery.add(String(gameId).trim());
+    if (roomCode) gameIdsToQuery.add(String(roomCode).trim());
+    if (gId) gameIdsToQuery.add(String(gId).trim());
+    const validIds = Array.from(gameIdsToQuery).filter(Boolean);
+
     const addOrUpdatePlayer = (p) => {
       if (!p) return;
       const hostId = (typeof Multiplayer !== 'undefined' && Multiplayer.currentGame) ? Multiplayer.currentGame.host_id : null;
-      const isHost = p.is_host === true || p.isHost === true || (hostId && (p.user_id === hostId || p.id === hostId)) || (p.display_name === 'Host' || p.name === 'Host');
+      const isHost = p.is_host === true || p.isHost === true || p.role === 'host' || (hostId && (p.user_id === hostId || p.id === hostId)) || (p.display_name && p.display_name.trim().toLowerCase() === 'host') || (p.name && p.name.trim().toLowerCase() === 'host');
       if (isHost) return;
 
       const name = p.display_name || p.playerName || p.name || 'Participant';
@@ -1613,12 +1619,12 @@ var DB = {
       }
     };
 
-    if (supabaseClient) {
+    if (supabaseClient && validIds.length > 0) {
       try {
         const { data: dbPlayers } = await supabaseClient
           .from('multiplayer_players')
           .select('*')
-          .or(`game_id.eq.${gId}${gameId && gameId !== gId ? `,game_id.eq.${gameId}` : ''}${roomCode ? `,game_id.eq.${roomCode}` : ''}`);
+          .in('game_id', validIds);
 
         if (dbPlayers && dbPlayers.length > 0) {
           dbPlayers.forEach(p => addOrUpdatePlayer(p));

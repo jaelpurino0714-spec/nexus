@@ -1662,6 +1662,20 @@ const Multiplayer = {
       this.playersList.forEach(addStandingItem);
     }
 
+    if (!this.isHost && mergedStandingsMap.size === 0) {
+      const myProfile = DB.getStudentProfile() || {};
+      const myName = myProfile.name || 'Participant';
+      const myId = DB.getUserUUID();
+      addStandingItem({
+        id: myId,
+        user_id: myId,
+        display_name: myName,
+        score: this.playerScore || 0,
+        correct_answers: this.playerCorrectCount || 0,
+        is_host: false
+      });
+    }
+
     const participantStandings = Array.from(mergedStandingsMap.values());
     participantStandings.sort((a, b) => (b.score || 0) - (a.score || 0));
 
