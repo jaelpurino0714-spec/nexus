@@ -45,6 +45,50 @@ var DB = {
     return /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(val);
   },
 
+  getUserUUID() {
+    try {
+      if (typeof window !== 'undefined' && window.supabaseClient && window.supabaseClient.auth) {
+        const user = window.supabaseClient.auth.user ? window.supabaseClient.auth.user() : null;
+        if (user && user.id && this.isValidUuid(user.id)) return user.id;
+      }
+    } catch (e) {}
+
+    let stored = localStorage.getItem(this.STORAGE_USER_UUID);
+    if (stored && this.isValidUuid(stored)) {
+      return stored;
+    }
+
+    const newUuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+
+    try {
+      localStorage.setItem(this.STORAGE_USER_UUID, newUuid);
+    } catch (e) {}
+
+    return newUuid;
+  },
+
+  async ensureProfileExistsInSupabase(userUuid, profile = {}) {
+    if (!supabaseClient || !this.isValidUuid(userUuid)) return;
+    try {
+      const pName = profile.name || profile.displayName || profile.playerName || profile.full_name || 'User';
+      const pEmail = profile.email || `${userUuid.substring(0, 8)}@nexus.app`;
+      const pRole = profile.role || (profile.isTeacher ? 'teacher' : 'student');
+
+      await supabaseClient.from('profiles').upsert({
+        id: userUuid,
+        name: pName,
+        full_name: pName,
+        email: pEmail,
+        role: pRole
+      }, { onConflict: 'id', ignoreDuplicates: true });
+    } catch (e) {
+      console.warn('Error ensuring profile in Supabase:', e);
+    }
+  },
+
   // Storage Key Constants
   STORAGE_PROFILE: 'nexus_student_profile',
   STORAGE_RESULTS: 'nexus_quiz_results',
@@ -791,10 +835,8 @@ var DB = {
 
     if (supabaseClient) {
       try {
-        // Save host student profile to Supabase first so profiles FK constraint passes!
-        try {
-          await this.saveStudentProfile(profile);
-        } catch (_) {}
+        // Save host profile to Supabase first so profiles FK constraint passes!
+        await this.ensureProfileExistsInSupabase(userUuid, profile);
 
         let gRes = null;
         let gErr = null;
@@ -855,23 +897,26 @@ var DB = {
             }
           }
           try {
-            await supabaseClient.from('multiplayer_players').insert({
+            await supabaseClient.from('multiplayer_players').upsert({
               game_id: gameData.id,
               user_id: userUuid,
               display_name: profile.name || 'Host',
               photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null,
               is_host: true
-            });
+            }, { ignoreDuplicates: true });
           } catch (e) {}
 
           try {
-            await supabaseClient.from('quiz_lobbies').insert({
-              id: gameData.id,
+            const qlPayload = {
               access_code: roomCode,
               host_id: userUuid,
               host_name: profile.name || 'Host',
               photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null
-            });
+            };
+            if (this.isValidUuid(gameData.id)) {
+              qlPayload.id = gameData.id;
+            }
+            await supabaseClient.from('quiz_lobbies').insert(qlPayload);
           } catch (e) {}
         }
       } catch (e) {
@@ -1592,22 +1637,27 @@ var DB = {
 
   async leaveMultiplayerGame(gameId, userUuid) {
     if (!gameId || !userUuid) return;
-    if (supabaseClient) {
-      try {
-        await supabaseClient
-          .from('multiplayer_players')
-          .delete()
-          .eq('game_id', gameId)
-          .eq('user_id', userUuid);
-      } catch (e) {}
+    const validUserUuid = this.isValidUuid(userUuid) ? userUuid : null;
+    const validGameUuid = this.isValidUuid(gameId) ? gameId : null;
 
-      try {
-        await supabaseClient
-          .from('multiplayer_player_answers')
-          .delete()
-          .eq('game_id', gameId)
-          .eq('player_id', userUuid);
-      } catch (e) {}
+    if (supabaseClient) {
+      if (validGameUuid && validUserUuid) {
+        try {
+          await supabaseClient
+            .from('multiplayer_players')
+            .delete()
+            .eq('game_id', validGameUuid)
+            .eq('user_id', validUserUuid);
+        } catch (e) {}
+
+        try {
+          await supabaseClient
+            .from('multiplayer_player_answers')
+            .delete()
+            .eq('game_id', validGameUuid)
+            .eq('player_id', validUserUuid);
+        } catch (e) {}
+      }
     }
   },
 
