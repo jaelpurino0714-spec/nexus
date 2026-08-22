@@ -446,36 +446,36 @@ const TeacherPortal = {
     if (latestHostedGame) {
       const parts = latestHostedGame.participants || [];
       hostedGameSection = `
-        <div style="background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 14px; padding: 16px; margin-bottom: 16px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 16px; padding: 18px; margin-bottom: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.3);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
             <div>
-              <span class="tag" style="background: #E0E7FF; color: #3730A3; font-weight: 700; margin-bottom: 4px; display: inline-block;">MOST PREVIOUSLY HOSTED GAME</span>
-              <h4 style="margin: 2px 0 0 0; color: #0F172A; font-size: 1.05rem;">${latestHostedGame.title || 'Science Host Game'} (PIN: ${latestHostedGame.roomCode})</h4>
+              <span class="tag" style="background: rgba(139, 92, 246, 0.25); color: #C084FC; border: 1px solid rgba(168, 85, 247, 0.4); font-weight: 800; font-size: 0.72rem; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.5px; margin-bottom: 6px; display: inline-block;">MOST PREVIOUSLY HOSTED GAME</span>
+              <h4 style="margin: 4px 0 0 0; color: #FFFFFF; font-size: 1.1rem; font-weight: 800; font-family: var(--font-heading);">${latestHostedGame.title || 'Science Host Game'} <span style="color:#C084FC;">(PIN: ${latestHostedGame.roomCode})</span></h4>
             </div>
-            <span style="font-size: 0.78rem; color: #64748B; font-weight: 600;">${latestHostedGame.date || ''}</span>
+            <span style="font-size: 0.8rem; color: #A5A3C4; font-weight: 600;">${latestHostedGame.date || ''}</span>
           </div>
 
-          <div style="max-height: 220px; overflow-y: auto; border: 1px solid #E2E8F0; border-radius: 10px; background: white;">
-            <table class="data-table" style="width: 100%; font-size: 0.82rem;">
+          <div style="max-height: 240px; overflow-y: auto; border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; background: rgba(15, 10, 30, 0.8);">
+            <table class="data-table" style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
               <thead>
-                <tr style="background: #F1F5F9; text-align: left;">
-                  <th style="padding: 10px;">Participant</th>
-                  <th style="padding: 10px;">Total Points</th>
-                  <th style="padding: 10px;">Accuracy</th>
-                  <th style="padding: 10px;">Correct / Total</th>
+                <tr style="background: rgba(139, 92, 246, 0.25); text-align: left; border-bottom: 1px solid rgba(139, 92, 246, 0.3);">
+                  <th style="padding: 12px 14px; color: #C084FC; font-weight: 800; font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Participant</th>
+                  <th style="padding: 12px 14px; color: #C084FC; font-weight: 800; font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Total Points</th>
+                  <th style="padding: 12px 14px; color: #C084FC; font-weight: 800; font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Accuracy</th>
+                  <th style="padding: 12px 14px; color: #C084FC; font-weight: 800; font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Correct / Total</th>
                 </tr>
               </thead>
               <tbody>
-                ${parts.length === 0 ? '<tr><td colspan="4" style="text-align:center; padding:16px; color:#94A3B8;">No participant responses recorded.</td></tr>' : parts.map(p => `
-                  <tr>
-                    <td style="padding: 10px; font-weight: 700; color: #1E293B;">👤 ${p.name}</td>
-                    <td style="padding: 10px; font-weight: 800; color: #6D28D9;">${(p.points || 0).toLocaleString()} pts</td>
-                    <td style="padding: 10px;">
-                      <span class="tag" style="background:${p.accuracyPct >= 50 ? '#DCFCE7' : '#FEE2E2'}; color:${p.accuracyPct >= 50 ? '#166534' : '#991B1B'}; font-weight:700;">
+                ${parts.length === 0 ? '<tr><td colspan="4" style="text-align:center; padding:20px; color:#A5A3C4; font-weight:600;">No participant responses recorded.</td></tr>' : parts.map(p => `
+                  <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
+                    <td style="padding: 12px 14px; font-weight: 700; color: #FFFFFF;">👤 ${p.name}</td>
+                    <td style="padding: 12px 14px; font-weight: 800; color: #C084FC;">${(p.points || 0).toLocaleString()} pts</td>
+                    <td style="padding: 12px 14px;">
+                      <span class="tag" style="background:${p.accuracyPct >= 50 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}; color:${p.accuracyPct >= 50 ? '#34D399' : '#FCA5A5'}; border: 1px solid ${p.accuracyPct >= 50 ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)'}; font-weight:800; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem;">
                         ${p.accuracyPct}%
                       </span>
                     </td>
-                    <td style="padding: 10px; font-weight: 700; color: #0284C7;">${p.correctRatio || `${p.correct}/${p.totalQuestions}`}</td>
+                    <td style="padding: 12px 14px; font-weight: 800; color: #38BDF8;">${p.correctRatio || `${p.correct}/${p.totalQuestions}`}</td>
                   </tr>
                 `).join('')}
               </tbody>
@@ -485,19 +485,19 @@ const TeacherPortal = {
       `;
     } else {
       hostedGameSection = `
-        <div style="background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 14px; padding: 20px; margin-bottom: 16px; text-align: center; color: #64748B;">
-          <div style="font-size: 2rem; margin-bottom: 6px;">📊</div>
-          <h4 style="margin: 0 0 4px 0; color: #334155;">No Hosted Game Analytics Recorded Yet</h4>
-          <p style="font-size: 0.85rem; margin: 0;">Host a live game to view participant names, total points, accuracy, and correct answers breakdown!</p>
+        <div style="background: rgba(255, 255, 255, 0.04); border: 1px dashed rgba(139, 92, 246, 0.35); border-radius: 16px; padding: 24px; margin-bottom: 16px; text-align: center; color: #A5A3C4;">
+          <div style="font-size: 2.2rem; margin-bottom: 8px;">📊</div>
+          <h4 style="margin: 0 0 6px 0; color: #FFFFFF; font-weight: 800; font-family: var(--font-heading);">No Hosted Game Analytics Recorded Yet</h4>
+          <p style="font-size: 0.85rem; margin: 0; color: #A5A3C4;">Host a live game to view participant names, total points, accuracy, and correct answers breakdown!</p>
         </div>
       `;
     }
 
     modal.innerHTML = `
-      <div class="modal-card" style="max-width: 640px; width: 90%;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <h3 style="margin: 0; color: #4C1D95;">📊 Class Performance & Game Analytics</h3>
-          <button class="close-modal-btn" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #666;" onclick="TeacherPortal.closeModal('teacherAnalyticsModal')">✕</button>
+      <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); max-width: 640px; width: 90%; color: white;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+          <h3 style="margin: 0; color: #FFFFFF; font-family: var(--font-heading); font-size: 1.2rem; font-weight: 800;">📊 Class Performance & Game Analytics</h3>
+          <button class="close-modal-btn" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); font-size: 1.1rem; cursor: pointer; color: #FFFFFF; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;" onclick="TeacherPortal.closeModal('teacherAnalyticsModal')">✕</button>
         </div>
 
         ${hostedGameSection}
