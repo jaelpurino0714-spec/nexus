@@ -724,6 +724,11 @@ const Multiplayer = {
         return;
       }
       try {
+        const updatedPlayers = await DB.getMultiplayerPlayers(this.currentGame.id, this.currentGame.room_code);
+        if (updatedPlayers && updatedPlayers.length > 0) {
+          this.playersList = updatedPlayers;
+        }
+
         const answeredList = await DB.getAnsweredPlayersForQuestion(this.currentGame.id, questionIndex);
         if (answeredList && answeredList.length > 0) {
           if (!this.answeredPlayerSet) this.answeredPlayerSet = new Set();
@@ -734,8 +739,8 @@ const Multiplayer = {
               this.answeredPlayerSet.add(str.toLowerCase());
             }
           });
-          this.refreshHostPlayerAnswerStatuses();
         }
+        this.refreshHostPlayerAnswerStatuses();
       } catch (e) {}
     };
 
@@ -762,7 +767,8 @@ const Multiplayer = {
             (pName && (this.answeredPlayerSet.has(String(pName).trim()) || this.answeredPlayerSet.has(pNameLower))) ||
             (p.user_id && this.answeredPlayerSet.has(String(p.user_id).trim()))
           )) ||
-          localStorage.getItem(`nexus_ans_${this.currentIndex}_${pNameLower}`) === 'true'
+          localStorage.getItem(`nexus_ans_${this.currentIndex}_${pNameLower}`) === 'true' ||
+          (pId && localStorage.getItem(`nexus_ans_${this.currentIndex}_${String(pId).toLowerCase().trim()}`) === 'true')
         );
         if (hasAns) answeredCount++;
       });
@@ -787,16 +793,17 @@ const Multiplayer = {
               (pName && (this.answeredPlayerSet.has(String(pName).trim()) || this.answeredPlayerSet.has(pNameLower))) ||
               (p.user_id && this.answeredPlayerSet.has(String(p.user_id).trim()))
             )) ||
-            localStorage.getItem(`nexus_ans_${this.currentIndex}_${pNameLower}`) === 'true'
+            localStorage.getItem(`nexus_ans_${this.currentIndex}_${pNameLower}`) === 'true' ||
+            (pId && localStorage.getItem(`nexus_ans_${this.currentIndex}_${String(pId).toLowerCase().trim()}`) === 'true')
           );
 
           const card = document.createElement('div');
           card.className = 'lobby-part-card';
           card.style.background = 'rgba(25, 17, 50, 0.95)';
-          card.style.border = '1.5px solid rgba(139, 92, 246, 0.35)';
+          card.style.border = hasAnswered ? '1.5px solid rgba(16, 185, 129, 0.5)' : '1.5px solid rgba(139, 92, 246, 0.35)';
           card.style.borderRadius = '16px';
           card.style.padding = '12px 16px';
-          card.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.35)';
+          card.style.boxShadow = hasAnswered ? '0 0 16px rgba(16, 185, 129, 0.25)' : '0 4px 16px rgba(0, 0, 0, 0.35)';
           card.style.cursor = 'default';
 
           const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%232E1065'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
@@ -810,7 +817,7 @@ const Multiplayer = {
             <div class="part-info-left" style="justify-content:space-between; width:100%; align-items:center;">
               <div style="display:flex; align-items:center; gap:12px;">
                 <img src="${pPhoto}" class="part-avatar" 
-                     style="width:40px; height:40px; border-radius:50%; border:2px solid #A855F7; object-fit:cover;" 
+                     style="width:40px; height:40px; border-radius:50%; border:2px solid ${hasAnswered ? '#10B981' : '#A855F7'}; object-fit:cover;" 
                      alt="${pName}">
                 <h5 style="margin:0; font-size:0.95rem; color:#FFFFFF; font-weight:700;">${pName}</h5>
               </div>
@@ -1755,23 +1762,25 @@ const Multiplayer = {
 
 if (typeof window !== 'undefined') {
   window.addEventListener('storage', (e) => {
-    if (e.key && (e.key.startsWith('nexus_mp_sync_trigger_') || e.key.startsWith('nexus_mp_answer_trigger_') || e.key.startsWith('nexus_lobby_'))) {
+    if (e.key && (e.key.startsWith('nexus_mp_sync_trigger_') || e.key.startsWith('nexus_mp_answer_trigger_') || e.key.startsWith('nexus_ans_') || e.key.startsWith('nexus_lobby_'))) {
       if (typeof Multiplayer !== 'undefined' && Multiplayer.isHost && Multiplayer.currentGame) {
-        if (e.key.startsWith('nexus_mp_answer_trigger_') && e.newValue) {
+        if ((e.key.startsWith('nexus_mp_answer_trigger_') || e.key.startsWith('nexus_ans_')) && e.newValue) {
           try {
-            const data = JSON.parse(e.newValue);
-            if (data && (data.userUuid || data.displayName)) {
-              if (!Multiplayer.answeredPlayerSet) Multiplayer.answeredPlayerSet = new Set();
-              if (data.userUuid) {
-                Multiplayer.answeredPlayerSet.add(String(data.userUuid).trim());
-                Multiplayer.answeredPlayerSet.add(String(data.userUuid).toLowerCase().trim());
+            if (e.key.startsWith('nexus_mp_answer_trigger_')) {
+              const data = JSON.parse(e.newValue);
+              if (data && (data.userUuid || data.displayName)) {
+                if (!Multiplayer.answeredPlayerSet) Multiplayer.answeredPlayerSet = new Set();
+                if (data.userUuid) {
+                  Multiplayer.answeredPlayerSet.add(String(data.userUuid).trim());
+                  Multiplayer.answeredPlayerSet.add(String(data.userUuid).toLowerCase().trim());
+                }
+                if (data.displayName) {
+                  Multiplayer.answeredPlayerSet.add(String(data.displayName).trim());
+                  Multiplayer.answeredPlayerSet.add(String(data.displayName).toLowerCase().trim());
+                }
               }
-              if (data.displayName) {
-                Multiplayer.answeredPlayerSet.add(String(data.displayName).trim());
-                Multiplayer.answeredPlayerSet.add(String(data.displayName).toLowerCase().trim());
-              }
-              Multiplayer.refreshHostPlayerAnswerStatuses();
             }
+            Multiplayer.refreshHostPlayerAnswerStatuses();
           } catch (_) {}
         }
         if (e.key.startsWith('nexus_mp_sync_trigger_') && e.newValue) {
@@ -1791,6 +1800,7 @@ if (typeof window !== 'undefined') {
             }
           } catch (_) {}
         }
+        Multiplayer.refreshHostPlayerAnswerStatuses();
         Multiplayer.syncHostRoster();
       }
     }

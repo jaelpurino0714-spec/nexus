@@ -1707,7 +1707,7 @@ var DB = {
       try {
         const { data: pData } = await supabaseClient
           .from('multiplayer_players')
-          .select('id, user_id, display_name, current_question_index, score')
+          .select('id, user_id, display_name, current_question_index, score, correct_answers, wrong_answers')
           .eq('game_id', gId);
         if (pData && pData.length > 0) players = pData;
       } catch (e) {}
@@ -1716,7 +1716,7 @@ var DB = {
         try {
           const { data: pData2 } = await supabaseClient
             .from('multiplayer_players')
-            .select('id, user_id, display_name, current_question_index, score')
+            .select('id, user_id, display_name, current_question_index, score, correct_answers, wrong_answers')
             .eq('game_id', gameId);
           if (pData2 && pData2.length > 0) players = pData2;
         } catch (e) {}
@@ -1724,7 +1724,15 @@ var DB = {
 
       if (players.length > 0) {
         players.forEach(p => {
-          if ((p.current_question_index || 0) > questionIndex || (questionIndex === 0 && (p.score || 0) > 0)) {
+          const totalAns = (p.correct_answers || 0) + (p.wrong_answers || 0);
+          const cIndex = p.current_question_index !== undefined && p.current_question_index !== null ? p.current_question_index : -1;
+
+          if (
+            totalAns > questionIndex ||
+            cIndex > questionIndex ||
+            (cIndex === questionIndex && (totalAns > 0 || (p.score || 0) > 0)) ||
+            (questionIndex === 0 && (totalAns > 0 || (p.score || 0) > 0))
+          ) {
             if (p.id) {
               answeredSet.add(String(p.id).trim());
               answeredSet.add(String(p.id).toLowerCase().trim());
@@ -1741,36 +1749,34 @@ var DB = {
         });
       }
 
-      if (this.isValidUuid(gId)) {
-        try {
-          const { data: answers } = await supabaseClient
-            .from('multiplayer_answers')
-            .select('player_id')
-            .eq('game_id', gId);
+      try {
+        const { data: answers } = await supabaseClient
+          .from('multiplayer_answers')
+          .select('player_id')
+          .or(`game_id.eq.${gId}${gameId && gameId !== gId ? `,game_id.eq.${gameId}` : ''}`);
 
-          if (answers && answers.length > 0) {
-            answers.forEach(a => {
-              if (a.player_id) {
-                const pidStr = String(a.player_id).trim();
-                answeredSet.add(pidStr);
-                answeredSet.add(pidStr.toLowerCase());
+        if (answers && answers.length > 0) {
+          answers.forEach(a => {
+            if (a.player_id) {
+              const pidStr = String(a.player_id).trim();
+              answeredSet.add(pidStr);
+              answeredSet.add(pidStr.toLowerCase());
 
-                const matchedPlayer = players.find(p => p.id === a.player_id || p.user_id === a.player_id);
-                if (matchedPlayer) {
-                  if (matchedPlayer.display_name) {
-                    answeredSet.add(String(matchedPlayer.display_name).trim());
-                    answeredSet.add(String(matchedPlayer.display_name).toLowerCase().trim());
-                  }
-                  if (matchedPlayer.user_id) {
-                    answeredSet.add(String(matchedPlayer.user_id).trim());
-                    answeredSet.add(String(matchedPlayer.user_id).toLowerCase().trim());
-                  }
+              const matchedPlayer = players.find(p => p.id === a.player_id || p.user_id === a.player_id);
+              if (matchedPlayer) {
+                if (matchedPlayer.display_name) {
+                  answeredSet.add(String(matchedPlayer.display_name).trim());
+                  answeredSet.add(String(matchedPlayer.display_name).toLowerCase().trim());
+                }
+                if (matchedPlayer.user_id) {
+                  answeredSet.add(String(matchedPlayer.user_id).trim());
+                  answeredSet.add(String(matchedPlayer.user_id).toLowerCase().trim());
                 }
               }
-            });
-          }
-        } catch (e) {}
-      }
+            }
+          });
+        }
+      } catch (e) {}
     }
 
     return Array.from(answeredSet);
