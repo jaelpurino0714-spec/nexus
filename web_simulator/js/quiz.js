@@ -862,10 +862,18 @@ const Quiz = {
     }
   },
 
+  async confirmAction(options) {
+    if (typeof App !== 'undefined' && typeof App.confirm === 'function') {
+      return await App.confirm(options);
+    }
+    const msg = typeof options === 'string' ? options : (options.message || 'Are you sure?');
+    return confirm(msg);
+  },
+
   async kickParticipant(idx) {
     const p = this.lobbyParticipants[idx];
     if (!p) return;
-    const confirmed = await App.confirm({
+    const confirmed = await this.confirmAction({
       title: 'Kick Participant',
       message: `Are you sure you want to kick ${p.name} from the lobby?`,
       icon: '🚫',
@@ -927,7 +935,7 @@ const Quiz = {
   },
 
   async exitLobby() {
-    const confirmed = await App.confirm({
+    const confirmed = await this.confirmAction({
       title: 'Exit Lobby',
       message: 'Are you sure you want to exit the multiplayer lobby?',
       icon: '🚪',
@@ -1006,7 +1014,7 @@ const Quiz = {
   },
 
   async endHostQuizEarly() {
-    const confirmed = await App.confirm({
+    const confirmed = await this.confirmAction({
       title: 'End Quiz Early',
       message: 'Are you sure you want to end the quiz early for all connected participants?',
       icon: '⏱️',
@@ -1571,7 +1579,7 @@ const Quiz = {
   },
 
   async quitQuiz() {
-    const confirmed = await App.confirm({
+    const confirmed = await this.confirmAction({
       title: 'Quit Quiz Round',
       message: 'Are you sure you want to quit this round? Your progress for this session will not be saved.',
       icon: '⚠️',

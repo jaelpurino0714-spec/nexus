@@ -920,8 +920,16 @@ const Multiplayer = {
     DB.saveHostedGameAnalytics(analyticsData);
   },
 
+  async confirmAction(options) {
+    if (typeof App !== 'undefined' && typeof App.confirm === 'function') {
+      return await App.confirm(options);
+    }
+    const msg = typeof options === 'string' ? options : (options.message || 'Are you sure?');
+    return confirm(msg);
+  },
+
   async hostCancelGame() {
-    const confirmed = await App.confirm({
+    const confirmed = await this.confirmAction({
       title: 'Cancel Game Session',
       message: 'Are you sure you want to cancel and close this multiplayer room for all connected participants?',
       icon: '🚪',
@@ -1548,7 +1556,7 @@ const Multiplayer = {
     if (!playerName && !playerId) return;
     const targetName = playerName || 'Participant';
     
-    const confirmed = await App.confirm({
+    const confirmed = await this.confirmAction({
       title: 'Remove Player from Lobby',
       message: `Are you sure you want to remove "${targetName}" from this game lobby?`,
       icon: '🚫',
