@@ -1701,34 +1701,72 @@ var DB = {
     const realGameId = await this._resolveRealGameId(gameId);
 
     if (supabaseClient) {
+      const gId = realGameId || gameId;
+
+      let players = [];
       try {
-        const queryGameId = realGameId || gameId;
-        const { data: players } = await supabaseClient
+        const { data: pData } = await supabaseClient
           .from('multiplayer_players')
           .select('id, user_id, display_name, current_question_index, score')
-          .or(`game_id.eq.${queryGameId}${this.isValidUuid(gameId) ? `,game_id.eq.${gameId}` : ''}`);
-
-        if (players && players.length > 0) {
-          players.forEach(p => {
-            if ((p.current_question_index || 0) > questionIndex || (questionIndex === 0 && (p.score || 0) > 0)) {
-              if (p.id) answeredSet.add(String(p.id).trim());
-              if (p.user_id) answeredSet.add(String(p.user_id).trim());
-              if (p.display_name) answeredSet.add(String(p.display_name).trim());
-            }
-          });
-        }
+          .eq('game_id', gId);
+        if (pData && pData.length > 0) players = pData;
       } catch (e) {}
 
-      if (this.isValidUuid(realGameId)) {
+      if (players.length === 0 && gameId && gameId !== gId) {
+        try {
+          const { data: pData2 } = await supabaseClient
+            .from('multiplayer_players')
+            .select('id, user_id, display_name, current_question_index, score')
+            .eq('game_id', gameId);
+          if (pData2 && pData2.length > 0) players = pData2;
+        } catch (e) {}
+      }
+
+      if (players.length > 0) {
+        players.forEach(p => {
+          if ((p.current_question_index || 0) > questionIndex || (questionIndex === 0 && (p.score || 0) > 0)) {
+            if (p.id) {
+              answeredSet.add(String(p.id).trim());
+              answeredSet.add(String(p.id).toLowerCase().trim());
+            }
+            if (p.user_id) {
+              answeredSet.add(String(p.user_id).trim());
+              answeredSet.add(String(p.user_id).toLowerCase().trim());
+            }
+            if (p.display_name) {
+              answeredSet.add(String(p.display_name).trim());
+              answeredSet.add(String(p.display_name).toLowerCase().trim());
+            }
+          }
+        });
+      }
+
+      if (this.isValidUuid(gId)) {
         try {
           const { data: answers } = await supabaseClient
             .from('multiplayer_answers')
             .select('player_id')
-            .eq('game_id', realGameId);
+            .eq('game_id', gId);
 
           if (answers && answers.length > 0) {
             answers.forEach(a => {
-              if (a.player_id) answeredSet.add(String(a.player_id).trim());
+              if (a.player_id) {
+                const pidStr = String(a.player_id).trim();
+                answeredSet.add(pidStr);
+                answeredSet.add(pidStr.toLowerCase());
+
+                const matchedPlayer = players.find(p => p.id === a.player_id || p.user_id === a.player_id);
+                if (matchedPlayer) {
+                  if (matchedPlayer.display_name) {
+                    answeredSet.add(String(matchedPlayer.display_name).trim());
+                    answeredSet.add(String(matchedPlayer.display_name).toLowerCase().trim());
+                  }
+                  if (matchedPlayer.user_id) {
+                    answeredSet.add(String(matchedPlayer.user_id).trim());
+                    answeredSet.add(String(matchedPlayer.user_id).toLowerCase().trim());
+                  }
+                }
+              }
             });
           }
         } catch (e) {}

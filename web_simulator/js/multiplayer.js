@@ -749,18 +749,20 @@ const Multiplayer = {
     const badgeEl = document.getElementById('mpHostResponseBadge');
 
     const total = this.playersList ? this.playersList.length : 0;
-
     let answeredCount = 0;
-    if (this.playersList && this.answeredPlayerSet) {
+    if (this.playersList) {
       this.playersList.forEach(p => {
         const pId = p.id || p.user_id || p.playerId;
         const pName = p.playerName || p.display_name || p.name || 'Player';
         const pNameLower = String(pName).toLowerCase().trim();
 
         const hasAns = (
-          (pId && (this.answeredPlayerSet.has(String(pId).trim()) || this.answeredPlayerSet.has(String(pId).toLowerCase().trim()))) ||
-          (pName && (this.answeredPlayerSet.has(String(pName).trim()) || this.answeredPlayerSet.has(pNameLower))) ||
-          (p.user_id && this.answeredPlayerSet.has(String(p.user_id).trim()))
+          (this.answeredPlayerSet && (
+            (pId && (this.answeredPlayerSet.has(String(pId).trim()) || this.answeredPlayerSet.has(String(pId).toLowerCase().trim()))) ||
+            (pName && (this.answeredPlayerSet.has(String(pName).trim()) || this.answeredPlayerSet.has(pNameLower))) ||
+            (p.user_id && this.answeredPlayerSet.has(String(p.user_id).trim()))
+          )) ||
+          localStorage.getItem(`nexus_ans_${this.currentIndex}_${pNameLower}`) === 'true'
         );
         if (hasAns) answeredCount++;
       });
@@ -775,14 +777,17 @@ const Multiplayer = {
         listEl.innerHTML = '<div style="color:#A5A3C4; padding:12px; text-align:center;">No participants connected</div>';
       } else {
         this.playersList.forEach(p => {
-          const pId = p.id || p.user_id || p.playerName;
+          const pId = p.id || p.user_id || p.playerId;
           const pName = p.playerName || p.display_name || p.name || 'Player';
           const pNameLower = String(pName).toLowerCase().trim();
 
-          const hasAnswered = this.answeredPlayerSet && (
-            (pId && (this.answeredPlayerSet.has(String(pId).trim()) || this.answeredPlayerSet.has(String(pId).toLowerCase().trim()))) ||
-            (pName && (this.answeredPlayerSet.has(String(pName).trim()) || this.answeredPlayerSet.has(pNameLower))) ||
-            (p.user_id && this.answeredPlayerSet.has(String(p.user_id).trim()))
+          const hasAnswered = (
+            (this.answeredPlayerSet && (
+              (pId && (this.answeredPlayerSet.has(String(pId).trim()) || this.answeredPlayerSet.has(String(pId).toLowerCase().trim()))) ||
+              (pName && (this.answeredPlayerSet.has(String(pName).trim()) || this.answeredPlayerSet.has(pNameLower))) ||
+              (p.user_id && this.answeredPlayerSet.has(String(p.user_id).trim()))
+            )) ||
+            localStorage.getItem(`nexus_ans_${this.currentIndex}_${pNameLower}`) === 'true'
           );
 
           const card = document.createElement('div');
@@ -1225,6 +1230,10 @@ const Multiplayer = {
     const myProfile = DB.getStudentProfile() || {};
     const myName = myProfile.name || 'Player';
     const myId = DB.getUserUUID();
+
+    try {
+      localStorage.setItem(`nexus_ans_${this.currentIndex}_${myName.toLowerCase().trim()}`, 'true');
+    } catch (_) {}
 
     this.sendBroadcast('PLAYER_ANSWERED', {
       playerId: myId,
