@@ -242,7 +242,6 @@ const Auth = {
             throw new Error(`Account with username "${username}" does not exist in Supabase. Please Sign Up.`);
           }
         }
-        }
       }
 
       // Fallback to local profile check if offline
