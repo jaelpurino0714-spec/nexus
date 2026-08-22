@@ -658,7 +658,7 @@ const Multiplayer = {
             card.style.cursor = 'default';
             card.innerHTML = `
               <span class="option-badge-pill"><span class="badge-letter">${key}</span></span>
-              <span class="option-text" style="font-weight:600; color:#1E293B;">${choicesMap[key]}</span>
+              <span class="option-text">${choicesMap[key]}</span>
             `;
             overviewEl.appendChild(card);
           }
@@ -868,16 +868,28 @@ const Multiplayer = {
       banner.classList.remove('hidden');
     }
 
-    // Highlight correct option card in green on host overview
+    // Highlight correct option card in dark sci-fi neon emerald theme
     const overviewEl = document.getElementById('mpHostAnswersOverview');
     if (overviewEl) {
       const cards = overviewEl.querySelectorAll('.answer-option-btn');
+      const normAns = String(q.correct_answer || '').trim().toUpperCase();
+
       cards.forEach(card => {
         const letterEl = card.querySelector('.badge-letter');
-        if (letterEl && letterEl.textContent.trim().toUpperCase() === String(q.correct_answer).trim().toUpperCase()) {
-          card.style.borderColor = '#10B981';
-          card.style.background = '#ECFDF5';
-          card.style.boxShadow = '0 4px 14px rgba(16, 185, 129, 0.2)';
+        const cardTextEl = card.querySelector('.option-text');
+
+        const letterStr = letterEl ? letterEl.textContent.trim().toUpperCase() : '';
+        const textStr = cardTextEl ? cardTextEl.textContent.trim().toUpperCase() : '';
+
+        const isLetterMatch = letterStr && (normAns === letterStr || normAns.startsWith(letterStr + ':') || normAns.startsWith(letterStr + ' '));
+        const isTextMatch = textStr && (normAns === textStr || normAns.includes(textStr) || textStr.includes(normAns));
+
+        if (isLetterMatch || isTextMatch) {
+          card.classList.remove('selected-choice', 'wrong-choice');
+          card.classList.add('correct-choice');
+          card.style.opacity = '1';
+        } else {
+          card.style.opacity = '0.55';
         }
       });
     }
