@@ -424,8 +424,8 @@ const Multiplayer = {
 
         // B. BROADCAST: Ephemeral game events
         this.realtimeChannel.on('broadcast', { event: 'game_event' }, (payload) => {
-          if (payload && payload.payload) {
-            this.handleBroadcastEvent(payload.payload);
+          if (payload) {
+            this.handleBroadcastEvent(payload.payload || payload);
           }
         });
 
@@ -1394,15 +1394,66 @@ const Multiplayer = {
     }
   },
 
+  handleBroadcastEvent(data) {
+    if (!data) return;
+    const eventType = data.event || data.type;
+    const payload = data.payload || data;
+
+    switch (eventType) {
+      case 'GAME_START':
+        this.onGameStart(payload);
+        break;
+      case 'QUESTION_START':
+        this.onQuestionStart(payload);
+        break;
+      case 'PLAYER_ANSWERED':
+        this.onPlayerAnswered(payload);
+        break;
+      case 'GAME_FINISH':
+        this.onGameFinish(payload);
+        break;
+      case 'PLAYER_KICKED':
+        this.onPlayerKicked(payload);
+        break;
+    }
+  },
+
+  onPlayerKicked(payload) {
+    if (this.isHost) return;
+    const myUuid = DB.getUserUUID();
+    const profile = DB.getStudentProfile() || {};
+    const myName = profile.name || 'Player';
+
+    if (payload && (payload.playerId === myUuid || payload.playerName === myName)) {
+      alert('You have been removed from the game lobby by the host.');
+      this.unsubscribeRealtime();
+      App.showScreen('homeScreen');
+    }
+  },
+
   viewParticipantProfile(playerName, photoUrl, playerObj = null) {
     const modal = this.createAvatarModal();
     const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%232E1065'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
-    const imgSrc = photoUrl || (playerObj ? (playerObj.photoUrl || playerObj.photo) : null) || defaultAvatar;
-    const cleanName = playerName || (playerObj ? (playerObj.playerName || playerObj.name || playerObj.display_name) : null) || 'Participant';
 
-    const pts = playerObj ? Number(playerObj.score || playerObj.points || 0) : 0;
-    const correct = playerObj ? Number(playerObj.correct_answers || playerObj.correct || 0) : 0;
-    const pId = playerObj ? (playerObj.id || playerObj.user_id || cleanName) : cleanName;
+    let p = (typeof playerObj === 'object' && playerObj !== null) ? playerObj : null;
+    if (!p && this.playersList && this.playersList.length > 0) {
+      const searchKey = (playerName || '').trim().toLowerCase();
+      p = this.playersList.find(item => {
+        const name = (item.playerName || item.display_name || item.name || '').trim().toLowerCase();
+        return (playerName && name === searchKey) || (photoUrl && item.photoUrl === photoUrl);
+      });
+    }
+
+    const cleanName = (p ? (p.playerName || p.display_name || p.name) : null) || (playerName && playerName !== 'Participant' ? playerName : 'Participant');
+    let imgSrc = (p ? (p.photoUrl || p.photo || p.photo_url) : null) || (photoUrl && photoUrl !== '' && !photoUrl.includes('data:image/svg+xml') ? photoUrl : null);
+
+    if (!imgSrc) {
+      imgSrc = defaultAvatar;
+    }
+
+    const pts = p ? Number(p.score || p.points || 0) : 0;
+    const correct = p ? Number(p.correct_answers || p.correct || 0) : 0;
+    const pId = p ? (p.id || p.user_id || cleanName) : cleanName;
 
     modal.innerHTML = `
       <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.85); max-width: 400px; width: 88%; text-align: center; color: white; margin: auto;">
@@ -1412,26 +1463,26 @@ const Multiplayer = {
         </div>
 
         <div style="position: relative; display: inline-block; margin: 8px 0 14px 0;">
-          <img src="${imgSrc}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; border: 3px solid #A855F7; box-shadow: 0 0 30px rgba(168, 85, 247, 0.65);" alt="${cleanName}">
+          <img src="${imgSrc}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; border: 3.5px solid #A855F7; box-shadow: 0 0 32px rgba(168, 85, 247, 0.7);" alt="${cleanName}">
         </div>
 
-        <h3 style="margin: 4px 0 2px 0; color: #FFFFFF; font-weight: 800; font-size: 1.4rem; font-family: var(--font-heading);">${cleanName}</h3>
-        <span style="display: inline-block; background: rgba(52, 211, 153, 0.2); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.4); font-weight: 700; font-size: 0.78rem; padding: 4px 14px; border-radius: 20px; margin-bottom: 16px;">● Online in Game Lobby</span>
+        <h3 style="margin: 4px 0 2px 0; color: #FFFFFF; font-weight: 800; font-size: 1.45rem; font-family: var(--font-heading);">${cleanName}</h3>
+        <span style="display: inline-block; background: rgba(52, 211, 153, 0.2); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.4); font-weight: 700; font-size: 0.78rem; padding: 5px 16px; border-radius: 20px; margin-bottom: 16px;">● Online in Game Lobby</span>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(139, 92, 246, 0.25); padding: 14px; border-radius: 16px; margin-bottom: 16px;">
           <div>
-            <strong style="font-size: 1.15rem; color: #C084FC; font-weight: 800;">${pts.toLocaleString()}</strong>
+            <strong style="font-size: 1.2rem; color: #C084FC; font-weight: 800;">${pts.toLocaleString()}</strong>
             <div style="font-size: 0.75rem; color: #A5A3C4; margin-top: 2px;">Total Score</div>
           </div>
           <div>
-            <strong style="font-size: 1.15rem; color: #34D399; font-weight: 800;">${correct}</strong>
+            <strong style="font-size: 1.2rem; color: #34D399; font-weight: 800;">${correct}</strong>
             <div style="font-size: 0.75rem; color: #A5A3C4; margin-top: 2px;">Correct Answers</div>
           </div>
         </div>
 
         ${this.isHost ? `
-          <button onclick="Multiplayer.kickPlayerFromLobby('${pId.replace(/'/g, "\\'")}', '${cleanName.replace(/'/g, "\\'")}')" 
-                  style="width: 100%; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #FCA5A5; font-weight: 700; font-size: 0.88rem; padding: 10px; border-radius: 14px; cursor: pointer; transition: all 0.2s;"
+          <button onclick="Multiplayer.kickPlayerFromLobby('${String(pId).replace(/'/g, "\\'")}', '${String(cleanName).replace(/'/g, "\\'")}')" 
+                  style="width: 100%; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #FCA5A5; font-weight: 700; font-size: 0.88rem; padding: 12px; border-radius: 14px; cursor: pointer; transition: all 0.2s;"
                   onmouseover="this.style.background='rgba(239, 68, 68, 0.35)';"
                   onmouseout="this.style.background='rgba(239, 68, 68, 0.2)';">
             🚫 Remove Player from Lobby
@@ -1440,22 +1491,50 @@ const Multiplayer = {
       </div>
     `;
 
+    modal.style.display = 'flex';
     modal.classList.remove('hidden');
   },
 
-  kickPlayerFromLobby(playerId, playerName) {
-    if (confirm(`Remove ${playerName} from this game lobby?`)) {
-      if (this.playersList) {
-        this.playersList = this.playersList.filter(p => (p.id !== playerId && p.user_id !== playerId && p.playerName !== playerName));
-      }
-      this.refreshHostPresenceRoster();
+  async kickPlayerFromLobby(playerId, playerName) {
+    if (!playerName && !playerId) return;
+    const targetName = playerName || 'Participant';
+    if (confirm(`Are you sure you want to remove "${targetName}" from the lobby?`)) {
       this.closeAvatarModal();
-      this.sendBroadcast('PLAYER_KICKED', { playerId, playerName });
+
+      if (this.playersList) {
+        this.playersList = this.playersList.filter(p => 
+          p.id !== playerId && 
+          p.user_id !== playerId && 
+          p.playerName !== targetName && 
+          p.display_name !== targetName && 
+          p.name !== targetName
+        );
+      }
+
+      if (this.currentGame && this.currentGame.id) {
+        try {
+          if (typeof DB !== 'undefined' && DB.leaveMultiplayerGame) {
+            await DB.leaveMultiplayerGame(this.currentGame.id, playerId);
+          }
+        } catch (err) {}
+      }
+
+      this.sendBroadcast('game_event', { event: 'PLAYER_KICKED', payload: { playerId, playerName: targetName } });
+      this.refreshHostPresenceRoster();
     }
   },
 
   openParticipantInfo(playerName, photoUrl, playerId = null) {
-    this.viewParticipantProfile(playerName, photoUrl, typeof playerId === 'object' ? playerId : null);
+    let pObj = null;
+    if (typeof playerId === 'object' && playerId !== null) {
+      pObj = playerId;
+    } else if (this.playersList && this.playersList.length > 0) {
+      pObj = this.playersList.find(item => 
+        (playerId && (item.id === playerId || item.user_id === playerId)) ||
+        (playerName && (item.playerName === playerName || item.name === playerName || item.display_name === playerName))
+      );
+    }
+    this.viewParticipantProfile(playerName, photoUrl, pObj);
   },
 
   setupRosterEventDelegation() {
@@ -1491,7 +1570,7 @@ const Multiplayer = {
       modal.style.height = '100vh';
       modal.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
       modal.style.backdropFilter = 'blur(8px)';
-      modal.style.display = 'flex';
+      modal.style.display = 'none';
       modal.style.alignItems = 'center';
       modal.style.justifyContent = 'center';
       modal.style.zIndex = '99999';
@@ -1505,7 +1584,10 @@ const Multiplayer = {
 
   closeAvatarModal() {
     const modal = document.getElementById('mpParticipantPhotoModal');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.style.display = 'none';
+    }
   }
 };
 
