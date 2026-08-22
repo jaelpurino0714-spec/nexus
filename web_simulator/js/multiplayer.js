@@ -920,8 +920,16 @@ const Multiplayer = {
     DB.saveHostedGameAnalytics(analyticsData);
   },
 
-  hostCancelGame() {
-    if (confirm('Cancel game session?')) {
+  async hostCancelGame() {
+    const confirmed = await App.confirm({
+      title: 'Cancel Game Session',
+      message: 'Are you sure you want to cancel and close this multiplayer room for all connected participants?',
+      icon: '🚪',
+      confirmText: 'Yes, Cancel Game',
+      cancelText: 'Keep Room Open',
+      danger: true
+    });
+    if (confirmed) {
       this.unsubscribeRealtime();
       App.showScreen('homeScreen');
     }
@@ -1539,7 +1547,17 @@ const Multiplayer = {
   async kickPlayerFromLobby(playerId, playerName) {
     if (!playerName && !playerId) return;
     const targetName = playerName || 'Participant';
-    if (confirm(`Are you sure you want to remove "${targetName}" from the lobby?`)) {
+    
+    const confirmed = await App.confirm({
+      title: 'Remove Player from Lobby',
+      message: `Are you sure you want to remove "${targetName}" from this game lobby?`,
+      icon: '🚫',
+      confirmText: 'Yes, Remove Player',
+      cancelText: 'Cancel',
+      danger: true
+    });
+
+    if (confirmed) {
       this.closeAvatarModal();
 
       if (this.playersList) {

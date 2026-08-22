@@ -429,8 +429,16 @@ const TeacherPortal = {
     this.openMyGames();
   },
 
-  deleteGame(quizId) {
-    if (!confirm('Are you sure you want to delete this game?')) return;
+  async deleteGame(quizId) {
+    const confirmed = await App.confirm({
+      title: 'Delete Custom Game',
+      message: 'Are you sure you want to permanently delete this custom game?',
+      icon: '🗑️',
+      confirmText: 'Yes, Delete',
+      cancelText: 'Cancel',
+      danger: true
+    });
+    if (!confirmed) return;
     let customQuizzes = DB.getCustomQuizzes() || [];
     customQuizzes = customQuizzes.filter(q => q.id !== quizId);
     localStorage.setItem('nexus_custom_quizzes', JSON.stringify(customQuizzes));

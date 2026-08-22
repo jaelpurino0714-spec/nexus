@@ -282,6 +282,106 @@ const Settings = {
         topicContainer.appendChild(div);
       });
     }
+  },
+
+  showConfirmModal(options = {}) {
+    return new Promise((resolve) => {
+      const {
+        title = 'Confirm Action',
+        message = 'Are you sure you want to proceed?',
+        icon = '⚠️',
+        confirmText = 'Yes, Proceed',
+        cancelText = 'Cancel',
+        danger = true
+      } = options;
+
+      let modal = document.getElementById('nexusGlobalConfirmModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'nexusGlobalConfirmModal';
+        modal.className = 'modal-backdrop';
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.85)';
+        modal.style.backdropFilter = 'blur(10px)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = '999999';
+        document.body.appendChild(modal);
+      }
+
+      const confirmBtnBg = danger 
+        ? 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)' 
+        : 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)';
+      const confirmBtnShadow = danger 
+        ? '0 0 24px rgba(239, 68, 68, 0.5)' 
+        : '0 0 24px rgba(139, 92, 246, 0.5)';
+
+      const hasCancel = cancelText && cancelText.trim() !== '';
+
+      modal.innerHTML = `
+        <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid ${danger ? 'rgba(239, 68, 68, 0.5)' : 'rgba(139, 92, 246, 0.4)'}; border-radius: 24px; padding: 28px 24px; box-shadow: 0 10px 50px rgba(0,0,0,0.9), 0 0 30px ${danger ? 'rgba(239, 68, 68, 0.25)' : 'rgba(139, 92, 246, 0.2)'}; max-width: 420px; width: 88%; text-align: center; color: white; margin: auto; animation: popIn 0.2s ease-out;">
+          <div style="width: 64px; height: 64px; border-radius: 50%; background: ${danger ? 'rgba(239, 68, 68, 0.15)' : 'rgba(139, 92, 246, 0.15)'}; border: 2px solid ${danger ? 'rgba(239, 68, 68, 0.4)' : 'rgba(168, 85, 247, 0.4)'}; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 16px auto; box-shadow: ${confirmBtnShadow};">
+            ${icon}
+          </div>
+
+          <h3 style="margin: 0 0 8px 0; color: #FFFFFF; font-weight: 800; font-size: 1.35rem; font-family: var(--font-heading);">${title}</h3>
+          <p style="margin: 0 0 24px 0; color: #A5A3C4; font-size: 0.92rem; line-height: 1.5;">${message}</p>
+
+          <div style="display: flex; gap: 12px; justify-content: center;">
+            ${hasCancel ? `
+              <button id="nexusConfirmCancelBtn" style="flex: 1; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #E9D5FF; font-weight: 700; font-size: 0.92rem; padding: 12px 18px; border-radius: 16px; cursor: pointer; transition: all 0.2s;">
+                ${cancelText}
+              </button>
+            ` : ''}
+            <button id="nexusConfirmOkBtn" style="flex: 1; background: ${confirmBtnBg}; border: none; color: #FFFFFF; font-weight: 800; font-size: 0.92rem; padding: 12px 18px; border-radius: 16px; cursor: pointer; box-shadow: ${confirmBtnShadow}; transition: all 0.2s;">
+              ${confirmText}
+            </button>
+          </div>
+        </div>
+      `;
+
+      modal.style.display = 'flex';
+      modal.classList.remove('hidden');
+
+      const closeModal = (result) => {
+        modal.style.display = 'none';
+        modal.classList.add('hidden');
+        resolve(result);
+      };
+
+      const cancelBtn = document.getElementById('nexusConfirmCancelBtn');
+      if (cancelBtn) cancelBtn.onclick = () => closeModal(false);
+      
+      const okBtn = document.getElementById('nexusConfirmOkBtn');
+      if (okBtn) okBtn.onclick = () => closeModal(true);
+
+      modal.onclick = (e) => {
+        if (e.target === modal) closeModal(false);
+      };
+    });
+  },
+
+  confirm(options) {
+    if (typeof options === 'string') {
+      options = { message: options };
+    }
+    return this.showConfirmModal(options);
+  },
+
+  showAlert(message, title = 'Notice', icon = 'ℹ️') {
+    return this.showConfirmModal({
+      title: title,
+      message: message,
+      icon: icon,
+      confirmText: 'OK',
+      cancelText: '',
+      danger: false
+    });
   }
 };
 

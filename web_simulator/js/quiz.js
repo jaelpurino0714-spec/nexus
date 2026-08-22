@@ -862,9 +862,18 @@ const Quiz = {
     }
   },
 
-  kickParticipant(idx) {
+  async kickParticipant(idx) {
     const p = this.lobbyParticipants[idx];
-    if (p && confirm(`Are you sure you want to kick ${p.name} from the lobby?`)) {
+    if (!p) return;
+    const confirmed = await App.confirm({
+      title: 'Kick Participant',
+      message: `Are you sure you want to kick ${p.name} from the lobby?`,
+      icon: '🚫',
+      confirmText: 'Yes, Kick',
+      cancelText: 'Cancel',
+      danger: true
+    });
+    if (confirmed) {
       const lobbyData = this.getLobbyData(this.lobbyAccessCode);
       if (lobbyData) {
         lobbyData.kickedIds = lobbyData.kickedIds || [];
@@ -917,8 +926,16 @@ const Quiz = {
     }
   },
 
-  exitLobby() {
-    if (confirm('Are you sure you want to exit the lobby?')) {
+  async exitLobby() {
+    const confirmed = await App.confirm({
+      title: 'Exit Lobby',
+      message: 'Are you sure you want to exit the multiplayer lobby?',
+      icon: '🚪',
+      confirmText: 'Yes, Exit Lobby',
+      cancelText: 'Stay in Lobby',
+      danger: true
+    });
+    if (confirmed) {
       if (this.isHost) {
         const lobbyData = this.getLobbyData(this.lobbyAccessCode);
         if (lobbyData) {
@@ -988,8 +1005,16 @@ const Quiz = {
     }
   },
 
-  endHostQuizEarly() {
-    if (confirm('Are you sure you want to end the quiz early for all participants?')) {
+  async endHostQuizEarly() {
+    const confirmed = await App.confirm({
+      title: 'End Quiz Early',
+      message: 'Are you sure you want to end the quiz early for all connected participants?',
+      icon: '⏱️',
+      confirmText: 'Yes, End Quiz',
+      cancelText: 'Continue Playing',
+      danger: true
+    });
+    if (confirmed) {
       if (this.hostTrackInterval) clearInterval(this.hostTrackInterval);
       this.finishQuizHostView();
     }
@@ -1545,8 +1570,16 @@ const Quiz = {
     App.showScreen('resultsScreen');
   },
 
-  quitQuiz() {
-    if (confirm('Are you sure you want to quit this round? Progress will not be saved.')) {
+  async quitQuiz() {
+    const confirmed = await App.confirm({
+      title: 'Quit Quiz Round',
+      message: 'Are you sure you want to quit this round? Your progress for this session will not be saved.',
+      icon: '⚠️',
+      confirmText: 'Yes, Quit',
+      cancelText: 'Keep Playing',
+      danger: true
+    });
+    if (confirmed) {
       clearInterval(this.timerInterval);
       App.showScreen('topicScreen');
     }
