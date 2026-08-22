@@ -11,8 +11,8 @@ const EVOLUTION_STAGES = [
     id: 'baby', 
     stage: 1, 
     title: 'BABY', 
-    icon: '🤖', 
-    image: 'assets/nexus_mascot_baby.jpg',
+    icon: '👶', 
+    image: 'assets/mascot/baby_main.png',
     minXP: 0, 
     nextXP: 100, 
     color: '#38BDF8', 
@@ -24,7 +24,7 @@ const EVOLUTION_STAGES = [
     stage: 2, 
     title: 'STUDENT', 
     icon: '🎒', 
-    image: 'assets/nexus_mascot_student.jpg',
+    image: 'assets/mascot/student_main.png',
     minXP: 100, 
     nextXP: 300, 
     color: '#10B981', 
@@ -36,7 +36,7 @@ const EVOLUTION_STAGES = [
     stage: 3, 
     title: 'SCIENTIST', 
     icon: '🧪', 
-    image: 'assets/nexus_mascot_scientist.jpg',
+    image: 'assets/mascot/scientist_main.png',
     minXP: 300, 
     nextXP: 600, 
     color: '#8B5CF6', 
@@ -48,7 +48,7 @@ const EVOLUTION_STAGES = [
     stage: 4, 
     title: 'MASTER SCIENTIST', 
     icon: '⚛️', 
-    image: 'assets/nexus_mascot_scientist.jpg',
+    image: 'assets/mascot/scientist_main.png',
     minXP: 600, 
     nextXP: Infinity, 
     color: '#F59E0B', 
@@ -59,18 +59,18 @@ const EVOLUTION_STAGES = [
 
 const GENDER_CHARACTER_IMAGES = {
   male: {
-    baby: 'assets/nexus_mascot_baby.jpg',
-    student: 'assets/nexus_mascot_student.jpg',
-    graduate: 'assets/nexus_mascot_scientist.jpg',
-    worker: 'assets/nexus_mascot_scientist.jpg',
-    adult: 'assets/nexus_mascot_scientist.jpg'
+    baby: 'assets/mascot/baby_main.png',
+    student: 'assets/mascot/student_main.png',
+    graduate: 'assets/mascot/scientist_main.png',
+    worker: 'assets/mascot/scientist_main.png',
+    adult: 'assets/mascot/scientist_main.png'
   },
   female: {
-    baby: 'assets/nexus_mascot_baby.jpg',
-    student: 'assets/nexus_mascot_student.jpg',
-    graduate: 'assets/nexus_mascot_scientist.jpg',
-    worker: 'assets/nexus_mascot_scientist.jpg',
-    adult: 'assets/nexus_mascot_scientist.jpg'
+    baby: 'assets/mascot/baby_main.png',
+    student: 'assets/mascot/student_main.png',
+    graduate: 'assets/mascot/scientist_main.png',
+    worker: 'assets/mascot/scientist_main.png',
+    adult: 'assets/mascot/scientist_main.png'
   }
 };
 
