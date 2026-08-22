@@ -455,6 +455,7 @@ const Multiplayer = {
     const startBtn = document.getElementById('mpStartGameBtn');
 
     if (startBtn) startBtn.disabled = false;
+    this.setupRosterEventDelegation();
 
     const online = this.playersList || [];
     if (countEl) countEl.textContent = `Connected Players (${online.length})`;
@@ -1450,6 +1451,30 @@ const Multiplayer = {
       this.refreshHostPresenceRoster();
       this.closeAvatarModal();
       this.sendBroadcast('PLAYER_KICKED', { playerId, playerName });
+    }
+  },
+
+  openParticipantInfo(playerName, photoUrl, playerId = null) {
+    this.viewParticipantProfile(playerName, photoUrl, typeof playerId === 'object' ? playerId : null);
+  },
+
+  setupRosterEventDelegation() {
+    const rosterEl = document.getElementById('mpHostPresenceRoster');
+    if (rosterEl && !rosterEl._delegated) {
+      rosterEl._delegated = true;
+      const handler = (e) => {
+        const card = e.target.closest('.lobby-part-card');
+        if (card) {
+          const name = card.getAttribute('data-player-name') || 'Participant';
+          const photo = card.getAttribute('data-player-photo') || '';
+          const pId = card.getAttribute('data-player-id') || '';
+          Multiplayer.openParticipantInfo(name, photo, pId);
+        }
+      };
+      rosterEl.addEventListener('click', handler);
+      rosterEl.addEventListener('touchend', (e) => {
+        handler(e);
+      });
     }
   },
 
