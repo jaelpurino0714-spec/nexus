@@ -1565,18 +1565,20 @@ var DB = {
 
   async getGameLeaderboard(gameId, roomCode) {
     const mergedMap = new Map();
+    const realGameId = await this._resolveRealGameId(gameId || roomCode);
+    const gId = realGameId || gameId;
 
     const addOrUpdatePlayer = (p) => {
       if (!p) return;
-      const isHost = p.is_host || p.isHost || (this.currentGame && this.currentGame.host_id && (p.user_id === this.currentGame.host_id || p.id === this.currentGame.host_id));
+      const hostId = (typeof Multiplayer !== 'undefined' && Multiplayer.currentGame) ? Multiplayer.currentGame.host_id : null;
+      const isHost = p.is_host === true || p.isHost === true || (hostId && (p.user_id === hostId || p.id === hostId)) || (p.display_name === 'Host' || p.name === 'Host');
       if (isHost) return;
 
-      const name = p.display_name || p.playerName || p.name || 'Player';
+      const name = p.display_name || p.playerName || p.name || 'Participant';
       const score = Number(p.score || p.points || 0);
       const correct = Number(p.correct_answers || p.correct || 0);
       const wrong = Number(p.wrong_answers || p.wrong || 0);
 
-      // Find if already present in map by id or name
       let existingKey = null;
       for (const [key, item] of mergedMap.entries()) {
         if ((p.user_id && item.user_id === p.user_id) || 
@@ -1611,13 +1613,12 @@ var DB = {
       }
     };
 
-    // 1. Fetch from Supabase multiplayer_players
-    if (supabaseClient && gameId) {
+    if (supabaseClient) {
       try {
         const { data: dbPlayers } = await supabaseClient
           .from('multiplayer_players')
           .select('*')
-          .eq('game_id', gameId);
+          .or(`game_id.eq.${gId}${gameId && gameId !== gId ? `,game_id.eq.${gameId}` : ''}${roomCode ? `,game_id.eq.${roomCode}` : ''}`);
 
         if (dbPlayers && dbPlayers.length > 0) {
           dbPlayers.forEach(p => addOrUpdatePlayer(p));
@@ -1627,12 +1628,10 @@ var DB = {
       }
     }
 
-    // 2. Merge with Multiplayer.playersList in memory
     if (typeof Multiplayer !== 'undefined' && Multiplayer.playersList) {
       Multiplayer.playersList.forEach(p => addOrUpdatePlayer(p));
     }
 
-    // 3. Always merge with local lobby state if roomCode provided
     if (roomCode) {
       const localState = this.getLocalLobbyState(roomCode);
       if (localState && localState.participants) {

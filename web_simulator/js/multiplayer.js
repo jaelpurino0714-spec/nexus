@@ -1443,7 +1443,174 @@ const Multiplayer = {
     this.goHome();
   },
 
-  // 11. Render Leaderboard & Podium Standings (Excludes Host, Accurately Ranks Joined Participants)
+  async hostShowResults() {
+    if (!this.currentGame) return;
+    await DB.updateMultiplayerGameStatus(this.currentGame.id, 'show_results');
+    const leaderboard = await DB.getGameLeaderboard(this.currentGame.id, this.currentGame.room_code);
+    this.sendBroadcast('SHOW_RESULTS', { questionNumber: this.currentIndex + 1, leaderboard });
+    this.renderLeaderboardScreen('Current Standings 📊', leaderboard);
+  },
+
+  async hostNextQuestion() {
+    if (this.currentIndex + 1 < this.questionsList.length) {
+      const nextIdx = this.currentIndex + 1;
+      await DB.updateMultiplayerGameStatus(this.currentGame.id, 'active', nextIdx);
+      this.hostRenderQuestion(nextIdx);
+    } else {
+      await DB.updateMultiplayerGameStatus(this.currentGame.id, 'finished');
+      const finalLeaderboard = await DB.getGameLeaderboard(this.currentGame.id, this.currentGame.room_code);
+
+      const totalQ = this.questionsList ? this.questionsList.length : 10;
+      const participantStandings = (finalLeaderboard || []).filter(p => {
+        if (p.is_host || p.isHost) return false;
+        if (this.currentGame && this.currentGame.host_id && (p.user_id === this.currentGame.host_id || p.id === this.currentGame.host_id)) return false;
+        return true;
+      });
+
+      const analyticsData = {
+        gameId: this.currentGame ? this.currentGame.id : 'game_' + Date.now(),
+        roomCode: this.currentGame ? (this.currentGame.room_code || this.currentGame.access_code) : '000000',
+        title: this.currentGame ? (this.currentGame.title || 'Science Host Quiz') : 'Science Host Quiz',
+        totalQuestions: totalQ,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+        participants: participantStandings.map(p => {
+          const correct = Number(p.correct_answers || p.correct || 0);
+          const points = Number(p.score || p.points || 0);
+          const pct = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
+          return {
+            name: p.display_name || p.playerName || p.name || 'Participant',
+            points: points,
+            correct: correct,
+            totalQuestions: totalQ,
+            correctRatio: `${correct}/${totalQ}`,
+            accuracyPct: pct
+          };
+        })
+      };
+
+      DB.saveHostedGameAnalytics(analyticsData);
+      this.sendBroadcast('GAME_FINISH', { finalLeaderboard });
+      this.renderLeaderboardScreen('🏆 Final Podium Leaderboard', finalLeaderboard);
+    }
+  },
+
+  saveCurrentHostAnalytics() {
+    if (!this.isHost || !this.currentGame) return;
+
+    const totalQ = (this.questionsList && this.questionsList.length > 0) ? this.questionsList.length : 10;
+    const mergedMap = new Map();
+
+    if (this.playersList && this.playersList.length > 0) {
+      this.playersList.forEach(p => {
+        if (!p) return;
+        const isHost = p.is_host || p.isHost || (this.currentGame && this.currentGame.host_id && (p.user_id === this.currentGame.host_id || p.id === this.currentGame.host_id));
+        if (isHost) return;
+
+        const name = p.display_name || p.playerName || p.name || 'Player';
+        const key = p.user_id || p.id || name.trim().toLowerCase();
+        mergedMap.set(key, {
+          name: name,
+          points: Number(p.score || p.points || 0),
+          correct: Number(p.correct_answers || p.correct || 0),
+          totalQuestions: totalQ,
+          correctRatio: `${Number(p.correct_answers || p.correct || 0)}/${totalQ}`,
+          accuracyPct: totalQ > 0 ? Math.round((Number(p.correct_answers || p.correct || 0) / totalQ) * 100) : 0
+        });
+      });
+    }
+
+    const analyticsData = {
+      gameId: this.currentGame ? this.currentGame.id : 'game_' + Date.now(),
+      roomCode: this.currentGame ? (this.currentGame.room_code || this.currentGame.access_code) : '000000',
+      title: this.currentGame ? (this.currentGame.title || 'Science Host Quiz') : 'Science Host Quiz',
+      totalQuestions: totalQ,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+      participants: Array.from(mergedMap.values())
+    };
+
+    DB.saveHostedGameAnalytics(analyticsData);
+  },
+
+  onQuestionLock(data) {
+    this.disablePlayerChoices();
+  },
+
+  onShowResults(data) {
+    if (!this.isHost) {
+      if (this.playerTimerInterval) clearInterval(this.playerTimerInterval);
+      this.hasAnsweredCurrent = true;
+      this.disablePlayerChoices();
+      this.renderLeaderboardScreen('Question Results 📊', data ? (data.leaderboard || []) : []);
+    }
+  },
+
+  onNextQuestion(data) {
+    if (!this.isHost) {
+      App.showScreen('mpPlayerGameScreen');
+    }
+  },
+
+  onGameFinish(data) {
+    this.renderLeaderboardScreen('🏆 Final Podium Leaderboard', data ? (data.finalLeaderboard || []) : []);
+  },
+
+  startSynchronizedTimer(timerElementId, startedAtIso, durationSec, onEndCallback) {
+    if (this.timerInterval) clearInterval(this.timerInterval);
+    const timerEl = document.getElementById(timerElementId);
+
+    const updateTimer = () => {
+      if (!startedAtIso || !durationSec) return;
+      const startTime = new Date(startedAtIso).getTime();
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const remaining = Math.max(0, durationSec - elapsed);
+
+      if (timerEl) {
+        timerEl.textContent = `${remaining}s`;
+      }
+
+      if (remaining <= 0) {
+        clearInterval(this.timerInterval);
+        if (onEndCallback) onEndCallback();
+      }
+    };
+
+    updateTimer();
+    this.timerInterval = setInterval(updateTimer, 500);
+  },
+
+  startPlayerSynchronizedTimer(startedAtIso, durationSec) {
+    if (this.playerTimerInterval) clearInterval(this.playerTimerInterval);
+    const timerEl = document.getElementById('mpPlayerTimerVal');
+
+    const updateTimer = () => {
+      if (!startedAtIso || !durationSec) return;
+      const startTime = new Date(startedAtIso).getTime();
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const remaining = Math.max(0, durationSec - elapsed);
+
+      if (timerEl) {
+        timerEl.textContent = `${remaining}s`;
+      }
+
+      if (remaining <= 0) {
+        clearInterval(this.playerTimerInterval);
+        if (!this.hasAnsweredCurrent) {
+          this.hasAnsweredCurrent = true;
+          this.disablePlayerChoices();
+          const banner = document.getElementById('mpPlayerFeedbackBanner');
+          const statusText = document.getElementById('mpPlayerFeedbackText');
+          if (banner && statusText) {
+            banner.className = 'feedback-banner';
+            statusText.textContent = '⏰ Time Limit Reached!';
+          }
+        }
+      }
+    };
+
+    updateTimer();
+    this.playerTimerInterval = setInterval(updateTimer, 500);
+  },
+
   renderLeaderboardScreen(title, standings) {
     App.showScreen('mpLeaderboardScreen');
     const titleEl = document.getElementById('mpLeaderboardTitle');
@@ -1455,16 +1622,17 @@ const Multiplayer = {
 
     const addStandingItem = (item) => {
       if (!item) return;
-      const isHost = item.is_host || item.isHost || (this.currentGame && this.currentGame.host_id && (item.user_id === this.currentGame.host_id || item.id === this.currentGame.host_id));
+      const hostId = (this.currentGame && this.currentGame.host_id) ? this.currentGame.host_id : null;
+      const isHost = item.is_host === true || item.isHost === true || (hostId && (item.user_id === hostId || item.id === hostId)) || (item.display_name === 'Host' || item.name === 'Host');
       if (isHost) return;
 
-      const name = item.display_name || item.playerName || item.name || 'Player';
+      const name = item.display_name || item.playerName || item.name || 'Participant';
       const score = Number(item.score || item.points || 0);
       const correct = Number(item.correct_answers || item.correct || 0);
 
       let existingKey = null;
       for (const [key, existing] of mergedStandingsMap.entries()) {
-        if ((item.user_id && existing.user_id === item.user_id) || (item.id && existing.id === item.id) || (name && existing.display_name === name)) {
+        if ((item.user_id && existing.user_id === item.user_id) || (item.id && existing.id === item.id) || (name && existing.display_name.trim().toLowerCase() === name.trim().toLowerCase())) {
           existingKey = key;
           break;
         }
@@ -1475,12 +1643,13 @@ const Multiplayer = {
         existing.score = Math.max(existing.score, score);
         existing.correct_answers = Math.max(existing.correct_answers, correct);
       } else {
-        const key = item.user_id || item.id || name;
+        const key = item.user_id || item.id || name.trim().toLowerCase();
         mergedStandingsMap.set(key, {
           id: key,
           user_id: item.user_id || key,
           display_name: name,
           playerName: name,
+          photo_url: item.photo_url || item.photoUrl || item.photo || null,
           score: score,
           correct_answers: correct,
           is_host: false
@@ -1496,6 +1665,10 @@ const Multiplayer = {
     const participantStandings = Array.from(mergedStandingsMap.values());
     participantStandings.sort((a, b) => (b.score || 0) - (a.score || 0));
 
+    const myUuid = DB.getUserUUID();
+    const myProfile = DB.getStudentProfile() || {};
+    const myName = (myProfile.name || '').trim().toLowerCase();
+
     if (rosterEl) {
       rosterEl.innerHTML = '';
       if (participantStandings.length === 0) {
@@ -1504,28 +1677,42 @@ const Multiplayer = {
         participantStandings.forEach((p, idx) => {
           const card = document.createElement('div');
           card.className = 'lobby-part-card';
-          card.style.background = 'rgba(25, 17, 50, 0.95)';
-          card.style.border = '1.5px solid rgba(139, 92, 246, 0.35)';
+
+          const isMe = (!this.isHost) && (
+            (p.user_id && p.user_id === myUuid) ||
+            (p.id && p.id === myUuid) ||
+            (myName && p.display_name && p.display_name.trim().toLowerCase() === myName)
+          );
+
+          card.style.background = isMe ? 'rgba(16, 185, 129, 0.15)' : 'rgba(25, 17, 50, 0.95)';
+          card.style.border = isMe ? '2px solid #10B981' : '1.5px solid rgba(139, 92, 246, 0.35)';
           card.style.borderRadius = '20px';
           card.style.padding = '16px 20px';
           card.style.marginBottom = '12px';
           card.style.display = 'flex';
           card.style.alignItems = 'center';
           card.style.justifyContent = 'space-between';
+          if (isMe) card.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.4)';
 
           const medals = ['🥇', '🥈', '🥉'];
           const rankTag = idx < 3 ? medals[idx] : `#${idx + 1}`;
-          const displayName = p.display_name || p.name || p.playerName || 'Player';
+          const displayName = p.display_name || p.name || p.playerName || 'Participant';
+          const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%232E1065'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
+          const pPhoto = p.photo_url || p.photoUrl || p.photo || defaultAvatar;
+
           card.innerHTML = `
             <div class="part-info-left" style="justify-content:space-between; width:100%; align-items:center;">
               <div style="display:flex; align-items:center; gap:12px;">
-                <span style="font-size:1.6rem; display:flex; align-items:center; justify-content:center;">${rankTag}</span>
+                <span style="font-size:1.6rem; display:flex; align-items:center; justify-content:center; min-width:32px;">${rankTag}</span>
+                <img src="${pPhoto}" class="part-avatar" style="width:42px; height:42px; border-radius:50%; border:2px solid ${isMe ? '#10B981' : '#A855F7'}; object-fit:cover;" alt="${displayName}">
                 <div style="text-align:left;">
-                  <h5 style="margin:0; font-size:1.05rem; color:#FFFFFF; font-weight:800; font-family:var(--font-heading);">${displayName}</h5>
-                  <span style="font-size:0.82rem; color:#A5A3C4; font-weight:500;">Correct: ${p.correct_answers || 0}</span>
+                  <h5 style="margin:0; font-size:1.05rem; color:#FFFFFF; font-weight:800; font-family:var(--font-heading);">${displayName} ${isMe ? '<span style="font-size:0.75rem; color:#10B981; background:rgba(16,185,129,0.2); padding:2px 8px; border-radius:10px; margin-left:6px;">(YOU)</span>' : ''}</h5>
+                  <span style="font-size:0.82rem; color:#A5A3C4; font-weight:500;">Correct Answers: ${p.correct_answers || 0}</span>
                 </div>
               </div>
-              <span style="font-weight:900; color:#34D399; font-size:1.3rem; font-family:var(--font-heading);">${(p.score || 0).toLocaleString()} pts</span>
+              <div style="text-align:right;">
+                <span style="font-weight:900; color:#34D399; font-size:1.35rem; font-family:var(--font-heading);">${(p.score || 0).toLocaleString()} pts</span>
+              </div>
             </div>
           `;
           rosterEl.appendChild(card);
@@ -1581,6 +1768,9 @@ const Multiplayer = {
         break;
       case 'PLAYER_ANSWERED':
         this.onPlayerAnswered(payload);
+        break;
+      case 'SHOW_RESULTS':
+        this.onShowResults(payload);
         break;
       case 'GAME_FINISH':
         this.onGameFinish(payload);
