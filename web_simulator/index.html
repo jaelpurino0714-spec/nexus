@@ -128,6 +128,27 @@
               <input type="text" id="signUpUsername" placeholder="e.g. mariasantos10" required style="width: 100%; padding: 12px 14px; border-radius: 14px; border: 1px solid #231648; background: #0E0F26; color: #FFFFFF; font-size: 0.95rem; outline: none; transition: all 0.2s;">
             </div>
 
+            <!-- Student Grade Level & Section Fields (Visible for Student Account selection) -->
+            <div id="signUpStudentInfoContainer" style="display: block;">
+              <div style="display: flex; gap: 10px; margin-bottom: 14px;">
+                <div class="form-group" style="flex: 1;">
+                  <label for="signUpGradeLevel" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; color: #A5A3C4;">Grade Level</label>
+                  <select id="signUpGradeLevel" style="width: 100%; padding: 12px 14px; border-radius: 14px; border: 1px solid #231648; background: #0E0F26; color: #FFFFFF; font-size: 0.95rem; outline: none; transition: all 0.2s;">
+                    <option value="Grade 10" selected style="background: #0E0F26; color: white;">Grade 10</option>
+                    <option value="Grade 7" style="background: #0E0F26; color: white;">Grade 7</option>
+                    <option value="Grade 8" style="background: #0E0F26; color: white;">Grade 8</option>
+                    <option value="Grade 9" style="background: #0E0F26; color: white;">Grade 9</option>
+                    <option value="Grade 11" style="background: #0E0F26; color: white;">Grade 11</option>
+                    <option value="Grade 12" style="background: #0E0F26; color: white;">Grade 12</option>
+                  </select>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                  <label for="signUpSection" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; color: #A5A3C4;">Section</label>
+                  <input type="text" id="signUpSection" placeholder="e.g. Einstein" required style="width: 100%; padding: 12px 14px; border-radius: 14px; border: 1px solid #231648; background: #0E0F26; color: #FFFFFF; font-size: 0.95rem; outline: none; transition: all 0.2s;">
+                </div>
+              </div>
+            </div>
+
             <!-- Teacher Code Field (Visible only for Teacher Account selection) -->
             <div id="signUpTeacherCodeContainer" class="form-group" style="display: none; margin-bottom: 14px;">
               <label for="signUpTeacherCode" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; color: #F97316;">Teacher Access Code</label>

@@ -102,6 +102,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String role,
     String? confirmPassword,
     String? teacherCode,
+    String gradeLevel = 'Grade 10',
+    String section = '',
   }) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
@@ -112,6 +114,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         role: role,
         confirmPassword: confirmPassword,
         teacherCode: teacherCode,
+        gradeLevel: gradeLevel,
+        section: section,
       );
       state = state.copyWith(
         status: profile.role == 'teacher' ? AuthStatus.authenticatedTeacher : AuthStatus.authenticatedStudent,

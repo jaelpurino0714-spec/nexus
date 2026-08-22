@@ -21,9 +21,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
   // Sign Up Controllers
   final _signUpFullNameController = TextEditingController();
   final _signUpUsernameController = TextEditingController();
+  final _signUpSectionController = TextEditingController();
   final _signUpTeacherCodeController = TextEditingController();
   final _signUpPasswordController = TextEditingController();
   final _signUpConfirmPasswordController = TextEditingController();
+  String _selectedGradeLevel = 'Grade 10';
   bool _signUpObscurePassword = true;
   bool _signUpObscureConfirmPassword = true;
   String _selectedRole = 'student'; // 'student' or 'teacher'
@@ -51,6 +53,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
     _signInPasswordController.dispose();
     _signUpFullNameController.dispose();
     _signUpUsernameController.dispose();
+    _signUpSectionController.dispose();
     _signUpTeacherCodeController.dispose();
     _signUpPasswordController.dispose();
     _signUpConfirmPasswordController.dispose();
@@ -73,8 +76,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
         );
 
     if (success && mounted) {
-      final state = ref.read(authProvider);
-      if (state.profile?.role == 'teacher') {
+      final role = ref.read(authProvider).profile?.role ?? _selectedRole;
+      if (role == 'teacher') {
         context.go('/teacher/dashboard');
       } else {
         context.go('/student/home');
@@ -85,6 +88,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
   Future<void> _handleSignUp() async {
     final fullName = _signUpFullNameController.text.trim();
     final username = _signUpUsernameController.text.trim();
+    final section = _signUpSectionController.text.trim();
     final teacherCode = _signUpTeacherCodeController.text.trim();
     final password = _signUpPasswordController.text;
     final confirmPassword = _signUpConfirmPasswordController.text;
@@ -101,6 +105,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
 
     if (username.length < 3) {
       setState(() => _localError = 'Nickname must be at least 3 characters.');
+      return;
+    }
+
+    if (_selectedRole == 'student' && section.isEmpty) {
+      setState(() => _localError = 'Please enter your Section.');
       return;
     }
 
@@ -144,6 +153,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
           role: _selectedRole,
           confirmPassword: confirmPassword,
           teacherCode: teacherCode,
+          gradeLevel: _selectedGradeLevel,
+          section: section,
         );
 
     if (success && mounted) {
@@ -539,6 +550,65 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
             ),
           ),
           const SizedBox(height: 12),
+
+          // Student Grade Level & Section Fields (Shown only when Student is selected)
+          if (_selectedRole == 'student') ...[
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedGradeLevel,
+                    dropdownColor: const Color(0xFF0E0F26),
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      labelText: 'Grade Level',
+                      labelStyle: const TextStyle(color: Color(0xFFA5A3C4)),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: const BorderSide(color: Color(0xFF231648)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: const BorderSide(color: Color(0xFF8B5CF6), width: 1.5),
+                      ),
+                      filled: true,
+                      fillColor: const Color(0xFF0E0F26),
+                    ),
+                    items: ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12']
+                        .map((g) => DropdownMenuItem(value: g, child: Text(g)))
+                        .toList(),
+                    onChanged: (val) {
+                      if (val != null) setState(() => _selectedGradeLevel = val);
+                    },
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: TextField(
+                    controller: _signUpSectionController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      labelText: 'Section',
+                      labelStyle: const TextStyle(color: Color(0xFFA5A3C4)),
+                      hintText: 'e.g. Einstein',
+                      hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: const BorderSide(color: Color(0xFF231648)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: const BorderSide(color: Color(0xFF8B5CF6), width: 1.5),
+                      ),
+                      filled: true,
+                      fillColor: const Color(0xFF0E0F26),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+          ],
 
           // Teacher Code Field (Shown only when Teacher is selected)
           if (_selectedRole == 'teacher') ...[

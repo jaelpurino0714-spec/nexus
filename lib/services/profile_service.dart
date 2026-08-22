@@ -44,9 +44,11 @@ class ProfileService {
     required String fullName,
     required String username,
     required String password,
-    required String role,
+    String role = 'student',
     String? confirmPassword,
     String? teacherCode,
+    String gradeLevel = 'Grade 10',
+    String section = '',
   }) async {
     final cleanFullName = fullName.trim();
     final cleanNickname = username.trim().toLowerCase();
@@ -59,6 +61,10 @@ class ProfileService {
     }
     if (cleanNickname.length < 3) {
       throw const AuthException('Nickname must be at least 3 characters long.');
+    }
+
+    if (role == 'student' && section.trim().isEmpty) {
+      throw const AuthException('Please enter your Section.');
     }
 
     if (role == 'teacher') {
@@ -101,6 +107,8 @@ class ProfileService {
           'nickname': cleanNickname,
           'username': cleanNickname,
           'role': role,
+          'grade_level': gradeLevel,
+          'section': section.trim(),
         },
       );
 
@@ -118,12 +126,16 @@ class ProfileService {
           name: cleanFullName,
           fullName: cleanFullName,
           username: cleanNickname,
+          gradeLevel: gradeLevel,
+          section: section.trim(),
           createdAt: DateTime.now(),
         );
 
         try {
           final payload = profile.toJson();
           payload['password'] = password;
+          payload['grade_level'] = gradeLevel;
+          payload['section'] = section.trim();
           await _client.from('profiles').upsert(payload);
         } catch (e) {
           print("Profiles table insert warning: $e");

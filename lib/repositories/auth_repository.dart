@@ -12,6 +12,8 @@ abstract class AuthRepository {
     required String role,
     String? confirmPassword,
     String? teacherCode,
+    String gradeLevel = 'Grade 10',
+    String section = '',
   });
   Future<ProfileModel> signIn({
     required String username,
@@ -43,6 +45,8 @@ class AuthRepositoryImpl implements AuthRepository {
     required String role,
     String? confirmPassword,
     String? teacherCode,
+    String gradeLevel = 'Grade 10',
+    String section = '',
   }) =>
       _profileService.signUp(
         fullName: fullName,
@@ -51,6 +55,8 @@ class AuthRepositoryImpl implements AuthRepository {
         role: role,
         confirmPassword: confirmPassword,
         teacherCode: teacherCode,
+        gradeLevel: gradeLevel,
+        section: section,
       );
 
   @override

@@ -55,6 +55,7 @@ const Auth = {
     this.selectedSignUpRole = role;
     const btnStudent = document.getElementById('roleBtnStudent');
     const btnTeacher = document.getElementById('roleBtnTeacher');
+    const studentContainer = document.getElementById('signUpStudentInfoContainer');
     const codeContainer = document.getElementById('signUpTeacherCodeContainer');
     const lblRealName = document.getElementById('lblSignUpRealName');
 
@@ -71,6 +72,7 @@ const Auth = {
         btnTeacher.style.color = '#A5A3C4';
         btnTeacher.style.boxShadow = 'none';
       }
+      if (studentContainer) studentContainer.style.display = 'block';
       if (codeContainer) codeContainer.style.display = 'none';
       if (lblRealName) lblRealName.textContent = 'Real Student Name';
     } else {
@@ -86,6 +88,7 @@ const Auth = {
         btnStudent.style.color = '#A5A3C4';
         btnStudent.style.boxShadow = 'none';
       }
+      if (studentContainer) studentContainer.style.display = 'none';
       if (codeContainer) codeContainer.style.display = 'block';
       if (lblRealName) lblRealName.textContent = 'Real Teacher Name';
     }
@@ -275,6 +278,8 @@ const Auth = {
     this.clearError();
     const fullName = (document.getElementById('signUpFullName')?.value || '').trim();
     const username = (document.getElementById('signUpUsername')?.value || '').trim().toLowerCase();
+    const gradeLevel = (document.getElementById('signUpGradeLevel')?.value || 'Grade 10').trim();
+    const section = (document.getElementById('signUpSection')?.value || '').trim();
     const teacherCode = (document.getElementById('signUpTeacherCode')?.value || '').trim();
     const password = document.getElementById('signUpPassword')?.value || '';
     const confirmPassword = document.getElementById('signUpConfirmPassword')?.value || '';
@@ -293,6 +298,11 @@ const Auth = {
 
     if (username.length < 3) {
       this.showError('Nickname must be at least 3 characters.');
+      return;
+    }
+
+    if (role === 'student' && !section) {
+      this.showError('Please enter your Section (e.g. Einstein).');
       return;
     }
 
@@ -380,7 +390,9 @@ const Auth = {
                     full_name: fullName,
                     nickname: username,
                     username: username,
-                    role: role
+                    role: role,
+                    grade_level: gradeLevel,
+                    section: section
                   }
                 }
               });
@@ -414,6 +426,8 @@ const Auth = {
             nickname: username,
             username: username,
             password: password,
+            gradeLevel: gradeLevel,
+            section: section,
             photo: this.uploadedPhotoData || null,
             createdAt: new Date().toISOString()
           };
@@ -428,6 +442,8 @@ const Auth = {
               nickname: username,
               username: username,
               password: password,
+              grade_level: gradeLevel,
+              section: section,
               photo_url: (this.uploadedPhotoData && this.uploadedPhotoData.length < 50000) ? this.uploadedPhotoData : null,
               created_at: new Date().toISOString()
             });
@@ -447,6 +463,8 @@ const Auth = {
           full_name: fullName,
           nickname: username,
           username: username,
+          gradeLevel: gradeLevel,
+          section: section,
           photo: this.uploadedPhotoData || null,
           createdAt: new Date().toISOString()
         };
