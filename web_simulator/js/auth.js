@@ -179,17 +179,17 @@ const Auth = {
                 isRateLimited = true;
                 console.warn('Supabase auth rate limit hit, verifying account against profiles table.');
               } else {
-                // Check if username exists in profiles for exact error messaging
+                // Check if username or nickname exists in profiles for exact error messaging
                 const { data: profCheck } = await client
                   .from('profiles')
-                  .select('id, username')
-                  .eq('username', username)
+                  .select('id, username, nickname')
+                  .or(`username.eq.${username},nickname.eq.${username}`)
                   .maybeSingle();
 
                 if (!profCheck) {
-                  throw new Error(`Account with username "${username}" does not exist. Please check spelling or Sign Up.`);
+                  throw new Error(`Account with username "${username}" does not exist in Supabase. Please check spelling or Sign Up.`);
                 } else {
-                  throw new Error('Incorrect password. Please try again.');
+                  throw new Error('Incorrect password for this account. Please try again.');
                 }
               }
             } else if (data && data.user) {
@@ -207,36 +207,41 @@ const Auth = {
           profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(authUser.id) : null;
           if (!profile) {
             const userRole = (authUser.user_metadata && authUser.user_metadata.role) ? authUser.user_metadata.role : 'student';
-            const fullName = (authUser.user_metadata && authUser.user_metadata.full_name) ? authUser.user_metadata.full_name : username;
+            const fullName = (authUser.user_metadata && (authUser.user_metadata.real_name || authUser.user_metadata.full_name)) ? (authUser.user_metadata.real_name || authUser.user_metadata.full_name) : username;
             profile = {
               id: authUser.id,
               role: userRole,
               name: fullName,
+              real_name: fullName,
               full_name: fullName,
+              nickname: username,
               username: username,
               createdAt: new Date().toISOString()
             };
           }
         } else {
-          // Check profiles table directly by username
+          // Check profiles table directly by username or nickname in Supabase
           const { data: dbProf } = await client
             .from('profiles')
             .select('*')
-            .eq('username', username)
+            .or(`username.eq.${username},nickname.eq.${username}`)
             .maybeSingle();
 
           if (dbProf) {
             profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(dbProf.id) : {
               id: dbProf.id,
               role: dbProf.role || 'student',
-              name: dbProf.full_name || dbProf.name || username,
-              full_name: dbProf.full_name || dbProf.name || username,
-              username: dbProf.username || username,
+              name: dbProf.real_name || dbProf.full_name || dbProf.name || username,
+              real_name: dbProf.real_name || dbProf.full_name || dbProf.name || username,
+              full_name: dbProf.full_name || dbProf.real_name || dbProf.name || username,
+              nickname: dbProf.nickname || dbProf.username || username,
+              username: dbProf.username || dbProf.nickname || username,
               createdAt: dbProf.created_at || new Date().toISOString()
             };
           } else if (!isRateLimited) {
-            throw new Error(`Account with username "${username}" does not exist. Please Sign Up.`);
+            throw new Error(`Account with username "${username}" does not exist in Supabase. Please Sign Up.`);
           }
+        }
         }
       }
 
