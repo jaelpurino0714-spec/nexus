@@ -479,7 +479,12 @@ const Multiplayer = {
 
           const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%232E1065'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
           const pName = p.playerName || p.display_name || p.name || 'Player';
-          const pPhoto = p.photoUrl || p.photo || defaultAvatar;
+          const pPhoto = p.photoUrl || p.photo || p.photo_url || defaultAvatar;
+
+          card.setAttribute('data-player-name', pName);
+          card.setAttribute('data-player-photo', pPhoto);
+          card.setAttribute('data-player-id', p.id || p.user_id || pName);
+          card._playerObj = p;
 
           card.onmouseover = function() {
             this.style.borderColor = '#C084FC';
@@ -1431,7 +1436,7 @@ const Multiplayer = {
     }
   },
 
-  viewParticipantProfile(playerName, photoUrl, playerObj = null) {
+  async viewParticipantProfile(playerName, photoUrl, playerObj = null) {
     const modal = this.createAvatarModal();
     const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%232E1065'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
 
@@ -1447,10 +1452,6 @@ const Multiplayer = {
     const cleanName = (p ? (p.playerName || p.display_name || p.name) : null) || (playerName && playerName !== 'Participant' ? playerName : 'Participant');
     let imgSrc = (p ? (p.photoUrl || p.photo || p.photo_url) : null) || (photoUrl && photoUrl !== '' && !photoUrl.includes('data:image/svg+xml') ? photoUrl : null);
 
-    if (!imgSrc) {
-      imgSrc = defaultAvatar;
-    }
-
     const pts = p ? Number(p.score || p.points || 0) : 0;
     const correct = p ? Number(p.correct_answers || p.correct || 0) : 0;
     const pId = p ? (p.id || p.user_id || cleanName) : cleanName;
@@ -1463,10 +1464,10 @@ const Multiplayer = {
         </div>
 
         <div style="position: relative; display: inline-block; margin: 8px 0 14px 0;">
-          <img src="${imgSrc}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; border: 3.5px solid #A855F7; box-shadow: 0 0 32px rgba(168, 85, 247, 0.7);" alt="${cleanName}">
+          <img id="mpParticipantModalPhoto" src="${imgSrc || defaultAvatar}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; border: 3.5px solid #A855F7; box-shadow: 0 0 32px rgba(168, 85, 247, 0.7);" alt="${cleanName}">
         </div>
 
-        <h3 style="margin: 4px 0 2px 0; color: #FFFFFF; font-weight: 800; font-size: 1.45rem; font-family: var(--font-heading);">${cleanName}</h3>
+        <h3 id="mpParticipantModalName" style="margin: 4px 0 2px 0; color: #FFFFFF; font-weight: 800; font-size: 1.45rem; font-family: var(--font-heading);">${cleanName}</h3>
         <span style="display: inline-block; background: rgba(52, 211, 153, 0.2); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.4); font-weight: 700; font-size: 0.78rem; padding: 5px 16px; border-radius: 20px; margin-bottom: 16px;">● Online in Game Lobby</span>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(139, 92, 246, 0.25); padding: 14px; border-radius: 16px; margin-bottom: 16px;">
@@ -1493,6 +1494,46 @@ const Multiplayer = {
 
     modal.style.display = 'flex';
     modal.classList.remove('hidden');
+
+    // Async fetch photo from Supabase profiles / multiplayer_players if missing
+    if ((!imgSrc || imgSrc === defaultAvatar) && typeof supabaseClient !== 'undefined' && supabaseClient) {
+      try {
+        let fetchedPhoto = null;
+        let fetchedName = null;
+
+        if (pId && typeof DB !== 'undefined' && DB.isValidUuid && DB.isValidUuid(pId)) {
+          const { data: prof } = await supabaseClient.from('profiles').select('name, full_name, photo_url, photo').eq('id', pId).maybeSingle();
+          if (prof) {
+            fetchedPhoto = prof.photo_url || prof.photo;
+            fetchedName = prof.full_name || prof.name;
+          }
+        }
+
+        if (!fetchedPhoto && this.currentGame && this.currentGame.id) {
+          const { data: mp } = await supabaseClient
+            .from('multiplayer_players')
+            .select('display_name, photo_url')
+            .eq('game_id', this.currentGame.id)
+            .or(`user_id.eq.${pId},display_name.eq.${cleanName}`)
+            .maybeSingle();
+          if (mp) {
+            fetchedPhoto = mp.photo_url;
+            fetchedName = mp.display_name;
+          }
+        }
+
+        const imgEl = document.getElementById('mpParticipantModalPhoto');
+        const nameEl = document.getElementById('mpParticipantModalName');
+        if (fetchedPhoto && imgEl) {
+          imgEl.src = fetchedPhoto;
+          if (p) p.photoUrl = fetchedPhoto;
+        }
+        if (fetchedName && nameEl && cleanName === 'Participant') {
+          nameEl.textContent = fetchedName;
+          if (p) p.playerName = fetchedName;
+        }
+      } catch (e) {}
+    }
   },
 
   async kickPlayerFromLobby(playerId, playerName) {
@@ -1544,10 +1585,11 @@ const Multiplayer = {
       const handler = (e) => {
         const card = e.target.closest('.lobby-part-card');
         if (card) {
-          const name = card.getAttribute('data-player-name') || 'Participant';
-          const photo = card.getAttribute('data-player-photo') || '';
+          const name = card.getAttribute('data-player-name') || (card._playerObj ? card._playerObj.playerName : 'Participant');
+          const photo = card.getAttribute('data-player-photo') || (card._playerObj ? card._playerObj.photoUrl : '');
           const pId = card.getAttribute('data-player-id') || '';
-          Multiplayer.openParticipantInfo(name, photo, pId);
+          const pObj = card._playerObj || null;
+          Multiplayer.viewParticipantProfile(name, photo, pObj || pId);
         }
       };
       rosterEl.addEventListener('click', handler);
