@@ -17,6 +17,7 @@ import '../../screens/custom_play_screen.dart';
 import '../../screens/host_quiz_screen.dart';
 import '../../screens/join_quiz_screen.dart';
 import '../../screens/full_character_screen.dart';
+import '../../screens/mascot_evolution_screen.dart';
 
 import '../../screens/teacher_login_screen.dart';
 import '../../screens/teacher_dashboard_screen.dart';
@@ -88,6 +89,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/student/character',
             builder: (context, state) => const FullCharacterScreen(),
+          ),
+          GoRoute(
+            path: '/student/mascot-evolution',
+            builder: (context, state) => const MascotEvolutionScreen(),
           ),
           GoRoute(
             path: '/student/terms',

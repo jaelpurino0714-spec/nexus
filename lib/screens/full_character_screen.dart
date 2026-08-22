@@ -268,27 +268,54 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Outfits Button
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (ctx) => const OutfitSelectionModal(),
-                      );
-                    },
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFF673AB7),
-                      side: const BorderSide(color: Color(0xFF673AB7), width: 1.5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                  // 3D Evolution Showcase Button & Outfits Button Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          context.push('/student/mascot-evolution');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF8B5CF6),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          elevation: 3,
+                        ),
+                        icon: const Icon(Icons.threed_rotation, size: 18),
+                        label: const Text(
+                          '3D Showcase',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                        ),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    ),
-                    icon: const Icon(Icons.checkroom, size: 20),
-                    label: const Text(
-                      '👕 Outfits',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                    ),
+                      const SizedBox(width: 10),
+
+                      // Outfits Button
+                      OutlinedButton.icon(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => const OutfitSelectionModal(),
+                          );
+                        },
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: const Color(0xFF673AB7),
+                          side: const BorderSide(color: Color(0xFF673AB7), width: 1.5),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        ),
+                        icon: const Icon(Icons.checkroom, size: 18),
+                        label: const Text(
+                          'Outfits',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 20),
 

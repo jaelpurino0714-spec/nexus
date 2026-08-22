@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../providers/character_provider.dart';
 import '../services/character_service.dart';
 
@@ -70,19 +71,35 @@ class EvolutionCelebrationDialog extends ConsumerWidget {
               onPressed: () {
                 ref.read(characterProvider.notifier).dismissEvolutionModal();
                 Navigator.of(context).pop();
+                context.push('/student/mascot-evolution');
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF673AB7),
+                backgroundColor: const Color(0xFFEC4899),
                 foregroundColor: Colors.white,
                 minimumSize: const Size.fromHeight(48),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
               ),
-              child: const Text(
-                'Awesome!',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.threed_rotation, size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    'View 3D Evolution Showcase!',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
+            ),
+            const SizedBox(height: 10),
+            TextButton(
+              onPressed: () {
+                ref.read(characterProvider.notifier).dismissEvolutionModal();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Awesome!', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
             ),
           ],
         ),

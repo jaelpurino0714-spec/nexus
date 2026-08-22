@@ -289,13 +289,11 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                           ),
                         ),
 
-                        // Character Image inside Hero Scene (Tapping opens Gender Selection between Male & Female)
+                        // Character Image inside Hero Scene (Tapping opens 3D Mascot Evolution Showcase)
                         GestureDetector(
                           onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (ctx) => const GenderSelectionDialog(),
-                            );
+                            Navigator.of(context).pop();
+                            context.push('/student/mascot-evolution');
                           },
                           child: Column(
                             children: [
@@ -320,10 +318,8 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                           child: IconButton(
                             icon: const Icon(Icons.chevron_left, size: 36, color: Colors.teal),
                             onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) => const GenderSelectionDialog(),
-                              );
+                              Navigator.of(context).pop();
+                              context.push('/student/mascot-evolution');
                             },
                           ),
                         ),
@@ -334,10 +330,8 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                           child: IconButton(
                             icon: const Icon(Icons.chevron_right, size: 36, color: Colors.teal),
                             onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) => const GenderSelectionDialog(),
-                              );
+                              Navigator.of(context).pop();
+                              context.push('/student/mascot-evolution');
                             },
                           ),
                         ),
@@ -346,10 +340,50 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                   ),
                   const SizedBox(height: 12),
 
-                  // 4. Gender & Outfits Buttons Row (directly under hero artwork)
+                  // 4. Gender & Outfits & 3D Evolution Buttons Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // 3D Mascot Evolution Showcase Button
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          context.push('/student/mascot-evolution');
+                        },
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.purple.withOpacity(0.3),
+                                blurRadius: 8,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.threed_rotation, color: Colors.white, size: 16),
+                              SizedBox(width: 4),
+                              Text(
+                                '3D Evolution',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.extrabold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
                       // Gender Selection Button (Male / Female)
                       InkWell(
                         onTap: () {
