@@ -729,9 +729,12 @@ const Multiplayer = {
           this.playersList = updatedPlayers;
         }
 
-        const answeredList = await DB.getAnsweredPlayersForQuestion(this.currentGame.id, questionIndex);
+        const currentQ = this.questionsList ? this.questionsList[questionIndex] : null;
+        const qId = currentQ ? currentQ.id : null;
+
+        const answeredList = await DB.getAnsweredPlayersForQuestion(this.currentGame.id, questionIndex, qId);
+        this.answeredPlayerSet = new Set();
         if (answeredList && answeredList.length > 0) {
-          if (!this.answeredPlayerSet) this.answeredPlayerSet = new Set();
           answeredList.forEach(item => {
             if (item) {
               const str = String(item).trim();
@@ -838,7 +841,7 @@ const Multiplayer = {
 
     if (this.currentGame) {
       try {
-        const answeredList = await DB.getAnsweredPlayersForQuestion(this.currentGame.id, this.currentIndex);
+        const answeredList = await DB.getAnsweredPlayersForQuestion(this.currentGame.id, this.currentIndex, q.id);
         if (answeredList && answeredList.length > 0) {
           if (!this.answeredPlayerSet) this.answeredPlayerSet = new Set();
           answeredList.forEach(item => {
@@ -868,28 +871,54 @@ const Multiplayer = {
       banner.classList.remove('hidden');
     }
 
-    // Highlight correct option card in dark sci-fi neon emerald theme
+    // Highlight ONLY the single correct option card in dark sci-fi neon emerald theme
     const overviewEl = document.getElementById('mpHostAnswersOverview');
     if (overviewEl) {
       const cards = overviewEl.querySelectorAll('.answer-option-btn');
-      const normAns = String(q.correct_answer || '').trim().toUpperCase();
+      
+      // Reset all cards first
+      cards.forEach(card => {
+        card.classList.remove('correct-choice', 'selected-choice', 'wrong-choice');
+        card.style.opacity = '0.55';
+      });
+
+      let correctKey = '';
+      const rawAns = String(q.correct_answer || '').trim();
+      if (rawAns) {
+        const u = rawAns.toUpperCase();
+        if (['A', 'B', 'C', 'D'].includes(u)) {
+          correctKey = u;
+        } else if (u === 'TRUE') {
+          correctKey = 'A';
+        } else if (u === 'FALSE') {
+          correctKey = 'B';
+        } else {
+          ['a', 'b', 'c', 'd'].forEach(k => {
+            const optVal = q['choice_' + k] || q['option_' + k] || q['choice' + k.toUpperCase()] || q['option' + k.toUpperCase()];
+            if (optVal && String(optVal).trim().toLowerCase() === rawAns.toLowerCase()) {
+              correctKey = k.toUpperCase();
+            }
+          });
+        }
+      }
 
       cards.forEach(card => {
         const letterEl = card.querySelector('.badge-letter');
         const cardTextEl = card.querySelector('.option-text');
 
         const letterStr = letterEl ? letterEl.textContent.trim().toUpperCase() : '';
-        const textStr = cardTextEl ? cardTextEl.textContent.trim().toUpperCase() : '';
+        const textStr = cardTextEl ? cardTextEl.textContent.trim() : '';
 
-        const isLetterMatch = letterStr && (normAns === letterStr || normAns.startsWith(letterStr + ':') || normAns.startsWith(letterStr + ' '));
-        const isTextMatch = textStr && (normAns === textStr || normAns.includes(textStr) || textStr.includes(normAns));
+        let isTarget = false;
+        if (correctKey && letterStr === correctKey) {
+          isTarget = true;
+        } else if (rawAns && textStr && textStr.toLowerCase() === rawAns.toLowerCase()) {
+          isTarget = true;
+        }
 
-        if (isLetterMatch || isTextMatch) {
-          card.classList.remove('selected-choice', 'wrong-choice');
+        if (isTarget) {
           card.classList.add('correct-choice');
           card.style.opacity = '1';
-        } else {
-          card.style.opacity = '0.55';
         }
       });
     }

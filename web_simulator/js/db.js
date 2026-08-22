@@ -1695,7 +1695,7 @@ var DB = {
     return gameId;
   },
 
-  async getAnsweredPlayersForQuestion(gameId, questionIndex = 0) {
+  async getAnsweredPlayersForQuestion(gameId, questionIndex = 0, questionId = null) {
     if (!gameId) return [];
     const answeredSet = new Set();
     const realGameId = await this._resolveRealGameId(gameId);
@@ -1725,14 +1725,9 @@ var DB = {
       if (players.length > 0) {
         players.forEach(p => {
           const totalAns = (p.correct_answers || 0) + (p.wrong_answers || 0);
-          const cIndex = p.current_question_index !== undefined && p.current_question_index !== null ? p.current_question_index : -1;
 
-          if (
-            totalAns > questionIndex ||
-            cIndex > questionIndex ||
-            (cIndex === questionIndex && (totalAns > 0 || (p.score || 0) > 0)) ||
-            (questionIndex === 0 && (totalAns > 0 || (p.score || 0) > 0))
-          ) {
+          // A player has ONLY answered question N if total answers submitted is strictly greater than questionIndex N
+          if (totalAns > questionIndex) {
             if (p.id) {
               answeredSet.add(String(p.id).trim());
               answeredSet.add(String(p.id).toLowerCase().trim());
@@ -1750,10 +1745,16 @@ var DB = {
       }
 
       try {
-        const { data: answers } = await supabaseClient
+        let query = supabaseClient
           .from('multiplayer_answers')
-          .select('player_id')
+          .select('player_id, question_id')
           .or(`game_id.eq.${gId}${gameId && gameId !== gId ? `,game_id.eq.${gameId}` : ''}`);
+
+        if (questionId && this.isValidUuid(questionId)) {
+          query = query.eq('question_id', questionId);
+        }
+
+        const { data: answers } = await query;
 
         if (answers && answers.length > 0) {
           answers.forEach(a => {
