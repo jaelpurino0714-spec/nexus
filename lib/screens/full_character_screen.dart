@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../providers/character_provider.dart';
 import '../services/character_service.dart';
 import '../widgets/outfit_selection_modal.dart';
+import '../widgets/mascot_3d_viewer.dart';
 
 class FullCharacterScreen extends ConsumerStatefulWidget {
   const FullCharacterScreen({super.key});
@@ -233,37 +234,20 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
                     ),
                   ),
 
-                  // Large Existing Nexus Character Artwork
+                  // Interactive 3D Mascot Model with Turnaround Views
                   GestureDetector(
                     onTap: () {
                       ref.read(characterProvider.notifier).interactWithCharacter();
                     },
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        // Decorative Platform Base
-                        Container(
-                          height: 40,
-                          width: 180,
-                          margin: const EdgeInsets.only(bottom: 10),
-                          decoration: BoxDecoration(
-                            ellipse: true,
-                            color: stageColor.withOpacity(0.18),
-                          ),
-                        ),
-
-                        // Existing Character Image
-                        Image.asset(
-                          assetPath,
-                          height: 200,
-                          width: 200,
-                          fit: BoxFit.contain,
-                          errorBuilder: (ctx, err, stack) => Text(
-                            stage.icon,
-                            style: const TextStyle(fontSize: 100),
-                          ),
-                        ),
-                      ],
+                    child: Mascot3DViewer(
+                      stage: stage.id == 'baby'
+                          ? MascotStage.baby
+                          : stage.id == 'student'
+                              ? MascotStage.student
+                              : MascotStage.scientist,
+                      activeExpression: 'happy',
+                      height: 240,
+                      showTurnaroundControls: true,
                     ),
                   ),
                   const SizedBox(height: 16),

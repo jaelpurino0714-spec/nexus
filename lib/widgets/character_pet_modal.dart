@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../providers/character_provider.dart';
 import '../services/character_service.dart';
 import 'outfit_selection_modal.dart';
+import 'gender_selection_dialog.dart';
+import 'mascot_3d_viewer.dart';
 
 class CharacterPetModal extends ConsumerStatefulWidget {
   const CharacterPetModal({super.key});
@@ -247,95 +249,17 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                   ),
                   const SizedBox(height: 16),
 
-                  // 3. Central Hero Area: Fluffy Cloud Platform & Interactive Character Artwork
+                  // 3. Central Hero Area: Interactive 3D Mascot Model (Transparent background, turnarounds, 3D rotation)
                   Center(
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        // Soft Fluffy Cloud Platform Base
-                        Container(
-                          width: 240,
-                          height: 150,
-                          margin: const EdgeInsets.only(top: 80),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            gradient: RadialGradient(
-                              colors: [
-                                const Color(0xFFDDD6FE).withOpacity(0.7),
-                                const Color(0xFFF472B6).withOpacity(0.15),
-                                Colors.transparent,
-                              ],
-                              radius: 0.85,
-                            ),
-                          ),
-                        ),
-                        // Cloud Graphic
-                        Positioned(
-                          bottom: 20,
-                          child: Container(
-                            height: 70,
-                            width: 260,
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.8),
-                              borderRadius: BorderRadius.circular(40),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.purple.withOpacity(0.15),
-                                  blurRadius: 20,
-                                  spreadRadius: 4,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        // Character Image inside Hero Scene (Tapping opens 3D Mascot Evolution Showcase)
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                            context.push('/student/mascot-evolution');
-                          },
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                assetPath,
-                                height: 210,
-                                width: 210,
-                                fit: BoxFit.contain,
-                                errorBuilder: (ctx, err, stack) => Text(
-                                  stage.icon,
-                                  style: const TextStyle(fontSize: 110),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                            ],
-                          ),
-                        ),
-
-                        // Left Arrow '<' Button
-                        Positioned(
-                          left: 0,
-                          child: IconButton(
-                            icon: const Icon(Icons.chevron_left, size: 36, color: Colors.teal),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              context.push('/student/mascot-evolution');
-                            },
-                          ),
-                        ),
-
-                        // Right Arrow '>' Button
-                        Positioned(
-                          right: 0,
-                          child: IconButton(
-                            icon: const Icon(Icons.chevron_right, size: 36, color: Colors.teal),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              context.push('/student/mascot-evolution');
-                            },
-                          ),
-                        ),
-                      ],
+                    child: Mascot3DViewer(
+                      stage: stage.id == 'baby'
+                          ? MascotStage.baby
+                          : stage.id == 'student'
+                              ? MascotStage.student
+                              : MascotStage.scientist,
+                      activeExpression: 'happy',
+                      height: 250,
+                      showTurnaroundControls: true,
                     ),
                   ),
                   const SizedBox(height: 12),
