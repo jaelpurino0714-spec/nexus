@@ -1444,6 +1444,16 @@ var DB = {
                 })
                 .eq('id', pId);
             } catch (err) {}
+
+            try {
+              localStorage.setItem('nexus_mp_answer_trigger_' + gameId, JSON.stringify({
+                userUuid: userUuid,
+                displayName: displayName,
+                score: newScore,
+                correct: isCorrect ? 1 : 0,
+                timestamp: Date.now()
+              }));
+            } catch (_) {}
           } else {
             // Player record missing in Supabase - insert now!
             const newPlayerPayload = {
@@ -1659,6 +1669,32 @@ var DB = {
         } catch (e) {}
       }
     }
+  },
+
+  async getAnsweredPlayersForQuestion(gameId, questionIndex = 0) {
+    if (!gameId) return [];
+    const answeredSet = new Set();
+
+    if (supabaseClient) {
+      try {
+        const { data: players } = await supabaseClient
+          .from('multiplayer_players')
+          .select('id, user_id, display_name, current_question_index')
+          .eq('game_id', gameId);
+
+        if (players && players.length > 0) {
+          players.forEach(p => {
+            if ((p.current_question_index || 0) > questionIndex) {
+              if (p.id) answeredSet.add(String(p.id).trim());
+              if (p.user_id) answeredSet.add(String(p.user_id).trim());
+              if (p.display_name) answeredSet.add(String(p.display_name).trim());
+            }
+          });
+        }
+      } catch (e) {}
+    }
+
+    return Array.from(answeredSet);
   },
 
   async updateMultiplayerGameStatus(gameId, status, currentQIndex = 0) {

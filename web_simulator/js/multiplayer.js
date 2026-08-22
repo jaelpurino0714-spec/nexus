@@ -711,6 +711,36 @@ const Multiplayer = {
     });
 
     this.saveCurrentHostAnalytics();
+    this.startHostAnswerSyncPolling(index);
+  },
+
+  startHostAnswerSyncPolling(questionIndex) {
+    if (this.hostAnswerPollInterval) clearInterval(this.hostAnswerPollInterval);
+    if (!this.currentGame || !this.isHost) return;
+
+    const poll = async () => {
+      if (!this.currentGame || !this.isHost) {
+        clearInterval(this.hostAnswerPollInterval);
+        return;
+      }
+      try {
+        const answeredList = await DB.getAnsweredPlayersForQuestion(this.currentGame.id, questionIndex);
+        if (answeredList && answeredList.length > 0) {
+          if (!this.answeredPlayerSet) this.answeredPlayerSet = new Set();
+          answeredList.forEach(item => {
+            if (item) {
+              const str = String(item).trim();
+              this.answeredPlayerSet.add(str);
+              this.answeredPlayerSet.add(str.toLowerCase());
+            }
+          });
+          this.refreshHostPlayerAnswerStatuses();
+        }
+      } catch (e) {}
+    };
+
+    poll();
+    this.hostAnswerPollInterval = setInterval(poll, 1000);
   },
 
   refreshHostPlayerAnswerStatuses() {
@@ -719,7 +749,22 @@ const Multiplayer = {
     const badgeEl = document.getElementById('mpHostResponseBadge');
 
     const total = this.playersList ? this.playersList.length : 0;
-    const answeredCount = this.answeredPlayerSet ? this.answeredPlayerSet.size : 0;
+
+    let answeredCount = 0;
+    if (this.playersList && this.answeredPlayerSet) {
+      this.playersList.forEach(p => {
+        const pId = p.id || p.user_id || p.playerId;
+        const pName = p.playerName || p.display_name || p.name || 'Player';
+        const pNameLower = String(pName).toLowerCase().trim();
+
+        const hasAns = (
+          (pId && (this.answeredPlayerSet.has(String(pId).trim()) || this.answeredPlayerSet.has(String(pId).toLowerCase().trim()))) ||
+          (pName && (this.answeredPlayerSet.has(String(pName).trim()) || this.answeredPlayerSet.has(pNameLower))) ||
+          (p.user_id && this.answeredPlayerSet.has(String(p.user_id).trim()))
+        );
+        if (hasAns) answeredCount++;
+      });
+    }
 
     if (countEl) countEl.textContent = `${answeredCount} / ${total} Answered`;
     if (badgeEl) badgeEl.textContent = `${answeredCount} / ${total} Answered`;
@@ -732,9 +777,12 @@ const Multiplayer = {
         this.playersList.forEach(p => {
           const pId = p.id || p.user_id || p.playerName;
           const pName = p.playerName || p.display_name || p.name || 'Player';
+          const pNameLower = String(pName).toLowerCase().trim();
+
           const hasAnswered = this.answeredPlayerSet && (
-            (pId && this.answeredPlayerSet.has(String(pId).trim())) ||
-            (pName && this.answeredPlayerSet.has(String(pName).trim()))
+            (pId && (this.answeredPlayerSet.has(String(pId).trim()) || this.answeredPlayerSet.has(String(pId).toLowerCase().trim()))) ||
+            (pName && (this.answeredPlayerSet.has(String(pName).trim()) || this.answeredPlayerSet.has(pNameLower))) ||
+            (p.user_id && this.answeredPlayerSet.has(String(p.user_id).trim()))
           );
 
           const card = document.createElement('div');
@@ -973,11 +1021,15 @@ const Multiplayer = {
 
   onPlayerAnswered(data) {
     if (!this.isHost || !data) return;
-    const { playerId, playerName, pointsEarned, totalScore, isCorrect } = data;
+    const { playerId, playerName, user_id, display_name, pointsEarned, totalScore, isCorrect } = data;
 
     if (!this.answeredPlayerSet) this.answeredPlayerSet = new Set();
-    const key = (playerId && String(playerId).trim()) || (playerName && String(playerName).trim());
-    if (key) this.answeredPlayerSet.add(key);
+    const keys = [playerId, playerName, user_id, display_name].filter(Boolean);
+    keys.forEach(k => {
+      const str = String(k).trim();
+      this.answeredPlayerSet.add(str);
+      this.answeredPlayerSet.add(str.toLowerCase());
+    });
 
     if (this.playersList && this.playersList.length > 0) {
       let p = this.playersList.find(item => 
@@ -1683,8 +1735,25 @@ const Multiplayer = {
 
 if (typeof window !== 'undefined') {
   window.addEventListener('storage', (e) => {
-    if (e.key && (e.key.startsWith('nexus_mp_sync_trigger_') || e.key.startsWith('nexus_lobby_'))) {
+    if (e.key && (e.key.startsWith('nexus_mp_sync_trigger_') || e.key.startsWith('nexus_mp_answer_trigger_') || e.key.startsWith('nexus_lobby_'))) {
       if (typeof Multiplayer !== 'undefined' && Multiplayer.isHost && Multiplayer.currentGame) {
+        if (e.key.startsWith('nexus_mp_answer_trigger_') && e.newValue) {
+          try {
+            const data = JSON.parse(e.newValue);
+            if (data && (data.userUuid || data.displayName)) {
+              if (!Multiplayer.answeredPlayerSet) Multiplayer.answeredPlayerSet = new Set();
+              if (data.userUuid) {
+                Multiplayer.answeredPlayerSet.add(String(data.userUuid).trim());
+                Multiplayer.answeredPlayerSet.add(String(data.userUuid).toLowerCase().trim());
+              }
+              if (data.displayName) {
+                Multiplayer.answeredPlayerSet.add(String(data.displayName).trim());
+                Multiplayer.answeredPlayerSet.add(String(data.displayName).toLowerCase().trim());
+              }
+              Multiplayer.refreshHostPlayerAnswerStatuses();
+            }
+          } catch (_) {}
+        }
         if (e.key.startsWith('nexus_mp_sync_trigger_') && e.newValue) {
           try {
             const data = JSON.parse(e.newValue);
