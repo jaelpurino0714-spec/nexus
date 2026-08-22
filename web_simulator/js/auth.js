@@ -150,7 +150,7 @@ const Auth = {
     const submitBtn = document.getElementById('signInSubmitBtn');
 
     if (!username || !password) {
-      this.showError('Please fill out both Username and Password.');
+      this.showError('Please fill out both Login Identifier and Password.');
       return;
     }
 
@@ -163,98 +163,67 @@ const Auth = {
       let profile = null;
 
       if (client) {
-        const internalEmail = this.formatInternalEmail(username);
-        let authUser = null;
-        let isRateLimited = false;
+        // 1. First, check if the account exists in Supabase profiles table
+        const { data: dbProf } = await client
+          .from('profiles')
+          .select('*')
+          .or(`username.ilike.${username},nickname.ilike.${username},username.eq.${username},nickname.eq.${username}`)
+          .maybeSingle();
 
+        if (!dbProf) {
+          throw new Error(`Account with Nickname "${username}" does not exist in Supabase. Please check spelling or Sign Up.`);
+        }
+
+        // 2. Account exists in Supabase! Determine actual username/nickname for auth email
+        const targetUsername = dbProf.nickname || dbProf.username || username;
+        const internalEmail = this.formatInternalEmail(targetUsername);
+
+        // 3. Attempt Supabase Auth login
         if (client.auth) {
           try {
-            const { data, error } = await client.auth.signInWithPassword({
+            const { data: authData, error: authErr } = await client.auth.signInWithPassword({
               email: internalEmail,
               password: password
             });
 
-            if (error) {
-              if (error.message && (error.message.toLowerCase().includes('rate limit') || error.status === 429)) {
-                isRateLimited = true;
-                console.warn('Supabase auth rate limit hit, verifying account against profiles table.');
-              } else {
-                // Check if username or nickname exists in profiles for exact error messaging
-                const { data: profCheck } = await client
-                  .from('profiles')
-                  .select('id, username, nickname')
-                  .or(`username.eq.${username},nickname.eq.${username}`)
-                  .maybeSingle();
-
-                if (!profCheck) {
-                  throw new Error(`Account with username "${username}" does not exist in Supabase. Please check spelling or Sign Up.`);
-                } else {
-                  throw new Error('Incorrect password for this account. Please try again.');
-                }
-              }
-            } else if (data && data.user) {
-              authUser = data.user;
+            if (!authErr && authData && authData.user) {
+              profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(authData.user.id) : null;
             }
           } catch (e) {
-            if (e.message && (e.message.includes('does not exist') || e.message.includes('Incorrect password'))) {
-              throw e;
-            }
-            console.warn('Supabase sign-in exception:', e);
+            console.warn('Supabase Auth signIn exception:', e);
           }
         }
 
-        if (authUser) {
-          profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(authUser.id) : null;
-          if (!profile) {
-            const userRole = (authUser.user_metadata && authUser.user_metadata.role) ? authUser.user_metadata.role : 'student';
-            const fullName = (authUser.user_metadata && (authUser.user_metadata.real_name || authUser.user_metadata.full_name)) ? (authUser.user_metadata.real_name || authUser.user_metadata.full_name) : username;
-            profile = {
-              id: authUser.id,
-              role: userRole,
-              name: fullName,
-              real_name: fullName,
-              full_name: fullName,
-              nickname: username,
-              username: username,
-              createdAt: new Date().toISOString()
-            };
+        // 4. If Supabase Auth didn't return session or failed password check, verify stored password in profile record
+        if (!profile) {
+          if (dbProf.password && dbProf.password !== password) {
+            throw new Error('Incorrect password for this account. Please try again.');
           }
-        } else {
-          // Check profiles table directly by username or nickname in Supabase
-          const { data: dbProf } = await client
-            .from('profiles')
-            .select('*')
-            .or(`username.eq.${username},nickname.eq.${username}`)
-            .maybeSingle();
-
-          if (dbProf) {
-            if (dbProf.password && dbProf.password !== password) {
-              throw new Error('Incorrect password for this account. Please try again.');
-            }
-            profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(dbProf.id) : {
-              id: dbProf.id,
-              role: dbProf.role || 'student',
-              name: dbProf.real_name || dbProf.full_name || dbProf.name || username,
-              real_name: dbProf.real_name || dbProf.full_name || dbProf.name || username,
-              full_name: dbProf.full_name || dbProf.real_name || dbProf.name || username,
-              nickname: dbProf.nickname || dbProf.username || username,
-              username: dbProf.username || dbProf.nickname || username,
-              password: password,
-              createdAt: dbProf.created_at || new Date().toISOString()
-            };
-          } else if (!isRateLimited) {
-            throw new Error(`Account with username "${username}" does not exist in Supabase. Please Sign Up.`);
-          }
+          profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(dbProf.id) : {
+            id: dbProf.id,
+            role: dbProf.role || 'student',
+            name: dbProf.real_name || dbProf.full_name || dbProf.name || targetUsername,
+            real_name: dbProf.real_name || dbProf.full_name || dbProf.name || targetUsername,
+            full_name: dbProf.full_name || dbProf.real_name || dbProf.name || targetUsername,
+            nickname: dbProf.nickname || dbProf.username || targetUsername,
+            username: dbProf.username || dbProf.nickname || targetUsername,
+            password: password,
+            createdAt: dbProf.created_at || new Date().toISOString()
+          };
         }
       }
 
-      // Fallback to local profile check if offline
+      // 5. Offline / Local fallback if client was unavailable
       if (!profile) {
         const localProf = db.getStudentProfile ? db.getStudentProfile() : null;
-        if (localProf && localProf.username && localProf.username.toLowerCase() === username) {
+        if (localProf && (localProf.username || localProf.nickname) &&
+            (localProf.username.toLowerCase() === username || (localProf.nickname && localProf.nickname.toLowerCase() === username))) {
+          if (localProf.password && localProf.password !== password) {
+            throw new Error('Incorrect password for this account. Please try again.');
+          }
           profile = localProf;
         } else {
-          throw new Error(`Account with username "${username}" does not exist. Please Sign Up.`);
+          throw new Error(`Account with Nickname "${username}" does not exist. Please Sign Up.`);
         }
       }
 
