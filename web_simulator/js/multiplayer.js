@@ -467,10 +467,15 @@ const Multiplayer = {
         online.forEach(p => {
           const card = document.createElement('div');
           card.className = 'lobby-part-card';
-          const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%23311042'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
+          card.style.background = 'rgba(25, 17, 50, 0.95)';
+          card.style.border = '1.5px solid rgba(139, 92, 246, 0.35)';
+          card.style.borderRadius = '16px';
+          card.style.padding = '12px 16px';
+          card.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.35)';
+          const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%232E1065'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
           card.innerHTML = `
             <div class="part-info-left">
-              <img src="${p.photoUrl || defaultAvatar}" class="part-avatar" alt="${p.playerName}">
+              <img src="${p.photoUrl || defaultAvatar}" class="part-avatar" style="width:36px; height:36px; border-radius:50%; border:1.5px solid #7C3AED;" alt="${p.playerName}">
               <div>
                 <h5 style="margin:0; font-size:0.95rem; color:#FFFFFF; font-weight:700;">${p.playerName}</h5>
                 <span style="font-size:0.75rem; color:#34D399; font-weight:600;">● Online in Lobby</span>
@@ -679,19 +684,23 @@ const Multiplayer = {
 
           const card = document.createElement('div');
           card.className = 'lobby-part-card';
-          card.style.padding = '10px 14px';
+          card.style.background = 'rgba(25, 17, 50, 0.95)';
+          card.style.border = '1.5px solid rgba(139, 92, 246, 0.35)';
+          card.style.borderRadius = '16px';
+          card.style.padding = '12px 16px';
+          card.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.35)';
 
           const statusBadge = hasAnswered 
-            ? '<span style="color:#34D399; background:rgba(16, 185, 129, 0.2); border:1px solid rgba(16, 185, 129, 0.4); padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">🟢 Answered</span>'
-            : '<span style="color:#C084FC; background:rgba(168, 85, 247, 0.2); border:1px solid rgba(168, 85, 247, 0.4); padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">⏳ Thinking...</span>';
+            ? '<span style="color:#6EE7B7; background:rgba(16, 185, 129, 0.25); border:1px solid rgba(16, 185, 129, 0.4); padding:6px 14px; border-radius:20px; font-size:0.8rem; font-weight:700;">🟢 Answered</span>'
+            : '<span style="color:#E9D5FF; background:rgba(124, 58, 237, 0.25); border:1px solid rgba(168, 85, 247, 0.4); padding:6px 14px; border-radius:20px; font-size:0.8rem; font-weight:700;">⏳ Thinking...</span>';
 
-          const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%23311042'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
+          const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%232E1065'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
 
           card.innerHTML = `
             <div class="part-info-left" style="justify-content:space-between; width:100%; align-items:center;">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <img src="${p.photoUrl || defaultAvatar}" class="part-avatar" style="width:32px; height:32px;" alt="${pName}">
-                <h5 style="margin:0; font-size:0.9rem; color:#FFFFFF; font-weight:700;">${pName}</h5>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <img src="${p.photoUrl || defaultAvatar}" class="part-avatar" style="width:36px; height:36px; border-radius:50%; border:1.5px solid #7C3AED;" alt="${pName}">
+                <h5 style="margin:0; font-size:0.95rem; color:#FFFFFF; font-weight:700;">${pName}</h5>
               </div>
               <div style="display:flex; align-items:center;">
                 ${statusBadge}

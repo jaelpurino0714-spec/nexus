@@ -834,14 +834,19 @@ const Quiz = {
       participants.forEach((p, idx) => {
         const card = document.createElement('div');
         card.className = 'lobby-part-card';
+        card.style.background = 'rgba(25, 17, 50, 0.95)';
+        card.style.border = '1.5px solid rgba(139, 92, 246, 0.35)';
+        card.style.borderRadius = '16px';
+        card.style.padding = '12px 16px';
+        card.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.35)';
         const displayName = p.name || p.display_name || 'Student Player';
         const photoUrl = p.photo || p.photo_url || null;
-        const partAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%23311042'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
+        const partAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%232E1065'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
         card.innerHTML = `
           <div class="part-info-left">
-            <img src="${photoUrl || partAvatar}" class="part-avatar" alt="${displayName}">
+            <img src="${photoUrl || partAvatar}" class="part-avatar" style="width:36px; height:36px; border-radius:50%; border:1.5px solid #7C3AED;" alt="${displayName}">
             <div>
-              <h5 style="margin:0; font-size:0.85rem; color:#FFFFFF; font-weight:700;">${displayName}</h5>
+              <h5 style="margin:0; font-size:0.95rem; color:#FFFFFF; font-weight:700;">${displayName}</h5>
               <span style="font-size:0.72rem; color:#A5A3C4;">${p.grade || 'Student'}</span>
             </div>
           </div>
