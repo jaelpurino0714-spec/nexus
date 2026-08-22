@@ -2192,6 +2192,28 @@
 }
 
 /* User Selection States (Dark Neon Sci-Fi Theme Match) */
+.answer-option-btn.selected-choice {
+  background: linear-gradient(135deg, rgba(58, 20, 120, 0.98) 0%, rgba(38, 12, 80, 0.98) 100%) !important;
+  border-color: #C084FC !important;
+  box-shadow: 0 0 24px rgba(168, 85, 247, 0.6) !important;
+  opacity: 1 !important;
+}
+
+.answer-option-btn.selected-choice .option-text,
+.answer-option-btn.selected-choice span:not(.option-badge-pill):not(.badge-letter) {
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+}
+
+.answer-option-btn.selected-choice .option-badge-pill {
+  background: #7C3AED !important;
+  border-color: #C084FC !important;
+}
+
+.answer-option-btn.selected-choice .badge-letter {
+  color: #FFFFFF !important;
+}
+
 .answer-option-btn.wrong-choice {
   background: linear-gradient(135deg, rgba(42, 10, 24, 0.98) 0%, rgba(30, 7, 18, 0.98) 100%) !important;
   border-color: #F43F5E !important;

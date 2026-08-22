@@ -998,6 +998,7 @@ const Multiplayer = {
         b.style.background = '';
         b.style.cursor = 'pointer';
         b.style.touchAction = 'manipulation';
+        b.classList.remove('selected-choice', 'correct-choice', 'wrong-choice');
       });
     }
   },
@@ -1008,8 +1009,9 @@ const Multiplayer = {
     this.disablePlayerChoices();
 
     if (btnEl) {
-      btnEl.style.borderColor = '#6D28D9';
-      btnEl.style.background = '#EDE9FE';
+      btnEl.style.borderColor = '';
+      btnEl.style.background = '';
+      btnEl.classList.add('selected-choice');
       btnEl.style.opacity = '1';
     }
 
