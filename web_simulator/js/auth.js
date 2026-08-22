@@ -228,6 +228,9 @@ const Auth = {
             .maybeSingle();
 
           if (dbProf) {
+            if (dbProf.password && dbProf.password !== password) {
+              throw new Error('Incorrect password for this account. Please try again.');
+            }
             profile = db.fetchProfileFromSupabase ? await db.fetchProfileFromSupabase(dbProf.id) : {
               id: dbProf.id,
               role: dbProf.role || 'student',
@@ -236,6 +239,7 @@ const Auth = {
               full_name: dbProf.full_name || dbProf.real_name || dbProf.name || username,
               nickname: dbProf.nickname || dbProf.username || username,
               username: dbProf.username || dbProf.nickname || username,
+              password: password,
               createdAt: dbProf.created_at || new Date().toISOString()
             };
           } else if (!isRateLimited) {
@@ -420,6 +424,7 @@ const Auth = {
             full_name: fullName,
             nickname: username,
             username: username,
+            password: password,
             photo: this.uploadedPhotoData || null,
             createdAt: new Date().toISOString()
           };
@@ -433,6 +438,7 @@ const Auth = {
               name: fullName,
               nickname: username,
               username: username,
+              password: password,
               photo_url: (this.uploadedPhotoData && this.uploadedPhotoData.length < 50000) ? this.uploadedPhotoData : null,
               created_at: new Date().toISOString()
             });

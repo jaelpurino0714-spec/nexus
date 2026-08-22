@@ -423,6 +423,7 @@ var DB = {
           full_name: profile.full_name || profile.real_name || profile.name || '',
           nickname: profile.nickname || profile.username || '',
           username: profile.username || profile.nickname || '',
+          password: profile.password || '',
           grade_level: profile.gradeLevel || '',
           section: profile.section || '',
           photo_url: (profile.photo && profile.photo.length < 500000) ? profile.photo : null,

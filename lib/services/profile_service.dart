@@ -122,7 +122,9 @@ class ProfileService {
         );
 
         try {
-          await _client.from('profiles').upsert(profile.toJson());
+          final payload = profile.toJson();
+          payload['password'] = password;
+          await _client.from('profiles').upsert(payload);
         } catch (e) {
           print("Profiles table insert warning: $e");
         }
