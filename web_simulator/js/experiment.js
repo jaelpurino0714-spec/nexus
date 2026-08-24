@@ -4054,8 +4054,8 @@ const Experiment = {
         let itemsHtml = items.map(item => {
           const sel = selections[item.id] || '';
           return `
-            <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:10px; margin-bottom:8px;">
-              <div style="font-weight:800; font-size:0.88rem; margin-bottom:4px;">${item.name}</div>
+            <div style="background: rgba(30, 27, 75, 0.4); border: 1.5px solid #231648; border-radius: 18px; padding: 14px 16px; margin-bottom: 12px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);">
+              <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; color: #FFFFFF; display: flex; align-items: center; gap: 8px;">${item.name}</div>
               <div class="waste-bin-group">
                 <button class="waste-bin-btn bio ${sel === 'bio' ? 'active' : ''}" onclick="Experiment.selectWasteBin('${item.id}', 'bio')">🟢 Bio</button>
                 <button class="waste-bin-btn rec ${sel === 'rec' ? 'active' : ''}" onclick="Experiment.selectWasteBin('${item.id}', 'rec')">🔵 Recyclable</button>
@@ -4066,12 +4066,12 @@ const Experiment = {
         }).join('');
 
         html += `
-          <div style="margin:10px 0;">
-            <div style="font-size:0.82rem; font-weight:800; color:#334155; margin-bottom:6px;">Select Bin for Each Household Waste Item:</div>
+          <div style="margin: 10px 0;">
+            <div style="font-size: 0.88rem; font-weight: 800; color: #E0E7FF; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">🍃 Select a bin for each household waste item:</div>
             ${itemsHtml}
           </div>
 
-          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startSustainabilitySimulation()">
+          <button class="primary-btn start-reaction-btn ready" style="background: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%); color: #FFFFFF; border: none; padding: 14px; border-radius: 18px; font-size: 1.05rem; font-weight: 800; cursor: pointer; width: 100%; box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45); margin-top: 10px; transition: all 0.2s;" onclick="Experiment.startSustainabilitySimulation()">
             ♻️ [ PROCESS WASTE ]
           </button>
         </div>
@@ -4089,33 +4089,33 @@ const Experiment = {
 
         html += `
           <div class="exp-result-container physical-result">
-            <div class="homeo-body-card" style="margin:0; width:100%;">
+            <div class="homeo-body-card" style="margin:0; width:100%; background: rgba(30, 27, 75, 0.5); border: 1.5px solid #10B981; border-radius: 20px; padding: 16px;">
               <div class="homeo-body-icon">♻️</div>
-              <div class="homeo-temp-display" style="background:#DCFCE7; border-color:#86EFAC; color:#15803D;">
+              <div class="homeo-temp-display" style="background: rgba(6, 78, 59, 0.4); border-color: #10B981; color: #34D399; font-weight: 800; font-size: 1rem; border-radius: 14px; padding: 10px 14px;">
                 Waste Diverted from Landfill: ${divertPercentage}%
               </div>
-              <div style="font-size:0.82rem; font-weight:700; color:#166534; margin-top:6px;">
+              <div style="font-size: 0.84rem; font-weight: 700; color: #A7F3D0; margin-top: 8px; text-align: center;">
                 ♻️ Recyclables → Recycling | 🌱 Biodegradable → Composting | 🗑️ Residual → Proper Disposal
               </div>
             </div>
 
-            <div class="result-badge maintained" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
+            <div class="result-badge maintained" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFFFFF; font-weight: 800; font-size: 0.9rem; padding: 10px 18px; border-radius: 16px; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);">
               ♻️ SUSTAINABLE WASTE MANAGEMENT
             </div>
           </div>
 
-          <div class="exp-explanation-section" style="margin-top:14px;">
-            <div class="exp-explain-block">
-              <h5>What happened?</h5>
-              <p>Proper waste segregation makes it easier to recycle materials and compost biodegradable waste. This reduces the amount of waste sent to landfills and helps conserve resources.</p>
+          <div class="exp-explanation-section" style="margin-top: 14px;">
+            <div class="exp-explain-block" style="background: rgba(30, 27, 75, 0.4); border: 1.5px solid #231648; border-radius: 18px; padding: 16px; color: #E2E8F0;">
+              <h5 style="color: #38BDF8; font-weight: 800; font-size: 1rem; margin-bottom: 6px;">What happened?</h5>
+              <p style="font-size: 0.88rem; color: #CBD5E1; line-height: 1.5;">Proper waste segregation makes it easier to recycle materials and compost biodegradable waste. This reduces the amount of waste sent to landfills and helps conserve resources.</p>
             </div>
 
-            <div class="exp-key-idea-box chemical-key">
+            <div class="exp-key-idea-box chemical-key" style="background: rgba(30, 27, 75, 0.5); border: 1.5px solid #312E81; border-radius: 16px; padding: 12px 16px; color: #FDE68A; font-weight: 800; margin-top: 10px;">
               💡 <b>Key Idea:</b> Reduce ➔ Reuse ➔ Recycle
             </div>
           </div>
 
-          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetSustainabilityActivity()">
+          <button class="secondary-btn reset-exp-btn" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid #312E81; color: #E0E7FF; font-weight: 800; padding: 12px; border-radius: 16px; width: 100%; margin-top: 14px; cursor: pointer;" onclick="Experiment.resetSustainabilityActivity()">
             🔄 Reset Experiment
           </button>
         </div>
@@ -4124,10 +4124,10 @@ const Experiment = {
     } else if (mode === 'energy') {
       html += `
         <div class="exp-activity-card">
-          <div class="exp-sub-title">⚡ EXPERIMENT 2 — Household Energy Conservation</div>
-          <div class="exp-explain-block">
-            <p style="font-size:0.88rem; color:#E9D5FF; font-weight:700;">
-              <b>Goal:</b> Demonstrate how small changes in household energy use can reduce electricity consumption and environmental impact.
+          <div class="exp-sub-title" style="font-family: var(--font-heading); color: #FFFFFF; font-size: 1.25rem; font-weight: 800; margin-bottom: 14px; text-align: center;">⚡ EXPERIMENT 2 — Household Energy Conservation</div>
+          <div class="exp-explain-block" style="background: rgba(30, 27, 75, 0.5); border: 1.5px solid #312E81; border-left: 5px solid #8B5CF6; border-radius: 18px; padding: 16px; margin-bottom: 14px;">
+            <p style="font-size: 0.88rem; color: #F3E8FF; font-weight: 600; line-height: 1.5;">
+              <b style="color: #C084FC;">Goal:</b> Demonstrate how small changes in household energy use can reduce electricity consumption and environmental impact.
             </p>
           </div>
       `;
@@ -4145,9 +4145,9 @@ const Experiment = {
         if (!sw.unplug) kwh += 1; // phantom load
 
         html += `
-          <div style="margin:10px 0;">
-            <div class="homeo-temp-display" style="margin-bottom:10px; font-size:1.05rem;">
-              ⚡ Current Daily Energy Use: ${kwh} kWh
+          <div style="margin: 10px 0;">
+            <div class="homeo-temp-display" style="margin-bottom: 14px; font-size: 1.05rem; background: rgba(30, 27, 75, 0.5); border: 1.5px solid #1E40AF; border-radius: 16px; color: #38BDF8; font-weight: 800; padding: 12px 16px; display: flex; align-items: center; gap: 8px;">
+              ⚡ Current Daily Energy Use: <span style="color: #38BDF8; font-weight: 900;">${kwh} kWh</span>
             </div>
 
             <div class="appliance-switch-card ${!sw.lights ? 'saved' : ''}">
@@ -4166,13 +4166,13 @@ const Experiment = {
 
             <div class="appliance-switch-card ${sw.unplug ? 'saved' : ''}">
               <span>🔌 Unplug unused devices (-1 kWh)</span>
-              <button class="toggle-switch-btn ${!sw.unplug ? 'on' : 'off'}" onclick="Experiment.toggleEnergySwitch('unplug')">
+              <button class="toggle-switch-btn ${!sw.unplug ? 'plugged' : 'off'}" onclick="Experiment.toggleEnergySwitch('unplug')">
                 ${!sw.unplug ? 'PLUGGED' : 'UNPLUGGED'}
               </button>
             </div>
           </div>
 
-          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startSustainabilitySimulation()">
+          <button class="primary-btn start-reaction-btn ready" style="background: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%); color: #FFFFFF; border: none; padding: 14px; border-radius: 18px; font-size: 1.05rem; font-weight: 800; cursor: pointer; width: 100%; box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45); margin-top: 14px; transition: all 0.2s;" onclick="Experiment.startSustainabilitySimulation()">
             ⚡ [ CALCULATE SAVINGS ]
           </button>
         </div>
