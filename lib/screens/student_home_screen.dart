@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../providers/character_provider.dart';
 import '../widgets/character_pet_modal.dart';
-import '../widgets/floating_companion_widget.dart';
 import '../widgets/gender_selection_dialog.dart';
 
 class StudentHomeScreen extends ConsumerStatefulWidget {
@@ -172,7 +171,6 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
               ],
             ),
           ),
-          const FloatingCompanionWidget(),
         ],
       ),
     );
