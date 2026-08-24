@@ -5,14 +5,14 @@ Author: Expert Python Graphics Programmer
 Requirements: pygame-ce, Pillow (optional for GIF export)
 
 Description:
-Procedurally renders a cute, high-detail 3D-styled Chibi Robot Scientist based on visual specs:
-- Cute helmet with dark visor, glossy purple anime eyes, pink blush cheeks & glowing ear cups
-- Swept organic pompadour hair with blue-purple-pink neon gradient
-- White lab coat with lapels, black inner suit, and glowing cyan atom emblem
-- Right hand holding a glowing glass test tube with swirling neon liquid & upward vapor smoke
-- Left hand holding a sleek dark tech tablet displaying a glowing atomic symbol
-- Dark space background with dynamic floating star dust & radial backlight
-- Looping hover/float animation, vapor physics, and eye shine/blink cycles
+Procedurally renders a cute, high-detail 3D-styled Chibi Robot Scientist with a 5-second
+seamless looping idle floating animation and realistic secondary motion physics:
+- Weightless vertical float with smooth ease-in-out at peak and valley
+- Subtle horizontal body sway and 3D rotational tilt
+- Delayed secondary arm/object inertia (test tube and tech tablet lag behind body float)
+- Leg/feet swinging momentum following body movement
+- Flaring lab coat flaps and soft hair dynamics
+- Automatic eye blink and vapor steam particles rising from liquid
 """
 
 import math
@@ -29,7 +29,8 @@ pygame.font.init()
 # Display Configuration
 WIDTH, HEIGHT = 800, 950
 FPS = 60
-TITLE = "Chibi Robot Scientist - Animated Procedural Graphics"
+LOOP_DURATION = 5.0  # 5-second seamless loop duration
+TITLE = "Chibi Robot Scientist - Floating Idle Animation"
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption(TITLE)
 clock = pygame.time.Clock()
@@ -74,7 +75,6 @@ def draw_atom_symbol(surface, center, radius, primary_color, orbit_angle=0.0, al
         ocx, ocy = orbit_w, orbit_w
         
         rect = pygame.Rect(ocx - orbit_w // 2, ocy - orbit_h // 2, orbit_w, orbit_h)
-        # Outer glow line
         pygame.draw.ellipse(orbit_surf, (*primary_color, int(alpha * 0.4)), rect.inflate(4, 4), 5)
         pygame.draw.ellipse(orbit_surf, (*primary_color, alpha), rect, 3)
         
@@ -121,7 +121,6 @@ class VaporParticle:
         progress = 1.0 - (self.life / self.max_life)
         alpha = int(210 * math.sin(progress * math.pi))
         
-        # Cyan -> Magenta -> Purple gradient
         if progress < 0.45:
             t = progress / 0.45
             r = int(COLOR_CYAN[0] * (1 - t) + COLOR_MAGENTA[0] * t)
@@ -135,10 +134,8 @@ class VaporParticle:
 
         pr = int(self.radius)
         p_surf = pygame.Surface((pr * 4, pr * 4), pygame.SRCALPHA)
-        # Soft outer cloud
         pygame.draw.circle(p_surf, (r, g, b, alpha // 3), (pr * 2, pr * 2), pr * 2)
         pygame.draw.circle(p_surf, (r, g, b, alpha // 2), (pr * 2, pr * 2), int(pr * 1.3))
-        # Inner core sparkle
         pygame.draw.circle(p_surf, (255, 255, 255, alpha), (pr * 2, pr * 2), max(1, pr // 3))
         surface.blit(p_surf, (int(self.x - pr * 2), int(self.y - pr * 2)))
 
@@ -166,50 +163,46 @@ class StarParticle:
         pygame.draw.circle(s_surf, (255, 255, 255, alpha), (8, 8), int(self.radius))
         surface.blit(s_surf, (int(self.x - 8), int(self.y - 8)))
 
-# --- Chibi Character Class ---
+# --- Chibi Character Renderer ---
 
 class ChibiRobotScientist:
-    """High-quality procedural renderer for the Chibi Robot Scientist."""
+    """High-quality procedural renderer for the Chibi Robot Scientist with 5s floating idle animation."""
     def __init__(self, center_x, center_y):
         self.cx = center_x
         self.cy = center_y
         self.vapor_particles = [VaporParticle(0, 0) for _ in range(45)]
         self.stars = [StarParticle() for _ in range(70)]
 
-    def draw_organic_hair(self, surface, x, y):
-        """Renders organic curved hair tufts with vibrant blue-purple-pink neon gradients."""
+    def draw_organic_hair(self, surface, x, y, hair_tilt=0.0):
+        """Renders organic curved hair tufts with soft vertical compression and tilt."""
         hair_x = x - 10
         hair_y = y - 165
         
-        # --- Back Pink Layer ---
+        # Back Pink Layer
         pink_surf = pygame.Surface((160, 140), pygame.SRCALPHA)
         pygame.draw.ellipse(pink_surf, COLOR_MAGENTA, (20, 20, 120, 90))
         pygame.draw.circle(pink_surf, COLOR_MAGENTA, (110, 45), 35)
-        rotated_pink = pygame.transform.rotate(pink_surf, -22)
-        surface.blit(rotated_pink, (hair_x + 10, hair_y - 45))
+        surface.blit(pygame.transform.rotate(pink_surf, -22 + hair_tilt), (hair_x + 10, hair_y - 45))
 
-        # --- Middle Purple Layer ---
+        # Middle Purple Layer
         purple_surf = pygame.Surface((170, 150), pygame.SRCALPHA)
         pygame.draw.ellipse(purple_surf, COLOR_PURPLE, (15, 25, 130, 95))
         pygame.draw.circle(purple_surf, COLOR_PURPLE, (75, 40), 45)
-        rotated_purple = pygame.transform.rotate(purple_surf, -12)
-        surface.blit(rotated_purple, (hair_x - 30, hair_y - 50))
+        surface.blit(pygame.transform.rotate(purple_surf, -12 + hair_tilt), (hair_x - 30, hair_y - 50))
 
-        # --- Front Cyan Swept Crest ---
+        # Front Cyan Swept Crest
         cyan_surf = pygame.Surface((180, 160), pygame.SRCALPHA)
         pygame.draw.ellipse(cyan_surf, COLOR_CYAN, (10, 30, 140, 100))
         pygame.draw.circle(cyan_surf, COLOR_CYAN, (45, 50), 50)
-        rotated_cyan = pygame.transform.rotate(cyan_surf, 8)
-        surface.blit(rotated_cyan, (hair_x - 85, hair_y - 45))
+        surface.blit(pygame.transform.rotate(cyan_surf, 8 + hair_tilt), (hair_x - 85, hair_y - 45))
 
-        # --- Shiny Specular Hair Highlight ---
+        # Shiny Specular Hair Highlight
         hi_surf = pygame.Surface((120, 60), pygame.SRCALPHA)
         pygame.draw.ellipse(hi_surf, (255, 255, 255, 160), (10, 10, 100, 35))
-        rot_hi = pygame.transform.rotate(hi_surf, -15)
-        surface.blit(rot_hi, (hair_x - 45, hair_y - 35))
+        surface.blit(pygame.transform.rotate(hi_surf, -15 + hair_tilt), (hair_x - 45, hair_y - 35))
 
-    def draw_head(self, surface, x, y, blink_factor, time_sec):
-        """Draws helmet, visor, glowing eyes, cheek blush, ear cups & hair crest."""
+    def draw_head(self, surface, x, y, blink_factor, time_sec, hair_tilt=0.0):
+        """Draws helmet, visor, glossy eyes, cheek blush, ear cups & hair crest."""
         
         # Helmet shadow glow
         h_shadow = pygame.Surface((340, 290), pygame.SRCALPHA)
@@ -219,7 +212,6 @@ class ChibiRobotScientist:
         # 1. Main White Helmet Base
         helmet_rect = pygame.Rect(x - 148, y - 160, 296, 235)
         pygame.draw.ellipse(surface, (230, 235, 248), helmet_rect)
-        # Top specular shine
         pygame.draw.ellipse(surface, (255, 255, 255), helmet_rect.inflate(-20, -20))
 
         # 2. Side Ear Cups (Headphones with Cyan/Magenta Glow Rings)
@@ -227,12 +219,10 @@ class ChibiRobotScientist:
             ear_x = x + side * 144
             ear_y = y - 32
             
-            # Ear ambient glow
             e_glow = pygame.Surface((90, 90), pygame.SRCALPHA)
             pygame.draw.circle(e_glow, (0, 225, 255, 90), (45, 45), 42)
             surface.blit(e_glow, (ear_x - 45, ear_y - 45))
             
-            # Outer casing
             pygame.draw.circle(surface, (25, 20, 45), (ear_x, ear_y), 34)
             pygame.draw.circle(surface, COLOR_CYAN, (ear_x, ear_y), 30, 5)
             pygame.draw.circle(surface, COLOR_MAGENTA, (ear_x, ear_y), 18)
@@ -241,12 +231,10 @@ class ChibiRobotScientist:
         # 3. Visor Screen & Cyan Frame
         visor_rect = pygame.Rect(x - 120, y - 115, 240, 138)
         
-        # Visor outer cyan neon glow rim
         v_glow = pygame.Surface((280, 178), pygame.SRCALPHA)
         pygame.draw.ellipse(v_glow, (0, 225, 255, 130), (10, 10, 260, 158), 16)
         surface.blit(v_glow, (x - 140, y - 125))
 
-        # Outer Frame & Interior Dark Glass
         pygame.draw.ellipse(surface, COLOR_CYAN, visor_rect.inflate(14, 14))
         pygame.draw.ellipse(surface, (10, 8, 24), visor_rect)
 
@@ -264,28 +252,22 @@ class ChibiRobotScientist:
         for side in [-1, 1]:
             eye_x = x + side * 52
             if eye_h > 6:
-                # Eye background purple aura
                 aura = pygame.Surface((74, 94), pygame.SRCALPHA)
                 pygame.draw.ellipse(aura, (170, 40, 255, 110), (0, 0, 74, 94))
                 surface.blit(aura, (eye_x - 37, eye_y - 47))
 
-                # Pupil dark purple base
                 pupil_rect = pygame.Rect(eye_x - 27, eye_y - eye_h // 2, 54, eye_h)
                 pygame.draw.ellipse(surface, COLOR_EYE_PURPLE_DARK, pupil_rect)
                 
-                # Inner vibrant gradient
                 inner_rect = pygame.Rect(eye_x - 22, eye_y - eye_h // 2 + 8, 44, max(4, eye_h - 14))
                 pygame.draw.ellipse(surface, COLOR_EYE_PURPLE_MID, inner_rect)
                 
-                # Bottom iris bright arc
                 bottom_rect = pygame.Rect(eye_x - 17, eye_y + eye_h // 2 - 24, 34, max(2, 18))
                 pygame.draw.ellipse(surface, COLOR_EYE_PURPLE_LIGHT, bottom_rect)
                 
-                # Double Specular Catchlights (Shine)
                 pygame.draw.circle(surface, (255, 255, 255), (eye_x - 8 * side, eye_y - eye_h // 4), 10)
                 pygame.draw.circle(surface, (255, 255, 255), (eye_x + 11 * side, eye_y + eye_h // 4), 5)
             else:
-                # Closed eye curve
                 pygame.draw.arc(surface, COLOR_PURPLE, (eye_x - 22, eye_y - 8, 44, 18), 0, math.pi, 4)
 
         # 5. Cheek Blush & Mouth
@@ -297,19 +279,19 @@ class ChibiRobotScientist:
                 pygame.draw.ellipse(chk, COLOR_PINK_CHEEK, (0, 0, 38, 22))
                 surface.blit(chk, (cheek_x - 19, cheek_y - 11))
 
-            # Mouth
             mouth_rect = pygame.Rect(x - 12, y - 18, 24, 16)
             pygame.draw.arc(surface, (255, 80, 140), mouth_rect, math.pi, 2 * math.pi, 3)
             pygame.draw.circle(surface, (255, 130, 170), (x, y - 7), 5)
 
-        # 6. Render Top Hair Crest
-        self.draw_organic_hair(surface, x, y)
+        # 6. Render Hair
+        self.draw_organic_hair(surface, x, y, hair_tilt)
 
-    def draw_body_and_coat(self, surface, x, y, time_sec):
-        """Draws coat, torso, glowing chest atom emblem, belt, and boots."""
+    def draw_body_and_coat(self, surface, x, y, time_sec, leg_l_shift=(0, 0), leg_r_shift=(0, 0)):
+        """Draws coat, torso, glowing chest atom emblem, belt, and swinging boots."""
         
-        sway_l = math.sin(time_sec * 2.6) * 7
-        sway_r = math.cos(time_sec * 2.6) * 7
+        omega = 2.0 * math.pi / LOOP_DURATION
+        sway_l = math.sin(omega * time_sec - 0.25) * 10.0
+        sway_r = math.cos(omega * time_sec - 0.25) * 10.0
         
         # 1. Outer White Lab Coat Flaps
         coat_l = [
@@ -321,11 +303,9 @@ class ChibiRobotScientist:
             (x + 90 + sway_r, y + 215), (x + 25, y + 130)
         ]
         
-        # Inner purple shadow lining
         pygame.draw.polygon(surface, (35, 18, 65), coat_l)
         pygame.draw.polygon(surface, (35, 18, 65), coat_r)
         
-        # Crisp white coat surface
         pygame.draw.polygon(surface, COLOR_WHITE, [
             (x - 42, y + 36), (x - 140 + sway_l, y + 165),
             (x - 85 + sway_l, y + 205), (x - 22, y + 125)
@@ -339,7 +319,6 @@ class ChibiRobotScientist:
         torso_rect = pygame.Rect(x - 56, y + 38, 112, 108)
         pygame.draw.rect(surface, COLOR_SUIT_DARK, torso_rect, border_radius=16)
         
-        # Lab Coat Front Lapels
         pygame.draw.polygon(surface, COLOR_WHITE, [(x - 56, y + 38), (x - 22, y + 115), (x - 56, y + 115)])
         pygame.draw.polygon(surface, COLOR_WHITE, [(x + 56, y + 38), (x + 22, y + 115), (x + 56, y + 115)])
 
@@ -352,39 +331,44 @@ class ChibiRobotScientist:
         pygame.draw.rect(surface, COLOR_CYAN, b_rect, border_radius=6)
         pygame.draw.rect(surface, (255, 255, 255), b_rect.inflate(-6, -6), border_radius=4)
 
-        # 5. Boots
-        for side in [-1, 1]:
-            bx = x + side * 32
-            by = y + 148
-            
-            pygame.draw.rect(surface, COLOR_SUIT_DARK, (bx - 16, by, 32, 45), border_radius=8)
-            boot = pygame.Rect(bx - 22, by + 36, 44, 46)
-            pygame.draw.rect(surface, COLOR_WHITE, boot, border_radius=12)
-            pygame.draw.rect(surface, COLOR_PURPLE, (bx - 20, by + 36, 40, 14), border_radius=6)
-            pygame.draw.rect(surface, COLOR_CYAN, (bx - 22, by + 74, 44, 8), border_radius=4)
+        # 5. Swinging Boots (Secondary Motion Inertia)
+        # Left Leg (Side -1)
+        lx = x - 32 + leg_l_shift[0]
+        ly = y + 148 + leg_l_shift[1]
+        pygame.draw.rect(surface, COLOR_SUIT_DARK, (lx - 16, ly, 32, 45), border_radius=8)
+        boot_l = pygame.Rect(lx - 22, ly + 36, 44, 46)
+        pygame.draw.rect(surface, COLOR_WHITE, boot_l, border_radius=12)
+        pygame.draw.rect(surface, COLOR_PURPLE, (lx - 20, ly + 36, 40, 14), border_radius=6)
+        pygame.draw.rect(surface, COLOR_CYAN, (lx - 22, ly + 74, 44, 8), border_radius=4)
 
-    def draw_right_arm_and_test_tube(self, surface, x, y, time_sec):
-        """Draws right hand holding glowing test tube upright with swirling neon liquid & vapor."""
-        
-        # Extended arm positioning to clear the helmet cleanly
+        # Right Leg (Side 1)
+        rx = x + 32 + leg_r_shift[0]
+        ry = y + 148 + leg_r_shift[1]
+        pygame.draw.rect(surface, COLOR_SUIT_DARK, (rx - 16, ry, 32, 45), border_radius=8)
+        boot_r = pygame.Rect(rx - 22, ry + 36, 44, 46)
+        pygame.draw.rect(surface, COLOR_WHITE, boot_r, border_radius=12)
+        pygame.draw.rect(surface, COLOR_PURPLE, (rx - 20, ry + 36, 40, 14), border_radius=6)
+        pygame.draw.rect(surface, COLOR_CYAN, (rx - 22, ry + 74, 44, 8), border_radius=4)
+
+    def draw_right_arm_and_test_tube(surface_or_self, surface, x, y, time_sec, arm_y_lag=0.0):
+        """Draws right hand holding test tube with delayed inertia lag."""
+        self = surface_or_self
         arm_base_x, arm_base_y = x - 54, y + 54
-        hand_x, hand_y = x - 170, y - 15
+        hand_x = x - 170
+        hand_y = y - 15 + arm_y_lag  # Delayed secondary response
         
-        # Lab coat sleeve
         pygame.draw.line(surface, COLOR_WHITE, (arm_base_x, arm_base_y), (hand_x, hand_y), 28)
         pygame.draw.circle(surface, COLOR_WHITE, (hand_x, hand_y), 16)
         pygame.draw.circle(surface, COLOR_WHITE, (hand_x - 6, hand_y - 2), 11)
         
-        # --- Glass Test Tube ---
+        # Test tube
         tube_w, tube_h = 34, 110
         tube_x, tube_y = hand_x - 17, hand_y - 80
         
-        # Outer Neon Liquid Glow Aura
         g_tube = pygame.Surface((tube_w + 40, tube_h + 40), pygame.SRCALPHA)
         pygame.draw.rect(g_tube, (0, 225, 255, 95), (20, 20, tube_w, tube_h), border_radius=16)
         surface.blit(g_tube, (tube_x - 20, tube_y - 20))
         
-        # Swirling Liquid Fill
         liquid_h = int(tube_h * 0.68)
         liq_rect = pygame.Rect(tube_x + 4, tube_y + tube_h - liquid_h, tube_w - 8, liquid_h - 4)
         
@@ -396,24 +380,20 @@ class ChibiRobotScientist:
             b = int(COLOR_CYAN[2] * (1 - factor) + COLOR_MAGENTA[2] * factor)
             pygame.draw.line(liq_surf, (r, g, b, 235), (0, ly), (tube_w - 8, ly))
         
-        # Internal wave motion & bubbles
         w_offset = math.sin(time_sec * 5.5) * 3
         surface.blit(liq_surf, liq_rect.topleft)
         pygame.draw.ellipse(surface, COLOR_CYAN, (tube_x + 4, tube_y + tube_h - liquid_h - 4 + int(w_offset), tube_w - 8, 8))
 
-        # Bubbles inside liquid
         for i in range(3):
             bx = tube_x + 10 + i * 6 + int(math.sin(time_sec * 4 + i) * 3)
             by = tube_y + tube_h - 15 - ((int(time_sec * 30 + i * 25) % (liquid_h - 15)))
             pygame.draw.circle(surface, (255, 255, 255, 200), (bx, by), 3)
 
-        # Glass Container Outline & Top Rim
         pygame.draw.rect(surface, (255, 255, 255, 210), (tube_x, tube_y, tube_w, tube_h), width=3, border_radius=16)
         pygame.draw.ellipse(surface, (255, 255, 255), (tube_x - 3, tube_y - 5, tube_w + 6, 10), width=3)
-        # Specular shine line
         pygame.draw.line(surface, (255, 255, 255, 220), (tube_x + 6, tube_y + 10), (tube_x + 6, tube_y + tube_h - 14), 2)
 
-        # --- Vapor Steam Particles Update & Render ---
+        # Steam Vapor Particles
         tube_top_x = tube_x + tube_w // 2
         tube_top_y = tube_y - 6
         
@@ -427,57 +407,72 @@ class ChibiRobotScientist:
             p.update()
             p.draw(surface)
 
-    def draw_left_arm_and_tablet(self, surface, x, y, time_sec):
-        """Draws left hand holding dark tech tablet with glowing neon atomic symbol."""
-        
+    def draw_left_arm_and_tablet(self, surface, x, y, time_sec, arm_y_lag=0.0):
+        """Draws left hand holding tablet with delayed secondary inertia."""
         arm_base_x, arm_base_y = x + 54, y + 54
-        hand_x, hand_y = x + 135, y + 20
+        hand_x = x + 135
+        hand_y = y + 20 + arm_y_lag  # Delayed secondary response
         
-        # Lab coat sleeve
         pygame.draw.line(surface, COLOR_WHITE, (arm_base_x, arm_base_y), (hand_x, hand_y), 28)
         pygame.draw.circle(surface, COLOR_WHITE, (hand_x, hand_y), 16)
         
-        # Tablet dimensions
         tab_w, tab_h = 105, 145
-        
         tab_surf = pygame.Surface((tab_w + 40, tab_h + 40), pygame.SRCALPHA)
         
-        # Outer ambient glow
         pygame.draw.rect(tab_surf, (160, 0, 255, 100), (15, 15, tab_w, tab_h), border_radius=18)
-        
-        # Dark metallic chassis
         pygame.draw.rect(tab_surf, (18, 14, 32), (20, 20, tab_w, tab_h), border_radius=16)
         pygame.draw.rect(tab_surf, COLOR_PURPLE, (20, 20, tab_w, tab_h), width=3, border_radius=16)
         
-        # Display Screen
         scr_rect = pygame.Rect(28, 28, tab_w - 16, tab_h - 16)
         pygame.draw.rect(tab_surf, (6, 4, 18), scr_rect, border_radius=12)
         
-        # Glowing Magenta/Cyan Atom Emblem on Tablet Screen
         draw_atom_symbol(tab_surf, (20 + tab_w // 2, 20 + tab_h // 2), 24, COLOR_MAGENTA, orbit_angle=-time_sec * 2.2)
         
-        # Glass diagonal shine streak
         pygame.draw.polygon(tab_surf, (255, 255, 255, 35), [
             (28, 28), (28 + tab_w - 16, 28), (28, 28 + tab_h - 16)
         ])
         
-        # Gentle 3D rotation tilt animation
-        angle_tilt = -16 + math.sin(time_sec * 2.2) * 3
+        # Dynamic secondary tilt angle
+        omega = 2.0 * math.pi / LOOP_DURATION
+        angle_tilt = -16.0 + math.sin(omega * time_sec - 0.45) * 5.0
         rot_tab = pygame.transform.rotate(tab_surf, angle_tilt)
         rot_rect = rot_tab.get_rect(center=(hand_x + 20, hand_y + 15))
         surface.blit(rot_tab, rot_rect)
         
-        # White gloved fingers gripping tablet edge
         pygame.draw.circle(surface, COLOR_WHITE, (hand_x + 6, hand_y + 18), 10)
         pygame.draw.circle(surface, COLOR_WHITE, (hand_x + 18, hand_y + 28), 9)
 
     def render(self, surface, time_sec):
-        """Renders character, background space glow, floating stars, and particle effects."""
+        """Renders character with smooth 5s floating idle animation & secondary momentum dynamics."""
         
-        # Vertical sine wave floating motion
-        float_offset = math.sin(time_sec * 2.6) * 18.0
-        curr_x = self.cx
-        curr_y = self.cy + float_offset
+        # Fundamental Loop Parameters (5.0s seamless loop)
+        omega = 2.0 * math.pi / LOOP_DURATION
+        
+        # 1. Primary Motion: Weightless Vertical Float & Ease-In-Out
+        float_y = math.sin(omega * time_sec) * 22.0
+        
+        # 2. Secondary Motion A: Horizontal Side-to-Side Body Sway
+        sway_x = math.sin(omega * time_sec * 0.5) * 10.0
+        
+        # 3. Secondary Motion B: Body Rotation / Tilt Angle (Rotates +-3.5 degrees)
+        body_tilt_deg = math.sin(omega * time_sec) * 3.5
+        
+        # 4. Secondary Motion C: Legs & Feet Momentum Swing (Lagging behind body float)
+        leg_l_shift = (
+            math.sin(omega * time_sec * 0.5 - 0.2) * 5.0,
+            math.sin(omega * time_sec - 0.45) * 7.0
+        )
+        leg_r_shift = (
+            math.sin(omega * time_sec * 0.5 - 0.4) * 5.0,
+            math.sin(omega * time_sec - 0.60) * 7.0
+        )
+
+        # 5. Secondary Motion D: Arm & Object Reaction Lag
+        arm_r_lag = math.sin(omega * time_sec - 0.38) * 8.0
+        arm_l_lag = math.sin(omega * time_sec - 0.30) * 7.0
+
+        curr_x = self.cx + sway_x
+        curr_y = self.cy + float_y
         
         # Automatic periodic eye blinking
         blink_cycle = (time_sec * 0.32) % 1.0
@@ -498,27 +493,37 @@ class ChibiRobotScientist:
             star.update()
             star.draw(surface, time_sec)
 
-        # Render Character Layers in optimized order
-        self.draw_head(surface, curr_x, curr_y, blink_factor, time_sec)
-        self.draw_body_and_coat(surface, curr_x, curr_y, time_sec)
-        self.draw_left_arm_and_tablet(surface, curr_x, curr_y, time_sec)
-        self.draw_right_arm_and_test_tube(surface, curr_x, curr_y, time_sec)
+        # Render Character on a temporary surface for rotational tilt
+        char_surf = pygame.Surface((600, 650), pygame.SRCALPHA)
+        char_cx, char_cy = 300, 300
+
+        self.draw_head(char_surf, char_cx, char_cy, blink_factor, time_sec, hair_tilt=body_tilt_deg * 0.5)
+        self.draw_body_and_coat(char_surf, char_cx, char_cy, time_sec, leg_l_shift, leg_r_shift)
+        self.draw_left_arm_and_tablet(char_surf, char_cx, char_cy, time_sec, arm_y_lag=arm_l_lag)
+        self.draw_right_arm_and_test_tube(char_surf, char_cx, char_cy, time_sec, arm_y_lag=arm_r_lag)
+
+        # Apply smooth 3D body rotation/tilt
+        if abs(body_tilt_deg) > 0.05:
+            rot_char = pygame.transform.rotate(char_surf, body_tilt_deg)
+            rot_rect = rot_char.get_rect(center=(int(curr_x), int(curr_y)))
+            surface.blit(rot_char, rot_rect)
+        else:
+            surface.blit(char_surf, (int(curr_x - char_cx), int(curr_y - char_cy)))
 
 # --- GIF Exporter Utility ---
 
-def export_looping_gif(character, duration_sec=2.42, fps=30, output_path="chibi_robot.gif"):
-    """Generates and saves a seamless looping animated GIF of the rendered character."""
-    print(f"[GIF Exporter] Rendering {int(duration_sec * fps)} frames for seamless loop...")
+def export_looping_gif(character, duration_sec=5.0, fps=30, output_path="chibi_robot.gif"):
+    """Generates and saves a 100% seamless 5-second looping animated GIF."""
+    print(f"[GIF Exporter] Rendering {int(duration_sec * fps)} frames for 5-second seamless loop...")
     frames = []
     total_frames = int(duration_sec * fps)
     
     temp_surf = pygame.Surface((WIDTH, HEIGHT))
     
     for frame_idx in range(total_frames):
-        t = (frame_idx / total_frames) * (2.0 * math.pi / 2.6)
+        t = (frame_idx / total_frames) * LOOP_DURATION
         
         temp_surf.fill(COLOR_BG_DARK)
-        # Background gradient
         grad_surf = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
         for y in range(0, HEIGHT, 4):
             factor = y / HEIGHT
@@ -542,7 +547,7 @@ def export_looping_gif(character, duration_sec=2.42, fps=30, output_path="chibi_
         duration=int(1000 / fps),
         loop=0
     )
-    print(f"[GIF Exporter] Successfully saved animation to '{output_path}'!")
+    print(f"[GIF Exporter] Successfully saved 5s seamless animation loop to '{output_path}'!")
 
 # --- Main Window Loop ---
 
@@ -554,12 +559,12 @@ def main():
     font = pygame.font.SysFont("Consolas", 15)
     
     print("=" * 65)
-    print(" CHIBI ROBOT SCIENTIST - PROCEDURAL GRAPHICS RENDERER")
+    print(" CHIBI ROBOT SCIENTIST - 5s FLOATING IDLE ANIMATION")
     print("=" * 65)
     print(" Controls:")
     print("   [SPACE] : Pause / Resume Animation")
     print("   [S]     : Save Screenshot PNG")
-    print("   [G]     : Export Seamless Animated GIF ('chibi_robot.gif')")
+    print("   [G]     : Export 5s Seamless Animated GIF ('chibi_robot.gif')")
     print("   [ESC]   : Exit")
     print("=" * 65)
 
@@ -583,7 +588,6 @@ def main():
             current_ticks = pygame.time.get_ticks() - paused_time
             time_sec = current_ticks / 1000.0
         
-        # Render background gradient
         screen.fill(COLOR_BG_DARK)
         grad_surf = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
         for y in range(0, HEIGHT, 4):
@@ -594,11 +598,9 @@ def main():
             pygame.draw.rect(grad_surf, (r, g, b, 120), (0, y, WIDTH, 4))
         screen.blit(grad_surf, (0, 0))
 
-        # Render character
         character.render(screen, time_sec)
 
-        # UI Overlay text
-        fps_text = font.render(f"FPS: {int(clock.get_fps())} | Controls: [SPACE] Pause | [S] Save PNG | [G] Export GIF", True, (180, 180, 220))
+        fps_text = font.render(f"FPS: {int(clock.get_fps())} | Controls: [SPACE] Pause | [S] Save PNG | [G] Export 5s GIF", True, (180, 180, 220))
         screen.blit(fps_text, (20, HEIGHT - 30))
 
         pygame.display.flip()
