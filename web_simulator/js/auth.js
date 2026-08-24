@@ -75,6 +75,10 @@ const Auth = {
       if (studentContainer) studentContainer.style.display = 'block';
       if (codeContainer) codeContainer.style.display = 'none';
       if (lblRealName) lblRealName.textContent = 'Real Student Name';
+      const sectionInput = document.getElementById('signUpSection');
+      if (sectionInput) sectionInput.required = true;
+      const teacherCodeInput = document.getElementById('signUpTeacherCode');
+      if (teacherCodeInput) teacherCodeInput.required = false;
     } else {
       if (btnTeacher) {
         btnTeacher.style.background = 'rgba(234, 88, 12, 0.2)';
@@ -91,6 +95,10 @@ const Auth = {
       if (studentContainer) studentContainer.style.display = 'none';
       if (codeContainer) codeContainer.style.display = 'block';
       if (lblRealName) lblRealName.textContent = 'Real Teacher Name';
+      const sectionInput = document.getElementById('signUpSection');
+      if (sectionInput) sectionInput.required = false;
+      const teacherCodeInput = document.getElementById('signUpTeacherCode');
+      if (teacherCodeInput) teacherCodeInput.required = true;
     }
   },
 
