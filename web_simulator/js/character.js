@@ -990,6 +990,17 @@ const CharacterSystem = {
         </div>
 
         <div class="char-card-body">
+          ${avatarHtml}
+
+          <div class="mascot-actions-bar">
+            <button class="mascot-action-btn" style="background: #d97706;" onclick="CharacterSystem.triggerAction('wave')">👋 Wave</button>
+            <button class="mascot-action-btn" style="background: #0891b2;" onclick="CharacterSystem.triggerAction('look_around')">👀 Look Around</button>
+            <button class="mascot-action-btn" style="background: #7c3aed;" onclick="CharacterSystem.triggerAction('blink')">😉 Blink</button>
+            <button class="mascot-action-btn" style="background: #db2777;" onclick="CharacterSystem.triggerAction('celebrate')">🎉 Cheer</button>
+            <button class="mascot-action-btn" style="background: #2563eb;" onclick="CharacterSystem.triggerAction('spin')">🌀 Spin</button>
+            <button class="mascot-action-btn" style="background: #059669;" onclick="CharacterSystem.triggerAction('expression')">😊 Expression</button>
+          </div>
+
           <div class="char-quote-label">"${dynamicQuote}"</div>
 
           <div class="char-xp-hero-badge">⭐ ${xp} XP &nbsp;•&nbsp; 🪙 ${coins} Coins</div>
@@ -1013,6 +1024,7 @@ const CharacterSystem = {
         </div>
       </div>
     `;
+    this.startIdleAnimations();
   },
 
   openOutfitShopModal(activeTab = 'wardrobe') {
@@ -1260,5 +1272,75 @@ const CharacterSystem = {
     const modal = document.getElementById('evolutionModal');
     if (modal) modal.classList.add('hidden');
     this.renderHomeCharacterCard();
+  },
+
+  triggerAction(type) {
+    const charImg = document.querySelector('.baby-char-img') || document.querySelector('.char-avatar-icon');
+    const speechBubble = document.getElementById('charSpeechBubble') || document.getElementById('webFloatingSpeech');
+
+    let animClass = '';
+    let msg = '';
+
+    switch (type) {
+      case 'wave':
+        animClass = 'anim-wave';
+        msg = 'Hello there! Waving at you! 👋';
+        break;
+      case 'look_around':
+        animClass = 'anim-look-around';
+        msg = 'Looking left, right, and up for science clues! 🧐';
+        break;
+      case 'blink':
+        animClass = 'anim-blink';
+        msg = 'Wink! Keeping an eye on science! 😉';
+        break;
+      case 'celebrate':
+        animClass = 'anim-celebrate';
+        msg = 'Woohoo! Science celebration dance! 🥳✨';
+        break;
+      case 'spin':
+        animClass = 'anim-spin';
+        msg = '360° Quantum Spin! 🌀';
+        break;
+      case 'expression':
+        const expressions = ['😊 Happy', '😉 Wink', '👓 Smart', '💡 Eureka!', '😍 Love'];
+        const exp = expressions[Math.floor(Math.random() * expressions.length)];
+        msg = `Feeling: ${exp}!`;
+        animClass = 'tap-react';
+        break;
+      default:
+        return;
+    }
+
+    if (speechBubble) {
+      speechBubble.textContent = msg;
+      speechBubble.classList.remove('hidden');
+      if (this._bubbleTimer) clearTimeout(this._bubbleTimer);
+      this._bubbleTimer = setTimeout(() => {
+        speechBubble.classList.add('hidden');
+      }, 2600);
+    }
+
+    if (charImg) {
+      charImg.classList.remove('anim-wave', 'anim-look-around', 'anim-blink', 'anim-celebrate', 'anim-spin', 'tap-react');
+      void charImg.offsetWidth;
+      charImg.classList.add(animClass);
+      setTimeout(() => {
+        charImg.classList.remove(animClass);
+      }, 2000);
+    }
+  },
+
+  startIdleAnimations() {
+    if (this._idleInterval) return;
+    this._idleInterval = setInterval(() => {
+      if (document.visibilityState !== 'visible') return;
+      const actions = ['look_around', 'blink', 'wave'];
+      const action = actions[Math.floor(Math.random() * actions.length)];
+      const charImg = document.querySelector('.baby-char-img') || document.querySelector('.char-avatar-icon');
+      if (charImg) {
+        this.triggerAction(action);
+      }
+    }, 8000);
   }
 };
