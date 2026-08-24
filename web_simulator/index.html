@@ -1317,18 +1317,38 @@
 
       <!-- ================= 7. RESULTS SCREEN ================= -->
       <section id="resultsScreen" class="screen">
+        <!-- Top Header Bar matching Image 1 -->
+        <div class="results-top-nav" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 16px; padding: 0 4px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.4rem;">🧬</span>
+            <div>
+              <div style="font-family: var(--font-heading); font-weight: 900; font-size: 1.1rem; color: #38BDF8; letter-spacing: 0.5px;">NEXUS</div>
+              <div style="font-size: 0.72rem; color: #A5A3C4; font-weight: 600;">DepEd Grade 10 Science</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="background: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%); padding: 5px 12px; border-radius: 14px; font-size: 0.78rem; font-weight: 800; color: white; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);">Grade 10</span>
+            <span style="background: #1E1B4B; border: 1px solid #312E81; padding: 6px 10px; border-radius: 12px; font-size: 0.9rem; color: white;">🧮</span>
+          </div>
+        </div>
+
         <div class="results-card">
           <div class="results-header">
             <span class="results-trophy">🏆</span>
             <h2>Round Complete!</h2>
-            <p id="resultsSubtext">Great mental warm-up session</p>
           </div>
 
-          <!-- Percentage Score (Center of Screen) -->
+          <!-- Percentage Score Ring (Center of Screen matching Image 1) -->
           <div class="score-center-display">
-            <div class="score-circle">
-              <span id="resultPercentage" class="percent-val">80%</span>
-              <span class="percent-label">Score</span>
+            <div class="score-ring-container">
+              <span class="sparkle sp-1">✦</span>
+              <span class="sparkle sp-2">✨</span>
+              <span class="sparkle sp-3">✨</span>
+              <span class="sparkle sp-4">✦</span>
+              <div class="score-circle">
+                <span id="resultPercentage" class="percent-val">80%</span>
+                <span class="percent-label">SCORE</span>
+              </div>
             </div>
             <div class="total-points-earned">
               Points Earned: <span id="resultTotalPoints">+1,240</span> pts
@@ -1338,20 +1358,20 @@
             </div>
           </div>
 
-          <!-- Correct / Incorrect Answers (Bottom Section) -->
+          <!-- Correct / Incorrect Answers (Bottom Section matching Image 1) -->
           <div class="results-stats-bottom">
             <div class="stat-box correct-box">
-              <span class="box-icon">✅</span>
+              <div class="box-icon-badge">✅</div>
               <div class="box-data">
-                <span id="resultCorrectCount" class="box-val">12</span>
+                <span id="resultCorrectCount" class="box-val">4</span>
                 <span class="box-label">Correct Answers</span>
               </div>
             </div>
 
             <div class="stat-box incorrect-box">
-              <span class="box-icon">❌</span>
+              <div class="box-icon-badge">❌</div>
               <div class="box-data">
-                <span id="resultIncorrectCount" class="box-val">3</span>
+                <span id="resultIncorrectCount" class="box-val">1</span>
                 <span class="box-label">Incorrect Answers</span>
               </div>
             </div>
@@ -1367,7 +1387,7 @@
             </p>
           </div>
 
-          <!-- Action Buttons -->
+          <!-- Action Buttons (Pill Buttons matching Image 1) -->
           <div class="results-actions">
             <button class="primary-btn play-again-btn" onclick="App.showScreen('playScreen')">Play Again 🎮</button>
             <button class="secondary-btn home-nav-link" onclick="App.showScreen('homeScreen')">Return to Home 🏠</button>

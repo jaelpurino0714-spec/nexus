@@ -2398,69 +2398,118 @@
   to { transform: scale(1); opacity: 1; }
 }
 
-/* ---------------- 6. RESULTS SCREEN ---------------- */
+/* ---------------- 6. RESULTS SCREEN (Image 1 Dark Cosmic Neon Theme) ---------------- */
 .results-card {
-  background: white;
-  border-radius: var(--radius-lg);
-  padding: 24px 20px;
+  background: #0E0F26;
+  border: 1.5px solid #231648;
+  border-radius: 28px;
+  padding: 26px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 16px;
+  gap: 18px;
   margin: auto 0;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  width: 100%;
 }
 
 .results-trophy {
-  font-size: 3rem;
+  font-size: 3.2rem;
+  filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.5));
 }
 
 .results-header h2 {
   font-family: var(--font-heading);
-  color: var(--primary-purple-dark);
-  font-size: 1.6rem;
+  color: #FFFFFF;
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin-top: 6px;
 }
 
 .score-center-display {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 8px 0;
+  margin: 6px 0;
+  width: 100%;
+}
+
+.score-ring-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.score-ring-container .sparkle {
+  position: absolute;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  animation: sparklePulse 2s ease-in-out infinite alternate;
+}
+
+.score-ring-container .sp-1 { top: 12px; left: 10px; color: rgba(255,255,255,0.7); }
+.score-ring-container .sp-2 { top: 22px; right: 10px; font-size: 1.1rem; }
+.score-ring-container .sp-3 { bottom: 18px; left: 14px; font-size: 1.1rem; }
+.score-ring-container .sp-4 { bottom: 20px; right: 12px; color: rgba(255,255,255,0.7); }
+
+@keyframes sparklePulse {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  100% { transform: scale(1.2); opacity: 1; }
 }
 
 .score-circle {
-  width: 120px;
-  height: 120px;
+  width: 155px;
+  height: 155px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary-purple), var(--accent-purple));
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.18) 0%, rgba(14, 15, 38, 0.4) 100%);
+  border: 6px solid #8B5CF6;
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(126, 87, 194, 0.35);
+  box-shadow: 0 0 28px rgba(139, 92, 246, 0.45), inset 0 0 18px rgba(139, 92, 246, 0.25);
 }
 
 .percent-val {
   font-family: var(--font-heading);
-  font-size: 2.2rem;
-  font-weight: 800;
+  font-size: 2.8rem;
+  font-weight: 900;
   line-height: 1;
+  color: #FFFFFF;
 }
 
 .percent-label {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  opacity: 0.9;
+  letter-spacing: 1.8px;
+  color: #C4B5FD;
+  font-weight: 800;
+  margin-top: 4px;
 }
 
 .total-points-earned {
   font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--text-dark);
-  margin-top: 10px;
+  font-size: 0.92rem;
+  color: #A5A3C4;
+  margin-top: 6px;
+}
+
+.perfect-score-coin-banner {
+  background: linear-gradient(135deg, rgba(88, 60, 8, 0.9) 0%, rgba(45, 30, 4, 0.95) 100%);
+  border: 1.5px solid #F59E0B;
+  border-radius: 16px;
+  padding: 12px 16px;
+  color: #FDE68A;
+  font-weight: 800;
+  font-size: 0.88rem;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.25);
+  margin-top: 14px;
+  width: 100%;
 }
 
 .results-stats-bottom {
@@ -2471,45 +2520,74 @@
 }
 
 .stat-box {
-  padding: 12px;
-  border-radius: var(--radius-md);
+  padding: 14px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  text-align: left;
 }
 
 .correct-box {
-  background: #E8F5E9;
-  border: 1px solid #A5D6A7;
+  background: rgba(6, 78, 59, 0.35);
+  border: 1.5px solid #10B981;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.15);
 }
 
 .incorrect-box {
-  background: #FFEBEE;
-  border: 1px solid #EF9A9A;
+  background: rgba(136, 19, 55, 0.35);
+  border: 1.5px solid #F43F5E;
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.15);
+}
+
+.box-icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.correct-box .box-icon-badge {
+  background: #10B981;
+  color: white;
+}
+
+.incorrect-box .box-icon-badge {
+  background: #F43F5E;
+  color: white;
+}
+
+.box-data {
+  display: flex;
+  flex-direction: column;
 }
 
 .box-val {
   font-family: var(--font-heading);
-  font-size: 1.2rem;
-  font-weight: 800;
-  display: block;
+  font-size: 1.8rem;
+  font-weight: 900;
+  line-height: 1;
 }
 
-.correct-box .box-val { color: #2E7D32; }
-.incorrect-box .box-val { color: #C62828; }
+.correct-box .box-val { color: #34D399; }
+.incorrect-box .box-val { color: #FB7185; }
 
-.box-label {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-}
+.correct-box .box-label { color: #A7F3D0; font-size: 0.76rem; font-weight: 700; }
+.incorrect-box .box-label { color: #FECDD3; font-size: 0.76rem; font-weight: 700; }
 
 .recommendation-card {
-  background: #FFF3E0;
-  border-left: 4px solid var(--warning-orange);
-  padding: 12px;
-  border-radius: var(--radius-sm);
+  background: rgba(67, 20, 7, 0.4);
+  border: 1.5px solid #7C2D12;
+  border-left: 4px solid #F97316;
+  padding: 12px 14px;
+  border-radius: 16px;
   text-align: left;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
+  color: #FFEDD5;
   width: 100%;
 }
 
@@ -2519,7 +2597,7 @@
 
 .rec-header {
   font-weight: 800;
-  color: #E65100;
+  color: #FB923C;
   margin-bottom: 4px;
 }
 
@@ -2528,7 +2606,45 @@
   flex-direction: column;
   gap: 10px;
   width: 100%;
-  margin-top: 8px;
+  margin-top: 6px;
+}
+
+.play-again-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%);
+  color: #FFFFFF;
+  border: none;
+  font-weight: 800;
+  font-size: 1.05rem;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
+  transition: all 0.2s;
+}
+
+.play-again-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.6);
+}
+
+.home-nav-link {
+  width: 100%;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1.5px solid #312E81;
+  color: #E0E7FF;
+  font-weight: 800;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.home-nav-link:hover {
+  background: rgba(30, 27, 75, 0.8);
+  border-color: #4338CA;
+  color: #FFFFFF;
 }
 
 /* ---------------- 7. SETTINGS & 4-COLUMN ACHIEVEMENTS GRID ---------------- */
