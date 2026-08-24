@@ -256,6 +256,69 @@ const ProgressionSystem = {
   }
 };
 
+/**
+ * AnimatedCharacter JS class implementing exact sine-wave floating math:
+ * - Store character x, y, base_x, base_y
+ * - Continuous float_y = sin(current_time * 2) * 15
+ * - Gentle side-to-side rotation = sin(current_time * 2) * 2°
+ * - Subtle breathing scale = 1 + sin(current_time * 2) * 0.02
+ * - Smooth continuous looping at ~60 updates per second
+ * - Allow user to drag character to another position
+ * - When dragging stops, character continues floating animation from its new position
+ * - Keep original character image unchanged and undistorted (object-fit: contain)
+ */
+class AnimatedCharacterJS {
+  constructor(x = 100, y = 300) {
+    this.x = x;
+    this.y = y;
+    this.baseX = x;
+    this.baseY = y;
+    this.rotation = 0;
+    this.scale = 1.0;
+    this.startTime = Date.now() / 1000.0;
+    this.dragging = false;
+  }
+
+  updateAnimation() {
+    if (this.dragging) return;
+
+    const currentTime = (Date.now() / 1000.0) - this.startTime;
+
+    // Smooth floating movement (approx 15 pixels)
+    const floatY = Math.sin(currentTime * 2) * 15;
+
+    // Gentle side-to-side rotation (approx -2° to +2°)
+    const rotation = Math.sin(currentTime * 2) * 2;
+
+    // Subtle breathing effect (approx 1.0 to 1.02)
+    const scale = 1 + Math.sin(currentTime * 2) * 0.02;
+
+    this.x = this.baseX;
+    this.y = this.baseY + floatY;
+    this.rotation = rotation;
+    this.scale = scale;
+  }
+
+  startDrag() {
+    this.dragging = true;
+  }
+
+  dragTo(newX, newY) {
+    if (this.dragging) {
+      this.x = newX;
+      this.y = newY;
+    }
+  }
+
+  stopDrag() {
+    this.dragging = false;
+
+    // Save the new position as the resting position
+    this.baseX = this.x;
+    this.baseY = this.y;
+  }
+}
+
 // --------------------------------------------------------------------------
 // 3. CHARACTER SYSTEM
 // --------------------------------------------------------------------------
@@ -275,65 +338,68 @@ const CharacterSystem = {
     if (!companion || this._floatingInited) return;
     this._floatingInited = true;
 
+    let initLeft = 100;
+    let initTop = 300;
+
     const savedPos = localStorage.getItem('nexus_floating_pos');
     if (savedPos) {
       try {
         const { left, top } = JSON.parse(savedPos);
-        companion.style.left = left + 'px';
-        companion.style.top = top + 'px';
-        companion.style.right = 'auto';
-        companion.style.bottom = 'auto';
+        if (typeof left === 'number' && typeof top === 'number') {
+          initLeft = left;
+          initTop = top;
+        }
       } catch (e) {}
+    } else {
+      initLeft = window.innerWidth > 400 ? window.innerWidth - 100 : 250;
+      initTop = window.innerHeight > 500 ? window.innerHeight - 180 : 380;
     }
 
-    let isDragging = false;
-    let startX = 0, startY = 0;
-    let initialLeft = 0, initialTop = 0;
+    this._animatedCharacter = new AnimatedCharacterJS(initLeft, initTop);
+
     let dragDistance = 0;
+    let startX = 0, startY = 0;
+    let initialX = 0, initialY = 0;
 
     const onPointerDown = (e) => {
-      isDragging = true;
+      this._animatedCharacter.startDrag();
       dragDistance = 0;
       const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
       const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
       startX = clientX;
       startY = clientY;
 
-      initialLeft = companion.offsetLeft;
-      initialTop = companion.offsetTop;
+      initialX = this._animatedCharacter.x;
+      initialY = this._animatedCharacter.y;
     };
 
     const onPointerMove = (e) => {
-      if (!isDragging) return;
+      if (!this._animatedCharacter.dragging) return;
       const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
       const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
       const dx = clientX - startX;
       const dy = clientY - startY;
       dragDistance += Math.hypot(dx, dy);
 
-      let newLeft = initialLeft + dx;
-      let newTop = initialTop + dy;
-
       const parent = companion.parentElement || document.body;
       const maxW = parent.clientWidth || window.innerWidth;
       const maxH = parent.clientHeight || window.innerHeight;
 
-      newLeft = Math.max(8, Math.min(maxW - 68, newLeft));
-      newTop = Math.max(8, Math.min(maxH - 68, newTop));
+      const newLeft = Math.max(8, Math.min(maxW - 75, initialX + dx));
+      const newTop = Math.max(8, Math.min(maxH - 85, initialY + dy));
 
-      companion.style.left = newLeft + 'px';
-      companion.style.top = newTop + 'px';
-      companion.style.right = 'auto';
-      companion.style.bottom = 'auto';
+      this._animatedCharacter.dragTo(newLeft, newTop);
     };
 
     const onPointerUp = () => {
-      if (!isDragging) return;
-      isDragging = false;
+      if (!this._animatedCharacter.dragging) return;
+      this._animatedCharacter.stopDrag();
 
       if (dragDistance >= 10) {
-        const rect = companion.getBoundingClientRect();
-        localStorage.setItem('nexus_floating_pos', JSON.stringify({ left: rect.left, top: rect.top }));
+        localStorage.setItem('nexus_floating_pos', JSON.stringify({
+          left: this._animatedCharacter.baseX,
+          top: this._animatedCharacter.baseY
+        }));
       } else {
         this.onTapCharacter();
       }
@@ -346,12 +412,33 @@ const CharacterSystem = {
     companion.addEventListener('touchstart', onPointerDown, { passive: true });
     window.addEventListener('touchmove', onPointerMove, { passive: true });
     window.addEventListener('touchend', onPointerUp);
+
+    // 60 FPS continuous Sine-Wave animation loop
+    const animLoop = () => {
+      if (this._animatedCharacter && companion) {
+        this._animatedCharacter.updateAnimation();
+        companion.style.left = `${this._animatedCharacter.x}px`;
+        companion.style.top = `${this._animatedCharacter.y}px`;
+        companion.style.right = 'auto';
+        companion.style.bottom = 'auto';
+
+        const avatar = document.getElementById('webFloatingAvatar') || companion;
+        avatar.style.transform = `rotate(${this._animatedCharacter.rotation}deg) scale(${this._animatedCharacter.scale})`;
+        avatar.style.transformOrigin = 'center center';
+      }
+      requestAnimationFrame(animLoop);
+    };
+    requestAnimationFrame(animLoop);
   },
 
   updateFloatingCompanion(currentScreenId = 'homeScreen') {
     const companion = document.getElementById('webFloatingCompanion');
     if (companion) {
-      companion.classList.add('hidden');
+      if (currentScreenId === 'authScreen') {
+        companion.classList.add('hidden');
+      } else {
+        companion.classList.remove('hidden');
+      }
     }
   },
 
