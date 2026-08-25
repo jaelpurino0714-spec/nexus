@@ -38,22 +38,10 @@ const EVOLUTION_STAGES = [
     icon: '🧪', 
     image: 'assets/mascot/scientist_main.png',
     minXP: 300, 
-    nextXP: 600, 
+    nextXP: Infinity, 
     color: '#8B5CF6', 
     defaultQuote: "Exploring science & mastering trivia!",
     desc: 'Mastered science trivia & laboratory research!' 
-  },
-  { 
-    id: 'worker', 
-    stage: 4, 
-    title: 'MASTER SCIENTIST', 
-    icon: '⚛️', 
-    image: 'assets/mascot/scientist_main.png',
-    minXP: 600, 
-    nextXP: Infinity, 
-    color: '#F59E0B', 
-    defaultQuote: "Working hard & applying science knowledge!",
-    desc: 'Grandmaster Science Professional!' 
   }
 ];
 
@@ -61,16 +49,12 @@ const GENDER_CHARACTER_IMAGES = {
   male: {
     baby: 'assets/mascot/baby_main.png',
     student: 'assets/mascot/student_main.png',
-    graduate: 'assets/mascot/scientist_main.png',
-    worker: 'assets/mascot/scientist_main.png',
-    adult: 'assets/mascot/scientist_main.png'
+    graduate: 'assets/mascot/scientist_main.png'
   },
   female: {
     baby: 'assets/mascot/baby_main.png',
     student: 'assets/mascot/student_main.png',
-    graduate: 'assets/mascot/scientist_main.png',
-    worker: 'assets/mascot/scientist_main.png',
-    adult: 'assets/mascot/scientist_main.png'
+    graduate: 'assets/mascot/scientist_main.png'
   }
 };
 
