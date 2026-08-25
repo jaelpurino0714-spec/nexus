@@ -289,10 +289,13 @@ body.fullscreen-mode .app-container {
 .header-science-decor {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: flex-end;
+  gap: 10px;
   position: relative;
   z-index: 2;
   user-select: none;
+  flex-shrink: 1;
+  overflow: hidden;
 }
 
 .science-chip {
@@ -342,11 +345,11 @@ body.fullscreen-mode .app-container {
 .logo-group {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin: 0 auto;
+  gap: 12px;
+  margin: 0;
   position: relative;
   z-index: 2;
+  flex-shrink: 0;
 }
 
 .app-logo-icon {
@@ -376,6 +379,7 @@ body.fullscreen-mode .app-container {
   justify-content: center;
   align-items: flex-start;
   min-width: 0;
+  flex-shrink: 0;
 }
 
 .app-name {
