@@ -1602,17 +1602,7 @@ const Quiz = {
     document.getElementById('resultCorrectCount').textContent = this.correctCount;
     document.getElementById('resultIncorrectCount').textContent = this.incorrectCount;
 
-    const coinBanner = document.getElementById('perfectScoreCoinBanner');
-    if (this.incorrectCount === 0 && this.correctCount === totalQ && totalQ > 0) {
-      if (coinBanner) {
-        coinBanner.innerHTML = `🪙 <b>PERFECT SCORE BONUS!</b> +25 Science Coins (100% Correct) 🎉`;
-        coinBanner.classList.remove('hidden');
-      }
-    } else {
-      if (coinBanner) {
-        coinBanner.classList.add('hidden');
-      }
-    }
+
 
     const recCard = document.getElementById('recommendationBanner');
     if (percentage < 50) {
