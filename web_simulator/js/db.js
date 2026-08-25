@@ -231,15 +231,23 @@ var DB = {
     }
   },
 
+  _getQuestionKey(q) {
+    if (!q) return '';
+    const text = q.question || q.question_text || q.stem || '';
+    const norm = String(text).trim().replace(/\s+/g, ' ').toLowerCase();
+    if (norm) return norm;
+    return q.id ? String(q.id).trim() : '';
+  },
+
   _formatQuestions(rawQuestions) {
     if (!Array.isArray(rawQuestions)) return [];
 
-    // Deduplicate Supabase questions by unique ID and question prompt text
+    // Deduplicate questions strictly by normalized question prompt text
     const uniqueMap = new Map();
     rawQuestions.forEach(q => {
       if (!q) return;
-      const key = (q.id ? String(q.id) : '') + '::' + (q.question ? String(q.question).trim().toLowerCase() : Math.random().toString());
-      if (!uniqueMap.has(key)) {
+      const key = this._getQuestionKey(q);
+      if (key && !uniqueMap.has(key)) {
         uniqueMap.set(key, q);
       }
     });
@@ -826,8 +834,8 @@ var DB = {
         const uniqueMap = new Map();
         (questions || []).forEach(q => {
           if (!q) return;
-          const key = q.id || (q.question ? String(q.question).trim().toLowerCase() : Math.random().toString());
-          if (!uniqueMap.has(key)) uniqueMap.set(key, q);
+          const key = this._getQuestionKey(q);
+          if (key && !uniqueMap.has(key)) uniqueMap.set(key, q);
         });
         const pool = Array.from(uniqueMap.values());
         const qCount = Math.min(30, Math.max(1, config.questionCount || 10));

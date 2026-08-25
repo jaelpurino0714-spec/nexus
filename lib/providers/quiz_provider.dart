@@ -135,6 +135,18 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
       );
     }
 
+    // MANDATORY DEDUPLICATION: Ensure absolutely zero duplicate questions per playthrough
+    final seenKeys = <String>{};
+    final List<PreparedQuestion> uniquePrepared = [];
+    for (final pq in questions) {
+      final key = QuestionService.getQuestionKey(pq.question);
+      if (key.isNotEmpty && !seenKeys.contains(key)) {
+        seenKeys.add(key);
+        uniquePrepared.add(pq);
+      }
+    }
+    questions = uniquePrepared;
+
     if (customQuestionCount != null && customQuestionCount > 0 && questions.length > customQuestionCount) {
       questions = questions.sublist(0, customQuestionCount);
     }

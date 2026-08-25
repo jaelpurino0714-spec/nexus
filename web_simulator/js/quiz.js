@@ -1083,6 +1083,14 @@ const Quiz = {
     } catch (e) {}
   },
 
+  getQuestionKey(q) {
+    if (!q) return '';
+    const text = q.question || q.question_text || q.stem || '';
+    const norm = String(text).trim().replace(/\s+/g, ' ').toLowerCase();
+    if (norm) return norm;
+    return q.id ? String(q.id).trim() : '';
+  },
+
   async prepareBuiltinQuestions() {
     let qTypeId = 1;
     if (this.currentQuestionFormat === 'true_false') qTypeId = 2;
@@ -1093,12 +1101,12 @@ const Quiz = {
       rawPool = await DB.getQuestions(this.currentTopicId, qTypeId);
     }
 
-    // 1. Deduplicate full question bank by unique ID and prompt text
+    // 1. Deduplicate full question bank by normalized prompt text
     const uniqueMap = new Map();
     (rawPool || []).forEach(q => {
       if (!q) return;
-      const key = (q.id ? String(q.id) : '') + '::' + (q.question ? String(q.question).trim().toLowerCase() : Math.random().toString());
-      if (!uniqueMap.has(key)) {
+      const key = this.getQuestionKey(q);
+      if (key && !uniqueMap.has(key)) {
         uniqueMap.set(key, q);
       }
     });
@@ -1111,7 +1119,7 @@ const Quiz = {
 
     // 2. Filter out questions already used in this playthrough session/cycle for this topic & mode
     let unusedPool = pool.filter(q => {
-      const qKey = (q.id ? String(q.id) : '') + '::' + (q.question ? String(q.question).trim().toLowerCase() : '');
+      const qKey = this.getQuestionKey(q);
       return !usedSet.has(qKey);
     });
 
@@ -1132,9 +1140,9 @@ const Quiz = {
       // Fill in remaining needed questions without repeating any question already selected in this test
       const needed = targetCount - selected.length;
       if (needed > 0) {
-        const selectedKeys = new Set(selected.map(q => (q.id ? String(q.id) : '') + '::' + (q.question ? String(q.question).trim().toLowerCase() : '')));
+        const selectedKeys = new Set(selected.map(q => this.getQuestionKey(q)));
         const fillCandidates = pool.filter(q => {
-          const qKey = (q.id ? String(q.id) : '') + '::' + (q.question ? String(q.question).trim().toLowerCase() : '');
+          const qKey = this.getQuestionKey(q);
           return !selectedKeys.has(qKey);
         });
 
@@ -1146,7 +1154,7 @@ const Quiz = {
 
     // Record selected question keys into playthrough history
     selected.forEach(q => {
-      const qKey = (q.id ? String(q.id) : '') + '::' + (q.question ? String(q.question).trim().toLowerCase() : '');
+      const qKey = this.getQuestionKey(q);
       if (qKey) usedSet.add(qKey);
     });
 
@@ -1178,8 +1186,8 @@ const Quiz = {
       const uniqueList = [];
       for (const q of this.questionsList) {
         if (!q) continue;
-        const key = (q.id ? String(q.id) : '') + '::' + (q.question ? String(q.question).trim().toLowerCase() : '');
-        if (!seenKeys.has(key)) {
+        const key = this.getQuestionKey(q);
+        if (key && !seenKeys.has(key)) {
           seenKeys.add(key);
           uniqueList.push(q);
         }

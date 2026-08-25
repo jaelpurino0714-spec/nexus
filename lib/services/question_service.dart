@@ -12,6 +12,26 @@ class PreparedQuestion {
 class QuestionService {
   SupabaseClient get _client => SupabaseService.instance.client;
 
+  static String getQuestionKey(QuestionModel q) {
+    final normText = q.question.trim().replaceAll(RegExp(r'\s+'), ' ').toLowerCase();
+    if (normText.isNotEmpty) return normText;
+    return q.id.trim();
+  }
+
+  static List<QuestionModel> deduplicateQuestions(List<QuestionModel> questions) {
+    final seenKeys = <String>{};
+    final List<QuestionModel> result = [];
+
+    for (final q in questions) {
+      final key = getQuestionKey(q);
+      if (key.isEmpty || seenKeys.contains(key)) continue;
+
+      seenKeys.add(key);
+      result.add(q);
+    }
+    return result;
+  }
+
   Future<List<QuestionModel>> fetchActiveQuestionsByTopic(
     String topicId, {
     String? questionType,
@@ -49,11 +69,12 @@ class QuestionService {
       print('Error fetching questions from Supabase: $e');
     }
 
-    return list;
+    return deduplicateQuestions(list);
   }
 
   List<PreparedQuestion> prepareQuizQuestions(List<QuestionModel> questions) {
-    List<QuestionModel> shuffledQuestions = List.from(questions)..shuffle(Random());
+    final uniqueQuestions = deduplicateQuestions(questions);
+    List<QuestionModel> shuffledQuestions = List.from(uniqueQuestions)..shuffle(Random());
     
     return shuffledQuestions.map((q) {
       List<String> options = [];
@@ -68,3 +89,4 @@ class QuestionService {
     }).toList();
   }
 }
+

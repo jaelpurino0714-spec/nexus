@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/question_model.dart';
+import 'question_service.dart';
 import 'supabase_service.dart';
 
 class LobbyParticipant {
@@ -99,12 +100,13 @@ class LobbyService {
     required int maxParticipants,
   }) async {
     final code = generateAccessCode();
+    final uniqueQuestions = QuestionService.deduplicateQuestions(questions);
     final lobby = QuizLobby(
       accessCode: code,
       hostName: hostName,
       hostPhotoUrl: hostPhotoUrl,
       quizTitle: quizTitle,
-      questions: questions,
+      questions: uniqueQuestions,
       timeLimitPerQuestion: timeLimitPerQuestion,
       maxParticipants: maxParticipants,
     );

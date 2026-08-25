@@ -9,6 +9,7 @@ import '../models/term_model.dart';
 import '../models/topic_model.dart';
 import '../models/question_model.dart';
 import '../services/lobby_service.dart';
+import '../services/question_service.dart';
 
 class HostQuizScreen extends ConsumerStatefulWidget {
   const HostQuizScreen({super.key});
@@ -239,10 +240,12 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
       );
 
       questionsToHost = rawPrepared.map((pq) => pq.question).toList();
+    }
 
-      if (questionsToHost.length > _questionCount) {
-        questionsToHost = questionsToHost.sublist(0, _questionCount);
-      }
+    questionsToHost = QuestionService.deduplicateQuestions(questionsToHost);
+
+    if (questionsToHost.length > _questionCount) {
+      questionsToHost = questionsToHost.sublist(0, _questionCount);
     }
 
     if (questionsToHost.isEmpty) {
