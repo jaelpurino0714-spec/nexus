@@ -69,9 +69,9 @@ POSE_KEYS = [
 POSE_LABELS = [
     "1: Running Forward",
     "2: Jump Burst",
-    "3: Walking & Thumbs Up (Primary Image 1)",
+    "3: Walking & Thumbs Up",
     "4: Reading Science Book",
-    "5: Pointing Atom",
+    "5: Chibi Robot Scientist (Primary GIF Mascot with Bubbling Test Tube)",
     "6: Victory Celebrating",
     "7: Hoverboard Surfing",
     "8: Sprinting Fast",
@@ -153,7 +153,7 @@ class MascotAnimator:
     """Manages sprite pose rendering, physics, and particle overlays."""
     def __init__(self):
         self.textures = load_sprite_textures()
-        self.active_index = 2  # Default to Pose 3 (Walking & Thumbs Up matching Image 1)
+        self.active_index = 4  # Default to Pose 5 (Chibi Robot Scientist with Bubbling Test Tube & Tablet)
         self.auto_cycle = False
         self.last_cycle_time = 0.0
         self.confetti = [ConfettiParticle() for _ in range(50)]
