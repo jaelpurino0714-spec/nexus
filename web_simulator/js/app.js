@@ -31,11 +31,21 @@ const App = {
     if (slider) slider.value = Math.round(volVal * 100);
     if (label) label.textContent = `${Math.round(volVal * 100)}%`;
 
-    const startPlay = () => {
-      audio.play().catch(() => {});
-      document.removeEventListener('click', startPlay);
+    const playAudio = () => {
+      audio.play().catch(() => {
+        const startOnUserAction = () => {
+          audio.play().catch(() => {});
+          ['click', 'pointerdown', 'keydown', 'touchstart'].forEach(evt => {
+            document.removeEventListener(evt, startOnUserAction);
+          });
+        };
+        ['click', 'pointerdown', 'keydown', 'touchstart'].forEach(evt => {
+          document.addEventListener(evt, startOnUserAction, { once: true });
+        });
+      });
     };
-    document.addEventListener('click', startPlay);
+
+    playAudio();
   },
 
   toggleBgmModal() {

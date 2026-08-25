@@ -13,8 +13,9 @@ void main() async {
   // Load environment variables (.env)
   await EnvConfig.init();
 
-  // Preload Audio Player for instant BGM playback on Home Screen
+  // Preload & auto-start Audio Player as soon as game loads
   AudioService.instance.init();
+  AudioService.instance.playBgm();
 
   // Initialize Hive for offline caching & sync queue
   await Hive.initFlutter();
