@@ -263,7 +263,7 @@ body.fullscreen-mode .app-container {
   padding: 8px 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   position: relative;
@@ -274,9 +274,9 @@ body.fullscreen-mode .app-container {
 .logo-group {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex-shrink: 1;
-  min-width: 0;
+  justify-content: center;
+  gap: 14px;
+  margin: 0 auto;
 }
 
 .app-logo-icon {
