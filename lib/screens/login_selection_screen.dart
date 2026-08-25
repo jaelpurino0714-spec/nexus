@@ -21,8 +21,8 @@ class LoginSelectionScreen extends StatelessWidget {
                   ClipOval(
                     child: Image.asset(
                       'assets/images/app_logo.png',
-                      width: 60,
-                      height: 60,
+                      width: 76,
+                      height: 76,
                       fit: BoxFit.cover,
                     ),
                   ),

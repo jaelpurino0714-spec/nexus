@@ -117,8 +117,8 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
                       ClipOval(
                         child: Image.asset(
                           'assets/images/app_logo.png',
-                          width: 46,
-                          height: 46,
+                          width: 64,
+                          height: 64,
                           fit: BoxFit.cover,
                         ),
                       ),
