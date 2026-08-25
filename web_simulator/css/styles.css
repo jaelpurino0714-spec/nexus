@@ -304,6 +304,7 @@ body.fullscreen-mode .app-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
   min-width: 0;
 }
 
@@ -338,12 +339,12 @@ body.fullscreen-mode .app-container {
   background: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%);
   color: #FFFFFF;
   font-family: var(--font-heading);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.5px;
-  padding: 6px 14px;
+  padding: 4px 12px;
   border-radius: 9999px;
-  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.45);
+  box-shadow: 0 3px 12px rgba(124, 58, 237, 0.45);
   border: 1px solid rgba(196, 181, 253, 0.35);
   white-space: nowrap;
   display: inline-flex;
@@ -351,6 +352,8 @@ body.fullscreen-mode .app-container {
   gap: 5px;
   line-height: 1;
   text-transform: uppercase;
+  margin-top: 5px;
+  align-self: flex-start;
 }
 
 .icon-btn {
