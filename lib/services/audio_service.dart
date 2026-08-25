@@ -53,21 +53,21 @@ class AudioService {
 
   /// Instantly starts looping background music zero-delay
   Future<void> playBgm() async {
-    if (_isPlaying) return;
     _isPlaying = true;
 
     try {
+      await _bgmPlayer.setReleaseMode(ReleaseMode.loop);
+      await _bgmPlayer.setVolume(volume);
       if (!_isSourceSet) {
-        await _bgmPlayer.setReleaseMode(ReleaseMode.loop);
         await _bgmPlayer.play(AssetSource('audio/bg_music.mp3'), volume: volume);
         _isSourceSet = true;
       } else {
         await _bgmPlayer.resume();
-        await _bgmPlayer.setVolume(volume);
       }
     } catch (_) {
       try {
         await _bgmPlayer.play(AssetSource('audio/bg_music.mp3'), volume: volume);
+        _isSourceSet = true;
       } catch (_) {}
     }
 

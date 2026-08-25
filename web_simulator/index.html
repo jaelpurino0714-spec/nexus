@@ -82,7 +82,7 @@
           <div id="authErrorBanner" class="warning-msg" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid #EF4444; color: #FCA5A5; padding: 10px 14px; border-radius: 12px; font-size: 0.85rem; margin-bottom: 18px; font-weight: 600;"></div>
 
           <!-- ================= SIGN IN FORM ================= -->
-          <form id="signInForm" style="display: block;" novalidate onsubmit="event.preventDefault(); Auth.handleSignIn();">
+          <form id="signInForm" style="display: block;" novalidate onsubmit="event.preventDefault(); if (typeof App !== 'undefined') App.playBgm(); Auth.handleSignIn();">
             <div class="form-group" style="margin-bottom: 16px;">
               <label for="signInUsername" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; color: #A5A3C4;">Login Identifier / Nickname</label>
               <input type="text" id="signInUsername" placeholder="e.g. mariasantos10" required style="width: 100%; padding: 12px 14px; border-radius: 14px; border: 1px solid #231648; background: #0E0F26; color: #FFFFFF; font-size: 0.95rem; outline: none; transition: all 0.2s;">
@@ -105,7 +105,7 @@
           </form>
 
           <!-- ================= CREATE ACCOUNT FORM ================= -->
-          <form id="signUpForm" style="display: none;" novalidate onsubmit="event.preventDefault(); Auth.handleSignUp();">
+          <form id="signUpForm" style="display: none;" novalidate onsubmit="event.preventDefault(); if (typeof App !== 'undefined') App.playBgm(); Auth.handleSignUp();">
             <!-- Account Type Switcher (Student vs Teacher) -->
             <div style="display: flex; gap: 10px; margin-bottom: 18px;">
               <button type="button" id="roleBtnStudent" onclick="Auth.setRole('student')" style="flex: 1; padding: 11px; border-radius: 14px; border: 1.5px solid #8B5CF6; background: rgba(124,58,237,0.18); font-weight: 700; cursor: pointer; color: #FFFFFF; box-shadow: 0 0 14px rgba(139,92,246,0.25); transition: all 0.2s;">🎓 Student</button>

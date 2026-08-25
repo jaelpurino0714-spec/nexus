@@ -21,6 +21,13 @@ const App = {
 
   initBgm() {
     this.playBgm();
+    
+    // Resume BGM when tab gains focus if active screen is teacherHomeScreen or homeScreen
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && (this.currentScreen === 'teacherHomeScreen' || this.currentScreen === 'homeScreen')) {
+        this.playBgm();
+      }
+    });
   },
 
   playBgm() {
@@ -39,18 +46,43 @@ const App = {
 
     const playPromise = audio.play();
     if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        const startOnUserAction = () => {
-          audio.play().catch(() => {});
-          ['click', 'pointerdown', 'keydown', 'touchstart'].forEach(evt => {
-            document.removeEventListener(evt, startOnUserAction);
-          });
-        };
-        ['click', 'pointerdown', 'keydown', 'touchstart'].forEach(evt => {
-          document.addEventListener(evt, startOnUserAction, { once: true });
-        });
+      playPromise.then(() => {
+        this._removeAudioUnlockListeners();
+      }).catch(() => {
+        this._setupAudioUnlockListeners();
       });
     }
+  },
+
+  _setupAudioUnlockListeners() {
+    if (this._hasAudioUnlockListeners) return;
+    this._hasAudioUnlockListeners = true;
+
+    const unlockHandler = () => {
+      const audio = document.getElementById('nexusBgmAudio');
+      if (audio) {
+        audio.loop = true;
+        audio.play().then(() => {
+          this._removeAudioUnlockListeners();
+        }).catch(() => {});
+      }
+    };
+
+    this._unlockHandler = unlockHandler;
+    const events = ['click', 'pointerdown', 'touchstart', 'keydown', 'mousedown'];
+    events.forEach(evt => {
+      window.addEventListener(evt, unlockHandler, { capture: true, passive: true });
+    });
+  },
+
+  _removeAudioUnlockListeners() {
+    if (!this._hasAudioUnlockListeners || !this._unlockHandler) return;
+    const events = ['click', 'pointerdown', 'touchstart', 'keydown', 'mousedown'];
+    events.forEach(evt => {
+      window.removeEventListener(evt, this._unlockHandler, { capture: true, passive: true });
+    });
+    this._hasAudioUnlockListeners = false;
+    this._unlockHandler = null;
   },
 
   toggleBgmModal() {
