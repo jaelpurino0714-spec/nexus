@@ -188,7 +188,7 @@ class AudioService {
     try {
       await _timerPlayer.stop();
       await _timerPlayer.setVolume(timerVolume);
-      await _timerPlayer.play(AssetSource('audio/clock 30sec.mp3'), volume: timerVolume);
+      await _timerPlayer.play(AssetSource('audio/timer_clock.mp3'), volume: timerVolume);
     } catch (_) {}
   }
 
