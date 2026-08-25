@@ -67,17 +67,25 @@ const Quiz = {
   getTopicIcon(topicName) {
     if (!topicName) return '🧪';
     const t = topicName.toLowerCase();
-    if (t.includes('balancing') || t.includes('balance') || t.includes('scale')) return '⚖️';
-    if (t.includes('equation') || t.includes('math') || t.includes('formula')) return '📝';
+    if (t.includes('physical vs') || t.includes('physical and chemical') || (t.includes('physical') && t.includes('change'))) return '⚗️';
+    if (t.includes('reaction') && !t.includes('rate')) return '💥';
     if (t.includes('acid') || t.includes('base') || t.includes('salt')) return '🧪';
-    if (t.includes('reaction') || t.includes('change')) return '🧪';
-    if (t.includes('chemical') || t.includes('element') || t.includes('atom')) return '🧪';
-    if (t.includes('ecosystem') || t.includes('biodiversity') || t.includes('flow')) return '🌿';
-    if (t.includes('plate') || t.includes('tectonic') || t.includes('volcano') || t.includes('earthquake')) return '🌋';
-    if (t.includes('climate') || t.includes('weather') || t.includes('atmosphere')) return '🌍';
-    if (t.includes('electricity') || t.includes('magnetism') || t.includes('current')) return '⚡';
-    if (t.includes('physics') || t.includes('motion') || t.includes('force') || t.includes('energy')) return '🔬';
-    return '🧪';
+    if (t.includes('balancing') || t.includes('balance')) return '⚖️';
+    if (t.includes('equation')) return '📝';
+    if (t.includes('rate')) return '⏱️';
+    if (t.includes('homeostasis')) return '🩺';
+    if (t.includes('evolution')) return '🦴';
+    if (t.includes('carrying') || t.includes('population') || t.includes('ecosystem')) return '🐾';
+    if (t.includes('biotech')) return '🧬';
+    if (t.includes('plate') || t.includes('tectonic') || t.includes('volcano')) return '🌋';
+    if (t.includes('climate')) return '🌡️';
+    if (t.includes('enso') || t.includes('interaction')) return '🌊';
+    if (t.includes('sustainability') || t.includes('sustain')) return '🌱';
+    if (t.includes('projectile')) return '🏹';
+    if (t.includes('momentum') || t.includes('collision')) return '💥';
+    if (t.includes('electricity') || t.includes('generation')) return '⚡';
+    if (t.includes('renewable') || t.includes('energy')) return '🔋';
+    return '🔬';
   },
 
   // 2. Render Topics for Selected Term (Dynamically from Supabase)
@@ -111,10 +119,10 @@ const Quiz = {
       btn.onclick = () => this.selectTopic(topicName, topicId);
       btn.innerHTML = `
         <div class="topic-info">
-          <div class="term-title" style="color: #FFFFFF; font-size: 1.12rem; font-weight: 800; margin-bottom: 6px; line-height: 1.3;">${topicName}</div>
-          <span class="term-action" style="color: #C084FC; font-weight: 800; font-size: 0.88rem;">Select Topic ➔</span>
+          <div class="term-title" style="color: #FFFFFF; font-size: 1.15rem; font-weight: 800; margin-bottom: 8px; line-height: 1.3;">${topicName}</div>
+          <span class="topic-select-pill">Select Topic <span style="font-size: 0.85rem; margin-left: 2px;">➔</span></span>
         </div>
-        <div class="topic-graphic">${icon}</div>
+        <div class="topic-graphic-orb">${icon}</div>
       `;
       container.appendChild(btn);
     });
