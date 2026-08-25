@@ -320,6 +320,10 @@ const App = {
       screenId = 'teacherHomeScreen';
     }
 
+    if (screenId !== 'gameplayScreen' && screenId !== 'mpPlayerGameScreen') {
+      this.stopTimerAudio();
+    }
+
     if (screenId === 'homeScreen' || screenId === 'teacherHomeScreen' || screenId === 'loginSelectionScreen') {
       this.playBgm();
     }
