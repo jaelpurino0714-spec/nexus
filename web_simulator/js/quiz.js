@@ -56,6 +56,9 @@ const Quiz = {
 
   // 1. Term Selection
   async selectTerm(termNum) {
+    if (this.customFlowType !== 'custom_play' && this.customFlowType !== 'host_builtin' && this.customFlowType !== 'host_custom') {
+      this.customFlowType = 'standard';
+    }
     this.currentTerm = termNum;
     await this.renderTopics();
     App.showScreen('topicScreen');

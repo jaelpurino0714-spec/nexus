@@ -527,6 +527,12 @@ const App = {
       screenId = 'teacherHomeScreen';
     }
 
+    if (screenId === 'homeScreen' || screenId === 'teacherHomeScreen' || screenId === 'playScreen') {
+      if (typeof Quiz !== 'undefined' && Quiz.customFlowType !== 'custom_play' && Quiz.customFlowType !== 'host_builtin' && Quiz.customFlowType !== 'host_custom') {
+        Quiz.customFlowType = 'standard';
+      }
+    }
+
     const isAnsweringScreen = (
       screenId === 'gameplayScreen' ||
       screenId === 'quizQuestionScreen' ||

@@ -353,7 +353,7 @@
 
         <!-- PRD Home Navigation Buttons placed at bottom of Home screen -->
         <div class="home-nav-bottom">
-          <button id="playBtn" class="home-nav-btn play-btn" onclick="App.showScreen('playScreen')">
+          <button id="playBtn" class="home-nav-btn play-btn" onclick="if (typeof Quiz !== 'undefined') Quiz.customFlowType = 'standard'; App.showScreen('playScreen');">
             <span class="btn-icon">🎮</span>
             <span class="btn-text">Play</span>
           </button>
