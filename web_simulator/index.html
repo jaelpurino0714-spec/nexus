@@ -237,22 +237,22 @@
           <!-- Teacher Quick Actions -->
           <div style="margin-bottom: 20px;">
             <h3 style="margin: 0 0 14px 0; color: #FFFFFF; font-size: 1.1rem; font-weight: 800;">Teacher Quick Actions</h3>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-              <button class="teacher-action-btn" style="background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%); border: none; color: white; padding: 18px 12px; border-radius: 20px; text-align: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);" onclick="Multiplayer.initCreateGameFlow()">
-                <div style="font-size: 2.2rem; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));">👑</div>
-                <strong style="font-size: 1rem; display: block; margin-top: 6px; font-weight: 800;">Host Game</strong>
+            <div class="teacher-actions-grid">
+              <button class="teacher-action-btn host-action-btn" onclick="Multiplayer.initCreateGameFlow()">
+                <div class="action-icon-orb">👑</div>
+                <strong class="action-btn-title">Host Game</strong>
               </button>
-              <button class="teacher-action-btn" style="background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%); border: none; color: white; padding: 18px 12px; border-radius: 20px; text-align: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);" onclick="App.showScreen('mpPlayerJoinScreen')">
-                <div style="font-size: 2.2rem; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));">🔑</div>
-                <strong style="font-size: 1rem; display: block; margin-top: 6px; font-weight: 800;">Join Game</strong>
+              <button class="teacher-action-btn join-action-btn" onclick="App.showScreen('mpPlayerJoinScreen')">
+                <div class="action-icon-orb">🔑</div>
+                <strong class="action-btn-title">Join Game</strong>
               </button>
-              <button class="teacher-action-btn" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); border: none; color: white; padding: 18px 12px; border-radius: 20px; text-align: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);" onclick="TeacherPortal.openMyGames()">
-                <div style="font-size: 2.2rem; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));">📁</div>
-                <strong style="font-size: 1rem; display: block; margin-top: 6px; font-weight: 800;">My Games</strong>
+              <button class="teacher-action-btn games-action-btn" onclick="TeacherPortal.openMyGames()">
+                <div class="action-icon-orb">📁</div>
+                <strong class="action-btn-title">My Games</strong>
               </button>
-              <button class="teacher-action-btn" style="background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); border: none; color: white; padding: 18px 12px; border-radius: 20px; text-align: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);" onclick="TeacherPortal.openAnalytics()">
-                <div style="font-size: 2.2rem; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));">📊</div>
-                <strong style="font-size: 1rem; display: block; margin-top: 6px; font-weight: 800;">Analytics</strong>
+              <button class="teacher-action-btn analytics-action-btn" onclick="TeacherPortal.openAnalytics()">
+                <div class="action-icon-orb">📊</div>
+                <strong class="action-btn-title">Analytics</strong>
               </button>
             </div>
           </div>
