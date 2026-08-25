@@ -167,6 +167,7 @@ const App = {
     } catch (_) {}
   },
 
+  _tickState: 0,
   playTickSound() {
     if (this.isSfxMuted || this.sfxVolume <= 0) return;
     try {
@@ -179,23 +180,29 @@ const App = {
       }
       if (!this._tickAudioCtx) return;
 
+      this._tickState = (this._tickState + 1) % 2;
+      const isTock = (this._tickState === 1);
+
       const osc = this._tickAudioCtx.createOscillator();
       const gain = this._tickAudioCtx.createGain();
 
-      osc.type = 'sine';
+      osc.type = 'triangle';
       const now = this._tickAudioCtx.currentTime;
-      osc.frequency.setValueAtTime(1200, now);
-      osc.frequency.exponentialRampToValueAtTime(300, now + 0.015);
+      const startFreq = isTock ? 900 : 1400;
+      const endFreq = isTock ? 250 : 400;
 
-      const maxGain = 0.22 * this.sfxVolume;
+      osc.frequency.setValueAtTime(startFreq, now);
+      osc.frequency.exponentialRampToValueAtTime(endFreq, now + 0.025);
+
+      const maxGain = (isTock ? 0.28 : 0.35) * this.sfxVolume;
       gain.gain.setValueAtTime(maxGain, now);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.025);
 
       osc.connect(gain);
       gain.connect(this._tickAudioCtx.destination);
 
       osc.start(now);
-      osc.stop(now + 0.015);
+      osc.stop(now + 0.025);
     } catch (_) {}
   },
 

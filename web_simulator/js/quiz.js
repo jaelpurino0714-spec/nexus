@@ -1241,6 +1241,10 @@ const Quiz = {
     this.questionStartTime = Date.now();
     this.updateTimerDisplay();
 
+    if (typeof App !== 'undefined' && App.playTickSound) {
+      App.playTickSound();
+    }
+
     this.timerInterval = setInterval(() => {
       this.timeRemainingSec--;
       this.updateTimerDisplay();
