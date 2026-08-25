@@ -1242,7 +1242,7 @@ const Quiz = {
     this.updateTimerDisplay();
 
     if (typeof App !== 'undefined' && App.playTimerAudio) {
-      App.playTimerAudio();
+      App.playTimerAudio(this.timeRemainingSec);
     }
     if (typeof App !== 'undefined' && App.playTickSound) {
       App.playTickSound();

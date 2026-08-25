@@ -190,7 +190,7 @@ const App = {
     localStorage.setItem('nexus_sfx_muted', this.isSfxMuted ? 'true' : 'false');
   },
 
-  playTimerAudio() {
+  playTimerAudio(durationSec = 20) {
     // 1. Pause background music while answering questions
     this.pauseBgm();
 
@@ -199,7 +199,15 @@ const App = {
 
     if (timerAudio) {
       try {
+        timerAudio.pause();
         timerAudio.currentTime = 0;
+
+        // Dynamic playback rate to stretch/shrink countdown ticking sound to match question time limit
+        const questionTime = Math.max(3, parseFloat(durationSec) || 20);
+        const tickingDuration = 26.8;
+        const rate = Math.min(3.0, Math.max(0.4, tickingDuration / questionTime));
+
+        timerAudio.playbackRate = rate;
         timerAudio.volume = this.timerVolume;
         timerAudio.muted = this.isTimerMuted;
         const playPromise = timerAudio.play();
@@ -238,8 +246,10 @@ const App = {
     if (timerAudio) {
       try {
         timerAudio.pause();
-        const duration = timerAudio.duration || 30;
-        timerAudio.currentTime = Math.max(0, duration - 3.5);
+        const totalDuration = timerAudio.duration || 30.0;
+        // Ringing alarm section of 30 Second Ticking Countdown Timer With Alarm.mp3
+        timerAudio.currentTime = Math.max(0, totalDuration - 3.2);
+        timerAudio.playbackRate = 1.0;
         timerAudio.volume = this.timerVolume;
         timerAudio.muted = this.isTimerMuted;
         const playPromise = timerAudio.play();
