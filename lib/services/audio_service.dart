@@ -11,13 +11,15 @@ class AudioService {
 
   static const String _bgmVolumeKey = 'nexus_bgm_volume';
   static const String _bgmMutedKey = 'nexus_bgm_muted';
-  static const String _sfxVolumeKey = 'nexus_sfx_volume';
-  static const String _sfxMutedKey = 'nexus_sfx_muted';
+  static const String _timerVolumeKey = 'nexus_timer_volume';
+  static const String _timerMutedKey = 'nexus_timer_muted';
 
   double _volume = 0.5;
   bool _isMuted = false;
   double _sfxVolume = 0.5;
   bool _isSfxMuted = false;
+  double _timerVolume = 0.6;
+  bool _isTimerMuted = false;
 
   bool _isInitialized = false;
   bool _isPlaying = false;
@@ -31,6 +33,10 @@ class AudioService {
   double get sfxVolume => _isSfxMuted ? 0.0 : _sfxVolume;
   double get rawSfxVolume => _sfxVolume;
   bool get isSfxMuted => _isSfxMuted;
+
+  double get timerVolume => _isTimerMuted ? 0.0 : _timerVolume;
+  double get rawTimerVolume => _timerVolume;
+  bool get isTimerMuted => _isTimerMuted;
 
   /// Fast non-blocking eager initialization
   Future<void> init() async {
@@ -71,6 +77,30 @@ class AudioService {
         _isSfxMuted = storedSfxMuteStr == 'true';
       }
     }).catchError((_) {});
+
+    _storage.read(key: _timerVolumeKey).then((storedTimerVolStr) {
+      if (storedTimerVolStr != null) {
+        _timerVolume = double.tryParse(storedTimerVolStr) ?? 0.6;
+      }
+    }).catchError((_) {});
+
+    _storage.read(key: _timerMutedKey).then((storedTimerMuteStr) {
+      if (storedTimerMuteStr != null) {
+        _isTimerMuted = storedTimerMuteStr == 'true';
+      }
+    }).catchError((_) {});
+  }
+
+  Future<void> setTimerVolume(double newVol) async {
+    _timerVolume = newVol;
+    await _storage.write(key: _timerVolumeKey, value: newVol.toString());
+    await _timerPlayer.setVolume(timerVolume);
+  }
+
+  Future<void> toggleTimerMute() async {
+    _isTimerMuted = !_isTimerMuted;
+    await _storage.write(key: _timerMutedKey, value: _isTimerMuted ? 'true' : 'false');
+    await _timerPlayer.setVolume(timerVolume);
   }
 
   /// Instantly starts looping background music zero-delay
@@ -110,7 +140,7 @@ class AudioService {
 
   /// Plays timer tick sound effect
   Future<void> playTickSound() async {
-    if (_isSfxMuted || _sfxVolume <= 0.0) return;
+    if (_isTimerMuted || _timerVolume <= 0.0) return;
     try {
       await SystemSound.play(SystemSoundType.click);
     } catch (_) {}
@@ -151,13 +181,14 @@ class AudioService {
     await playWrongSound();
   }
 
-  /// Plays 30sec clock background audio during active timer countdown
+  /// Plays 30sec clock background audio during active timer countdown (and pauses background music while answering)
   Future<void> playTimerAudio() async {
-    if (_isSfxMuted || _sfxVolume <= 0.0) return;
+    await pauseBgm();
+    if (_isTimerMuted || _timerVolume <= 0.0) return;
     try {
       await _timerPlayer.stop();
-      await _timerPlayer.setVolume(sfxVolume);
-      await _timerPlayer.play(AssetSource('audio/clock 30sec.mp3'), volume: sfxVolume);
+      await _timerPlayer.setVolume(timerVolume);
+      await _timerPlayer.play(AssetSource('audio/clock 30sec.mp3'), volume: timerVolume);
     } catch (_) {}
   }
 

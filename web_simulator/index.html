@@ -1658,7 +1658,20 @@
         <button id="bgmMuteBtn" onclick="App.toggleBgmMute()" style="width: 100%; padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.1); color: #38BDF8; font-weight: 700; font-size: 0.85rem; cursor: pointer;">🔇 Mute Music</button>
       </div>
 
-      <!-- 2. Button Click Sound Effects (SFX) -->
+      <!-- 2. Timer Countdown Sound -->
+      <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 20px; padding: 16px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.2rem;">⏱️</span>
+            <span style="font-size: 0.95rem; font-weight: 700; color: #FFFFFF;">Timer Clock Sound</span>
+          </div>
+          <span id="timerVolPercent" style="font-size: 0.95rem; font-weight: 800; color: #FBBF24;">60%</span>
+        </div>
+        <input type="range" id="timerVolSlider" min="0" max="100" value="60" oninput="App.setTimerVolume(this.value)" style="width: 100%; accent-color: #F59E0B; cursor: pointer; margin-bottom: 10px;">
+        <button id="timerMuteBtn" onclick="App.toggleTimerMute()" style="width: 100%; padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.1); color: #FBBF24; font-weight: 700; font-size: 0.85rem; cursor: pointer;">🔇 Mute Timer</button>
+      </div>
+
+      <!-- 3. Button Click Sound Effects (SFX) -->
       <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 20px; padding: 16px; margin-bottom: 20px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
           <div style="display: flex; align-items: center; gap: 8px;">

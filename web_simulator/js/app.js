@@ -85,12 +85,45 @@ const App = {
     this._unlockHandler = null;
   },
 
+  timerVolume: parseFloat(localStorage.getItem('nexus_timer_vol') || '0.6'),
+  isTimerMuted: localStorage.getItem('nexus_timer_muted') === 'true',
+  sfxVolume: parseFloat(localStorage.getItem('nexus_sfx_vol') || '0.5'),
+  isSfxMuted: localStorage.getItem('nexus_sfx_muted') === 'true',
+
+  pauseBgm() {
+    const audio = document.getElementById('nexusBgmAudio');
+    if (audio) {
+      try {
+        audio.pause();
+      } catch (_) {}
+    }
+  },
+
   toggleBgmModal() {
     const modal = document.getElementById('bgmModal');
     if (modal) {
       const isShowing = modal.style.display === 'flex';
       modal.style.display = isShowing ? 'none' : 'flex';
       if (!isShowing) {
+        // Sync BGM controls
+        const bgmAudio = document.getElementById('nexusBgmAudio');
+        const bgmSlider = document.getElementById('bgmVolSlider');
+        const bgmLabel = document.getElementById('bgmVolPercent');
+        const bgmBtn = document.getElementById('bgmMuteBtn');
+        const currentBgmVol = bgmAudio ? bgmAudio.volume : parseFloat(localStorage.getItem('nexus_bgm_vol') || '0.5');
+        if (bgmSlider) bgmSlider.value = Math.round(currentBgmVol * 100);
+        if (bgmLabel) bgmLabel.textContent = `${Math.round(currentBgmVol * 100)}%`;
+        if (bgmBtn && bgmAudio) bgmBtn.textContent = bgmAudio.muted ? '🔊 Unmute' : '🔇 Mute';
+
+        // Sync Timer controls
+        const timerSlider = document.getElementById('timerVolSlider');
+        const timerLabel = document.getElementById('timerVolPercent');
+        const timerBtn = document.getElementById('timerMuteBtn');
+        if (timerSlider) timerSlider.value = Math.round(this.timerVolume * 100);
+        if (timerLabel) timerLabel.textContent = `${Math.round(this.timerVolume * 100)}%`;
+        if (timerBtn) timerBtn.textContent = this.isTimerMuted ? '🔊 Unmute Timer' : '🔇 Mute Timer';
+
+        // Sync SFX controls
         const sfxSlider = document.getElementById('sfxVolSlider');
         const sfxLabel = document.getElementById('sfxVolPercent');
         const sfxBtn = document.getElementById('sfxMuteBtn');
@@ -118,6 +151,29 @@ const App = {
     if (btn) btn.textContent = audio.muted ? '🔊 Unmute' : '🔇 Mute';
   },
 
+  setTimerVolume(val) {
+    const vol = parseFloat(val) / 100.0;
+    this.timerVolume = vol;
+    if (vol > 0) this.isTimerMuted = false;
+    const label = document.getElementById('timerVolPercent');
+    if (label) label.textContent = `${val}%`;
+    localStorage.setItem('nexus_timer_vol', vol.toString());
+    const timerAudio = document.getElementById('nexusTimerAudio');
+    if (timerAudio) {
+      timerAudio.volume = this.timerVolume;
+      timerAudio.muted = this.isTimerMuted;
+    }
+  },
+
+  toggleTimerMute() {
+    this.isTimerMuted = !this.isTimerMuted;
+    const btn = document.getElementById('timerMuteBtn');
+    if (btn) btn.textContent = this.isTimerMuted ? '🔊 Unmute Timer' : '🔇 Mute Timer';
+    localStorage.setItem('nexus_timer_muted', this.isTimerMuted ? 'true' : 'false');
+    const timerAudio = document.getElementById('nexusTimerAudio');
+    if (timerAudio) timerAudio.muted = this.isTimerMuted;
+  },
+
   setSfxVolume(val) {
     const vol = parseFloat(val) / 100.0;
     this.sfxVolume = vol;
@@ -132,46 +188,36 @@ const App = {
     const btn = document.getElementById('sfxMuteBtn');
     if (btn) btn.textContent = this.isSfxMuted ? '🔊 Unmute SFX' : '🔇 Mute SFX';
     localStorage.setItem('nexus_sfx_muted', this.isSfxMuted ? 'true' : 'false');
-    const timerAudio = document.getElementById('nexusTimerAudio');
-    if (timerAudio) timerAudio.muted = this.isSfxMuted;
   },
 
   playTimerAudio() {
-    if (this.isSfxMuted || this.sfxVolume <= 0) return;
+    // 1. Pause background music while answering questions
+    this.pauseBgm();
+
+    if (this.isTimerMuted || this.timerVolume <= 0) return;
     const timerAudio = document.getElementById('nexusTimerAudio');
-    const bgmAudio = document.getElementById('nexusBgmAudio');
 
     if (timerAudio) {
       try {
         timerAudio.currentTime = 0;
-        timerAudio.volume = Math.min(1.0, this.sfxVolume * 1.2);
-        timerAudio.muted = this.isSfxMuted;
+        timerAudio.volume = this.timerVolume;
+        timerAudio.muted = this.isTimerMuted;
         const playPromise = timerAudio.play();
         if (playPromise !== undefined) {
           playPromise.catch(() => {});
         }
       } catch (_) {}
     }
-
-    if (bgmAudio && !bgmAudio.paused) {
-      bgmAudio.volume = Math.max(0.05, (parseFloat(localStorage.getItem('nexus_bgm_vol') || '0.5') * 0.25));
-    }
   },
 
   stopTimerAudio() {
     const timerAudio = document.getElementById('nexusTimerAudio');
-    const bgmAudio = document.getElementById('nexusBgmAudio');
 
     if (timerAudio) {
       try {
         timerAudio.pause();
         timerAudio.currentTime = 0;
       } catch (_) {}
-    }
-
-    if (bgmAudio) {
-      const savedBgmVol = parseFloat(localStorage.getItem('nexus_bgm_vol') || '0.5');
-      bgmAudio.volume = savedBgmVol;
     }
   },
 
@@ -405,11 +451,19 @@ const App = {
       screenId = 'teacherHomeScreen';
     }
 
-    if (screenId !== 'gameplayScreen' && screenId !== 'mpPlayerGameScreen') {
-      this.stopTimerAudio();
-    }
+    const isAnsweringScreen = (
+      screenId === 'gameplayScreen' ||
+      screenId === 'quizQuestionScreen' ||
+      screenId === 'mpPlayerGameScreen' ||
+      screenId === 'mpHostGameScreen' ||
+      screenId === 'mpPlayerQuestionScreen' ||
+      screenId === 'mpHostQuestionScreen'
+    );
 
-    if (screenId === 'homeScreen' || screenId === 'teacherHomeScreen' || screenId === 'loginSelectionScreen') {
+    if (isAnsweringScreen) {
+      this.pauseBgm();
+    } else {
+      this.stopTimerAudio();
       this.playBgm();
     }
 
