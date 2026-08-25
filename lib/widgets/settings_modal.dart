@@ -155,6 +155,102 @@ class SettingsModal extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
 
+            // --- BUTTON CLICK SOUND EFFECTS (SFX) SECTION ---
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E293B),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFF10B981).withOpacity(0.3)),
+              ),
+              child: Column(
+                crossAlignment: CrossAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            audioState.isSfxMuted
+                                ? Icons.volume_off
+                                : (audioState.sfxVolume > 0.5
+                                    ? Icons.volume_up
+                                    : Icons.volume_down),
+                            color: const Color(0xFF34D399),
+                            size: 22,
+                          ),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Button Click Sounds',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      // SFX Mute Toggle Button
+                      IconButton(
+                        icon: Icon(
+                          audioState.isSfxMuted ? Icons.volume_off_outlined : Icons.volume_up_outlined,
+                          color: audioState.isSfxMuted ? Colors.redAccent : const Color(0xFF34D399),
+                        ),
+                        tooltip: audioState.isSfxMuted ? 'Unmute SFX' : 'Mute SFX',
+                        onPressed: () => audioNotifier.toggleSfxMute(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+
+                  // SFX Volume Slider
+                  Row(
+                    children: [
+                      const Icon(Icons.volume_mute, color: Colors.white54, size: 18),
+                      Expanded(
+                        child: SliderTheme(
+                          data: SliderThemeData(
+                            activeTrackColor: const Color(0xFF10B981),
+                            inactiveTrackColor: Colors.white12,
+                            thumbColor: const Color(0xFF34D399),
+                            overlayColor: const Color(0xFF34D399).withOpacity(0.2),
+                            trackHeight: 6,
+                          ),
+                          child: Slider(
+                            value: audioState.sfxVolume,
+                            min: 0.0,
+                            max: 1.0,
+                            divisions: 20,
+                            label: '${(audioState.sfxVolume * 100).round()}%',
+                            onChanged: (val) {
+                              audioNotifier.setSfxVolume(val);
+                            },
+                          ),
+                        ),
+                      ),
+                      const Icon(Icons.volume_up, color: Colors.white70, size: 18),
+                    ],
+                  ),
+
+                  // Volume Percentage Display
+                  Center(
+                    child: Text(
+                      audioState.isSfxMuted
+                          ? 'Muted (0%)'
+                          : 'Volume: ${(audioState.sfxVolume * 100).round()}%',
+                      style: TextStyle(
+                        color: audioState.isSfxMuted ? Colors.redAccent : const Color(0xFF34D399),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+
             // Close Button
             SizedBox(
               width: double.infinity,

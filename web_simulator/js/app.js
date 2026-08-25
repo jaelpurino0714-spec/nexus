@@ -88,7 +88,16 @@ const App = {
   toggleBgmModal() {
     const modal = document.getElementById('bgmModal');
     if (modal) {
-      modal.style.display = modal.style.display === 'none' || !modal.style.display ? 'flex' : 'none';
+      const isShowing = modal.style.display === 'flex';
+      modal.style.display = isShowing ? 'none' : 'flex';
+      if (!isShowing) {
+        const sfxSlider = document.getElementById('sfxVolSlider');
+        const sfxLabel = document.getElementById('sfxVolPercent');
+        const sfxBtn = document.getElementById('sfxMuteBtn');
+        if (sfxSlider) sfxSlider.value = Math.round(this.sfxVolume * 100);
+        if (sfxLabel) sfxLabel.textContent = `${Math.round(this.sfxVolume * 100)}%`;
+        if (sfxBtn) sfxBtn.textContent = this.isSfxMuted ? '🔊 Unmute SFX' : '🔇 Mute SFX';
+      }
     }
   },
 
@@ -109,7 +118,25 @@ const App = {
     if (btn) btn.textContent = audio.muted ? '🔊 Unmute' : '🔇 Mute';
   },
 
+  setSfxVolume(val) {
+    const vol = parseFloat(val) / 100.0;
+    this.sfxVolume = vol;
+    if (vol > 0) this.isSfxMuted = false;
+    const label = document.getElementById('sfxVolPercent');
+    if (label) label.textContent = `${val}%`;
+    localStorage.setItem('nexus_sfx_vol', vol.toString());
+  },
+
+  toggleSfxMute() {
+    this.isSfxMuted = !this.isSfxMuted;
+    const btn = document.getElementById('sfxMuteBtn');
+    if (btn) btn.textContent = this.isSfxMuted ? '🔊 Unmute SFX' : '🔇 Mute SFX';
+    localStorage.setItem('nexus_sfx_muted', this.isSfxMuted ? 'true' : 'false');
+  },
+
   playClickSound() {
+    if (this.isSfxMuted || this.sfxVolume <= 0) return;
+
     try {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!AudioCtx) return;
@@ -128,7 +155,8 @@ const App = {
       osc.frequency.setValueAtTime(650, now);
       osc.frequency.exponentialRampToValueAtTime(140, now + 0.045);
 
-      gain.gain.setValueAtTime(0.3, now);
+      const maxGain = 0.35 * this.sfxVolume;
+      gain.gain.setValueAtTime(maxGain, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
 
       osc.connect(gain);

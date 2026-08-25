@@ -11,9 +11,14 @@ class AudioService {
 
   static const String _bgmVolumeKey = 'nexus_bgm_volume';
   static const String _bgmMutedKey = 'nexus_bgm_muted';
+  static const String _sfxVolumeKey = 'nexus_sfx_volume';
+  static const String _sfxMutedKey = 'nexus_sfx_muted';
 
   double _volume = 0.5;
   bool _isMuted = false;
+  double _sfxVolume = 0.5;
+  bool _isSfxMuted = false;
+
   bool _isInitialized = false;
   bool _isPlaying = false;
   bool _isSourceSet = false;
@@ -22,6 +27,10 @@ class AudioService {
   double get rawVolume => _volume;
   bool get isMuted => _isMuted;
   bool get isPlaying => _isPlaying;
+
+  double get sfxVolume => _isSfxMuted ? 0.0 : _sfxVolume;
+  double get rawSfxVolume => _sfxVolume;
+  bool get isSfxMuted => _isSfxMuted;
 
   /// Fast non-blocking eager initialization
   Future<void> init() async {
@@ -48,6 +57,18 @@ class AudioService {
       if (storedMuteStr != null) {
         _isMuted = storedMuteStr == 'true';
         _bgmPlayer.setVolume(volume);
+      }
+    }).catchError((_) {});
+
+    _storage.read(key: _sfxVolumeKey).then((storedSfxVolStr) {
+      if (storedSfxVolStr != null) {
+        _sfxVolume = double.tryParse(storedSfxVolStr) ?? 0.5;
+      }
+    }).catchError((_) {});
+
+    _storage.read(key: _sfxMutedKey).then((storedSfxMuteStr) {
+      if (storedSfxMuteStr != null) {
+        _isSfxMuted = storedSfxMuteStr == 'true';
       }
     }).catchError((_) {});
   }
@@ -79,6 +100,7 @@ class AudioService {
 
   /// Plays button tap / click feedback sound
   Future<void> playClickSound() async {
+    if (_isSfxMuted || _sfxVolume <= 0.0) return;
     try {
       await SystemSound.play(SystemSoundType.click);
     } catch (_) {}
@@ -112,6 +134,20 @@ class AudioService {
     _isMuted = !_isMuted;
     _storage.write(key: _bgmMutedKey, value: _isMuted.toString());
     await _bgmPlayer.setVolume(volume);
+  }
+
+  Future<void> setSfxVolume(double newVolume) async {
+    _sfxVolume = newVolume.clamp(0.0, 1.0);
+    if (_sfxVolume > 0.0 && _isSfxMuted) {
+      _isSfxMuted = false;
+      _storage.write(key: _sfxMutedKey, value: 'false');
+    }
+    _storage.write(key: _sfxVolumeKey, value: _sfxVolume.toString());
+  }
+
+  Future<void> toggleSfxMute() async {
+    _isSfxMuted = !_isSfxMuted;
+    _storage.write(key: _sfxMutedKey, value: _isSfxMuted.toString());
   }
 
   void dispose() {

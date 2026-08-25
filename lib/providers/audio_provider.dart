@@ -5,22 +5,30 @@ class AudioState {
   final double volume;
   final bool isMuted;
   final bool isPlaying;
+  final double sfxVolume;
+  final bool isSfxMuted;
 
   const AudioState({
     required this.volume,
     required this.isMuted,
     required this.isPlaying,
+    required this.sfxVolume,
+    required this.isSfxMuted,
   });
 
   AudioState copyWith({
     double? volume,
     bool? isMuted,
     bool? isPlaying,
+    double? sfxVolume,
+    bool? isSfxMuted,
   }) {
     return AudioState(
       volume: volume ?? this.volume,
       isMuted: isMuted ?? this.isMuted,
       isPlaying: isPlaying ?? this.isPlaying,
+      sfxVolume: sfxVolume ?? this.sfxVolume,
+      isSfxMuted: isSfxMuted ?? this.isSfxMuted,
     );
   }
 }
@@ -31,6 +39,8 @@ class AudioNotifier extends StateNotifier<AudioState> {
           volume: AudioService.instance.rawVolume,
           isMuted: AudioService.instance.isMuted,
           isPlaying: AudioService.instance.isPlaying,
+          sfxVolume: AudioService.instance.rawSfxVolume,
+          isSfxMuted: AudioService.instance.isSfxMuted,
         )) {
     _init();
   }
@@ -41,6 +51,8 @@ class AudioNotifier extends StateNotifier<AudioState> {
       volume: AudioService.instance.rawVolume,
       isMuted: AudioService.instance.isMuted,
       isPlaying: AudioService.instance.isPlaying,
+      sfxVolume: AudioService.instance.rawSfxVolume,
+      isSfxMuted: AudioService.instance.isSfxMuted,
     );
   }
 
@@ -70,6 +82,21 @@ class AudioNotifier extends StateNotifier<AudioState> {
     await AudioService.instance.toggleMute();
     state = state.copyWith(
       isMuted: AudioService.instance.isMuted,
+    );
+  }
+
+  Future<void> setSfxVolume(double volume) async {
+    await AudioService.instance.setSfxVolume(volume);
+    state = state.copyWith(
+      sfxVolume: AudioService.instance.rawSfxVolume,
+      isSfxMuted: AudioService.instance.isSfxMuted,
+    );
+  }
+
+  Future<void> toggleSfxMute() async {
+    await AudioService.instance.toggleSfxMute();
+    state = state.copyWith(
+      isSfxMuted: AudioService.instance.isSfxMuted,
     );
   }
 }
