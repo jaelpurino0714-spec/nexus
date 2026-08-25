@@ -20,8 +20,14 @@ const App = {
   },
 
   initBgm() {
+    this.playBgm();
+  },
+
+  playBgm() {
     const audio = document.getElementById('nexusBgmAudio');
     if (!audio) return;
+    audio.loop = true;
+
     const savedVol = localStorage.getItem('nexus_bgm_vol');
     const volVal = savedVol !== null ? parseFloat(savedVol) : 0.5;
     audio.volume = volVal;
@@ -31,8 +37,9 @@ const App = {
     if (slider) slider.value = Math.round(volVal * 100);
     if (label) label.textContent = `${Math.round(volVal * 100)}%`;
 
-    const playAudio = () => {
-      audio.play().catch(() => {
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
         const startOnUserAction = () => {
           audio.play().catch(() => {});
           ['click', 'pointerdown', 'keydown', 'touchstart'].forEach(evt => {
@@ -43,9 +50,7 @@ const App = {
           document.addEventListener(evt, startOnUserAction, { once: true });
         });
       });
-    };
-
-    playAudio();
+    }
   },
 
   toggleBgmModal() {
@@ -143,11 +148,8 @@ const App = {
       screenId = 'teacherHomeScreen';
     }
 
-    if (screenId === 'homeScreen' || screenId === 'teacherHomeScreen') {
-      const audio = document.getElementById('nexusBgmAudio');
-      if (audio) {
-        audio.play().catch(() => {});
-      }
+    if (screenId === 'homeScreen' || screenId === 'teacherHomeScreen' || screenId === 'loginSelectionScreen') {
+      this.playBgm();
     }
 
     this.currentScreen = screenId;

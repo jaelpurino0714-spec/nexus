@@ -2,13 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';
 import '../providers/analytics_provider.dart';
+import '../providers/audio_provider.dart';
 import '../utils/csv_exporter.dart';
 
-class TeacherDashboardScreen extends ConsumerWidget {
+class TeacherDashboardScreen extends ConsumerStatefulWidget {
   const TeacherDashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TeacherDashboardScreen> createState() => _TeacherDashboardScreenState();
+}
+
+class _TeacherDashboardScreenState extends ConsumerState<TeacherDashboardScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Instantly trigger looping background music zero-delay
+    ref.read(audioProvider.notifier).playBgm();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final analyticsAsync = ref.watch(teacherAnalyticsProvider);
 
     return Scaffold(
