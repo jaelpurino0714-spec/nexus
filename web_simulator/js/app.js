@@ -15,7 +15,51 @@ const App = {
 
   init() {
     this.bindEvents();
+    this.initBgm();
     this.checkInitialAuth();
+  },
+
+  initBgm() {
+    const audio = document.getElementById('nexusBgmAudio');
+    if (!audio) return;
+    const savedVol = localStorage.getItem('nexus_bgm_vol');
+    const volVal = savedVol !== null ? parseFloat(savedVol) : 0.5;
+    audio.volume = volVal;
+
+    const slider = document.getElementById('bgmVolSlider');
+    const label = document.getElementById('bgmVolPercent');
+    if (slider) slider.value = Math.round(volVal * 100);
+    if (label) label.textContent = `${Math.round(volVal * 100)}%`;
+
+    const startPlay = () => {
+      audio.play().catch(() => {});
+      document.removeEventListener('click', startPlay);
+    };
+    document.addEventListener('click', startPlay);
+  },
+
+  toggleBgmModal() {
+    const modal = document.getElementById('bgmModal');
+    if (modal) {
+      modal.style.display = modal.style.display === 'none' || !modal.style.display ? 'flex' : 'none';
+    }
+  },
+
+  setBgmVolume(val) {
+    const audio = document.getElementById('nexusBgmAudio');
+    const label = document.getElementById('bgmVolPercent');
+    const vol = parseFloat(val) / 100.0;
+    if (audio) audio.volume = vol;
+    if (label) label.textContent = `${val}%`;
+    localStorage.setItem('nexus_bgm_vol', vol.toString());
+  },
+
+  toggleBgmMute() {
+    const audio = document.getElementById('nexusBgmAudio');
+    const btn = document.getElementById('bgmMuteBtn');
+    if (!audio) return;
+    audio.muted = !audio.muted;
+    if (btn) btn.textContent = audio.muted ? '🔊 Unmute' : '🔇 Mute';
   },
 
   bindEvents() {

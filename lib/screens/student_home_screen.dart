@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../providers/character_provider.dart';
+import '../providers/audio_provider.dart';
 import '../widgets/character_pet_modal.dart';
 import '../widgets/gender_selection_dialog.dart';
+import '../widgets/settings_modal.dart';
 
 class StudentHomeScreen extends ConsumerStatefulWidget {
   const StudentHomeScreen({super.key});
@@ -18,6 +20,9 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Auto-start looping background music on Home Screen
+      ref.read(audioProvider.notifier).playBgm();
+
       final charState = ref.read(characterProvider);
       if (charState.pendingGenderSelection) {
         showDialog(
@@ -38,14 +43,32 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
     );
   }
 
+  void _showSettingsModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => const SettingsModal(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
+    final audioState = ref.watch(audioProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Welcome, ${authState.profile?.name ?? "Student"}!'),
         actions: [
+          IconButton(
+            icon: Icon(
+              audioState.isMuted ? Icons.volume_off : Icons.volume_up,
+              color: audioState.isMuted ? Colors.grey : const Color(0xFF8B5CF6),
+            ),
+            tooltip: 'Audio Settings',
+            onPressed: () => _showSettingsModal(context),
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () => ref.read(authProvider.notifier).logout(),
@@ -148,7 +171,7 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
                 ),
                 const SizedBox(height: 14),
 
-                // 5. Settings / Analytics Button
+                // 5. Settings Button with Volume Slider Control
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 18),
@@ -165,7 +188,7 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {
-                    context.push('/student/analytics');
+                    _showSettingsModal(context);
                   },
                 ),
               ],

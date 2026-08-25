@@ -51,9 +51,13 @@
       </div>
       <div class="header-actions">
         <span id="userBadge" class="user-badge" style="display: none;">Student</span>
+        <button id="bgmToggleBtn" class="icon-btn" onclick="App.toggleBgmModal()" title="Background Music & Volume Settings">🎵</button>
         <button id="toggleFrameBtn" class="icon-btn" title="Toggle Mobile Frame View">📱</button>
       </div>
     </header>
+
+    <!-- Background Music Audio Element -->
+    <audio id="nexusBgmAudio" loop src="assets/audio/bg_music.mp3"></audio>
 
     <!-- Main Content View Container -->
     <main class="app-content" id="mainContent">
@@ -1618,5 +1622,28 @@
     setInterval(updatePhoneClock, 1000);
     updatePhoneClock();
   </script>
+
+  <!-- Background Music Volume Settings Modal -->
+  <div id="bgmModal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 10000; align-items: center; justify-content: center;">
+    <div style="background: #0F172A; border: 1.5px solid #8B5CF6; border-radius: 24px; padding: 24px; width: 90%; max-width: 380px; box-shadow: 0 10px 40px rgba(139,92,246,0.3); color: white;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #FFFFFF;">🎵 Background Music</h3>
+        <button onclick="App.toggleBgmModal()" style="background: none; border: none; color: #94A3B8; font-size: 1.4rem; cursor: pointer;">✕</button>
+      </div>
+
+      <div style="background: #1E293B; border-radius: 16px; padding: 16px; margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <span style="font-size: 0.95rem; font-weight: 600; color: #CBD5E1;">Volume Level</span>
+          <span id="bgmVolPercent" style="font-size: 0.95rem; font-weight: 700; color: #C084FC;">50%</span>
+        </div>
+        <input type="range" id="bgmVolSlider" min="0" max="100" value="50" oninput="App.setBgmVolume(this.value)" style="width: 100%; accent-color: #8B5CF6; cursor: pointer;">
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button id="bgmMuteBtn" onclick="App.toggleBgmMute()" style="flex: 1; padding: 12px; border-radius: 14px; border: 1px solid #38BDF8; background: transparent; color: #38BDF8; font-weight: 700; cursor: pointer;">🔇 Mute</button>
+        <button onclick="App.toggleBgmModal()" style="flex: 1; padding: 12px; border-radius: 14px; border: none; background: #8B5CF6; color: white; font-weight: 700; cursor: pointer;">Done</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
