@@ -1425,10 +1425,19 @@ const Multiplayer = {
       startTime = now;
     }
 
+    let lastSecInt = -1;
     const updateTimer = () => {
       const currentNow = Date.now();
       const elapsedMs = currentNow - startTime;
       let remainingMs = Math.max(0, durationMs - elapsedMs);
+
+      const secInt = Math.ceil(remainingMs / 1000);
+      if (remainingMs > 0 && secInt !== lastSecInt) {
+        lastSecInt = secInt;
+        if (typeof App !== 'undefined' && App.playTickSound) {
+          App.playTickSound();
+        }
+      }
 
       const remainingSec = (remainingMs / 1000).toFixed(2);
 

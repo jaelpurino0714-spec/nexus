@@ -8,6 +8,7 @@ import '../services/question_service.dart';
 import '../services/quiz_service.dart';
 import '../services/sync_service.dart';
 import '../services/lobby_service.dart';
+import '../services/audio_service.dart';
 import '../core/network/connectivity_service.dart';
 
 final questionServiceProvider = Provider<QuestionService>((ref) => QuestionService());
@@ -188,6 +189,7 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
         return;
       }
 
+      AudioService.instance.playTickSound();
       if (state!.secondsRemaining > 1) {
         state = state!.copyWith(secondsRemaining: state!.secondsRemaining - 1);
       } else {

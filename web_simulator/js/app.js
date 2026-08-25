@@ -167,6 +167,38 @@ const App = {
     } catch (_) {}
   },
 
+  playTickSound() {
+    if (this.isSfxMuted || this.sfxVolume <= 0) return;
+    try {
+      if (!this._tickAudioCtx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) this._tickAudioCtx = new AudioCtx();
+      }
+      if (this._tickAudioCtx && this._tickAudioCtx.state === 'suspended') {
+        this._tickAudioCtx.resume().catch(() => {});
+      }
+      if (!this._tickAudioCtx) return;
+
+      const osc = this._tickAudioCtx.createOscillator();
+      const gain = this._tickAudioCtx.createGain();
+
+      osc.type = 'sine';
+      const now = this._tickAudioCtx.currentTime;
+      osc.frequency.setValueAtTime(1200, now);
+      osc.frequency.exponentialRampToValueAtTime(300, now + 0.015);
+
+      const maxGain = 0.22 * this.sfxVolume;
+      gain.gain.setValueAtTime(maxGain, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.015);
+
+      osc.connect(gain);
+      gain.connect(this._tickAudioCtx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.015);
+    } catch (_) {}
+  },
+
   bindEvents() {
     const toggleBtn = document.getElementById('toggleFrameBtn');
     if (toggleBtn) {

@@ -106,6 +106,14 @@ class AudioService {
     } catch (_) {}
   }
 
+  /// Plays timer tick sound effect
+  Future<void> playTickSound() async {
+    if (_isSfxMuted || _sfxVolume <= 0.0) return;
+    try {
+      await SystemSound.play(SystemSoundType.click);
+    } catch (_) {}
+  }
+
   Future<void> pauseBgm() async {
     try {
       await _bgmPlayer.pause();

@@ -1244,6 +1244,9 @@ const Quiz = {
     this.timerInterval = setInterval(() => {
       this.timeRemainingSec--;
       this.updateTimerDisplay();
+      if (typeof App !== 'undefined' && App.playTickSound) {
+        App.playTickSound();
+      }
 
       if (this.timeRemainingSec <= 0) {
         clearInterval(this.timerInterval);
