@@ -233,7 +233,19 @@ var DB = {
 
   _formatQuestions(rawQuestions) {
     if (!Array.isArray(rawQuestions)) return [];
-    return rawQuestions.map(q => {
+
+    // Deduplicate Supabase questions by unique ID and question prompt text
+    const uniqueMap = new Map();
+    rawQuestions.forEach(q => {
+      if (!q) return;
+      const key = (q.id ? String(q.id) : '') + '::' + (q.question ? String(q.question).trim().toLowerCase() : Math.random().toString());
+      if (!uniqueMap.has(key)) {
+        uniqueMap.set(key, q);
+      }
+    });
+
+    const uniqueRaw = Array.from(uniqueMap.values());
+    return uniqueRaw.map(q => {
       let typeId = q.question_type_id || 1;
       let choiceA = q.choice_a || q.option_a || '';
       let choiceB = q.choice_b || q.option_b || '';
