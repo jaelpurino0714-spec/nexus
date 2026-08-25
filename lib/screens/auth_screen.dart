@@ -182,9 +182,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
               children: [
                 // Header Logo
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF8B5CF6).withOpacity(0.15),
+                    color: const Color(0xFF8B5CF6).withOpacity(0.2),
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
@@ -193,7 +193,14 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
                       ),
                     ],
                   ),
-                  child: const Text('🧬', style: TextStyle(fontSize: 48)),
+                  child: ClipOval(
+                    child: Image.asset(
+                      'assets/images/app_logo.png',
+                      width: 72,
+                      height: 72,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 RichText(

@@ -5,15 +5,19 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color(0xFF673AB7),
+    return Scaffold(
+      backgroundColor: const Color(0xFF673AB7),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              '🧬',
-              style: TextStyle(fontSize: 72),
+            ClipOval(
+              child: Image.asset(
+                'assets/images/app_logo.png',
+                width: 96,
+                height: 96,
+                fit: BoxFit.cover,
+              ),
             ),
             SizedBox(height: 16),
             Text(

@@ -15,14 +15,28 @@ class LoginSelectionScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAlignment.stretch,
             children: [
-              const Text(
-                '🧬 NEXUS',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.extrabold,
-                  color: Color(0xFF673AB7),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipOval(
+                    child: Image.asset(
+                      'assets/images/app_logo.png',
+                      width: 48,
+                      height: 48,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Text(
+                    'NEXUS',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.extrabold,
+                      color: Color(0xFF673AB7),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
               const Text(
