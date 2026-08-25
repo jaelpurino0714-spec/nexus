@@ -1143,6 +1143,21 @@ const Quiz = {
       await this.prepareBuiltinQuestions();
     }
 
+    // MANDATORY DEDUPLICATION: Guarantee 100% unique questions per test session
+    if (this.questionsList && this.questionsList.length > 0) {
+      const seenKeys = new Set();
+      const uniqueList = [];
+      for (const q of this.questionsList) {
+        if (!q) continue;
+        const key = (q.id ? String(q.id) : '') + '::' + (q.question ? String(q.question).trim().toLowerCase() : '');
+        if (!seenKeys.has(key)) {
+          seenKeys.add(key);
+          uniqueList.push(q);
+        }
+      }
+      this.questionsList = uniqueList;
+    }
+
     App.showScreen('gameplayScreen');
     this.renderQuestion();
   },
