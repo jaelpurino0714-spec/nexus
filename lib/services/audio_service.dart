@@ -116,6 +116,41 @@ class AudioService {
     } catch (_) {}
   }
 
+  final AudioPlayer _sfxPlayer = AudioPlayer();
+
+  /// Plays sound effect when question is answered correctly
+  Future<void> playCorrectSound() async {
+    if (_isSfxMuted || _sfxVolume <= 0.0) return;
+    try {
+      await _sfxPlayer.stop();
+      await _sfxPlayer.setVolume(sfxVolume);
+      await _sfxPlayer.play(AssetSource('audio/correct.mp3'), volume: sfxVolume);
+    } catch (_) {
+      try {
+        await SystemSound.play(SystemSoundType.click);
+      } catch (_) {}
+    }
+  }
+
+  /// Plays sound effect when question is answered incorrectly or time expires
+  Future<void> playWrongSound() async {
+    if (_isSfxMuted || _sfxVolume <= 0.0) return;
+    try {
+      await _sfxPlayer.stop();
+      await _sfxPlayer.setVolume(sfxVolume);
+      await _sfxPlayer.play(AssetSource('audio/wrong.mp3'), volume: sfxVolume);
+    } catch (_) {
+      try {
+        await SystemSound.play(SystemSoundType.click);
+      } catch (_) {}
+    }
+  }
+
+  /// Alias for playWrongSound
+  Future<void> playIncorrectSound() async {
+    await playWrongSound();
+  }
+
   /// Plays 30sec clock background audio during active timer countdown
   Future<void> playTimerAudio() async {
     if (_isSfxMuted || _sfxVolume <= 0.0) return;

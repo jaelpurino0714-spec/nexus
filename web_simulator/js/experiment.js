@@ -390,6 +390,12 @@ const Experiment = {
       this.bIsCorrect = (c1 === 2 && c2 === 1 && c3 === 2);
     }
 
+    if (this.bIsCorrect) {
+      if (typeof App !== 'undefined' && App.playCorrectSound) App.playCorrectSound();
+    } else {
+      if (typeof App !== 'undefined' && App.playWrongSound) App.playWrongSound();
+    }
+
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) {
       this.renderBalancingChemicalEquationsActivity(canvasBox);
@@ -573,6 +579,12 @@ const Experiment = {
       this.challengeIsCorrect = true;
     } else {
       this.challengeIsCorrect = false;
+    }
+
+    if (this.challengeIsCorrect) {
+      if (typeof App !== 'undefined' && App.playCorrectSound) App.playCorrectSound();
+    } else {
+      if (typeof App !== 'undefined' && App.playWrongSound) App.playWrongSound();
     }
 
     const canvasBox = document.getElementById('expCanvasBox');

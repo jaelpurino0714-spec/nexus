@@ -1370,6 +1370,7 @@ const Quiz = {
     const subTextEl = document.getElementById('feedbackAnswerSub');
 
     if (isCorrect) {
+      if (typeof App !== 'undefined' && App.playCorrectSound) App.playCorrectSound();
       this.correctCount++;
       this.streak++;
       if (this.streak > this.maxStreak) this.maxStreak = this.streak;
@@ -1388,6 +1389,7 @@ const Quiz = {
       if (statusTextEl) statusTextEl.textContent = `✅ Correct! +${earned} pts`;
       if (subTextEl) subTextEl.textContent = '';
     } else {
+      if (typeof App !== 'undefined' && App.playWrongSound) App.playWrongSound();
       this.incorrectCount++;
       this.streak = 0;
       if (feedback) feedback.className = 'feedback-banner wrong';
@@ -1494,6 +1496,7 @@ const Quiz = {
     }
 
     if (feedback) feedback.className = 'feedback-banner wrong';
+    if (typeof App !== 'undefined' && App.playWrongSound) App.playWrongSound();
     if (statusTextEl) statusTextEl.textContent = `⏰ Time's Up! (Wrong - 0 pts)`;
     if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${correctDisplay}</b>`;
 

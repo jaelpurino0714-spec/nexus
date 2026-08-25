@@ -198,6 +198,7 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
         state = state!.copyWith(secondsRemaining: 0);
         timer.cancel();
         AudioService.instance.stopTimerAudio();
+        AudioService.instance.playWrongSound();
       }
     });
   }
@@ -256,6 +257,12 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
         isCorrect = (upperSel == corrOptionText) ||
                     (corrOptionText.isNotEmpty && (upperSel.contains(corrOptionText) || corrOptionText.contains(upperSel)));
       }
+    }
+
+    if (isCorrect) {
+      AudioService.instance.playCorrectSound();
+    } else {
+      AudioService.instance.playWrongSound();
     }
 
     int newScore = state!.score + (isCorrect ? 10 : 0);

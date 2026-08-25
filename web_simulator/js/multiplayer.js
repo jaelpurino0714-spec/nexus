@@ -1355,6 +1355,12 @@ const Multiplayer = {
         isCorrect: result.is_correct || false
       });
 
+      if (result.is_correct) {
+        if (typeof App !== 'undefined' && App.playCorrectSound) App.playCorrectSound();
+      } else {
+        if (typeof App !== 'undefined' && App.playWrongSound) App.playWrongSound();
+      }
+
       if (banner && statusText && subText) {
         statusText.textContent = result.is_correct ? '✅ Correct Answer!' : '❌ Incorrect Answer';
         subText.textContent = `+${result.points_earned || 0} points earned!`;

@@ -247,6 +247,91 @@ const App = {
     } catch (_) {}
   },
 
+  playCorrectSound() {
+    if (this.isSfxMuted || this.sfxVolume <= 0) return;
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!this._sfxAudioCtx) {
+        this._sfxAudioCtx = new AudioCtx();
+      }
+      if (this._sfxAudioCtx.state === 'suspended') {
+        this._sfxAudioCtx.resume().catch(() => {});
+      }
+      const ctx = this._sfxAudioCtx;
+      const now = ctx.currentTime;
+
+      // Bright, cheerful 4-step ascending major chord chime (C5, E5, G5, C6)
+      const notes = [
+        { freq: 523.25, time: 0.00, duration: 0.12 },
+        { freq: 659.25, time: 0.08, duration: 0.12 },
+        { freq: 783.99, time: 0.16, duration: 0.20 },
+        { freq: 1046.50, time: 0.24, duration: 0.30 }
+      ];
+
+      notes.forEach(n => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(n.freq, now + n.time);
+
+        const vol = 0.35 * this.sfxVolume;
+        gain.gain.setValueAtTime(vol, now + n.time);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + n.time + n.duration);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now + n.time);
+        osc.stop(now + n.time + n.duration);
+      });
+    } catch (_) {}
+  },
+
+  playWrongSound() {
+    if (this.isSfxMuted || this.sfxVolume <= 0) return;
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!this._sfxAudioCtx) {
+        this._sfxAudioCtx = new AudioCtx();
+      }
+      if (this._sfxAudioCtx.state === 'suspended') {
+        this._sfxAudioCtx.resume().catch(() => {});
+      }
+      const ctx = this._sfxAudioCtx;
+      const now = ctx.currentTime;
+
+      // Distinct 2-step low pitch drop for Wrong Answer
+      const tones = [
+        { startFreq: 280, endFreq: 180, time: 0.00, duration: 0.15 },
+        { startFreq: 190, endFreq: 120, time: 0.14, duration: 0.25 }
+      ];
+
+      tones.forEach(t => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(t.startFreq, now + t.time);
+        osc.frequency.exponentialRampToValueAtTime(t.endFreq, now + t.time + t.duration);
+
+        const vol = 0.22 * this.sfxVolume;
+        gain.gain.setValueAtTime(vol, now + t.time);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + t.time + t.duration);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now + t.time);
+        osc.stop(now + t.time + t.duration);
+      });
+    } catch (_) {}
+  },
+
+  playIncorrectSound() {
+    this.playWrongSound();
+  },
+
   bindEvents() {
     const toggleBtn = document.getElementById('toggleFrameBtn');
     if (toggleBtn) {
