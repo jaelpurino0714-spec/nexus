@@ -528,12 +528,6 @@ const CharacterSystem = {
               <div class="pet-stage-dot ${idx === previewIndex ? 'active' : ''}" onclick="CharacterSystem.selectPreviewStage(${idx})" title="${s.title} Stage (${s.minXP} XP)"></div>
             `).join('')}
           </div>
-
-          <!-- Outfits Button -->
-          <button class="pet-outfits-pill-btn" onclick="CharacterSystem.closeCharacterModal(); CharacterSystem.openOutfitShopModal();">
-            <span>${activeOutfit.icon}</span>
-            <span>Outfits</span>
-          </button>
         </div>
 
         <!-- Animated Candy-Stripe EXP Bar -->
@@ -542,21 +536,13 @@ const CharacterSystem = {
             <div class="pet-exp-bar-fill" style="width: ${pct}%;"></div>
             <div class="pet-exp-bar-text">${nextReqText}</div>
           </div>
-          <div class="pet-exp-subtitle" onclick="CharacterSystem.closeCharacterModal(); CharacterSystem.openOutfitShopModal();">
+          <div class="pet-exp-subtitle">
             ${untilNextText}
           </div>
         </div>
 
         <!-- Bottom Action Cards -->
         <div class="pet-bottom-cards">
-          <!-- Card 1: Outfit Banner -->
-          <div class="pet-shop-banner-card" onclick="CharacterSystem.closeCharacterModal(); CharacterSystem.openOutfitShopModal();">
-            <div class="pet-banner-left">
-              <div class="pet-banner-icon">🛍️</div>
-              <div class="pet-banner-text">Unlock new outfits for your Learning Buddy with Science XP!</div>
-            </div>
-            <div class="pet-chevron-right">›</div>
-          </div>
 
           <!-- Card 2: Grow Your Learning Buddy -->
           <div class="pet-info-card">
