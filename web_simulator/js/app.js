@@ -210,6 +210,43 @@ const App = {
     }
   },
 
+  triggerRedScreenAlert() {
+    const targets = [
+      document.querySelector('.app-container'),
+      document.querySelector('.feedback-banner'),
+      document.body
+    ];
+    targets.forEach(el => {
+      if (el) el.classList.add('screen-red-alert');
+    });
+  },
+
+  clearRedScreenAlert() {
+    document.querySelectorAll('.screen-red-alert').forEach(el => {
+      el.classList.remove('screen-red-alert');
+    });
+  },
+
+  playTimeoutAlarm() {
+    this.triggerRedScreenAlert();
+
+    if (this.isTimerMuted || this.timerVolume <= 0) return;
+    const timerAudio = document.getElementById('nexusTimerAudio');
+    if (timerAudio) {
+      try {
+        timerAudio.pause();
+        const duration = timerAudio.duration || 30;
+        timerAudio.currentTime = Math.max(0, duration - 3.5);
+        timerAudio.volume = this.timerVolume;
+        timerAudio.muted = this.isTimerMuted;
+        const playPromise = timerAudio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {});
+        }
+      } catch (_) {}
+    }
+  },
+
   stopTimerAudio() {
     const timerAudio = document.getElementById('nexusTimerAudio');
 
@@ -463,6 +500,7 @@ const App = {
     if (isAnsweringScreen) {
       this.pauseBgm();
     } else {
+      this.clearRedScreenAlert();
       this.stopTimerAudio();
       this.playBgm();
     }

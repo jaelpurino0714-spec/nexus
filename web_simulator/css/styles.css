@@ -540,3 +540,30 @@ button:active:not(:disabled),
 .btn-clicked {
   animation: buttonClickBounce 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Red Screen Alert Overlay when Timer Expires / Wrong Answer */
+.screen-red-alert {
+  border-color: #EF4444 !important;
+  box-shadow: 
+    0 0 90px rgba(239, 68, 68, 0.95),
+    0 0 0 6px rgba(239, 68, 68, 0.85),
+    inset 0 0 70px rgba(239, 68, 68, 0.7) !important;
+  animation: redScreenPulse 0.5s infinite alternate ease-in-out !important;
+}
+
+@keyframes redScreenPulse {
+  0% {
+    box-shadow: 
+      0 0 40px rgba(239, 68, 68, 0.7),
+      0 0 0 3px rgba(239, 68, 68, 0.6),
+      inset 0 0 35px rgba(239, 68, 68, 0.45);
+    border-color: #EF4444;
+  }
+  100% {
+    box-shadow: 
+      0 0 110px rgba(239, 68, 68, 1),
+      0 0 0 8px rgba(239, 68, 68, 0.95),
+      inset 0 0 90px rgba(239, 68, 68, 0.85);
+    border-color: #DC2626;
+  }
+}
