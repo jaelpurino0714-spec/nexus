@@ -22,15 +22,34 @@ const App = {
   initBgm() {
     this.playBgm();
     
-    // Resume BGM when tab gains focus if active screen is teacherHomeScreen or homeScreen
+    // Resume BGM when tab gains focus
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && (this.currentScreen === 'teacherHomeScreen' || this.currentScreen === 'homeScreen')) {
-        this.playBgm();
+      const charModal = document.getElementById('myCharacterPetModal');
+      const isCharModalOpen = charModal && !charModal.classList.contains('hidden');
+
+      if (!document.hidden) {
+        if (isCharModalOpen) {
+          if (typeof CharacterSystem !== 'undefined' && CharacterSystem.playCharacterMusic) {
+            CharacterSystem.playCharacterMusic();
+          }
+        } else if (this.currentScreen === 'teacherHomeScreen' || this.currentScreen === 'homeScreen') {
+          this.playBgm();
+        }
+      } else {
+        const charAudio = document.getElementById('nexusCharacterAudio');
+        if (charAudio) {
+          try { charAudio.pause(); } catch (_) {}
+        }
       }
     });
   },
 
   playBgm() {
+    const charModal = document.getElementById('myCharacterPetModal');
+    if (charModal && !charModal.classList.contains('hidden')) {
+      return;
+    }
+
     const audio = document.getElementById('nexusBgmAudio');
     if (!audio) return;
     audio.loop = true;
@@ -136,18 +155,22 @@ const App = {
 
   setBgmVolume(val) {
     const audio = document.getElementById('nexusBgmAudio');
+    const charAudio = document.getElementById('nexusCharacterAudio');
     const label = document.getElementById('bgmVolPercent');
     const vol = parseFloat(val) / 100.0;
     if (audio) audio.volume = vol;
+    if (charAudio) charAudio.volume = vol;
     if (label) label.textContent = `${val}%`;
     localStorage.setItem('nexus_bgm_vol', vol.toString());
   },
 
   toggleBgmMute() {
     const audio = document.getElementById('nexusBgmAudio');
+    const charAudio = document.getElementById('nexusCharacterAudio');
     const btn = document.getElementById('bgmMuteBtn');
     if (!audio) return;
     audio.muted = !audio.muted;
+    if (charAudio) charAudio.muted = audio.muted;
     if (btn) btn.textContent = audio.muted ? '🔊 Unmute' : '🔇 Mute';
   },
 
@@ -523,6 +546,15 @@ const App = {
   },
 
   showScreen(screenId) {
+    const charModal = document.getElementById('myCharacterPetModal');
+    if (charModal && !charModal.classList.contains('hidden')) {
+      if (typeof CharacterSystem !== 'undefined' && CharacterSystem.closeCharacterModal) {
+        CharacterSystem.closeCharacterModal();
+      } else {
+        charModal.classList.add('hidden');
+      }
+    }
+
     if (screenId === 'homeScreen' && localStorage.getItem(DB.STORAGE_TEACHER)) {
       screenId = 'teacherHomeScreen';
     }
