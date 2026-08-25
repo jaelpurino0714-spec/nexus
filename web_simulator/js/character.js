@@ -14,10 +14,10 @@ const EVOLUTION_STAGES = [
     icon: '👶', 
     image: 'assets/mascot/baby_main.png',
     minXP: 0, 
-    nextXP: 100, 
+    nextXP: 1000, 
     color: '#38BDF8', 
     defaultQuote: "Let's grow together!",
-    desc: 'Focusing on earning 100 XP to evolve into Student!' 
+    desc: 'Focusing on earning 1000 XP to evolve into Student!' 
   },
   { 
     id: 'student', 
@@ -25,8 +25,8 @@ const EVOLUTION_STAGES = [
     title: 'STUDENT', 
     icon: '🎒', 
     image: 'assets/mascot/student_main.png',
-    minXP: 100, 
-    nextXP: 300, 
+    minXP: 1000, 
+    nextXP: 2000, 
     color: '#10B981', 
     defaultQuote: "Studying core Grade 10 concepts!",
     desc: 'Learning core Grade 10 Science topics!' 
@@ -37,7 +37,7 @@ const EVOLUTION_STAGES = [
     title: 'SCIENTIST', 
     icon: '🧪', 
     image: 'assets/mascot/scientist_main.png',
-    minXP: 300, 
+    minXP: 2000, 
     nextXP: Infinity, 
     color: '#8B5CF6', 
     defaultQuote: "Exploring science & mastering trivia!",
@@ -64,7 +64,7 @@ const BABY_INTERACTION_REACTIONS = [
   "Giggle giggle! 🧪",
   "Ready to learn with you! ⭐",
   "Every quiz makes me grow! 🚀",
-  "Let's reach 100 XP! 🎯"
+  "Let's reach 1000 XP! 🎯"
 ];
 
 const OUTFITS_CATALOG = [
@@ -441,10 +441,9 @@ const CharacterSystem = {
     if (isLocked) {
       dynamicQuote = `🔒 Locked • Unlocks at ${stage.minXP} XP`;
     } else if (isCurrent) {
-      if (stage.id === 'baby') dynamicQuote = xp >= 70 ? "Almost ready to evolve! 👶" : "Let's grow together!";
-      else if (stage.id === 'student') dynamicQuote = xp >= 270 ? "Graduation is close! 🎓" : "Studying Grade 10 concepts!";
+      if (stage.id === 'baby') dynamicQuote = xp >= 700 ? "Almost ready to evolve! 👶" : "Let's grow together!";
+      else if (stage.id === 'student') dynamicQuote = xp >= 1700 ? "Graduation is close! 🎓" : "Studying Grade 10 concepts!";
       else if (stage.id === 'graduate') dynamicQuote = "Mastering trivia & simulations! 🏆";
-      else if (stage.id === 'worker') dynamicQuote = "Science Master Worker! 💼";
     } else {
       dynamicQuote = `Unlocked ${stage.title} Stage! 🎉`;
     }
