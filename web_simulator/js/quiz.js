@@ -1237,29 +1237,27 @@ const Quiz = {
     }
 
     // Start Digital Timer with custom set time limit
-    this.timeRemainingSec = this.customTimeLimitSec || 20;
+    const totalTimeLimit = this.customTimeLimitSec || (q && q.time_limit ? q.time_limit : 20);
+    this.timeRemainingSec = totalTimeLimit;
     this.questionStartTime = Date.now();
     this.updateTimerDisplay();
 
     if (typeof App !== 'undefined' && App.playTimerAudio) {
-      App.playTimerAudio(this.timeRemainingSec);
-    }
-    if (typeof App !== 'undefined' && App.playTickSound) {
-      App.playTickSound();
+      App.playTimerAudio(totalTimeLimit);
     }
 
+    if (this.timerInterval) clearInterval(this.timerInterval);
     this.timerInterval = setInterval(() => {
-      this.timeRemainingSec--;
+      const elapsedSec = (Date.now() - this.questionStartTime) / 1000;
+      const remaining = Math.max(0, Math.ceil(totalTimeLimit - elapsedSec));
+      this.timeRemainingSec = remaining;
       this.updateTimerDisplay();
-      if (typeof App !== 'undefined' && App.playTickSound) {
-        App.playTickSound();
-      }
 
-      if (this.timeRemainingSec <= 0) {
+      if (elapsedSec >= totalTimeLimit || remaining <= 0) {
         clearInterval(this.timerInterval);
         this.handleTimeOut();
       }
-    }, 1000);
+    }, 100);
   },
 
   updateTimerDisplay() {

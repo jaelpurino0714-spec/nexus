@@ -306,6 +306,12 @@ const App = {
 
   _tickState: 0,
   playTickSound() {
+    const timerAudio = document.getElementById('nexusTimerAudio');
+    if (timerAudio && !timerAudio.paused && !timerAudio.muted && this.timerVolume > 0) {
+      // Timer clock MP3 is actively playing the tick audio; skip duplicate synth beep
+      return;
+    }
+
     if (this.isSfxMuted || this.sfxVolume <= 0) return;
     try {
       if (!this._tickAudioCtx) {
