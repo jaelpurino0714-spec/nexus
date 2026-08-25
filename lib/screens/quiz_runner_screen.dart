@@ -135,6 +135,16 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<ActiveQuizState?>(quizProvider, (previous, next) {
+      if (next != null && next.secondsRemaining == 0 && !_hasAnswered && !next.isCompleted) {
+        setState(() {
+          _hasAnswered = true;
+          _isAnswerCorrect = false;
+          _userSelectedAns = '[Time Expired]';
+        });
+      }
+    });
+
     final quizState = ref.watch(quizProvider);
 
     if (quizState == null || quizState.questions.isEmpty) {
@@ -525,7 +535,11 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            _isAnswerCorrect ? '✅ Correct!' : '❌ Incorrect!',
+                            _isAnswerCorrect
+                                ? '✅ Correct!'
+                                : (_userSelectedAns == '[Time Expired]'
+                                    ? '⏰ Time\'s Up! (Wrong - 0 pts)'
+                                    : '❌ Incorrect!'),
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w800,
@@ -572,15 +586,17 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9999)),
                                 ),
                                 onPressed: _proceedNextQuestion,
-                                child: const Row(
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Continue',
-                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.white),
+                                      quizState.currentIndex >= quizState.questions.length - 1
+                                          ? 'Finish Quiz 🏁'
+                                          : 'Next Question',
+                                      style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.white),
                                     ),
-                                    SizedBox(width: 10),
-                                    CircleAvatar(
+                                    const SizedBox(width: 10),
+                                    const CircleAvatar(
                                       radius: 14,
                                       backgroundColor: Colors.white24,
                                       child: Icon(Icons.arrow_forward_rounded, size: 16, color: Colors.white),

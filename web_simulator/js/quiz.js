@@ -1247,7 +1247,7 @@ const Quiz = {
 
       if (this.timeRemainingSec <= 0) {
         clearInterval(this.timerInterval);
-        // Do not auto-popup feedback card on timeout; wait for user to pick an answer
+        this.handleTimeOut();
       }
     }, 1000);
   },
@@ -1391,6 +1391,12 @@ const Quiz = {
       if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${correctDisplay}</b>`;
     }
 
+    const nextBtn = document.getElementById('nextQuestionBtn');
+    if (nextBtn) {
+      const isLast = (this.currentIndex >= this.questionsList.length - 1);
+      nextBtn.innerHTML = isLast ? `Finish Quiz 🏁` : `Next Question <span class="arrow-pill">➡</span>`;
+    }
+
     document.getElementById('scorePointsText').textContent = `Points: ${this.totalScorePoints.toLocaleString()}`;
     const streakEl = document.getElementById('streakCounter');
     if (streakEl) {
@@ -1420,7 +1426,7 @@ const Quiz = {
 
     this.incorrectCount++;
     this.streak = 0;
-    this.sessionTotalTimeSec += 20;
+    this.sessionTotalTimeSec += (this.customTimeLimitSec || 20);
 
     if (!this.sessionTopicStats[this.currentTopic]) {
       this.sessionTopicStats[this.currentTopic] = { total: 0, correct: 0 };
@@ -1458,16 +1464,30 @@ const Quiz = {
       if (inputEl) inputEl.disabled = true;
       if (submitBtn) submitBtn.disabled = true;
     } else {
+      let correctIndex = typeof q.answer === 'number' ? q.answer : -1;
+      if (correctIndex < 0) {
+        const corrLetter = String(q.correct_answer || q.correctAnswer || 'A').toUpperCase();
+        const letterToIndex = { 'A': 0, 'B': 1, 'C': 2, 'D': 3, '0': 0, '1': 1, '2': 2, '3': 3 };
+        if (letterToIndex[corrLetter] !== undefined) correctIndex = letterToIndex[corrLetter];
+      }
       const buttons = document.querySelectorAll('.answer-option-btn');
       buttons.forEach((btn, idx) => {
         btn.disabled = true;
-        if (idx === q.answer) btn.classList.add('correct-choice');
+        if (idx === correctIndex) btn.classList.add('correct-choice');
       });
     }
 
     if (feedback) feedback.className = 'feedback-banner wrong';
-    if (statusTextEl) statusTextEl.textContent = `❌ Incorrect!`;
+    if (statusTextEl) statusTextEl.textContent = `⏰ Time's Up! (Wrong - 0 pts)`;
     if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${correctDisplay}</b>`;
+
+    const nextBtn = document.getElementById('nextQuestionBtn');
+    if (nextBtn) {
+      const isLast = (this.currentIndex >= this.questionsList.length - 1);
+      nextBtn.innerHTML = isLast ? `Finish Quiz 🏁` : `Next Question <span class="arrow-pill">➡</span>`;
+    }
+
+    document.getElementById('scorePointsText').textContent = `Points: ${this.totalScorePoints.toLocaleString()}`;
     this.updateParticipantLobbyProgress();
   },
 
