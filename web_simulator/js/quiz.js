@@ -1553,38 +1553,23 @@ const Quiz = {
       App.updateUserHeader();
     }
 
-    // Interactive Character Progression: Pass rewards through TaskSystem
-    if (typeof TaskSystem !== 'undefined') {
-      // 1. Complete a quiz (+10 XP)
-      TaskSystem.completeTask(`quiz_complete_${Date.now()}`, `Completed Quiz`, 10);
+    // Mascot EXP Award Logic (Only if student scores >= 50% on the test)
+    if (percentage >= 50) {
+      let mascotXPAward = 0;
+      const fmt = this.currentQuestionFormat || 'multiple_choice';
 
-      // 2. High Score Bonus (+10 XP if score >= 80%)
-      if (percentage >= 80) {
-        TaskSystem.completeTask(`high_score_${Date.now()}`, `High Score (≥80%)`, 10);
+      if (fmt === 'true_false') {
+        mascotXPAward = 10;
+      } else if (fmt === 'identification') {
+        mascotXPAward = 50;
+      } else {
+        // multiple_choice
+        mascotXPAward = 300;
       }
 
-      // 3. Finish a topic (+15 XP)
-      if (this.currentTopic) {
-        TaskSystem.completeTask(`topic_finish_${this.currentTerm}_${this.currentTopic}_${Date.now()}`, `Finished Topic: ${this.currentTopic}`, 15);
-      }
-
-      // 4. Award Science XP (+5 XP per correct answer + 20 bonus for 100%)
-      const xpEarned = (this.correctCount * 5) + (percentage >= 100 ? 20 : 0);
-      if (typeof ProgressionSystem !== 'undefined' && ProgressionSystem.addXP && xpEarned > 0) {
-        ProgressionSystem.addXP(xpEarned, `Quiz Performance (${this.correctCount} correct)`);
-      }
-
-      // 5. Maintain a streak (+5 XP if maxStreak >= 3)
-      if (this.maxStreak >= 3) {
-        TaskSystem.completeTask(`streak_${Date.now()}`, `Streak Bonus (🔥 ${this.maxStreak})`, 5);
-      }
-
-      // 6. Award Science Coins ONLY for 100% Perfect Test Score (100% Correct, 0 Wrong Answers)
-      if (this.incorrectCount === 0 && this.correctCount === totalQ && totalQ > 0) {
-        const bonusCoins = 25; // 25 Science Coins awarded only for 100% correct
-        if (typeof ProgressionSystem !== 'undefined' && ProgressionSystem.addCoins) {
-          ProgressionSystem.addCoins(bonusCoins);
-        }
+      if (typeof ProgressionSystem !== 'undefined' && ProgressionSystem.addXP && mascotXPAward > 0) {
+        const formatLabel = fmt === 'true_false' ? 'True/False Test' : (fmt === 'identification' ? 'Identification Test' : 'Multiple Choice Test');
+        ProgressionSystem.addXP(mascotXPAward, `Passed ${formatLabel} (${percentage}%)`);
       }
     }
 
