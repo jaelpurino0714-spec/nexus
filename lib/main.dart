@@ -5,12 +5,16 @@ import 'core/config/env_config.dart';
 import 'core/router/app_router.dart';
 import 'services/supabase_service.dart';
 import 'services/sync_service.dart';
+import 'services/audio_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Load environment variables (.env)
   await EnvConfig.init();
+
+  // Preload Audio Player for instant BGM playback on Home Screen
+  AudioService.instance.init();
 
   // Initialize Hive for offline caching & sync queue
   await Hive.initFlutter();

@@ -133,6 +133,13 @@ const App = {
       screenId = 'teacherHomeScreen';
     }
 
+    if (screenId === 'homeScreen' || screenId === 'teacherHomeScreen') {
+      const audio = document.getElementById('nexusBgmAudio');
+      if (audio) {
+        audio.play().catch(() => {});
+      }
+    }
+
     this.currentScreen = screenId;
 
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));

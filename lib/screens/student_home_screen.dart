@@ -19,10 +19,10 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Auto-start looping background music on Home Screen
-      ref.read(audioProvider.notifier).playBgm();
+    // Instantly trigger looping background music zero-delay
+    ref.read(audioProvider.notifier).playBgm();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       final charState = ref.read(characterProvider);
       if (charState.pendingGenderSelection) {
         showDialog(
