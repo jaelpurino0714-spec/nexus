@@ -114,13 +114,10 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
                 children: [
                   Row(
                     children: [
-                      ClipOval(
-                        child: Image.asset(
-                          'assets/images/app_logo.png',
-                          width: 64,
-                          height: 64,
-                          fit: BoxFit.cover,
-                        ),
+                      Image.asset(
+                        'assets/images/app_logo.png',
+                        height: 64,
+                        fit: BoxFit.contain,
                       ),
                       const SizedBox(width: 8),
                       Column(

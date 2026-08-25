@@ -18,13 +18,10 @@ class LoginSelectionScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ClipOval(
-                    child: Image.asset(
-                      'assets/images/app_logo.png',
-                      width: 76,
-                      height: 76,
-                      fit: BoxFit.cover,
-                    ),
+                  Image.asset(
+                    'assets/images/app_logo.png',
+                    height: 80,
+                    fit: BoxFit.contain,
                   ),
                   const SizedBox(width: 12),
                   const Text(

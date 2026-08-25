@@ -181,26 +181,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Header Logo
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF8B5CF6).withOpacity(0.2),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFFEC4899).withOpacity(0.4),
-                        blurRadius: 24,
-                      ),
-                    ],
-                  ),
-                  child: ClipOval(
-                    child: Image.asset(
-                      'assets/images/app_logo.png',
-                      width: 140,
-                      height: 140,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                Image.asset(
+                  'assets/images/app_logo.png',
+                  height: 160,
+                  fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 12),
                 RichText(

@@ -280,19 +280,18 @@ body.fullscreen-mode .app-container {
 }
 
 .app-logo-img {
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.65), 0 0 10px rgba(99, 102, 241, 0.4);
-  border: 2px solid rgba(168, 85, 247, 0.6);
+  height: 72px;
+  width: auto;
+  max-width: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.75)) drop-shadow(0 0 4px rgba(99, 102, 241, 0.5));
   display: block;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .app-logo-img:hover {
-  transform: scale(1.06);
-  box-shadow: 0 0 26px rgba(168, 85, 247, 0.85);
+  transform: scale(1.08) translateY(-2px);
+  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.95)) drop-shadow(0 0 8px rgba(168, 85, 247, 0.7));
 }
 
 .app-name {
