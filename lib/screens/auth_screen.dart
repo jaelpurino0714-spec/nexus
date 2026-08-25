@@ -196,8 +196,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
                   child: ClipOval(
                     child: Image.asset(
                       'assets/images/app_logo.png',
-                      width: 72,
-                      height: 72,
+                      width: 104,
+                      height: 104,
                       fit: BoxFit.cover,
                     ),
                   ),
