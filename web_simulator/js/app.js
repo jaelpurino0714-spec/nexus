@@ -213,7 +213,10 @@ const App = {
   triggerRedScreenAlert() {
     const targets = [
       document.querySelector('.app-container'),
-      document.querySelector('.feedback-banner'),
+      document.getElementById('mainContent'),
+      document.querySelector('.screen.active'),
+      document.querySelector('.quiz-question-card'),
+      document.getElementById('feedbackBanner'),
       document.body
     ];
     targets.forEach(el => {

@@ -541,29 +541,77 @@ button:active:not(:disabled),
   animation: buttonClickBounce 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Red Screen Alert Overlay when Timer Expires / Wrong Answer */
-.screen-red-alert {
-  border-color: #EF4444 !important;
+/* Red Screen Alert Overlay when Timer Expires / Wrong Answer - High Noticeability on Phone Display */
+.app-container.screen-red-alert,
+.screen.active.screen-red-alert {
+  border-color: #FF0033 !important;
   box-shadow: 
-    0 0 90px rgba(239, 68, 68, 0.95),
-    0 0 0 6px rgba(239, 68, 68, 0.85),
-    inset 0 0 70px rgba(239, 68, 68, 0.7) !important;
-  animation: redScreenPulse 0.5s infinite alternate ease-in-out !important;
+    0 0 100px rgba(255, 0, 51, 0.95),
+    0 0 0 8px #FF0033,
+    inset 0 0 90px rgba(255, 0, 51, 0.8) !important;
+  animation: redScreenPulse 0.4s infinite alternate ease-in-out !important;
+}
+
+/* Inner Phone Display Red Flash Overlay Vignette */
+.app-container.screen-red-alert::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: 34px !important;
+  border: 4px solid #FF0033 !important;
+  box-shadow: inset 0 0 80px rgba(255, 0, 51, 0.85), inset 0 0 25px rgba(255, 0, 51, 0.9) !important;
+  pointer-events: none !important;
+  z-index: 99999 !important;
+  animation: innerRedGlowPulse 0.4s infinite alternate ease-in-out !important;
+}
+
+.app-container.screen-red-alert #mainContent,
+.app-container.screen-red-alert .screen.active {
+  background: radial-gradient(circle at center, rgba(255, 0, 51, 0.3) 0%, rgba(19, 14, 46, 0.98) 100%) !important;
+}
+
+.app-container.screen-red-alert .app-header {
+  border-bottom: 2px solid #FF0033 !important;
+  background: linear-gradient(180deg, rgba(255, 0, 51, 0.35) 0%, rgba(19, 14, 46, 0.9) 100%) !important;
+}
+
+.app-container.screen-red-alert .speed-timer-card,
+.app-container.screen-red-alert .timer-box {
+  border-color: #FF0033 !important;
+  box-shadow: 0 0 30px rgba(255, 0, 51, 0.9), inset 0 0 20px rgba(255, 0, 51, 0.6) !important;
+  background: rgba(255, 0, 51, 0.25) !important;
+}
+
+.app-container.screen-red-alert .quiz-question-card,
+.app-container.screen-red-alert .modal-card {
+  border-color: rgba(255, 0, 51, 0.85) !important;
+  box-shadow: 0 0 35px rgba(255, 0, 51, 0.75) !important;
 }
 
 @keyframes redScreenPulse {
   0% {
+    border-color: #FF1A40;
     box-shadow: 
-      0 0 40px rgba(239, 68, 68, 0.7),
-      0 0 0 3px rgba(239, 68, 68, 0.6),
-      inset 0 0 35px rgba(239, 68, 68, 0.45);
-    border-color: #EF4444;
+      0 0 50px rgba(255, 0, 51, 0.75),
+      0 0 0 4px #FF1A40,
+      inset 0 0 50px rgba(255, 0, 51, 0.6);
   }
   100% {
+    border-color: #CC0029;
     box-shadow: 
-      0 0 110px rgba(239, 68, 68, 1),
-      0 0 0 8px rgba(239, 68, 68, 0.95),
-      inset 0 0 90px rgba(239, 68, 68, 0.85);
-    border-color: #DC2626;
+      0 0 120px rgba(255, 0, 51, 1),
+      0 0 0 9px #FF0033,
+      inset 0 0 100px rgba(255, 0, 51, 0.95);
+  }
+}
+
+@keyframes innerRedGlowPulse {
+  0% {
+    opacity: 0.6;
+    box-shadow: inset 0 0 50px rgba(255, 0, 51, 0.6);
+  }
+  100% {
+    opacity: 1;
+    box-shadow: inset 0 0 110px rgba(255, 0, 51, 0.95);
   }
 }
