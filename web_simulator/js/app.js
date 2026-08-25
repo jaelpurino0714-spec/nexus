@@ -132,6 +132,47 @@ const App = {
     const btn = document.getElementById('sfxMuteBtn');
     if (btn) btn.textContent = this.isSfxMuted ? '🔊 Unmute SFX' : '🔇 Mute SFX';
     localStorage.setItem('nexus_sfx_muted', this.isSfxMuted ? 'true' : 'false');
+    const timerAudio = document.getElementById('nexusTimerAudio');
+    if (timerAudio) timerAudio.muted = this.isSfxMuted;
+  },
+
+  playTimerAudio() {
+    if (this.isSfxMuted || this.sfxVolume <= 0) return;
+    const timerAudio = document.getElementById('nexusTimerAudio');
+    const bgmAudio = document.getElementById('nexusBgmAudio');
+
+    if (timerAudio) {
+      try {
+        timerAudio.currentTime = 0;
+        timerAudio.volume = Math.min(1.0, this.sfxVolume * 1.2);
+        timerAudio.muted = this.isSfxMuted;
+        const playPromise = timerAudio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {});
+        }
+      } catch (_) {}
+    }
+
+    if (bgmAudio && !bgmAudio.paused) {
+      bgmAudio.volume = Math.max(0.05, (parseFloat(localStorage.getItem('nexus_bgm_vol') || '0.5') * 0.25));
+    }
+  },
+
+  stopTimerAudio() {
+    const timerAudio = document.getElementById('nexusTimerAudio');
+    const bgmAudio = document.getElementById('nexusBgmAudio');
+
+    if (timerAudio) {
+      try {
+        timerAudio.pause();
+        timerAudio.currentTime = 0;
+      } catch (_) {}
+    }
+
+    if (bgmAudio) {
+      const savedBgmVol = parseFloat(localStorage.getItem('nexus_bgm_vol') || '0.5');
+      bgmAudio.volume = savedBgmVol;
+    }
   },
 
   playClickSound() {

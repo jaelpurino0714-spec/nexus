@@ -183,9 +183,11 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
 
   void _startTimer() {
     _timer?.cancel();
+    AudioService.instance.playTimerAudio();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (state == null || state!.isCompleted) {
         timer.cancel();
+        AudioService.instance.stopTimerAudio();
         return;
       }
 
@@ -195,6 +197,7 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
       } else {
         state = state!.copyWith(secondsRemaining: 0);
         timer.cancel();
+        AudioService.instance.stopTimerAudio();
       }
     });
   }
@@ -206,6 +209,7 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
     if (state == null || state!.isCompleted) return;
 
     _timer?.cancel();
+    AudioService.instance.stopTimerAudio();
 
     final currentQ = state!.currentQuestion!.question;
     bool isCorrect = false;
@@ -337,6 +341,7 @@ class QuizNotifier extends StateNotifier<ActiveQuizState?> {
   @override
   void dispose() {
     _timer?.cancel();
+    AudioService.instance.stopTimerAudio();
     super.dispose();
   }
 }

@@ -98,6 +98,8 @@ class AudioService {
     }
   }
 
+  final AudioPlayer _timerPlayer = AudioPlayer();
+
   /// Plays button tap / click feedback sound
   Future<void> playClickSound() async {
     if (_isSfxMuted || _sfxVolume <= 0.0) return;
@@ -111,6 +113,23 @@ class AudioService {
     if (_isSfxMuted || _sfxVolume <= 0.0) return;
     try {
       await SystemSound.play(SystemSoundType.click);
+    } catch (_) {}
+  }
+
+  /// Plays 30sec clock background audio during active timer countdown
+  Future<void> playTimerAudio() async {
+    if (_isSfxMuted || _sfxVolume <= 0.0) return;
+    try {
+      await _timerPlayer.stop();
+      await _timerPlayer.setVolume(sfxVolume);
+      await _timerPlayer.play(AssetSource('audio/clock 30sec.mp3'), volume: sfxVolume);
+    } catch (_) {}
+  }
+
+  /// Stops 30sec clock background audio when timer ends or user answers
+  Future<void> stopTimerAudio() async {
+    try {
+      await _timerPlayer.stop();
     } catch (_) {}
   }
 

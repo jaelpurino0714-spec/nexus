@@ -1241,6 +1241,9 @@ const Quiz = {
     this.questionStartTime = Date.now();
     this.updateTimerDisplay();
 
+    if (typeof App !== 'undefined' && App.playTimerAudio) {
+      App.playTimerAudio();
+    }
     if (typeof App !== 'undefined' && App.playTickSound) {
       App.playTickSound();
     }
@@ -1277,6 +1280,9 @@ const Quiz = {
     if (this.isAnswering) return;
     this.isAnswering = true;
     clearInterval(this.timerInterval);
+    if (typeof App !== 'undefined' && App.stopTimerAudio) {
+      App.stopTimerAudio();
+    }
 
     if (!this.questionsList || this.currentIndex >= this.questionsList.length) {
       this.finishQuiz();
@@ -1419,6 +1425,9 @@ const Quiz = {
     if (this.isAnswering) return;
     this.isAnswering = true;
     clearInterval(this.timerInterval);
+    if (typeof App !== 'undefined' && App.stopTimerAudio) {
+      App.stopTimerAudio();
+    }
 
     if (!this.questionsList || this.currentIndex >= this.questionsList.length) {
       this.finishQuiz();
@@ -1500,6 +1509,9 @@ const Quiz = {
 
   finishQuiz() {
     clearInterval(this.timerInterval);
+    if (typeof App !== 'undefined' && App.stopTimerAudio) {
+      App.stopTimerAudio();
+    }
     this.isAnswering = true;
     const totalQ = this.questionsList.length;
     const percentage = Math.round((this.correctCount / totalQ) * 100);
@@ -1616,6 +1628,9 @@ const Quiz = {
     });
     if (confirmed) {
       clearInterval(this.timerInterval);
+      if (typeof App !== 'undefined' && App.stopTimerAudio) {
+        App.stopTimerAudio();
+      }
       App.showScreen('topicScreen');
     }
   },

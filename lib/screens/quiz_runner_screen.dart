@@ -59,12 +59,14 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
 
   @override
   void dispose() {
+    AudioService.instance.stopTimerAudio();
     _idInputController.dispose();
     super.dispose();
   }
 
   void _onAnswerSelected(String ans) {
     if (_hasAnswered) return;
+    AudioService.instance.stopTimerAudio();
 
     final quizState = ref.read(quizProvider);
     if (quizState != null && quizState.currentQuestion != null) {
