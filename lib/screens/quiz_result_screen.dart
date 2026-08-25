@@ -116,7 +116,7 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
                     children: [
                       Image.asset(
                         'assets/images/app_logo.png',
-                        height: 64,
+                        height: 100,
                         fit: BoxFit.contain,
                       ),
                       const SizedBox(width: 8),

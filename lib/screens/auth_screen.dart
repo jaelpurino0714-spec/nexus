@@ -183,7 +183,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
                 // Header Logo
                 Image.asset(
                   'assets/images/app_logo.png',
-                  height: 160,
+                  height: 240,
                   fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 12),

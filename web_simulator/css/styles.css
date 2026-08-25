@@ -258,20 +258,22 @@ body.fullscreen-mode .app-container {
 
 /* App Header */
 .app-header {
-  height: 68px;
+  min-height: 84px;
   background: #130E2E;
-  padding: 0 18px;
+  padding: 8px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 50;
 }
 
 .logo-group {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
 }
 
 .app-logo-icon {
@@ -280,18 +282,20 @@ body.fullscreen-mode .app-container {
 }
 
 .app-logo-img {
-  height: 72px;
+  height: 110px;
   width: auto;
-  max-width: 80px;
+  max-width: 130px;
   object-fit: contain;
-  filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.75)) drop-shadow(0 0 4px rgba(99, 102, 241, 0.5));
+  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.85)) drop-shadow(0 0 6px rgba(99, 102, 241, 0.6));
   display: block;
+  margin-top: -12px;
+  margin-bottom: -12px;
   transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .app-logo-img:hover {
-  transform: scale(1.08) translateY(-2px);
-  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.95)) drop-shadow(0 0 8px rgba(168, 85, 247, 0.7));
+  transform: scale(1.1) translateY(-2px);
+  filter: drop-shadow(0 0 24px rgba(168, 85, 247, 1)) drop-shadow(0 0 10px rgba(168, 85, 247, 0.8));
 }
 
 .app-name {

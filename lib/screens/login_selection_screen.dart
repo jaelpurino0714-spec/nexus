@@ -20,7 +20,7 @@ class LoginSelectionScreen extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/images/app_logo.png',
-                    height: 80,
+                    height: 120,
                     fit: BoxFit.contain,
                   ),
                   const SizedBox(width: 12),
