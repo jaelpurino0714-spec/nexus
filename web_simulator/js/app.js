@@ -200,16 +200,35 @@ const App = {
     if (timerAudio) {
       try {
         timerAudio.pause();
-        timerAudio.currentTime = 0;
+        const N = Math.max(3, parseFloat(durationSec) || 20);
+        const tickingEnd = 26.8;
 
-        // Dynamic playback rate to stretch/shrink countdown ticking sound to match question time limit
-        const questionTime = Math.max(3, parseFloat(durationSec) || 20);
-        const tickingDuration = 26.8;
-        const rate = Math.min(3.0, Math.max(0.4, tickingDuration / questionTime));
+        if (N <= tickingEnd) {
+          // Tests <= 30s: start at (26.8 - N) so the last N ticks play at normal 1.0x speed
+          timerAudio.currentTime = Math.max(0, tickingEnd - N);
+        } else {
+          // Tests > 30s: start at 0.0s and loop the ticking section
+          timerAudio.currentTime = 0;
+        }
 
-        timerAudio.playbackRate = rate;
+        timerAudio.playbackRate = 1.0; // Maintain natural speed (no speed shift)
         timerAudio.volume = this.timerVolume;
         timerAudio.muted = this.isTimerMuted;
+
+        if (!this._timerTimeUpdateHandler) {
+          this._timerTimeUpdateHandler = () => {
+            const audio = document.getElementById('nexusTimerAudio');
+            if (audio && !audio.paused && !this._isAlarmPlaying) {
+              // If ticking section reaches 26.8s for tests > 30s, loop back to 0.0s
+              if (audio.currentTime >= 26.8) {
+                audio.currentTime = 0;
+              }
+            }
+          };
+          timerAudio.addEventListener('timeupdate', this._timerTimeUpdateHandler);
+        }
+        this._isAlarmPlaying = false;
+
         const playPromise = timerAudio.play();
         if (playPromise !== undefined) {
           playPromise.catch(() => {});
@@ -245,9 +264,9 @@ const App = {
     const timerAudio = document.getElementById('nexusTimerAudio');
     if (timerAudio) {
       try {
+        this._isAlarmPlaying = true;
         timerAudio.pause();
         const totalDuration = timerAudio.duration || 30.0;
-        // Ringing alarm section of 30 Second Ticking Countdown Timer With Alarm.mp3
         timerAudio.currentTime = Math.max(0, totalDuration - 3.2);
         timerAudio.playbackRate = 1.0;
         timerAudio.volume = this.timerVolume;
@@ -261,6 +280,7 @@ const App = {
   },
 
   stopTimerAudio() {
+    this._isAlarmPlaying = false;
     const timerAudio = document.getElementById('nexusTimerAudio');
 
     if (timerAudio) {
