@@ -4554,89 +4554,185 @@
   100% { opacity: 0; transform: translateY(-15px) scale(0.9); }
 }
 
-/* Evolution Modal Styling */
-.evo-modal-content {
+/* Neon Cosmic Character Evolution Modal (Matching Reference Image) */
+.evo-modal-card {
+  position: relative;
+  background: radial-gradient(circle at 50% 20%, #1a103c 0%, #0c0824 60%, #060414 100%);
+  border: 2px solid #9333EA;
+  border-radius: 36px;
+  padding: 32px 28px;
+  width: 100%;
+  max-width: 440px;
   text-align: center;
-  background: #FFFFFF;
-  padding: 24px;
+  box-shadow: 
+    0 0 60px rgba(147, 51, 234, 0.4),
+    0 0 20px rgba(56, 189, 248, 0.3),
+    inset 0 0 35px rgba(147, 51, 234, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  animation: evoModalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.evo-celebrate-badge {
-  background: #FEF3C7;
-  color: #D97706;
-  font-size: 0.8rem;
-  font-weight: 800;
-  padding: 4px 12px;
-  border-radius: 12px;
-  display: inline-block;
-  margin-bottom: 6px;
+@keyframes evoModalPop {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
-.evo-animation-stage {
+.evo-header-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(22, 13, 46, 0.85);
+  border: 1.5px solid #C084FC;
+  box-shadow: 0 0 20px rgba(192, 132, 252, 0.45);
+  border-radius: 9999px;
+  padding: 6px 20px;
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+}
+
+.evo-cards-row {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 16px;
-  margin: 18px 0;
+  margin-bottom: 22px;
+  width: 100%;
 }
 
-.evo-stage-item {
+.evo-card {
+  width: 135px;
+  height: 155px;
+  border-radius: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 12px;
-  border-radius: 16px;
-  background: #F8FAFC;
-  width: 100px;
+  justify-content: space-between;
+  padding: 14px 10px;
+  position: relative;
+  transition: all 0.3s ease;
 }
 
-.evo-stage-item.old {
-  opacity: 0.6;
-  filter: grayscale(0.4);
+.evo-card-old {
+  background: linear-gradient(180deg, rgba(35, 18, 75, 0.65) 0%, rgba(18, 9, 42, 0.9) 100%);
+  border: 2px solid #8B5CF6;
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.35);
+  opacity: 0.85;
 }
 
-.evo-stage-item.new {
-  background: #ECFDF5;
-  border: 2px solid #10B981;
+.evo-card-new {
+  background: linear-gradient(180deg, rgba(12, 42, 85, 0.75) 0%, rgba(6, 22, 48, 0.95) 100%);
+  border: 2px solid #38BDF8;
+  box-shadow: 0 0 35px rgba(56, 189, 248, 0.6), 0 0 15px rgba(56, 189, 248, 0.8);
+  animation: newCardGlowPulse 1.5s infinite alternate ease-in-out;
 }
 
-.evo-icon {
-  font-size: 3rem;
+@keyframes newCardGlowPulse {
+  0% { box-shadow: 0 0 25px rgba(56, 189, 248, 0.5); transform: scale(1); }
+  100% { box-shadow: 0 0 45px rgba(56, 189, 248, 0.85), 0 0 15px rgba(168, 85, 247, 0.6); transform: scale(1.03); }
 }
 
-.evo-stage-item.new .evo-icon {
-  animation: iconPulse 1.2s ease-in-out infinite alternate;
+.evo-card-image-wrap {
+  width: 85px;
+  height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
-@keyframes iconPulse {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.15); }
+.evo-card-image-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5));
 }
 
-.evo-title {
-  font-size: 0.85rem;
-  font-weight: 800;
-  color: #0F172A;
+.evo-card-label {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
 }
 
-.evo-arrow {
-  font-size: 1.8rem;
-  color: #10B981;
-  font-weight: bold;
+.evo-card-old .evo-card-label {
+  color: #E9D5FF;
 }
 
-.evo-desc {
-  font-size: 0.88rem;
-  color: #475569;
-  font-weight: 600;
-  margin-bottom: 6px;
+.evo-card-new .evo-card-label {
+  color: #38BDF8;
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.7);
 }
 
-.evo-xp-text {
+.evo-transition-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 10px #38BDF8);
+  animation: arrowGlow 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes arrowGlow {
+  0% { transform: translateX(-2px); opacity: 0.8; }
+  100% { transform: translateX(3px); opacity: 1; filter: drop-shadow(0 0 16px #38BDF8); }
+}
+
+.evo-description-text {
+  color: #CBD5E1;
   font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.evo-celebration-text {
+  color: #FFFFFF;
+  font-size: 1rem;
   font-weight: 800;
-  color: #059669;
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+
+.evo-celebration-text .highlight-cyan {
+  color: #38BDF8;
+  font-weight: 900;
+}
+
+.evo-celebration-text .highlight-pink {
+  color: #F472B6;
+  font-weight: 900;
+}
+
+.evo-keep-learning-btn {
+  width: 100%;
+  padding: 16px 24px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  background: linear-gradient(90deg, #9333EA 0%, #0284C7 50%, #06B6D4 100%);
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(6, 182, 212, 0.5), 0 0 20px rgba(147, 51, 234, 0.4);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.evo-keep-learning-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 35px rgba(6, 182, 212, 0.7), 0 0 25px rgba(147, 51, 234, 0.6);
+}
+
+.evo-keep-learning-btn:active {
+  transform: translateY(1px) scale(0.98);
 }
 
 /* Baby Stage Card Specific Styling */

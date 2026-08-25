@@ -1199,30 +1199,48 @@
       </section>
 
 
-      <!-- Character Evolution Celebration Modal -->
-      <div id="evolutionModal" class="mode-modal hidden">
-        <div class="mode-modal-content evo-modal-content">
-          <div class="evo-modal-header">
-            <span class="evo-celebrate-badge">🎉 THRESHOLD REACHED!</span>
-            <h2>CHARACTER EVOLUTION!</h2>
+      <!-- Character Evolution Celebration Modal (Neon Cyberpunk Design) -->
+      <div id="evolutionModal" class="mode-modal hidden" style="display: none; position: fixed; inset: 0; background: rgba(5, 4, 16, 0.88); backdrop-filter: blur(12px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
+        <div class="evo-modal-card">
+          <!-- Top Header Badge -->
+          <div class="evo-header-pill">
+            🎉 THRESHOLD REACHED!
           </div>
 
-          <div class="evo-animation-stage">
-            <div class="evo-stage-item old">
-              <span id="evoOldIcon" class="evo-icon">👶</span>
-              <span id="evoOldTitle" class="evo-title">BABY</span>
+          <!-- Dual Stage Cards Row -->
+          <div class="evo-cards-row">
+            <div class="evo-card evo-card-old">
+              <div id="evoOldIcon" class="evo-card-image-wrap">
+                <!-- Old Mascot Image -->
+              </div>
+              <div id="evoOldTitle" class="evo-card-label">BABY</div>
             </div>
-            <div class="evo-arrow">➔</div>
-            <div class="evo-stage-item new glow-bounce">
-              <span id="evoNewIcon" class="evo-icon">🎒</span>
-              <span id="evoNewTitle" class="evo-title">STUDENT</span>
+
+            <div class="evo-transition-arrow">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#38BDF8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+
+            <div class="evo-card evo-card-new">
+              <div id="evoNewIcon" class="evo-card-image-wrap">
+                <!-- New Mascot Image -->
+              </div>
+              <div id="evoNewTitle" class="evo-card-label">STUDENT</div>
             </div>
           </div>
 
-          <p id="evoNewDesc" class="evo-desc">Learning core Grade 10 concepts!</p>
-          <div id="evoXPText" class="evo-xp-text">105 XP Reached!</div>
+          <!-- Description & Celebration Text -->
+          <div id="evoNewDesc" class="evo-description-text">
+            Learning core Grade 10 Science topics!
+          </div>
+          
+          <div id="evoXPText" class="evo-celebration-text">
+            🎉 <span class="highlight-cyan">1000 XP Reached!</span> <span class="highlight-pink">BABY</span> evolved into <span class="highlight-cyan">STUDENT</span>!
+          </div>
 
-          <button class="primary-btn bottom-start-btn" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); margin-top: 14px;" onclick="CharacterSystem.closeEvolutionModal()">
+          <!-- Primary Action Button -->
+          <button class="evo-keep-learning-btn" onclick="CharacterSystem.closeEvolutionModal()">
             Keep Learning 🚀
           </button>
         </div>

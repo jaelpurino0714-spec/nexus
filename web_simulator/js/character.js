@@ -1125,32 +1125,39 @@ const CharacterSystem = {
     const newImg = this.getStageImage(newStage, gender);
 
     const oldDisplay = oldImg 
-      ? `<img src="${oldImg}" class="evo-img-thumb" alt="${oldStage.title}" />` 
-      : oldStage.icon;
+      ? `<img src="${oldImg}" alt="${oldStage.title}" />` 
+      : `<span style="font-size: 3.5rem;">${oldStage.icon}</span>`;
 
     const newDisplay = newImg 
-      ? `<img src="${newImg}" class="evo-img-thumb" alt="${newStage.title}" />` 
-      : newStage.icon;
+      ? `<img src="${newImg}" alt="${newStage.title}" />` 
+      : `<span style="font-size: 3.5rem;">${newStage.icon}</span>`;
     
     document.getElementById('evoOldIcon').innerHTML = oldDisplay;
     document.getElementById('evoOldTitle').textContent = oldStage.title;
 
     document.getElementById('evoNewIcon').innerHTML = newDisplay;
     document.getElementById('evoNewTitle').textContent = newStage.title;
-    document.getElementById('evoNewDesc').textContent = newStage.desc;
     
-    if (newStage.id === 'adult') {
-      document.getElementById('evoXPText').textContent = `🎉 ${newStage.minXP} XP Reached! ${oldStage.title} evolved into ${newStage.title} (FINAL STAGE)!`;
-    } else {
-      document.getElementById('evoXPText').textContent = `🎉 ${newStage.minXP} XP Reached! ${oldStage.title} evolved into ${newStage.title}!`;
+    const descEl = document.getElementById('evoNewDesc');
+    if (descEl) {
+      descEl.textContent = newStage.desc || 'Learning core Grade 10 Science topics!';
+    }
+
+    const xpTextEl = document.getElementById('evoXPText');
+    if (xpTextEl) {
+      xpTextEl.innerHTML = `🎉 <span class="highlight-cyan">${newStage.minXP} XP Reached!</span> <span class="highlight-pink">${oldStage.title}</span> evolved into <span class="highlight-cyan">${newStage.title}</span>!`;
     }
 
     modal.classList.remove('hidden');
+    modal.style.display = 'flex';
   },
 
   closeEvolutionModal() {
     const modal = document.getElementById('evolutionModal');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.style.display = 'none';
+    }
     this.renderHomeCharacterCard();
   },
 
