@@ -1065,7 +1065,23 @@ const Quiz = {
     alert('Host Live Quiz finished! Final participant scores saved.');
   },
 
-  usedQuestionIdsByTopic: {},
+  getUsedQuestionSet(topicKey) {
+    try {
+      const raw = localStorage.getItem('nexus_playthrough_used_q_' + topicKey);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        return new Set(arr);
+      }
+    } catch (e) {}
+    return new Set();
+  },
+
+  saveUsedQuestionSet(topicKey, setObj) {
+    try {
+      const arr = Array.from(setObj);
+      localStorage.setItem('nexus_playthrough_used_q_' + topicKey, JSON.stringify(arr));
+    } catch (e) {}
+  },
 
   async prepareBuiltinQuestions() {
     let qTypeId = 1;
@@ -1077,51 +1093,64 @@ const Quiz = {
       rawPool = await DB.getQuestions(this.currentTopicId, qTypeId);
     }
 
-    // 1. Deduplicate questions within pool by ID or prompt text
+    // 1. Deduplicate full question bank by unique ID and prompt text
     const uniqueMap = new Map();
     (rawPool || []).forEach(q => {
       if (!q) return;
-      const key = q.id || (q.question ? String(q.question).trim().toLowerCase() : Math.random().toString());
+      const key = (q.id ? String(q.id) : '') + '::' + (q.question ? String(q.question).trim().toLowerCase() : Math.random().toString());
       if (!uniqueMap.has(key)) {
         uniqueMap.set(key, q);
       }
     });
 
     const pool = Array.from(uniqueMap.values());
-    const topicKey = `${this.currentTopicId || this.currentTopic || 'all'}_${qTypeId}_${this.currentMode || 'pre-test'}`;
+    const modeKey = this.currentMode || 'pre-test';
+    const topicKey = `${this.currentTopicId || this.currentTopic || 'all'}_fmt${qTypeId}_mode${modeKey}`;
 
-    if (!this.usedQuestionIdsByTopic) {
-      this.usedQuestionIdsByTopic = {};
-    }
-    if (!this.usedQuestionIdsByTopic[topicKey]) {
-      this.usedQuestionIdsByTopic[topicKey] = new Set();
-    }
+    let usedSet = this.getUsedQuestionSet(topicKey);
 
-    const usedSet = this.usedQuestionIdsByTopic[topicKey];
-
-    // 2. Filter out questions already used in previous playthroughs of this topic
+    // 2. Filter out questions already used in this playthrough session/cycle for this topic & mode
     let unusedPool = pool.filter(q => {
-      const qKey = q.id || (q.question ? String(q.question).trim().toLowerCase() : '');
+      const qKey = (q.id ? String(q.id) : '') + '::' + (q.question ? String(q.question).trim().toLowerCase() : '');
       return !usedSet.has(qKey);
     });
 
-    const targetCount = this.customQuestionCount || 15;
+    const targetCount = Math.min(pool.length, this.customQuestionCount || 15);
+    let selected = [];
 
-    // Reset topic playthrough cycle if unasked questions are exhausted
-    if (unusedPool.length < Math.min(pool.length, targetCount)) {
+    if (unusedPool.length >= targetCount) {
+      // Enough unasked questions for a full fresh test session!
+      const shuffledUnused = this.shuffleArray(unusedPool);
+      selected = shuffledUnused.slice(0, targetCount);
+    } else {
+      // Unasked questions are fewer than targetCount. First, take ALL remaining unasked questions!
+      selected = this.shuffleArray([...unusedPool]);
+
+      // Reset playthrough history for this topic & mode so a new cycle begins
       usedSet.clear();
-      unusedPool = [...pool];
+
+      // Fill in remaining needed questions without repeating any question already selected in this test
+      const needed = targetCount - selected.length;
+      if (needed > 0) {
+        const selectedKeys = new Set(selected.map(q => (q.id ? String(q.id) : '') + '::' + (q.question ? String(q.question).trim().toLowerCase() : '')));
+        const fillCandidates = pool.filter(q => {
+          const qKey = (q.id ? String(q.id) : '') + '::' + (q.question ? String(q.question).trim().toLowerCase() : '');
+          return !selectedKeys.has(qKey);
+        });
+
+        const shuffledCandidates = this.shuffleArray(fillCandidates);
+        const fillIn = shuffledCandidates.slice(0, needed);
+        selected = [...selected, ...fillIn];
+      }
     }
 
-    const shuffled = this.shuffleArray(unusedPool);
-    const selected = shuffled.slice(0, targetCount);
-
-    // Record selected question IDs into topic playthrough history
+    // Record selected question keys into playthrough history
     selected.forEach(q => {
-      const qKey = q.id || (q.question ? String(q.question).trim().toLowerCase() : '');
+      const qKey = (q.id ? String(q.id) : '') + '::' + (q.question ? String(q.question).trim().toLowerCase() : '');
       if (qKey) usedSet.add(qKey);
     });
 
+    this.saveUsedQuestionSet(topicKey, usedSet);
     this.questionsList = selected;
   },
 
