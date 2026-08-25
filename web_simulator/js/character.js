@@ -204,9 +204,8 @@ const ProgressionSystem = {
   },
 
   getStageForXP(xp) {
-    if (xp >= 600) return EVOLUTION_STAGES[3];
-    if (xp >= 300) return EVOLUTION_STAGES[2];
-    if (xp >= 100) return EVOLUTION_STAGES[1];
+    if (xp >= 2000) return EVOLUTION_STAGES[2];
+    if (xp >= 1000) return EVOLUTION_STAGES[1];
     return EVOLUTION_STAGES[0];
   },
 
@@ -810,16 +809,13 @@ const CharacterSystem = {
     
     let dynamicQuote = stage.defaultQuote;
     if (isBaby) {
-      if (xp >= 70) dynamicQuote = "Almost ready to evolve! 👶";
+      if (xp >= 700) dynamicQuote = "Almost ready to evolve! 👶";
       else dynamicQuote = "Let's grow together!";
     } else if (isStudent) {
-      if (xp >= 270) dynamicQuote = "Graduation is close! 🎓";
+      if (xp >= 1700) dynamicQuote = "Graduation is close! 🎓";
       else dynamicQuote = "Studying core Grade 10 concepts!";
     } else if (isGraduate) {
-      if (xp >= 550) dynamicQuote = "Almost at the worker stage! 💼";
-      else dynamicQuote = "Mastering trivia & simulations!";
-    } else if (isAdult) {
-      dynamicQuote = "Working hard & applying science knowledge! 💼";
+      dynamicQuote = "Mastering trivia & simulations!";
     }
 
     let nextReqText = '';
