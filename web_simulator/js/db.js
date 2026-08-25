@@ -811,8 +811,15 @@ var DB = {
             questions = fallbackRes.data || [];
           }
         }
+        const uniqueMap = new Map();
+        (questions || []).forEach(q => {
+          if (!q) return;
+          const key = q.id || (q.question ? String(q.question).trim().toLowerCase() : Math.random().toString());
+          if (!uniqueMap.has(key)) uniqueMap.set(key, q);
+        });
+        const pool = Array.from(uniqueMap.values());
         const qCount = Math.min(30, Math.max(1, config.questionCount || 10));
-        const shuffled = [...questions].sort(() => Math.random() - 0.5);
+        const shuffled = [...pool].sort(() => Math.random() - 0.5);
         selectedQuestions = shuffled.slice(0, qCount);
       } catch (e) {
         console.warn('Questions query error, using local fallback:', e);

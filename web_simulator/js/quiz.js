@@ -1065,15 +1065,64 @@ const Quiz = {
     alert('Host Live Quiz finished! Final participant scores saved.');
   },
 
+  usedQuestionIdsByTopic: {},
+
   async prepareBuiltinQuestions() {
     let qTypeId = 1;
     if (this.currentQuestionFormat === 'true_false') qTypeId = 2;
     else if (this.currentQuestionFormat === 'identification') qTypeId = 3;
 
-    let pool = await DB.getQuestions(this.currentTopicId, qTypeId, this.currentMode);
-    if (pool.length === 0) pool = await DB.getQuestions(this.currentTopicId, qTypeId);
-    pool = this.shuffleArray(pool);
-    this.questionsList = pool.slice(0, this.customQuestionCount || 15);
+    let rawPool = await DB.getQuestions(this.currentTopicId, qTypeId, this.currentMode);
+    if (!rawPool || rawPool.length === 0) {
+      rawPool = await DB.getQuestions(this.currentTopicId, qTypeId);
+    }
+
+    // 1. Deduplicate questions within pool by ID or prompt text
+    const uniqueMap = new Map();
+    (rawPool || []).forEach(q => {
+      if (!q) return;
+      const key = q.id || (q.question ? String(q.question).trim().toLowerCase() : Math.random().toString());
+      if (!uniqueMap.has(key)) {
+        uniqueMap.set(key, q);
+      }
+    });
+
+    const pool = Array.from(uniqueMap.values());
+    const topicKey = `${this.currentTopicId || this.currentTopic || 'all'}_${qTypeId}_${this.currentMode || 'pre-test'}`;
+
+    if (!this.usedQuestionIdsByTopic) {
+      this.usedQuestionIdsByTopic = {};
+    }
+    if (!this.usedQuestionIdsByTopic[topicKey]) {
+      this.usedQuestionIdsByTopic[topicKey] = new Set();
+    }
+
+    const usedSet = this.usedQuestionIdsByTopic[topicKey];
+
+    // 2. Filter out questions already used in previous playthroughs of this topic
+    let unusedPool = pool.filter(q => {
+      const qKey = q.id || (q.question ? String(q.question).trim().toLowerCase() : '');
+      return !usedSet.has(qKey);
+    });
+
+    const targetCount = this.customQuestionCount || 15;
+
+    // Reset topic playthrough cycle if unasked questions are exhausted
+    if (unusedPool.length < Math.min(pool.length, targetCount)) {
+      usedSet.clear();
+      unusedPool = [...pool];
+    }
+
+    const shuffled = this.shuffleArray(unusedPool);
+    const selected = shuffled.slice(0, targetCount);
+
+    // Record selected question IDs into topic playthrough history
+    selected.forEach(q => {
+      const qKey = q.id || (q.question ? String(q.question).trim().toLowerCase() : '');
+      if (qKey) usedSet.add(qKey);
+    });
+
+    this.questionsList = selected;
   },
 
   // 6. Start Quiz Engine
