@@ -482,7 +482,7 @@ const CharacterSystem = {
             <button class="pet-stage-nav-btn" onclick="CharacterSystem.prevStage()" ${previewIndex === 0 ? 'disabled' : ''} title="Previous Stage">‹</button>
             <div style="display: flex; flex-direction: column; align-items: center;">
               <span style="font-size: 0.8rem; font-weight: 800; color: ${isLocked ? '#e11d48' : '#0284c7'}; background: rgba(255,255,255,0.85); padding: 4px 14px; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-                ${isCurrent ? '✨ CURRENT' : (isLocked ? `🔒 LOCKED (${stage.minXP} XP)` : '✅ UNLOCKED')} • ${stage.title} (${previewIndex + 1}/4)
+                ${isCurrent ? '✨ CURRENT' : (isLocked ? `🔒 LOCKED (${stage.minXP} XP)` : '✅ UNLOCKED')} • ${stage.title} (${previewIndex + 1}/${EVOLUTION_STAGES.length})
               </span>
             </div>
             <button class="pet-stage-nav-btn" onclick="CharacterSystem.nextStage()" ${previewIndex === EVOLUTION_STAGES.length - 1 ? 'disabled' : ''} title="Next Stage">›</button>
