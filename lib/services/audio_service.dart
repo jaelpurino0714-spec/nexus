@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -74,6 +75,13 @@ class AudioService {
     if (!_isInitialized) {
       init();
     }
+  }
+
+  /// Plays button tap / click feedback sound
+  Future<void> playClickSound() async {
+    try {
+      await SystemSound.play(SystemSoundType.click);
+    } catch (_) {}
   }
 
   Future<void> pauseBgm() async {

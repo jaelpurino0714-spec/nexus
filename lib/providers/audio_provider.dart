@@ -49,6 +49,10 @@ class AudioNotifier extends StateNotifier<AudioState> {
     state = state.copyWith(isPlaying: true);
   }
 
+  Future<void> playClickSound() async {
+    await AudioService.instance.playClickSound();
+  }
+
   Future<void> pauseBgm() async {
     await AudioService.instance.pauseBgm();
     state = state.copyWith(isPlaying: false);

@@ -109,6 +109,36 @@ const App = {
     if (btn) btn.textContent = audio.muted ? '🔊 Unmute' : '🔇 Mute';
   },
 
+  playClickSound() {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!this._clickAudioCtx) {
+        this._clickAudioCtx = new AudioCtx();
+      }
+      if (this._clickAudioCtx.state === 'suspended') {
+        this._clickAudioCtx.resume().catch(() => {});
+      }
+
+      const osc = this._clickAudioCtx.createOscillator();
+      const gain = this._clickAudioCtx.createGain();
+
+      osc.type = 'sine';
+      const now = this._clickAudioCtx.currentTime;
+      osc.frequency.setValueAtTime(650, now);
+      osc.frequency.exponentialRampToValueAtTime(140, now + 0.045);
+
+      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+
+      osc.connect(gain);
+      gain.connect(this._clickAudioCtx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.045);
+    } catch (_) {}
+  },
+
   bindEvents() {
     const toggleBtn = document.getElementById('toggleFrameBtn');
     if (toggleBtn) {
@@ -118,8 +148,10 @@ const App = {
     }
 
     document.addEventListener('click', (e) => {
-      const btn = e.target.closest('button, [role="button"], .primary-btn, .secondary-btn, .home-nav-btn, .term-btn, .topic-card, .teacher-action-btn, .icon-btn, .stat-pill, .role-card, .back-link, .logout-btn, .quiz-choice-btn, .quiz-nav-btn, .option-card, .avatar-wrapper');
+      const btn = e.target.closest('button, [role="button"], input[type="button"], input[type="submit"], .primary-btn, .secondary-btn, .home-nav-btn, .term-btn, .topic-card, .teacher-action-btn, .icon-btn, .stat-pill, .role-card, .back-link, .logout-btn, .quiz-choice-btn, .quiz-nav-btn, .option-card, .avatar-wrapper, a.btn, .game-item-card button, .close-modal-btn');
       if (btn && !btn.disabled) {
+        this.playClickSound();
+
         btn.classList.remove('btn-clicked');
         void btn.offsetWidth;
         btn.classList.add('btn-clicked');
