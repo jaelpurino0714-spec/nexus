@@ -333,93 +333,122 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 16px 22px;
+  gap: 14px;
+  padding: 16px 24px;
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
   font-family: var(--font-heading);
-  font-size: 1.15rem;
+  font-size: 1.18rem;
   font-weight: 800;
   color: #FFFFFF;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, filter 0.25s ease !important;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3), inset 0 1.5px 0 rgba(255, 255, 255, 0.4), inset 0 -3px 0 rgba(0, 0, 0, 0.25);
+}
+
+.home-nav-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.home-nav-btn:hover::before {
+  left: 180%;
 }
 
 .home-nav-btn .btn-icon {
-  font-size: 1.35rem;
+  font-size: 1.3rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  filter: none;
-  transition: transform 0.25s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.25s ease !important;
+  flex-shrink: 0;
 }
 
 .home-nav-btn:hover .btn-icon {
-  transform: scale(1.15);
+  transform: scale(1.18) rotate(8deg);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .home-nav-btn:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.06);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  transform: translateY(-4px) scale(1.02) !important;
 }
 
 .home-nav-btn:active {
-  transform: translateY(0) scale(0.98);
+  transform: translateY(1px) scale(0.98) !important;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.4) !important;
 }
 
-/* Play Button: Simplistic Emerald */
+/* Play Button: Enhanced Emerald */
 .play-btn {
-  background: linear-gradient(90deg, #059669 0%, #10B981 100%);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(135deg, #059669 0%, #10B981 50%, #34D399 100%) !important;
+  border-color: rgba(167, 243, 208, 0.45) !important;
+  box-shadow: 0 8px 22px rgba(16, 185, 129, 0.4), inset 0 1.5px 0 rgba(255, 255, 255, 0.45), inset 0 -3px 0 rgba(4, 120, 87, 0.5) !important;
 }
 
-.play-btn .btn-icon {
-  filter: none;
+.play-btn:hover {
+  box-shadow: 0 12px 28px rgba(16, 185, 129, 0.65), inset 0 1.5px 0 rgba(255, 255, 255, 0.6), inset 0 -3px 0 rgba(4, 120, 87, 0.5) !important;
 }
 
-/* My Character Button: Simplistic Ocean Blue */
+/* My Character Button: Enhanced Ocean Blue */
 .character-btn {
-  background: linear-gradient(90deg, #2563EB 0%, #3B82F6 100%);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(135deg, #1D4ED8 0%, #3B82F6 50%, #60A5FA 100%) !important;
+  border-color: rgba(191, 219, 254, 0.45) !important;
+  box-shadow: 0 8px 22px rgba(59, 130, 246, 0.4), inset 0 1.5px 0 rgba(255, 255, 255, 0.45), inset 0 -3px 0 rgba(29, 78, 216, 0.5) !important;
 }
 
-.character-btn .btn-icon {
-  filter: none;
+.character-btn:hover {
+  box-shadow: 0 12px 28px rgba(59, 130, 246, 0.65), inset 0 1.5px 0 rgba(255, 255, 255, 0.6), inset 0 -3px 0 rgba(29, 78, 216, 0.5) !important;
 }
 
-/* Experiment Simulator Button: Simplistic Mint/Teal */
+/* Experiment Simulator Button: Enhanced Mint/Teal */
 .experiment-btn {
-  background: linear-gradient(90deg, #0F766E 0%, #14B8A6 100%);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(135deg, #0284C7 0%, #0EA5E9 50%, #38BDF8 100%) !important;
+  border-color: rgba(186, 230, 253, 0.45) !important;
+  box-shadow: 0 8px 22px rgba(14, 165, 233, 0.4), inset 0 1.5px 0 rgba(255, 255, 255, 0.45), inset 0 -3px 0 rgba(3, 105, 161, 0.5) !important;
 }
 
-.experiment-btn .btn-icon {
-  filter: none;
+.experiment-btn:hover {
+  box-shadow: 0 12px 28px rgba(14, 165, 233, 0.65), inset 0 1.5px 0 rgba(255, 255, 255, 0.6), inset 0 -3px 0 rgba(3, 105, 161, 0.5) !important;
 }
 
-/* Custom Play Button: Simplistic Hot Pink/Magenta */
+/* Custom Play Button: Enhanced Hot Pink/Magenta */
 .custom-play-btn {
-  background: linear-gradient(90deg, #BE185D 0%, #EC4899 100%);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(135deg, #C026D3 0%, #EC4899 50%, #F472B6 100%) !important;
+  border-color: rgba(251, 207, 232, 0.45) !important;
+  box-shadow: 0 8px 22px rgba(236, 72, 153, 0.4), inset 0 1.5px 0 rgba(255, 255, 255, 0.45), inset 0 -3px 0 rgba(190, 24, 93, 0.5) !important;
 }
 
-.custom-play-btn .btn-icon {
-  filter: none;
+.custom-play-btn:hover {
+  box-shadow: 0 12px 28px rgba(236, 72, 153, 0.65), inset 0 1.5px 0 rgba(255, 255, 255, 0.6), inset 0 -3px 0 rgba(190, 24, 93, 0.5) !important;
 }
 
-/* Settings Button: Simplistic Slate Gray */
+/* Settings Button: Enhanced Slate Steel */
 .settings-btn {
-  background: linear-gradient(90deg, #475569 0%, #64748B 100%);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(135deg, #475569 0%, #64748B 50%, #94A3B8 100%) !important;
+  border-color: rgba(226, 232, 240, 0.45) !important;
+  box-shadow: 0 8px 22px rgba(100, 116, 139, 0.35), inset 0 1.5px 0 rgba(255, 255, 255, 0.45), inset 0 -3px 0 rgba(51, 65, 85, 0.5) !important;
+}
+
+.settings-btn:hover {
+  box-shadow: 0 12px 28px rgba(100, 116, 139, 0.55), inset 0 1.5px 0 rgba(255, 255, 255, 0.6), inset 0 -3px 0 rgba(51, 65, 85, 0.5) !important;
 }
 
 .settings-btn .btn-icon {
