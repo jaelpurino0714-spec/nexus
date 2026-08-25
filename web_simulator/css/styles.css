@@ -258,9 +258,9 @@ body.fullscreen-mode .app-container {
 
 /* App Header */
 .app-header {
-  min-height: 84px;
+  min-height: 76px;
   background: #130E2E;
-  padding: 8px 18px;
+  padding: 8px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -268,12 +268,15 @@ body.fullscreen-mode .app-container {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   position: relative;
   z-index: 50;
+  gap: 12px;
 }
 
 .logo-group {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .app-logo-icon {
@@ -282,52 +285,72 @@ body.fullscreen-mode .app-container {
 }
 
 .app-logo-img {
-  height: 110px;
+  height: 84px;
   width: auto;
-  max-width: 130px;
+  max-width: 95px;
   object-fit: contain;
   filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.85)) drop-shadow(0 0 6px rgba(99, 102, 241, 0.6));
   display: block;
-  margin-top: -12px;
-  margin-bottom: -12px;
+  flex-shrink: 0;
   transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .app-logo-img:hover {
-  transform: scale(1.1) translateY(-2px);
+  transform: scale(1.08) translateY(-2px);
   filter: drop-shadow(0 0 24px rgba(168, 85, 247, 1)) drop-shadow(0 0 10px rgba(168, 85, 247, 0.8));
+}
+
+.app-title-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
 }
 
 .app-name {
   font-family: var(--font-heading);
-  font-size: 1.35rem;
-  font-weight: 800;
+  font-size: 1.45rem;
+  font-weight: 900;
   color: #FFFFFF;
   letter-spacing: 0.5px;
   line-height: 1.1;
+  margin: 0;
+  white-space: nowrap;
 }
 
 .app-subtitle {
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 600;
   color: #A78BFA;
   display: block;
+  white-space: nowrap;
+  margin-top: 1px;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .user-badge {
-  background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+  background: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%);
   color: #FFFFFF;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 4px 12px;
-  border-radius: var(--radius-full);
-  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.45);
+  border: 1px solid rgba(196, 181, 253, 0.35);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .icon-btn {

@@ -597,8 +597,8 @@ const App = {
 
     if (teacher) {
       if (badge) {
-        badge.style.display = 'inline-block';
-        badge.textContent = 'Teacher';
+        badge.style.display = 'inline-flex';
+        badge.innerHTML = `<span>👩‍🏫</span> Teacher`;
       }
       const teacherTitle = document.getElementById('teacherHomeTitle');
       if (teacherTitle) teacherTitle.textContent = `Welcome, ${teacher.name}!`;
@@ -617,8 +617,9 @@ const App = {
     }
 
     if (badge) {
-      badge.style.display = 'inline-block';
-      badge.textContent = profile.gradeLevel || 'Student';
+      badge.style.display = 'inline-flex';
+      const rawGrade = (profile.gradeLevel && profile.gradeLevel !== 'undefined') ? profile.gradeLevel : 'Grade 10';
+      badge.innerHTML = `<span>🎓</span> ${rawGrade}`;
     }
 
     const nameVal = (profile.name && profile.name !== 'undefined' && profile.name.trim() !== '') ? profile.name : 'Student';
