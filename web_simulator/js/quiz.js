@@ -5,9 +5,30 @@
    ========================================================================== */
 
 const CURRICULUM = {
-  1: [],
-  2: [],
-  3: []
+  1: [
+    "Physical vs. Chemical Change",
+    "Chemical Reactions",
+    "Acids, Bases, and Salts",
+    "Chemical Equations",
+    "Balancing Chemical Equations",
+    "Rates of Reactions",
+    "Homeostasis",
+    "Mechanisms of Evolution"
+  ],
+  2: [
+    "Ecosystem's Carrying Capacity and Population Growth",
+    "Biotechnology",
+    "Plate Tectonics",
+    "Global Climate",
+    "Global Interactions (ENSO)",
+    "Global and Local Sustainability"
+  ],
+  3: [
+    "Projectile Motion",
+    "Momentum and Collisions",
+    "Large-Scale Generation and Distribution of Electricity",
+    "Renewable and Non-Renewable Energy Sources"
+  ]
 };
 
 const Quiz = {
@@ -60,7 +81,7 @@ const Quiz = {
   async renderTopics() {
     const termNames = { 1: 'First Term Topics', 2: 'Second Term Topics', 3: 'Third Term Topics' };
     document.getElementById('topicScreenTitle').textContent = termNames[this.currentTerm] || 'Select Topic';
-    document.getElementById('topicScreenSub').textContent = `Choose a topic to begin`;
+    document.getElementById('topicScreenSub').textContent = `Choose a DepEd Grade 10 Science topic to begin`;
 
     const container = document.getElementById('topicsListGroup');
     container.innerHTML = '<div style="text-align:center; padding:20px; color:#C4B5FD;">Loading topics from Supabase...</div>';
