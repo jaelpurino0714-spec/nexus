@@ -214,7 +214,8 @@ class CharacterService {
       case 'student':
         return 'assets/images/character/$g/student.png';
       case 'graduate':
-        return 'assets/images/character/$g/graduate.png';
+      case 'scientist':
+        return 'assets/images/character/$g/graduate.gif';
       case 'worker':
       case 'adult':
         return 'assets/images/character/$g/worker.png';

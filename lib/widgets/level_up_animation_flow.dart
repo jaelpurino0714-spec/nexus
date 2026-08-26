@@ -42,7 +42,7 @@ class _LevelUpAnimationFlowState extends State<LevelUpAnimationFlow> with Single
     {
       'title': '5. SCIENTIST STAGE',
       'subtitle': 'Exploring & Creating',
-      'asset': 'assets/images/mascot/flow_step_5_scientist.png',
+      'asset': 'assets/images/mascot/scientist_main.gif',
       'desc': 'Ultimate Scientist form with glowing beaker, tablet & LEVEL UP badge!',
     },
   ];
@@ -209,6 +209,8 @@ class _LevelUpAnimationFlowState extends State<LevelUpAnimationFlow> with Single
                             Expanded(
                               child: Image.asset(
                                 _steps[idx]['asset']!,
+                                key: ValueKey(_steps[idx]['asset']!),
+                                gaplessPlayback: true,
                                 fit: BoxFit.contain,
                                 errorBuilder: (ctx, err, stack) => const Icon(Icons.flash_on, color: Colors.cyan),
                               ),
@@ -277,6 +279,8 @@ class _LevelUpAnimationFlowState extends State<LevelUpAnimationFlow> with Single
                       ),
                       child: Image.asset(
                         currentStepData['asset']!,
+                        key: ValueKey(currentStepData['asset']!),
+                        gaplessPlayback: true,
                         fit: BoxFit.contain,
                         errorBuilder: (ctx, err, stack) => const Icon(Icons.star, color: Colors.cyan, size: 40),
                       ),

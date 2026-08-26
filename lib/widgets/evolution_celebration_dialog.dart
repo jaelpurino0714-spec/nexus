@@ -43,6 +43,8 @@ class EvolutionCelebrationDialog extends ConsumerWidget {
               child: Center(
                 child: Image.asset(
                   assetPath,
+                  key: ValueKey(assetPath),
+                  gaplessPlayback: true,
                   height: 110,
                   width: 110,
                   fit: BoxFit.contain,

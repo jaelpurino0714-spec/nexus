@@ -359,6 +359,9 @@ class _Mascot3DViewerState extends State<Mascot3DViewer> with TickerProviderStat
 
   String _getMainMascotAssetPath() {
     final stageName = widget.stage.name;
+    if (stageName == 'scientist') {
+      return 'assets/images/mascot/scientist_main.gif';
+    }
     return 'assets/images/mascot/${stageName}_main.png';
   }
 
@@ -544,6 +547,8 @@ class _Mascot3DViewerState extends State<Mascot3DViewer> with TickerProviderStat
                           // Base Mascot Sprite (Transparent background)
                           Image.asset(
                             isFrontView ? _getMainMascotAssetPath() : _getTurnaroundAssetPath(),
+                            key: ValueKey(isFrontView ? _getMainMascotAssetPath() : _getTurnaroundAssetPath()),
+                            gaplessPlayback: true,
                             height: widget.height * 0.76,
                             fit: BoxFit.contain,
                             errorBuilder: (ctx, err, stack) => Icon(
@@ -557,8 +562,8 @@ class _Mascot3DViewerState extends State<Mascot3DViewer> with TickerProviderStat
                             ),
                           ),
 
-                          // Visor Expression & Natural Blink Overlay (shown on front view)
-                          if (isFrontView)
+                          // Visor Expression & Natural Blink Overlay (shown on front view for baby & student)
+                          if (isFrontView && widget.stage != MascotStage.scientist)
                             Positioned(
                               top: widget.height * (widget.stage == MascotStage.scientist ? 0.16 : 0.18) + (_gazeY * 0.6),
                               left: (widget.height * 0.28) + (_gazeX * 0.7),
