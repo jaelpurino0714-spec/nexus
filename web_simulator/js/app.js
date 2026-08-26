@@ -19,7 +19,7 @@ const App = {
     this.checkInitialAuth();
   },
 
-  isSpecialAudioScreen(screenId = this.currentScreen) {
+  isExperimentAudioScreen(screenId = this.currentScreen) {
     return (
       screenId === 'experimentTermScreen' ||
       screenId === 'experimentTopicScreen' ||
@@ -32,8 +32,11 @@ const App = {
     return charModal && !charModal.classList.contains('hidden');
   },
 
-  playSpecialAudio() {
-    this.pauseBgm();
+  playCharacterAudio() {
+    const bgm = document.getElementById('nexusBgmAudio');
+    const exp = document.getElementById('nexusExperimentAudio');
+    if (bgm) try { bgm.pause(); } catch (_) {}
+    if (exp) try { exp.pause(); } catch (_) {}
 
     let audio = document.getElementById('nexusCharacterAudio');
     if (!audio) {
@@ -53,12 +56,12 @@ const App = {
     const playPromise = audio.play();
     if (playPromise !== undefined) {
       playPromise.catch(err => {
-        console.warn('Special music playback warning:', err);
+        console.warn('Character music playback warning:', err);
       });
     }
   },
 
-  stopSpecialAudio() {
+  stopCharacterAudio() {
     const audio = document.getElementById('nexusCharacterAudio');
     if (audio) {
       try {
@@ -68,31 +71,80 @@ const App = {
     }
   },
 
+  playExperimentAudio() {
+    const bgm = document.getElementById('nexusBgmAudio');
+    const charAudio = document.getElementById('nexusCharacterAudio');
+    if (bgm) try { bgm.pause(); } catch (_) {}
+    if (charAudio) try { charAudio.pause(); } catch (_) {}
+
+    let audio = document.getElementById('nexusExperimentAudio');
+    if (!audio) {
+      audio = document.createElement('audio');
+      audio.id = 'nexusExperimentAudio';
+      audio.src = 'assets/audio/Science Music Background Royalty Free _ Ambient Technology Music.mp3';
+      audio.preload = 'auto';
+      document.body.appendChild(audio);
+    }
+
+    audio.loop = true;
+
+    const savedVol = localStorage.getItem('nexus_bgm_vol');
+    const volVal = savedVol !== null ? parseFloat(savedVol) : 0.5;
+    audio.volume = volVal;
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(err => {
+        console.warn('Experiment music playback warning:', err);
+      });
+    }
+  },
+
+  stopExperimentAudio() {
+    const audio = document.getElementById('nexusExperimentAudio');
+    if (audio) {
+      try {
+        audio.pause();
+        audio.currentTime = 0;
+      } catch (_) {}
+    }
+  },
+
+  stopAllCustomAudio() {
+    this.stopCharacterAudio();
+    this.stopExperimentAudio();
+  },
+
   initBgm() {
     this.playBgm();
     
     // Resume BGM when tab gains focus
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) {
-        if (this.isCharacterModalOpen() || this.isSpecialAudioScreen()) {
-          this.playSpecialAudio();
+        if (this.isCharacterModalOpen()) {
+          this.playCharacterAudio();
+        } else if (this.isExperimentAudioScreen()) {
+          this.playExperimentAudio();
         } else if (this.currentScreen === 'teacherHomeScreen' || this.currentScreen === 'homeScreen') {
           this.playBgm();
         }
       } else {
         this.pauseBgm();
-        this.stopSpecialAudio();
       }
     });
   },
 
   playBgm() {
-    if (this.isCharacterModalOpen() || this.isSpecialAudioScreen()) {
-      this.playSpecialAudio();
+    if (this.isCharacterModalOpen()) {
+      this.playCharacterAudio();
+      return;
+    }
+    if (this.isExperimentAudioScreen()) {
+      this.playExperimentAudio();
       return;
     }
 
-    this.stopSpecialAudio();
+    this.stopAllCustomAudio();
 
     const audio = document.getElementById('nexusBgmAudio');
     if (!audio) return;
@@ -154,12 +206,12 @@ const App = {
   isSfxMuted: localStorage.getItem('nexus_sfx_muted') === 'true',
 
   pauseBgm() {
-    const audio = document.getElementById('nexusBgmAudio');
-    if (audio) {
-      try {
-        audio.pause();
-      } catch (_) {}
-    }
+    ['nexusBgmAudio', 'nexusCharacterAudio', 'nexusExperimentAudio'].forEach(id => {
+      const audio = document.getElementById(id);
+      if (audio) {
+        try { audio.pause(); } catch (_) {}
+      }
+    });
   },
 
   toggleBgmModal() {
@@ -198,24 +250,26 @@ const App = {
   },
 
   setBgmVolume(val) {
-    const audio = document.getElementById('nexusBgmAudio');
-    const charAudio = document.getElementById('nexusCharacterAudio');
-    const label = document.getElementById('bgmVolPercent');
     const vol = parseFloat(val) / 100.0;
-    if (audio) audio.volume = vol;
-    if (charAudio) charAudio.volume = vol;
+    ['nexusBgmAudio', 'nexusCharacterAudio', 'nexusExperimentAudio'].forEach(id => {
+      const audio = document.getElementById(id);
+      if (audio) audio.volume = vol;
+    });
+    const label = document.getElementById('bgmVolPercent');
     if (label) label.textContent = `${val}%`;
     localStorage.setItem('nexus_bgm_vol', vol.toString());
   },
 
   toggleBgmMute() {
     const audio = document.getElementById('nexusBgmAudio');
-    const charAudio = document.getElementById('nexusCharacterAudio');
-    const btn = document.getElementById('bgmMuteBtn');
     if (!audio) return;
-    audio.muted = !audio.muted;
-    if (charAudio) charAudio.muted = audio.muted;
-    if (btn) btn.textContent = audio.muted ? '🔊 Unmute' : '🔇 Mute';
+    const isMuted = !audio.muted;
+    ['nexusBgmAudio', 'nexusCharacterAudio', 'nexusExperimentAudio'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.muted = isMuted;
+    });
+    const btn = document.getElementById('bgmMuteBtn');
+    if (btn) btn.textContent = isMuted ? '🔊 Unmute' : '🔇 Mute';
   },
 
   setTimerVolume(val) {
@@ -618,19 +672,20 @@ const App = {
       screenId === 'mpHostQuestionScreen'
     );
 
-    const isExperimentUI = this.isSpecialAudioScreen(screenId);
+    const isExperimentUI = this.isExperimentAudioScreen(screenId);
 
     if (isAnsweringScreen) {
       this.pauseBgm();
-      this.stopSpecialAudio();
+      this.stopAllCustomAudio();
     } else if (isExperimentUI) {
       this.clearRedScreenAlert();
       this.stopTimerAudio();
-      this.playSpecialAudio();
+      this.stopCharacterAudio();
+      this.playExperimentAudio();
     } else {
       this.clearRedScreenAlert();
       this.stopTimerAudio();
-      this.stopSpecialAudio();
+      this.stopAllCustomAudio();
       this.playBgm();
     }
 

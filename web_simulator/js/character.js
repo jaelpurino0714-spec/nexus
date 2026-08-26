@@ -324,15 +324,15 @@ const CharacterSystem = {
   },
 
   playCharacterMusic() {
-    if (typeof App !== 'undefined' && App.playSpecialAudio) {
-      App.playSpecialAudio();
+    if (typeof App !== 'undefined' && App.playCharacterAudio) {
+      App.playCharacterAudio();
     }
   },
 
   stopCharacterMusic() {
-    if (typeof App !== 'undefined' && App.stopSpecialAudio) {
-      App.stopSpecialAudio();
-      if (App.currentScreen && !App.isSpecialAudioScreen(App.currentScreen)) {
+    if (typeof App !== 'undefined' && App.stopCharacterAudio) {
+      App.stopCharacterAudio();
+      if (App.currentScreen && typeof App.playBgm === 'function') {
         App.playBgm();
       }
     }
