@@ -249,7 +249,6 @@ const Experiment = {
   },
 
   openExperiment(topicName) {
-    this.playStartExperimentSfx();
     this.currentTopic = topicName;
     const titleEl = document.getElementById('expDetailTitle');
     const topicTagEl = document.getElementById('expDetailTopicTag');
