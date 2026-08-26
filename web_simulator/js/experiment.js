@@ -197,64 +197,54 @@ const Experiment = {
       const ctx = this.audioCtx;
       const now = ctx.currentTime;
 
-      // 1. Heavy Sub-Bass Boom (Low-frequency impact shockwave: 160Hz -> 25Hz)
-      const subOsc = ctx.createOscillator();
-      const subGain = ctx.createGain();
-      subOsc.type = 'sine';
-      subOsc.frequency.setValueAtTime(160, now);
-      subOsc.frequency.exponentialRampToValueAtTime(25, now + 0.5);
+      // Ascending Triumphant Achievement Arpeggio Notes: C5 (523Hz), E5 (659Hz), G5 (784Hz), C6 (1046Hz)
+      const notes = [
+        { freq: 523.25, start: now, dur: 0.14, type: 'sine' },        // C5
+        { freq: 659.25, start: now + 0.07, dur: 0.14, type: 'sine' }, // E5
+        { freq: 783.99, start: now + 0.14, dur: 0.18, type: 'sine' }, // G5
+        { freq: 1046.50, start: now + 0.22, dur: 0.65, type: 'triangle' } // C6 High Peak Ring
+      ];
 
-      subGain.gain.setValueAtTime(0.85, now);
-      subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+      notes.forEach((n, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
 
-      subOsc.connect(subGain);
-      subGain.connect(ctx.destination);
-      subOsc.start(now);
-      subOsc.stop(now + 0.55);
+        osc.type = n.type;
+        osc.frequency.setValueAtTime(n.freq, n.start);
 
-      // 2. White Noise Blast (Booming lowpass rumble explosion body: 1800Hz -> 60Hz)
-      const bufferSize = Math.floor(ctx.sampleRate * 0.7);
-      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        output[i] = Math.random() * 2 - 1;
-      }
+        if (idx === 3) {
+          // Shimmer pitch bend on final peak chime
+          osc.frequency.exponentialRampToValueAtTime(n.freq * 1.02, n.start + n.dur);
+        }
 
-      const whiteNoise = ctx.createBufferSource();
-      whiteNoise.buffer = noiseBuffer;
+        const vol = idx === 3 ? 0.45 : 0.3;
+        gain.gain.setValueAtTime(vol, n.start);
+        gain.gain.exponentialRampToValueAtTime(0.001, n.start + n.dur);
 
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(1800, now);
-      filter.frequency.exponentialRampToValueAtTime(60, now + 0.65);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
 
-      const noiseGain = ctx.createGain();
-      noiseGain.gain.setValueAtTime(0.75, now);
-      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+        osc.start(n.start);
+        osc.stop(n.start + n.dur);
+      });
 
-      whiteNoise.connect(filter);
-      filter.connect(noiseGain);
-      noiseGain.connect(ctx.destination);
+      // Warm Sub-Bass Triumph Layer (C3: 130.81Hz -> C4: 261.63Hz)
+      const bassOsc = ctx.createOscillator();
+      const bassGain = ctx.createGain();
+      bassOsc.type = 'sine';
+      bassOsc.frequency.setValueAtTime(130.81, now + 0.12);
+      bassOsc.frequency.exponentialRampToValueAtTime(261.63, now + 0.48);
 
-      whiteNoise.start(now);
-      whiteNoise.stop(now + 0.7);
+      bassGain.gain.setValueAtTime(0.35, now + 0.12);
+      bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.52);
 
-      // 3. High-Frequency Blast Crackle / Distortion Burst (450Hz -> 40Hz)
-      const crackleOsc = ctx.createOscillator();
-      const crackleGain = ctx.createGain();
-      crackleOsc.type = 'sawtooth';
-      crackleOsc.frequency.setValueAtTime(450, now);
-      crackleOsc.frequency.exponentialRampToValueAtTime(40, now + 0.35);
+      bassOsc.connect(bassGain);
+      bassGain.connect(ctx.destination);
 
-      crackleGain.gain.setValueAtTime(0.35, now);
-      crackleGain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-
-      crackleOsc.connect(crackleGain);
-      crackleGain.connect(ctx.destination);
-      crackleOsc.start(now);
-      crackleOsc.stop(now + 0.35);
+      bassOsc.start(now + 0.12);
+      bassOsc.stop(now + 0.52);
     } catch (e) {
-      console.warn('Explosion SFX error:', e);
+      console.warn('Achievement SFX error:', e);
     }
   },
 
