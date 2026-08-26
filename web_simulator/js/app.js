@@ -86,8 +86,8 @@ const App = {
 
     const bgm = document.getElementById('nexusBgmAudio');
     const charAudio = document.getElementById('nexusCharacterAudio');
-    if (bgm) try { bgm.pause(); } catch (_) {}
-    if (charAudio) try { charAudio.pause(); } catch (_) {}
+    if (bgm) try { bgm.pause(); bgm.currentTime = 0; } catch (_) {}
+    if (charAudio) try { charAudio.pause(); charAudio.currentTime = 0; } catch (_) {}
 
     let audio = document.getElementById('nexusExperimentAudio');
     if (!audio) {
@@ -99,6 +99,19 @@ const App = {
     }
 
     audio.loop = true;
+
+    if (!audio._hasLoopListener) {
+      audio._hasLoopListener = true;
+      audio.addEventListener('ended', () => {
+        if (this.isExperimentAudioScreen()) {
+          audio.currentTime = 0;
+          const p = audio.play();
+          if (p !== undefined) p.catch(() => {});
+        } else {
+          this.stopExperimentAudio();
+        }
+      });
+    }
 
     const savedVol = localStorage.getItem('nexus_bgm_vol');
     const volVal = savedVol !== null ? parseFloat(savedVol) : 0.5;
@@ -139,7 +152,8 @@ const App = {
           this.playCharacterAudio();
         } else if (this.isExperimentAudioScreen()) {
           this.playExperimentAudio();
-        } else if (this.currentScreen === 'teacherHomeScreen' || this.currentScreen === 'homeScreen') {
+        } else {
+          this.stopAllCustomAudio();
           this.playBgm();
         }
       } else {
