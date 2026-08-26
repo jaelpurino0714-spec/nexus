@@ -1506,7 +1506,7 @@ const Experiment = {
     loop();
   },
 
-  // 11. Plate Tectonics Fault Line Canvas
+  // 11. Plate Tectonics Fault Line Canvas (10X COOLER)
   startTectonicsCanvas(canvasId, mode) {
     const setup = this.setupCanvas(canvasId, 220);
     if (!setup) return;
@@ -1515,6 +1515,18 @@ const Experiment = {
     let time = 0;
     const isDivergent = mode === 'divergent';
     const isConvergent = mode === 'convergent';
+
+    const particles = [];
+    for (let i = 0; i < 35; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: h - 20 + Math.random() * 20,
+        vy: -0.8 - Math.random() * 1.2,
+        vx: (Math.random() - 0.5) * 0.8,
+        r: 2 + Math.random() * 3,
+        color: i % 2 === 0 ? '#EF4444' : '#F59E0B'
+      });
+    }
 
     const loop = () => {
       time += 0.04;
@@ -1527,22 +1539,137 @@ const Experiment = {
       }
 
       const centerX = w / 2;
-      const groundY = h / 2;
+      const groundY = h / 2 + 15;
 
-      if (isDivergent) {
-        ctx.fillStyle = '#EF4444';
-        ctx.shadowColor = '#EF4444';
-        ctx.shadowBlur = 20;
-        ctx.fillRect(centerX - 20, groundY - 10, 40, h - groundY + 10);
+      // Draw Glowing Mantle Magma Layer
+      const mantleGrad = ctx.createLinearGradient(0, groundY, 0, h);
+      mantleGrad.addColorStop(0, '#7F1D1D');
+      mantleGrad.addColorStop(0.5, '#B91C1C');
+      mantleGrad.addColorStop(1, '#450A0A');
+      ctx.fillStyle = mantleGrad;
+      ctx.fillRect(0, groundY + 15, w, h - groundY);
+
+      // Draw Magma Convection Loops
+      ctx.strokeStyle = '#F59E0B';
+      ctx.shadowColor = '#F59E0B';
+      ctx.shadowBlur = 12;
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 3; i++) {
+        const offset = (i - 1) * 90;
+        ctx.beginPath();
+        ctx.arc(centerX + offset, groundY + 45, 18, time + i, time + i + Math.PI * 1.5);
+        ctx.stroke();
       }
 
-      const shiftL = isDivergent ? -Math.sin(time) * 10 : (isConvergent ? Math.sin(time) * 10 : 0);
-      ctx.fillStyle = '#475569';
-      ctx.fillRect(30 + shiftL, groundY - 20, centerX - 40, 60);
+      // Draw Magma Plume if Divergent
+      if (isDivergent) {
+        const plumeGrad = ctx.createLinearGradient(centerX - 25, groundY + 20, centerX + 25, groundY - 35);
+        plumeGrad.addColorStop(0, '#EF4444');
+        plumeGrad.addColorStop(1, '#F59E0B');
+        ctx.fillStyle = plumeGrad;
+        ctx.shadowColor = '#EF4444';
+        ctx.shadowBlur = 20;
+        ctx.beginPath();
+        ctx.moveTo(centerX - 20, groundY + 30);
+        ctx.lineTo(centerX + 20, groundY + 30);
+        ctx.lineTo(centerX + 12, groundY - 35);
+        ctx.lineTo(centerX - 12, groundY - 35);
+        ctx.closePath();
+        ctx.fill();
 
-      const shiftR = isDivergent ? Math.sin(time) * 10 : (isConvergent ? -Math.sin(time) * 10 : 0);
-      ctx.fillStyle = '#334155';
-      ctx.fillRect(centerX + 10 + shiftR, groundY - 20, centerX - 40, 60);
+        ctx.strokeStyle = '#FDE047';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(centerX, groundY + 30);
+        ctx.lineTo(centerX, groundY - 35);
+        ctx.stroke();
+      }
+
+      const shiftL = isDivergent ? -Math.sin(time * 1.5) * 16 : (isConvergent ? Math.sin(time * 1.5) * 16 : 0);
+      const shiftR = isDivergent ? Math.sin(time * 1.5) * 16 : (isConvergent ? -Math.sin(time * 1.5) * 16 : 0);
+
+      // Draw Plate A Block
+      ctx.shadowColor = '#38BDF8';
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = 'rgba(30, 41, 59, 0.95)';
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 2.5;
+
+      const plateAW = centerX - 45;
+      const plateAX = 20 + shiftL;
+      ctx.fillRect(plateAX, groundY - 30, plateAW, 45);
+      ctx.strokeRect(plateAX, groundY - 30, plateAW, 45);
+
+      ctx.fillStyle = '#1E293B';
+      ctx.fillRect(plateAX, groundY - 30, plateAW, 10);
+      ctx.fillStyle = '#38BDF8';
+      ctx.font = 'bold 12px sans-serif';
+      ctx.fillText('PLATE A (Oceanic)', plateAX + 15, groundY - 6);
+
+      // Draw Plate B Block
+      ctx.shadowColor = '#A855F7';
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = 'rgba(30, 22, 60, 0.95)';
+      ctx.strokeStyle = '#A855F7';
+
+      const plateBW = centerX - 45;
+      const plateBX = centerX + 25 + shiftR;
+      ctx.fillRect(plateBX, groundY - 30, plateBW, 45);
+      ctx.strokeRect(plateBX, groundY - 30, plateBX, 45);
+
+      ctx.fillStyle = '#3B0764';
+      ctx.fillRect(plateBX, groundY - 30, plateBW, 10);
+      ctx.fillStyle = '#C084FC';
+      ctx.font = 'bold 12px sans-serif';
+      ctx.fillText('PLATE B (Continental)', plateBX + 15, groundY - 6);
+
+      // Mountain Uplift if Convergent
+      if (isConvergent) {
+        ctx.fillStyle = '#94A3B8';
+        ctx.shadowColor = '#38BDF8';
+        ctx.shadowBlur = 15;
+        ctx.beginPath();
+        ctx.moveTo(centerX - 30, groundY - 30);
+        ctx.lineTo(centerX, groundY - 70 - Math.abs(shiftL) * 1.5);
+        ctx.lineTo(centerX + 30, groundY - 30);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.strokeStyle = '#F1F5F9';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      // Directional Velocity Vectors
+      ctx.fillStyle = '#FDE047';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.shadowColor = '#F59E0B';
+      ctx.shadowBlur = 10;
+
+      if (isDivergent) {
+        ctx.fillText('← RIFT', plateAX + plateAW / 2 - 25, groundY + 30);
+        ctx.fillText('RIFT →', plateBX + 20, groundY + 30);
+      } else if (isConvergent) {
+        ctx.fillText('DRIFT →', plateAX + plateAW / 2 - 25, groundY + 30);
+        ctx.fillText('← DRIFT', plateBX + 20, groundY + 30);
+      }
+
+      // Rising Magma Sparks
+      particles.forEach(p => {
+        p.y += p.vy;
+        p.x += p.vx;
+        if (p.y < groundY - 30) {
+          p.y = h - 10;
+          p.x = centerX + (Math.random() - 0.5) * 60;
+        }
+
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
 
       this.animFrameId = requestAnimationFrame(loop);
     };
@@ -4294,28 +4421,52 @@ const Experiment = {
 
       if (!isStarted) {
         html += `
-          <div class="tectonics-anim-box">
-            <div class="plates-row">
-              <div class="tectonic-plate">🟫 Plate A</div>
-              <div style="font-size:1.5rem; color:#0284C7; font-weight:800;">← →</div>
-              <div class="tectonic-plate">🟫 Plate B</div>
+          <div class="exp-result-container chemical-result">
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">🌋 DIVERGENT RIFT STANDBY MONITOR</span>
+                <span class="exp-hud-status active">● RIFT STANDBY</span>
+              </div>
+              <canvas id="canvasTectonics" class="exp-sim-canvas"></canvas>
             </div>
-            <div style="font-size:0.82rem; font-weight:800; color:#78350F; margin-top:10px;">
-              🌋 Magma Layer Below
-            </div>
-          </div>
 
-          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startTectonicsSimulation()">
-            🌋 [ MOVE PLATES ]
-          </button>
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🌍</div>
+                <div class="telemetry-label">Plate Drift</div>
+                <div class="telemetry-value">← RIFT →</div>
+                <div class="telemetry-unit">Separating</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 50%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🌋</div>
+                <div class="telemetry-label">Mantle Temp</div>
+                <div class="telemetry-value">1200</div>
+                <div class="telemetry-unit">°C Molten Basalt</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 85%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">⚡</div>
+                <div class="telemetry-label">Seismic Activity</div>
+                <div class="telemetry-value">READY</div>
+                <div class="telemetry-unit">Fault Standby</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 40%;"></div></div>
+              </div>
+            </div>
+
+            <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startTectonicsSimulation()">
+              🌋 [ INITIATE DIVERGENT RIFT ]
+            </button>
+          </div>
         </div>
         `;
+        setTimeout(() => this.startTectonicsCanvas('canvasTectonics', mode), 40);
       } else {
         html += `
           <div class="exp-result-container chemical-result">
             <div class="exp-canvas-box-wrapper">
               <div class="exp-hud-bar">
-                <span class="exp-hud-title">🌋 TECTONIC FAULT RIFT SIMULATOR</span>
+                <span class="exp-hud-title">🌋 DIVERGENT FAULT SEPARATION ACTIVE</span>
                 <span class="exp-hud-status active">● MAGMA UPRIFT ACTIVE</span>
               </div>
               <canvas id="canvasTectonics" class="exp-sim-canvas"></canvas>
@@ -4327,26 +4478,26 @@ const Experiment = {
                 <div class="telemetry-label">Plate Velocity</div>
                 <div class="telemetry-value">4.2</div>
                 <div class="telemetry-unit">cm / year</div>
-                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 70%;"></div></div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 75%;"></div></div>
               </div>
               <div class="telemetry-card">
                 <div class="telemetry-icon">🌋</div>
                 <div class="telemetry-label">Magma Temp</div>
-                <div class="telemetry-value">1250</div>
+                <div class="telemetry-value">1280</div>
                 <div class="telemetry-unit">°C Molten Basalt</div>
-                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 95%;"></div></div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 98%;"></div></div>
               </div>
               <div class="telemetry-card">
                 <div class="telemetry-icon">⛰️</div>
                 <div class="telemetry-label">Crust Age</div>
                 <div class="telemetry-value">NEW</div>
-                <div class="telemetry-unit">Oceanic Ridge</div>
+                <div class="telemetry-unit">Mid-Ocean Ridge</div>
                 <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
               </div>
             </div>
 
             <div class="result-badge maintained" style="background:linear-gradient(135deg, #EF4444 0%, #B91C1C 100%);">
-              🌋 DIVERGENT FAULT SEPARATION (Plate A ← → Plate B + Magma Rift)
+              🌋 DIVERGENT FAULT SEPARATION: New Oceanic Crust Forming via Magma Upwelling
             </div>
           </div>
 
@@ -4381,57 +4532,103 @@ const Experiment = {
 
       if (!isStarted) {
         html += `
-          <div class="tectonics-anim-box">
-            <div class="plates-row">
-              <div class="tectonic-plate">🟫 Plate A</div>
-              <div style="font-size:1.5rem; color:#92400E; font-weight:800;">→ ←</div>
-              <div class="tectonic-plate">🟫 Plate B</div>
+          <div class="exp-result-container physical-result">
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">🏔️ CONVERGENT COLLISION MONITOR</span>
+                <span class="exp-hud-status active">● COLLISION STANDBY</span>
+              </div>
+              <canvas id="canvasTectonics" class="exp-sim-canvas"></canvas>
             </div>
-            <div style="font-size:0.82rem; font-weight:800; color:#78350F; margin-top:10px;">
-              Collision Zone Below
-            </div>
-          </div>
 
-          <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startTectonicsSimulation()">
-            🏔️ [ MOVE PLATES ]
-          </button>
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🌍</div>
+                <div class="telemetry-label">Plate Vector</div>
+                <div class="telemetry-value">→ DRIFT ←</div>
+                <div class="telemetry-unit">Colliding</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 50%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🏔️</div>
+                <div class="telemetry-label">Uplift Potential</div>
+                <div class="telemetry-value">HIGH</div>
+                <div class="telemetry-unit">Orogeny Pre-Collision</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 80%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">⚡</div>
+                <div class="telemetry-label">Seismic Index</div>
+                <div class="telemetry-value">NORMAL</div>
+                <div class="telemetry-unit">Subduction Standby</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 40%;"></div></div>
+              </div>
+            </div>
+
+            <button class="primary-btn start-reaction-btn ready" onclick="Experiment.startTectonicsSimulation()">
+              🏔️ [ INITIATE PLATE COLLISION ]
+            </button>
+          </div>
         </div>
         `;
+        setTimeout(() => this.startTectonicsCanvas('canvasTectonics', mode), 40);
       } else {
         html += `
           <div class="exp-result-container physical-result">
-            <div class="tectonics-anim-box">
-              <div class="plates-row">
-                <div class="tectonic-plate move-collide-left">🟫 Plate A</div>
-                <div class="mountain-rising-anim">🏔️</div>
-                <div class="tectonic-plate move-collide-right">🟫 Plate B</div>
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">🏔️ CONVERGENT MOUNTAIN UPLIFT & SUBDUCTION</span>
+                <span class="exp-hud-status active">● COLLISION ACTIVE</span>
               </div>
-              <div class="crust-new-badge" style="background:#0284C7; margin-top:8px;">
-                ⛰️ Mountain Ranges / Trench Formed
+              <canvas id="canvasTectonics" class="exp-sim-canvas"></canvas>
+            </div>
+
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🌍</div>
+                <div class="telemetry-label">Collision Force</div>
+                <div class="telemetry-value">9.8</div>
+                <div class="telemetry-unit">GigaPascals</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 95%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🏔️</div>
+                <div class="telemetry-label">Mountain Height</div>
+                <div class="telemetry-value">6,800</div>
+                <div class="telemetry-unit">Meters Uplift</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 88%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">⚡</div>
+                <div class="telemetry-label">Subduction Depth</div>
+                <div class="telemetry-value">140</div>
+                <div class="telemetry-unit">km Trench</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 90%;"></div></div>
               </div>
             </div>
 
             <div class="result-badge maintained" style="background:linear-gradient(135deg, #0284C7 0%, #0369A1 100%);">
-              🏔️ CONVERGENT BOUNDARY (Plate Collision)
+              🏔️ CONVERGENT BOUNDARY: Crust Buckling & Subduction Trench Active
             </div>
           </div>
 
           <div class="exp-explanation-section" style="margin-top:14px;">
             <div class="exp-explain-block">
               <h5>What happened?</h5>
-              <p>At a convergent boundary, tectonic plates collide. Land buckles upward into mountain ranges or one plate slides beneath another into a deep ocean trench (subduction).</p>
+              <p>At a convergent boundary, tectonic plates collide. Crustal buckling forces land upward into mountain ranges, while subduction plunges denser lithosphere into deep mantle trenches.</p>
             </div>
 
             <div class="exp-key-idea-box chemical-key">
-              💡 <b>Key Idea:</b> Convergent boundaries collide, forming mountains and subduction zones.
+              💡 <b>Key Idea:</b> Plate collisions generate mountain ranges, volcanic island arcs, and deep subduction zones.
             </div>
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetTectonicsActivity()">
-            🔄 Reset Experiment
+            🔄 Reset Simulator
           </button>
         </div>
         `;
+        setTimeout(() => this.startTectonicsCanvas('canvasTectonics', mode), 40);
       }
     } else {
       html += `

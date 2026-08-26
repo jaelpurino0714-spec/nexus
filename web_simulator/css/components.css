@@ -6131,6 +6131,128 @@
 }
 
 /* ==========================================================================
+   TOPIC SELECTION CARD & HIGH CONTRAST TABLE STYLES
+   ========================================================================== */
+.topic-item-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  width: 100% !important;
+  min-height: 125px !important;
+  padding: 20px 22px !important;
+  margin-bottom: 16px !important;
+  border-radius: 26px !important;
+  background: linear-gradient(135deg, rgba(30, 22, 60, 0.95) 0%, rgba(20, 14, 45, 0.98) 100%) !important;
+  border: 1.5px solid rgba(139, 92, 246, 0.45) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  text-align: left !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+}
+
+.topic-item-btn:hover {
+  border-color: #A855F7 !important;
+  box-shadow: 0 12px 35px rgba(139, 92, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  transform: translateY(-3px) !important;
+}
+
+.topic-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  gap: 12px !important;
+}
+
+.term-title {
+  color: #FFFFFF !important;
+  font-family: var(--font-heading, sans-serif) !important;
+  font-size: 1.12rem !important;
+  font-weight: 800 !important;
+  line-height: 1.4 !important;
+  margin-bottom: 4px !important;
+  word-break: break-word !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+.topic-select-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 8px 18px !important;
+  border-radius: 9999px !important;
+  background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%) !important;
+  color: #FFFFFF !important;
+  font-family: var(--font-heading, sans-serif) !important;
+  font-size: 0.84rem !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.topic-graphic-orb {
+  width: 58px !important;
+  height: 58px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 35% 35%, rgba(168, 85, 247, 0.4) 0%, rgba(30, 22, 60, 0.9) 100%) !important;
+  border: 1.5px solid rgba(168, 85, 247, 0.6) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.85rem !important;
+  flex-shrink: 0 !important;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.35) !important;
+}
+
+.comparison-table,
+.exp-explain-block table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  margin-top: 10px !important;
+  font-size: 0.85rem !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  border: 1.5px solid rgba(139, 92, 246, 0.4) !important;
+  background: rgba(15, 10, 38, 0.85) !important;
+}
+
+.comparison-table th,
+.exp-explain-block table th {
+  background: rgba(30, 22, 60, 0.95) !important;
+  color: #38BDF8 !important;
+  font-family: var(--font-heading, sans-serif) !important;
+  font-weight: 800 !important;
+  padding: 10px 14px !important;
+  text-align: left !important;
+  border-bottom: 1.5px solid rgba(139, 92, 246, 0.35) !important;
+  letter-spacing: 0.5px !important;
+}
+
+.comparison-table td,
+.exp-explain-block table td {
+  padding: 10px 14px !important;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2) !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+}
+
+.comparison-table tr:last-child td,
+.exp-explain-block table tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* ==========================================================================
    10X COOLER EXPERIMENT SIMULATOR SCI-FI CANVAS & TELEMETRY STYLES
    ========================================================================== */
 .exp-canvas-box-wrapper {
