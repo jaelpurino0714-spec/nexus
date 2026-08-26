@@ -6380,6 +6380,8 @@ const Experiment = {
           </button>
         </div>
         `;
+        setTimeout(() => this.startEnergyMixCanvas('canvasEnergyMix', ren), 40);
+      }
     } else {
       // 📚 FINAL ENERGY PANEL
       html += `
