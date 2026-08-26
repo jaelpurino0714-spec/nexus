@@ -324,53 +324,15 @@ const CharacterSystem = {
   },
 
   playCharacterMusic() {
-    if (typeof App !== 'undefined' && App.pauseBgm) {
-      App.pauseBgm();
-    }
-
-    let audio = document.getElementById('nexusCharacterAudio');
-    if (!audio) {
-      audio = document.createElement('audio');
-      audio.id = 'nexusCharacterAudio';
-      audio.src = 'assets/audio/AQP5EI3ZsvQ2ipg_SbQn0hCTc3K8C8drJdqbHLX-Y59JVt1l1ZtkJhBugu7mQuHoY8Pi9yoQxQR3xja0-Cho85q9gWQQ7eBreSCfF7jYpQ.mp3';
-      audio.preload = 'auto';
-      document.body.appendChild(audio);
-    }
-
-    audio.loop = true;
-
-    const savedVol = localStorage.getItem('nexus_bgm_vol');
-    const volVal = savedVol !== null ? parseFloat(savedVol) : 0.5;
-    audio.volume = volVal;
-
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(err => {
-        console.warn('Character music playback warning:', err);
-      });
+    if (typeof App !== 'undefined' && App.playSpecialAudio) {
+      App.playSpecialAudio();
     }
   },
 
   stopCharacterMusic() {
-    const audio = document.getElementById('nexusCharacterAudio');
-    if (audio) {
-      try {
-        audio.pause();
-        audio.currentTime = 0;
-      } catch (_) {}
-    }
-
-    if (typeof App !== 'undefined' && App.playBgm) {
-      const currentScreen = App.currentScreen;
-      const isAnsweringScreen = (
-        currentScreen === 'gameplayScreen' ||
-        currentScreen === 'quizQuestionScreen' ||
-        currentScreen === 'mpPlayerGameScreen' ||
-        currentScreen === 'mpHostGameScreen' ||
-        currentScreen === 'mpPlayerQuestionScreen' ||
-        currentScreen === 'mpHostQuestionScreen'
-      );
-      if (!isAnsweringScreen) {
+    if (typeof App !== 'undefined' && App.stopSpecialAudio) {
+      App.stopSpecialAudio();
+      if (App.currentScreen && !App.isSpecialAudioScreen(App.currentScreen)) {
         App.playBgm();
       }
     }

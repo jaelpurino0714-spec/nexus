@@ -19,36 +19,80 @@ const App = {
     this.checkInitialAuth();
   },
 
+  isSpecialAudioScreen(screenId = this.currentScreen) {
+    return (
+      screenId === 'experimentTermScreen' ||
+      screenId === 'experimentTopicScreen' ||
+      screenId === 'experimentDetailScreen'
+    );
+  },
+
+  isCharacterModalOpen() {
+    const charModal = document.getElementById('myCharacterPetModal');
+    return charModal && !charModal.classList.contains('hidden');
+  },
+
+  playSpecialAudio() {
+    this.pauseBgm();
+
+    let audio = document.getElementById('nexusCharacterAudio');
+    if (!audio) {
+      audio = document.createElement('audio');
+      audio.id = 'nexusCharacterAudio';
+      audio.src = 'assets/audio/AQP5EI3ZsvQ2ipg_SbQn0hCTc3K8C8drJdqbHLX-Y59JVt1l1ZtkJhBugu7mQuHoY8Pi9yoQxQR3xja0-Cho85q9gWQQ7eBreSCfF7jYpQ.mp3';
+      audio.preload = 'auto';
+      document.body.appendChild(audio);
+    }
+
+    audio.loop = true;
+
+    const savedVol = localStorage.getItem('nexus_bgm_vol');
+    const volVal = savedVol !== null ? parseFloat(savedVol) : 0.5;
+    audio.volume = volVal;
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(err => {
+        console.warn('Special music playback warning:', err);
+      });
+    }
+  },
+
+  stopSpecialAudio() {
+    const audio = document.getElementById('nexusCharacterAudio');
+    if (audio) {
+      try {
+        audio.pause();
+        audio.currentTime = 0;
+      } catch (_) {}
+    }
+  },
+
   initBgm() {
     this.playBgm();
     
     // Resume BGM when tab gains focus
     document.addEventListener('visibilitychange', () => {
-      const charModal = document.getElementById('myCharacterPetModal');
-      const isCharModalOpen = charModal && !charModal.classList.contains('hidden');
-
       if (!document.hidden) {
-        if (isCharModalOpen) {
-          if (typeof CharacterSystem !== 'undefined' && CharacterSystem.playCharacterMusic) {
-            CharacterSystem.playCharacterMusic();
-          }
+        if (this.isCharacterModalOpen() || this.isSpecialAudioScreen()) {
+          this.playSpecialAudio();
         } else if (this.currentScreen === 'teacherHomeScreen' || this.currentScreen === 'homeScreen') {
           this.playBgm();
         }
       } else {
-        const charAudio = document.getElementById('nexusCharacterAudio');
-        if (charAudio) {
-          try { charAudio.pause(); } catch (_) {}
-        }
+        this.pauseBgm();
+        this.stopSpecialAudio();
       }
     });
   },
 
   playBgm() {
-    const charModal = document.getElementById('myCharacterPetModal');
-    if (charModal && !charModal.classList.contains('hidden')) {
+    if (this.isCharacterModalOpen() || this.isSpecialAudioScreen()) {
+      this.playSpecialAudio();
       return;
     }
+
+    this.stopSpecialAudio();
 
     const audio = document.getElementById('nexusBgmAudio');
     if (!audio) return;
@@ -574,11 +618,19 @@ const App = {
       screenId === 'mpHostQuestionScreen'
     );
 
+    const isExperimentUI = this.isSpecialAudioScreen(screenId);
+
     if (isAnsweringScreen) {
       this.pauseBgm();
+      this.stopSpecialAudio();
+    } else if (isExperimentUI) {
+      this.clearRedScreenAlert();
+      this.stopTimerAudio();
+      this.playSpecialAudio();
     } else {
       this.clearRedScreenAlert();
       this.stopTimerAudio();
+      this.stopSpecialAudio();
       this.playBgm();
     }
 
