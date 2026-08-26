@@ -362,6 +362,9 @@ class _Mascot3DViewerState extends State<Mascot3DViewer> with TickerProviderStat
     if (stageName == 'baby') {
       return 'assets/images/mascot/baby_main.gif';
     }
+    if (stageName == 'student') {
+      return 'assets/images/mascot/student_main.gif';
+    }
     if (stageName == 'scientist') {
       return 'assets/images/mascot/scientist_main.gif';
     }
@@ -430,7 +433,7 @@ class _Mascot3DViewerState extends State<Mascot3DViewer> with TickerProviderStat
               final celVal = _celebrateController.value;
 
               // Physics-based natural floating bobbing (Y offset)
-              final isAnimatedGif = widget.stage == MascotStage.baby || widget.stage == MascotStage.scientist;
+              final isAnimatedGif = true;
               final baseFloatY = isAnimatedGif ? 0.0 : math.sin(progress * math.pi) * 10.0;
               final jumpOffsetY = tapJump * 36.0;
               final celJumpY = math.sin(celVal * math.pi * 2) * 40.0;

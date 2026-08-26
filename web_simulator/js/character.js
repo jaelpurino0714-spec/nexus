@@ -24,7 +24,7 @@ const EVOLUTION_STAGES = [
     stage: 2, 
     title: 'STUDENT', 
     icon: '🎒', 
-    image: 'assets/mascot/student_main.png',
+    image: 'assets/mascot/student_main.gif',
     minXP: 1000, 
     nextXP: 2000, 
     color: '#10B981', 
@@ -48,12 +48,12 @@ const EVOLUTION_STAGES = [
 const GENDER_CHARACTER_IMAGES = {
   male: {
     baby: 'assets/mascot/baby_main.gif',
-    student: 'assets/mascot/student_main.png',
+    student: 'assets/mascot/student_main.gif',
     graduate: 'assets/mascot/scientist_main.gif'
   },
   female: {
     baby: 'assets/mascot/baby_main.gif',
-    student: 'assets/mascot/student_main.png',
+    student: 'assets/mascot/student_main.gif',
     graduate: 'assets/mascot/scientist_main.gif'
   }
 };
