@@ -6137,18 +6137,19 @@
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  gap: 16px !important;
+  gap: 12px !important;
   width: 100% !important;
-  min-height: 125px !important;
-  padding: 20px 22px !important;
-  margin-bottom: 16px !important;
-  border-radius: 26px !important;
+  min-height: 105px !important;
+  height: auto !important;
+  padding: 16px 18px !important;
+  margin-bottom: 14px !important;
+  border-radius: 24px !important;
   background: linear-gradient(135deg, rgba(30, 22, 60, 0.95) 0%, rgba(20, 14, 45, 0.98) 100%) !important;
   border: 1.5px solid rgba(139, 92, 246, 0.45) !important;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
   text-align: left !important;
   position: relative !important;
-  overflow: hidden !important;
+  overflow: visible !important;
   box-sizing: border-box !important;
   cursor: pointer !important;
 }
@@ -6163,41 +6164,41 @@
   display: flex !important;
   flex-direction: column !important;
   align-items: flex-start !important;
-  justify-content: space-between !important;
+  justify-content: center !important;
   flex: 1 !important;
   min-width: 0 !important;
-  height: 100% !important;
-  gap: 12px !important;
+  height: auto !important;
+  gap: 8px !important;
 }
 
-.term-title {
+.term-title, .topic-title-text {
   color: #FFFFFF !important;
   font-family: var(--font-heading, sans-serif) !important;
-  font-size: 1.12rem !important;
   font-weight: 800 !important;
-  line-height: 1.4 !important;
-  margin-bottom: 4px !important;
+  line-height: 1.25 !important;
+  margin: 0 0 4px 0 !important;
   word-break: break-word !important;
-  display: -webkit-box !important;
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
+  display: block !important;
+  overflow: visible !important;
+  white-space: normal !important;
 }
 
 .topic-select-pill {
   display: inline-flex !important;
   align-items: center !important;
-  gap: 6px !important;
-  padding: 8px 18px !important;
+  gap: 5px !important;
+  padding: 6px 14px !important;
   border-radius: 9999px !important;
   background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%) !important;
   color: #FFFFFF !important;
   font-family: var(--font-heading, sans-serif) !important;
-  font-size: 0.84rem !important;
+  font-size: 0.78rem !important;
   font-weight: 800 !important;
-  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.45) !important;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.45) !important;
   border: 1px solid rgba(255, 255, 255, 0.25) !important;
   white-space: nowrap !important;
   flex-shrink: 0 !important;
+  margin-top: 2px !important;
 }
 
 .topic-graphic-orb {

@@ -161,18 +161,26 @@ const Experiment = {
 
     topics.forEach((topicName) => {
       const icon = this.getTopicIcon(topicName);
+      const fontSize = this.getTopicFontSize(topicName);
       const btn = document.createElement('button');
       btn.className = 'term-btn topic-item-btn';
       btn.onclick = () => this.openExperiment(topicName);
       btn.innerHTML = `
         <div class="topic-info">
-          <div class="term-title" style="color: #FFFFFF; font-size: 1.15rem; font-weight: 800; margin-bottom: 8px; line-height: 1.3;">${topicName}</div>
-          <span class="topic-select-pill">Launch Simulator <span style="font-size: 0.85rem; margin-left: 2px;">➔</span></span>
+          <div class="term-title topic-title-text" style="color: #FFFFFF; font-size: ${fontSize}; font-weight: 800; line-height: 1.25; margin-bottom: 4px; word-break: break-word;">${topicName}</div>
+          <span class="topic-select-pill">Launch Simulator <span style="font-size: 0.78rem; margin-left: 2px;">➔</span></span>
         </div>
         <div class="topic-graphic-orb">${icon}</div>
       `;
       container.appendChild(btn);
     });
+  },
+
+  getTopicFontSize(topicName) {
+    if (topicName.length > 40) return '0.78rem';
+    if (topicName.length > 28) return '0.84rem';
+    if (topicName.length > 20) return '0.90rem';
+    return '0.98rem';
   },
 
   openExperiment(topicName) {
