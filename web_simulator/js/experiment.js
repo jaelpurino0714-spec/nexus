@@ -183,7 +183,68 @@ const Experiment = {
     return '0.98rem';
   },
 
+  playStartExperimentSfx() {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!this.audioCtx) {
+        this.audioCtx = new AudioCtx();
+      }
+      if (this.audioCtx.state === 'suspended') {
+        this.audioCtx.resume();
+      }
+
+      const ctx = this.audioCtx;
+      const now = ctx.currentTime;
+
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(320, now);
+      osc1.frequency.exponentialRampToValueAtTime(1280, now + 0.28);
+
+      gain1.gain.setValueAtTime(0.35, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.32);
+
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(640, now + 0.05);
+      osc2.frequency.exponentialRampToValueAtTime(1920, now + 0.25);
+
+      gain2.gain.setValueAtTime(0.25, now + 0.05);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.start(now + 0.05);
+      osc2.stop(now + 0.28);
+
+      const subOsc = ctx.createOscillator();
+      const subGain = ctx.createGain();
+      subOsc.type = 'sine';
+      subOsc.frequency.setValueAtTime(120, now);
+      subOsc.frequency.exponentialRampToValueAtTime(60, now + 0.22);
+
+      subGain.gain.setValueAtTime(0.4, now);
+      subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+      subOsc.connect(subGain);
+      subGain.connect(ctx.destination);
+      subOsc.start(now);
+      subOsc.stop(now + 0.25);
+    } catch (e) {
+      console.warn('AudioContext SFX error:', e);
+    }
+  },
+
   openExperiment(topicName) {
+    this.playStartExperimentSfx();
     this.currentTopic = topicName;
     const titleEl = document.getElementById('expDetailTitle');
     const topicTagEl = document.getElementById('expDetailTopicTag');
@@ -462,6 +523,7 @@ const Experiment = {
   },
 
   combineItems() {
+    this.playStartExperimentSfx();
     if (this.selectedItems.size < 2) return;
     this.isCombined = true;
     const canvasBox = document.getElementById('expCanvasBox');
@@ -2639,6 +2701,7 @@ const Experiment = {
   },
 
   startRatesReaction() {
+    this.playStartExperimentSfx();
     this.ratesStarted = true;
     if (this.ratesMode === 'catalyst') {
       this.ratesExp1Completed = true;
@@ -3039,6 +3102,7 @@ const Experiment = {
   },
 
   startHomeostasisReaction() {
+    this.playStartExperimentSfx();
     this.homeostasisStarted = true;
     if (this.homeostasisMode === 'temperature') {
       this.homeostasisExp1Completed = true;
@@ -3488,6 +3552,7 @@ const Experiment = {
   },
 
   startEvolutionSimulation() {
+    this.playStartExperimentSfx();
     this.evolutionStarted = true;
     this.evolutionGeneration = 1;
     if (this.evolutionMode === 'camouflage') {
@@ -3872,6 +3937,7 @@ const Experiment = {
   },
 
   startCarryingCapacitySimulation() {
+    this.playStartExperimentSfx();
     this.carryingCapacityStarted = true;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) {
@@ -4154,6 +4220,7 @@ const Experiment = {
   },
 
   startBiotechSimulation() {
+    this.playStartExperimentSfx();
     this.biotechStarted = true;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) {
@@ -4382,6 +4449,7 @@ const Experiment = {
   },
 
   startTectonicsSimulation() {
+    this.playStartExperimentSfx();
     this.tectonicsStarted = true;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) {
@@ -4692,6 +4760,7 @@ const Experiment = {
   },
 
   startClimateSimulation() {
+    this.playStartExperimentSfx();
     this.climateStarted = true;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) this.renderClimateActivity(canvasBox);
@@ -4949,6 +5018,7 @@ const Experiment = {
   },
 
   startEnsoSimulation() {
+    this.playStartExperimentSfx();
     this.ensoStarted = true;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) this.renderEnsoActivity(canvasBox);
@@ -5213,6 +5283,7 @@ const Experiment = {
   },
 
   startSustainabilitySimulation() {
+    this.playStartExperimentSfx();
     this.sustainabilityStarted = true;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) this.renderSustainabilityActivity(canvasBox);
@@ -5537,6 +5608,7 @@ const Experiment = {
   },
 
   startProjectileSimulation() {
+    this.playStartExperimentSfx();
     this.projectileStarted = true;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) this.renderProjectileActivity(canvasBox);
@@ -5829,6 +5901,7 @@ const Experiment = {
   },
 
   startMomentumSimulation() {
+    this.playStartExperimentSfx();
     this.momentumStarted = true;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) this.renderMomentumActivity(canvasBox);
@@ -6090,6 +6163,7 @@ const Experiment = {
   },
 
   startElectricitySimulation() {
+    this.playStartExperimentSfx();
     this.electricityStarted = true;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) this.renderElectricityActivity(canvasBox);
@@ -6345,6 +6419,7 @@ const Experiment = {
   },
 
   startEnergyMixSimulation() {
+    this.playStartExperimentSfx();
     this.energyMixStarted = true;
     const canvasBox = document.getElementById('expCanvasBox');
     if (canvasBox) this.renderEnergyMixActivity(canvasBox);
