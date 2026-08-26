@@ -5675,7 +5675,7 @@
 }
 
 .pet-char-img.locked-gray-tint {
-  filter: grayscale(100%) contrast(0.85) opacity(0.55) drop-shadow(0 10px 15px rgba(0, 0, 0, 0.15)) !important;
+  filter: contrast(0.95) opacity(0.85) drop-shadow(0 10px 15px rgba(0, 0, 0, 0.15)) !important;
 }
 
 .pet-stage-nav-btn {
