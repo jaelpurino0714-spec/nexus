@@ -249,18 +249,27 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                   ),
                   const SizedBox(height: 16),
 
-                  // 3. Central Hero Area: Interactive 3D Mascot Model (Transparent background, turnarounds, 3D rotation)
+                  // 3. Central Hero Area: Native Animated GIF for Stage 3 / 3D Mascot Model
                   Center(
-                    child: Mascot3DViewer(
-                      stage: stage.id == 'baby'
-                          ? MascotStage.baby
-                          : stage.id == 'student'
-                              ? MascotStage.student
-                              : MascotStage.scientist,
-                      activeExpression: 'happy',
-                      height: 250,
-                      showTurnaroundControls: true,
-                    ),
+                    child: (stage.stage == 3 || stage.id == 'graduate' || stage.id == 'scientist')
+                        ? Image.asset(
+                            assetPath,
+                            key: ValueKey('stage3_gif_$assetPath'),
+                            gaplessPlayback: true,
+                            height: 260,
+                            fit: BoxFit.contain,
+                            errorBuilder: (ctx, err, stack) => const Icon(Icons.science, size: 100, color: Color(0xFFA855F7)),
+                          )
+                        : Mascot3DViewer(
+                            stage: stage.id == 'baby'
+                                ? MascotStage.baby
+                                : stage.id == 'student'
+                                    ? MascotStage.student
+                                    : MascotStage.scientist,
+                            activeExpression: 'happy',
+                            height: 250,
+                            showTurnaroundControls: true,
+                          ),
                   ),
                   const SizedBox(height: 12),
 
