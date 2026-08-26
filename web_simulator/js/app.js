@@ -86,7 +86,7 @@ const App = {
 
     const bgm = document.getElementById('nexusBgmAudio');
     const charAudio = document.getElementById('nexusCharacterAudio');
-    if (bgm) try { bgm.pause(); bgm.currentTime = 0; } catch (_) {}
+    if (bgm) try { bgm.pause(); } catch (_) {}
     if (charAudio) try { charAudio.pause(); charAudio.currentTime = 0; } catch (_) {}
 
     let audio = document.getElementById('nexusExperimentAudio');
