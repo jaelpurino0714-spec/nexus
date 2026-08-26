@@ -197,49 +197,64 @@ const Experiment = {
       const ctx = this.audioCtx;
       const now = ctx.currentTime;
 
-      const osc1 = ctx.createOscillator();
-      const gain1 = ctx.createGain();
-      osc1.type = 'sine';
-      osc1.frequency.setValueAtTime(320, now);
-      osc1.frequency.exponentialRampToValueAtTime(1280, now + 0.28);
-
-      gain1.gain.setValueAtTime(0.35, now);
-      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
-
-      osc1.connect(gain1);
-      gain1.connect(ctx.destination);
-      osc1.start(now);
-      osc1.stop(now + 0.32);
-
-      const osc2 = ctx.createOscillator();
-      const gain2 = ctx.createGain();
-      osc2.type = 'triangle';
-      osc2.frequency.setValueAtTime(640, now + 0.05);
-      osc2.frequency.exponentialRampToValueAtTime(1920, now + 0.25);
-
-      gain2.gain.setValueAtTime(0.25, now + 0.05);
-      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
-
-      osc2.connect(gain2);
-      gain2.connect(ctx.destination);
-      osc2.start(now + 0.05);
-      osc2.stop(now + 0.28);
-
+      // 1. Heavy Sub-Bass Boom (Low-frequency impact shockwave: 160Hz -> 25Hz)
       const subOsc = ctx.createOscillator();
       const subGain = ctx.createGain();
       subOsc.type = 'sine';
-      subOsc.frequency.setValueAtTime(120, now);
-      subOsc.frequency.exponentialRampToValueAtTime(60, now + 0.22);
+      subOsc.frequency.setValueAtTime(160, now);
+      subOsc.frequency.exponentialRampToValueAtTime(25, now + 0.5);
 
-      subGain.gain.setValueAtTime(0.4, now);
-      subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      subGain.gain.setValueAtTime(0.85, now);
+      subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
 
       subOsc.connect(subGain);
       subGain.connect(ctx.destination);
       subOsc.start(now);
-      subOsc.stop(now + 0.25);
+      subOsc.stop(now + 0.55);
+
+      // 2. White Noise Blast (Booming lowpass rumble explosion body: 1800Hz -> 60Hz)
+      const bufferSize = Math.floor(ctx.sampleRate * 0.7);
+      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        output[i] = Math.random() * 2 - 1;
+      }
+
+      const whiteNoise = ctx.createBufferSource();
+      whiteNoise.buffer = noiseBuffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(1800, now);
+      filter.frequency.exponentialRampToValueAtTime(60, now + 0.65);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.75, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+
+      whiteNoise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+
+      whiteNoise.start(now);
+      whiteNoise.stop(now + 0.7);
+
+      // 3. High-Frequency Blast Crackle / Distortion Burst (450Hz -> 40Hz)
+      const crackleOsc = ctx.createOscillator();
+      const crackleGain = ctx.createGain();
+      crackleOsc.type = 'sawtooth';
+      crackleOsc.frequency.setValueAtTime(450, now);
+      crackleOsc.frequency.exponentialRampToValueAtTime(40, now + 0.35);
+
+      crackleGain.gain.setValueAtTime(0.35, now);
+      crackleGain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+      crackleOsc.connect(crackleGain);
+      crackleGain.connect(ctx.destination);
+      crackleOsc.start(now);
+      crackleOsc.stop(now + 0.35);
     } catch (e) {
-      console.warn('AudioContext SFX error:', e);
+      console.warn('Explosion SFX error:', e);
     }
   },
 
