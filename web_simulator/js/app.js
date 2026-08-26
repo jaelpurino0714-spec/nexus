@@ -33,6 +33,11 @@ const App = {
   },
 
   playCharacterAudio() {
+    if (!this.isCharacterModalOpen()) {
+      this.stopCharacterAudio();
+      return;
+    }
+
     const bgm = document.getElementById('nexusBgmAudio');
     const exp = document.getElementById('nexusExperimentAudio');
     if (bgm) try { bgm.pause(); } catch (_) {}
@@ -72,6 +77,11 @@ const App = {
   },
 
   playExperimentAudio() {
+    if (!this.isExperimentAudioScreen()) {
+      this.stopExperimentAudio();
+      return;
+    }
+
     const bgm = document.getElementById('nexusBgmAudio');
     const charAudio = document.getElementById('nexusCharacterAudio');
     if (bgm) try { bgm.pause(); } catch (_) {}
