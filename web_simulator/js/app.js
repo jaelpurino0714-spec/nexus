@@ -60,8 +60,10 @@ const App = {
 
     const playPromise = audio.play();
     if (playPromise !== undefined) {
-      playPromise.catch(err => {
-        console.warn('Character music playback warning:', err);
+      playPromise.then(() => {
+        this._removeAudioUnlockListeners();
+      }).catch(err => {
+        this._setupAudioUnlockListeners();
       });
     }
   },
@@ -104,8 +106,10 @@ const App = {
 
     const playPromise = audio.play();
     if (playPromise !== undefined) {
-      playPromise.catch(err => {
-        console.warn('Experiment music playback warning:', err);
+      playPromise.then(() => {
+        this._removeAudioUnlockListeners();
+      }).catch(err => {
+        this._setupAudioUnlockListeners();
       });
     }
   },
@@ -184,12 +188,19 @@ const App = {
     this._hasAudioUnlockListeners = true;
 
     const unlockHandler = () => {
-      const audio = document.getElementById('nexusBgmAudio');
-      if (audio) {
-        audio.loop = true;
-        audio.play().then(() => {
-          this._removeAudioUnlockListeners();
-        }).catch(() => {});
+      if (this.isCharacterModalOpen()) {
+        this.playCharacterAudio();
+      } else if (this.isExperimentAudioScreen()) {
+        this.playExperimentAudio();
+      } else {
+        this.stopAllCustomAudio();
+        const bgm = document.getElementById('nexusBgmAudio');
+        if (bgm) {
+          bgm.loop = true;
+          bgm.play().then(() => {
+            this._removeAudioUnlockListeners();
+          }).catch(() => {});
+        }
       }
     };
 
