@@ -595,6 +595,449 @@ const Experiment = {
     }
   },
 
+  // ==========================================================================
+  // 10X COOLER CANVAS ANIMATION FRAMEWORK & PARTICLE SIMULATOR ENGINE
+  // ==========================================================================
+  animFrameId: null,
+
+  stopCanvasAnimation() {
+    if (this.animFrameId) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
+  },
+
+  setupCanvas(canvasId, height = 220) {
+    this.stopCanvasAnimation();
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return null;
+
+    const parent = canvas.parentElement;
+    const w = parent ? (parent.clientWidth || 360) : 360;
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = w * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = '100%';
+    canvas.style.height = `${height}px`;
+
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    return { ctx, w, h: height, canvas };
+  },
+
+  // 1. Physical vs Chemical Change Canvas
+  startPhysicalVsChemicalCanvas(canvasId, isChemical) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+    const particles = [];
+    const count = isChemical ? 40 : 30;
+
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 1.5,
+        vy: isChemical ? -0.8 - Math.random() * 1.5 : (Math.random() - 0.5) * 0.8,
+        r: isChemical ? 3 + Math.random() * 6 : 2 + Math.random() * 5,
+        alpha: 0.3 + Math.random() * 0.6,
+        color: isChemical ? '#38BDF8' : '#C084FC'
+      });
+    }
+
+    const loop = () => {
+      time += 0.03;
+      ctx.clearRect(0, 0, w, h);
+
+      // Sci-Fi Grid Background
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = 0; y < h; y += 30) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      const centerX = w / 2;
+      const centerY = h / 2;
+
+      if (isChemical) {
+        // Chemical Reaction Beaker with Rising Gas Particles
+        const flaskY = h * 0.7;
+
+        ctx.strokeStyle = '#38BDF8';
+        ctx.lineWidth = 3;
+        ctx.shadowColor = '#38BDF8';
+        ctx.shadowBlur = 15;
+        ctx.beginPath();
+        ctx.moveTo(centerX - 40, flaskY - 60);
+        ctx.lineTo(centerX - 50, flaskY + 30);
+        ctx.quadraticCurveTo(centerX, flaskY + 45, centerX + 50, flaskY + 30);
+        ctx.lineTo(centerX + 40, flaskY - 60);
+        ctx.stroke();
+
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.25)';
+        ctx.beginPath();
+        ctx.moveTo(centerX - 48, flaskY + 30);
+        for (let x = -48; x <= 48; x += 6) {
+          const dy = Math.sin(time * 3 + x * 0.1) * 4;
+          ctx.lineTo(centerX + x, flaskY - 10 + dy);
+        }
+        ctx.quadraticCurveTo(centerX, flaskY + 45, centerX - 48, flaskY + 30);
+        ctx.fill();
+
+        particles.forEach(p => {
+          p.y += p.vy;
+          p.x += Math.sin(time * 2 + p.r) * 0.8;
+          if (p.y < 20) {
+            p.y = flaskY + 20;
+            p.x = centerX + (Math.random() - 0.5) * 60;
+          }
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.alpha;
+          ctx.shadowColor = p.color;
+          ctx.shadowBlur = 10;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        ctx.globalAlpha = 1.0;
+        ctx.shadowBlur = 0;
+      } else {
+        // Physical Change: Ice Melting Fluid Pool
+        const meltProgress = (Math.sin(time * 0.8) + 1) / 2;
+
+        ctx.strokeStyle = 'rgba(244, 63, 94, 0.4)';
+        ctx.lineWidth = 2;
+        for (let i = -3; i <= 3; i++) {
+          const rayX = centerX + i * 25;
+          const rayY = centerY + 30 - (time * 40 + i * 15) % 60;
+          ctx.beginPath(); ctx.moveTo(rayX, rayY); ctx.lineTo(rayX, rayY - 15); ctx.stroke();
+        }
+
+        ctx.fillStyle = `rgba(168, 85, 247, ${0.4 + meltProgress * 0.3})`;
+        ctx.shadowColor = '#A855F7';
+        ctx.shadowBlur = 18;
+        ctx.beginPath();
+        const rx = 65 + meltProgress * 30;
+        const ry = 25 - meltProgress * 12;
+        ctx.ellipse(centerX, centerY + 20, rx, ry, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        particles.forEach(p => {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 20 || p.x > w - 20) p.vx *= -1;
+          if (p.y < 20 || p.y > h - 20) p.vy *= -1;
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.alpha;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        ctx.globalAlpha = 1.0;
+        ctx.shadowBlur = 0;
+      }
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 15. Projectile Motion Physics Cannon Canvas
+  startProjectileCanvas(canvasId, angleDeg, velocityStr) {
+    const setup = this.setupCanvas(canvasId, 230);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    const velMap = { low: 25, medium: 35, high: 48 };
+    const v0 = velMap[velocityStr] || 35;
+    const rad = angleDeg * Math.PI / 180;
+    const g = 9.81;
+
+    const vx = v0 * Math.cos(rad);
+    const vy = v0 * Math.sin(rad);
+    const flightTime = (2 * vy) / g;
+    const maxHeight = (vy * vy) / (2 * g);
+    const range = (v0 * v0 * Math.sin(2 * rad)) / g;
+
+    let animT = 0;
+
+    const loop = () => {
+      animT += 0.04;
+      if (animT > flightTime) animT = 0;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = 0; y < h; y += 30) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      const groundY = h - 25;
+      const cannonX = 35;
+      const scaleX = (w - 70) / Math.max(120, range * 1.1);
+      const scaleY = (h - 60) / Math.max(40, maxHeight * 1.2);
+
+      // Ground Line
+      ctx.strokeStyle = '#10B981';
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(0, groundY); ctx.lineTo(w, groundY); ctx.stroke();
+
+      // Trajectory Arc Path
+      ctx.strokeStyle = angleDeg === 45 ? '#10B981' : 'rgba(56, 189, 248, 0.7)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(cannonX, groundY);
+      for (let t = 0; t <= flightTime; t += 0.05) {
+        const px = cannonX + (vx * t) * scaleX;
+        const py = groundY - (vy * t - 0.5 * g * t * t) * scaleY;
+        ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Cannon Barrel
+      ctx.save();
+      ctx.translate(cannonX, groundY);
+      ctx.rotate(-rad);
+      ctx.fillStyle = '#A855F7';
+      ctx.shadowColor = '#A855F7';
+      ctx.shadowBlur = 12;
+      ctx.fillRect(0, -8, 30, 16);
+      ctx.restore();
+
+      // Animated Cannonball
+      const ballX = cannonX + (vx * animT) * scaleX;
+      const ballY = groundY - (vy * animT - 0.5 * g * animT * animT) * scaleY;
+
+      ctx.fillStyle = '#F59E0B';
+      ctx.shadowColor = '#F59E0B';
+      ctx.shadowBlur = 16;
+      ctx.beginPath();
+      ctx.arc(ballX, ballY, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Target Marker at landing point
+      const landX = cannonX + range * scaleX;
+      ctx.fillStyle = 'rgba(244, 63, 94, 0.8)';
+      ctx.beginPath();
+      ctx.arc(landX, groundY, 10, 0, Math.PI * 2);
+      ctx.fill();
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 16. Momentum & Collisions Physics Canvas
+  startMomentumCanvas(canvasId, massA, velA, massB, velB) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    const groundY = h - 35;
+    let carAX = 60;
+    let carBX = w - 80;
+    let curVelA = velA * 1.5;
+    let curVelB = velB * 1.5;
+    let isImpact = false;
+
+    const loop = () => {
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid Lines
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      // Track Line
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(0, groundY); ctx.lineTo(w, groundY); ctx.stroke();
+
+      carAX += curVelA;
+      carBX += curVelB;
+
+      // Collision Check
+      if (carBX - carAX <= 45 && !isImpact) {
+        isImpact = true;
+        const vA_new = ((massA - massB) * curVelA + 2 * massB * curVelB) / (massA + massB);
+        const vB_new = ((massB - massA) * curVelB + 2 * massA * curVelA) / (massA + massB);
+        curVelA = vA_new;
+        curVelB = vB_new;
+      }
+
+      if (carAX < 30 || carAX > w - 80) curVelA *= -1;
+      if (carBX < 80 || carBX > w - 30) curVelB *= -1;
+
+      // Bumper Car A (Pink)
+      ctx.fillStyle = '#EC4899';
+      ctx.shadowColor = '#EC4899';
+      ctx.shadowBlur = 12;
+      ctx.fillRect(carAX - 20, groundY - 24, 40, 24);
+
+      // Bumper Car B (Cyan)
+      ctx.fillStyle = '#06B6D4';
+      ctx.shadowColor = '#06B6D4';
+      ctx.shadowBlur = 12;
+      ctx.fillRect(carBX - 20, groundY - 24, 40, 24);
+
+      if (isImpact) {
+        ctx.strokeStyle = 'rgba(251, 191, 36, 0.8)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc((carAX + carBX) / 2, groundY - 12, 25, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 17. Electricity Grid Generator Canvas
+  startElectricityCanvas(canvasId, voltageType) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+    const isHigh = voltageType === 'high';
+
+    const loop = () => {
+      time += 0.05;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      const centerY = h / 2;
+
+      // Power Plant Turbine Rotor
+      ctx.fillStyle = '#8B5CF6';
+      ctx.shadowColor = '#8B5CF6';
+      ctx.shadowBlur = 15;
+      ctx.beginPath(); ctx.arc(50, centerY, 30, 0, Math.PI * 2); ctx.fill();
+
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.lineWidth = 3;
+      for (let a = 0; a < Math.PI * 2; a += Math.PI / 2) {
+        const bx = 50 + Math.cos(time * 3 + a) * 25;
+        const by = centerY + Math.sin(time * 3 + a) * 25;
+        ctx.beginPath(); ctx.moveTo(50, centerY); ctx.lineTo(bx, by); ctx.stroke();
+      }
+
+      // Transmission Line Wave Glow
+      ctx.strokeStyle = isHigh ? '#F59E0B' : '#10B981';
+      ctx.lineWidth = isHigh ? 4 : 2;
+      ctx.shadowColor = isHigh ? '#F59E0B' : '#10B981';
+      ctx.shadowBlur = isHigh ? 18 : 8;
+
+      ctx.beginPath();
+      ctx.moveTo(80, centerY);
+      for (let x = 80; x <= w - 60; x += 10) {
+        const wave = Math.sin(time * 6 + x * 0.08) * (isHigh ? 8 : 4);
+        ctx.lineTo(x, centerY + wave);
+      }
+      ctx.stroke();
+
+      // Current Spark Particles
+      for (let i = 0; i < 4; i++) {
+        const px = 80 + ((time * 80 + i * 80) % (w - 140));
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath(); ctx.arc(px, centerY, 4, 0, Math.PI * 2); ctx.fill();
+      }
+
+      // Home Target Destination
+      ctx.fillStyle = '#10B981';
+      ctx.shadowColor = '#10B981';
+      ctx.shadowBlur = 15;
+      ctx.beginPath(); ctx.arc(w - 40, centerY, 22, 0, Math.PI * 2); ctx.fill();
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 18. Energy Mix Grid Canvas
+  startEnergyMixCanvas(canvasId, mixState) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+
+    const loop = () => {
+      time += 0.04;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      const centerY = h / 2;
+
+      if (mixState.solar) {
+        ctx.strokeStyle = '#F59E0B';
+        ctx.lineWidth = 2;
+        for (let i = 0; i < 5; i++) {
+          const sx = 40 + i * 20;
+          ctx.beginPath(); ctx.moveTo(sx, 20); ctx.lineTo(sx - 10, centerY - 20); ctx.stroke();
+        }
+      }
+
+      if (mixState.wind) {
+        ctx.strokeStyle = '#38BDF8';
+        ctx.lineWidth = 3;
+        ctx.shadowColor = '#38BDF8';
+        ctx.shadowBlur = 12;
+        ctx.beginPath(); ctx.moveTo(w / 2, h - 20); ctx.lineTo(w / 2, centerY - 20); ctx.stroke();
+        for (let a = 0; a < Math.PI * 2; a += (Math.PI * 2) / 3) {
+          const bx = w / 2 + Math.cos(time * 4 + a) * 30;
+          const by = (centerY - 20) + Math.sin(time * 4 + a) * 30;
+          ctx.beginPath(); ctx.moveTo(w / 2, centerY - 20); ctx.lineTo(bx, by); ctx.stroke();
+        }
+      }
+
+      if (mixState.hydro) {
+        ctx.fillStyle = '#06B6D4';
+        ctx.shadowColor = '#06B6D4';
+        ctx.shadowBlur = 10;
+        for (let i = 0; i < 6; i++) {
+          const wx = w - 100 + i * 15;
+          const wy = h - 30 + Math.sin(time * 3 + i) * 6;
+          ctx.beginPath(); ctx.arc(wx, wy, 4, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
   renderPhysicalVsChemicalActivity(container) {
     const isChemical = this.changeTypeMode === 'chemical';
 
@@ -610,7 +1053,6 @@ const Experiment = {
 
     let html = `
       <div class="exp-activity-wrapper">
-        <!-- 2 Mode Selection Buttons -->
         <div class="exp-mode-toggle-group">
           <button class="exp-mode-btn ${isChemical ? 'active' : ''}" onclick="Experiment.switchChangeTypeMode('chemical')">
             ⚗️ Chemical Change
@@ -628,9 +1070,8 @@ const Experiment = {
 
     if (!this.isCombined) {
       html += `
-          <p class="exp-instruction">Tap both items to select them, then tap <b>Combine</b>:</p>
+          <p class="exp-instruction">Tap both items to select them, then tap <b>Combine Reactants</b>:</p>
 
-          <!-- Selectable Items Grid -->
           <div class="exp-items-grid">
       `;
 
@@ -649,104 +1090,75 @@ const Experiment = {
       html += `
           </div>
 
-          <button class="primary-btn combine-action-btn ${canCombine ? 'ready' : 'disabled'}"
-                  ${canCombine ? 'onclick="Experiment.combineItems()"' : 'disabled'}>
-            Combine ${canCombine ? '✨' : '🔒'}
+          <button class="sci-fi-btn combine-action-btn ${canCombine ? 'ready' : 'disabled'}"
+                  ${canCombine ? 'onclick="Experiment.combineItems()"' : 'disabled'} style="width:100%;">
+            Combine Reactants ${canCombine ? '✨' : '🔒'}
           </button>
         </div>
       `;
     } else {
-      // Combined Result Screen
-      if (isChemical) {
-        html += `
-          <!-- Chemical Change Reaction Visual Result -->
-          <div class="exp-result-container chemical-result">
-            <div class="reaction-animation-box">
-              <div class="flask-visual">🧪</div>
-              <div class="fizz-bubbles-container">
-                <span class="bubble b1">🫧</span>
-                <span class="bubble b2">🫧</span>
-                <span class="bubble b3">🫧</span>
-                <span class="bubble b4">🫧</span>
-              </div>
+      // 10x Cooler Interactive Canvas & Sci-Fi Telemetry Dashboard Result
+      html += `
+        <div class="exp-result-container ${isChemical ? 'chemical-result' : 'physical-result'}">
+          <div class="exp-canvas-box-wrapper">
+            <div class="exp-hud-bar">
+              <span class="exp-hud-title">⚡ REAL-TIME ${isChemical ? 'CHEMICAL' : 'PHYSICAL'} SIMULATOR</span>
+              <span class="exp-hud-status active">● SIMULATING</span>
             </div>
-            <div class="result-badge chemical">Chemical Change</div>
+            <canvas id="canvasPhysChem" class="exp-sim-canvas"></canvas>
           </div>
 
-          <!-- Explanation Section -->
+          <div class="telemetry-grid">
+            <div class="telemetry-card">
+              <div class="telemetry-icon">${isChemical ? '🫧' : '💧'}</div>
+              <div class="telemetry-label">${isChemical ? 'Gas Produced' : 'Phase State'}</div>
+              <div class="telemetry-value">${isChemical ? '350' : 'Liquid'}</div>
+              <div class="telemetry-unit">${isChemical ? 'mL CO₂' : 'H₂O Fluid'}</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 85%;"></div></div>
+            </div>
+            <div class="telemetry-card">
+              <div class="telemetry-icon">🌡️</div>
+              <div class="telemetry-label">Temperature</div>
+              <div class="telemetry-value">${isChemical ? '34.2' : '45.0'}</div>
+              <div class="telemetry-unit">°C</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${isChemical ? 45 : 70}%;"></div></div>
+            </div>
+            <div class="telemetry-card">
+              <div class="telemetry-icon">🧬</div>
+              <div class="telemetry-label">Substance ID</div>
+              <div class="telemetry-value">${isChemical ? 'NEW' : 'SAME'}</div>
+              <div class="telemetry-unit">${isChemical ? 'NaC₂H₃O₂ + CO₂' : 'H₂O Molecules'}</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
+            </div>
+          </div>
+
+          <div class="result-badge ${isChemical ? 'chemical' : 'physical'}">
+            ${isChemical ? '⚗️ Chemical Change: New Substances Formed' : '🧊 Physical Change: State Shift Only'}
+          </div>
+
           <div class="exp-explanation-section">
             <div class="exp-explain-block">
               <h5>What happened?</h5>
-              <p>When baking soda and vinegar were combined, they reacted and produced new substances, including carbon dioxide gas. The bubbles are evidence that a gas was produced.</p>
+              <p>${isChemical ? 'Baking soda (NaHCO₃) and vinegar (CH₃COOH) reacted to form carbon dioxide gas (CO₂), water, and sodium acetate.' : 'Thermal heat transfer melted solid ice crystals into liquid water molecules.'}</p>
             </div>
-
-            <div class="exp-explain-block">
-              <h5>Why is it a chemical change?</h5>
-              <ul>
-                <li>A new substance is formed.</li>
-                <li>Gas is produced.</li>
-                <li>The original substances change into different substances.</li>
-              </ul>
-            </div>
-
-            <div class="exp-key-idea-box chemical-key">
-              💡 <b>Key Idea:</b> Chemical change = a new substance is formed.
+            <div class="exp-key-idea-box ${isChemical ? 'chemical-key' : 'physical-key'}">
+              💡 <b>Key Idea:</b> ${isChemical ? 'Chemical Change = Atomic bonds break and reform new substances.' : 'Physical Change = Reversible phase or shape change without altering chemical formula.'}
             </div>
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
-            🔄 Reset / Try Again
+            🔄 Reset Simulator
           </button>
         </div>
-        `;
-      } else {
-        html += `
-          <!-- Physical Change Reaction Visual Result -->
-          <div class="exp-result-container physical-result">
-            <div class="reaction-animation-box">
-              <div class="melting-visual">
-                <span class="ice-melting-icon">🧊 ➡️ 💧</span>
-              </div>
-              <div class="water-drops-container">
-                <span class="drop d1">💧</span>
-                <span class="drop d2">💧</span>
-                <span class="drop d3">💧</span>
-              </div>
-            </div>
-            <div class="result-badge physical">Physical Change</div>
-          </div>
-
-          <!-- Explanation Section -->
-          <div class="exp-explanation-section">
-            <div class="exp-explain-block">
-              <h5>What happened?</h5>
-              <p>The ice melted and became liquid water.</p>
-            </div>
-
-            <div class="exp-explain-block">
-              <h5>Why is it a physical change?</h5>
-              <ul>
-                <li>No new substance was formed.</li>
-                <li>The water is still H₂O.</li>
-                <li>Only its physical state changed from solid to liquid.</li>
-              </ul>
-            </div>
-
-            <div class="exp-key-idea-box physical-key">
-              💡 <b>Key Idea:</b> Physical change = no new substance is formed.
-            </div>
-          </div>
-
-          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
-            🔄 Reset / Try Again
-          </button>
-        </div>
-        `;
-      }
+      `;
     }
 
     html += `</div>`;
     container.innerHTML = html;
+
+    if (this.isCombined) {
+      setTimeout(() => this.startPhysicalVsChemicalCanvas('canvasPhysChem', isChemical), 40);
+    }
   },
 
   renderChemicalReactionsActivity(container) {
@@ -4394,46 +4806,58 @@ const Experiment = {
         `;
       } else {
         let rangeMap = { 15: 50, 30: 86.6, 45: 100, 60: 86.6, 75: 50 };
-        let currentRange = rangeMap[angle];
-
-        // Trajectory SVG path curves based on angle
-        let pathMap = {
-          15: "M 20,90 Q 70,75 140,90",
-          30: "M 20,90 Q 110,40 210,90",
-          45: "M 20,90 Q 150,15 280,90",
-          60: "M 20,90 Q 120,5 210,90",
-          75: "M 20,90 Q 80,0 140,90"
-        };
+        let currentRange = rangeMap[angle] || 100;
+        let rad = angle * Math.PI / 180;
+        let maxH = Math.round(((35 * Math.sin(rad)) ** 2) / (2 * 9.81));
+        let tFlight = (2 * 35 * Math.sin(rad) / 9.81).toFixed(1);
 
         html += `
           <div class="exp-result-container physical-result">
-            <div class="pop-graph-box">
-              <div class="pop-graph-header">
-                <span>Projectile Trajectory (${angle}°)</span>
-                <span class="resource-pill">Range: ${currentRange}m ${angle === 45 ? '🎯 MAXIMUM' : ''}</span>
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">🏹 PHYSICS PROJECTILE SIMULATOR</span>
+                <span class="exp-hud-status active">● TRAJECTORY ACTIVE</span>
               </div>
-              <svg viewBox="0 0 300 110" style="width:100%; height:110px; overflow:visible;">
-                <line x1="10" y1="90" x2="290" y2="90" stroke="#94A3B8" stroke-width="1.5"/>
-                <path d="${pathMap[angle]}" fill="none" stroke="${angle === 45 ? '#10B981' : '#3B82F6'}" stroke-width="3" stroke-dasharray="4,2"/>
-                <circle cx="20" cy="90" r="4" fill="#3B82F6"/>
-                <text x="20" y="105" font-size="9" fill="#64748B">Cannon</text>
-                <text x="${angle === 45 ? 275 : (angle === 30 || angle === 60 ? 205 : 135)}" y="105" font-size="9" fill="#0F172A" font-weight="bold">${currentRange}m</text>
-              </svg>
+              <canvas id="canvasProjectile" class="exp-sim-canvas"></canvas>
+            </div>
+
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">📏</div>
+                <div class="telemetry-label">Range (R)</div>
+                <div class="telemetry-value">${currentRange}</div>
+                <div class="telemetry-unit">Meters ${angle === 45 ? '🎯 MAX' : ''}</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${(currentRange/100)*100}%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">📐</div>
+                <div class="telemetry-label">Max Height (H)</div>
+                <div class="telemetry-value">${maxH}</div>
+                <div class="telemetry-unit">Meters</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${Math.min(100, (maxH/35)*100)}%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">⏱️</div>
+                <div class="telemetry-label">Flight Time</div>
+                <div class="telemetry-value">${tFlight}</div>
+                <div class="telemetry-unit">Seconds</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${Math.min(100, (tFlight/7)*100)}%;"></div></div>
+              </div>
             </div>
 
             <div class="result-badge maintained" style="background:${angle === 45 ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)'};">
-              🎯 PROJECTILE RANGE (${angle}° ➔ ${angle === 45 ? 'Maximum Range!' : currentRange + 'm'})
+              🎯 PROJECTILE RANGE (${angle}° ➔ ${angle === 45 ? 'Maximum Range Achieved (100m)' : currentRange + 'm'})
             </div>
           </div>
 
           <div class="exp-explanation-section" style="margin-top:14px;">
             <div class="exp-explain-block">
               <h5>What happened?</h5>
-              <p>When air resistance is ignored and launch & landing heights are the same, a launch angle of about <b>45°</b> produces the greatest horizontal range for a given initial speed.</p>
+              <p>When launch & landing heights are equal, a launch angle of <b>45°</b> maximizes horizontal range by balancing vertical flight time with horizontal velocity.</p>
             </div>
 
             <div class="exp-key-idea-box chemical-key">
-              💡 <b>Key Idea:</b> Changing the launch angle changes the projectile's trajectory, flight time, and horizontal range.
+              💡 <b>Key Idea:</b> Launch angle dictates kinetic energy distribution between vertical elevation and horizontal displacement.
             </div>
 
             <div class="exp-info-panel" style="margin-top:10px;">
@@ -4444,18 +4868,19 @@ const Experiment = {
                 `).join('')}
               </div>
               ${this.projectileAnswer === '45' ? `
-                <div style="color:#15803D; font-weight:800; font-size:0.85rem; margin-top:8px;">✅ Correct! 45° produces maximum horizontal range.</div>
+                <div style="color:#67E8F9; font-weight:800; font-size:0.85rem; margin-top:8px;">✅ Correct! 45° produces maximum horizontal range.</div>
               ` : (this.projectileAnswer ? `
-                <div style="color:#B91C1C; font-weight:800; font-size:0.85rem; margin-top:8px;">❌ Try again! Hint: Look for the angle with 100m range.</div>
+                <div style="color:#FCA5A5; font-weight:800; font-size:0.85rem; margin-top:8px;">❌ Try again! Hint: Look for the angle with 100m range.</div>
               ` : '')}
             </div>
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetProjectileActivity()">
-            🔄 Reset Experiment
+            🔄 Reset Simulator
           </button>
         </div>
         `;
+        setTimeout(() => this.startProjectileCanvas('canvasProjectile', angle, vel), 40);
       }
     } else if (mode === 'velocity') {
       html += `
@@ -4740,28 +5165,51 @@ const Experiment = {
       } else {
         html += `
           <div class="exp-result-container physical-result">
-            <div class="homeo-body-card" style="margin:0; width:100%;">
-              <div style="font-size:0.92rem; font-weight:800; color:#FFFFFF;">
-                Before Collision: p_total = (2 × 3) + (2 × -1) = 6 - 2 = <b style="color:#38BDF8;">4 kg·m/s</b>
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">💥 COLLISION & MOMENTUM SIMULATOR</span>
+                <span class="exp-hud-status active">● COLLISION ACTIVE</span>
               </div>
-              <div style="font-size:0.92rem; font-weight:800; color:#34D399; margin-top:6px;">
-                After Collision: p_total = <b style="color:#67E8F9;">4 kg·m/s</b>
+              <canvas id="canvasMomentum" class="exp-sim-canvas"></canvas>
+            </div>
+
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🛒</div>
+                <div class="telemetry-label">Initial Momentum</div>
+                <div class="telemetry-value">4.0</div>
+                <div class="telemetry-unit">kg·m/s</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 80%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">💥</div>
+                <div class="telemetry-label">Final Momentum</div>
+                <div class="telemetry-value">4.0</div>
+                <div class="telemetry-unit">kg·m/s</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 80%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">⚖️</div>
+                <div class="telemetry-label">Conservation</div>
+                <div class="telemetry-value">100%</div>
+                <div class="telemetry-unit">Conserved</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
               </div>
             </div>
 
             <div class="result-badge maintained" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
-              ✅ MOMENTUM CONSERVED (Before = After = 4 kg·m/s)
+              ✅ CONSERVATION OF MOMENTUM (p_initial = p_final = 4.0 kg·m/s)
             </div>
           </div>
 
           <div class="exp-explanation-section" style="margin-top:14px;">
             <div class="exp-explain-block">
               <h5>What happened?</h5>
-              <p>In an isolated system, the total momentum before a collision equals the total momentum after the collision.</p>
+              <p>In an isolated collision system, total momentum before collision ($p_{initial} = m_1 v_1 + m_2 v_2$) equals total momentum after collision ($p_{final}$).</p>
             </div>
 
             <div class="exp-key-idea-box chemical-key">
-              💡 <b>Key Idea:</b> Total momentum before collision = Total momentum after collision.
+              💡 <b>Key Idea:</b> Total momentum is conserved during all collisions in isolated systems ($p_{initial} = p_{final}$).
             </div>
 
             <div class="exp-info-panel" style="margin-top:10px;">
@@ -4772,18 +5220,19 @@ const Experiment = {
                 <button class="exp-cond-btn ${this.momentumAnswer === 'same' ? 'active' : ''}" onclick="Experiment.answerMomentumChallenge('same')">Remains the same</button>
               </div>
               ${this.momentumAnswer === 'same' ? `
-                <div style="color:#15803D; font-weight:800; font-size:0.85rem; margin-top:8px;">✅ Correct! Total momentum remains the same assuming no external forces.</div>
+                <div style="color:#67E8F9; font-weight:800; font-size:0.85rem; margin-top:8px;">✅ Correct! Total momentum remains the same assuming no external forces.</div>
               ` : (this.momentumAnswer ? `
-                <div style="color:#B91C1C; font-weight:800; font-size:0.85rem; margin-top:8px;">❌ Try again! Hint: Total momentum is conserved.</div>
+                <div style="color:#FCA5A5; font-weight:800; font-size:0.85rem; margin-top:8px;">❌ Try again! Hint: Total momentum is conserved.</div>
               ` : '')}
             </div>
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetMomentumActivity()">
-            🔄 Reset Experiment
+            🔄 Reset Simulator
           </button>
         </div>
         `;
+        setTimeout(() => this.startMomentumCanvas('canvasMomentum', 2, 3, 2, -1), 40);
       }
     } else {
       // 📚 FINAL MOMENTUM PANEL
@@ -4899,35 +5348,40 @@ const Experiment = {
       } else {
         html += `
           <div class="exp-result-container physical-result">
-            <div class="recombinant-flow">
-              <div class="recombinant-step-card">
-                <span style="font-size:1.5rem;">🏭</span>
-                <span><b>Power Plant:</b> Generates electrical energy</span>
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">⚡ POWER GRID TRANSMISSION SIMULATOR</span>
+                <span class="exp-hud-status active">● CURRENT FLOWING</span>
               </div>
-              <div style="color:#8B5CF6;">⬇️</div>
-              <div class="recombinant-step-card">
-                <span style="font-size:1.5rem;">⚡</span>
-                <span><b>Step-Up Transformer:</b> Raises voltage for long distances</span>
+              <canvas id="canvasElectricity" class="exp-sim-canvas"></canvas>
+            </div>
+
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🏭</div>
+                <div class="telemetry-label">Turbine Gen</div>
+                <div class="telemetry-value">13.8</div>
+                <div class="telemetry-unit">kV Output</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 60%;"></div></div>
               </div>
-              <div style="color:#8B5CF6;">⬇️</div>
-              <div class="recombinant-step-card">
-                <span style="font-size:1.5rem;">🗼</span>
-                <span><b>Transmission Lines:</b> Carries high-voltage power</span>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🗼</div>
+                <div class="telemetry-label">Grid Line</div>
+                <div class="telemetry-value">${type === 'high' ? '500' : '13.8'}</div>
+                <div class="telemetry-unit">kV Transmission</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${type === 'high' ? 95 : 30}%;"></div></div>
               </div>
-              <div style="color:#8B5CF6;">⬇️</div>
-              <div class="recombinant-step-card">
-                <span style="font-size:1.5rem;">🔌</span>
-                <span><b>Step-Down Transformer:</b> Reduces voltage for safe local use</span>
-              </div>
-              <div style="color:#8B5CF6;">⬇️</div>
-              <div class="recombinant-step-card" style="border-color:#10B981; background:rgba(16, 185, 129, 0.25);">
-                <span style="font-size:1.5rem;">🏠</span>
-                <span style="color:#67E8F9;"><b>Home & Electric Meter:</b> Measures and uses electricity</span>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🏠</div>
+                <div class="telemetry-label">Home Supply</div>
+                <div class="telemetry-value">220</div>
+                <div class="telemetry-unit">Volts AC</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
               </div>
             </div>
 
             <div class="result-badge maintained" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
-              ⚡ ELECTRICITY DELIVERED SAFELY
+              ⚡ ELECTRICITY TRANSMITTED SAFELY (220V Household Standard)
             </div>
           </div>
 
@@ -4938,10 +5392,11 @@ const Experiment = {
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetElectricityActivity()">
-            🔄 Reset Experiment
+            🔄 Reset Simulator
           </button>
         </div>
         `;
+        setTimeout(() => this.startElectricityCanvas('canvasElectricity', type), 40);
       }
     } else if (mode === 'voltage') {
       html += `
