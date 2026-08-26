@@ -496,7 +496,7 @@
       <!-- ================= EXPERIMENT SIMULATOR (TERM SELECTION) ================= -->
       <section id="experimentTermScreen" class="screen">
         <div class="play-container">
-          <button class="back-link" onclick="App.showScreen('homeScreen')">← Home</button>
+          <button class="back-link" onclick="App.goHome()">← Home</button>
           
           <div class="play-prompt-header">
             <h2 class="play-prompt-title">Experiment Simulator</h2>
@@ -837,7 +837,7 @@
       <!-- ================= MULTIPLAYER: HOST CREATE GAME SCREEN ================= -->
       <section id="mpHostCreateScreen" class="screen">
         <div class="play-container">
-          <button class="back-link" onclick="App.showScreen('homeScreen')">← Back to Home</button>
+          <button class="back-link" onclick="App.goHome()">← Back to Home</button>
           
           <div class="sub-settings-container" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); margin-top: 16px;">
             <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: #FFFFFF; margin-bottom: 6px;">Host Live Game 👑</h2>
@@ -973,7 +973,7 @@
       <!-- ================= MULTIPLAYER: PLAYER JOIN SCREEN ================= -->
       <section id="mpPlayerJoinScreen" class="screen">
         <div class="play-container">
-          <button class="back-link" onclick="App.showScreen('homeScreen')">← Back to Home</button>
+          <button class="back-link" onclick="App.goHome()">← Back to Home</button>
 
           <div class="sub-settings-container" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 28px 24px; text-align: center; max-width: 440px; margin: 20px auto 0 auto; box-shadow: 0 10px 40px rgba(0,0,0,0.6);">
             <h2 style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: #FFFFFF; margin-bottom: 6px;">Join Game 🔑</h2>
@@ -1416,7 +1416,7 @@
           <!-- Action Buttons (Pill Buttons matching Image 1) -->
           <div class="results-actions">
             <button class="primary-btn play-again-btn" onclick="App.showScreen('playScreen')">Play Again 🎮</button>
-            <button class="secondary-btn home-nav-link" onclick="App.showScreen('homeScreen')">Return to Home 🏠</button>
+            <button class="secondary-btn home-nav-link" onclick="App.goHome()">Return to Home 🏠</button>
           </div>
         </div>
       </section>
@@ -1424,7 +1424,7 @@
       <!-- ================= 8. SETTINGS UI ================= -->
       <section id="settingsScreen" class="screen">
         <div class="settings-container">
-          <button class="back-link" onclick="App.showScreen('homeScreen')">← Home</button>
+          <button class="back-link" onclick="App.goHome()">← Home</button>
           <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: #FFFFFF; margin-top: 10px;">Settings & Overview</h2>
           <p class="subtitle" style="color: #A5A3C4; font-size: 0.9rem; margin-bottom: 20px;">Choose a menu option below</p>
 

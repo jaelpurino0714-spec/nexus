@@ -694,14 +694,14 @@ const Quiz = {
     if (!this.isHost && lobbyData.kickedIds && lobbyData.kickedIds.includes(myId)) {
       this.stopLobbySync();
       alert('⚠️ You have been kicked from the lobby by the host.');
-      App.showScreen('homeScreen');
+      App.goHome();
       return;
     }
 
     if (!this.isHost && lobbyData.status === 'cancelled') {
       this.stopLobbySync();
       alert('⚠️ The host has ended the lobby.');
-      App.showScreen('homeScreen');
+      App.goHome();
       return;
     }
 
@@ -963,7 +963,7 @@ const Quiz = {
         }
       }
       this.stopLobbySync();
-      App.showScreen('homeScreen');
+      App.goHome();
     }
   },
 
@@ -1069,7 +1069,7 @@ const Quiz = {
     };
 
     DB.saveHostedGameAnalytics(analyticsData);
-    App.showScreen('homeScreen');
+    App.goHome();
     alert('Host Live Quiz finished! Final participant scores saved.');
   },
 

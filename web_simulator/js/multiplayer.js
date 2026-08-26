@@ -38,7 +38,7 @@ const Multiplayer = {
 
   goHome() {
     this.resetState();
-    App.showScreen('homeScreen');
+    App.goHome();
   },
 
   // 1. Host Flow: Open Host Create Screen & Populate Term/Topic Dropdowns

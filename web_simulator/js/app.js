@@ -186,8 +186,18 @@ const App = {
 
     this.stopAllCustomAudio();
 
-    const audio = document.getElementById('nexusBgmAudio');
-    if (!audio) return;
+    let audio = document.getElementById('nexusBgmAudio');
+    if (!audio) {
+      audio = document.createElement('audio');
+      audio.id = 'nexusBgmAudio';
+      audio.src = 'assets/audio/bg_music.mp3';
+      audio.preload = 'auto';
+      document.body.appendChild(audio);
+    } else {
+      if (!audio.src || !audio.src.includes('bg_music.mp3')) {
+        audio.src = 'assets/audio/bg_music.mp3';
+      }
+    }
     audio.loop = true;
 
     const savedVol = localStorage.getItem('nexus_bgm_vol');
@@ -687,7 +697,18 @@ const App = {
   },
 
   goHome() {
+    const charModal = document.getElementById('myCharacterPetModal');
+    if (charModal && !charModal.classList.contains('hidden')) {
+      if (typeof CharacterSystem !== 'undefined' && CharacterSystem.closeCharacterModal) {
+        CharacterSystem.closeCharacterModal();
+      } else {
+        charModal.classList.add('hidden');
+      }
+    }
+    this.stopAllCustomAudio();
+    this.stopTimerAudio();
     this.showScreen(this.getHomeScreen());
+    this.playBgm();
   },
 
   showScreen(screenId) {
