@@ -5123,6 +5123,13 @@
   -webkit-user-drag: none;
 }
 
+.baby-char-img[src*="student"],
+.pet-char-img[src*="student"] {
+  height: 195px !important;
+  max-height: 220px !important;
+  object-fit: contain !important;
+}
+
 .baby-avatar-wrapper:hover .baby-char-img {
   transform: scale(1.05);
   filter: drop-shadow(0 10px 20px rgba(56, 189, 248, 0.4));
