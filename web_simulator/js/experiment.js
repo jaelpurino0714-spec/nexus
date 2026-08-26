@@ -2206,7 +2206,6 @@ const Experiment = {
       setTimeout(() => this.startChemicalEquationsCanvas('canvasChemEq', isH2O), 40);
     }
   },
-  },
 
   renderBalancingChemicalEquationsActivity(container) {
     const isGuided = this.balancingStage === 'guided';
