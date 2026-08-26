@@ -118,9 +118,13 @@ const App = {
     audio.volume = volVal;
 
     const playPromise = audio.play();
+    this._expPlayPromise = playPromise;
     if (playPromise !== undefined) {
       playPromise.then(() => {
         this._removeAudioUnlockListeners();
+        if (!this.isExperimentAudioScreen()) {
+          this.stopExperimentAudio();
+        }
       }).catch(err => {
         this._setupAudioUnlockListeners();
       });
@@ -134,6 +138,14 @@ const App = {
         audio.pause();
         audio.currentTime = 0;
       } catch (_) {}
+      if (this._expPlayPromise !== undefined) {
+        this._expPlayPromise.then(() => {
+          try {
+            audio.pause();
+            audio.currentTime = 0;
+          } catch (_) {}
+        }).catch(() => {});
+      }
     }
   },
 
