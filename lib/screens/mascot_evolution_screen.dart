@@ -170,20 +170,31 @@ class _MascotEvolutionScreenState extends ConsumerState<MascotEvolutionScreen> {
               const SizedBox(height: 24),
 
               // 3. Central 3D Interactive Mascot Viewer & Turnaround Controls
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF160B3A).withOpacity(0.6),
-                  borderRadius: BorderRadius.circular(28),
-                  border: Border.all(color: Colors.white.withOpacity(0.1)),
-                ),
-                child: Mascot3DViewer(
-                  stage: _selectedStage,
-                  activeExpression: _activeExpression,
-                  height: 260,
-                  showTurnaroundControls: true,
-                ),
+              Builder(
+                builder: (context) {
+                  final charState = ref.watch(characterProvider);
+                  final userXP = charState.profile?.characterXp ?? 0;
+                  bool isStageLocked = false;
+                  if (_selectedStage == MascotStage.student && userXP < 1000) isStageLocked = true;
+                  if (_selectedStage == MascotStage.scientist && userXP < 2000) isStageLocked = true;
+
+                  return Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF160B3A).withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(28),
+                      border: Border.all(color: Colors.white.withOpacity(0.1)),
+                    ),
+                    child: Mascot3DViewer(
+                      stage: _selectedStage,
+                      activeExpression: _activeExpression,
+                      height: 260,
+                      isLocked: isStageLocked,
+                      showTurnaroundControls: true,
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 20),
 

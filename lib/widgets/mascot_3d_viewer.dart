@@ -13,6 +13,8 @@ class Mascot3DViewer extends StatefulWidget {
   final Function(double angle)? onAngleChanged;
   final Function(String expression)? onExpressionChanged;
 
+  final bool isLocked;
+
   const Mascot3DViewer({
     super.key,
     required this.stage,
@@ -20,6 +22,7 @@ class Mascot3DViewer extends StatefulWidget {
     this.height = 260.0,
     this.showTurnaroundControls = true,
     this.showActionToolbar = true,
+    this.isLocked = false,
     this.onAngleChanged,
     this.onExpressionChanged,
   });
@@ -552,20 +555,30 @@ class _Mascot3DViewerState extends State<Mascot3DViewer> with TickerProviderStat
                         alignment: Alignment.center,
                         children: [
                           // Base Mascot Sprite (Transparent background)
-                          Image.asset(
-                            isFrontView ? _getMainMascotAssetPath() : _getTurnaroundAssetPath(),
-                            key: ValueKey(isFrontView ? _getMainMascotAssetPath() : _getTurnaroundAssetPath()),
-                            gaplessPlayback: true,
-                            height: widget.height * 0.76,
-                            fit: BoxFit.contain,
-                            errorBuilder: (ctx, err, stack) => Icon(
-                              widget.stage == MascotStage.baby
-                                  ? Icons.child_care
-                                  : widget.stage == MascotStage.student
-                                      ? Icons.school
-                                      : Icons.science,
-                              size: 100,
-                              color: const Color(0xFFA855F7),
+                          ColorFiltered(
+                            colorFilter: widget.isLocked
+                                ? const ColorFilter.matrix(<double>[
+                                    0.2126, 0.7152, 0.0722, 0, -35,
+                                    0.2126, 0.7152, 0.0722, 0, -35,
+                                    0.2126, 0.7152, 0.0722, 0, -35,
+                                    0,      0,      0,      0.75, 0,
+                                  ])
+                                : const ColorFilter.mode(Colors.transparent, BlendMode.dst),
+                            child: Image.asset(
+                              isFrontView ? _getMainMascotAssetPath() : _getTurnaroundAssetPath(),
+                              key: ValueKey(isFrontView ? _getMainMascotAssetPath() : _getTurnaroundAssetPath()),
+                              gaplessPlayback: true,
+                              height: widget.height * 0.76,
+                              fit: BoxFit.contain,
+                              errorBuilder: (ctx, err, stack) => Icon(
+                                widget.stage == MascotStage.baby
+                                    ? Icons.child_care
+                                    : widget.stage == MascotStage.student
+                                        ? Icons.school
+                                        : Icons.science,
+                                size: 100,
+                                color: const Color(0xFFA855F7),
+                              ),
                             ),
                           ),
 

@@ -252,13 +252,23 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                   // 3. Central Hero Area: Native Animated GIF for Stage 3 / 3D Mascot Model
                   Center(
                     child: (stage.stage == 3 || stage.id == 'graduate' || stage.id == 'scientist')
-                        ? Image.asset(
-                            assetPath,
-                            key: ValueKey('stage3_gif_$assetPath'),
-                            gaplessPlayback: true,
-                            height: 260,
-                            fit: BoxFit.contain,
-                            errorBuilder: (ctx, err, stack) => const Icon(Icons.science, size: 100, color: Color(0xFFA855F7)),
+                        ? ColorFiltered(
+                            colorFilter: (xp < stage.minXP)
+                                ? const ColorFilter.matrix(<double>[
+                                    0.2126, 0.7152, 0.0722, 0, -35,
+                                    0.2126, 0.7152, 0.0722, 0, -35,
+                                    0.2126, 0.7152, 0.0722, 0, -35,
+                                    0,      0,      0,      0.75, 0,
+                                  ])
+                                : const ColorFilter.mode(Colors.transparent, BlendMode.dst),
+                            child: Image.asset(
+                              assetPath,
+                              key: ValueKey('stage3_gif_$assetPath'),
+                              gaplessPlayback: true,
+                              height: 260,
+                              fit: BoxFit.contain,
+                              errorBuilder: (ctx, err, stack) => const Icon(Icons.science, size: 100, color: Color(0xFFA855F7)),
+                            ),
                           )
                         : Mascot3DViewer(
                             stage: stage.id == 'baby'
@@ -268,6 +278,7 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                                     : MascotStage.scientist,
                             activeExpression: 'happy',
                             height: 250,
+                            isLocked: xp < stage.minXP,
                             showTurnaroundControls: true,
                           ),
                   ),

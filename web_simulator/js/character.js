@@ -828,6 +828,7 @@ const CharacterSystem = {
     const isStudent = (stage.id === 'student');
     const isGraduate = (stage.id === 'graduate');
     const isAdult = (stage.id === 'worker' || stage.id === 'adult');
+    const isLocked = (xp < stage.minXP);
     
     let dynamicQuote = stage.defaultQuote;
     if (isBaby) {
@@ -864,7 +865,7 @@ const CharacterSystem = {
       avatarHtml = `
         <div class="baby-avatar-wrapper" onclick="CharacterSystem.onTapCharacter()" title="Tap character to interact!">
           <div class="char-speech-bubble hidden" id="charSpeechBubble">${dynamicQuote}</div>
-          <img src="${stageImage}" class="baby-char-img bounce-anim" alt="${stage.title} Character" />
+          <img src="${stageImage}" class="baby-char-img bounce-anim ${isLocked ? 'locked-gray-tint' : ''}" alt="${stage.title} Character" />
         </div>
       `;
     } else {

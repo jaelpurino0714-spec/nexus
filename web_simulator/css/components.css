@@ -5679,8 +5679,10 @@
   transform: none !important;
 }
 
-.pet-char-img.locked-gray-tint {
-  filter: contrast(0.95) opacity(0.85) drop-shadow(0 10px 15px rgba(0, 0, 0, 0.15)) !important;
+.pet-char-img.locked-gray-tint,
+.baby-char-img.locked-gray-tint,
+.locked-gray-tint {
+  filter: grayscale(100%) brightness(0.65) contrast(0.9) opacity(0.8) drop-shadow(0 10px 15px rgba(0, 0, 0, 0.15)) !important;
 }
 
 .pet-stage-nav-btn {
