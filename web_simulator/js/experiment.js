@@ -1038,6 +1038,645 @@ const Experiment = {
     loop();
   },
 
+  // 2. Chemical Reactions Canvas (Iron Rusting & Apple Browning)
+  startChemicalReactionsCanvas(canvasId, isIron) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+    const particles = [];
+    for (let i = 0; i < 35; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 1.2,
+        vy: (Math.random() - 0.5) * 1.2,
+        r: 3 + Math.random() * 4,
+        color: isIron ? '#F97316' : '#84CC16'
+      });
+    }
+
+    const loop = () => {
+      time += 0.03;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      const centerX = w / 2;
+      const centerY = h / 2;
+
+      if (isIron) {
+        ctx.fillStyle = '#94A3B8';
+        ctx.shadowColor = '#F97316';
+        ctx.shadowBlur = 15;
+        ctx.fillRect(centerX - 80, centerY - 25, 160, 50);
+
+        ctx.fillStyle = 'rgba(249, 115, 22, 0.65)';
+        ctx.fillRect(centerX - 80, centerY - 25, 160, 15);
+
+        particles.forEach(p => {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 20 || p.x > w - 20) p.vx *= -1;
+          if (p.y < 20 || p.y > h - 20) p.vy *= -1;
+          ctx.fillStyle = p.color;
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+        });
+      } else {
+        ctx.fillStyle = '#FEF08A';
+        ctx.shadowColor = '#84CC16';
+        ctx.shadowBlur = 15;
+        ctx.beginPath(); ctx.arc(centerX, centerY, 55, 0, Math.PI * 2); ctx.fill();
+
+        ctx.fillStyle = 'rgba(180, 83, 9, 0.55)';
+        ctx.beginPath(); ctx.arc(centerX, centerY, 55, 0, Math.PI); ctx.fill();
+
+        particles.forEach(p => {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 20 || p.x > w - 20) p.vx *= -1;
+          if (p.y < 20 || p.y > h - 20) p.vy *= -1;
+          ctx.fillStyle = '#B45309';
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+        });
+      }
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 3. Acids, Bases & Litmus Neutralization Canvas
+  startAcidsBasesCanvas(canvasId, mode) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+    const isAcid = mode === 'blue_litmus';
+    const isBase = mode === 'red_litmus';
+    const isNeut = mode === 'neutralization';
+
+    const count = 40;
+    const ions = [];
+    for (let i = 0; i < count; i++) {
+      ions.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2,
+        type: isAcid ? 'H+' : (isBase ? 'OH-' : (i % 2 === 0 ? 'H+' : 'OH-'))
+      });
+    }
+
+    const loop = () => {
+      time += 0.04;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      const centerX = w / 2;
+      const centerY = h / 2;
+
+      let fluidColor = isAcid ? 'rgba(239, 68, 68, 0.35)' : (isBase ? 'rgba(59, 130, 246, 0.35)' : 'rgba(16, 185, 129, 0.35)');
+      ctx.fillStyle = fluidColor;
+      ctx.shadowColor = isAcid ? '#EF4444' : (isBase ? '#3B82F6' : '#10B981');
+      ctx.shadowBlur = 18;
+      ctx.beginPath(); ctx.arc(centerX, centerY + 10, 65, 0, Math.PI * 2); ctx.fill();
+
+      if (!isNeut) {
+        ctx.fillStyle = isAcid ? '#EF4444' : '#3B82F6';
+        ctx.fillRect(centerX - 12, 10, 24, h - 50);
+      }
+
+      ions.forEach(ion => {
+        ion.x += ion.vx; ion.y += ion.vy;
+        if (ion.x < 30 || ion.x > w - 30) ion.vx *= -1;
+        if (ion.y < 30 || ion.y > h - 30) ion.vy *= -1;
+
+        ctx.fillStyle = ion.type === 'H+' ? '#F43F5E' : '#38BDF8';
+        ctx.beginPath(); ctx.arc(ion.x, ion.y, 4, 0, Math.PI * 2); ctx.fill();
+      });
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 4. Chemical Equations Atomic Fusion Canvas
+  startChemicalEquationsCanvas(canvasId, isH2O) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+
+    const loop = () => {
+      time += 0.04;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      const centerX = w / 2;
+      const centerY = h / 2;
+
+      ctx.fillStyle = isH2O ? '#38BDF8' : '#F59E0B';
+      ctx.shadowColor = isH2O ? '#38BDF8' : '#F59E0B';
+      ctx.shadowBlur = 20;
+      ctx.beginPath(); ctx.arc(centerX, centerY, 32, 0, Math.PI * 2); ctx.fill();
+
+      const radius = 55;
+      for (let i = 0; i < 2; i++) {
+        const ang = time * 2 + i * Math.PI;
+        const ax = centerX + Math.cos(ang) * radius;
+        const ay = centerY + Math.sin(ang) * radius;
+
+        ctx.fillStyle = isH2O ? '#F472B6' : '#34D399';
+        ctx.shadowColor = isH2O ? '#F472B6' : '#34D399';
+        ctx.shadowBlur = 12;
+        ctx.beginPath(); ctx.arc(ax, ay, 16, 0, Math.PI * 2); ctx.fill();
+
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(centerX, centerY, radius, 0, Math.PI * 2); ctx.stroke();
+      }
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 5. Balancing Scale Balance Canvas
+  startBalancingCanvas(canvasId, c1, c2, c3) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    const isBalanced = (c1 === 2 && c2 === 1 && c3 === 2);
+    let time = 0;
+
+    const loop = () => {
+      time += 0.04;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      const centerX = w / 2;
+      const fulcrumY = h - 40;
+
+      ctx.fillStyle = '#A855F7';
+      ctx.beginPath();
+      ctx.moveTo(centerX, fulcrumY - 45);
+      ctx.lineTo(centerX - 25, fulcrumY);
+      ctx.lineTo(centerX + 25, fulcrumY);
+      ctx.fill();
+
+      const tilt = isBalanced ? 0 : Math.sin(time * 2) * 0.12;
+
+      ctx.save();
+      ctx.translate(centerX, fulcrumY - 45);
+      ctx.rotate(tilt);
+
+      ctx.strokeStyle = isBalanced ? '#10B981' : '#F43F5E';
+      ctx.lineWidth = 5;
+      ctx.shadowColor = isBalanced ? '#10B981' : '#F43F5E';
+      ctx.shadowBlur = 15;
+      ctx.beginPath(); ctx.moveTo(-110, 0); ctx.lineTo(110, 0); ctx.stroke();
+
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.4)';
+      ctx.fillRect(-140, 0, 60, 15);
+
+      ctx.fillStyle = 'rgba(168, 85, 247, 0.4)';
+      ctx.fillRect(80, 0, 60, 15);
+
+      ctx.restore();
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 6. Rates of Reactions Kinetic Collision Canvas
+  startRatesCanvas(canvasId, temp, hasCatalyst) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+    const speed = (temp === 'high' ? 3.5 : 1.5) * (hasCatalyst ? 1.4 : 1.0);
+    const count = 45;
+    const molecules = [];
+
+    for (let i = 0; i < count; i++) {
+      molecules.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * speed,
+        vy: (Math.random() - 0.5) * speed,
+        r: 4 + Math.random() * 4,
+        color: i % 2 === 0 ? '#38BDF8' : '#F43F5E'
+      });
+    }
+
+    const loop = () => {
+      time += 0.04;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      if (hasCatalyst) {
+        ctx.fillStyle = 'rgba(251, 191, 36, 0.3)';
+        ctx.strokeStyle = '#F59E0B';
+        ctx.lineWidth = 3;
+        ctx.shadowColor = '#F59E0B';
+        ctx.shadowBlur = 14;
+        ctx.fillRect(40, h - 20, w - 80, 12);
+      }
+
+      molecules.forEach(m => {
+        m.x += m.vx; m.y += m.vy;
+        if (m.x < 15 || m.x > w - 15) m.vx *= -1;
+        if (m.y < 15 || m.y > h - (hasCatalyst ? 30 : 15)) m.vy *= -1;
+
+        ctx.fillStyle = m.color;
+        ctx.shadowColor = m.color;
+        ctx.shadowBlur = 8;
+        ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2); ctx.fill();
+      });
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 7. Homeostasis Heart Monitor ECG Canvas
+  startHomeostasisCanvas(canvasId, mode, condition) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+    const isHot = condition === 'hot';
+
+    const loop = () => {
+      time += 0.06;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      const centerY = h / 2;
+
+      ctx.strokeStyle = isHot ? '#F43F5E' : '#38BDF8';
+      ctx.lineWidth = 3;
+      ctx.shadowColor = isHot ? '#F43F5E' : '#38BDF8';
+      ctx.shadowBlur = 15;
+
+      ctx.beginPath();
+      ctx.moveTo(0, centerY);
+      for (let x = 0; x < w; x += 5) {
+        const pulse = Math.sin((x * 0.05) - (time * (isHot ? 4 : 2)));
+        const ecgPeak = (x % 80 > 35 && x % 80 < 45) ? Math.sin(x) * (isHot ? 35 : 18) : pulse * 4;
+        ctx.lineTo(x, centerY - ecgPeak);
+      }
+      ctx.stroke();
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 8. Mechanisms of Evolution Moth Simulator Canvas
+  startEvolutionCanvas(canvasId, env, generation) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+    const isBirch = env === 'green' || env === 'birch';
+
+    const loop = () => {
+      time += 0.03;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.fillStyle = isBirch ? '#F8FAFC' : '#1E293B';
+      ctx.fillRect(0, 0, w, h);
+
+      const lightCount = isBirch ? Math.max(5, 30 - generation * 6) : Math.max(2, 20 - generation * 5);
+      const darkCount = isBirch ? Math.max(2, 10 - generation * 2) : Math.min(30, 8 + generation * 8);
+
+      for (let i = 0; i < lightCount; i++) {
+        const mx = (i * 35 + time * 20) % w;
+        const my = (i * 25 + Math.sin(time + i) * 15) % h;
+        ctx.fillStyle = '#E2E8F0';
+        ctx.beginPath(); ctx.arc(mx, my, 8, 0, Math.PI * 2); ctx.fill();
+      }
+
+      for (let i = 0; i < darkCount; i++) {
+        const mx = (i * 35 + time * 15 + 40) % w;
+        const my = (i * 30 + Math.cos(time + i) * 15) % h;
+        ctx.fillStyle = '#0F172A';
+        ctx.beginPath(); ctx.arc(mx, my, 8, 0, Math.PI * 2); ctx.fill();
+      }
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 9. Ecosystem Carrying Capacity S-Curve Canvas
+  startCarryingCapacityCanvas(canvasId) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+
+    const loop = () => {
+      time += 0.03;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      const groundY = h - 25;
+
+      const capY = groundY - 140;
+      ctx.strokeStyle = '#F59E0B';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath(); ctx.moveTo(0, capY); ctx.lineTo(w, capY); ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.strokeStyle = '#10B981';
+      ctx.lineWidth = 3;
+      ctx.shadowColor = '#10B981';
+      ctx.shadowBlur = 12;
+      ctx.beginPath();
+      ctx.moveTo(10, groundY);
+      for (let x = 10; x <= w; x += 5) {
+        const progress = x / w;
+        const sVal = 1 / (1 + Math.exp(-8 * (progress - 0.4)));
+        const y = groundY - sVal * 140;
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 10. Biotechnology Gene Splicing Canvas
+  startBiotechCanvas(canvasId) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+
+    const loop = () => {
+      time += 0.04;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      const centerY = h / 2;
+
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 3;
+      ctx.shadowColor = '#38BDF8';
+      ctx.shadowBlur = 12;
+
+      for (let x = 20; x < w - 20; x += 8) {
+        const y1 = centerY + Math.sin(time * 2 + x * 0.05) * 35;
+        const y2 = centerY - Math.sin(time * 2 + x * 0.05) * 35;
+
+        ctx.fillStyle = '#A855F7';
+        ctx.beginPath(); ctx.arc(x, y1, 4, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#EC4899';
+        ctx.beginPath(); ctx.arc(x, y2, 4, 0, Math.PI * 2); ctx.fill();
+
+        if (x % 16 === 0) {
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+          ctx.beginPath(); ctx.moveTo(x, y1); ctx.lineTo(x, y2); ctx.stroke();
+        }
+      }
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 11. Plate Tectonics Fault Line Canvas
+  startTectonicsCanvas(canvasId, mode) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+    const isDivergent = mode === 'divergent';
+    const isConvergent = mode === 'convergent';
+
+    const loop = () => {
+      time += 0.04;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      const centerX = w / 2;
+      const groundY = h / 2;
+
+      if (isDivergent) {
+        ctx.fillStyle = '#EF4444';
+        ctx.shadowColor = '#EF4444';
+        ctx.shadowBlur = 20;
+        ctx.fillRect(centerX - 20, groundY - 10, 40, h - groundY + 10);
+      }
+
+      const shiftL = isDivergent ? -Math.sin(time) * 10 : (isConvergent ? Math.sin(time) * 10 : 0);
+      ctx.fillStyle = '#475569';
+      ctx.fillRect(30 + shiftL, groundY - 20, centerX - 40, 60);
+
+      const shiftR = isDivergent ? Math.sin(time) * 10 : (isConvergent ? -Math.sin(time) * 10 : 0);
+      ctx.fillStyle = '#334155';
+      ctx.fillRect(centerX + 10 + shiftR, groundY - 20, centerX - 40, 60);
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 12. Global Climate Greenhouse Heat Trap Canvas
+  startClimateCanvas(canvasId) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+
+    const loop = () => {
+      time += 0.04;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      const groundY = h - 30;
+
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 3;
+      ctx.shadowColor = '#38BDF8';
+      ctx.shadowBlur = 15;
+      ctx.beginPath(); ctx.moveTo(0, 40); ctx.lineTo(w, 40); ctx.stroke();
+
+      for (let i = 0; i < 25; i++) {
+        const px = (i * 25 + time * 30) % w;
+        const py = 45 + Math.sin(time * 3 + i) * 35;
+        ctx.fillStyle = '#EF4444';
+        ctx.shadowColor = '#EF4444';
+        ctx.shadowBlur = 10;
+        ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.fill();
+      }
+
+      ctx.fillStyle = '#10B981';
+      ctx.fillRect(0, groundY, w, 30);
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 13. Global ENSO Trade Winds Canvas
+  startEnsoCanvas(canvasId, mode) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+    const isElNino = mode === 'elnino';
+
+    const loop = () => {
+      time += 0.04;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      const centerY = h / 2;
+
+      const poolX = isElNino ? w * 0.6 : w * 0.2;
+      ctx.fillStyle = '#EF4444';
+      ctx.shadowColor = '#EF4444';
+      ctx.shadowBlur = 20;
+      ctx.beginPath(); ctx.ellipse(poolX, centerY + 20, 75, 25, 0, 0, Math.PI * 2); ctx.fill();
+
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 3;
+      ctx.shadowColor = '#38BDF8';
+      ctx.shadowBlur = 12;
+
+      const dir = isElNino ? 1 : -1;
+      for (let i = 0; i < 4; i++) {
+        const wx = (i * 80 + time * 60 * dir) % w;
+        ctx.beginPath(); ctx.moveTo(wx, centerY - 25); ctx.lineTo(wx + 25 * dir, centerY - 25); ctx.stroke();
+      }
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
+  // 14. Sustainability Smart Eco-City & Waste Canvas
+  startSustainabilityCanvas(canvasId) {
+    const setup = this.setupCanvas(canvasId, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    let time = 0;
+
+    const loop = () => {
+      time += 0.04;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      const groundY = h - 25;
+
+      ctx.fillStyle = '#10B981';
+      ctx.shadowColor = '#10B981';
+      ctx.shadowBlur = 15;
+      ctx.fillRect(30, groundY - 50, 40, 50);
+      ctx.fillRect(85, groundY - 70, 50, 70);
+
+      for (let i = 0; i < 20; i++) {
+        const px = (i * 20 + time * 25) % w;
+        const py = groundY - 20 - (Math.sin(time + i) * 35);
+        ctx.fillStyle = '#34D399';
+        ctx.beginPath(); ctx.arc(px, py, 3.5, 0, Math.PI * 2); ctx.fill();
+      }
+
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+  },
+
   renderPhysicalVsChemicalActivity(container) {
     const isChemical = this.changeTypeMode === 'chemical';
 
@@ -1222,110 +1861,68 @@ const Experiment = {
         </div>
       `;
     } else {
-      // Combined Result Screen
-      if (isIron) {
-        html += `
-          <!-- Iron + Oxygen Rusting Visual Result -->
-          <div class="exp-result-container chemical-result">
-            <div class="reaction-animation-box">
-              <div class="rusting-visual">
-                <span>🔩</span>
-                <span style="font-size:1.5rem;">➡️</span>
-                <span class="rust-anim-item">🟤</span>
-              </div>
+      // 10x Cooler Canvas & Sci-Fi Telemetry Dashboard Result
+      html += `
+        <div class="exp-result-container chemical-result">
+          <div class="exp-canvas-box-wrapper">
+            <div class="exp-hud-bar">
+              <span class="exp-hud-title">🧪 OXIDATION & REACTION SIMULATOR</span>
+              <span class="exp-hud-status active">● REACTION ACTIVE</span>
             </div>
-            <div class="result-badge chemical">Chemical Reaction • Rust (Iron Oxide)</div>
+            <canvas id="canvasChemReact" class="exp-sim-canvas"></canvas>
           </div>
 
-          <!-- Explanation Section -->
+          <div class="telemetry-grid">
+            <div class="telemetry-card">
+              <div class="telemetry-icon">${isIron ? '🔩' : '🍎'}</div>
+              <div class="telemetry-label">${isIron ? 'Oxide Layer' : 'Browning'}</div>
+              <div class="telemetry-value">${isIron ? '2.8' : '75%'}</div>
+              <div class="telemetry-unit">${isIron ? 'mm Fe₂O₃' : 'Melanin Index'}</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 75%;"></div></div>
+            </div>
+            <div class="telemetry-card">
+              <div class="telemetry-icon">💨</div>
+              <div class="telemetry-label">O₂ Absorbed</div>
+              <div class="telemetry-value">${isIron ? '180' : '35'}</div>
+              <div class="telemetry-unit">${isIron ? 'mL O₂ Gas' : 'µL O₂ Gas'}</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 85%;"></div></div>
+            </div>
+            <div class="telemetry-card">
+              <div class="telemetry-icon">🧪</div>
+              <div class="telemetry-label">Reaction State</div>
+              <div class="telemetry-value">NEW</div>
+              <div class="telemetry-unit">${isIron ? 'Iron Oxide' : 'Polyphenol Oxide'}</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
+            </div>
+          </div>
+
+          <div class="result-badge chemical">
+            ${isIron ? '🔩 Chemical Reaction • Rust (Fe₂O₃ Iron Oxide Formed)' : '🍎 Chemical Reaction • Enzymatic Browning Compounds Formed'}
+          </div>
+
           <div class="exp-explanation-section">
             <div class="exp-explain-block">
               <h5>What happened?</h5>
-              <p>Iron reacts with oxygen in the presence of moisture to form rust, a new substance called iron oxide.</p>
+              <p>${isIron ? 'Iron atoms reacted chemically with atmospheric oxygen in the presence of water to form iron oxide rust.' : 'Enzymes (polyphenol oxidase) in the cut apple tissue catalyzed oxidation reactions with oxygen, producing brown pigment compounds.'}</p>
             </div>
-
-            <div class="exp-explain-block">
-              <h5>Why is it a chemical reaction?</h5>
-              <ul>
-                <li>A new substance is formed.</li>
-                <li>The iron changes into iron oxide.</li>
-                <li>The change cannot easily be reversed.</li>
-                <li>The formation of rust shows that the iron has reacted chemically with oxygen.</li>
-              </ul>
-            </div>
-
             <div class="exp-key-idea-box chemical-key">
-              💡 <b>Key Idea:</b> Chemical reaction = substances react and form one or more new substances.
-            </div>
-
-            <div class="exp-explain-block">
-              <h5 style="color:#38BDF8;">🧪 Suggested Reaction:</h5>
-              <p style="color:#E9D5FF;"><b>Iron + Oxygen + Water → Rust (Iron Oxide)</b></p>
-              <p style="font-size:0.8rem; color:#C4B5FD; margin-top:4px;">Water/moisture helps the rusting process happen, but oxygen is the substance reacting with the iron.</p>
+              💡 <b>Key Idea:</b> Chemical reaction = reactant bonds rearrange into new chemical substances with distinct properties.
             </div>
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
-            🔄 Reset Experiment
+            🔄 Reset Simulator
           </button>
         </div>
-        `;
-      } else {
-        html += `
-          <!-- Apple + Oxygen Browning Visual Result -->
-          <div class="exp-result-container chemical-result">
-            <div class="reaction-animation-box">
-              <div class="apple-browning-visual">
-                <span>🍎</span>
-                <span style="font-size:1.5rem;">➡️</span>
-                <span class="apple-anim-item">🟤</span>
-              </div>
-            </div>
-            <div class="result-badge chemical">Chemical Reaction • Brown Compounds</div>
-          </div>
-
-          <!-- Explanation Section -->
-          <div class="exp-explanation-section">
-            <div class="exp-explain-block">
-              <h5>What happened?</h5>
-              <p>When a cut apple is exposed to oxygen in the air, enzymes in the apple help substances in the apple react with oxygen. This process produces new compounds that cause the exposed surface to turn brown.</p>
-            </div>
-
-            <div class="exp-explain-block">
-              <h5>How does the reaction happen?</h5>
-              <ol>
-                <li>The apple is cut, exposing its inside to air.</li>
-                <li>Oxygen from the air comes into contact with substances inside the apple.</li>
-                <li>Enzymes in the apple help the reaction occur.</li>
-                <li>New brown-colored compounds are produced.</li>
-                <li>The apple's exposed surface gradually becomes brown.</li>
-              </ol>
-            </div>
-
-            <div class="exp-key-idea-box chemical-key">
-              💡 <b>Key Idea:</b> In a chemical reaction, reactants interact and form new products.
-            </div>
-
-            <!-- Information Panel -->
-            <div class="exp-info-panel">
-              <h5>🔬 Reaction: Enzymatic Browning</h5>
-              <div class="exp-info-item"><b>Reactants:</b> 🍎 Compounds in the apple + 💨 Oxygen</div>
-              <div class="exp-info-item"><b>Product:</b> 🟤 Brown-colored compounds</div>
-              <div class="exp-info-item"><b>What causes it?</b> Enzymes in the apple help oxygen react with certain compounds in the exposed apple tissue.</div>
-              <div class="exp-info-item"><b>Where can you see it?</b> This reaction commonly occurs when apples, bananas, potatoes, and other fruits or vegetables are cut and exposed to air.</div>
-            </div>
-          </div>
-
-          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
-            🔄 Reset Experiment
-          </button>
-        </div>
-        `;
-      }
+      `;
     }
 
     html += `</div>`;
     container.innerHTML = html;
+
+    if (this.isCombined) {
+      setTimeout(() => this.startChemicalReactionsCanvas('canvasChemReact', isIron), 40);
+    }
   },
 
   renderAcidsBasesActivity(container) {
@@ -1407,208 +2004,72 @@ const Experiment = {
         </div>
       `;
     } else {
-      // Result Screens for Acids, Bases, and Salts
-      if (mode === 'blue_litmus') {
-        html += `
-          <!-- Blue Litmus + Acid Visual Result -->
-          <div class="exp-result-container chemical-result">
-            <div class="reaction-animation-box">
-              <div class="litmus-anim-visual">
-                <span class="litmus-sphere blue-sphere" title="Blue Litmus"></span>
-                <span style="font-size:1.5rem; color:#8B5CF6;">➡️</span>
-                <span class="litmus-sphere turn-blue-to-red" title="Red Litmus"></span>
-              </div>
+      // 10x Cooler Canvas & Sci-Fi Telemetry Dashboard Result
+      const isAcid = mode === 'blue_litmus';
+      const isBase = mode === 'red_litmus';
+      const isNeut = mode === 'neutralization';
+
+      html += `
+        <div class="exp-result-container chemical-result">
+          <div class="exp-canvas-box-wrapper">
+            <div class="exp-hud-bar">
+              <span class="exp-hud-title">🧪 pH & LITMUS INDICATOR SIMULATOR</span>
+              <span class="exp-hud-status active">● REACTION ACTIVE</span>
             </div>
-            <div class="result-badge chemical">Result: Acid Detected</div>
-            <div class="toast-banner">“Acid detected! The solution is acidic.”</div>
+            <canvas id="canvasAcidsBases" class="exp-sim-canvas"></canvas>
           </div>
 
-          <!-- Explanation Section -->
+          <div class="telemetry-grid">
+            <div class="telemetry-card">
+              <div class="telemetry-icon">🧪</div>
+              <div class="telemetry-label">pH Scale</div>
+              <div class="telemetry-value">${isAcid ? '2.5' : (isBase ? '11.8' : '7.0')}</div>
+              <div class="telemetry-unit">${isAcid ? 'Strong Acid' : (isBase ? 'Strong Base' : 'Neutral pH')}</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${(isAcid ? 25 : (isBase ? 85 : 50))}%;"></div></div>
+            </div>
+            <div class="telemetry-card">
+              <div class="telemetry-icon">🔬</div>
+              <div class="telemetry-label">Primary Ion</div>
+              <div class="telemetry-value">${isAcid ? 'H⁺' : (isBase ? 'OH⁻' : 'H₂O')}</div>
+              <div class="telemetry-unit">${isAcid ? 'Hydronium' : (isBase ? 'Hydroxide' : 'Pure Water')}</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 90%;"></div></div>
+            </div>
+            <div class="telemetry-card">
+              <div class="telemetry-icon">🎨</div>
+              <div class="telemetry-label">Litmus State</div>
+              <div class="telemetry-value">${isAcid ? '🔴 RED' : (isBase ? '🔵 BLUE' : '🟢 SALT')}</div>
+              <div class="telemetry-unit">${isAcid ? 'Acid Shift' : (isBase ? 'Base Shift' : 'NaCl + H₂O')}</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
+            </div>
+          </div>
+
+          <div class="result-badge chemical">
+            ${isAcid ? '🔴 Blue Litmus Turned Red (Acidic pH < 7)' : (isBase ? '🔵 Red Litmus Turned Blue (Basic pH > 7)' : '✨ Neutralization Complete (H⁺ + OH⁻ ➔ H₂O + Salt)')}
+          </div>
+
           <div class="exp-explanation-section">
             <div class="exp-explain-block">
               <h5>What happened?</h5>
-              <p>The acidic solution caused the <b>blue litmus paper to turn red</b>.</p>
+              <p>${isAcid ? 'The acidic solution ($H^+$ ion concentration) transformed the blue litmus pigment into crimson red.' : (isBase ? 'The basic solution ($OH^-$ ion concentration) transformed the red litmus pigment into deep royal blue.' : 'Combining an acid ($H^+$) and a base ($OH^-$) produced neutral water ($H_2O$) and dissolved salt ($NaCl$).')}</p>
             </div>
-
-            <div class="exp-explain-block">
-              <h5>Traits of Acids:</h5>
-              <ul>
-                <li>Acids have a <b>pH below 7</b>.</li>
-                <li>They turn <b>blue litmus paper red</b>.</li>
-                <li>Many acids have a sour taste, but <b>never taste an unknown chemical</b>.</li>
-                <li>Acids can react with certain metals.</li>
-                <li>Strong acids can be corrosive.</li>
-              </ul>
-            </div>
-
             <div class="exp-key-idea-box chemical-key">
-              💡 <b>Key Idea:</b> Blue litmus turns red in an acid.
-            </div>
-
-            <div class="exp-safety-note">
-              ⚠️ <b>Safety Note:</b> Never taste, smell closely, or touch unknown acids or bases. The experiments are simulations for learning.
+              💡 <b>Key Idea:</b> Indicators change color according to $H^+$ and $OH^-$ concentration levels.
             </div>
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
-            🔄 Reset Experiment
+            🔄 Reset Simulator
           </button>
         </div>
-        `;
-      } else if (mode === 'red_litmus') {
-        html += `
-          <!-- Red Litmus + Base Visual Result -->
-          <div class="exp-result-container physical-result">
-            <div class="reaction-animation-box">
-              <div class="litmus-anim-visual">
-                <span class="litmus-sphere red-sphere" title="Red Litmus"></span>
-                <span style="font-size:1.5rem; color:#8B5CF6;">➡️</span>
-                <span class="litmus-sphere turn-red-to-blue" title="Blue Litmus"></span>
-              </div>
-            </div>
-            <div class="result-badge physical">Result: Base Detected</div>
-            <div class="toast-banner">“Base detected! The solution is basic.”</div>
-          </div>
-
-          <!-- Explanation Section -->
-          <div class="exp-explanation-section">
-            <div class="exp-explain-block">
-              <h5>What happened?</h5>
-              <p>The basic solution caused the <b>red litmus paper to turn blue</b>.</p>
-            </div>
-
-            <div class="exp-explain-block">
-              <h5>Traits of Bases:</h5>
-              <ul>
-                <li>Bases have a <b>pH above 7</b>.</li>
-                <li>They turn <b>red litmus paper blue</b>.</li>
-                <li>Many bases feel slippery, but <b>never touch or taste unknown chemicals</b>.</li>
-                <li>Bases can react with acids in a process called <b>neutralization</b>.</li>
-                <li>Strong bases can be corrosive.</li>
-              </ul>
-            </div>
-
-            <div class="exp-key-idea-box physical-key">
-              💡 <b>Key Idea:</b> Red litmus turns blue in a base.
-            </div>
-
-            <!-- Comparison Panel -->
-            <div class="exp-explain-block">
-              <h5>📊 Comparison Panel</h5>
-              <table class="comparison-table">
-                <thead>
-                  <tr>
-                    <th>Property</th>
-                    <th>🧪 Acid</th>
-                    <th>🧪 Base</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><b>pH</b></td>
-                    <td>Below 7</td>
-                    <td>Above 7</td>
-                  </tr>
-                  <tr>
-                    <td><b>Blue Litmus</b></td>
-                    <td>🔵 ➡️ 🔴 Red</td>
-                    <td>Stays blue</td>
-                  </tr>
-                  <tr>
-                    <td><b>Red Litmus</b></td>
-                    <td>Stays red</td>
-                    <td>🔴 ➡️ 🔵 Blue</td>
-                  </tr>
-                  <tr>
-                    <td><b>Common trait</b></td>
-                    <td>Can react with bases</td>
-                    <td>Can react with acids</td>
-                  </tr>
-                  <tr>
-                    <td><b>Reaction</b></td>
-                    <td>Can neutralize bases</td>
-                    <td>Can neutralize acids</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="exp-safety-note">
-              ⚠️ <b>Safety Note:</b> Never taste, smell closely, or touch unknown acids or bases. The experiments are simulations for learning.
-            </div>
-          </div>
-
-          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
-            🔄 Reset Experiment
-          </button>
-        </div>
-        `;
-      } else {
-        html += `
-          <!-- Acid + Base Neutralization Visual Result -->
-          <div class="exp-result-container chemical-result">
-            <div class="reaction-animation-box">
-              <div class="neutralization-anim-box">
-                <span class="neut-particle-1">🧪</span>
-                <span style="font-size:1.5rem;">+</span>
-                <span class="neut-particle-2">🧪</span>
-                <span style="font-size:1.5rem;">➡️</span>
-                <span>💧 🧂</span>
-              </div>
-            </div>
-            <div class="result-badge chemical">Result: Neutralization Reaction</div>
-          </div>
-
-          <!-- Explanation Section -->
-          <div class="exp-explanation-section">
-            <div class="exp-explain-block">
-              <h5>What happened?</h5>
-              <p>When an acid reacts with a base, they can <b>neutralize each other</b>. The reaction produces <b>water and a salt</b>.</p>
-            </div>
-
-            <div class="exp-explain-block">
-              <h5>General Reaction:</h5>
-              <p><b>Acid + Base → Salt + Water</b></p>
-              <p style="font-size:0.84rem; color:#C4B5FD; margin-top:4px;"><b>Example:</b> Hydrochloric Acid + Sodium Hydroxide → Sodium Chloride + Water<br><code>HCl + NaOH → NaCl + H₂O</code></p>
-            </div>
-
-            <div class="exp-explain-block">
-              <h5>What Is Neutralization?</h5>
-              <p>Neutralization is a chemical reaction in which an acid reacts with a base, reducing their acidic and basic properties.</p>
-              <ul style="margin-top:6px;">
-                <li>The acid provides <b>H⁺ ions</b>.</li>
-                <li>The base provides <b>OH⁻ ions</b>.</li>
-                <li><b>H⁺ + OH⁻ → H₂O</b></li>
-                <li>The remaining ions combine to form a <b>salt</b>.</li>
-              </ul>
-            </div>
-
-            <div class="exp-key-idea-box chemical-key">
-              💡 <b>Key Idea:</b> Neutralization occurs when an acid and a base react to form salt and water.
-            </div>
-
-            <!-- Information Panel -->
-            <div class="exp-info-panel">
-              <h5>🔬 Reaction: Neutralization</h5>
-              <div class="exp-info-item"><b>Reactants:</b> 🧪 Acid + 🧪 Base</div>
-              <div class="exp-info-item"><b>Products:</b> 🧂 Salt + 💧 Water</div>
-              <div class="exp-info-item" style="margin-top:4px;"><b>Real-Life Examples ("Where do we see this?"):</b></div>
-              <div class="exp-info-item">• 💊 <b>Antacids</b> — bases can neutralize excess stomach acid.</div>
-              <div class="exp-info-item">• 🌱 <b>Soil treatment</b> — substances can be added to adjust overly acidic soil.</div>
-              <div class="exp-info-item">• 🏭 <b>Wastewater treatment</b> — acids and bases can be neutralized to help control pH.</div>
-            </div>
-          </div>
-
-          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
-            🔄 Reset Experiment
-          </button>
-        </div>
-        `;
-      }
+      `;
     }
 
     html += `</div>`;
     container.innerHTML = html;
+
+    if (this.isCombined) {
+      setTimeout(() => this.startAcidsBasesCanvas('canvasAcidsBases', mode), 40);
+    }
   },
 
   renderChemicalEquationsActivity(container) {
@@ -1674,124 +2135,77 @@ const Experiment = {
         </div>
       `;
     } else {
-      // Combined Result Screen with Prominent Chemical Equation
+      // 10x Cooler Canvas & Sci-Fi Telemetry Dashboard Result
       const eqFormula = isH2O ? '2H₂ + O₂ → 2H₂O' : '2Na + Cl₂ → 2NaCl';
 
       html += `
-        <!-- Reaction Visual Animation -->
         <div class="exp-result-container chemical-result">
-          <div class="reaction-animation-box">
-            <div class="neutralization-anim-box">
-              <span class="neut-particle-1">${isH2O ? '💨' : '🪙'}</span>
-              <span style="font-size:1.5rem;">+</span>
-              <span class="neut-particle-2">${isH2O ? '💨' : '🟢'}</span>
-              <span style="font-size:1.5rem;">➡️</span>
-              <span>${isH2O ? '💧 H₂O' : '🧂 NaCl'}</span>
+          <div class="exp-canvas-box-wrapper">
+            <div class="exp-hud-bar">
+              <span class="exp-hud-title">⚡ ATOMIC FUSION SIMULATOR</span>
+              <span class="exp-hud-status active">● FUSION ACTIVE</span>
             </div>
+            <canvas id="canvasChemEq" class="exp-sim-canvas"></canvas>
           </div>
-          <div class="result-badge chemical">Product: ${isH2O ? 'Water (H₂O)' : 'Sodium Chloride (NaCl)'}</div>
-        </div>
 
-        <!-- MAIN PROMINENT RESULT: CHEMICAL EQUATION -->
-        <div class="eq-main-banner">
-          <div class="eq-banner-title">⚗️ CHEMICAL EQUATION</div>
-          <div class="eq-equation-display">${eqFormula}</div>
-        </div>
-
-        <!-- Explanation & Equation Breakdown -->
-        <div class="exp-explanation-section">
-          <div class="exp-explain-block">
-            <h5>Equation Breakdown:</h5>
-            <div class="eq-symbol-grid">
-              <div class="eq-symbol-item">${isH2O ? '<b>H₂</b> = Hydrogen' : '<b>Na</b> = Sodium'}</div>
-              <div class="eq-symbol-item">${isH2O ? '<b>O₂</b> = Oxygen' : '<b>Cl₂</b> = Chlorine'}</div>
-              <div class="eq-symbol-item">${isH2O ? '<b>H₂O</b> = Water' : '<b>NaCl</b> = Sodium Chloride'}</div>
-              <div class="eq-symbol-item"><b>+</b> = Reacts with</div>
-              <div class="eq-symbol-item"><b>→</b> = Produces</div>
-              <div class="eq-symbol-item"><b>2</b> = Coefficient</div>
+          <div class="telemetry-grid">
+            <div class="telemetry-card">
+              <div class="telemetry-icon">⚛️</div>
+              <div class="telemetry-label">Reactants</div>
+              <div class="telemetry-value">6</div>
+              <div class="telemetry-unit">${isH2O ? '4 H + 2 O' : '2 Na + 2 Cl'}</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
             </div>
-            <div style="font-size:0.86rem; margin-top:8px; color:#E9D5FF;">
-              • <b>Reactants:</b> ${isH2O ? 'Hydrogen and Oxygen' : 'Sodium and Chlorine'}<br>
-              • <b>Product:</b> ${isH2O ? 'Water' : 'Sodium Chloride'}
+            <div class="telemetry-card">
+              <div class="telemetry-icon">💧</div>
+              <div class="telemetry-label">Products</div>
+              <div class="telemetry-value">6</div>
+              <div class="telemetry-unit">${isH2O ? '2 H₂O Molecules' : '2 NaCl Crystals'}</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
+            </div>
+            <div class="telemetry-card">
+              <div class="telemetry-icon">⚖️</div>
+              <div class="telemetry-label">Mass Conservation</div>
+              <div class="telemetry-value">100%</div>
+              <div class="telemetry-unit">Perfect Balance</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
             </div>
           </div>
 
-          <!-- Balance Check Section -->
-          <div class="exp-explain-block">
-            <h5>⚖️ Balance Check</h5>
-            <div class="atom-counter-grid">
-              <div class="atom-count-card">
-                <h6>Reactants</h6>
-                <p>${isH2O ? 'Hydrogen: 4 atoms' : 'Sodium: 2 atoms'}</p>
-                <p>${isH2O ? 'Oxygen: 2 atoms' : 'Chlorine: 2 atoms'}</p>
-              </div>
-              <div class="atom-count-card">
-                <h6>Products</h6>
-                <p>${isH2O ? 'Hydrogen: 4 atoms' : 'Sodium: 2 atoms'}</p>
-                <p>${isH2O ? 'Oxygen: 2 atoms' : 'Chlorine: 2 atoms'}</p>
-              </div>
-            </div>
-            <div class="toast-banner" style="background:rgba(16, 185, 129, 0.25); border-color:rgba(16, 185, 129, 0.4); color:#67E8F9; margin-top:10px;">
-              ✅ <b>BALANCED!</b> Left Side = Right Side! Great job!
-            </div>
-            <p style="font-size:0.84rem; color:#E9D5FF; margin-top:6px;">
-              The equation is balanced because the number of ${isH2O ? 'hydrogen and oxygen' : 'sodium and chlorine'} atoms is the same on both sides.
-            </p>
+          <div class="eq-main-banner">
+            <div class="eq-banner-title">⚗️ BALANCED CHEMICAL EQUATION</div>
+            <div class="eq-equation-display">${eqFormula}</div>
           </div>
 
-          <div class="exp-key-idea-box chemical-key">
-            💡 <b>Key Learning:</b> A chemical equation represents a chemical reaction using chemical formulas and coefficients.
+          <div class="exp-explanation-section">
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>${isH2O ? 'Covalent bonding fused hydrogen and oxygen atoms into water molecules ($2H_2 + O_2 \\rightarrow 2H_2O$).' : 'Ionic bonding transferred electrons between sodium and chlorine to form sodium chloride salt ($2Na + Cl_2 \\rightarrow 2NaCl$).'}</p>
+            </div>
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Matter is neither created nor destroyed in a chemical reaction—atoms are simply rearranged.
+            </div>
           </div>
 
-          <!-- OPTIONAL BALANCING CHALLENGE -->
-          <div class="challenge-card">
-            <div class="challenge-title">🎯 Balancing Challenge</div>
-            <p style="font-size:0.85rem; color:#4C1D95; margin:0;">Fill in the coefficients to balance the equation:</p>
-            <div class="challenge-row">
-              <input type="number" id="coeff1" class="coeff-input" placeholder="?" min="1" max="9">
-              <span>${isH2O ? 'H₂ +' : 'Na +'}</span>
-              <input type="number" id="coeff2" class="coeff-input" placeholder="1" min="1" max="9">
-              <span>${isH2O ? 'O₂ →' : 'Cl₂ →'}</span>
-              <input type="number" id="coeff3" class="coeff-input" placeholder="?" min="1" max="9">
-              <span>${isH2O ? 'H₂O' : 'NaCl'}</span>
-            </div>
-
-            <button class="primary-btn" style="padding:10px 18px; font-size:0.9rem;" onclick="Experiment.checkBalancingChallenge()">
-              Check Balance 🎯
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+            <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
+              🔄 Reset Simulator
             </button>
-
-            ${this.challengeSubmitted ? `
-              <div class="feedback-pill ${this.challengeIsCorrect ? 'correct' : 'incorrect'}">
-                ${this.challengeIsCorrect ? '✅ Correct! The equation is balanced.' : '❌ Try again! Count each type of atom on both sides.'}
-              </div>
-            ` : ''}
-          </div>
-
-          <!-- Key Concepts Panel -->
-          <div class="exp-info-panel">
-            <h5>📚 Key Concepts</h5>
-            <div class="exp-info-item"><b>Reactants:</b> The substances that start the chemical reaction.</div>
-            <div class="exp-info-item"><b>Products:</b> The new substances formed by the reaction.</div>
-            <div class="exp-info-item"><b>Coefficients:</b> Numbers placed in front of chemical formulas to show how many particles or molecules are involved.</div>
-            <div class="exp-info-item"><b>Balanced Chemical Equation:</b> An equation where the number of atoms of each element is equal on both sides.</div>
-            <div class="exp-info-item" style="margin-top:4px; font-weight:700; color:#FDE047;">💡 Important Rule: Never change the small numbers inside a chemical formula when balancing an equation. Change only the coefficients in front.</div>
+            <button class="primary-btn" style="padding:12px; border-radius:14px; font-size:0.9rem;" onclick="Experiment.switchChemicalEquationsMode('${otherMode}')">
+              🔀 ${otherLabel}
+            </button>
           </div>
         </div>
-
-        <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
-          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetActivity()">
-            🔄 Reset Experiment
-          </button>
-          <button class="primary-btn" style="padding:12px; border-radius:14px; font-size:0.9rem;" onclick="Experiment.switchChemicalEquationsMode('${otherMode}')">
-            🔀 ${otherLabel}
-          </button>
-        </div>
-      </div>
       `;
     }
 
     html += `</div>`;
     container.innerHTML = html;
+
+    if (this.isCombined) {
+      setTimeout(() => this.startChemicalEquationsCanvas('canvasChemEq', isH2O), 40);
+    }
+  },
   },
 
   renderBalancingChemicalEquationsActivity(container) {
@@ -1837,7 +2251,37 @@ const Experiment = {
           <div class="exp-sub-title">
             ${isGuided ? '⚖️ Activity: Balance the Chemical Equation (H₂ + O₂ → H₂O)' : '🎯 Practice Challenge: Na + Cl₂ → NaCl'}
           </div>
-          <p class="exp-instruction">Balance the equation by changing the numbers in front of the chemical formulas:</p>
+          <div class="exp-canvas-box-wrapper">
+            <div class="exp-hud-bar">
+              <span class="exp-hud-title">⚖️ STOICHIOMETRY SCALE BALANCE SIMULATOR</span>
+              <span class="exp-hud-status active">● LIVE BALANCE</span>
+            </div>
+            <canvas id="canvasBalancing" class="exp-sim-canvas"></canvas>
+          </div>
+
+          <div class="telemetry-grid">
+            <div class="telemetry-card">
+              <div class="telemetry-icon">⚛️</div>
+              <div class="telemetry-label">Left Pan (Reactants)</div>
+              <div class="telemetry-value">${isGuided ? 2 * c1Val + 2 * c2Val : 1 * c1Val + 2 * c2Val}</div>
+              <div class="telemetry-unit">Atoms</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 75%;"></div></div>
+            </div>
+            <div class="telemetry-card">
+              <div class="telemetry-icon">🧪</div>
+              <div class="telemetry-label">Right Pan (Products)</div>
+              <div class="telemetry-value">${isGuided ? 3 * c3Val : 2 * c3Val}</div>
+              <div class="telemetry-unit">Atoms</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 75%;"></div></div>
+            </div>
+            <div class="telemetry-card">
+              <div class="telemetry-icon">⚖️</div>
+              <div class="telemetry-label">Fulcrum State</div>
+              <div class="telemetry-value">${isBalanced ? 'LEVEL' : 'TILTED'}</div>
+              <div class="telemetry-unit">${isBalanced ? '100% Balanced' : 'Unbalanced'}</div>
+              <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${isBalanced ? 100 : 40}%;"></div></div>
+            </div>
+          </div>
 
           <!-- PROMINENT UNBALANCED EQUATION WITH EDITABLE COEFFICIENT BOXES & STEPPERS -->
           <div class="eq-main-banner" style="background: linear-gradient(135deg, #4C1D95 0%, #2E1065 100%);">
@@ -2039,6 +2483,7 @@ const Experiment = {
     `;
 
     container.innerHTML = html;
+    setTimeout(() => this.startBalancingCanvas('canvasBalancing', c1Val, c2Val, c3Val), 40);
   },
   switchRatesMode(mode) {
     this.ratesMode = mode;
@@ -2156,27 +2601,41 @@ const Experiment = {
 
         html += `
           <div class="exp-result-container ${isWithout ? 'physical-result' : 'chemical-result'}">
-            <div class="rates-animation-box ${isWithout ? 'rates-anim-slow' : 'rates-anim-fast'}">
-              <div class="beaker-base">🧪</div>
-              <div class="particles-layer">
-                ${isWithout ? `
-                  <span class="rate-particle p1">🫧</span>
-                  <span class="rate-particle p2">🫧</span>
-                ` : `
-                  <span class="rate-particle p1">🫧</span>
-                  <span class="rate-particle p2">⚡</span>
-                  <span class="rate-particle p3">🫧</span>
-                  <span class="rate-particle p4">⚡</span>
-                  <span class="rate-particle p5">🫧</span>
-                  <span class="rate-particle spark">✨</span>
-                `}
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">🧪 KINETIC MOLECULAR COLLISION SIMULATOR</span>
+                <span class="exp-hud-status active">● REACTION ACTIVE</span>
+              </div>
+              <canvas id="canvasRates" class="exp-sim-canvas"></canvas>
+            </div>
+
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">⚡</div>
+                <div class="telemetry-label">Collision Rate</div>
+                <div class="telemetry-value">${isWithout ? '120' : '480'}</div>
+                <div class="telemetry-unit">collisions / sec</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${isWithout ? 30 : 95}%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">⛰️</div>
+                <div class="telemetry-label">Activation Energy (Ea)</div>
+                <div class="telemetry-value">${isWithout ? '75.0' : '28.4'}</div>
+                <div class="telemetry-unit">kJ / mol ${isWithout ? 'HIGH' : '⚡ LOW'}</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${isWithout ? 85 : 30}%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">⏱️</div>
+                <div class="telemetry-label">Reaction Speed</div>
+                <div class="telemetry-value">${isWithout ? 'SLOW' : 'FAST'}</div>
+                <div class="telemetry-unit">${isWithout ? 'Standard Pathway' : 'Catalyzed Pathway'}</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${isWithout ? 25 : 100}%;"></div></div>
               </div>
             </div>
 
             <div class="result-badge ${isWithout ? 'slow' : 'faster'}">
-              ${isWithout ? '🐢 SLOW REACTION' : '⚡ FASTER REACTION'}
+              ${isWithout ? '🐢 Slow Reaction Rate (Higher Activation Barrier)' : '⚡ Accelerated Reaction Rate (Catalytic Lowered Ea Pathway)'}
             </div>
-            <div class="rate-speed-tag">Reaction Rate: ${isWithout ? 'Slow' : 'Faster'}</div>
           </div>
 
           <div class="exp-explanation-section" style="margin-top:14px;">
@@ -2222,10 +2681,11 @@ const Experiment = {
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetRatesActivity()">
-            🔄 Reset Experiment
+            🔄 Reset Simulator
           </button>
         </div>
         `;
+        setTimeout(() => this.startRatesCanvas('canvasRates', 'high', !isWithout), 40);
       }
     } else if (mode === 'inhibitor') {
       html += `
@@ -2539,15 +2999,40 @@ const Experiment = {
 
         html += `
           <div class="exp-result-container ${isHot ? 'chemical-result' : 'physical-result'}">
-            <div class="homeo-body-card" style="margin:0; width:100%; border:none; background:transparent; box-shadow:none;">
-              <div class="homeo-body-icon">${isHot ? '🥵' : '🥶'}</div>
-              <div class="homeo-temp-display ${isHot ? 'hot' : 'cold'}">
-                ${isHot ? '37°C → 38°C' : '37°C → 35–36°C'}
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">🫀 HOMEOSTASIS ECG PULSE MONITOR</span>
+                <span class="exp-hud-status active">● REAL-TIME ECG</span>
+              </div>
+              <canvas id="canvasHomeostasis" class="exp-sim-canvas"></canvas>
+            </div>
+
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">💓</div>
+                <div class="telemetry-label">Heart Rate</div>
+                <div class="telemetry-value">${isHot ? '110' : '65'}</div>
+                <div class="telemetry-unit">BPM</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${isHot ? 80 : 45}%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🌡️</div>
+                <div class="telemetry-label">Core Temp</div>
+                <div class="telemetry-value">${isHot ? '38.1' : '35.8'}</div>
+                <div class="telemetry-unit">°C</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${isHot ? 75 : 35}%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🩸</div>
+                <div class="telemetry-label">Vasodilation</div>
+                <div class="telemetry-value">${isHot ? 'WIDENED' : 'NARROWED'}</div>
+                <div class="telemetry-unit">${isHot ? 'Sweat Active' : 'Shivering Active'}</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
               </div>
             </div>
 
             <div class="result-badge maintained">
-              ✅ HOMEOSTASIS MAINTAINED
+              ✅ HOMEOSTASIS MAINTAINED (Negative Feedback Loop Active)
             </div>
           </div>
 
@@ -2635,6 +3120,7 @@ const Experiment = {
           </div>
         </div>
         `;
+        setTimeout(() => this.startHomeostasisCanvas('canvasHomeostasis', mode, cond), 40);
       }
     } else if (mode === 'glucose') {
       html += `
@@ -2984,24 +3470,40 @@ const Experiment = {
 
         html += `
           <div class="exp-result-container ${isGreenEnv ? 'physical-result' : 'chemical-result'}">
-            <div class="evo-env-box ${isGreenEnv ? 'green-bg' : 'brown-bg'}" style="margin:0; width:100%;">
-              <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
-                <span class="gen-tracker-pill">Generation ${gen} of 3</span>
-                <span class="pop-counter-badge">Population: 10</span>
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">🦋 NATURAL SELECTION MOTH SIMULATOR</span>
+                <span class="exp-hud-status active">● GENERATION ${gen} ACTIVE</span>
               </div>
+              <canvas id="canvasEvolution" class="exp-sim-canvas"></canvas>
+            </div>
 
-              <div class="evo-creature-grid">
-                ${greenIcons}${brownIcons}
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🧬</div>
+                <div class="telemetry-label">Generation</div>
+                <div class="telemetry-value">Gen ${gen}</div>
+                <div class="telemetry-unit">Step ${gen} of 3</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${(gen/3)*100}%;"></div></div>
               </div>
-
-              <div style="display:flex; gap:12px; font-size:0.85rem; font-weight:800;">
-                <span style="color:#15803D;">🟢 Green: ${greenCount}</span>
-                <span style="color:#B45309;">🟤 Brown: ${brownCount}</span>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🟢</div>
+                <div class="telemetry-label">Light Phenotype</div>
+                <div class="telemetry-value">${greenCount * 10}%</div>
+                <div class="telemetry-unit">${greenCount} Insects</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${greenCount * 10}%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🟤</div>
+                <div class="telemetry-label">Dark Phenotype</div>
+                <div class="telemetry-value">${brownCount * 10}%</div>
+                <div class="telemetry-unit">${brownCount} Insects</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${brownCount * 10}%;"></div></div>
               </div>
             </div>
 
             <div class="result-badge maintained" style="background:linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);">
-              🧬 POPULATION CHANGED
+              🧬 NATURAL SELECTION SHIFT: ${isGreenEnv ? 'Light Allele Frequency Dominance' : 'Dark Allele Frequency Dominance'}
             </div>
           </div>
 
@@ -3050,6 +3552,7 @@ const Experiment = {
           </div>
         </div>
         `;
+        setTimeout(() => this.startEvolutionCanvas('canvasEvolution', env, gen), 40);
       }
     } else if (mode === 'resistance') {
       html += `
@@ -3306,46 +3809,60 @@ const Experiment = {
       } else {
         html += `
           <div class="exp-result-container physical-result">
-            <div class="pop-graph-box">
-              <div class="pop-graph-header">
-                <span>Rabbit Population Growth</span>
-                <span class="k-line-indicator">Carrying Capacity (K = 100)</span>
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">📈 ECOLOGICAL LOGISTIC S-CURVE SIMULATOR</span>
+                <span class="exp-hud-status active">● POPULATION MONITORING</span>
               </div>
-              <svg viewBox="0 0 300 120" style="width:100%; height:110px; overflow:visible;">
-                <line x1="30" y1="20" x2="290" y2="20" stroke="#FCA5A5" stroke-dasharray="4,4" stroke-width="1.5"/>
-                <line x1="30" y1="100" x2="290" y2="100" stroke="#CBD5E1" stroke-width="1"/>
-                <line x1="30" y1="10" x2="30" y2="100" stroke="#CBD5E1" stroke-width="1"/>
-                <path d="M 30,95 Q 100,90 140,50 T 290,22" fill="none" stroke="#10B981" stroke-width="3.5" stroke-linecap="round"/>
-                <circle cx="290" cy="22" r="5" fill="#059669">
-                  <animate attributeName="r" values="4;7;4" dur="1.5s" repeatCount="indefinite"/>
-                </circle>
-                <text x="15" y="24" font-size="9" fill="#DC2626" font-weight="bold">100</text>
-                <text x="15" y="100" font-size="9" fill="#64748B">0</text>
-                <text x="150" y="115" font-size="9" fill="#64748B" text-anchor="middle">Time (Generations) ➔</text>
-              </svg>
+              <canvas id="canvasCarrying" class="exp-sim-canvas"></canvas>
+            </div>
+
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🐇</div>
+                <div class="telemetry-label">Population (N)</div>
+                <div class="telemetry-value">98</div>
+                <div class="telemetry-unit">Organisms</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 98%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">📏</div>
+                <div class="telemetry-label">Capacity (K)</div>
+                <div class="telemetry-value">100</div>
+                <div class="telemetry-unit">Max Capacity</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🌱</div>
+                <div class="telemetry-label">Growth Stage</div>
+                <div class="telemetry-value">STABLE</div>
+                <div class="telemetry-unit">N ≈ K Equilibrium</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 98%;"></div></div>
+              </div>
             </div>
 
             <div class="result-badge maintained">
-              📈 POPULATION GROWTH (Stable @ ~100)
+              📈 POPULATION EQUILIBRIUM ACHIEVED (N ≈ K = 100 Organisms)
             </div>
           </div>
 
           <div class="exp-explanation-section" style="margin-top:14px;">
             <div class="exp-explain-block">
               <h5>What happened?</h5>
-              <p>When resources were abundant, the rabbit population grew quickly. As the population increased, food, water, and space became more limited. Growth slowed as the population approached the environment's carrying capacity.</p>
+              <p>Initial exponential growth ($dN/dt = rN$) slowed down as population density approached carrying capacity limit ($K = 100$), stabilizing at logistic equilibrium.</p>
             </div>
 
             <div class="exp-key-idea-box chemical-key">
-              💡 <b>Key Idea:</b> Carrying capacity is the largest population an environment can sustainably support with its available resources.
+              💡 <b>Key Idea:</b> Environmental resistance (food, water, space) restricts indefinite exponential population growth.
             </div>
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetCarryingCapacityActivity()">
-            🔄 Reset Experiment
+            🔄 Reset Simulator
           </button>
         </div>
         `;
+        setTimeout(() => this.startCarryingCapacityCanvas('canvasCarrying'), 40);
       }
     } else if (mode === 'capacity') {
       html += `
@@ -3628,58 +4145,60 @@ const Experiment = {
       } else {
         html += `
           <div class="exp-result-container chemical-result">
-            <div class="recombinant-flow">
-              <div class="recombinant-step-card">
-                <span style="font-size:1.5rem;">🧬</span>
-                <span><b>Human Insulin Gene</b> isolated</span>
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">🧬 RECOMBINANT DNA GENE SCANNER</span>
+                <span class="exp-hud-status active">● SPLICING COMPLETE</span>
               </div>
-              <div style="color:#8B5CF6; font-size:1.1rem;">⬇️</div>
-              <div class="recombinant-step-card">
-                <span style="font-size:1.5rem;">🧬</span>
-                <span>Inserted into <b>Bacterial Plasmid</b></span>
+              <canvas id="canvasBiotech" class="exp-sim-canvas"></canvas>
+            </div>
+
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🧬</div>
+                <div class="telemetry-label">Insulin Gene</div>
+                <div class="telemetry-value">SPLICED</div>
+                <div class="telemetry-unit">Target Sequence</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
               </div>
-              <div style="color:#8B5CF6; font-size:1.1rem;">⬇️</div>
-              <div class="recombinant-step-card">
-                <span style="font-size:1.5rem;">🦠</span>
-                <span>Recombinant plasmid put into <b>Bacterial Cell</b></span>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🦠</div>
+                <div class="telemetry-label">Plasmid Host</div>
+                <div class="telemetry-value">E. coli</div>
+                <div class="telemetry-unit">Bacterial Vector</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 90%;"></div></div>
               </div>
-              <div style="color:#8B5CF6; font-size:1.1rem;">⬇️</div>
-              <div class="recombinant-step-card" style="border-color:#10B981; background:#ECFDF5;">
-                <span style="font-size:1.5rem;">💉</span>
-                <span style="color:#065F46;"><b>Bacteria produce Human Insulin Protein!</b></span>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">💉</div>
+                <div class="telemetry-label">Protein Yield</div>
+                <div class="telemetry-value">98.5%</div>
+                <div class="telemetry-unit">Human Insulin</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 98%;"></div></div>
               </div>
             </div>
 
             <div class="result-badge maintained" style="background:linear-gradient(135deg, #10B981 0%, #059669 100%);">
-              🧬 RECOMBINANT DNA CREATED
+              🧬 RECOMBINANT DNA CREATED (Bacterial Plasmid Expression Active)
             </div>
           </div>
 
           <div class="exp-explanation-section" style="margin-top:14px;">
             <div class="exp-explain-block">
               <h5>What happened?</h5>
-              <p>A useful gene can be inserted into a bacterial plasmid. The bacterium can then use the inserted genetic information to produce a desired protein.</p>
-              <div style="font-family:var(--font-heading); font-size:0.86rem; font-weight:800; color:#5B21B6; margin-top:6px;">
-                Human insulin gene → Bacterial cell → Insulin protein
-              </div>
+              <p>Restriction enzymes cut plasmid DNA, allowing insertion of the human insulin gene. Transformed bacterial host cells now express bio-synthetic insulin.</p>
             </div>
 
             <div class="exp-key-idea-box chemical-key">
-              💡 <b>Key Idea:</b> Genetic engineering allows scientists to introduce specific genetic information into organisms to produce useful products.
-            </div>
-
-            <div class="exp-info-panel">
-              <div class="exp-info-item">
-                💉 <b>Real-Life Application (Insulin Production):</b> Genetically engineered microorganisms are used to produce human insulin for diabetic medical treatment.
-              </div>
+              💡 <b>Key Idea:</b> Recombinant DNA technology enables bio-reactors to synthesize essential therapeutic proteins.
             </div>
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetBiotechActivity()">
-            🔄 Reset Experiment
+            🔄 Reset Simulator
           </button>
         </div>
         `;
+        setTimeout(() => this.startBiotechCanvas('canvasBiotech'), 40);
       }
     } else {
       html += `
@@ -3795,38 +4314,60 @@ const Experiment = {
       } else {
         html += `
           <div class="exp-result-container chemical-result">
-            <div class="tectonics-anim-box">
-              <div class="plates-row">
-                <div class="tectonic-plate move-left">🟫 Plate A</div>
-                <div class="magma-rising-anim">🌋</div>
-                <div class="tectonic-plate move-right">🟫 Plate B</div>
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">🌋 TECTONIC FAULT RIFT SIMULATOR</span>
+                <span class="exp-hud-status active">● MAGMA UPRIFT ACTIVE</span>
               </div>
-              <div class="crust-new-badge" style="margin-top:8px;">
-                ✨ New Oceanic Crust Forming
+              <canvas id="canvasTectonics" class="exp-sim-canvas"></canvas>
+            </div>
+
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🌍</div>
+                <div class="telemetry-label">Plate Velocity</div>
+                <div class="telemetry-value">4.2</div>
+                <div class="telemetry-unit">cm / year</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 70%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🌋</div>
+                <div class="telemetry-label">Magma Temp</div>
+                <div class="telemetry-value">1250</div>
+                <div class="telemetry-unit">°C Molten Basalt</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 95%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">⛰️</div>
+                <div class="telemetry-label">Crust Age</div>
+                <div class="telemetry-value">NEW</div>
+                <div class="telemetry-unit">Oceanic Ridge</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
               </div>
             </div>
 
             <div class="result-badge maintained" style="background:linear-gradient(135deg, #EF4444 0%, #B91C1C 100%);">
-              🌋 DIVERGENT BOUNDARY (Plate A ← → Plate B)
+              🌋 DIVERGENT FAULT SEPARATION (Plate A ← → Plate B + Magma Rift)
             </div>
           </div>
 
           <div class="exp-explanation-section" style="margin-top:14px;">
             <div class="exp-explain-block">
               <h5>What happened?</h5>
-              <p>At a divergent boundary, tectonic plates move away from each other. The gap between them opens, magma rises from below, and new crust forms as it cools.</p>
+              <p>Tectonic plates pull apart at divergent boundaries. Decompression melting pushes mantle magma upward, cooling into new basaltic ocean floor crust.</p>
             </div>
 
             <div class="exp-key-idea-box chemical-key">
-              💡 <b>Key Idea:</b> Divergent boundaries pull apart, forming new crust as magma rises to fill the rift.
+              💡 <b>Key Idea:</b> Divergent rift valleys and mid-ocean ridges continuously produce new lithosphere crust.
             </div>
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetTectonicsActivity()">
-            🔄 Reset Experiment
+            🔄 Reset Simulator
           </button>
         </div>
         `;
+        setTimeout(() => this.startTectonicsCanvas('canvasTectonics', mode), 40);
       }
     } else if (mode === 'convergent') {
       html += `
@@ -4013,43 +4554,60 @@ const Experiment = {
       } else {
         html += `
           <div class="exp-result-container chemical-result">
-            <div class="climate-dual-box" style="margin:0;">
-              <div class="earth-model-card">
-                <div style="font-size:0.82rem; font-weight:800; color:#334155;">🌍 Earth A</div>
-                <div class="earth-model-icon">🌍</div>
-                <div class="temp-indicator-pill normal">🌡️ Normal Warming (15°C)</div>
-                <div style="font-size:0.75rem; color:#64748B;">Heat escapes to space</div>
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">🌍 ATMOSPHERIC GREENHOUSE HEAT TRAP SIMULATOR</span>
+                <span class="exp-hud-status active">● INFRARED RETENTION</span>
               </div>
+              <canvas id="canvasClimate" class="exp-sim-canvas"></canvas>
+            </div>
 
-              <div class="earth-model-card enhanced-ghg">
-                <div style="font-size:0.82rem; font-weight:800; color:#991B1B;">🌍 Earth B</div>
-                <div class="earth-model-icon">🌏</div>
-                <div class="temp-indicator-pill retained">🌡️ More Heat Retained (22°C)</div>
-                <div style="font-size:0.75rem; color:#991B1B; font-weight:700;">Gases re-emit heat</div>
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🌡️</div>
+                <div class="telemetry-label">Global Anomaly</div>
+                <div class="telemetry-value">+1.4</div>
+                <div class="telemetry-unit">°C Warming</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 75%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">💨</div>
+                <div class="telemetry-label">CO₂ Concentration</div>
+                <div class="telemetry-value">422</div>
+                <div class="telemetry-unit">PPM Atmosphere</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 85%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🔥</div>
+                <div class="telemetry-label">Radiative Forcing</div>
+                <div class="telemetry-value">2.8</div>
+                <div class="telemetry-unit">W / m² Trapped Heat</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 80%;"></div></div>
               </div>
             </div>
 
             <div class="result-badge maintained" style="background:linear-gradient(135deg, #EF4444 0%, #B91C1C 100%);">
-              🌡️ GREENHOUSE EFFECT (Heat Trapped)
+              🌡️ GREENHOUSE THERMAL TRAP: Infrared Radiative Re-emission Active
             </div>
           </div>
 
           <div class="exp-explanation-section" style="margin-top:14px;">
             <div class="exp-explain-block">
               <h5>What happened?</h5>
-              <p>Greenhouse gases absorb and re-emit some outgoing infrared radiation, helping keep heat in Earth's atmosphere. This natural greenhouse effect makes Earth warm enough to support life. Increasing greenhouse gas concentrations strengthens this heat-trapping effect and contributes to global warming.</p>
+              <p>Shortwave solar radiation enters Earth's atmosphere. The ground absorbs and re-radiates it as longwave thermal infrared heat, which is trapped by atmospheric $CO_2$ and $CH_4$ gas molecules.</p>
             </div>
 
             <div class="exp-key-idea-box chemical-key">
-              💡 <b>Key Idea:</b> Greenhouse gases trap part of Earth's outgoing heat, affecting Earth's temperature.
+              💡 <b>Key Idea:</b> Higher greenhouse gas concentrations decrease Earth's thermal energy escape rate, elevating global temperatures.
             </div>
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetClimateActivity()">
-            🔄 Reset Experiment
+            🔄 Reset Simulator
           </button>
         </div>
         `;
+        setTimeout(() => this.startClimateCanvas('canvasClimate'), 40);
       }
     } else if (mode === 'ocean') {
       html += `
@@ -4250,39 +4808,60 @@ const Experiment = {
       } else {
         html += `
           <div class="exp-result-container chemical-result">
-            <div class="enso-pacific-box" style="background:linear-gradient(180deg, #FDE8E8 0%, #EF4444 100%); border-color:#DC2626;">
-              <div class="enso-map-header">
-                <span>🌏 Asia</span>
-                <span>🔥 Warm Pacific Water Shifts East ➡️</span>
-                <span>🌎 Americas 🌧️</span>
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">🔥 EL NIÑO OCEAN-ATMOSPHERE SIMULATOR</span>
+                <span class="exp-hud-status active">● WARMEST POOL SHIFT</span>
               </div>
-              <div class="enso-water-strip" style="background:rgba(255,255,255,0.45);">
-                <span style="color:#991B1B; font-weight:800;">💨 Trade Winds WEAKENED</span>
-                <span class="enso-status-pill" style="color:#DC2626; border:1px solid #FCA5A5;">Warmer Central/East Pacific</span>
+              <canvas id="canvasEnso" class="exp-sim-canvas"></canvas>
+            </div>
+
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">💨</div>
+                <div class="telemetry-label">Trade Winds</div>
+                <div class="telemetry-value">WEAK</div>
+                <div class="telemetry-unit">Slackened Vector</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 25%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🌊</div>
+                <div class="telemetry-label">Pacific SST</div>
+                <div class="telemetry-value">+2.8</div>
+                <div class="telemetry-unit">°C Anomaly East</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 90%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🌧️</div>
+                <div class="telemetry-label">Precipitation</div>
+                <div class="telemetry-value">EAST SHIFT</div>
+                <div class="telemetry-unit">Walker Cell Displaced</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
               </div>
             </div>
 
             <div class="result-badge maintained" style="background:linear-gradient(135deg, #EF4444 0%, #B91C1C 100%);">
-              🔥 EL NIÑO (Ocean: Warmer East | Winds: Weakened | Rain: Shifts East)
+              🔥 EL NIÑO OSCILLATION: Warm Surface Waters Shifted Eastward
             </div>
           </div>
 
           <div class="exp-explanation-section" style="margin-top:14px;">
             <div class="exp-explain-block">
               <h5>What happened?</h5>
-              <p>During El Niño, unusually warm surface waters develop in the central and eastern tropical Pacific. This changes atmospheric circulation and can influence weather patterns far beyond the Pacific Ocean.</p>
+              <p>Slackening trade winds allow warm western Pacific surface waters to slosh eastward, suppressing deep nutrient upwelling and altering global jet stream storm tracks.</p>
             </div>
 
             <div class="exp-key-idea-box chemical-key">
-              💡 <b>Key Idea:</b> Changes in ocean temperature can affect atmospheric circulation and weather around the world.
+              💡 <b>Key Idea:</b> ENSO demonstrates tight coupling between ocean surface thermal patterns and global atmospheric pressure systems.
             </div>
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetEnsoActivity()">
-            🔄 Reset Experiment
+            🔄 Reset Simulator
           </button>
         </div>
         `;
+        setTimeout(() => this.startEnsoCanvas('canvasEnso', mode), 40);
       }
     } else if (mode === 'lanina') {
       html += `
@@ -4515,37 +5094,60 @@ const Experiment = {
 
         html += `
           <div class="exp-result-container physical-result">
-            <div class="homeo-body-card" style="margin:0; width:100%; background: rgba(30, 27, 75, 0.5); border: 1.5px solid #10B981; border-radius: 20px; padding: 16px;">
-              <div class="homeo-body-icon">♻️</div>
-              <div class="homeo-temp-display" style="background: rgba(6, 78, 59, 0.4); border-color: #10B981; color: #34D399; font-weight: 800; font-size: 1rem; border-radius: 14px; padding: 10px 14px;">
-                Waste Diverted from Landfill: ${divertPercentage}%
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">♻️ SMART ECO-CITY WASTE RECYCLING SIMULATOR</span>
+                <span class="exp-hud-status active">● DIVERSION MONITOR</span>
               </div>
-              <div style="font-size: 0.84rem; font-weight: 700; color: #A7F3D0; margin-top: 8px; text-align: center;">
-                ♻️ Recyclables → Recycling | 🌱 Biodegradable → Composting | 🗑️ Residual → Proper Disposal
+              <canvas id="canvasSust" class="exp-sim-canvas"></canvas>
+            </div>
+
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">♻️</div>
+                <div class="telemetry-label">Landfill Diverted</div>
+                <div class="telemetry-value">${divertPercentage}%</div>
+                <div class="telemetry-unit">Segregated Material</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${divertPercentage}%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🌱</div>
+                <div class="telemetry-label">Compost & Recycled</div>
+                <div class="telemetry-value">${correctCount} / ${items.length}</div>
+                <div class="telemetry-unit">Bins Correct</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${(correctCount/items.length)*100}%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🏙️</div>
+                <div class="telemetry-label">Carbon Offset</div>
+                <div class="telemetry-value">-4.5</div>
+                <div class="telemetry-unit">kg CO₂ Saved</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 85%;"></div></div>
               </div>
             </div>
 
-            <div class="result-badge maintained" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFFFFF; font-weight: 800; font-size: 0.9rem; padding: 10px 18px; border-radius: 16px; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);">
-              ♻️ SUSTAINABLE WASTE MANAGEMENT
+            <div class="result-badge maintained" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); font-weight: 800; font-size: 0.9rem; padding: 10px 18px; border-radius: 16px;">
+              ♻️ SUSTAINABLE ECO-CITY WASTE RECOVERY COMPLETE
             </div>
           </div>
 
           <div class="exp-explanation-section" style="margin-top: 14px;">
-            <div class="exp-explain-block" style="background: rgba(30, 27, 75, 0.4); border: 1.5px solid #231648; border-radius: 18px; padding: 16px; color: #E2E8F0;">
-              <h5 style="color: #38BDF8; font-weight: 800; font-size: 1rem; margin-bottom: 6px;">What happened?</h5>
-              <p style="font-size: 0.88rem; color: #CBD5E1; line-height: 1.5;">Proper waste segregation makes it easier to recycle materials and compost biodegradable waste. This reduces the amount of waste sent to landfills and helps conserve resources.</p>
+            <div class="exp-explain-block">
+              <h5>What happened?</h5>
+              <p>Municipal source-segregation prevents recyclables and organic compost from entering methane-emitting landfill sites.</p>
             </div>
 
-            <div class="exp-key-idea-box chemical-key" style="background: rgba(30, 27, 75, 0.5); border: 1.5px solid #312E81; border-radius: 16px; padding: 12px 16px; color: #FDE68A; font-weight: 800; margin-top: 10px;">
-              💡 <b>Key Idea:</b> Reduce ➔ Reuse ➔ Recycle
+            <div class="exp-key-idea-box chemical-key">
+              💡 <b>Key Idea:</b> Circular economy = Reduce ➔ Reuse ➔ Recycle ➔ Compost.
             </div>
           </div>
 
-          <button class="secondary-btn reset-exp-btn" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid #312E81; color: #E0E7FF; font-weight: 800; padding: 12px; border-radius: 16px; width: 100%; margin-top: 14px; cursor: pointer;" onclick="Experiment.resetSustainabilityActivity()">
-            🔄 Reset Experiment
+          <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetSustainabilityActivity()">
+            🔄 Reset Simulator
           </button>
         </div>
         `;
+        setTimeout(() => this.startSustainabilityCanvas('canvasSust'), 40);
       }
     } else if (mode === 'energy') {
       html += `
@@ -5615,87 +6217,60 @@ const Experiment = {
 
         html += `
           <div class="exp-result-container ${isSolar ? 'physical-result' : 'chemical-result'}">
-            <div class="recombinant-flow">
-              ${isSolar ? `
-                <div class="recombinant-step-card">
-                  <span style="font-size:1.5rem;">☀️</span>
-                  <span><b>Sunlight</b> shines continuously</span>
-                </div>
-                <div style="color:#10B981;">⬇️</div>
-                <div class="recombinant-step-card">
-                  <span style="font-size:1.5rem;">🔲</span>
-                  <span><b>Solar Panels</b> convert photons to electricity</span>
-                </div>
-                <div style="color:#10B981;">⬇️</div>
-                <div class="recombinant-step-card" style="border-color:#10B981; background:rgba(16, 185, 129, 0.25);">
-                  <span style="font-size:1.5rem;">⚡</span>
-                  <span style="color:#67E8F9;"><b>Clean Electricity Generated!</b></span>
-                </div>
-              ` : `
-                <div class="recombinant-step-card">
-                  <span style="font-size:1.5rem;">🪨</span>
-                  <span><b>Coal</b> mined from ground</span>
-                </div>
-                <div style="color:#EF4444;">⬇️</div>
-                <div class="recombinant-step-card">
-                  <span style="font-size:1.5rem;">🔥</span>
-                  <span><b>Combustion</b> generates steam turbine rotation</span>
-                </div>
-                <div style="color:#EF4444;">⬇️</div>
-                <div class="recombinant-step-card" style="border-color:#EF4444; background:rgba(239, 68, 68, 0.25);">
-                  <span style="font-size:1.5rem;">⚡</span>
-                  <span style="color:#FCA5A5;"><b>Electricity Generated (Fuel Consumed)</b></span>
-                </div>
-              `}
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">⚡ HYBRID ENERGY GRID DYNAMICS SIMULATOR</span>
+                <span class="exp-hud-status active">● POWER GENERATING</span>
+              </div>
+              <canvas id="canvasEnergyMix" class="exp-sim-canvas"></canvas>
+            </div>
+
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">${isSolar ? '☀️' : '🪨'}</div>
+                <div class="telemetry-label">Grid Output</div>
+                <div class="telemetry-value">${isSolar ? '450' : '820'}</div>
+                <div class="telemetry-unit">MW Base Power</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${isSolar ? 70 : 95}%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">💨</div>
+                <div class="telemetry-label">Emissions</div>
+                <div class="telemetry-value">${isSolar ? '0' : '920'}</div>
+                <div class="telemetry-unit">g CO₂ / kWh</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${isSolar ? 0 : 90}%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">♻️</div>
+                <div class="telemetry-label">Sustainability</div>
+                <div class="telemetry-value">${isSolar ? 'RENEWABLE' : 'FINITE'}</div>
+                <div class="telemetry-unit">${isSolar ? 'Infinite Sun' : 'Fossil Fuel Depletion'}</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${isSolar ? 100 : 20}%;"></div></div>
+              </div>
             </div>
 
             <div class="result-badge maintained" style="background:${isSolar ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #D97706 0%, #B45309 100%)'};">
-              ${isSolar ? '♻️ RENEWABLE ENERGY (Naturally Replenished)' : '⛏️ NON-RENEWABLE ENERGY (Finite Fossil Fuel)'}
+              ${isSolar ? '♻️ RENEWABLE CLEAN ENERGY GENERATION (Zero Carbon Emissions)' : '⛏️ NON-RENEWABLE FOSSIL FUEL POWER (Combustion & CO₂ Output)'}
             </div>
           </div>
 
           <div class="exp-explanation-section" style="margin-top:14px;">
             <div class="exp-explain-block">
-              <h5>Comparison Summary</h5>
-              <table style="width:100%; border-collapse:collapse; margin-top:6px; font-size:0.82rem; color:#E9D5FF;">
-                <tr style="background:rgba(139, 92, 246, 0.25);">
-                  <th style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3); color:#38BDF8;">Feature</th>
-                  <th style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3); color:#34D399;">☀️ Solar</th>
-                  <th style="padding:6px; border:1px solid rgba(139, 92, 246, 0.3); color:#FDE047;">🪨 Coal</th>
-                </tr>
-                <tr>
-                  <td style="padding:6px; border:1px solid #CBD5E1; font-weight:700;">Type</td>
-                  <td style="padding:6px; border:1px solid #CBD5E1;">Renewable</td>
-                  <td style="padding:6px; border:1px solid #CBD5E1;">Non-renewable</td>
-                </tr>
-                <tr>
-                  <td style="padding:6px; border:1px solid #CBD5E1; font-weight:700;">Replenished</td>
-                  <td style="padding:6px; border:1px solid #CBD5E1;">Yes</td>
-                  <td style="padding:6px; border:1px solid #CBD5E1;">No, takes millions of yrs</td>
-                </tr>
-                <tr>
-                  <td style="padding:6px; border:1px solid #CBD5E1; font-weight:700;">Generation</td>
-                  <td style="padding:6px; border:1px solid #CBD5E1;">Solar panels</td>
-                  <td style="padding:6px; border:1px solid #CBD5E1;">Thermal power plant</td>
-                </tr>
-                <tr>
-                  <td style="padding:6px; border:1px solid #CBD5E1; font-weight:700;">Fuel Consumed</td>
-                  <td style="padding:6px; border:1px solid #CBD5E1;">No</td>
-                  <td style="padding:6px; border:1px solid #CBD5E1;">Yes</td>
-                </tr>
-              </table>
+              <h5>What happened?</h5>
+              <p>${isSolar ? 'Solar photovoltaic cells absorb photons to generate clean electricity without fuel depletion.' : 'Coal combustion releases chemical thermal energy to turn steam turbines, producing carbon dioxide emissions and depleting finite reserves.'}</p>
             </div>
 
             <div class="exp-key-idea-box chemical-key">
-              💡 <b>Key Idea:</b> Renewable resources are naturally replenished, while non-renewable resources are finite and take very long periods to form.
+              💡 <b>Key Idea:</b> Renewable resources replenish continuously, while fossil fuels are finite and deplete reserves.
             </div>
           </div>
 
           <button class="secondary-btn reset-exp-btn" onclick="Experiment.resetEnergyMixActivity()">
-            🔄 Reset Experiment
+            🔄 Reset Simulator
           </button>
         </div>
         `;
+        setTimeout(() => this.startEnergyMixCanvas('canvasEnergyMix', { solar: isSolar, wind: true, hydro: false }), 40);
       }
     } else if (mode === 'mix') {
       html += `
@@ -5738,10 +6313,35 @@ const Experiment = {
       } else {
         html += `
           <div class="exp-result-container physical-result">
-            <div class="homeo-body-card" style="margin:0; width:100%;">
-              <div class="homeo-body-icon">⚡</div>
-              <div class="homeo-temp-display" style="background:#DCFCE7; border-color:#86EFAC; color:#15803D;">
-                Total Clean Electricity Generated: ${totalMW} MW
+            <div class="exp-canvas-box-wrapper">
+              <div class="exp-hud-bar">
+                <span class="exp-hud-title">⚡ RENEWABLE HYBRID ENERGY MIX SIMULATOR</span>
+                <span class="exp-hud-status active">● ECO-GRID ACTIVE</span>
+              </div>
+              <canvas id="canvasEnergyMix" class="exp-sim-canvas"></canvas>
+            </div>
+
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-icon">⚡</div>
+                <div class="telemetry-label">Total Clean Power</div>
+                <div class="telemetry-value">${totalMW}</div>
+                <div class="telemetry-unit">MW Combined</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: ${(totalMW/100)*100}%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">🌿</div>
+                <div class="telemetry-label">Grid Offset</div>
+                <div class="telemetry-value">100%</div>
+                <div class="telemetry-unit">Clean Energy</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 100%;"></div></div>
+              </div>
+              <div class="telemetry-card">
+                <div class="telemetry-icon">♻️</div>
+                <div class="telemetry-label">Emissions</div>
+                <div class="telemetry-value">0</div>
+                <div class="telemetry-unit">g CO₂ Output</div>
+                <div class="telemetry-progress-bar"><div class="telemetry-progress-fill" style="width: 0%;"></div></div>
               </div>
             </div>
 
@@ -5781,7 +6381,6 @@ const Experiment = {
           </button>
         </div>
         `;
-      }
     } else {
       // 📚 FINAL ENERGY PANEL
       html += `
