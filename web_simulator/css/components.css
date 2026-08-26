@@ -5674,6 +5674,11 @@
   transition: filter 0.3s ease, transform 0.3s ease;
 }
 
+.pet-char-img.animated-gif-no-float {
+  animation: none !important;
+  transform: none !important;
+}
+
 .pet-char-img.locked-gray-tint {
   filter: contrast(0.95) opacity(0.85) drop-shadow(0 10px 15px rgba(0, 0, 0, 0.15)) !important;
 }

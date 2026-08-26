@@ -512,7 +512,7 @@ const CharacterSystem = {
           <div class="pet-character-avatar" onclick="CharacterSystem.onTapCharacterModalPet()">
             <div class="pet-speech-bubble" id="modalPetSpeechBubble">${dynamicQuote}</div>
             ${stageImage 
-              ? `<img src="${stageImage}" class="pet-char-img ${isLocked ? 'locked-gray-tint' : ''}" alt="${stage.title}" />` 
+              ? `<img src="${stageImage}" class="pet-char-img ${stage.id === 'graduate' || stageImage.endsWith('.gif') ? 'animated-gif-no-float' : ''} ${isLocked ? 'locked-gray-tint' : ''}" alt="${stage.title}" />` 
               : `<div class="${isLocked ? 'locked-gray-tint' : ''}" style="font-size: 8rem; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));">${stage.icon}</div>`
             }
           </div>

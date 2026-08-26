@@ -427,7 +427,8 @@ class _Mascot3DViewerState extends State<Mascot3DViewer> with TickerProviderStat
               final celVal = _celebrateController.value;
 
               // Physics-based natural floating bobbing (Y offset)
-              final baseFloatY = math.sin(progress * math.pi) * 10.0;
+              final isScientistGif = widget.stage == MascotStage.scientist;
+              final baseFloatY = isScientistGif ? 0.0 : math.sin(progress * math.pi) * 10.0;
               final jumpOffsetY = tapJump * 36.0;
               final celJumpY = math.sin(celVal * math.pi * 2) * 40.0;
               final totalOffsetY = baseFloatY + jumpOffsetY + celJumpY;
@@ -437,11 +438,11 @@ class _Mascot3DViewerState extends State<Mascot3DViewer> with TickerProviderStat
               final celTwist = math.sin(celVal * math.pi * 4) * 0.12;
 
               // Natural body sway / tilt (Z rotation in radians)
-              final bodySwayZ = math.sin(progress * math.pi * 0.8) * 0.06 + _headTiltZ + waveBodySway + celTwist;
+              final bodySwayZ = isScientistGif ? 0.0 : (math.sin(progress * math.pi * 0.8) * 0.06 + _headTiltZ + waveBodySway + celTwist);
 
               // Squash & stretch scale deformation
-              final squashX = 1.0 + math.sin(progress * math.pi) * 0.035 - (tapJump * 0.08) + (math.sin(celVal * math.pi * 2) * 0.12);
-              final stretchY = 1.0 - math.sin(progress * math.pi) * 0.035 + (tapJump * 0.12) + (math.sin(celVal * math.pi * 2) * 0.15);
+              final squashX = isScientistGif ? 1.0 : (1.0 + math.sin(progress * math.pi) * 0.035 - (tapJump * 0.08) + (math.sin(celVal * math.pi * 2) * 0.12));
+              final stretchY = isScientistGif ? 1.0 : (1.0 - math.sin(progress * math.pi) * 0.035 + (tapJump * 0.12) + (math.sin(celVal * math.pi * 2) * 0.15));
 
               // 360 Spin Angle Offset
               final spinAngleY = spinVal * math.pi * 2;
