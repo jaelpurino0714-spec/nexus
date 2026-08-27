@@ -628,13 +628,32 @@ const Auth = {
       try { teacher = JSON.parse(teacherRaw); } catch(e) {}
     }
 
-    const editNameEl = document.getElementById('editNameInput');
-    const editGradeEl = document.getElementById('editGradeInput');
-    const editSectionEl = document.getElementById('editSectionInput');
+    const isTeacher = profile.isTeacher || profile.role === 'teacher' || !!teacher;
 
+    const editNameEl = document.getElementById('editNameInput');
     if (editNameEl && editNameEl.value.trim()) profile.name = editNameEl.value.trim();
-    if (editGradeEl && editGradeEl.value) profile.gradeLevel = editGradeEl.value;
-    if (editSectionEl && editSectionEl.value.trim()) profile.section = editSectionEl.value.trim();
+
+    if (isTeacher) {
+      delete profile.gradeLevel;
+      delete profile.section;
+
+      const editSubjectEl = document.getElementById('editSubjectInput');
+      const editSchoolEl = document.getElementById('editSchoolInput');
+      if (editSubjectEl) profile.subject = editSubjectEl.value;
+      if (editSchoolEl) profile.school = editSchoolEl.value.trim();
+
+      if (!teacher) teacher = { name: profile.name };
+      teacher.name = profile.name;
+      if (profile.subject) teacher.subject = profile.subject;
+      if (profile.school) teacher.school = profile.school;
+      if (this.editPhotoData) teacher.photo = this.editPhotoData;
+      localStorage.setItem(teacherStorageKey, JSON.stringify(teacher));
+    } else {
+      const editGradeEl = document.getElementById('editGradeInput');
+      const editSectionEl = document.getElementById('editSectionInput');
+      if (editGradeEl && editGradeEl.value) profile.gradeLevel = editGradeEl.value;
+      if (editSectionEl && editSectionEl.value.trim()) profile.section = editSectionEl.value.trim();
+    }
 
     if (this.editPhotoData) {
       profile.photo = this.editPhotoData;

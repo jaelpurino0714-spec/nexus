@@ -1558,24 +1558,34 @@
             <p class="photo-hint" style="color: #A5A3C4; font-size: 0.84rem; margin-top: 10px; font-weight: 500;">Tap icon to change photo</p>
           </div>
 
+          <div id="editRoleBadge" style="display: none; text-align: center; margin-bottom: 16px;">
+            <span style="background: rgba(249, 115, 22, 0.2); border: 1.5px solid #F97316; color: #FFEDD5; font-size: 0.82rem; font-weight: 800; padding: 6px 16px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 0 12px rgba(249, 115, 22, 0.3);">
+              👨‍🏫 Educator / Teacher Profile
+            </span>
+          </div>
+
           <div class="form-group" style="margin-bottom: 16px;">
             <label for="editNameInput" style="font-size: 0.88rem; font-weight: 700; color: #38BDF8; display: block; margin-bottom: 8px;">Name</label>
             <input type="text" id="editNameInput" class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 16px; color: #FFFFFF; font-weight: 600; font-size: 1rem; padding: 14px 18px; outline: none; box-sizing: border-box; font-family: var(--font-heading);">
           </div>
 
-          <div class="form-group" style="margin-bottom: 16px;">
+          <!-- STUDENT ONLY FIELDS -->
+          <div id="editGradeGroup" class="form-group" style="margin-bottom: 16px;">
             <label for="editGradeInput" style="font-size: 0.88rem; font-weight: 700; color: #38BDF8; display: block; margin-bottom: 8px;">Grade Level</label>
             <div style="position: relative;">
               <select id="editGradeInput" class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 16px; color: #FFFFFF; font-weight: 600; font-size: 1rem; padding: 14px 18px; outline: none; appearance: none; box-sizing: border-box; font-family: var(--font-heading); cursor: pointer;">
                 <option value="Grade 10" style="background: #1E163B; color: #FFF;">Grade 10</option>
                 <option value="Grade 9" style="background: #1E163B; color: #FFF;">Grade 9</option>
                 <option value="Grade 11" style="background: #1E163B; color: #FFF;">Grade 11</option>
+                <option value="Grade 7" style="background: #1E163B; color: #FFF;">Grade 7</option>
+                <option value="Grade 8" style="background: #1E163B; color: #FFF;">Grade 8</option>
+                <option value="Grade 12" style="background: #1E163B; color: #FFF;">Grade 12</option>
               </select>
               <div style="position: absolute; right: 18px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #A855F7; font-size: 0.85rem;">▼</div>
             </div>
           </div>
 
-          <div class="form-group" style="margin-bottom: 24px;">
+          <div id="editSectionGroup" class="form-group" style="margin-bottom: 24px;">
             <label for="editSectionInput" style="font-size: 0.88rem; font-weight: 700; color: #38BDF8; display: block; margin-bottom: 8px;">Section</label>
             <div style="position: relative;">
               <select id="editSectionInput" class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 16px; color: #FFFFFF; font-weight: 600; font-size: 1rem; padding: 14px 18px; outline: none; appearance: none; box-sizing: border-box; font-family: var(--font-heading); cursor: pointer;">
@@ -1587,6 +1597,28 @@
                 <option value="Tesla" style="background: #1E163B; color: #FFF;">Tesla</option>
               </select>
               <div style="position: absolute; right: 18px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #A855F7; font-size: 0.85rem;">▼</div>
+            </div>
+          </div>
+
+          <!-- TEACHER ONLY CUSTOM FIELDS -->
+          <div id="editTeacherGroup" style="display: none;">
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label for="editSubjectInput" style="font-size: 0.88rem; font-weight: 700; color: #38BDF8; display: block; margin-bottom: 8px;">Subject / Specialization</label>
+              <div style="position: relative;">
+                <select id="editSubjectInput" class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 16px; color: #FFFFFF; font-weight: 600; font-size: 1rem; padding: 14px 18px; outline: none; appearance: none; box-sizing: border-box; font-family: var(--font-heading); cursor: pointer;">
+                  <option value="General Science" style="background: #1E163B; color: #FFF;">General Science</option>
+                  <option value="Earth & Space Science" style="background: #1E163B; color: #FFF;">Earth & Space Science</option>
+                  <option value="Physics" style="background: #1E163B; color: #FFF;">Physics</option>
+                  <option value="Chemistry" style="background: #1E163B; color: #FFF;">Chemistry</option>
+                  <option value="Biology" style="background: #1E163B; color: #FFF;">Biology</option>
+                </select>
+                <div style="position: absolute; right: 18px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #A855F7; font-size: 0.85rem;">▼</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 24px;">
+              <label for="editSchoolInput" style="font-size: 0.88rem; font-weight: 700; color: #38BDF8; display: block; margin-bottom: 8px;">School / Institution (Optional)</label>
+              <input type="text" id="editSchoolInput" class="customize-input" placeholder="e.g. Nexus Science High School" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 16px; color: #FFFFFF; font-weight: 600; font-size: 1rem; padding: 14px 18px; outline: none; box-sizing: border-box; font-family: var(--font-heading);">
             </div>
           </div>
 

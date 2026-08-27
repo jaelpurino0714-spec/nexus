@@ -873,9 +873,45 @@ const Settings = {
       App.showScreen('settingsDataSubScreen');
     } else if (subMenu === 'profile') {
       const profile = DB.getStudentProfile() || {};
-      document.getElementById('editNameInput').value = profile.name || '';
-      document.getElementById('editGradeInput').value = profile.gradeLevel || 'Grade 10';
-      document.getElementById('editSectionInput').value = profile.section || '';
+      const teacherSession = localStorage.getItem('nexus_teacher_session');
+      let teacherObj = null;
+      if (teacherSession) {
+        try { teacherObj = JSON.parse(teacherSession); } catch(e) {}
+      }
+      const isTeacher = profile.isTeacher || profile.role === 'teacher' || !!teacherObj;
+
+      const editNameEl = document.getElementById('editNameInput');
+      if (editNameEl) {
+        editNameEl.value = profile.name || (teacherObj ? teacherObj.name : '') || '';
+      }
+
+      const roleBadge = document.getElementById('editRoleBadge');
+      const gradeGroup = document.getElementById('editGradeGroup');
+      const sectionGroup = document.getElementById('editSectionGroup');
+      const teacherGroup = document.getElementById('editTeacherGroup');
+
+      if (isTeacher) {
+        if (roleBadge) roleBadge.style.display = 'block';
+        if (gradeGroup) gradeGroup.style.display = 'none';
+        if (sectionGroup) sectionGroup.style.display = 'none';
+        if (teacherGroup) teacherGroup.style.display = 'block';
+
+        const editSubject = document.getElementById('editSubjectInput');
+        const editSchool = document.getElementById('editSchoolInput');
+        if (editSubject) editSubject.value = profile.subject || (teacherObj ? teacherObj.subject : '') || 'General Science';
+        if (editSchool) editSchool.value = profile.school || (teacherObj ? teacherObj.school : '') || '';
+      } else {
+        if (roleBadge) roleBadge.style.display = 'none';
+        if (gradeGroup) gradeGroup.style.display = 'block';
+        if (sectionGroup) sectionGroup.style.display = 'block';
+        if (teacherGroup) teacherGroup.style.display = 'none';
+
+        const editGrade = document.getElementById('editGradeInput');
+        const editSection = document.getElementById('editSectionInput');
+        if (editGrade) editGrade.value = profile.gradeLevel || 'Grade 10';
+        if (editSection) editSection.value = profile.section || '';
+      }
+
       App.showScreen('settingsProfileSubScreen');
     } else if (subMenu === 'achievements') {
       Achievements.renderGrid();
