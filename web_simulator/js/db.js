@@ -276,10 +276,10 @@ var DB = {
 
       let ansIndex = 0;
       const ansUpper = (q.correct_answer || '').toUpperCase().trim();
-      if (ansUpper === 'A' || ansUpper === choiceA.toUpperCase().trim()) ansIndex = 0;
-      else if (ansUpper === 'B' || ansUpper === choiceB.toUpperCase().trim()) ansIndex = 1;
-      else if (ansUpper === 'C' || ansUpper === choiceC.toUpperCase().trim()) ansIndex = 2;
-      else if (ansUpper === 'D' || ansUpper === choiceD.toUpperCase().trim()) ansIndex = 3;
+      if (ansUpper === 'A' || (choiceA && ansUpper === choiceA.toUpperCase().trim())) ansIndex = 0;
+      else if (ansUpper === 'B' || (choiceB && ansUpper === choiceB.toUpperCase().trim())) ansIndex = 1;
+      else if (ansUpper === 'C' || (choiceC && ansUpper === choiceC.toUpperCase().trim())) ansIndex = 2;
+      else if (ansUpper === 'D' || (choiceD && ansUpper === choiceD.toUpperCase().trim())) ansIndex = 3;
 
       let qTypeStr = 'mc';
       if (typeId === 2 || q.question_type === 'true_false') qTypeStr = 'tf';
@@ -1343,73 +1343,41 @@ var DB = {
   evaluateAnswerCorrectness(q, selectedChoice) {
     if (!q || selectedChoice === undefined || selectedChoice === null) return false;
 
-    const dbCorrect = String(q.correct_answer || q.correctAnswer || q.answer || '').trim();
-    const eqCorrect = String(q.equivalent_answer || q.equivalentAnswer || q.counterpart || '').trim();
-    const userSel = String(selectedChoice).trim();
+    const letterMap = { 'A': 0, 'B': 1, 'C': 2, 'D': 3, '0': 0, '1': 1, '2': 2, '3': 3, 'a': 0, 'b': 1, 'c': 2, 'd': 3 };
 
-    const letterMap = { 'a': 'a', 'b': 'b', 'c': 'c', 'd': 'd', '0': 'a', '1': 'b', '2': 'c', '3': 'd' };
+    let targetIndex = typeof q.answer === 'number' ? q.answer : -1;
+    const dbCorrect = String(q.correct_answer || q.correctAnswer || '').trim().toUpperCase();
 
-    let dbLower = dbCorrect.toLowerCase();
-    let eqLower = eqCorrect.toLowerCase();
-    let userLower = userSel.toLowerCase();
-
-    if (letterMap[userLower]) {
-      userLower = letterMap[userLower];
+    if (letterMap[dbCorrect] !== undefined) {
+      targetIndex = letterMap[dbCorrect];
+    } else {
+      const choiceA = String(q.choice_a || q.option_a || '').toUpperCase().trim();
+      const choiceB = String(q.choice_b || q.option_b || '').toUpperCase().trim();
+      const choiceC = String(q.choice_c || q.option_c || '').toUpperCase().trim();
+      const choiceD = String(q.choice_d || q.option_d || '').toUpperCase().trim();
+      if (dbCorrect && choiceA && dbCorrect === choiceA) targetIndex = 0;
+      else if (dbCorrect && choiceB && dbCorrect === choiceB) targetIndex = 1;
+      else if (dbCorrect && choiceC && dbCorrect === choiceC) targetIndex = 2;
+      else if (dbCorrect && choiceD && dbCorrect === choiceD) targetIndex = 3;
     }
-    if (letterMap[dbLower]) {
-      dbLower = letterMap[dbLower];
-    }
 
-    // 1. Direct case-insensitive equality
-    if (userLower === dbLower || (eqLower && userLower === eqLower)) return true;
-
-    // 2. Map choices
-    const choicesMap = {
-      a: String(q.choice_a || q.option_a || q.optionA || (q.options ? q.options[0] : '') || '').trim().toLowerCase(),
-      b: String(q.choice_b || q.option_b || q.optionB || (q.options ? q.options[1] : '') || '').trim().toLowerCase(),
-      c: String(q.choice_c || q.option_c || q.optionC || (q.options ? q.options[2] : '') || '').trim().toLowerCase(),
-      d: String(q.choice_d || q.option_d || q.optionD || (q.options ? q.options[3] : '') || '').trim().toLowerCase()
-    };
-
-    // If user selected A/B/C/D letter (or index 0..3)
-    if (['a', 'b', 'c', 'd'].includes(userLower)) {
-      if (dbLower === userLower) return true;
-      const textForUserLetter = choicesMap[userLower];
-      if (textForUserLetter && (textForUserLetter === dbLower || textForUserLetter === eqLower)) {
-        return true;
-      }
-      if (textForUserLetter && dbLower.length > 2 && (textForUserLetter.includes(dbLower) || dbLower.includes(textForUserLetter))) {
-        return true;
+    let userIndex = -1;
+    if (typeof selectedChoice === 'number') {
+      userIndex = selectedChoice;
+    } else {
+      const userUpper = String(selectedChoice).trim().toUpperCase();
+      if (letterMap[userUpper] !== undefined) {
+        userIndex = letterMap[userUpper];
       }
     }
 
-    // If dbCorrect is a letter A/B/C/D (or index 0..3)
-    if (['a', 'b', 'c', 'd'].includes(dbLower)) {
-      if (dbLower === userLower) return true;
-      const textForDbLetter = choicesMap[dbLower];
-      if (textForDbLetter && (textForDbLetter === userLower || textForDbLetter === eqLower)) {
-        return true;
-      }
-      if (textForDbLetter && userLower.length > 2 && (textForDbLetter.includes(userLower) || userLower.includes(textForDbLetter))) {
-        return true;
-      }
+    if (userIndex >= 0 && targetIndex >= 0) {
+      return userIndex === targetIndex;
     }
 
-    // 3. True / False handling
-    const trueSyns = ['true', 't'];
-    const falseSyns = ['false', 'f'];
-    if (q.question_type_id === 2 || q.question_type === 'true_false' || (choicesMap.a === 'true' && choicesMap.b === 'false')) {
-      if (trueSyns.includes(dbLower) && trueSyns.includes(userLower)) return true;
-      if (falseSyns.includes(dbLower) && falseSyns.includes(userLower)) return true;
-    }
-
-    // 4. Substring / Counterpart fallback for text/identification answer (minimum length 3)
-    if (userLower.length >= 3 && (eqLower.length >= 3 || dbLower.length >= 3)) {
-      const targetText = eqLower || dbLower;
-      if (userLower === targetText || userLower.includes(targetText) || targetText.includes(userLower)) return true;
-    }
-
-    return false;
+    const userStr = String(selectedChoice).trim().toLowerCase();
+    const corrStr = String(q.correct_answer || q.correctAnswer || '').trim().toLowerCase();
+    return userStr === corrStr;
   },
 
   async submitPlayerAnswer(gameId, userUuid, questionId, selectedChoice, responseTimeSec = 0) {

@@ -1509,9 +1509,15 @@ const Quiz = {
       this.streak = 0;
       if (feedback) feedback.className = 'feedback-banner wrong';
       const prefixes = ['A', 'B', 'C', 'D'];
+      const letterMap = { 'A': 0, 'B': 1, 'C': 2, 'D': 3, '0': 0, '1': 1, '2': 2, '3': 3 };
+      let corrIdx = typeof q.answer === 'number' ? q.answer : -1;
+      if (corrIdx < 0) {
+        const corrLetter = String(q.correct_answer || q.correctAnswer || 'A').toUpperCase().trim();
+        if (letterMap[corrLetter] !== undefined) corrIdx = letterMap[corrLetter];
+      }
       let correctDisplay = '';
-      if (q.options && typeof q.answer === 'number' && q.options[q.answer]) {
-        correctDisplay = `${prefixes[q.answer] || ''}: ${q.options[q.answer]}`;
+      if (q.options && corrIdx >= 0 && q.options[corrIdx]) {
+        correctDisplay = `${prefixes[corrIdx] || ''}: ${q.options[corrIdx]}`;
       } else if (q.rawAnswer || q.correct_answer) {
         correctDisplay = q.rawAnswer || q.correct_answer;
       } else if (q.choice_a || q.option_a) {
