@@ -1484,12 +1484,25 @@
               </div>
             </button>
 
+            <button class="settings-menu-btn offline-btn" onclick="Auth.toggleOfflineModeInSettings()" style="border: 1.5px solid rgba(56, 189, 248, 0.45); background: linear-gradient(135deg, rgba(14, 30, 60, 0.95) 0%, rgba(20, 45, 90, 0.95) 100%);">
+              <div class="menu-icon-box" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3);">
+                <span class="menu-icon-inner">🎮</span>
+              </div>
+              <div class="menu-info" style="flex: 1;">
+                <h3 style="color: #38BDF8;" id="settingsOfflineTitle">5. Offline Mode (Guest)</h3>
+                <p style="color: #A5A3C4;" id="settingsOfflineSub">Play all 1,491 DepEd Grade 10 Science questions offline</p>
+              </div>
+              <div class="menu-arrow-icon" id="settingsOfflineBadge">
+                <span style="background: #38BDF8; color: #0F172A; font-weight: 800; font-size: 0.72rem; padding: 4px 10px; border-radius: 9999px;">OFFLINE</span>
+              </div>
+            </button>
+
             <button class="settings-menu-btn logout-btn-card" onclick="Auth.logout()">
               <div class="menu-icon-box logout-icon-box">
                 <span class="menu-icon-inner">🚪</span>
               </div>
               <div class="menu-info" style="flex: 1;">
-                <h3 style="color: #F43F5E;">5. Log Out</h3>
+                <h3 style="color: #F43F5E;">6. Log Out</h3>
                 <p style="color: #FCA5A5;">Clear stored profile session and switch role</p>
               </div>
               <div class="menu-arrow-icon">

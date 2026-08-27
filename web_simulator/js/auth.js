@@ -756,6 +756,22 @@ const Auth = {
       if (App.updateUserHeader) App.updateUserHeader();
       if (App.showScreen) App.showScreen('homeScreen');
     }
+  },
+
+  async toggleOfflineModeInSettings() {
+    const db = this.getDB();
+    const profile = db ? db.getStudentProfile() : null;
+    const isCurrentlyGuest = profile && (profile.id === 'guest-user-uuid-0000-0000-000000000000' || profile.username === 'guest');
+
+    if (isCurrentlyGuest) {
+      if (confirm('You are currently playing in Offline Guest Mode. Would you like to switch to online Sign In / Sign Up?')) {
+        this.logout();
+      }
+    } else {
+      if (confirm('Switch to Offline Guest Mode? You can play all 1,491 DepEd Grade 10 Science questions 100% offline without internet connection.')) {
+        await this.loginAsGuest();
+      }
+    }
   }
 };
 

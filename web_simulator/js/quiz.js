@@ -117,9 +117,21 @@ const Quiz = {
       const btn = document.createElement('button');
       btn.className = `term-btn topic-item-btn`;
       btn.onclick = () => this.selectTopic(topicName, topicId);
+      
+      const titleLength = topicName.length;
+      let fontSize = '1.05rem';
+      let lineHeight = '1.3';
+      if (titleLength > 35) {
+        fontSize = '0.82rem';
+        lineHeight = '1.2';
+      } else if (titleLength > 22) {
+        fontSize = '0.90rem';
+        lineHeight = '1.25';
+      }
+
       btn.innerHTML = `
         <div class="topic-info">
-          <div class="term-title" style="color: #FFFFFF; font-size: 1.15rem; font-weight: 800; margin-bottom: 8px; line-height: 1.3;">${topicName}</div>
+          <div class="term-title" style="color: #FFFFFF; font-size: ${fontSize}; font-weight: 800; margin-bottom: 6px; line-height: ${lineHeight}; word-break: break-word;">${topicName}</div>
           <span class="topic-select-pill">Select Topic <span style="font-size: 0.85rem; margin-left: 2px;">➔</span></span>
         </div>
         <div class="topic-graphic-orb">${icon}</div>

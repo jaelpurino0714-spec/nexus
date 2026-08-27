@@ -6153,9 +6153,9 @@
   justify-content: space-between !important;
   gap: 12px !important;
   width: 100% !important;
-  min-height: 105px !important;
+  min-height: 110px !important;
   height: auto !important;
-  padding: 16px 18px !important;
+  padding: 14px 16px !important;
   margin-bottom: 14px !important;
   border-radius: 24px !important;
   background: linear-gradient(135deg, rgba(30, 22, 60, 0.95) 0%, rgba(20, 14, 45, 0.98) 100%) !important;
@@ -6163,7 +6163,7 @@
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
   text-align: left !important;
   position: relative !important;
-  overflow: visible !important;
+  overflow: hidden !important;
   box-sizing: border-box !important;
   cursor: pointer !important;
 }

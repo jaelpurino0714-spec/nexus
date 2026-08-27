@@ -17,6 +17,37 @@ const App = {
     this.bindEvents();
     this.initBgm();
     this.checkInitialAuth();
+    this.initOfflinePromptListener();
+  },
+
+  _suggestPromptShown: false,
+  initOfflinePromptListener() {
+    window.addEventListener('offline', () => {
+      this.suggestOfflineMode();
+    });
+  },
+
+  async suggestOfflineMode() {
+    if (this._suggestPromptShown) return;
+    const profile = DB ? DB.getStudentProfile() : null;
+    if (profile && (profile.id === 'guest-user-uuid-0000-0000-000000000000' || profile.username === 'guest')) {
+      return; // Already in offline mode
+    }
+
+    this._suggestPromptShown = true;
+    const confirmed = await this.showConfirmModal({
+      title: '📶 No Internet Connection Detected',
+      message: 'You appear to be offline. Would you like to switch to Offline Mode and play all 1,491 DepEd Grade 10 Science questions 100% offline?',
+      icon: '📶',
+      confirmText: '🎮 Switch to Offline Mode',
+      cancelText: 'Dismiss'
+    });
+
+    if (confirmed) {
+      if (typeof Auth !== 'undefined' && Auth.loginAsGuest) {
+        await Auth.loginAsGuest();
+      }
+    }
   },
 
   confirm(options) {
