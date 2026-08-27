@@ -3,7 +3,7 @@
 -- Safely creates or updates user profiles table linked to auth.users
 -- ============================================================================
 
--- 1. Create Base Profiles Table if it doesn't exist
+-- 1. Create Base Profiles Table if it doesn''t exist
 CREATE TABLE IF NOT EXISTS public.profiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     created_at TIMESTAMPTZ DEFAULT NOW(),

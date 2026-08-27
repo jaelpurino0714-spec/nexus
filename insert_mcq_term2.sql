@@ -8,7 +8,7 @@
 DELETE FROM public.questions WHERE topic_id IN ('b0000000-0000-0000-0000-000000000201', 'b0000000-0000-0000-0000-000000000202', 'b0000000-0000-0000-0000-000000000203', 'b0000000-0000-0000-0000-000000000204', 'b0000000-0000-0000-0000-000000000205', 'b0000000-0000-0000-0000-000000000206') AND question_type_id = 1;
 
 -- 2. Insert Pre-test Multiple Choice Questions per Topic
--- Topic 1: Ecosystem's Carrying Capacity and Population Growth (Total 15 Pre-test MCQs)
+-- Topic 1: Ecosystem''s Carrying Capacity and Population Growth (Total 15 Pre-test MCQs)
 INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation, is_active) VALUES
 ('b0000000-0000-0000-0000-000000000201', 1, 'pre_test', 'The maximum number of individuals an ecosystem can support long-term without exhausting its resources is called:', 'Population density', 'Carrying capacity', 'Birth rate', 'Death rate', 'B', 'Option B is the correct answer.', true),
 ('b0000000-0000-0000-0000-000000000201', 1, 'pre_test', 'Any factor that prevents a population from growing larger is called a:', 'Limiting factor', 'Density factor', 'Growth factor', 'Carrying factor', 'A', 'Option A is the correct answer.', true),

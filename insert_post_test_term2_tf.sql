@@ -8,7 +8,7 @@
 DELETE FROM public.questions WHERE topic_id IN ('b0000000-0000-0000-0000-000000000201', 'b0000000-0000-0000-0000-000000000202', 'b0000000-0000-0000-0000-000000000203', 'b0000000-0000-0000-0000-000000000204', 'b0000000-0000-0000-0000-000000000205', 'b0000000-0000-0000-0000-000000000206') AND question_type_id = 2;
 
 -- 2. Insert True or False Questions per Topic
--- Topic 1: Ecosystem's Carrying Capacity and Population Growth (Total 30 True/False questions)
+-- Topic 1: Ecosystem''s Carrying Capacity and Population Growth (Total 30 True/False questions)
 INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation, is_active) VALUES
 ('b0000000-0000-0000-0000-000000000201', 2, 'post_test', 'Carrying capacity is the maximum number of individuals an ecosystem can support long-term.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
 ('b0000000-0000-0000-0000-000000000201', 2, 'post_test', 'Limiting factors stop a population from growing beyond available resources.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
@@ -26,7 +26,7 @@ INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, c
 ('b0000000-0000-0000-0000-000000000201', 2, 'post_test', 'Birth rate higher than death rate causes population to increase.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
 ('b0000000-0000-0000-0000-000000000201', 2, 'post_test', 'Immigration means moving out of an area permanently.', 'True', 'False', NULL, NULL, 'False', 'The statement is False.', true),
 ('b0000000-0000-0000-0000-000000000201', 2, 'post_test', 'Emigration reduces the number of individuals in a local population.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
-('b0000000-0000-0000-0000-000000000201', 2, 'post_test', 'Habitat destruction can lower an ecosystem's carrying capacity.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
+('b0000000-0000-0000-0000-000000000201', 2, 'post_test', 'Habitat destruction can lower an ecosystem''s carrying capacity.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
 ('b0000000-0000-0000-0000-000000000201', 2, 'post_test', 'Carrying capacity is fixed and can never change for any reason.', 'True', 'False', NULL, NULL, 'False', 'The statement is False.', true),
 ('b0000000-0000-0000-0000-000000000201', 2, 'post_test', 'Population density counts individuals per unit area or volume.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
 ('b0000000-0000-0000-0000-000000000201', 2, 'post_test', 'Predation helps keep prey populations balanced with resources.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
@@ -76,7 +76,7 @@ INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, c
 
 -- Topic 3: Plate Tectonics (Total 30 True/False questions)
 INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation, is_active) VALUES
-('b0000000-0000-0000-0000-000000000203', 2, 'post_test', 'The Earth's outer layer is broken into moving plates called tectonic plates.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
+('b0000000-0000-0000-0000-000000000203', 2, 'post_test', 'The Earth''s outer layer is broken into moving plates called tectonic plates.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
 ('b0000000-0000-0000-0000-000000000203', 2, 'post_test', 'Plates move because of convection currents in the asthenosphere.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
 ('b0000000-0000-0000-0000-000000000203', 2, 'post_test', 'Divergent boundaries occur where plates move away from each other.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
 ('b0000000-0000-0000-0000-000000000203', 2, 'post_test', 'Convergent boundaries form when plates collide or push together.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
@@ -111,7 +111,7 @@ INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, c
 INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation, is_active) VALUES
 ('b0000000-0000-0000-0000-000000000204', 2, 'post_test', 'Climate is the long-term average pattern of weather conditions in an area.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
 ('b0000000-0000-0000-0000-000000000204', 2, 'post_test', 'Weather describes day-to-day conditions while climate spans decades or longer.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
-('b0000000-0000-0000-0000-000000000204', 2, 'post_test', 'Global warming refers to the rising average temperature of Earth's atmosphere and oceans.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
+('b0000000-0000-0000-0000-000000000204', 2, 'post_test', 'Global warming refers to the rising average temperature of Earth''s atmosphere and oceans.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
 ('b0000000-0000-0000-0000-000000000204', 2, 'post_test', 'Greenhouse gases trap heat and keep Earth warmer than it would be otherwise.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
 ('b0000000-0000-0000-0000-000000000204', 2, 'post_test', 'Carbon dioxide is the main human-caused greenhouse gas driving modern warming.', 'True', 'False', NULL, NULL, 'True', 'The statement is True.', true),
 ('b0000000-0000-0000-0000-000000000204', 2, 'post_test', 'Natural greenhouse effect makes Earth too hot for life to exist.', 'True', 'False', NULL, NULL, 'False', 'The statement is False.', true),
