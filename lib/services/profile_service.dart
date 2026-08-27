@@ -129,6 +129,9 @@ class ProfileService {
           gradeLevel: gradeLevel,
           section: section.trim(),
           createdAt: DateTime.now(),
+          currentStreak: 0,
+          longestStreak: 0,
+          characterXp: 0,
         );
 
         try {
@@ -136,6 +139,9 @@ class ProfileService {
           payload['password'] = password;
           payload['grade_level'] = gradeLevel;
           payload['section'] = section.trim();
+          payload['current_streak'] = 0;
+          payload['longest_streak'] = 0;
+          payload['character_xp'] = 0;
           await _client.from('profiles').upsert(payload);
         } catch (e) {
           print("Profiles table insert warning: $e");
@@ -156,6 +162,9 @@ class ProfileService {
           fullName: cleanFullName,
           username: cleanNickname,
           createdAt: DateTime.now(),
+          currentStreak: 0,
+          longestStreak: 0,
+          characterXp: 0,
         );
         await _secureStorage.write(key: _userUuidKey, value: localUuid);
         await _secureStorage.write(key: _userRoleKey, value: role);

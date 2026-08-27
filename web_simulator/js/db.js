@@ -529,14 +529,18 @@ var DB = {
   // 4. QUIZ ATTEMPTS & ANSWERS (SUPABASE QUIZ_ATTEMPTS TABLE)
   // --------------------------------------------------------------------------
   getQuizResults() {
-    const raw = localStorage.getItem(this.STORAGE_RESULTS);
+    const uuid = this.getUserUUID();
+    const key = uuid ? `${this.STORAGE_RESULTS}_${uuid}` : this.STORAGE_RESULTS;
+    const raw = localStorage.getItem(key);
     return raw ? JSON.parse(raw) : [];
   },
 
   async saveQuizResult(result) {
+    const uuid = this.getUserUUID();
+    const key = uuid ? `${this.STORAGE_RESULTS}_${uuid}` : this.STORAGE_RESULTS;
     const list = this.getQuizResults();
     list.push(result);
-    this.safeSetItem(this.STORAGE_RESULTS, JSON.stringify(list));
+    this.safeSetItem(key, JSON.stringify(list));
 
     if (supabaseClient) {
       try {
@@ -573,15 +577,19 @@ var DB = {
   // 5. ACHIEVEMENTS & USER SESSIONS
   // --------------------------------------------------------------------------
   getUnlockedAchievements() {
-    const raw = localStorage.getItem(this.STORAGE_ACHIEVEMENTS);
+    const uuid = this.getUserUUID();
+    const key = uuid ? `${this.STORAGE_ACHIEVEMENTS}_${uuid}` : this.STORAGE_ACHIEVEMENTS;
+    const raw = localStorage.getItem(key);
     return raw ? JSON.parse(raw) : [];
   },
 
   saveUnlockedAchievement(achId) {
+    const uuid = this.getUserUUID();
+    const key = uuid ? `${this.STORAGE_ACHIEVEMENTS}_${uuid}` : this.STORAGE_ACHIEVEMENTS;
     const list = this.getUnlockedAchievements();
     if (!list.includes(achId)) {
       list.push(achId);
-      this.safeSetItem(this.STORAGE_ACHIEVEMENTS, JSON.stringify(list));
+      this.safeSetItem(key, JSON.stringify(list));
       if (typeof TaskSystem !== 'undefined') {
         TaskSystem.completeTask(`ach_xp_${achId}`, `Achievement Unlocked`, 15);
       }
@@ -743,11 +751,38 @@ var DB = {
     return userQuizzes;
   },
 
-  clearSession() {
+  resetUserData(targetUuid) {
     this._cachedProfile = null;
+    const uuid = targetUuid || this.getUserUUID();
     localStorage.removeItem(this.STORAGE_PROFILE);
     localStorage.removeItem(this.STORAGE_TEACHER);
     localStorage.removeItem(this.STORAGE_USER_UUID);
+    localStorage.removeItem(this.STORAGE_ACHIEVEMENTS);
+    localStorage.removeItem(this.STORAGE_RESULTS);
+    localStorage.removeItem('nexus_completed_tasks');
+
+    if (uuid) {
+      localStorage.removeItem(`${this.STORAGE_ACHIEVEMENTS}_${uuid}`);
+      localStorage.removeItem(`${this.STORAGE_RESULTS}_${uuid}`);
+      localStorage.removeItem(`nexus_completed_tasks_${uuid}`);
+    }
+
+    try {
+      const keys = Object.keys(localStorage);
+      keys.forEach(k => {
+        if (k.startsWith('nexus_unlocked_achievements') || k.startsWith('nexus_quiz_results') || k.startsWith('nexus_completed_tasks')) {
+          localStorage.removeItem(k);
+        }
+      });
+    } catch (e) {}
+
+    try {
+      sessionStorage.removeItem('nexus_session_tab_uuid');
+    } catch (e) {}
+  },
+
+  clearSession() {
+    this.resetUserData();
   },
 
   // --------------------------------------------------------------------------

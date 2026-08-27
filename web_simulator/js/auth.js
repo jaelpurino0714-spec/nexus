@@ -419,6 +419,13 @@ const Auth = {
             gradeLevel: gradeLevel,
             section: section,
             photo: this.uploadedPhotoData || null,
+            streak: 0,
+            current_streak: 0,
+            longestStreak: 0,
+            longest_streak: 0,
+            totalPoints: 0,
+            characterXP: 0,
+            character_xp: 0,
             createdAt: new Date().toISOString()
           };
 
@@ -435,6 +442,10 @@ const Auth = {
               grade_level: gradeLevel,
               section: section,
               photo_url: (this.uploadedPhotoData && this.uploadedPhotoData.length < 50000) ? this.uploadedPhotoData : null,
+              current_streak: 0,
+              longest_streak: 0,
+              character_xp: 0,
+              total_points: 0,
               created_at: new Date().toISOString()
             });
           } catch (e) {
@@ -456,18 +467,29 @@ const Auth = {
           gradeLevel: gradeLevel,
           section: section,
           photo: this.uploadedPhotoData || null,
+          streak: 0,
+          current_streak: 0,
+          longestStreak: 0,
+          longest_streak: 0,
+          totalPoints: 0,
+          characterXP: 0,
+          character_xp: 0,
           createdAt: new Date().toISOString()
         };
       }
 
-      if (profile && db && db.clearSession) {
-        db.clearSession();
-      }
-      if (profile && db && db.saveStudentProfile) {
-        await db.saveStudentProfile(profile);
+      if (profile && db) {
+        if (db.resetUserData) {
+          db.resetUserData(profile.id);
+        } else if (db.clearSession) {
+          db.clearSession();
+        }
       }
       if (profile && db && db.saveUserUUID) {
         db.saveUserUUID(profile.id);
+      }
+      if (profile && db && db.saveStudentProfile) {
+        await db.saveStudentProfile(profile);
       }
 
       if (typeof App !== 'undefined' && App.updateUserHeader) App.updateUserHeader();
@@ -598,8 +620,9 @@ const Auth = {
       createdAt: new Date().toISOString()
     };
 
-    DB.saveStudentProfile(profile);
+    if (DB.resetUserData) DB.resetUserData(uuid);
     DB.saveUserUUID(uuid);
+    DB.saveStudentProfile(profile);
     App.updateUserHeader();
     App.showScreen('homeScreen');
   },
