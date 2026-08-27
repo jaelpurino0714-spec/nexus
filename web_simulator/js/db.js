@@ -577,14 +577,28 @@ var DB = {
   // 5. ACHIEVEMENTS & USER SESSIONS
   // --------------------------------------------------------------------------
   getUnlockedAchievements() {
-    const uuid = this.getUserUUID();
+    const profile = this.getStudentProfile();
+    const results = this.getQuizResults();
+    // A brand new account with 0 quiz attempts and 0 total points MUST always return 0 unlocked achievements
+    if (results.length === 0 && (!profile || !profile.totalPoints || profile.totalPoints === 0)) {
+      return [];
+    }
+
+    const uuid = (profile && profile.id) ? profile.id : this.getUserUUID();
     const key = uuid ? `${this.STORAGE_ACHIEVEMENTS}_${uuid}` : this.STORAGE_ACHIEVEMENTS;
     const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    try {
+      const list = JSON.parse(raw);
+      return Array.isArray(list) ? list : [];
+    } catch (e) {
+      return [];
+    }
   },
 
   saveUnlockedAchievement(achId) {
-    const uuid = this.getUserUUID();
+    const profile = this.getStudentProfile();
+    const uuid = (profile && profile.id) ? profile.id : this.getUserUUID();
     const key = uuid ? `${this.STORAGE_ACHIEVEMENTS}_${uuid}` : this.STORAGE_ACHIEVEMENTS;
     const list = this.getUnlockedAchievements();
     if (!list.includes(achId)) {
@@ -601,6 +615,10 @@ var DB = {
   },
 
   getUserUUID() {
+    const profile = this.getStudentProfile();
+    if (profile && profile.id && profile.id.length === 36 && profile.id.includes('-')) {
+      return profile.id;
+    }
     let uuid = null;
     try {
       uuid = sessionStorage.getItem('nexus_session_tab_uuid');
@@ -608,6 +626,11 @@ var DB = {
 
     const isValidUUID = uuid && uuid.length === 36 && uuid.includes('-');
     if (!isValidUUID) {
+      uuid = localStorage.getItem(this.STORAGE_USER_UUID);
+    }
+
+    const isValidUUID2 = uuid && uuid.length === 36 && uuid.includes('-');
+    if (!isValidUUID2) {
       uuid = (typeof crypto !== 'undefined' && crypto.randomUUID) 
         ? crypto.randomUUID()
         : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -624,6 +647,9 @@ var DB = {
   },
 
   saveUserUUID(uuid) {
+    try {
+      sessionStorage.setItem('nexus_session_tab_uuid', uuid);
+    } catch (e) {}
     this.safeSetItem(this.STORAGE_USER_UUID, uuid);
   },
 
