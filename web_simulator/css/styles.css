@@ -359,11 +359,11 @@ body.fullscreen-mode .app-container {
 }
 
 .app-logo-img {
-  height: 84px;
+  height: 115px;
   width: auto;
-  max-width: 95px;
+  max-width: 130px;
   object-fit: contain;
-  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.85)) drop-shadow(0 0 6px rgba(99, 102, 241, 0.6));
+  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.85)) drop-shadow(0 0 8px rgba(99, 102, 241, 0.6));
   display: block;
   flex-shrink: 0;
   transition: transform 0.2s ease, filter 0.2s ease;
