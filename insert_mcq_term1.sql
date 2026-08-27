@@ -104,7 +104,7 @@ INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, c
 
 -- Topic 4: Chemical Equations (Total 53 items: 15 Pre-test, 38 Post-test)
 INSERT INTO public.questions (topic_id, question_type_id, quiz_type, question, choice_a, choice_b, choice_c, choice_d, correct_answer, explanation, is_active) VALUES
-('b0000000-0000-0000-0000-000000000104', 1, 'post_test', 'Which general equation represents COMBINATION (Synthesis)?', 'AB + CD → AD + CB', 'A + B → AB', 'AB → A + B', 'AB + C → AC + B', 'B', 'Two or more reactants form ONE product.', true),
+('b0000000-0000-0000-0000-000000000104', 1, 'post_test', 'Which general equation represents COMBINATION (Synthesis)?', 'AB + CD → AD + CB', 'A + B → AB', 'AB → A + B', 'AB + C → AC + B', 'C', 'Two or more reactants form ONE product.', true),
 ('b0000000-0000-0000-0000-000000000104', 1, 'post_test', '2Na + Cl₂ → 2NaCl is an example of:', 'Single displacement', 'Combustion', 'Decomposition', 'Combination', 'D', 'Na + Cl combine to make one product, NaCl.', true),
 ('b0000000-0000-0000-0000-000000000104', 1, 'post_test', 'The reaction CaCO₃ → CaO + CO₂ is classified as:', 'Combination', 'Double displacement', 'Decomposition', 'Acid-base reaction', 'C', 'One reactant breaks down into two simpler substances.', true),
 ('b0000000-0000-0000-0000-000000000104', 1, 'post_test', 'What is the general form of DECOMPOSITION?', 'AB + C → AC + B', 'Acid + Base → Salt + Water', 'A + B → AB', 'AB → A + B', 'D', 'Opposite of combination; one becomes two or more substances.', true),
