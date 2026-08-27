@@ -460,6 +460,9 @@ const Auth = {
         };
       }
 
+      if (profile && db && db.clearSession) {
+        db.clearSession();
+      }
       if (profile && db && db.saveStudentProfile) {
         await db.saveStudentProfile(profile);
       }

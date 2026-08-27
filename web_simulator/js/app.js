@@ -19,6 +19,26 @@ const App = {
     this.checkInitialAuth();
   },
 
+  confirm(options) {
+    return new Promise((resolve) => {
+      const title = typeof options === 'string' ? options : (options ? (options.title || 'Confirm Action') : 'Confirm Action');
+      const message = typeof options === 'object' && options ? (options.message || options.text || '') : '';
+
+      if (typeof Modal !== 'undefined' && typeof Modal.showConfirm === 'function') {
+        Modal.showConfirm({
+          title,
+          message,
+          ...options,
+          onConfirm: () => resolve(true),
+          onCancel: () => resolve(false)
+        });
+      } else {
+        const res = window.confirm(`${title}${message ? '\n\n' + message : ''}`);
+        resolve(res);
+      }
+    });
+  },
+
   isExperimentAudioScreen(screenId = this.currentScreen) {
     return (
       screenId === 'experimentTermScreen' ||

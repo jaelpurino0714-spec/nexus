@@ -430,18 +430,33 @@ const TeacherPortal = {
   },
 
   async deleteGame(quizId) {
-    const confirmed = await App.confirm({
-      title: 'Delete Custom Game',
-      message: 'Are you sure you want to permanently delete this custom game?',
-      icon: '🗑️',
-      confirmText: 'Yes, Delete',
-      cancelText: 'Cancel',
-      danger: true
-    });
+    let confirmed = false;
+    if (typeof App !== 'undefined' && typeof App.confirm === 'function') {
+      confirmed = await App.confirm({
+        title: 'Delete Custom Game',
+        message: 'Are you sure you want to permanently delete this custom game?',
+        icon: '🗑️',
+        confirmText: 'Yes, Delete',
+        cancelText: 'Cancel',
+        danger: true
+      });
+    } else {
+      confirmed = window.confirm('Are you sure you want to permanently delete this custom game?');
+    }
     if (!confirmed) return;
-    let customQuizzes = DB.getCustomQuizzes() || [];
+
+    let customQuizzes = JSON.parse(localStorage.getItem('nexus_custom_quizzes') || '[]');
     customQuizzes = customQuizzes.filter(q => q.id !== quizId);
     localStorage.setItem('nexus_custom_quizzes', JSON.stringify(customQuizzes));
+
+    if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+      try {
+        await supabaseClient.from('custom_quizzes').delete().eq('id', quizId);
+      } catch (e) {
+        console.warn('Error deleting remote custom quiz:', e);
+      }
+    }
+
     this.openMyGames();
   },
 

@@ -622,6 +622,14 @@ var DB = {
   async saveCustomQuiz(quizObj) {
     if (!quizObj) return;
 
+    const activeProfile = this.getActiveProfile() || this.getStudentProfile() || {};
+    const userId = activeProfile.id || this.getUserUUID();
+    const username = activeProfile.username || activeProfile.nickname || activeProfile.name || '';
+
+    quizObj.created_by = quizObj.created_by || userId;
+    quizObj.creator_id = quizObj.creator_id || userId;
+    quizObj.creator_username = quizObj.creator_username || username;
+
     // 1. Save to LocalStorage immediately
     const list = JSON.parse(localStorage.getItem('nexus_custom_quizzes') || '[]');
     const existingIdx = list.findIndex(q => q.id === quizObj.id);
@@ -686,10 +694,27 @@ var DB = {
     const raw = localStorage.getItem('nexus_custom_quizzes');
     let localList = raw ? JSON.parse(raw) : [];
 
-    if (supabaseClient) {
+    const activeProfile = this.getActiveProfile() || this.getStudentProfile() || {};
+    const currentUserId = activeProfile.id || this.getUserUUID();
+    const currentUsername = activeProfile.username || activeProfile.nickname || activeProfile.name || '';
+
+    // Filter local quizzes so accounts only see their own created games
+    let userQuizzes = localList.filter(q => {
+      if (q.creator_id || q.created_by || q.creator_username) {
+        return (
+          q.creator_id === currentUserId ||
+          q.created_by === currentUserId ||
+          (currentUsername && q.creator_username === currentUsername)
+        );
+      }
+      return true;
+    });
+
+    if (supabaseClient && currentUserId) {
       supabaseClient
         .from('custom_quizzes')
         .select('*')
+        .eq('created_by', currentUserId)
         .then(({ data: remoteQuizzes }) => {
           if (remoteQuizzes && remoteQuizzes.length > 0) {
             let updated = false;
@@ -698,9 +723,11 @@ var DB = {
                 id: rq.id,
                 title: rq.title,
                 term: rq.term_id,
+                created_by: rq.created_by,
+                creator_id: rq.created_by,
                 questions: rq.questions_json || []
               };
-              if (!localList.some(l => l.id === parsed.id || l.title === parsed.title)) {
+              if (!localList.some(l => l.id === parsed.id)) {
                 localList.push(parsed);
                 updated = true;
               }
@@ -713,7 +740,7 @@ var DB = {
         .catch(() => {});
     }
 
-    return localList;
+    return userQuizzes;
   },
 
   clearSession() {
