@@ -244,10 +244,15 @@ const ProgressionSystem = {
 // --------------------------------------------------------------------------
 // 3. CHARACTER SYSTEM
 // --------------------------------------------------------------------------
-const CharacterSystem = {
-  _pendingEvolutionData: null,
-  _selectedGender: null,
-  _genderPromptShown: false,
+  isOfflineMode() {
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) return true;
+    const profile = (typeof DB !== 'undefined' && DB.getStudentProfile) ? DB.getStudentProfile() : null;
+    if (!profile) return true;
+    if (profile.id === 'guest-user-uuid-0000-0000-000000000000' || profile.username === 'guest' || profile.nickname === 'guest' || profile.isOffline === true) {
+      return true;
+    }
+    return false;
+  },
 
   init() {
     this.renderHomeCharacterCard();
@@ -339,6 +344,10 @@ const CharacterSystem = {
   },
 
   openCharacterModal() {
+    if (this.isOfflineMode()) {
+      alert('Interactive mascot companion is disabled in Offline Mode.');
+      return;
+    }
     let modal = document.getElementById('myCharacterPetModal');
     if (!modal) {
       modal = document.createElement('div');
@@ -808,6 +817,17 @@ const CharacterSystem = {
 
   renderHomeCharacterCard() {
     const container = document.getElementById('homeCharacterCard');
+    const myCharBtn = document.getElementById('myCharacterBtn');
+
+    if (this.isOfflineMode()) {
+      if (container) container.style.display = 'none';
+      if (myCharBtn) myCharBtn.style.display = 'none';
+      return;
+    } else {
+      if (myCharBtn) myCharBtn.style.display = '';
+      if (container) container.style.display = '';
+    }
+
     if (!container) return;
 
     const xp = ProgressionSystem.getCurrentXP();
@@ -1135,6 +1155,20 @@ const CharacterSystem = {
     setTimeout(() => {
       toast.classList.add('hidden');
     }, 2800);
+  },
+
+  updateFloatingCompanion(screenId) {
+    const avatar = document.getElementById('webFloatingAvatar');
+    const bubble = document.getElementById('webFloatingSpeech');
+
+    if (this.isOfflineMode()) {
+      if (avatar) avatar.style.display = 'none';
+      if (bubble) bubble.style.display = 'none';
+      return;
+    } else {
+      if (avatar) avatar.style.display = '';
+      if (bubble) bubble.style.display = '';
+    }
   },
 
   triggerEvolutionModal(oldStage, newStage, currentXP) {

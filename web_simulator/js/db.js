@@ -118,42 +118,86 @@ var DB = {
     return formatted;
   },
 
+  OFFLINE_TERMS: [
+    { id: 'b0000000-0000-0000-0000-000000000001', title: 'Term 1: Matter, Chemistry & Life', order_no: 1, order_index: 1, name: 'Term 1' },
+    { id: 'b0000000-0000-0000-0000-000000000002', title: 'Term 2: Living Things & Environment', order_no: 2, order_index: 2, name: 'Term 2' },
+    { id: 'b0000000-0000-0000-0000-000000000003', title: 'Term 3: Force, Motion & Energy', order_no: 3, order_index: 3, name: 'Term 3' }
+  ],
+
+  OFFLINE_TOPICS: {
+    'b0000000-0000-0000-0000-000000000001': [
+      { id: 'b0000000-0000-0000-0000-000000000101', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Physical vs. Chemical Change', order_no: 1 },
+      { id: 'b0000000-0000-0000-0000-000000000102', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Chemical Reactions', order_no: 2 },
+      { id: 'b0000000-0000-0000-0000-000000000103', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Acids, Bases, and Salts', order_no: 3 },
+      { id: 'b0000000-0000-0000-0000-000000000104', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Chemical Equations', order_no: 4 },
+      { id: 'b0000000-0000-0000-0000-000000000105', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Balancing Chemical Equations', order_no: 5 },
+      { id: 'b0000000-0000-0000-0000-000000000106', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Rates of Reactions', order_no: 6 },
+      { id: 'b0000000-0000-0000-0000-000000000107', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Homeostasis', order_no: 7 },
+      { id: 'b0000000-0000-0000-0000-000000000108', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Mechanisms of Evolution', order_no: 8 }
+    ],
+    'b0000000-0000-0000-0000-000000000002': [
+      { id: 'b0000000-0000-0000-0000-000000000201', term_id: 'b0000000-0000-0000-0000-000000000002', title: "Ecosystem's Carrying Capacity and Population Growth", order_no: 1 },
+      { id: 'b0000000-0000-0000-0000-000000000202', term_id: 'b0000000-0000-0000-0000-000000000002', title: 'Biotechnology', order_no: 2 },
+      { id: 'b0000000-0000-0000-0000-000000000203', term_id: 'b0000000-0000-0000-0000-000000000002', title: 'Plate Tectonics', order_no: 3 },
+      { id: 'b0000000-0000-0000-0000-000000000204', term_id: 'b0000000-0000-0000-0000-000000000002', title: 'Global Climate', order_no: 4 },
+      { id: 'b0000000-0000-0000-0000-000000000205', term_id: 'b0000000-0000-0000-0000-000000000002', title: 'Global Interactions (ENSO)', order_no: 5 },
+      { id: 'b0000000-0000-0000-0000-000000000206', term_id: 'b0000000-0000-0000-0000-000000000002', title: 'Global and Local Sustainability', order_no: 6 }
+    ],
+    'b0000000-0000-0000-0000-000000000003': [
+      { id: 'b0000000-0000-0000-0000-000000000301', term_id: 'b0000000-0000-0000-0000-000000000003', title: 'Projectile Motion', order_no: 1 },
+      { id: 'b0000000-0000-0000-0000-000000000302', term_id: 'b0000000-0000-0000-0000-000000000003', title: 'Momentum and Collisions', order_no: 2 },
+      { id: 'b0000000-0000-0000-0000-000000000303', term_id: 'b0000000-0000-0000-0000-000000000003', title: 'Large-Scale Generation and Distribution of Electricity', order_no: 3 },
+      { id: 'b0000000-0000-0000-0000-000000000304', term_id: 'b0000000-0000-0000-0000-000000000003', title: 'Renewable and Non-Renewable Energy Sources', order_no: 4 }
+    ]
+  },
+
   async getTerms() {
-    if (!supabaseClient) return [];
-    try {
-      const { data, error } = await supabaseClient
-        .from('terms')
-        .select('*')
-        .order('order_no', { ascending: true });
-      if (error) throw error;
-      if (data) {
-        return data.map(t => ({
-          ...t,
-          title: this.formatTermTitle(t.title, t.order_no),
-          name: t.name ? t.name.replace(/Quarter/gi, 'Term') : `Term ${t.order_no || 1}`
-        }));
+    if (supabaseClient && (typeof navigator === 'undefined' || navigator.onLine !== false)) {
+      try {
+        const { data, error } = await supabaseClient
+          .from('terms')
+          .select('*')
+          .order('order_no', { ascending: true });
+        if (!error && data && data.length > 0) {
+          return data.map(t => ({
+            ...t,
+            title: this.formatTermTitle(t.title, t.order_no),
+            name: t.name ? t.name.replace(/Quarter/gi, 'Term') : `Term ${t.order_no || 1}`
+          }));
+        }
+      } catch (e) {
+        console.warn('Error fetching terms from Supabase, using offline fallback:', e);
       }
-      return [];
-    } catch (e) {
-      console.error('Error fetching terms from Supabase:', e);
-      return [];
     }
+    return this.OFFLINE_TERMS;
   },
 
   async getTopics(termId) {
-    if (!supabaseClient) return [];
-    try {
-      const { data, error } = await supabaseClient
-        .from('topics')
-        .select('*')
-        .eq('term_id', termId)
-        .order('order_no', { ascending: true });
-      if (error) throw error;
-      return data || [];
-    } catch (e) {
-      console.error('Error fetching topics from Supabase:', e);
-      return [];
+    if (supabaseClient && (typeof navigator === 'undefined' || navigator.onLine !== false)) {
+      try {
+        const { data, error } = await supabaseClient
+          .from('topics')
+          .select('*')
+          .eq('term_id', termId)
+          .order('order_no', { ascending: true });
+        if (!error && data && data.length > 0) {
+          return data;
+        }
+      } catch (e) {
+        console.warn('Error fetching topics from Supabase, using offline fallback:', e);
+      }
     }
+
+    if (termId && this.OFFLINE_TOPICS[termId]) {
+      return this.OFFLINE_TOPICS[termId];
+    }
+
+    // Match by numeric index or prefix
+    if (termId === 'top_1' || String(termId).includes('1') || String(termId).endsWith('01')) return this.OFFLINE_TOPICS['b0000000-0000-0000-0000-000000000001'];
+    if (termId === 'top_2' || String(termId).includes('2') || String(termId).endsWith('02')) return this.OFFLINE_TOPICS['b0000000-0000-0000-0000-000000000002'];
+    if (termId === 'top_3' || String(termId).includes('3') || String(termId).endsWith('03')) return this.OFFLINE_TOPICS['b0000000-0000-0000-0000-000000000003'];
+
+    return this.OFFLINE_TOPICS['b0000000-0000-0000-0000-000000000001'];
   },
 
   async getQuestionTypes() {
