@@ -1679,7 +1679,7 @@ const Quiz = {
         mascotXPAward = 50;
       } else {
         // multiple_choice
-        mascotXPAward = 300;
+        mascotXPAward = 20;
       }
 
       if (typeof ProgressionSystem !== 'undefined' && ProgressionSystem.addXP && mascotXPAward > 0) {
