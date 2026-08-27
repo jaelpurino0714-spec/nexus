@@ -244,6 +244,11 @@ const ProgressionSystem = {
 // --------------------------------------------------------------------------
 // 3. CHARACTER SYSTEM
 // --------------------------------------------------------------------------
+const CharacterSystem = {
+  _pendingEvolutionData: null,
+  _selectedGender: null,
+  _genderPromptShown: false,
+
   isOfflineMode() {
     if (typeof navigator !== 'undefined' && navigator.onLine === false) return true;
     const profile = (typeof DB !== 'undefined' && DB.getStudentProfile) ? DB.getStudentProfile() : null;
