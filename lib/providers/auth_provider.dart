@@ -199,6 +199,38 @@ class AuthNotifier extends StateNotifier<AuthState> {
     );
   }
 
+  Future<bool> loginAsGuest() async {
+    state = state.copyWith(isLoading: true, errorMessage: null);
+    final guestProfile = ProfileModel(
+      id: 'guest-user-uuid-0000-0000-000000000000',
+      role: 'student',
+      name: 'Guest Student',
+      realName: 'Guest Student',
+      fullName: 'Guest Student',
+      nickname: 'guest',
+      username: 'guest',
+      gradeLevel: 'Grade 10',
+      section: 'Science',
+      characterXp: 0,
+      characterStage: 'baby',
+      characterMood: 'idle',
+      currentStreak: 0,
+      longestStreak: 0,
+      coins: 50,
+      unlockedOutfits: ['default'],
+      totalPoints: 0,
+    );
+    await _profileRepo.saveProfile(guestProfile);
+    await _authRepo.saveUserSession(guestProfile.id, 'student');
+    state = state.copyWith(
+      status: AuthStatus.authenticatedStudent,
+      profile: guestProfile,
+      isLoading: false,
+      errorMessage: null,
+    );
+    return true;
+  }
+
   void clearError() {
     state = state.copyWith(errorMessage: null);
   }

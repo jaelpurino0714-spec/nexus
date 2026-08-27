@@ -706,6 +706,56 @@ const Auth = {
     if (typeof App !== 'undefined' && App.showScreen) {
       App.showScreen(App.getHomeScreen ? App.getHomeScreen() : 'homeScreen');
     }
+  },
+
+  async loginAsGuest() {
+    this.clearError();
+    const db = this.getDB();
+    const guestId = 'guest-user-uuid-0000-0000-000000000000';
+    let profile = db.getStudentProfile ? db.getStudentProfile() : null;
+
+    if (!profile || profile.id !== guestId) {
+      profile = {
+        id: guestId,
+        role: 'student',
+        name: 'Guest Student',
+        real_name: 'Guest Student',
+        full_name: 'Guest Student',
+        nickname: 'guest',
+        username: 'guest',
+        gradeLevel: 'Grade 10',
+        section: 'Science',
+        photo: null,
+        petName: 'Mascot',
+        gender: 'male',
+        characterXP: 0,
+        characterStage: 'baby',
+        characterMood: 'idle',
+        streak: 0,
+        longestStreak: 0,
+        coins: 50,
+        unlockedOutfits: ['default'],
+        totalPoints: 0,
+        createdAt: new Date().toISOString()
+      };
+      if (db && db.resetUserData) {
+        db.resetUserData(guestId);
+      }
+    }
+
+    if (db && db.saveStudentProfile) {
+      await db.saveStudentProfile(profile);
+    }
+    if (db && db.saveUserUUID) {
+      db.saveUserUUID(profile.id);
+    }
+
+    localStorage.removeItem((db ? db.STORAGE_TEACHER : null) || 'nexus_teacher_session');
+
+    if (typeof App !== 'undefined') {
+      if (App.updateUserHeader) App.updateUserHeader();
+      if (App.showScreen) App.showScreen('homeScreen');
+    }
   }
 };
 

@@ -172,63 +172,101 @@ var DB = {
   },
 
   async getQuestions(topicId, questionTypeId, quizType) {
-    if (!supabaseClient) return [];
-    try {
-      let query = supabaseClient
-        .from('questions')
-        .select('*')
-        .eq('is_active', true);
+    let rawQuestions = [];
 
-      if (topicId) query = query.eq('topic_id', topicId);
-      if (questionTypeId) query = query.eq('question_type_id', questionTypeId);
-      if (quizType) {
-        const normalizedQuizType = String(quizType).replace('-', '_');
-        query = query.eq('quiz_type', normalizedQuizType);
-      }
-
-      const { data, error } = await query;
-      if (error) throw error;
-      return this._formatQuestions(data || []);
-    } catch (e) {
-      console.error('Error fetching questions from Supabase:', e);
-      return [];
-    }
-  },
-
-  async fetchQuestionsForTerm(termNumber) {
-    if (!supabaseClient) return [];
-    try {
-      const terms = await this.getTerms();
-      const matchedTerm = terms.find(t => t.order_no === termNumber || t.order_index === termNumber);
-
-      if (!matchedTerm) {
-        const { data: allQ } = await supabaseClient
+    if (supabaseClient && (typeof navigator === 'undefined' || navigator.onLine !== false)) {
+      try {
+        let query = supabaseClient
           .from('questions')
           .select('*')
           .eq('is_active', true);
-        return this._formatQuestions(allQ || []);
+
+        if (topicId) query = query.eq('topic_id', topicId);
+        if (questionTypeId) query = query.eq('question_type_id', questionTypeId);
+        if (quizType) {
+          const normalizedQuizType = String(quizType).replace('-', '_');
+          query = query.eq('quiz_type', normalizedQuizType);
+        }
+
+        const { data, error } = await query;
+        if (!error && data && data.length > 0) {
+          rawQuestions = data;
+        }
+      } catch (e) {
+        console.warn('Supabase fetch failed, using offline fallback:', e);
       }
-
-      const topics = await this.getTopics(matchedTerm.id);
-      const topicIds = topics.map(t => t.id);
-
-      let query = supabaseClient
-        .from('questions')
-        .select('*')
-        .eq('is_active', true);
-
-      if (topicIds.length > 0) {
-        query = query.in('topic_id', topicIds);
-      }
-
-      const { data: questions, error: qErr } = await query;
-      if (qErr) throw qErr;
-
-      return this._formatQuestions(questions || []);
-    } catch (e) {
-      console.error('Error fetching questions for term:', e);
-      return [];
     }
+
+    // Offline / Fallback Question Bank from embedded offline question dataset
+    if (rawQuestions.length === 0 && typeof window !== 'undefined' && window.OFFLINE_QUESTIONS_BANK) {
+      const bank = window.OFFLINE_QUESTIONS_BANK || [];
+      const normQuizType = quizType ? String(quizType).replace('-', '_') : null;
+
+      rawQuestions = bank.filter(q => {
+        if (q.is_active === false) return false;
+        if (topicId && q.topic_id !== topicId) return false;
+        if (questionTypeId && q.question_type_id !== Number(questionTypeId)) return false;
+        if (normQuizType && q.quiz_type !== normQuizType) return false;
+        return true;
+      });
+
+      // If specific quiz_type had no match, fallback to topic + format
+      if (rawQuestions.length === 0 && topicId) {
+        rawQuestions = bank.filter(q => {
+          if (q.is_active === false) return false;
+          if (q.topic_id !== topicId) return false;
+          if (questionTypeId && q.question_type_id !== Number(questionTypeId)) return false;
+          return true;
+        });
+      }
+    }
+
+    return this._formatQuestions(rawQuestions || []);
+  },
+
+  async fetchQuestionsForTerm(termNumber) {
+    let rawQuestions = [];
+
+    if (supabaseClient && (typeof navigator === 'undefined' || navigator.onLine !== false)) {
+      try {
+        const terms = await this.getTerms();
+        const matchedTerm = terms.find(t => t.order_no === termNumber || t.order_index === termNumber);
+
+        if (!matchedTerm) {
+          const { data: allQ } = await supabaseClient
+            .from('questions')
+            .select('*')
+            .eq('is_active', true);
+          if (allQ && allQ.length > 0) rawQuestions = allQ;
+        } else {
+          const topics = await this.getTopics(matchedTerm.id);
+          const topicIds = topics.map(t => t.id);
+
+          let query = supabaseClient
+            .from('questions')
+            .select('*')
+            .eq('is_active', true);
+
+          if (topicIds.length > 0) {
+            query = query.in('topic_id', topicIds);
+          }
+
+          const { data: questions, error: qErr } = await query;
+          if (!qErr && questions && questions.length > 0) rawQuestions = questions;
+        }
+      } catch (e) {
+        console.warn('Error fetching questions for term from Supabase, fallback to offline:', e);
+      }
+    }
+
+    if (rawQuestions.length === 0 && typeof window !== 'undefined' && window.OFFLINE_QUESTIONS_BANK) {
+      const bank = window.OFFLINE_QUESTIONS_BANK || [];
+      const termPrefix = `b0000000-0000-0000-0000-000000000${termNumber}`;
+      rawQuestions = bank.filter(q => q.topic_id && q.topic_id.startsWith(termPrefix));
+      if (rawQuestions.length === 0) rawQuestions = bank;
+    }
+
+    return this._formatQuestions(rawQuestions || []);
   },
 
   _getQuestionKey(q) {

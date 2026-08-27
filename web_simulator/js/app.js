@@ -707,6 +707,12 @@ const App = {
       this.updateUserHeader();
       this.showScreen('homeScreen');
     } else {
+      if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+        if (typeof Auth !== 'undefined' && Auth.loginAsGuest) {
+          Auth.loginAsGuest();
+          return;
+        }
+      }
       this.showScreen('loginSelectionScreen');
     }
   },

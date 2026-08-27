@@ -416,6 +416,36 @@ class _AuthScreenState extends ConsumerState<AuthScreen> with SingleTickerProvid
                   : const Text('Sign In 🚀', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
             ),
           ),
+          const SizedBox(height: 10),
+
+          // Guest Mode / Offline Button
+          Container(
+            height: 48,
+            decoration: BoxDecoration(
+              color: const Color(0xFF38BDF8).withOpacity(0.15),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFF38BDF8), width: 1.5),
+            ),
+            child: ElevatedButton(
+              onPressed: isLoading
+                  ? null
+                  : () async {
+                      final success = await ref.read(authProvider.notifier).loginAsGuest();
+                      if (success && mounted) {
+                        context.go('/student/home');
+                      }
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              ),
+              child: const Text(
+                '🎮 Continue as Guest (Offline Mode)',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF38BDF8)),
+              ),
+            ),
+          ),
           const SizedBox(height: 12),
         ],
       ),
