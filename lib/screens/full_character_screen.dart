@@ -101,7 +101,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
                   charName,
                   style: const TextStyle(
                     color: Colors.black87,
-                    fontWeight: FontWeight.extrabold,
+                    fontWeight: FontWeight.w800,
                     fontSize: 18,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -305,7 +305,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
 
                   // Character Growth Progress Bar
                   Column(
-                    crossAlignment: CrossAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -361,7 +361,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
                 ],
               ),
               child: Column(
-                crossAlignment: CrossAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Row(
                     children: [
@@ -425,7 +425,7 @@ class _FullCharacterScreenState extends ConsumerState<FullCharacterScreen> {
                           // Task Details
                           Expanded(
                             child: Column(
-                              crossAlignment: CrossAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   task.title,

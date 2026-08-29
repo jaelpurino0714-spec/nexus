@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/quiz_provider.dart';
 import '../models/question_model.dart';
+import '../services/audio_service.dart';
+import '../providers/character_provider.dart';
 
 class QuizRunnerScreen extends ConsumerStatefulWidget {
   final String topicId;
@@ -177,7 +179,7 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
           onPressed: () => context.pop(),
         ),
         title: Column(
-          crossAxisAlignment: CrossAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
@@ -242,7 +244,7 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Dark Speed Tapping Countdown Time Card
             Container(
@@ -276,7 +278,7 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                     ),
                   ),
                   Column(
-                    crossAxisAlignment: CrossAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       const Text(
                         'SPEED TAPPING COUNTDOWN TIME',
@@ -319,7 +321,7 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                 ],
               ),
               child: Column(
-                crossAlignment: CrossAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
                     currentQ.question.question,

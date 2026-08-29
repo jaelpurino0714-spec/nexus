@@ -106,7 +106,7 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: Column(
-            crossAlignment: CrossAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // 1. Top Header Bar (NEXUS Logo, Grade 10 Pill, Calculator Icon)
               Row(
@@ -121,7 +121,7 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
                       ),
                       const SizedBox(width: 8),
                       Column(
-                        crossAxisAlignment: CrossAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
                           Text(
                             'NEXUS',
@@ -164,7 +164,7 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
                           'Grade 10',
                           style: TextStyle(
                             fontSize: 12,
-                            fontWeight: FontWeight.extrabold,
+                            fontWeight: FontWeight.w800,
                             color: Colors.white,
                           ),
                         ),
@@ -371,7 +371,7 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
-                                    crossAlignment: CrossAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '${quizState.correctCount}',
@@ -429,7 +429,7 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
-                                    crossAlignment: CrossAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '${quizState.wrongCount}',
@@ -577,7 +577,7 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
         border: Border.all(color: const Color(0xFF312E81)),
       ),
       child: Column(
-        crossAlignment: CrossAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -646,7 +646,7 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
-                          crossAlignment: CrossAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               p.name + (isCurrentStudent ? ' (YOU)' : ''),

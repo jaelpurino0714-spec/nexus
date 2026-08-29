@@ -102,7 +102,7 @@ class _JoinQuizScreenState extends ConsumerState<JoinQuizScreen> {
 
   Widget _buildCodeEntryView() {
     return Column(
-      crossAlignment: CrossAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Icon(Icons.key, size: 70, color: Color(0xFF673AB7)),
@@ -154,7 +154,7 @@ class _JoinQuizScreenState extends ConsumerState<JoinQuizScreen> {
     if (lobby == null) return Container();
 
     return Column(
-      crossAlignment: CrossAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Host Info Header
         Card(
@@ -172,7 +172,7 @@ class _JoinQuizScreenState extends ConsumerState<JoinQuizScreen> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
-                    crossAlignment: CrossAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text('QUIZ HOST', style: TextStyle(color: Colors.amberAccent, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1)),
                       const SizedBox(height: 4),

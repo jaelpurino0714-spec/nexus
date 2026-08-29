@@ -51,7 +51,7 @@ class MascotExpressionPicker extends StatelessWidget {
         border: Border.all(color: const Color(0xFFEC4899).withOpacity(0.3)),
       ),
       child: Column(
-        crossAlignment: CrossAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
@@ -117,7 +117,7 @@ class MascotExpressionPicker extends StatelessWidget {
                       style: TextStyle(
                         color: isSelected ? const Color(0xFFEC4899) : Colors.white60,
                         fontSize: 11,
-                        fontWeight: isSelected ? FontWeight.extrabold : FontWeight.w500,
+                        fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
                       ),
                     ),
                   ],

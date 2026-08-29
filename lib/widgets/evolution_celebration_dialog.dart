@@ -65,7 +65,7 @@ class EvolutionCelebrationDialog extends ConsumerWidget {
             Text(
               stage.description,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 14, color: Colors.black68),
+              style: const TextStyle(fontSize: 14, color: Colors.black54),
             ),
             const SizedBox(height: 24),
 

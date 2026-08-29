@@ -48,7 +48,7 @@ class _TeacherLoginScreenState extends ConsumerState<TeacherLoginScreen> {
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
-            crossAxisAlignment: CrossAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Text(
                 '👩‍🏫 Teacher Portal',

@@ -109,7 +109,7 @@ class _LevelUpAnimationFlowState extends State<LevelUpAnimationFlow> with Single
         ],
       ),
       child: Column(
-        crossAlignment: CrossAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header Bar with Play/Pause Button
           Row(
@@ -290,7 +290,7 @@ class _LevelUpAnimationFlowState extends State<LevelUpAnimationFlow> with Single
                     // Active Step Description & Titles
                     Expanded(
                       child: Column(
-                        crossAlignment: CrossAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -364,7 +364,7 @@ class _LevelUpAnimationFlowState extends State<LevelUpAnimationFlow> with Single
                   ),
                   const SizedBox(width: 10),
                   const Column(
-                    crossAlignment: CrossAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
@@ -380,7 +380,7 @@ class _LevelUpAnimationFlowState extends State<LevelUpAnimationFlow> with Single
                       Text(
                         'Evolve with every quiz answer!',
                         style: TextStyle(
-                          color: Colors.white90,
+                          color: Colors.white70,
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                         ),

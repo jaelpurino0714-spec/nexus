@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/character_provider.dart';
+import '../services/character_service.dart';
 
 class GenderSelectionDialog extends ConsumerStatefulWidget {
   const GenderSelectionDialog({super.key});

@@ -84,7 +84,7 @@ class _MascotEvolutionScreenState extends ConsumerState<MascotEvolutionScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Column(
-            crossAlignment: CrossAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 1. Header Banner & Subtitle matching poster header
               Center(
@@ -282,7 +282,7 @@ class _MascotEvolutionScreenState extends ConsumerState<MascotEvolutionScreen> {
             Text(
               sublabel,
               style: TextStyle(
-                color: isSelected ? Colors.white90 : Colors.white38,
+                color: isSelected ? Colors.white70 : Colors.white38,
                 fontSize: 9,
                 fontWeight: FontWeight.w600,
               ),

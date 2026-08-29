@@ -11,6 +11,8 @@ class AudioService {
 
   static const String _bgmVolumeKey = 'nexus_bgm_volume';
   static const String _bgmMutedKey = 'nexus_bgm_muted';
+  static const String _sfxVolumeKey = 'nexus_sfx_volume';
+  static const String _sfxMutedKey = 'nexus_sfx_muted';
   static const String _timerVolumeKey = 'nexus_timer_volume';
   static const String _timerMutedKey = 'nexus_timer_muted';
 

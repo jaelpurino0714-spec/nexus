@@ -100,7 +100,7 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               child: Column(
-                crossAlignment: CrossAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // 1. Top Navigation Bar (Close X, Title Pill, Dots Menu)
                   Row(
@@ -319,7 +319,7 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                                 '3D Evolution',
                                 style: TextStyle(
                                   fontSize: 13,
-                                  fontWeight: FontWeight.extrabold,
+                                  fontWeight: FontWeight.w800,
                                   color: Colors.white,
                                 ),
                               ),
@@ -357,7 +357,7 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                                 gender == 'female' ? '👧 Female' : '👦 Male',
                                 style: const TextStyle(
                                   fontSize: 14,
-                                  fontWeight: FontWeight.extrabold,
+                                  fontWeight: FontWeight.w800,
                                   color: Color(0xFF0284C7),
                                 ),
                               ),
@@ -400,7 +400,7 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                                 'Outfits',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  fontWeight: FontWeight.extrabold,
+                                  fontWeight: FontWeight.w800,
                                   color: Color(0xFF0284C7),
                                 ),
                               ),
@@ -558,7 +558,7 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                       ],
                     ),
                     child: Column(
-                      crossAlignment: CrossAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
                           'Grow your Pet',
@@ -611,7 +611,7 @@ class _CharacterPetModalState extends ConsumerState<CharacterPetModal> {
                                 // Task Details
                                 Expanded(
                                   child: Column(
-                                    crossAlignment: CrossAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         task.title,

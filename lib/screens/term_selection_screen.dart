@@ -80,11 +80,11 @@ class TermSelectionScreen extends ConsumerWidget {
           child: Padding(
             padding: const EdgeInsets.all(22.0),
             child: Row(
-              crossAxisAlignment: CrossAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -110,7 +110,7 @@ class TermSelectionScreen extends ConsumerWidget {
                         subtitle,
                         style: const TextStyle(
                           fontSize: 13,
-                          color: Colors.white90,
+                          color: Colors.white70,
                         ),
                       ),
                     ],

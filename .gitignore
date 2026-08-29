@@ -28,6 +28,9 @@ ephemeral/
 .DS_Store
 Thumbs.db
 
-# Scratch / Temporary
+# Scratch / Temporary & Binaries
 scratch/
+*.apk
+*.apk.idsig
+
 

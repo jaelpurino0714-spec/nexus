@@ -1,0 +1,46 @@
+buildscript {
+    ext.flutter = [
+        compileSdkVersion: 35,
+        minSdkVersion: 21,
+        targetSdkVersion: 35
+    ]
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    if (project.state.executed) {
+        if (project.extensions.findByName("android") != null) {
+            project.android {
+                compileSdkVersion 35
+                buildToolsVersion "35.0.0"
+            }
+        }
+    } else {
+        project.afterEvaluate { p ->
+            if (p.extensions.findByName("android") != null) {
+                p.android {
+                    compileSdkVersion 35
+                    buildToolsVersion "35.0.0"
+                }
+            }
+        }
+    }
+}
+
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

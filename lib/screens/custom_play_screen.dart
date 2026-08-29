@@ -140,7 +140,7 @@ class _CustomPlayScreenState extends ConsumerState<CustomPlayScreen> {
 
   Widget _buildTermSelectionStep(List<TermModel> terms) {
     return Column(
-      crossAxisAlignment: CrossAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const Text(
           'Step 1: Select Term',
@@ -191,7 +191,7 @@ class _CustomPlayScreenState extends ConsumerState<CustomPlayScreen> {
     final topics = _selectedTerm?.topics ?? [];
 
     return Column(
-      crossAxisAlignment: CrossAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
           'Step 2: Select Topic (${_selectedTerm?.title ?? 'Term'})',
@@ -241,7 +241,7 @@ class _CustomPlayScreenState extends ConsumerState<CustomPlayScreen> {
 
   Widget _buildTestModeSelectionStep() {
     return Column(
-      crossAlignment: CrossAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
           'Topic: ${_selectedTopic?.title ?? ""}',
@@ -349,7 +349,7 @@ class _CustomPlayScreenState extends ConsumerState<CustomPlayScreen> {
   Widget _buildPreGameCustomizeStep() {
     return SingleChildScrollView(
       child: Column(
-        crossAlignment: CrossAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Text(
             'Custom Play – Pre-Game Customize',
@@ -369,7 +369,7 @@ class _CustomPlayScreenState extends ConsumerState<CustomPlayScreen> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
-                crossAlignment: CrossAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Row(
                     children: [
@@ -409,7 +409,7 @@ class _CustomPlayScreenState extends ConsumerState<CustomPlayScreen> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
-                crossAlignment: CrossAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Row(
                     children: [

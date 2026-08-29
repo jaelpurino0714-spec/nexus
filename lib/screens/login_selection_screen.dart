@@ -13,7 +13,7 @@ class LoginSelectionScreen extends StatelessWidget {
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -29,7 +29,7 @@ class LoginSelectionScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 40,
-                      fontWeight: FontWeight.extrabold,
+                      fontWeight: FontWeight.w800,
                       color: Color(0xFF673AB7),
                     ),
                   ),
@@ -67,7 +67,7 @@ class LoginSelectionScreen extends StatelessWidget {
                       const SizedBox(width: 16),
                       const Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Student',
@@ -83,6 +83,10 @@ class LoginSelectionScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+                      Icon(Icons.arrow_forward_ios, color: Colors.purple[700], size: 18),
+                    ],
+                  ),
+                ),
               ),
 
               const SizedBox(height: 20),
@@ -111,7 +115,7 @@ class LoginSelectionScreen extends StatelessWidget {
                       const SizedBox(width: 16),
                       const Expanded(
                         child: Column(
-                          crossAlignment: CrossAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Teacher',

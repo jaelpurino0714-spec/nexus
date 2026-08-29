@@ -59,7 +59,7 @@ class MascotKeyTraitsCard extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAlignment: CrossAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
@@ -119,7 +119,7 @@ class MascotKeyTraitsCard extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
-                        crossAlignment: CrossAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             trait['title'],

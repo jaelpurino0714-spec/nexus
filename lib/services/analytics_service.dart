@@ -1,3 +1,4 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/quiz_attempt_model.dart';
 import '../models/student_analytics_model.dart';
 import '../models/teacher_analytics_model.dart';

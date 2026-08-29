@@ -1,5 +1,5 @@
 import 'package:uuid/uuid.dart';
-import '../models/answer_model.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/quiz_attempt_model.dart';
 import 'supabase_service.dart';
 

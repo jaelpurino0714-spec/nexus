@@ -1,4 +1,5 @@
 import '../models/term_model.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/topic_model.dart';
 import '../services/supabase_service.dart';
 

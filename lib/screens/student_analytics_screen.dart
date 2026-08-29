@@ -18,7 +18,7 @@ class StudentAnalyticsScreen extends ConsumerWidget {
         data: (stats) => SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
-            crossAxisAlignment: CrossAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
@@ -80,7 +80,7 @@ class StudentAnalyticsScreen extends ConsumerWidget {
         border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Column(
-        crossAlignment: CrossAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),

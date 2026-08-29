@@ -78,7 +78,7 @@ class ActiveQuizState {
     int? wrongCount,
     int? streak,
     int? secondsRemaining,
-    List<Map<String, dynamic>>: recordedAnswers,
+    List<Map<String, dynamic>>? recordedAnswers,
     bool? isCompleted,
     QuizAttemptModel? resultAttempt,
     String? lobbyAccessCode,

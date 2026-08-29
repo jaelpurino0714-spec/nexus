@@ -46,7 +46,7 @@ class _OutfitSelectionModalState extends ConsumerState<OutfitSelectionModal> wit
         padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAlignment: CrossAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // 1. Header Row (Title, Coin Pill, Close X)
             Row(
@@ -135,7 +135,7 @@ class _OutfitSelectionModalState extends ConsumerState<OutfitSelectionModal> wit
                   const SizedBox(width: 14),
                   Expanded(
                     child: Column(
-                      crossAlignment: CrossAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Equipped: ${CharacterService.outfits.firstWhere((o) => o.id == currentOutfit, orElse: () => CharacterService.outfits.first).name}',
@@ -276,7 +276,7 @@ class _OutfitSelectionModalState extends ConsumerState<OutfitSelectionModal> wit
                                     '🪙 ${outfit.priceCoins}',
                                     style: const TextStyle(
                                       fontSize: 11,
-                                      fontWeight: FontWeight.extrabold,
+                                      fontWeight: FontWeight.w800,
                                       color: Color(0xFF854D0E),
                                     ),
                                   ),

@@ -73,7 +73,7 @@ class _StudentProfileSetupScreenState extends ConsumerState<StudentProfileSetupS
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
-          crossAlignment: CrossAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
               child: Column(

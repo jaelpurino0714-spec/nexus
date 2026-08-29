@@ -811,7 +811,7 @@ class _Mascot3DViewerState extends State<Mascot3DViewer> with TickerProviderStat
               spacing: 4,
               runSpacing: 4,
               alignment: WrapAlignment.center,
-              crossAlignment: WrapCrossAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 const Text('TURNAROUND VIEWS: ',
                     style: TextStyle(

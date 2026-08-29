@@ -6,8 +6,8 @@ class ConnectivityService {
   final StreamController<bool> _controller = StreamController<bool>.broadcast();
 
   ConnectivityService() {
-    _connectivity.onConnectivityChanged.listen((results) {
-      final bool isConnected = results.any((result) => result != ConnectivityResult.none);
+    _connectivity.onConnectivityChanged.listen((result) {
+      final bool isConnected = result != ConnectivityResult.none;
       _controller.add(isConnected);
     });
   }
@@ -15,8 +15,8 @@ class ConnectivityService {
   Stream<bool> get onConnectivityChanged => _controller.stream;
 
   Future<bool> checkConnected() async {
-    final results = await _connectivity.checkConnectivity();
-    return results.any((result) => result != ConnectivityResult.none);
+    final result = await _connectivity.checkConnectivity();
+    return result != ConnectivityResult.none;
   }
 
   void dispose() {

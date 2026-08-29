@@ -233,7 +233,7 @@ class _TestModeSelectionScreenState extends State<TestModeSelectionScreen> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildCardHeader(title, isWhiteTitle: isWhiteTitle),
                       const SizedBox(height: 4),
@@ -311,7 +311,7 @@ class _TestModeSelectionScreenState extends State<TestModeSelectionScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Drag Handle Capsule
                       Center(

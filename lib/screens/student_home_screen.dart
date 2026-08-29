@@ -80,7 +80,7 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
           SingleChildScrollView(
             padding: const EdgeInsets.all(20.0),
             child: Column(
-              crossAlignment: CrossAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 10),
 
@@ -211,7 +211,7 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAlignment: CrossAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Text(
                 'Custom Mode Hub',

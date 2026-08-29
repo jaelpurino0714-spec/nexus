@@ -7,7 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="assets/app_logo.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="assets/web_logo.png">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/components.css">
 </head>
@@ -103,7 +104,9 @@
 
             <button type="submit" id="signInSubmitBtn" class="primary-btn" style="width: 100%; padding: 14px; border-radius: 16px; background: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%); color: #FFFFFF; border: none; font-weight: 800; font-size: 1.05rem; cursor: pointer; box-shadow: 0 6px 20px rgba(124,58,237,0.45); margin-bottom: 12px; transition: all 0.2s;">Sign In 🚀</button>
 
-            <button type="button" onclick="Auth.loginAsGuest()" style="width: 100%; padding: 12px; border-radius: 16px; background: rgba(56, 189, 248, 0.15); border: 1.5px solid #38BDF8; color: #38BDF8; font-weight: 800; font-size: 0.95rem; cursor: pointer; margin-bottom: 16px; transition: all 0.2s; box-shadow: 0 4px 14px rgba(56, 189, 248, 0.2);">🎮 Continue as Guest (Offline Mode)</button>
+            <button type="button" onclick="Auth.loginAsGuest()" style="width: 100%; padding: 12px; border-radius: 16px; background: rgba(56, 189, 248, 0.15); border: 1.5px solid #38BDF8; color: #38BDF8; font-weight: 800; font-size: 0.95rem; cursor: pointer; margin-bottom: 10px; transition: all 0.2s; box-shadow: 0 4px 14px rgba(56, 189, 248, 0.2);">🎮 Continue as Guest (Offline Mode)</button>
+
+            <a href="Nexus_Science_Android13-16.apk" download="Nexus_Science_Android13-16.apk" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; border-radius: 16px; background: linear-gradient(135deg, #059669 0%, #10B981 100%); color: #FFFFFF; font-weight: 800; font-size: 0.95rem; text-decoration: none; margin-bottom: 16px; transition: all 0.2s; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); box-sizing: border-box;">📱 Download Android App (APK)</a>
 
             <div style="text-align: center;">
               <span style="font-size: 0.88rem; color: #8E8CAE;">Don't have an account? </span>
@@ -1497,12 +1500,25 @@
               </div>
             </button>
 
+            <a href="Nexus_Science_Android13-16.apk" download="Nexus_Science_Android13-16.apk" class="settings-menu-btn download-apk-card" style="text-decoration: none; border: 1.5px solid rgba(52, 211, 153, 0.45); background: linear-gradient(135deg, rgba(6, 45, 30, 0.95) 0%, rgba(10, 60, 40, 0.95) 100%); display: flex; align-items: center;">
+              <div class="menu-icon-box" style="background: rgba(52, 211, 153, 0.15); border: 1px solid rgba(52, 211, 153, 0.3);">
+                <span class="menu-icon-inner">📱</span>
+              </div>
+              <div class="menu-info" style="flex: 1;">
+                <h3 style="color: #34D399;">6. Download Android APK App</h3>
+                <p style="color: #A7F3D0;">Install Nexus Science Android app directly on your phone</p>
+              </div>
+              <div class="menu-arrow-icon">
+                <span style="background: #34D399; color: #064E3B; font-weight: 800; font-size: 0.72rem; padding: 4px 10px; border-radius: 9999px;">📥 APK</span>
+              </div>
+            </a>
+
             <button class="settings-menu-btn logout-btn-card" onclick="Auth.logout()">
               <div class="menu-icon-box logout-icon-box">
                 <span class="menu-icon-inner">🚪</span>
               </div>
               <div class="menu-info" style="flex: 1;">
-                <h3 style="color: #F43F5E;">6. Log Out</h3>
+                <h3 style="color: #F43F5E;">7. Log Out</h3>
                 <p style="color: #FCA5A5;">Clear stored profile session and switch role</p>
               </div>
               <div class="menu-arrow-icon">

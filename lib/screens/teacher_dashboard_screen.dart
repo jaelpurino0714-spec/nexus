@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../providers/analytics_provider.dart';
 import '../providers/audio_provider.dart';
@@ -51,7 +52,7 @@ class _TeacherDashboardScreenState extends ConsumerState<TeacherDashboardScreen>
         data: (stats) => SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
-            crossAxisAlignment: CrossAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Teacher Quick Actions & Student Features (Except Custom)
               Container(
@@ -64,7 +65,7 @@ class _TeacherDashboardScreenState extends ConsumerState<TeacherDashboardScreen>
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
-                  crossAlignment: CrossAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       '👩‍🏫 Teacher Navigation & Tools',
@@ -151,11 +152,11 @@ class _TeacherDashboardScreenState extends ConsumerState<TeacherDashboardScreen>
         border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Column(
-        crossAlignment: CrossAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label, style: TextStyle(color: color, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
-          Text(val, style: TextStyle(fontSize: 28, fontWeight: FontWeight.extrabold, color: color)),
+          Text(val, style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: color)),
         ],
       ),
     );

@@ -308,7 +308,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAlignment: CrossAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Grade & Section: ${participant.gradeLevel} - ${participant.section}'),
             const SizedBox(height: 8),
@@ -355,7 +355,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
   // Step 0: Choose Built-in vs Custom Questions
   Widget _buildHostTypeSelectionStep() {
     return Column(
-      crossAlignment: CrossAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Icon(Icons.hub, size: 70, color: Color(0xFF673AB7)),
@@ -426,7 +426,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
 
         return SingleChildScrollView(
           child: Column(
-            crossAlignment: CrossAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Text('Built-in Host Quiz Setup', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF4C1D95))),
               const SizedBox(height: 16),
@@ -435,7 +435,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
               DropdownButtonFormField<TermModel>(
                 value: _selectedTerm,
                 decoration: const InputDecoration(labelText: 'Select Term', border: OutlineInputBorder()),
-                items: terms.take(3).map((t) => DropdownMenuItem(value: t, child: Text(t.name.isNotEmpty ? t.name : 'Term ${t.orderNo}'))).toList(),
+                items: terms.take(3).map((t) => DropdownMenuItem(value: t, child: Text(t.title.isNotEmpty ? t.title : 'Term ${t.orderIndex}'))).toList(),
                 onChanged: (val) {
                   setState(() {
                     _selectedTerm = val;
@@ -513,7 +513,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
 
     return SingleChildScrollView(
       child: Column(
-        crossAlignment: CrossAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
             'Question ${_currentCustomQuestionIndex + 1} of $_questionCount',
@@ -626,7 +626,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAlignment: CrossAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text('⏱️ Time Limit (5–60s)', style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 6),
@@ -675,7 +675,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
     if (lobby == null) return Container();
 
     return Column(
-      crossAlignment: CrossAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Card(
           color: const Color(0xFF673AB7),
@@ -688,10 +688,10 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
                 const SizedBox(height: 8),
                 Text(
                   lobby.accessCode,
-                  style: const TextStyle(fontSize: 42, fontWeight: FontWeight.black, color: Colors.amberAccent, letterSpacing: 4),
+                  style: const TextStyle(fontSize: 42, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 4),
                 ),
                 const SizedBox(height: 8),
-                const Text('Share this 7-digit code with students to join!', style: TextStyle(color: Colors.white90, fontSize: 13)),
+                const Text('Share this 7-digit code with students to join!', style: TextStyle(color: Colors.white70, fontSize: 13)),
               ],
             ),
           ),
@@ -771,7 +771,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
     final currentQ = hasQuestions ? questions[_hostCurrentQuestionIndex] : null;
 
     return Column(
-      crossAlignment: CrossAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -814,7 +814,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAlignment: CrossAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -861,7 +861,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
                         Expanded(
                           child: Text(
                             _getFormattedCorrectAnswer(currentQ),
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.black, fontSize: 14),
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -922,7 +922,7 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
 
                             Expanded(
                               child: Column(
-                                crossAlignment: CrossAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(p.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                                   const SizedBox(height: 4),
@@ -941,9 +941,9 @@ class _HostQuizScreenState extends ConsumerState<HostQuizScreen> {
                             ),
 
                             Column(
-                              crossAlignment: CrossAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Text('${p.score} pts', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.black, color: Color(0xFF673AB7))),
+                                Text('${p.score} pts', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Color(0xFF673AB7))),
                                 const SizedBox(height: 4),
                                 Text(
                                   p.isFinished ? 'Finished ✅' : 'In Progress ⏳',

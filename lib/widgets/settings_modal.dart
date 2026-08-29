@@ -19,7 +19,7 @@ class SettingsModal extends ConsumerWidget {
       child: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAlignment: CrossAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Top Drag Handle
             Center(
@@ -68,7 +68,7 @@ class SettingsModal extends ConsumerWidget {
                 border: Border.all(color: const Color(0xFF8B5CF6).withOpacity(0.3)),
               ),
               child: Column(
-                crossAlignment: CrossAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -164,7 +164,7 @@ class SettingsModal extends ConsumerWidget {
                 border: Border.all(color: const Color(0xFF10B981).withOpacity(0.3)),
               ),
               child: Column(
-                crossAlignment: CrossAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

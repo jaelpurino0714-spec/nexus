@@ -1,3 +1,4 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../services/supabase_service.dart';
 
 abstract class TeacherRepository {
