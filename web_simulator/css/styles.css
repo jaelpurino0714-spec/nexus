@@ -258,11 +258,11 @@ body.fullscreen-mode .app-container {
 
 /* App Header */
 .app-header {
-  min-height: 86px;
+  min-height: 78px;
   background: radial-gradient(circle at 15% 50%, rgba(124, 58, 237, 0.25) 0%, transparent 55%),
               radial-gradient(circle at 85% 50%, rgba(236, 72, 153, 0.25) 0%, transparent 55%),
               linear-gradient(135deg, #0F0A28 0%, #17103C 50%, #0F0A28 100%);
-  padding: 6px 20px;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -359,19 +359,19 @@ body.fullscreen-mode .app-container {
 }
 
 .app-logo-img {
-  height: 115px;
+  height: 56px;
   width: auto;
-  max-width: 130px;
+  max-width: 64px;
   object-fit: contain;
-  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.85)) drop-shadow(0 0 8px rgba(99, 102, 241, 0.6));
+  filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.75)) drop-shadow(0 0 6px rgba(99, 102, 241, 0.5));
   display: block;
   flex-shrink: 0;
   transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .app-logo-img:hover {
-  transform: scale(1.08) translateY(-2px);
-  filter: drop-shadow(0 0 24px rgba(168, 85, 247, 1)) drop-shadow(0 0 10px rgba(168, 85, 247, 0.8));
+  transform: scale(1.06) translateY(-1px);
+  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.95)) drop-shadow(0 0 8px rgba(168, 85, 247, 0.7));
 }
 
 .app-title-group {
@@ -384,9 +384,9 @@ body.fullscreen-mode .app-container {
 }
 
 .app-title-wordmark {
-  height: 24px;
+  height: 20px;
   width: auto;
-  max-width: 200px;
+  max-width: 175px;
   object-fit: contain;
   display: block;
   filter: drop-shadow(0 0 10px rgba(124, 58, 237, 0.6)) drop-shadow(0 0 4px rgba(56, 189, 248, 0.5));
