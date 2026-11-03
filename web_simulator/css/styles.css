@@ -383,6 +383,21 @@ body.fullscreen-mode .app-container {
   flex-shrink: 0;
 }
 
+.app-title-wordmark {
+  height: 24px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 0 10px rgba(124, 58, 237, 0.6)) drop-shadow(0 0 4px rgba(56, 189, 248, 0.5));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.logo-group:hover .app-title-wordmark {
+  transform: scale(1.04);
+  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.95)) drop-shadow(0 0 8px rgba(56, 189, 248, 0.8));
+}
+
 .app-name {
   font-family: var(--font-heading);
   font-size: 1.45rem;
