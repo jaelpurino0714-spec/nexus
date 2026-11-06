@@ -155,11 +155,134 @@ const Multiplayer = {
     const errEl = document.getElementById('mpJoinError');
 
     const profile = DB.getStudentProfile() || {};
-    if (pinInput) pinInput.value = '';
     if (nameInput) nameInput.value = profile.username || profile.name || '';
-    if (errEl) errEl.classList.add('hidden');
+    if (errEl) {
+      errEl.classList.add('hidden');
+      errEl.innerHTML = '';
+    }
 
+    this.renderActiveLobbiesList();
     App.showScreen('mpPlayerJoinScreen');
+  },
+
+  renderActiveLobbiesList() {
+    const container = document.getElementById('mpActiveLobbiesContainer');
+    if (!container) return;
+
+    const allLobbies = (typeof DB !== 'undefined' && DB.getAllLocalLobbies) ? DB.getAllLocalLobbies() : [];
+    const now = Date.now();
+    const valid = allLobbies.filter(l => (now - (l.lastUpdated || 0) < 1000 * 60 * 180));
+
+    if (valid.length === 0) {
+      container.innerHTML = '';
+      return;
+    }
+
+    let html = '<div style="margin-bottom: 12px; text-align: left;">';
+    html += '<div style="font-size: 0.76rem; color: #34D399; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;"><span>🟢</span> ACTIVE LOBBY FOUND:</div>';
+    valid.slice(0, 3).forEach(l => {
+      const code = (l.code || l.room_code || '').toUpperCase();
+      const host = l.hostName || 'Host';
+      const parts = (l.participants ? l.participants.length : 1);
+      html += 
+        <div style="background: rgba(16, 185, 129, 0.12); border: 1.5px solid rgba(16, 185, 129, 0.45); border-radius: 14px; padding: 10px 14px; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;" onclick="Multiplayer.quickFillPin('')" title="Click to auto-fill PIN and join">
+          <div style="text-align: left;">
+            <span style="font-size: 1.15rem; font-weight: 900; color: #FFFFFF; font-family: var(--font-heading); letter-spacing: 3px;"></span>
+            <span style="font-size: 0.74rem; color: #A7F3D0; margin-left: 8px;">Host: <b>System.Management.Automation.Internal.Host.InternalHost</b> ( online)</span>
+          </div>
+          <button type="button" class="primary-btn" style="padding: 5px 12px; font-size: 0.78rem; font-weight: 800; border-radius: 8px; background: linear-gradient(135deg, #059669 0%, #10B981 100%); border: none; color: white;">Tap to Join</button>
+        </div>
+      ;
+    });
+    html += '</div>';
+    container.innerHTML = html;
+
+    const pinInput = document.getElementById('mpPinInput');
+    if (pinInput && !pinInput.value && valid.length > 0) {
+      pinInput.value = (valid[0].code || '').toUpperCase();
+    }
+  },
+
+  quickFillPin(code) {
+    const pinInput = document.getElementById('mpPinInput');
+    if (pinInput) pinInput.value = (code || '').toUpperCase();
+    this.submitJoinLobby();
+  },
+
+  async startInstantPracticeLobby(pin) {
+    const cleanPin = (pin || DB.generate6CharRoomCode()).toUpperCase().trim();
+    const profile = DB.getStudentProfile() || {};
+    const questions = (typeof DB !== 'undefined' && DB.getQuestions) ? DB.getQuestions('b0000000-0000-0000-0000-000000000001', null, 'multiple_choice', 10) : [];
+
+    try {
+      const game = await DB.createMultiplayerGame({
+        roomCode: cleanPin,
+        termId: 'b0000000-0000-0000-0000-000000000001',
+        answerMedium: 'multiple_choice',
+        questionCount: 10,
+        timeLimit: 20,
+        customQuestions: questions
+      });
+
+      this.currentGame = game;
+      this.isHost = true;
+      this.questionsList = game.formattedQuestions || [];
+
+      await this.enterHostLobbyScreen(game);
+      if (typeof Achievements !== 'undefined' && Achievements.recordLiveQuizEvent) {
+        Achievements.recordLiveQuizEvent('host');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Error launching lobby: ' + (e.message || e));
+    }
+  },
+
+  async startPracticeMatch(pin) {
+    const cleanPin = (pin || 'AI' + Math.floor(1000 + Math.random() * 9000)).toUpperCase().trim();
+    const profile = DB.getStudentProfile() || {};
+    const myName = (document.getElementById('mpNicknameInput')?.value || '').trim() || profile.username || profile.name || 'Student';
+    const questions = (typeof DB !== 'undefined' && DB.getQuestions) ? DB.getQuestions('b0000000-0000-0000-0000-000000000001', null, 'multiple_choice', 10) : [];
+
+    const bots = [
+      { user_id: 'bot_sakshi', id: 'bot_sakshi', display_name: 'Sakshi', score: 0, correct_answers: 0, wrong_answers: 0, is_bot: true },
+      { user_id: 'bot_raflu', id: 'bot_raflu', display_name: 'Raflu', score: 0, correct_answers: 0, wrong_answers: 0, is_bot: true },
+      { user_id: 'bot_palizya', id: 'bot_palizya', display_name: 'Palizya', score: 0, correct_answers: 0, wrong_answers: 0, is_bot: true }
+    ];
+
+    const formattedQ = (questions && questions.length > 0) ? questions.map(q => ({ ...q, time_limit: 20 })) : [];
+
+    const localState = {
+      code: cleanPin,
+      gameId: 'game_' + cleanPin,
+      hostId: 'ai_host',
+      hostName: 'Nexus Science Host',
+      status: 'waiting',
+      settings: {
+        timeLimitSec: 20,
+        questionCount: 10,
+        questionsList: formattedQ
+      },
+      participants: [
+        { user_id: 'ai_host', id: 'ai_host', display_name: 'Host', is_host: true, score: 0, correct_answers: 0, wrong_answers: 0 },
+        ...bots
+      ],
+      lastUpdated: Date.now()
+    };
+
+    DB.saveLocalLobbyState(cleanPin, localState);
+
+    try {
+      const game = await DB.joinMultiplayerGame(cleanPin, myName);
+      this.currentGame = game;
+      this.isHost = false;
+      this.isBotMatch = true;
+
+      await this.enterPlayerLobbyScreen(game, myName);
+    } catch (e) {
+      console.error(e);
+      alert('Error entering match: ' + (e.message || e));
+    }
   },
 
   // 4. Submit Player Join PIN
@@ -169,14 +292,17 @@ const Multiplayer = {
     const errEl = document.getElementById('mpJoinError');
     const btn = document.getElementById('mpJoinSubmitBtn');
 
-    if (errEl) errEl.classList.add('hidden');
+    if (errEl) {
+      errEl.classList.add('hidden');
+      errEl.innerHTML = '';
+    }
     const pinVal = (pinInput ? pinInput.value : '').toUpperCase().trim();
     const profile = DB.getStudentProfile() || {};
     const nicknameVal = (nameInput ? nameInput.value : '').trim() || profile.username || profile.name || 'Player';
 
-    if (pinVal.length !== 6) {
+    if (pinVal.length < 4 || pinVal.length > 8) {
       if (errEl) {
-        errEl.textContent = '⚠️ Please enter a valid 6-digit Game PIN (e.g. 482913)!';
+        errEl.textContent = '⚠️ Please enter a valid 5 to 6 character Game PIN (e.g. 482913)!';
         errEl.classList.remove('hidden');
       }
       return;
@@ -202,9 +328,22 @@ const Multiplayer = {
         await this.enterPlayerLobbyScreen(game, nicknameVal);
       }
     } catch (e) {
-      console.error(e);
+      console.warn('Join lobby note:', e);
       if (errEl) {
-        errEl.textContent = `⚠️ ${e.message || 'Unable to join game'}`;
+        errEl.innerHTML = 
+          <div style="background: rgba(239, 68, 68, 0.12); border: 1.5px solid rgba(239, 68, 68, 0.4); border-radius: 14px; padding: 12px; margin-top: 4px;">
+            <div style="color: #F87171; font-weight: 800; font-size: 0.92rem; margin-bottom: 4px;">⚠️ Room "" Not Found</div>
+            <div style="color: #A5A3C4; font-size: 0.78rem; margin-bottom: 10px;">Make sure the host has started the lobby, or launch this room immediately:</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <button type="button" class="primary-btn" style="width: 100%; padding: 10px; border-radius: 12px; font-weight: 800; font-size: 0.85rem; background: linear-gradient(135deg, #7C3AED, #6366F1); cursor: pointer; border: none; color: white;" onclick="Multiplayer.startInstantPracticeLobby('')">
+                👑 Host Room "" & Start Now
+              </button>
+              <button type="button" class="secondary-btn" style="width: 100%; padding: 9px; border-radius: 12px; font-weight: 700; font-size: 0.82rem; background: rgba(124, 58, 237, 0.2); border: 1px solid rgba(139, 92, 246, 0.4); color: #E9D5FF; cursor: pointer;" onclick="Multiplayer.startPracticeMatch('')">
+                🤖 Play Solo with AI Classmates
+              </button>
+            </div>
+          </div>
+        ;
         errEl.classList.remove('hidden');
       }
     } finally {
@@ -371,8 +510,18 @@ const Multiplayer = {
     App.showScreen('mpPlayerLobbyScreen');
     const badge = document.getElementById('mpPlayerNicknameBadge');
     const tag = document.getElementById('mpPlayerChannelTag');
-    if (badge) badge.textContent = nickname;
+    const botStartBtn = document.getElementById('mpBotStartMatchBtn');
+
+    if (badge) badge.textContent = `👤 ${nickname}`;
     if (tag) tag.textContent = `PIN: ${game.room_code}`;
+
+    if (botStartBtn) {
+      if (this.isBotMatch || game.host_id === 'ai_host' || game.host_id === 'demo_host') {
+        botStartBtn.style.display = 'block';
+      } else {
+        botStartBtn.style.display = 'none';
+      }
+    }
 
     await this.subscribeToGameChannel(game.room_code || game.id, 'player', nickname);
     this.startPlayerGameSyncPolling();
@@ -1474,6 +1623,31 @@ const Multiplayer = {
   // 10. Synchronized Timer (Calculated locally from question_started_at + duration - now)
   startSynchronizedTimer(timerElementId, startedAtIso, durationSec, onExpire) {
     if (this.timerInterval) clearInterval(this.timerInterval);
+
+    // AI Bots simulation for solo practice match
+    if (this.isBotMatch && this.currentGame) {
+      const currentPin = this.currentGame.room_code;
+      const qIndex = this.currentIndex || 0;
+      ['bot_sakshi', 'bot_raflu', 'bot_palizya'].forEach((botId, idx) => {
+        const delay = (idx + 1) * 2500 + Math.random() * 2000;
+        setTimeout(() => {
+          if (!this.currentGame || this.currentGame.room_code !== currentPin) return;
+          const isCorrect = Math.random() > 0.25;
+          const scoreEarned = isCorrect ? Math.round(700 + Math.random() * 250) : 0;
+          const local = DB.getLocalLobbyState(currentPin);
+          if (local && local.participants) {
+            const b = local.participants.find(p => p.id === botId || p.user_id === botId);
+            if (b) {
+              b.score = (b.score || 0) + scoreEarned;
+              if (isCorrect) b.correct_answers = (b.correct_answers || 0) + 1;
+              else b.wrong_answers = (b.wrong_answers || 0) + 1;
+              b.current_question_index = qIndex + 1;
+              DB.saveLocalLobbyState(currentPin, local);
+            }
+          }
+        }, delay);
+      });
+    }
 
     const now = Date.now();
     let startTime = startedAtIso ? new Date(startedAtIso).getTime() : now;

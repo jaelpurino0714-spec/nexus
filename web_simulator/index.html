@@ -989,7 +989,10 @@
 
           <div class="sub-settings-container" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 28px 24px; text-align: center; max-width: 440px; margin: 20px auto 0 auto; box-shadow: 0 10px 40px rgba(0,0,0,0.6);">
             <h2 style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: #FFFFFF; margin-bottom: 6px;">Join Game 🔑</h2>
-            <p style="color: #A5A3C4; font-size: 0.9rem; margin-bottom: 24px;">Enter 6-digit Game PIN provided by your host</p>
+            <p style="color: #A5A3C4; font-size: 0.9rem; margin-bottom: 20px;">Enter 6-digit Game PIN provided by your host</p>
+
+            <!-- Detected Live Lobbies -->
+            <div id="mpActiveLobbiesContainer" style="margin-bottom: 16px;"></div>
 
             <div class="form-group" style="margin-bottom: 20px;">
               <label for="mpPinInput" style="font-size: 0.84rem; font-weight: 700; color: #A5A3C4; letter-spacing: 1px; margin-bottom: 8px; display: block;">GAME PIN:</label>
@@ -1001,11 +1004,18 @@
               <input type="text" id="mpNicknameInput" placeholder="Enter nickname..." maxlength="20" class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 16px; color: #FFFFFF; font-weight: 700; font-size: 1.1rem; text-align: center; padding: 14px 18px; outline: none; box-sizing: border-box; font-family: var(--font-heading);" />
             </div>
 
-            <div id="mpJoinError" class="customize-error-msg hidden"></div>
+            <div id="mpJoinError" class="customize-error-msg hidden" style="text-align: left; margin-bottom: 16px;"></div>
 
             <button id="mpJoinSubmitBtn" class="primary-btn bottom-start-btn" onclick="Multiplayer.submitJoinLobby()">
               Join Lobby ➔
             </button>
+
+            <!-- Solo Practice / Bot Match Option -->
+            <div style="margin-top: 20px; padding-top: 14px; border-top: 1px dashed rgba(139, 92, 246, 0.25);">
+              <button type="button" class="secondary-btn" style="width: 100%; padding: 11px; border-radius: 14px; font-weight: 700; font-size: 0.88rem; background: rgba(124, 58, 237, 0.2); border: 1.5px solid rgba(139, 92, 246, 0.4); color: #DDD6FE; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="Multiplayer.startPracticeMatch()">
+                🤖 Play Solo with AI Classmates
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -1081,8 +1091,12 @@
             </span>
 
             <div style="padding: 14px; background: rgba(25, 17, 50, 0.95); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 16px; color: #A5A3C4; font-size: 0.88rem; font-weight: 600; margin-bottom: 20px;">
-              🟢 Connected to Realtime Channel <span id="mpPlayerChannelTag" style="color: #38BDF8; font-weight: 800;">game:...</span>
+              🟢 Connected to Room <span id="mpPlayerChannelTag" style="color: #38BDF8; font-weight: 800;">game:...</span>
             </div>
+
+            <button id="mpBotStartMatchBtn" class="primary-btn" style="display: none; width: 100%; margin-bottom: 12px; padding: 14px; border-radius: 18px; font-weight: 800; font-size: 1rem; background: linear-gradient(135deg, #059669 0%, #10B981 100%); cursor: pointer;" onclick="Multiplayer.startHostGameSession()">
+              ▶️ Start Match Now
+            </button>
 
             <button class="cancel-btn" style="width: 100%; background: rgba(30, 20, 60, 0.8); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 18px; padding: 14px; color: #FFFFFF; font-weight: 700; font-size: 1rem; font-family: var(--font-heading); cursor: pointer;" onclick="Multiplayer.openLeaveGameModal()">
               Leave Game 🚪
@@ -1781,19 +1795,19 @@
 
 
   <!-- Scripts -->
-  <script src="js/questions_bank.js?v=5.4"></script>
+  <script src="js/questions_bank.js?v=5.5"></script>
   <script src="js/lib/supabase.js"></script>
-  <script src="js/db.js?v=5.4"></script>
-  <script src="js/app.js?v=5.4"></script>
-  <script src="js/auth.js?v=5.4"></script>
-  <script src="js/achievements.js?v=5.4"></script>
-  <script src="js/multiplayer.js?v=5.4"></script>
-  <script src="js/quiz.js?v=5.4"></script>
-  <script src="js/analytics.js?v=5.4"></script>
-  <script src="js/teacher_portal.js?v=5.4"></script>
-  <script src="js/experiment.js?v=5.4"></script>
-  <script src="js/character.js?v=5.4"></script>
-  <script src="js/student_dashboard.js?v=5.4"></script>
+  <script src="js/db.js?v=5.5"></script>
+  <script src="js/app.js?v=5.5"></script>
+  <script src="js/auth.js?v=5.5"></script>
+  <script src="js/achievements.js?v=5.5"></script>
+  <script src="js/multiplayer.js?v=5.5"></script>
+  <script src="js/quiz.js?v=5.5"></script>
+  <script src="js/analytics.js?v=5.5"></script>
+  <script src="js/teacher_portal.js?v=5.5"></script>
+  <script src="js/experiment.js?v=5.5"></script>
+  <script src="js/character.js?v=5.5"></script>
+  <script src="js/student_dashboard.js?v=5.5"></script>
   <script>
     function updatePhoneClock() {
       const timeEl = document.getElementById('phoneStatusTime');
