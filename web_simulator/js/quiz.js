@@ -1284,6 +1284,20 @@ const Quiz = {
     document.getElementById('quizModeTag').textContent = `${this.currentMode.toUpperCase()} (${this.currentQuestionFormat.toUpperCase()}) • ${this.currentTopic || 'Science'}`;
     document.getElementById('questionText').textContent = q.question;
 
+    // Render Question Image if present
+    const qImgBox = document.getElementById('questionImageContainer');
+    const qImgEl = document.getElementById('questionImageEl');
+    const qImgSrc = q.imageUrl || q.image_url || q.image;
+    if (qImgBox && qImgEl) {
+      if (qImgSrc) {
+        qImgEl.src = qImgSrc;
+        qImgBox.classList.remove('hidden');
+      } else {
+        qImgEl.src = '';
+        qImgBox.classList.add('hidden');
+      }
+    }
+
     // Feedback reset
     const feedback = document.getElementById('feedbackBanner');
     if (feedback) feedback.className = 'feedback-banner hidden';

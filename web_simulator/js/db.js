@@ -417,6 +417,9 @@ var DB = {
         rawAnswer: q.correct_answer,
         correct_answer: q.correct_answer,
         explanation: q.explanation,
+        imageUrl: q.imageUrl || q.image_url || q.image || null,
+        image_url: q.imageUrl || q.image_url || q.image || null,
+        image: q.imageUrl || q.image_url || q.image || null,
         timeLimit: q.time_limit || 20,
         time_limit: q.time_limit || 20,
         type: qTypeStr
@@ -1000,6 +1003,9 @@ var DB = {
           equivalent_answer: eqAns,
           counterpart: q.counterpart || eqAns,
           question_type: q.questionType || q.question_type || q.type || 'multiple_choice',
+          imageUrl: q.imageUrl || q.image_url || q.image || null,
+          image_url: q.imageUrl || q.image_url || q.image || null,
+          image: q.imageUrl || q.image_url || q.image || null,
           time_limit: config.timeLimit || 20
         };
       });

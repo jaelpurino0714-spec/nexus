@@ -658,6 +658,19 @@ const Multiplayer = {
     document.getElementById('mpHostQCounter').textContent = `Question ${index + 1} of ${this.questionsList.length}`;
     document.getElementById('mpHostQuestionText').textContent = q.question;
 
+    const hostImgBox = document.getElementById('mpHostQuestionImageContainer');
+    const hostImgEl = document.getElementById('mpHostQuestionImageEl');
+    const hostImgSrc = q.imageUrl || q.image_url || q.image;
+    if (hostImgBox && hostImgEl) {
+      if (hostImgSrc) {
+        hostImgEl.src = hostImgSrc;
+        hostImgBox.classList.remove('hidden');
+      } else {
+        hostImgEl.src = '';
+        hostImgBox.classList.add('hidden');
+      }
+    }
+
     const typeId = q.question_type_id || (q.question_type === 'true_false' || q.type === 'true_false' ? 2 : (q.question_type === 'identification' || q.type === 'identification' ? 3 : 1));
 
     // Teacher Perspective: Display question and choices Overview
@@ -723,10 +736,12 @@ const Multiplayer = {
     };
 
     // Send QUESTION_START Broadcast payload with full custom question info
+    const qBroadcastImg = q.imageUrl || q.image_url || q.image || null;
     this.sendBroadcast('QUESTION_START', {
       questionNumber: index + 1,
       questionId: q.id,
       questionText: q.question,
+      imageUrl: qBroadcastImg,
       questionTypeId: typeId,
       choices: choicesObj,
       customQuestion: {
@@ -738,7 +753,9 @@ const Multiplayer = {
         choice_b: choicesObj.b,
         choice_c: choicesObj.c,
         choice_d: choicesObj.d,
-        correct_answer: q.correct_answer || q.correctAnswer
+        correct_answer: q.correct_answer || q.correctAnswer,
+        imageUrl: qBroadcastImg,
+        image: qBroadcastImg
       },
       startedAt: startedAt,
       duration: this.questionDurationSec,
@@ -1197,6 +1214,19 @@ const Multiplayer = {
 
     document.getElementById('mpPlayerQCounter').textContent = `Question ${index + 1} of ${this.questionsList.length || 10}`;
     document.getElementById('mpPlayerQuestionText').textContent = q.question || 'Question';
+
+    const playerImgBox = document.getElementById('mpPlayerQuestionImageContainer');
+    const playerImgEl = document.getElementById('mpPlayerQuestionImageEl');
+    const playerImgSrc = q.imageUrl || q.image_url || q.image;
+    if (playerImgBox && playerImgEl) {
+      if (playerImgSrc) {
+        playerImgEl.src = playerImgSrc;
+        playerImgBox.classList.remove('hidden');
+      } else {
+        playerImgEl.src = '';
+        playerImgBox.classList.add('hidden');
+      }
+    }
 
     this.questionDurationSec = (q && q.time_limit) ? q.time_limit : ((gameObj && gameObj.duration) ? gameObj.duration : ((this.currentGame && this.currentGame.time_limit) ? this.currentGame.time_limit : 20));
 

@@ -109,6 +109,41 @@ const TeacherPortal = {
             </select>
           </div>
 
+          <!-- OPTION TO ADD AN IMAGE ABOVE THE QUESTION PER QUESTION -->
+          <div class="form-group" style="margin-bottom: 12px; background: rgba(25, 16, 50, 0.6); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 14px; padding: 10px 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <label style="font-size: 0.84rem; font-weight: 700; color: #C084FC; display: flex; align-items: center; gap: 6px; margin: 0;">
+                <span>🖼️ Question Image (Optional)</span>
+              </label>
+              <span id="builderImageIndicator" style="font-size: 0.74rem; color: #A5A3C4; font-weight: 600;">No image added</span>
+            </div>
+
+            <!-- Image action row: File upload + URL input toggle -->
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <input type="file" id="builderImageFileInput" accept="image/*" style="display: none;" onchange="TeacherPortal.onBuilderImageFileSelected(event)">
+              <button type="button" class="secondary-btn" style="padding: 7px 14px; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px; border-radius: 12px; background: rgba(139, 92, 246, 0.22); border: 1.5px solid rgba(139, 92, 246, 0.5); color: #E9D5FF; cursor: pointer; font-weight: 700;" onclick="document.getElementById('builderImageFileInput').click()">
+                📁 Upload Image
+              </button>
+              <button type="button" class="secondary-btn" style="padding: 7px 14px; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px; border-radius: 12px; background: rgba(56, 189, 248, 0.16); border: 1.5px solid rgba(56, 189, 248, 0.45); color: #BAE6FD; cursor: pointer; font-weight: 700;" onclick="TeacherPortal.toggleBuilderImageUrlInput()">
+                🔗 Paste Image URL
+              </button>
+              <button type="button" id="builderRemoveImageBtn" style="display: none; padding: 7px 12px; font-size: 0.82rem; border-radius: 12px; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #FCA5A5; cursor: pointer; font-weight: 700;" onclick="TeacherPortal.clearBuilderImage()">
+                ✕ Remove
+              </button>
+            </div>
+
+            <!-- Optional URL input field -->
+            <div id="builderImageUrlRow" style="display: none; margin-top: 8px;">
+              <input type="url" id="builderImageUrlInput" placeholder="Paste image link (https://... or data:...)" class="customize-input" style="width: 100%; background: rgba(20, 13, 40, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 12px; color: #FFFFFF; font-size: 0.85rem; padding: 8px 12px; outline: none; box-sizing: border-box;" oninput="TeacherPortal.onBuilderImageUrlEntered(this.value)">
+            </div>
+
+            <!-- Live Image Preview directly above question prompt -->
+            <div id="builderImagePreviewBox" style="display: none; margin-top: 10px; position: relative; text-align: center; background: rgba(10, 6, 24, 0.8); border: 1.5px dashed rgba(168, 85, 247, 0.6); border-radius: 14px; padding: 10px;">
+              <img id="builderImagePreviewEl" src="" alt="Question Preview" style="max-height: 140px; max-width: 100%; object-fit: contain; border-radius: 8px; display: inline-block; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+              <button type="button" style="position: absolute; top: 6px; right: 8px; background: rgba(239, 68, 68, 0.9); color: #FFF; border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 0.75rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;" onclick="TeacherPortal.clearBuilderImage()" title="Remove image">✕</button>
+            </div>
+          </div>
+
           <input type="text" id="builderQPrompt" placeholder="Question prompt..." class="customize-input" style="width: 100%; background: rgba(25, 17, 50, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 14px; color: #FFFFFF; font-weight: 600; font-size: 0.9rem; padding: 10px 14px; outline: none; box-sizing: border-box; font-family: var(--font-heading); margin-bottom: 10px;">
           
           <div id="builderInputsContainer">
@@ -142,9 +177,91 @@ const TeacherPortal = {
     `;
     modal.classList.remove('hidden');
     this._builderDrafts = [];
+    this._currentBuilderImage = null;
   },
 
   _builderDrafts: [],
+  _currentBuilderImage: null,
+
+  onBuilderImageFileSelected(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file (PNG, JPG, WebP, GIF).');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image file is too large (max 5MB). Please select a smaller file.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target.result;
+      this._setBuilderImage(dataUrl, file.name);
+    };
+    reader.readAsDataURL(file);
+  },
+
+  toggleBuilderImageUrlInput() {
+    const row = document.getElementById('builderImageUrlRow');
+    if (!row) return;
+    if (row.style.display === 'none') {
+      row.style.display = 'block';
+      const input = document.getElementById('builderImageUrlInput');
+      if (input) input.focus();
+    } else {
+      row.style.display = 'none';
+    }
+  },
+
+  onBuilderImageUrlEntered(url) {
+    const trimmed = (url || '').trim();
+    if (trimmed) {
+      this._setBuilderImage(trimmed, 'Web Link');
+    } else {
+      this.clearBuilderImage();
+    }
+  },
+
+  _setBuilderImage(src, label) {
+    this._currentBuilderImage = src;
+    const previewBox = document.getElementById('builderImagePreviewBox');
+    const previewEl = document.getElementById('builderImagePreviewEl');
+    const indicator = document.getElementById('builderImageIndicator');
+    const removeBtn = document.getElementById('builderRemoveImageBtn');
+
+    if (previewEl) previewEl.src = src;
+    if (previewBox) previewBox.style.display = 'block';
+    if (indicator) {
+      indicator.textContent = `✓ ${label || 'Image added'}`;
+      indicator.style.color = '#34D399';
+    }
+    if (removeBtn) removeBtn.style.display = 'inline-block';
+  },
+
+  clearBuilderImage() {
+    this._currentBuilderImage = null;
+    const fileInput = document.getElementById('builderImageFileInput');
+    if (fileInput) fileInput.value = '';
+    const urlInput = document.getElementById('builderImageUrlInput');
+    if (urlInput) urlInput.value = '';
+    const urlRow = document.getElementById('builderImageUrlRow');
+    if (urlRow) urlRow.style.display = 'none';
+    const previewBox = document.getElementById('builderImagePreviewBox');
+    if (previewBox) previewBox.style.display = 'none';
+    const previewEl = document.getElementById('builderImagePreviewEl');
+    if (previewEl) previewEl.src = '';
+    const indicator = document.getElementById('builderImageIndicator');
+    if (indicator) {
+      indicator.textContent = 'No image added';
+      indicator.style.color = '#A5A3C4';
+    }
+    const removeBtn = document.getElementById('builderRemoveImageBtn');
+    if (removeBtn) removeBtn.style.display = 'none';
+  },
 
   onBuilderFormatChanged() {
     const fmt = document.getElementById('builderQFormat').value;
@@ -202,7 +319,10 @@ const TeacherPortal = {
     let qObj = {
       id: 'q_' + Date.now(),
       question: prompt,
-      questionType: fmt
+      questionType: fmt,
+      image: this._currentBuilderImage || null,
+      imageUrl: this._currentBuilderImage || null,
+      image_url: this._currentBuilderImage || null
     };
 
     if (fmt === 'multiple_choice') {
@@ -278,6 +398,7 @@ const TeacherPortal = {
 
     this._builderDrafts.push(qObj);
     document.getElementById('builderQPrompt').value = '';
+    this.clearBuilderImage();
 
     if (fmt === 'multiple_choice') {
       document.getElementById('builderOptA').value = '';
@@ -297,9 +418,12 @@ const TeacherPortal = {
       } else if (q.questionType === 'identification') {
         ansLabel = q.counterpart || q.answer;
       }
+      const imgPill = (q.image || q.imageUrl)
+        ? `<span style="background: rgba(56, 189, 248, 0.2); color: #38BDF8; font-size: 0.72rem; padding: 2px 7px; border-radius: 6px; margin-left: 6px; font-weight: 700; border: 1px solid rgba(56, 189, 248, 0.35);">🖼️ Image</span>`
+        : '';
       return `
-      <li>
-        <b>Q${idx+1} [${q.questionType.replace('_', ' ')}]:</b> ${q.question}
+      <li style="margin-bottom: 6px; line-height: 1.4;">
+        <b>Q${idx+1} [${q.questionType.replace('_', ' ')}]:</b> ${q.question} ${imgPill}
         <span style="color:#10B981; font-weight:bold;">(Ans: ${ansLabel})</span>
       </li>
     `;
