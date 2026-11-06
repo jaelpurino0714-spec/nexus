@@ -2405,9 +2405,12 @@ const Achievements = {
           const isActive = k === rankKey;
           return `
             <button class="rank-switcher-btn ${isActive ? 'active' : ''} rarity-${k}" 
-                    onclick="Achievements.showRankAchievements('${k}')">
-              <span>${meta.icon}</span>
-              <span>${meta.name}</span>
+                    onclick="Achievements.showRankAchievements('${k}')"
+                    title="${meta.name} (${counts.unlocked}/${counts.total})">
+              <div class="rank-btn-header">
+                <span class="rank-icon-sm">${meta.icon}</span>
+                <span class="rank-name-sm">${meta.name}</span>
+              </div>
               <span class="rank-switcher-count">${counts.unlocked}/${counts.total}</span>
             </button>
           `;
@@ -2488,7 +2491,7 @@ const Achievements = {
       const stats = this.getStats();
       progress = this.computeProgress(ach, stats);
     }
-    const isProgressComplete = progress.isComplete || progress.percentage >= 100;
+    const isProgressComplete = progress.isComplete || progress.percentage >= 100 || (progress.current >= progress.target && progress.target > 0);
     if (isProgressComplete) {
       isUnlocked = true;
       if (typeof DB !== 'undefined' && DB.saveUnlockedAchievement) {
@@ -2497,6 +2500,10 @@ const Achievements = {
     } else if (isUnlocked === undefined) {
       const unlocked = (typeof DB !== 'undefined' && DB.getUnlockedAchievements) ? DB.getUnlockedAchievements() : [];
       isUnlocked = unlocked.includes(ach.id);
+    }
+
+    if (isUnlocked) {
+      this.playCelebrationSound();
     }
 
     const modalCard = document.querySelector('.achievement-modal-content');
@@ -2572,6 +2579,28 @@ const Achievements = {
 
     const modal = document.getElementById('achievementDetailModal');
     if (modal) modal.classList.remove('hidden');
+  },
+
+  playCelebrationSound() {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+      notes.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08);
+        gain.gain.setValueAtTime(0.001, ctx.currentTime + idx * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + idx * 0.08 + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.45);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + idx * 0.08);
+        osc.stop(ctx.currentTime + idx * 0.08 + 0.46);
+      });
+    } catch (_) {}
   },
 
   closeModal() {

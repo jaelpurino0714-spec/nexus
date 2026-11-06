@@ -3,6 +3,31 @@
    Implements precise layout & color requirements from PRD pages 6-9
    ========================================================================== */
 
+/* Universal Sleek Cyber Scrollbars (Eliminates OS white bars across browser/webview) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(12, 8, 24, 0.4);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.45);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.85);
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.45) transparent;
+}
+
 /* ---------------- 1. LOGIN SELECTION & MODAL CARDS ---------------- */
 /* ---------------- 1. LOGIN SELECTION & MODAL CARDS ---------------- */
 .modal-card, .profile-setup-card {
@@ -3020,6 +3045,57 @@
   line-height: 1.35;
 }
 
+/* 10x Cooler Settings Achievements Card */
+.settings-menu-btn.achievements-btn {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(28, 16, 56, 0.95) 0%, rgba(14, 20, 48, 0.96) 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(56, 189, 248, 0.2);
+}
+
+.settings-menu-btn.achievements-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -100%;
+  width: 60%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(56, 189, 248, 0.2) 50%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  animation: achSheenSweep 5s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes achSheenSweep {
+  0% { left: -100%; }
+  35%, 100% { left: 200%; }
+}
+
+.settings-menu-btn.achievements-btn:hover {
+  border-color: #38BDF8;
+  background: linear-gradient(135deg, rgba(38, 22, 75, 0.98) 0%, rgba(20, 28, 65, 0.98) 100%);
+  transform: translateX(4px) translateY(-1px);
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.4), 0 0 15px rgba(168, 85, 247, 0.3);
+}
+
+.settings-menu-btn.achievements-btn .menu-icon-box {
+  background: radial-gradient(circle at 30% 30%, rgba(56, 189, 248, 0.25) 0%, rgba(20, 14, 45, 0.95) 100%);
+  border-color: #38BDF8;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.4), inset 0 0 12px rgba(56, 189, 248, 0.25);
+  animation: achMedalPulse 3s infinite ease-in-out;
+}
+
+@keyframes achMedalPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 16px rgba(56, 189, 248, 0.35); }
+  50% { transform: scale(1.06); box-shadow: 0 0 24px rgba(56, 189, 248, 0.65), 0 0 10px rgba(251, 191, 36, 0.4); }
+}
+
 /* PRD Requirement: 4-Column Grid for Achievements */
 /* ==========================================================================
    ACHIEVEMENTS SYSTEM V2.0 — 84 ACHIEVEMENTS WITH RANKING & CATEGORIES HUB
@@ -3322,11 +3398,11 @@
 }
 
 .category-popup-card {
-  width: 94%;
+  width: 95%;
   max-width: 440px;
-  height: 84vh;
-  max-height: 600px;
-  background: linear-gradient(135deg, rgba(24, 15, 48, 0.98) 0%, rgba(14, 9, 28, 0.99) 100%);
+  height: 86vh;
+  max-height: 640px;
+  background: linear-gradient(135deg, rgba(24, 15, 48, 0.98) 0%, rgba(13, 8, 28, 0.99) 100%);
   border: 1.5px solid #A855F7;
   border-radius: 24px;
   padding: 16px 14px 12px 14px;
@@ -3334,8 +3410,8 @@
   flex-direction: column;
   box-sizing: border-box;
   animation: categoryPopupIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(168, 85, 247, 0.3);
-  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(168, 85, 247, 0.35);
+  overflow: hidden !important;
   position: relative;
 }
 
@@ -3783,16 +3859,13 @@
 }
 
 .rank-switcher-tabs {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 6px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 4px 2px 8px 2px;
-  margin-bottom: 6px;
-  scrollbar-width: none;
-  flex-shrink: 0;
   width: 100%;
   box-sizing: border-box;
+  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .rank-switcher-tabs::-webkit-scrollbar {
@@ -3800,61 +3873,76 @@
 }
 
 .rank-switcher-btn {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #94A3B8;
-  padding: 6px 10px;
+  padding: 6px 2px;
   border-radius: 12px;
   font-size: 0.74rem;
   font-weight: 700;
   cursor: pointer;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 5px;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
+  justify-content: center;
+  gap: 2px;
+  transition: all 0.22s ease;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .rank-switcher-btn:hover {
   background: rgba(255, 255, 255, 0.12);
   color: #FFFFFF;
+  transform: translateY(-1px);
 }
 
-.rank-switcher-btn.active.rarity-bronze {
-  background: rgba(205, 127, 50, 0.25);
-  border-color: #CD7F32;
-  color: #FFFFFF;
-  box-shadow: 0 0 10px rgba(205, 127, 50, 0.35);
+.rank-switcher-btn .rank-btn-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
-.rank-switcher-btn.active.rarity-silver {
-  background: rgba(203, 213, 225, 0.25);
-  border-color: #CBD5E1;
-  color: #FFFFFF;
-  box-shadow: 0 0 10px rgba(203, 213, 225, 0.35);
-}
-
-.rank-switcher-btn.active.rarity-gold {
-  background: rgba(251, 191, 36, 0.25);
-  border-color: #FBBF24;
-  color: #FFFFFF;
-  box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
-}
-
-.rank-switcher-btn.active.rarity-platinum {
-  background: rgba(56, 189, 248, 0.25);
-  border-color: #38BDF8;
-  color: #FFFFFF;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
-}
-
-.rank-switcher-count {
-  font-size: 0.68rem;
+.rank-switcher-btn .rank-switcher-count {
+  font-size: 0.65rem;
   font-weight: 800;
   background: rgba(0, 0, 0, 0.35);
   padding: 1px 5px;
   border-radius: 6px;
+  white-space: nowrap;
+}
+
+.rank-switcher-btn.active.rarity-bronze {
+  background: linear-gradient(135deg, rgba(205, 127, 50, 0.3) 0%, rgba(130, 80, 30, 0.3) 100%);
+  border-color: #CD7F32;
+  color: #FFFFFF;
+  box-shadow: 0 0 14px rgba(205, 127, 50, 0.45);
+}
+
+.rank-switcher-btn.active.rarity-silver {
+  background: linear-gradient(135deg, rgba(203, 213, 225, 0.3) 0%, rgba(148, 163, 184, 0.3) 100%);
+  border-color: #CBD5E1;
+  color: #FFFFFF;
+  box-shadow: 0 0 14px rgba(203, 213, 225, 0.45);
+}
+
+.rank-switcher-btn.active.rarity-gold {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(180, 130, 20, 0.3) 100%);
+  border-color: #FBBF24;
+  color: #FFFFFF;
+  box-shadow: 0 0 16px rgba(251, 191, 36, 0.5);
+}
+
+.rank-switcher-btn.active.rarity-platinum {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3) 0%, rgba(14, 116, 144, 0.3) 100%);
+  border-color: #38BDF8;
+  color: #FFFFFF;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.55);
 }
 
 /* Category Filter Tabs */
@@ -4134,38 +4222,59 @@
 
 /* Modal Popup Styles */
 .modal-overlay {
-  position: absolute;
+  position: fixed !important;
+  inset: 0 !important;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 50;
+  background: rgba(6, 4, 15, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 1000 !important;
+  overflow: hidden !important;
+  padding: 14px;
+  box-sizing: border-box;
 }
 
 .modal-overlay.hidden {
-  display: none;
+  display: none !important;
 }
 
 .achievement-modal-content {
-  width: 88%;
-  max-width: 440px;
-  background: linear-gradient(135deg, rgba(28, 18, 55, 0.98) 0%, rgba(16, 10, 32, 0.98) 100%);
-  border: 1.5px solid rgba(168, 85, 247, 0.4);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(168, 85, 247, 0.25);
-  border-radius: 24px;
+  width: 90%;
+  max-width: 420px;
+  background: linear-gradient(135deg, rgba(28, 18, 55, 0.98) 0%, rgba(14, 9, 32, 0.99) 100%);
+  border: 1.5px solid rgba(168, 85, 247, 0.5);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(168, 85, 247, 0.3);
+  border-radius: 26px;
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  animation: categoryPopupIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.achievement-modal-content::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(168, 85, 247, 0.12) 0%, transparent 60%);
+  pointer-events: none;
 }
 
 .modal-icon-halo {
-  width: 76px;
-  height: 76px;
-  border-radius: 22px;
+  width: 82px;
+  height: 82px;
+  min-width: 82px;
+  border-radius: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4173,6 +4282,7 @@
   border: 2px solid #38BDF8;
   background: radial-gradient(circle at 35% 35%, rgba(56, 189, 248, 0.3) 0%, rgba(139, 92, 246, 0.35) 100%);
   box-shadow: 0 0 24px rgba(56, 189, 248, 0.5);
+  position: relative;
 }
 
 .modal-icon-halo.rarity-bronze { border-color: #CD7F32; box-shadow: 0 0 20px rgba(205, 127, 50, 0.5); }

@@ -928,13 +928,13 @@ const Settings = {
     const total = (typeof Achievements !== 'undefined' && Achievements.list) ? Achievements.list.length : 84;
     const titleEl = document.getElementById('settingsAchievementsTitle');
     const descEl = document.getElementById('settingsAchievementsDesc');
-    if (titleEl) titleEl.textContent = `${total} Achievements`;
+    if (titleEl) titleEl.textContent = '3. Achievements';
     if (descEl) descEl.textContent = `View all ${total} unlockable achievements across 6 categories`;
     const achBtnInfo = document.querySelector('.settings-menu-btn.achievements-btn .menu-info');
     if (achBtnInfo) {
       const h3 = achBtnInfo.querySelector('h3');
       const p = achBtnInfo.querySelector('p');
-      if (h3) h3.textContent = `${total} Achievements`;
+      if (h3) h3.textContent = '3. Achievements';
       if (p) p.textContent = `View all ${total} unlockable achievements across 6 categories`;
     }
   },
