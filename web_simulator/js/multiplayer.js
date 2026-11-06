@@ -1595,9 +1595,11 @@ var Multiplayer = window.Multiplayer = {
         totalQuestions: totalQ,
         date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
         participants: participantStandings.map(p => {
-          const correct = Number(p.correct_answers || p.correct || 0);
+          let rawCorrect = Number(p.correct_answers || p.correct || 0);
+          const correct = Math.min(totalQ, Math.max(0, rawCorrect));
           const points = Number(p.score || p.points || 0);
-          const pct = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
+          const rawPct = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
+          const pct = Math.min(100, Math.max(0, rawPct));
           return {
             name: p.display_name || p.playerName || p.name || 'Participant',
             points: points,
@@ -1643,9 +1645,11 @@ var Multiplayer = window.Multiplayer = {
     }
 
     const participantsList = Array.from(mergedMap.values()).map(p => {
-      const correct = Number(p.correct || 0);
+      let rawCorrect = Number(p.correct || 0);
+      const correct = Math.min(totalQ, Math.max(0, rawCorrect));
       const points = Number(p.points || 0);
-      const pct = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
+      const rawPct = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
+      const pct = Math.min(100, Math.max(0, rawPct));
       return {
         name: p.name,
         points: points,
@@ -1759,9 +1763,21 @@ var Multiplayer = window.Multiplayer = {
       } else if (pointsEarned !== undefined) {
         p.score = (p.score || 0) + pointsEarned;
       }
-      if (isCorrect !== undefined) {
-        p.correct_answers = (p.correct_answers || 0) + (isCorrect ? 1 : 0);
-        p.wrong_answers = (p.wrong_answers || 0) + (isCorrect ? 0 : 1);
+      
+      const totalQ = (this.questionsList && this.questionsList.length > 0) ? this.questionsList.length : 1;
+      const qIdx = data.questionIndex !== undefined ? data.questionIndex : (this.currentIndex || 0);
+
+      if (!p.answeredQuestions) p.answeredQuestions = new Set();
+      if (!p.answeredQuestions.has(qIdx)) {
+        p.answeredQuestions.add(qIdx);
+        if (isCorrect) {
+          p.correct_answers = Math.min(totalQ, (p.correct_answers || 0) + 1);
+        } else {
+          p.wrong_answers = (p.wrong_answers || 0) + 1;
+        }
+      } else {
+        // Already recorded this question, clamp correct_answers
+        p.correct_answers = Math.min(totalQ, Math.max(0, p.correct_answers || 0));
       }
       p.lastPointsEarned = pointsEarned || 0;
       p.lastAnswerCorrect = !!isCorrect;

@@ -2296,6 +2296,22 @@ var DB = {
   saveHostedGameAnalytics(data) {
     if (!data) return;
     try {
+      const totalQ = Math.max(1, Number(data.totalQuestions || 1));
+      if (Array.isArray(data.participants)) {
+        data.participants = data.participants.map(p => {
+          let correct = Number(p.correct !== undefined ? p.correct : (p.correct_answers || 0));
+          correct = Math.min(totalQ, Math.max(0, correct));
+          const rawPct = Math.round((correct / totalQ) * 100);
+          const accuracyPct = Math.min(100, Math.max(0, rawPct));
+          return {
+            ...p,
+            correct: correct,
+            totalQuestions: totalQ,
+            correctRatio: `${correct}/${totalQ}`,
+            accuracyPct: accuracyPct
+          };
+        });
+      }
       this._lastHostedAnalytics = data;
       localStorage.setItem('nexus_latest_hosted_game_analytics', JSON.stringify(data));
       sessionStorage.setItem('nexus_latest_hosted_game_analytics', JSON.stringify(data));
@@ -2305,17 +2321,39 @@ var DB = {
   },
 
   getLatestHostedGameAnalytics() {
+    let data = null;
     try {
       const raw = localStorage.getItem('nexus_latest_hosted_game_analytics');
-      if (raw) return JSON.parse(raw);
+      if (raw) data = JSON.parse(raw);
     } catch (e) {}
 
-    try {
-      const rawSession = sessionStorage.getItem('nexus_latest_hosted_game_analytics');
-      if (rawSession) return JSON.parse(rawSession);
-    } catch (e) {}
+    if (!data) {
+      try {
+        const rawSession = sessionStorage.getItem('nexus_latest_hosted_game_analytics');
+        if (rawSession) data = JSON.parse(rawSession);
+      } catch (e) {}
+    }
 
-    return this._lastHostedAnalytics || null;
+    if (!data) data = this._lastHostedAnalytics || null;
+
+    if (data && Array.isArray(data.participants)) {
+      const totalQ = Math.max(1, Number(data.totalQuestions || 1));
+      data.participants = data.participants.map(p => {
+        let correct = Number(p.correct !== undefined ? p.correct : (p.correct_answers || 0));
+        correct = Math.min(totalQ, Math.max(0, correct));
+        const rawPct = Math.round((correct / totalQ) * 100);
+        const accuracyPct = Math.min(100, Math.max(0, rawPct));
+        return {
+          ...p,
+          correct: correct,
+          totalQuestions: totalQ,
+          correctRatio: `${correct}/${totalQ}`,
+          accuracyPct: accuracyPct
+        };
+      });
+    }
+
+    return data;
   }
 };
 

@@ -621,7 +621,21 @@ const TeacherPortal = {
 
     let hostedGameSection = '';
     if (latestHostedGame) {
-      const parts = latestHostedGame.participants || [];
+      const totalQ = Math.max(1, Number(latestHostedGame.totalQuestions || 1));
+      const parts = (latestHostedGame.participants || []).map(p => {
+        let correct = Number(p.correct !== undefined ? p.correct : (p.correct_answers || 0));
+        correct = Math.min(totalQ, Math.max(0, correct));
+        const rawPct = Number(p.accuracyPct !== undefined ? p.accuracyPct : Math.round((correct / totalQ) * 100));
+        const accuracyPct = Math.min(100, Math.max(0, rawPct));
+        const correctRatio = `${correct}/${totalQ}`;
+        return {
+          ...p,
+          correct,
+          totalQuestions: totalQ,
+          correctRatio,
+          accuracyPct
+        };
+      });
       hostedGameSection = `
         <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 16px; padding: 18px; margin-bottom: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.3);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
