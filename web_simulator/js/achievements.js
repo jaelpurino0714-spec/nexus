@@ -2225,7 +2225,10 @@ const Achievements = {
       }
       const tile = document.createElement('div');
       tile.className = `ach-tile ${isUnlocked ? 'unlocked achieved' : 'locked'} rarity-${ach.rarity}`;
-      tile.onclick = () => this.showModal(ach, isUnlocked, progress);
+      tile.onclick = (e) => {
+        if (e) e.stopPropagation();
+        this.showModal(ach, isUnlocked, progress);
+      };
 
       const progressHtml = isUnlocked
         ? `<div class="ach-tile-progress-text unlocked">Achieved ✅</div>`
@@ -2437,7 +2440,10 @@ const Achievements = {
       }
       const tile = document.createElement('div');
       tile.className = `ach-tile ${isUnlocked ? 'unlocked achieved' : 'locked'} rarity-${ach.rarity}`;
-      tile.onclick = () => this.showModal(ach, isUnlocked, progress);
+      tile.onclick = (e) => {
+        if (e) e.stopPropagation();
+        this.showModal(ach, isUnlocked, progress);
+      };
 
       const progressHtml = isUnlocked
         ? `<div class="ach-tile-progress-text unlocked">Achieved ✅</div>`
@@ -2578,7 +2584,11 @@ const Achievements = {
     }
 
     const modal = document.getElementById('achievementDetailModal');
-    if (modal) modal.classList.remove('hidden');
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.style.display = 'flex';
+      modal.style.zIndex = '20000';
+    }
   },
 
   playCelebrationSound() {
@@ -2605,7 +2615,10 @@ const Achievements = {
 
   closeModal() {
     const modal = document.getElementById('achievementDetailModal');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.style.display = 'none';
+    }
   }
 };
 

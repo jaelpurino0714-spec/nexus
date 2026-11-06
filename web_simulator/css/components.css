@@ -4243,6 +4243,10 @@
   display: none !important;
 }
 
+#achievementDetailModal {
+  z-index: 20000 !important;
+}
+
 .achievement-modal-content {
   width: 90%;
   max-width: 420px;
