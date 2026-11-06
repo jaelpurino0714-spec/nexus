@@ -184,15 +184,13 @@ const Multiplayer = {
       const code = (l.code || l.room_code || '').toUpperCase();
       const host = l.hostName || 'Host';
       const parts = (l.participants ? l.participants.length : 1);
-      html += 
-        <div style="background: rgba(16, 185, 129, 0.12); border: 1.5px solid rgba(16, 185, 129, 0.45); border-radius: 14px; padding: 10px 14px; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;" onclick="Multiplayer.quickFillPin('')" title="Click to auto-fill PIN and join">
-          <div style="text-align: left;">
-            <span style="font-size: 1.15rem; font-weight: 900; color: #FFFFFF; font-family: var(--font-heading); letter-spacing: 3px;"></span>
-            <span style="font-size: 0.74rem; color: #A7F3D0; margin-left: 8px;">Host: <b>System.Management.Automation.Internal.Host.InternalHost</b> ( online)</span>
-          </div>
-          <button type="button" class="primary-btn" style="padding: 5px 12px; font-size: 0.78rem; font-weight: 800; border-radius: 8px; background: linear-gradient(135deg, #059669 0%, #10B981 100%); border: none; color: white;">Tap to Join</button>
-        </div>
-      ;
+      html += '<div style="background: rgba(16, 185, 129, 0.12); border: 1.5px solid rgba(16, 185, 129, 0.45); border-radius: 14px; padding: 10px 14px; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;" onclick="Multiplayer.quickFillPin(\'' + code + '\')" title="Click to auto-fill PIN and join">' +
+        '<div style="text-align: left;">' +
+          '<span style="font-size: 1.15rem; font-weight: 900; color: #FFFFFF; font-family: var(--font-heading); letter-spacing: 3px;">' + code + '</span>' +
+          '<span style="font-size: 0.74rem; color: #A7F3D0; margin-left: 8px;">Host: <b>' + host + '</b> (' + parts + ' online)</span>' +
+        '</div>' +
+        '<button type="button" class="primary-btn" style="padding: 5px 12px; font-size: 0.78rem; font-weight: 800; border-radius: 8px; background: linear-gradient(135deg, #059669 0%, #10B981 100%); border: none; color: white;">Tap to Join</button>' +
+      '</div>';
     });
     html += '</div>';
     container.innerHTML = html;

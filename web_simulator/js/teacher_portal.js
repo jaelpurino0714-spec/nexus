@@ -535,6 +535,11 @@ const TeacherPortal = {
       maxParticipants: maxPart
     };
 
+    if (typeof Multiplayer === 'undefined') {
+      alert('Multiplayer engine is currently loading or unavailable. Please refresh.');
+      return;
+    }
+
     Multiplayer.resetState();
     const game = await DB.createMultiplayerGame(config);
     Multiplayer.currentGame = game;

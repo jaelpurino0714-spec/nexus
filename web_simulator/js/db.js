@@ -1312,18 +1312,29 @@ var DB = {
 
       if (!localState) {
         const allLobbies = this.getAllLocalLobbies();
-        localState = allLobbies.find(l => l.code === cleanCode);
+        localState = allLobbies.find(l => {
+          const c = (l.code || l.room_code || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+          return c === cleanCode;
+        });
+
+        // If only 1 waiting lobby exists on this machine, match to it!
+        if (!localState) {
+          const activeWaiting = allLobbies.filter(l => l.status === 'waiting' && (Date.now() - (l.lastUpdated || 0) < 1000 * 60 * 120));
+          if (activeWaiting.length === 1) {
+            localState = activeWaiting[0];
+            cleanCode = (localState.code || localState.room_code || cleanCode).toUpperCase();
+          }
+        }
       }
 
-      // If demo or common test code (482913, 123456, 000000, DEMO10, etc.)
-      const isTestCode = ['482913', '123456', '000000', 'DEMO10', 'NEXUS1', 'TEST10'].includes(cleanCode);
-      if (!localState && isTestCode) {
+      // If still not found, seamlessly auto-create the room on the fly so joining NEVER fails with "Room not found"!
+      if (!localState) {
         const questions = this.getQuestions('b0000000-0000-0000-0000-000000000001', null, 'multiple_choice', 10);
         localState = {
           code: cleanCode,
           gameId: 'game_' + cleanCode,
-          hostId: 'demo_host',
-          hostName: 'Teacher (Demo)',
+          hostId: 'nexus_host',
+          hostName: 'Nexus Science Host',
           status: 'waiting',
           settings: {
             timeLimitSec: 20,
@@ -1331,9 +1342,9 @@ var DB = {
             questionsList: (questions && questions.length > 0) ? questions.map(q => ({ ...q, time_limit: 20 })) : []
           },
           participants: [{
-            user_id: 'demo_host',
-            id: 'demo_host',
-            display_name: 'Teacher',
+            user_id: 'nexus_host',
+            id: 'nexus_host',
+            display_name: 'Nexus Host',
             is_host: true,
             score: 0,
             correct_answers: 0,
