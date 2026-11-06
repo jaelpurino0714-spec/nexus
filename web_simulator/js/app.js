@@ -848,6 +848,10 @@ const App = {
       if (typeof CharacterSystem !== 'undefined') {
         CharacterSystem.renderHomeCharacterCard();
       }
+    } else if (screenId === 'studentDashboardScreen') {
+      if (typeof StudentDashboard !== 'undefined' && StudentDashboard.render) {
+        StudentDashboard.render();
+      }
     }
   },
 
