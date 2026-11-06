@@ -924,7 +924,23 @@ const App = {
 
 // Settings Sub-Menu Navigation
 const Settings = {
+  refreshAchievementsMenuCard() {
+    const total = (typeof Achievements !== 'undefined' && Achievements.list) ? Achievements.list.length : 84;
+    const titleEl = document.getElementById('settingsAchievementsTitle');
+    const descEl = document.getElementById('settingsAchievementsDesc');
+    if (titleEl) titleEl.textContent = `${total} Achievements`;
+    if (descEl) descEl.textContent = `View all ${total} unlockable achievements across 6 categories`;
+    const achBtnInfo = document.querySelector('.settings-menu-btn.achievements-btn .menu-info');
+    if (achBtnInfo) {
+      const h3 = achBtnInfo.querySelector('h3');
+      const p = achBtnInfo.querySelector('p');
+      if (h3) h3.textContent = `${total} Achievements`;
+      if (p) p.textContent = `View all ${total} unlockable achievements across 6 categories`;
+    }
+  },
+
   openSubMenu(subMenu) {
+    this.refreshAchievementsMenuCard();
     if (subMenu === 'data') {
       this.renderDataStats();
       App.showScreen('settingsDataSubScreen');
@@ -1148,4 +1164,7 @@ if (typeof window !== 'undefined') {
 
 document.addEventListener('DOMContentLoaded', () => {
   App.init();
+  if (typeof Settings !== 'undefined' && Settings.refreshAchievementsMenuCard) {
+    Settings.refreshAchievementsMenuCard();
+  }
 });
