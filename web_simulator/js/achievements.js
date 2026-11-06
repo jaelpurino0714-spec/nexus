@@ -1597,25 +1597,20 @@ const Achievements = {
     let newUnlocks = 0;
 
     this.list.forEach(ach => {
-      const { isComplete } = this.computeProgress(ach, stats);
-      if (isComplete && !unlocked.includes(ach.id)) {
+      const { isComplete, percentage } = this.computeProgress(ach, stats);
+      if ((isComplete || percentage >= 100) && !unlocked.includes(ach.id)) {
         if (typeof DB !== 'undefined' && DB.saveUnlockedAchievement) {
           DB.saveUnlockedAchievement(ach.id);
         }
         unlocked.push(ach.id);
         newUnlocks++;
-        this.showUnlockToast(ach);
       }
     });
 
     if (newUnlocks > 0) {
       this.saveStats(stats);
-      // Re-render if achievements screen is currently active
-      if (document.getElementById('settingsAchievementsSubScreen') && 
-          document.getElementById('settingsAchievementsSubScreen').classList.contains('active')) {
-        this.render();
-      }
     }
+    return unlocked;
   },
 
   showUnlockToast(ach) {
@@ -1990,6 +1985,7 @@ const Achievements = {
   },
 
   showCategoriesView() {
+    this.checkAndUnlock();
     const hub = document.getElementById('achievementsCategoriesHub');
     if (hub) hub.classList.remove('hidden');
 
@@ -1999,6 +1995,7 @@ const Achievements = {
   },
 
   openCategory(catId) {
+    this.checkAndUnlock();
     if (catId === 'rankings') {
       this.openRankingsPopup();
       return;
@@ -2020,6 +2017,7 @@ const Achievements = {
   },
 
   openRankingsPopup() {
+    this.checkAndUnlock();
     const popup = document.getElementById('rankingsPopupModal');
     if (popup) popup.classList.remove('hidden');
     this.showRankingsHub();
@@ -2217,14 +2215,20 @@ const Achievements = {
     grid.innerHTML = '';
 
     filtered.forEach(ach => {
-      const isUnlocked = unlocked.includes(ach.id);
       const progress = this.computeProgress(ach, stats);
+      let isUnlocked = unlocked.includes(ach.id) || progress.isComplete || progress.percentage >= 100;
+      if (isUnlocked && !unlocked.includes(ach.id)) {
+        unlocked.push(ach.id);
+        if (typeof DB !== 'undefined' && DB.saveUnlockedAchievement) {
+          DB.saveUnlockedAchievement(ach.id);
+        }
+      }
       const tile = document.createElement('div');
-      tile.className = `ach-tile ${isUnlocked ? 'unlocked' : 'locked'} rarity-${ach.rarity}`;
+      tile.className = `ach-tile ${isUnlocked ? 'unlocked achieved' : 'locked'} rarity-${ach.rarity}`;
       tile.onclick = () => this.showModal(ach, isUnlocked, progress);
 
       const progressHtml = isUnlocked
-        ? `<div class="ach-tile-progress-text unlocked">Completed ✅</div>`
+        ? `<div class="ach-tile-progress-text unlocked">Achieved ✅</div>`
         : `
           <div class="ach-tile-progress-wrap">
             <div class="ach-tile-progress-bar">
@@ -2420,14 +2424,20 @@ const Achievements = {
     if (!grid) return;
 
     filtered.forEach(ach => {
-      const isUnlocked = unlocked.includes(ach.id);
       const progress = this.computeProgress(ach, stats);
+      let isUnlocked = unlocked.includes(ach.id) || progress.isComplete || progress.percentage >= 100;
+      if (isUnlocked && !unlocked.includes(ach.id)) {
+        unlocked.push(ach.id);
+        if (typeof DB !== 'undefined' && DB.saveUnlockedAchievement) {
+          DB.saveUnlockedAchievement(ach.id);
+        }
+      }
       const tile = document.createElement('div');
-      tile.className = `ach-tile ${isUnlocked ? 'unlocked' : 'locked'} rarity-${ach.rarity}`;
+      tile.className = `ach-tile ${isUnlocked ? 'unlocked achieved' : 'locked'} rarity-${ach.rarity}`;
       tile.onclick = () => this.showModal(ach, isUnlocked, progress);
 
       const progressHtml = isUnlocked
-        ? `<div class="ach-tile-progress-text unlocked">Completed ✅</div>`
+        ? `<div class="ach-tile-progress-text unlocked">Achieved ✅</div>`
         : `
           <div class="ach-tile-progress-wrap">
             <div class="ach-tile-progress-bar">
@@ -2478,15 +2488,30 @@ const Achievements = {
       const stats = this.getStats();
       progress = this.computeProgress(ach, stats);
     }
-    if (isUnlocked === undefined) {
+    const isProgressComplete = progress.isComplete || progress.percentage >= 100;
+    if (isProgressComplete) {
+      isUnlocked = true;
+      if (typeof DB !== 'undefined' && DB.saveUnlockedAchievement) {
+        DB.saveUnlockedAchievement(ach.id);
+      }
+    } else if (isUnlocked === undefined) {
       const unlocked = (typeof DB !== 'undefined' && DB.getUnlockedAchievements) ? DB.getUnlockedAchievements() : [];
       isUnlocked = unlocked.includes(ach.id);
+    }
+
+    const modalCard = document.querySelector('.achievement-modal-content');
+    if (modalCard) {
+      if (isUnlocked) {
+        modalCard.classList.add('achieved');
+      } else {
+        modalCard.classList.remove('achieved');
+      }
     }
 
     const iconEl = document.getElementById('modalAchIcon');
     if (iconEl) {
       iconEl.innerHTML = `
-        <div class="modal-icon-halo rarity-${ach.rarity}">
+        <div class="modal-icon-halo rarity-${ach.rarity} ${isUnlocked ? 'achieved-glow' : ''}">
           <span class="modal-ach-emoji">${ach.icon}</span>
         </div>
       `;
@@ -2511,25 +2536,37 @@ const Achievements = {
 
     const badge = document.getElementById('modalAchStatus');
     if (badge) {
-      badge.textContent = isUnlocked ? 'Unlocked 🎉' : 'Locked 🔒';
-      badge.className = `ach-status-badge ${isUnlocked ? 'unlocked' : 'locked'}`;
+      if (isUnlocked) {
+        badge.innerHTML = 'Achieved 🎉';
+        badge.className = 'ach-status-badge unlocked achieved';
+      } else {
+        badge.innerHTML = 'Locked 🔒';
+        badge.className = 'ach-status-badge locked';
+      }
     }
 
     const xpEl = document.getElementById('modalAchXP');
     if (xpEl) {
       xpEl.textContent = `+${ach.xp} XP`;
+      if (isUnlocked) {
+        xpEl.className = 'ach-status-badge xp-pill achieved-xp';
+      } else {
+        xpEl.className = 'ach-status-badge xp-pill';
+      }
     }
 
     const progBar = document.getElementById('modalAchProgressBar');
     if (progBar) {
-      progBar.style.width = `${progress.percentage}%`;
-      progBar.className = `modal-progress-fill rarity-${ach.rarity}`;
+      progBar.style.width = isUnlocked ? '100%' : `${progress.percentage}%`;
+      progBar.className = isUnlocked 
+        ? `modal-progress-fill achieved-fill rarity-${ach.rarity}` 
+        : `modal-progress-fill rarity-${ach.rarity}`;
     }
 
     const progText = document.getElementById('modalAchProgressText');
     if (progText) {
       progText.textContent = isUnlocked
-        ? `100% Completed (${progress.target}/${progress.target})`
+        ? `100% Completed (${progress.target} / ${progress.target})`
         : `${progress.percentage}% Complete (${progress.current} / ${progress.target})`;
     }
 

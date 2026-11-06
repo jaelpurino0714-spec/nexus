@@ -4269,6 +4269,73 @@
 .modal-progress-fill.rarity-gold { background: #FBBF24; }
 .modal-progress-fill.rarity-platinum { background: #38BDF8; }
 
+/* ================= 100% ACHIEVED & LIT UP SHOWCASE ================= */
+@keyframes achievementGlowPulse {
+  0% {
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(52, 211, 153, 0.4), inset 0 0 15px rgba(52, 211, 153, 0.1);
+    border-color: #34D399;
+  }
+  100% {
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.8), 0 0 45px rgba(52, 211, 153, 0.75), inset 0 0 25px rgba(52, 211, 153, 0.25);
+    border-color: #10B981;
+  }
+}
+
+@keyframes iconAchievedPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.85));
+  }
+  50% {
+    transform: scale(1.06);
+    filter: drop-shadow(0 0 24px rgba(52, 211, 153, 1));
+  }
+}
+
+.achievement-modal-content.achieved {
+  border-color: #34D399 !important;
+  animation: achievementGlowPulse 2.2s infinite alternate ease-in-out;
+}
+
+.modal-icon-halo.achieved-glow {
+  border-color: #34D399 !important;
+  background: radial-gradient(circle at 35% 35%, rgba(52, 211, 153, 0.45) 0%, rgba(16, 185, 129, 0.25) 100%) !important;
+  box-shadow: 0 0 32px rgba(52, 211, 153, 0.9), inset 0 0 16px rgba(52, 211, 153, 0.4) !important;
+  animation: iconAchievedPulse 2s infinite ease-in-out;
+}
+
+.ach-status-badge.unlocked.achieved {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.35) 0%, rgba(52, 211, 153, 0.25) 100%) !important;
+  color: #34D399 !important;
+  border: 1.5px solid #10B981 !important;
+  box-shadow: 0 0 14px rgba(52, 211, 153, 0.65) !important;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.ach-status-badge.xp-pill.achieved-xp {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.6) !important;
+}
+
+.modal-progress-fill.achieved-fill {
+  background: linear-gradient(90deg, #10B981 0%, #34D399 50%, #6EE7B7 100%) !important;
+  box-shadow: 0 0 18px rgba(52, 211, 153, 0.9) !important;
+}
+
+.ach-tile.unlocked.achieved {
+  border-color: #34D399 !important;
+  box-shadow: 0 0 22px rgba(52, 211, 153, 0.45) !important;
+}
+.ach-tile.unlocked.achieved.rarity-gold {
+  border-color: #FBBF24 !important;
+  box-shadow: 0 0 24px rgba(251, 191, 36, 0.55) !important;
+}
+.ach-tile.unlocked.achieved.rarity-platinum {
+  border-color: #38BDF8 !important;
+  box-shadow: 0 0 26px rgba(56, 189, 248, 0.6) !important;
+}
+
 /* Achievement Unlock Toast Notification */
 .achievement-toast-banner {
   position: fixed;
