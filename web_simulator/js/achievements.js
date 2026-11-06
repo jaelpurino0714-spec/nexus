@@ -1988,26 +1988,27 @@ const Achievements = {
 
   showCategoriesView() {
     const hub = document.getElementById('achievementsCategoriesHub');
-    const detail = document.getElementById('achievementsCategoryDetailView');
     if (hub) hub.classList.remove('hidden');
-    if (detail) detail.classList.add('hidden');
 
-    this.renderSummaryHeader();
+    this.closeCategoryPopup();
     this.renderCategoryCards();
   },
 
   openCategory(catId) {
     this.activeCategory = catId;
-    const hub = document.getElementById('achievementsCategoriesHub');
-    const detail = document.getElementById('achievementsCategoryDetailView');
-    if (hub) hub.classList.add('hidden');
-    if (detail) detail.classList.remove('hidden');
+    const popup = document.getElementById('categoryPopupModal');
+    if (popup) popup.classList.remove('hidden');
 
-    this.renderSelectedCategoryHeader(catId);
+    this.renderCategoryPopupHeader(catId);
     this.renderCategoryGrid(catId);
 
     const grid = document.getElementById('achievementsGrid');
     if (grid) grid.scrollTop = 0;
+  },
+
+  closeCategoryPopup() {
+    const popup = document.getElementById('categoryPopupModal');
+    if (popup) popup.classList.add('hidden');
   },
 
   renderSummaryHeader() {
@@ -2133,24 +2134,45 @@ const Achievements = {
     }).join('');
   },
 
-  renderSelectedCategoryHeader(catId) {
-    const navInfo = document.getElementById('selectedCategoryNavInfo');
-    if (!navInfo) return;
-
+  renderCategoryPopupHeader(catId) {
     const cat = this.categories.find(c => c.id === catId) || this.categories[1];
     const catAchs = this.list.filter(a => a.category === catId);
     const unlocked = (typeof DB !== 'undefined' && DB.getUnlockedAchievements) ? DB.getUnlockedAchievements() : [];
     const catUnlocked = catAchs.filter(a => unlocked.includes(a.id)).length;
+    const catPercent = Math.round((catUnlocked / catAchs.length) * 100);
     const rank = this.getCategoryRank(catId, catUnlocked);
     const colors = this.categoryColors[catId] || { border: '#A855F7', glow: 'rgba(168, 85, 247, 0.35)', bg: 'rgba(168, 85, 247, 0.12)' };
 
-    navInfo.style.borderColor = colors.border;
-    navInfo.style.boxShadow = `0 0 14px ${colors.glow}`;
-    navInfo.innerHTML = `
-      <span class="cat-pill-icon">${cat.icon}</span>
-      <span class="cat-pill-name">${cat.name}</span>
-      <span class="cat-pill-count" style="color: ${colors.border};">${catUnlocked}/${catAchs.length}</span>
-    `;
+    const halo = document.getElementById('catPopupIconHalo');
+    if (halo) {
+      halo.style.borderColor = colors.border;
+      halo.style.background = colors.bg;
+      halo.style.boxShadow = `0 0 16px ${colors.glow}`;
+    }
+
+    const iconEl = document.getElementById('catPopupIcon');
+    if (iconEl) iconEl.textContent = cat.icon;
+
+    const titleEl = document.getElementById('catPopupTitle');
+    if (titleEl) titleEl.textContent = cat.name;
+
+    const rankEl = document.getElementById('catPopupRank');
+    if (rankEl) {
+      rankEl.innerHTML = `${rank.icon} ${rank.title}`;
+      rankEl.style.borderColor = colors.border;
+      rankEl.style.color = colors.border;
+    }
+
+    const countEl = document.getElementById('catPopupCount');
+    if (countEl) {
+      countEl.textContent = `${catUnlocked} / ${catAchs.length} (${catPercent}%)`;
+    }
+
+    const card = document.querySelector('.category-popup-card');
+    if (card) {
+      card.style.borderColor = colors.border;
+      card.style.boxShadow = `0 16px 50px rgba(0, 0, 0, 0.8), 0 0 28px ${colors.glow}`;
+    }
   },
 
   renderCategoryGrid(catId) {

@@ -1658,14 +1658,11 @@
 
       <!-- ================= 8.3 ACHIEVEMENTS SUB-MENU ================= -->
       <section id="settingsAchievementsSubScreen" class="screen">
-        <!-- VIEW 1: CATEGORIES HUB -->
+        <!-- ONLY CATEGORIES UI -->
         <div id="achievementsCategoriesHub" class="sub-settings-container">
           <button class="back-link" onclick="App.showScreen('settingsScreen')">← Settings</button>
           <h2>Achievements & Badges</h2>
-          <p class="subtitle">Choose a category to view milestones & ranking</p>
-
-          <!-- Master Summary Header Card with Overall Rank -->
-          <div id="achievementsHeaderSummary"></div>
+          <p class="subtitle">Select a category to view its achievements</p>
 
           <!-- Category Selection Cards (6 categories) -->
           <div id="achievementsCategoryCardsGrid" class="ach-categories-menu-grid">
@@ -1673,21 +1670,34 @@
           </div>
         </div>
 
-        <!-- VIEW 2: DEDICATED ACHIEVEMENTS VIEW (ONLY ACHIEVEMENTS) -->
-        <div id="achievementsCategoryDetailView" class="sub-settings-container hidden">
-          <div class="category-detail-top-nav">
-            <button class="category-back-btn" onclick="Achievements.showCategoriesView()">← Categories</button>
-            <div id="selectedCategoryNavInfo" class="category-nav-title-pill"></div>
-          </div>
+        <!-- POPUP UI: CATEGORY ACHIEVEMENTS (Pops up when category is clicked) -->
+        <div id="categoryPopupModal" class="modal-overlay hidden" onclick="Achievements.closeCategoryPopup()">
+          <div class="category-popup-card" onclick="event.stopPropagation()">
+            <div class="category-popup-header">
+              <div class="cat-popup-title-group">
+                <div id="catPopupIconHalo" class="cat-popup-icon-halo">
+                  <span id="catPopupIcon" class="cat-popup-icon">🏆</span>
+                </div>
+                <div class="cat-popup-info-group">
+                  <h3 id="catPopupTitle" class="cat-popup-title">Live Competitor</h3>
+                  <div class="cat-popup-badges-row">
+                    <span id="catPopupRank" class="cat-popup-rank-badge">Casual Competitor</span>
+                    <span id="catPopupCount" class="cat-popup-count">0 / 14 (0%)</span>
+                  </div>
+                </div>
+              </div>
+              <button class="cat-popup-close-btn" onclick="Achievements.closeCategoryPopup()" aria-label="Close">✕</button>
+            </div>
 
-          <!-- 3-Column Grid of 14 Achievements -->
-          <div id="achievementsGrid" class="achievements-4col-grid">
-            <!-- Populated dynamically by achievements.js -->
+            <!-- 3-Column Grid of 14 Achievements -->
+            <div id="achievementsGrid" class="achievements-popup-grid">
+              <!-- Populated dynamically by achievements.js -->
+            </div>
           </div>
         </div>
 
-        <!-- Achievement Detail Popup Modal -->
-        <div id="achievementDetailModal" class="modal-overlay hidden" onclick="Achievements.closeModal()">
+        <!-- Achievement Detail Popup Modal (Pops above category popup) -->
+        <div id="achievementDetailModal" class="modal-overlay hidden" style="z-index: 60;" onclick="Achievements.closeModal()">
           <div class="modal-card achievement-modal-content" onclick="event.stopPropagation()">
             <div id="modalAchIcon" class="ach-modal-icon">🏆</div>
             <div id="modalAchCategory" class="modal-cat-tag">⚡ Speedster</div>
