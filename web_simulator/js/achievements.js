@@ -1492,8 +1492,8 @@ const Achievements = {
 
   backfillStats(stats) {
     if (typeof DB === 'undefined') return;
-    const allResults = DB.getQuizResults ? DB.getQuizResults() : [];
-    const profile = DB.getStudentProfile ? DB.getStudentProfile() : {};
+    const allResults = (DB.getQuizResults ? DB.getQuizResults() : null) || [];
+    const profile = (DB.getStudentProfile ? DB.getStudentProfile() : null) || {};
 
     // Backfill quiz metrics if not already populated
     if (allResults.length > 0) {
@@ -1556,7 +1556,7 @@ const Achievements = {
       }
     }
 
-    if (profile.streak && profile.streak > stats.petInteractionStreak) {
+    if (profile && profile.streak && profile.streak > stats.petInteractionStreak) {
       stats.petInteractionStreak = profile.streak;
     }
   },
