@@ -4222,22 +4222,24 @@
 
 /* Modal Popup Styles */
 .modal-overlay {
-  position: fixed !important;
-  inset: 0 !important;
+  position: fixed;
+  inset: 0;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(6, 4, 15, 0.85) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  z-index: 1000 !important;
-  overflow: hidden !important;
+  background: rgba(6, 4, 15, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  overflow: hidden;
   padding: 14px;
   box-sizing: border-box;
 }
 
-.modal-overlay.hidden {
+.modal-overlay.hidden,
+.modal-overlay[style*="display: none"],
+.modal-overlay[style*="display:none"] {
   display: none !important;
 }
 

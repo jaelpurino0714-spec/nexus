@@ -325,9 +325,13 @@ const App = {
   toggleBgmModal() {
     const modal = document.getElementById('bgmModal');
     if (modal) {
-      const isShowing = modal.style.display === 'flex';
-      modal.style.display = isShowing ? 'none' : 'flex';
-      if (!isShowing) {
+      const isShowing = !modal.classList.contains('hidden') && modal.style.display !== 'none';
+      if (isShowing) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      } else {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
         // Sync BGM controls
         const bgmAudio = document.getElementById('nexusBgmAudio');
         const bgmSlider = document.getElementById('bgmVolSlider');
