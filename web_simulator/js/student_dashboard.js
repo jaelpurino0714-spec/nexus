@@ -366,7 +366,7 @@ const StudentDashboard = {
     return `
       <div class="dash-greeting-row">
         <div class="dash-greeting-left">
-          <h1 class="dash-hello-title">Hello ${name}! <span class="dash-mascot-emoji">🐯</span></h1>
+          <h1 class="dash-hello-title">Hello ${name}!</h1>
         </div>
         <div class="dash-speech-bubble">
           <span>${bubbleText}</span>
@@ -688,7 +688,7 @@ const StudentDashboard = {
 
         <!-- Illustration & Big Play Button -->
         <div class="challenge-visual-box">
-          <div class="challenge-mascot-deco">🐯🧭</div>
+          <div class="challenge-mascot-deco">🧭</div>
           <button class="challenge-play-btn" title="Play Today's Challenge">
             <span>▶</span>
           </button>
