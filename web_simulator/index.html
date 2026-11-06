@@ -10,8 +10,8 @@
   <link rel="icon" type="image/png" href="favicon.png?v=2">
   <link rel="shortcut icon" href="favicon.ico?v=2">
   <link rel="apple-touch-icon" href="assets/web_logo.png?v=2">
-  <link rel="stylesheet" href="css/styles.css?v=4.6">
-  <link rel="stylesheet" href="css/components.css?v=4.6">
+  <link rel="stylesheet" href="css/styles.css?v=4.7">
+  <link rel="stylesheet" href="css/components.css?v=4.7">
 </head>
 <body>
 
@@ -115,8 +115,8 @@
           <form id="signUpForm" style="display: none;" novalidate onsubmit="event.preventDefault(); if (typeof App !== 'undefined') App.playBgm(); Auth.handleSignUp();">
             <!-- Account Type Switcher (Student vs Teacher) -->
             <div style="display: flex; gap: 10px; margin-bottom: 18px;">
-              <button type="button" id="roleBtnStudent" onclick="Auth.setRole('student')" style="flex: 1; padding: 11px; border-radius: 14px; border: 1.5px solid #8B5CF6; background: rgba(124,58,237,0.18); font-weight: 700; cursor: pointer; color: #FFFFFF; box-shadow: 0 0 14px rgba(139,92,246,0.25); transition: all 0.2s;">🎓 Student</button>
-              <button type="button" id="roleBtnTeacher" onclick="Auth.setRole('teacher')" style="flex: 1; padding: 11px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(14,15,38,0.6); font-weight: 700; cursor: pointer; color: #A5A3C4; transition: all 0.2s;">👩‍🏫 Teacher</button>
+              <button type="button" id="roleBtnStudent" onclick="Auth.setRole('student')" style="flex: 1; padding: 11px; border-radius: 14px; border: 1.5px solid #8B5CF6; background: rgba(124,58,237,0.18); font-weight: 700; cursor: pointer; color: #FFFFFF; box-shadow: 0 0 14px rgba(139,92,246,0.25); transition: all 0.2s;">Student</button>
+              <button type="button" id="roleBtnTeacher" onclick="Auth.setRole('teacher')" style="flex: 1; padding: 11px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(14,15,38,0.6); font-weight: 700; cursor: pointer; color: #A5A3C4; transition: all 0.2s;">Teacher</button>
             </div>
 
             <!-- Profile Photo Upload Container -->
@@ -1588,7 +1588,7 @@
 
           <div id="editRoleBadge" style="display: none; text-align: center; margin-bottom: 16px;">
             <span style="background: rgba(249, 115, 22, 0.2); border: 1.5px solid #F97316; color: #FFEDD5; font-size: 0.82rem; font-weight: 800; padding: 6px 16px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 0 12px rgba(249, 115, 22, 0.3);">
-              👨‍🏫 Educator / Teacher Profile
+              Educator / Teacher Profile
             </span>
           </div>
 
@@ -1745,18 +1745,18 @@
 
 
   <!-- Scripts -->
-  <script src="js/questions_bank.js?v=4.6"></script>
+  <script src="js/questions_bank.js?v=4.7"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/db.js?v=4.6"></script>
-  <script src="js/app.js?v=4.6"></script>
-  <script src="js/auth.js?v=4.6"></script>
-  <script src="js/achievements.js?v=4.6"></script>
-  <script src="js/multiplayer.js?v=4.6"></script>
-  <script src="js/quiz.js?v=4.6"></script>
-  <script src="js/analytics.js?v=4.6"></script>
-  <script src="js/teacher_portal.js?v=4.6"></script>
-  <script src="js/experiment.js?v=4.6"></script>
-  <script src="js/character.js?v=4.6"></script>
+  <script src="js/db.js?v=4.7"></script>
+  <script src="js/app.js?v=4.7"></script>
+  <script src="js/auth.js?v=4.7"></script>
+  <script src="js/achievements.js?v=4.7"></script>
+  <script src="js/multiplayer.js?v=4.7"></script>
+  <script src="js/quiz.js?v=4.7"></script>
+  <script src="js/analytics.js?v=4.7"></script>
+  <script src="js/teacher_portal.js?v=4.7"></script>
+  <script src="js/experiment.js?v=4.7"></script>
+  <script src="js/character.js?v=4.7"></script>
   <script>
     function updatePhoneClock() {
       const timeEl = document.getElementById('phoneStatusTime');
