@@ -1971,19 +1971,72 @@ var Multiplayer = window.Multiplayer = {
     this.enablePlayerChoices();
 
     this.startSynchronizedTimer('mpPlayerTimerValue', startedAt, this.questionDurationSec, () => {
+      // 1. Immediately lock choices so joiner cannot press or submit an answer
       this.disablePlayerChoices();
+
       const banner = document.getElementById('mpPlayerFeedbackBanner');
       const statusText = document.getElementById('mpPlayerFeedbackText');
-      if (banner && statusText && !this.hasAnsweredCurrent) {
-        banner.className = 'feedback-banner';
-        statusText.textContent = '⏰ Time Limit Reached!';
-      }
-      // Joiner perspective: Automatically advance to the next question when timer runs out!
-      setTimeout(() => {
-        if (!this.isHost) {
-          this.playerAutoAdvanceNextQuestion();
+      const subText = document.getElementById('mpPlayerFeedbackSub');
+
+      // 2. If joiner has not answered yet, automatically record a 0 score
+      if (!this.hasAnsweredCurrent) {
+        this.hasAnsweredCurrent = true;
+
+        const myProfile = (typeof DB !== 'undefined' && DB.getStudentProfile) ? (DB.getStudentProfile() || {}) : {};
+        const myName = this.currentPlayerNickname || 
+                       (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('nexus_current_player_name')) || 
+                       (typeof localStorage !== 'undefined' && localStorage.getItem('nexus_current_player_name')) || 
+                       myProfile.name || 
+                       'Player';
+        const myId = (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('nexus_current_player_id')) || 
+                     (typeof DB !== 'undefined' ? DB.getUserUUID() : ('u_' + Date.now()));
+
+        try {
+          localStorage.setItem(`nexus_ans_${this.currentIndex}_${myName.toLowerCase().trim()}`, 'true');
+        } catch (_) {}
+
+        if (banner && statusText) {
+          banner.className = 'feedback-banner';
+          banner.classList.remove('hidden');
+          statusText.textContent = "⏰ Time's Up!";
+          if (subText) {
+            subText.textContent = 'No answer submitted • 0 points (Waiting for host...)';
+          }
         }
-      }, 1500);
+        if (typeof App !== 'undefined' && App.playWrongSound) {
+          App.playWrongSound();
+        }
+
+        // Send 0-point timeout answer to Host over RealtimeRelay and Broadcast
+        this.sendBroadcast('PLAYER_ANSWERED', {
+          playerId: myId,
+          user_id: myId,
+          playerName: myName,
+          display_name: myName,
+          choice: 'TIME_OUT',
+          isCorrect: false,
+          pointsEarned: 0,
+          totalScore: this.playerScore || 0,
+          questionIndex: this.currentIndex
+        });
+
+        if (typeof RealtimeRelay !== 'undefined' && RealtimeRelay.sendPlayerAnswer) {
+          RealtimeRelay.sendPlayerAnswer(myId, myName, 'TIME_OUT', false, 0, this.playerScore || 0);
+        }
+
+        // Record in DB if possible
+        if (typeof DB !== 'undefined' && DB.submitPlayerAnswer && this.currentGame && q) {
+          try {
+            DB.submitPlayerAnswer(
+              this.currentGame.id,
+              myId,
+              q.id || `q_${this.currentIndex}`,
+              'TIME_OUT',
+              this.questionDurationSec || 20
+            );
+          } catch (_) {}
+        }
+      }
     });
   },
 
@@ -2105,25 +2158,6 @@ var Multiplayer = window.Multiplayer = {
         b.style.pointerEvents = 'none';
         b.style.opacity = '0.7';
       });
-    }
-  },
-
-  playerAutoAdvanceNextQuestion() {
-    if (this.isHost) return;
-    const totalQ = (this.questionsList && this.questionsList.length) ? this.questionsList.length : 1;
-    if (this.currentIndex + 1 < totalQ) {
-      const nextIdx = this.currentIndex + 1;
-      const nextQ = this.questionsList[nextIdx];
-      console.log('⏱️ Timer expired - player auto-advancing to question', nextIdx + 1, 'of', totalQ);
-      this.playerRenderQuestion(nextIdx, {
-        question: nextQ,
-        customQuestion: nextQ,
-        duration: (nextQ && nextQ.time_limit) ? nextQ.time_limit : 20
-      });
-    } else {
-      console.log('⏱️ Final question timer expired - showing final leaderboard');
-      const standings = (this.playersList && this.playersList.length > 0) ? this.playersList : [];
-      this.renderLeaderboardScreen('🏆 Final Podium Leaderboard', standings);
     }
   },
 
