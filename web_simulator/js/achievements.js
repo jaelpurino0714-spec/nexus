@@ -1936,23 +1936,31 @@ const Achievements = {
 
         <div class="ach-rarity-row">
           <div class="ach-rarity-chip bronze">
-            <span class="rarity-dot"></span>
-            <span class="rarity-name">Bronze</span>
+            <div class="rarity-chip-label">
+              <span class="rarity-dot"></span>
+              <span class="rarity-name">Bronze</span>
+            </div>
             <span class="rarity-val">${rarityCounts.bronze.unlocked}/${rarityCounts.bronze.total}</span>
           </div>
           <div class="ach-rarity-chip silver">
-            <span class="rarity-dot"></span>
-            <span class="rarity-name">Silver</span>
+            <div class="rarity-chip-label">
+              <span class="rarity-dot"></span>
+              <span class="rarity-name">Silver</span>
+            </div>
             <span class="rarity-val">${rarityCounts.silver.unlocked}/${rarityCounts.silver.total}</span>
           </div>
           <div class="ach-rarity-chip gold">
-            <span class="rarity-dot"></span>
-            <span class="rarity-name">Gold</span>
+            <div class="rarity-chip-label">
+              <span class="rarity-dot"></span>
+              <span class="rarity-name">Gold</span>
+            </div>
             <span class="rarity-val">${rarityCounts.gold.unlocked}/${rarityCounts.gold.total}</span>
           </div>
           <div class="ach-rarity-chip platinum">
-            <span class="rarity-dot"></span>
-            <span class="rarity-name">Platinum</span>
+            <div class="rarity-chip-label">
+              <span class="rarity-dot"></span>
+              <span class="rarity-name">Platinum</span>
+            </div>
             <span class="rarity-val">${rarityCounts.platinum.unlocked}/${rarityCounts.platinum.total}</span>
           </div>
         </div>
@@ -2031,7 +2039,6 @@ const Achievements = {
             <span class="ach-emoji">${ach.icon}</span>
           </div>
           <div class="ach-name">${ach.name}</div>
-          <div class="ach-desc">${ach.desc}</div>
           ${progressHtml}
         `;
       } else {
@@ -2042,7 +2049,6 @@ const Achievements = {
             <div class="ach-lock-overlay">🔒</div>
           </div>
           <div class="ach-name">${ach.name}</div>
-          <div class="ach-desc">${ach.desc}</div>
           ${progressHtml}
         `;
       }
