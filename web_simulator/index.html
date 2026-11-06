@@ -1180,8 +1180,8 @@
           </div>
 
           <div class="question-card main-question-card" style="margin-top: 12px; background: rgba(22, 14, 45, 0.95); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 22px; padding: 24px;">
-            <div id="mpPlayerQuestionImageContainer" class="question-image-box hidden" style="text-align: center; margin-bottom: 14px;">
-              <img id="mpPlayerQuestionImageEl" src="" alt="Question Illustration" style="max-height: 200px; max-width: 100%; border-radius: 14px; object-fit: contain; box-shadow: 0 4px 20px rgba(0,0,0,0.6); border: 1.5px solid rgba(139, 92, 246, 0.45); background: rgba(15, 10, 30, 0.6);" />
+            <div id="mpPlayerQuestionImageContainer" class="question-image-box hidden" style="text-align: center; margin-bottom: 14px; display: none;">
+              <img id="mpPlayerQuestionImageEl" src="" alt="Question Illustration" style="max-height: 200px; max-width: 100%; border-radius: 14px; object-fit: contain; box-shadow: 0 4px 20px rgba(0,0,0,0.6); border: 1.5px solid rgba(139, 92, 246, 0.45); background: rgba(15, 10, 30, 0.6); display: none;" onerror="this.style.display='none'; if(this.parentElement) this.parentElement.style.display='none';" />
             </div>
             <h3 id="mpPlayerQuestionText" class="gameplay-question-text" style="color: #FFFFFF; font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800;">Loading question...</h3>
 
@@ -1796,20 +1796,20 @@
 
   <!-- Scripts -->
   <script src="js/lib/paho-mqtt.js"></script>
-  <script src="js/realtime_relay.js?v=6.0"></script>
-  <script src="js/questions_bank.js?v=6.0"></script>
+  <script src="js/realtime_relay.js?v=6.1"></script>
+  <script src="js/questions_bank.js?v=6.1"></script>
   <script src="js/lib/supabase.js"></script>
-  <script src="js/db.js?v=6.0"></script>
-  <script src="js/app.js?v=6.0"></script>
-  <script src="js/auth.js?v=6.0"></script>
-  <script src="js/achievements.js?v=6.0"></script>
-  <script src="js/multiplayer.js?v=6.0"></script>
-  <script src="js/quiz.js?v=6.0"></script>
-  <script src="js/analytics.js?v=6.0"></script>
-  <script src="js/teacher_portal.js?v=6.0"></script>
-  <script src="js/experiment.js?v=6.0"></script>
-  <script src="js/character.js?v=6.0"></script>
-  <script src="js/student_dashboard.js?v=6.0"></script>
+  <script src="js/db.js?v=6.1"></script>
+  <script src="js/app.js?v=6.1"></script>
+  <script src="js/auth.js?v=6.1"></script>
+  <script src="js/achievements.js?v=6.1"></script>
+  <script src="js/multiplayer.js?v=6.1"></script>
+  <script src="js/quiz.js?v=6.1"></script>
+  <script src="js/analytics.js?v=6.1"></script>
+  <script src="js/teacher_portal.js?v=6.1"></script>
+  <script src="js/experiment.js?v=6.1"></script>
+  <script src="js/character.js?v=6.1"></script>
+  <script src="js/student_dashboard.js?v=6.1"></script>
   <script>
     function updatePhoneClock() {
       const timeEl = document.getElementById('phoneStatusTime');

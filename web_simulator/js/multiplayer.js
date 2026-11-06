@@ -596,8 +596,18 @@ const Multiplayer = {
           (document.getElementById('mpPlayerGameScreen') && document.getElementById('mpPlayerGameScreen').classList.contains('active'));
 
         if ((game.status === 'active' || game.status === 'starting' || game.status === 'in_progress') && isLobbyActive) {
+          if (typeof RealtimeRelay !== 'undefined' && RealtimeRelay.sendSyncRequest) {
+            RealtimeRelay.sendSyncRequest();
+          }
           if (!this.questionsList || this.questionsList.length === 0) {
-            this.questionsList = await DB.getMultiplayerQuestions(game.id, game.room_code);
+            try {
+              this.questionsList = await DB.getMultiplayerQuestions(game.id, game.room_code);
+            } catch (_) {}
+          }
+          if (!this.questionsList || this.questionsList.length === 0) {
+            if (typeof window !== 'undefined' && window.OFFLINE_QUESTIONS_BANK && window.OFFLINE_QUESTIONS_BANK.length > 0) {
+              this.questionsList = DB._formatQuestions(window.OFFLINE_QUESTIONS_BANK.slice(0, 10));
+            }
           }
           App.showScreen('mpPlayerGameScreen');
           const currentIdx = game.current_question_index || 0;
@@ -609,10 +619,20 @@ const Multiplayer = {
           const qStartTime = game.question_start_time || '';
           const qKey = `${dbIndex}_${qStartTime}`;
 
-          if (qKey !== this.lastRenderedQuestionKey || !this.questionsList || this.questionsList.length === 0) {
+          if (qKey !== this.lastRenderedQuestionKey || !this.questionsList || this.questionsList.length === 0 || !this.questionsList[dbIndex]) {
+            if (typeof RealtimeRelay !== 'undefined' && RealtimeRelay.sendSyncRequest) {
+              RealtimeRelay.sendSyncRequest();
+            }
             this.lastRenderedQuestionKey = qKey;
             if (!this.questionsList || this.questionsList.length === 0) {
-              this.questionsList = await DB.getMultiplayerQuestions(game.id, game.room_code);
+              try {
+                this.questionsList = await DB.getMultiplayerQuestions(game.id, game.room_code);
+              } catch (_) {}
+            }
+            if (!this.questionsList || this.questionsList.length === 0) {
+              if (typeof window !== 'undefined' && window.OFFLINE_QUESTIONS_BANK && window.OFFLINE_QUESTIONS_BANK.length > 0) {
+                this.questionsList = DB._formatQuestions(window.OFFLINE_QUESTIONS_BANK.slice(0, 10));
+              }
             }
             await this.playerRenderQuestion(dbIndex, game);
           }
@@ -709,6 +729,30 @@ const Multiplayer = {
         onGameFinish: (payload) => {
           if (!this.isHost) {
             this.onGameFinish(payload);
+          }
+        },
+        onSyncRequest: () => {
+          if (this.isHost && this.currentGame && this.questionsList && this.questionsList.length > 0) {
+            const currentQ = this.questionsList[this.currentIndex || 0];
+            if (typeof RealtimeRelay !== 'undefined' && RealtimeRelay.sendSyncResponse) {
+              RealtimeRelay.sendSyncResponse({
+                status: this.currentGame.status || 'active',
+                currentIndex: this.currentIndex || 0,
+                questionNumber: (this.currentIndex || 0) + 1,
+                question: currentQ,
+                customQuestion: currentQ,
+                startedAt: this.questionStartedAt || new Date().toISOString(),
+                duration: this.questionDurationSec || 20,
+                totalQuestions: this.questionsList.length
+              });
+            }
+          }
+        },
+        onSyncResponse: (payload) => {
+          if (!this.isHost && payload) {
+            if (payload.status === 'active' || payload.status === 'in_progress') {
+              this.onQuestionStart(payload);
+            }
           }
         }
       });
@@ -1674,7 +1718,14 @@ const Multiplayer = {
     this.hasAnsweredCurrent = false;
 
     if ((!this.questionsList || this.questionsList.length === 0 || !this.questionsList[index]) && this.currentGame) {
-      this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id, this.currentGame.room_code);
+      try {
+        this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id, this.currentGame.room_code);
+      } catch (_) {}
+    }
+    if (!this.questionsList || this.questionsList.length === 0) {
+      if (typeof window !== 'undefined' && window.OFFLINE_QUESTIONS_BANK && window.OFFLINE_QUESTIONS_BANK.length > 0) {
+        this.questionsList = DB._formatQuestions(window.OFFLINE_QUESTIONS_BANK.slice(0, 10));
+      }
     }
 
     const q = (this.questionsList && this.questionsList[index]) || (gameObj && (gameObj.customQuestion || gameObj.question)) || {};
@@ -1694,12 +1745,14 @@ const Multiplayer = {
     const playerImgSrc = q.imageUrl || q.image_url || q.image || q.photoUrl || q.photo_url || q.photo || (gameObj && (gameObj.imageUrl || gameObj.image_url || gameObj.image)) || null;
 
     if (playerImgBox && playerImgEl) {
-      if (playerImgSrc) {
+      if (playerImgSrc && typeof playerImgSrc === 'string' && playerImgSrc.trim().length > 10) {
         playerImgEl.src = playerImgSrc;
+        playerImgEl.style.display = 'inline-block';
         playerImgBox.classList.remove('hidden');
         playerImgBox.style.display = 'block';
       } else {
         playerImgEl.src = '';
+        playerImgEl.style.display = 'none';
         playerImgBox.classList.add('hidden');
         playerImgBox.style.display = 'none';
       }

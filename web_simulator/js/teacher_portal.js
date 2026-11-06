@@ -205,8 +205,10 @@ const TeacherPortal = {
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      const dataUrl = event.target.result;
-      this._setBuilderImage(dataUrl, file.name);
+      const rawDataUrl = event.target.result;
+      this.compressImage(rawDataUrl, 640, 0.7, (compressedDataUrl) => {
+        this._setBuilderImage(compressedDataUrl, file.name);
+      });
     };
     reader.readAsDataURL(file);
   },

@@ -207,6 +207,20 @@ const RealtimeRelay = {
         }
         break;
 
+      case 'request_sync':
+        console.log('⚡ [Relay] Player requested sync:', payload);
+        if (this.callbacks.onSyncRequest) {
+          try { this.callbacks.onSyncRequest(payload); } catch (e) {}
+        }
+        break;
+
+      case 'sync_response':
+        console.log('⚡ [Relay] Sync response received:', payload);
+        if (this.callbacks.onSyncResponse) {
+          try { this.callbacks.onSyncResponse(payload); } catch (e) {}
+        }
+        break;
+
       case 'host_ready':
         // If student is waiting and host becomes ready, re-send join
         if (this.role === 'player') {
@@ -277,6 +291,22 @@ const RealtimeRelay = {
   sendGameStart(gameData, questionsList) {
     const q0 = (questionsList && questionsList[0]) || null;
     const dur = (q0 && q0.time_limit) ? q0.time_limit : 20;
+
+    // Create lightweight question list summary (strip large base64 images from questions 1..N to prevent MQTT packet size limit overflows)
+    const summary = (questionsList || []).map((q, idx) => ({
+      id: q.id || `q_${idx}`,
+      question: q.question || '',
+      question_type_id: q.question_type_id || (q.question_type === 'true_false' ? 2 : (q.question_type === 'identification' ? 3 : 1)),
+      choice_a: q.choice_a || q.option_a || (q.options ? q.options[0] : ''),
+      choice_b: q.choice_b || q.option_b || (q.options ? q.options[1] : ''),
+      choice_c: q.choice_c || q.option_c || (q.options ? q.options[2] : ''),
+      choice_d: q.choice_d || q.option_d || (q.options ? q.options[3] : ''),
+      options: q.options || [q.choice_a, q.choice_b, q.choice_c, q.choice_d].filter(Boolean),
+      correct_answer: q.correct_answer || q.answer || '',
+      time_limit: q.time_limit || dur,
+      imageUrl: idx === 0 ? (q.imageUrl || q.image_url || q.image || q.photoUrl || null) : null
+    }));
+
     this.publish('game_start', {
       type: 'GAME_START',
       eventType: 'GAME_START',
@@ -288,7 +318,22 @@ const RealtimeRelay = {
       game: gameData,
       question: q0,
       customQuestion: q0,
-      questionsList: questionsList || []
+      questionsList: summary
+    });
+  },
+
+  sendSyncRequest() {
+    this.publish('request_sync', {
+      type: 'REQUEST_SYNC',
+      playerId: (this.userInfo && (this.userInfo.id || this.userInfo.user_id)) || 'p_' + Date.now(),
+      playerName: (this.userInfo && (this.userInfo.playerName || this.userInfo.name)) || 'Player'
+    });
+  },
+
+  sendSyncResponse(gameState) {
+    this.publish('sync_response', {
+      type: 'SYNC_RESPONSE',
+      ...gameState
     });
   },
 
