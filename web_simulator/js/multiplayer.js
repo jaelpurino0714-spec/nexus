@@ -641,6 +641,79 @@ const Multiplayer = {
       } catch (err) {}
     }
 
+    // B. RealtimeRelay for seamless cross-device communication (Phone <-> PC across 4G/Wi-Fi)
+    if (typeof RealtimeRelay !== 'undefined') {
+      const myId = (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('nexus_current_player_id')) || (typeof DB !== 'undefined' ? DB.getUserUUID() : ('u_' + Date.now()));
+      const profile = (typeof DB !== 'undefined' && DB.getStudentProfile) ? DB.getStudentProfile() || {} : {};
+      
+      RealtimeRelay.init(cleanPin, role, {
+        id: myId,
+        user_id: myId,
+        name: name || profile.name || 'Player',
+        playerName: name || profile.name || 'Player',
+        display_name: name || profile.name || 'Player',
+        photoUrl: profile.photo || null,
+        role: role
+      }, {
+        onPlayerJoin: (player) => {
+          if (this.isHost) {
+            this.handleRemotePlayerJoin(player);
+          }
+        },
+        onRosterSync: (players) => {
+          if (!this.isHost && players && players.length > 0) {
+            this.playersList = players;
+          }
+        },
+        onGameStart: (payload) => {
+          if (!this.isHost) {
+            this.onGameStart(payload);
+          }
+        },
+        onNextQuestion: (payload) => {
+          if (!this.isHost) {
+            this.onNextQuestion(payload);
+          }
+        },
+        onPlayerAnswer: (payload) => {
+          if (this.isHost) {
+            this.onPlayerAnswered(payload);
+          }
+        },
+        onAnswerReveal: (payload) => {
+          if (!this.isHost) {
+            this.onShowResults(payload);
+          }
+        },
+        onGameFinish: (payload) => {
+          if (!this.isHost) {
+            this.onGameFinish(payload);
+          }
+        }
+      });
+
+      // If student is joining, broadcast player join immediately
+      if (role === 'player') {
+        const studentPlayer = {
+          id: myId,
+          user_id: myId,
+          name: name,
+          playerName: name,
+          display_name: name,
+          photoUrl: profile.photo || null,
+          role: 'player',
+          is_host: false,
+          score: 0,
+          correct_answers: 0,
+          wrong_answers: 0
+        };
+        setTimeout(() => {
+          RealtimeRelay.sendJoin(studentPlayer);
+          this.sendBroadcast('PLAYER_JOINED', { player: studentPlayer });
+        }, 300);
+      }
+    }
+
     if (typeof DB !== 'undefined' && DB.canQuerySupabase && DB.canQuerySupabase() && typeof supabaseClient !== 'undefined' && supabaseClient) {
       try {
         const myUuid = DB.getUserUUID();
@@ -780,6 +853,76 @@ const Multiplayer = {
         this.localBroadcastChannel.postMessage({ eventType, ...payload });
       } catch (e) {}
     }
+
+    if (typeof RealtimeRelay !== 'undefined' && RealtimeRelay.publish) {
+      try {
+        RealtimeRelay.publish('game_event', { eventType, ...payload });
+      } catch (e) {}
+    }
+  },
+
+  handleRemotePlayerJoin(player) {
+    if (!player || !this.currentGame) return;
+    if (!this.playersList) this.playersList = [];
+
+    const cleanName = player.playerName || player.display_name || player.name || 'Player';
+    const pId = player.id || player.user_id || ('p_' + cleanName);
+
+    // Don't add host as a player
+    if (this.isHostPlayer(player)) return;
+
+    // Check if player is already in roster
+    const existingIndex = this.playersList.findIndex(p => p.id === pId || p.playerName === cleanName || p.display_name === cleanName);
+    const playerObj = {
+      id: pId,
+      user_id: pId,
+      playerName: cleanName,
+      display_name: cleanName,
+      photoUrl: player.photoUrl || player.photo_url || player.photo || null,
+      score: player.score || 0,
+      correct_answers: player.correct_answers || 0,
+      wrong_answers: player.wrong_answers || 0,
+      role: 'player',
+      is_host: false
+    };
+
+    if (existingIndex >= 0) {
+      this.playersList[existingIndex] = { ...this.playersList[existingIndex], ...playerObj };
+    } else {
+      this.playersList.push(playerObj);
+    }
+
+    // Persist to local lobby state so subsequent refreshes retain them
+    const cleanCode = (this.currentGame.room_code || '').toUpperCase().trim();
+    if (typeof DB !== 'undefined' && DB.getLocalLobbyState) {
+      let localState = DB.getLocalLobbyState(cleanCode);
+      if (!localState) {
+        localState = {
+          code: cleanCode,
+          gameId: this.currentGame.id,
+          hostId: this.currentGame.host_id,
+          status: 'waiting',
+          participants: []
+        };
+      }
+      if (!Array.isArray(localState.participants)) localState.participants = [];
+      const partIdx = localState.participants.findIndex(p => p.id === pId || p.display_name === cleanName);
+      if (partIdx >= 0) {
+        localState.participants[partIdx] = { ...localState.participants[partIdx], ...playerObj };
+      } else {
+        localState.participants.push(playerObj);
+      }
+      localState.lastUpdated = Date.now();
+      DB.saveLocalLobbyState(cleanCode, localState);
+    }
+
+    // Update the Connected Players count and list on the Host screen
+    this.refreshHostPresenceRoster();
+
+    // Broadcast current roster back to all players across the internet
+    if (typeof RealtimeRelay !== 'undefined' && RealtimeRelay.sendRosterSync) {
+      RealtimeRelay.sendRosterSync(this.playersList);
+    }
   },
 
   handleBroadcastEvent(data) {
@@ -787,7 +930,15 @@ const Multiplayer = {
     const eventType = data.eventType || data.event || data.type;
     const payload = data.payload || data;
 
-    if (eventType === 'GAME_START') {
+    if (eventType === 'PLAYER_JOINED' || eventType === 'PLAYER_JOIN') {
+      if (this.isHost) {
+        this.handleRemotePlayerJoin(payload.player || payload);
+      }
+    } else if (eventType === 'ROSTER_SYNC') {
+      if (!this.isHost && payload.players && payload.players.length > 0) {
+        this.playersList = payload.players;
+      }
+    } else if (eventType === 'GAME_START') {
       this.onGameStart(payload);
     } else if (eventType === 'QUESTION_START') {
       this.onQuestionStart(payload);
@@ -2077,6 +2228,9 @@ const Multiplayer = {
   },
 
   unsubscribeRealtime() {
+    if (typeof RealtimeRelay !== 'undefined' && RealtimeRelay.disconnect) {
+      try { RealtimeRelay.disconnect(); } catch(e) {}
+    }
     if (this.localBroadcastChannel) {
       try { this.localBroadcastChannel.close(); } catch(e) {}
       this.localBroadcastChannel = null;
