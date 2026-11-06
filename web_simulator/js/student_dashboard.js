@@ -27,62 +27,77 @@ const StudentDashboard = {
     const container = document.getElementById('studentDashboardContainer');
     if (!container) return;
 
-    // 1. Retrieve real student profile
-    const profile = (typeof DB !== 'undefined' && DB.getStudentProfile) 
-      ? (DB.getStudentProfile() || {}) 
-      : {};
-    
-    // 2. Retrieve real lifetime quiz results
-    const quizResults = (typeof DB !== 'undefined' && DB.getQuizResults) 
-      ? (DB.getQuizResults() || []) 
-      : [];
+    try {
+      // 1. Retrieve real student profile
+      const profile = (typeof DB !== 'undefined' && DB.getStudentProfile) 
+        ? (DB.getStudentProfile() || {}) 
+        : {};
+      
+      // 2. Retrieve real lifetime quiz results
+      const quizResults = (typeof DB !== 'undefined' && DB.getQuizResults) 
+        ? (DB.getQuizResults() || []) 
+        : [];
 
-    // 3. Compute stats
-    const stats = this.computeLifetimeStats(quizResults, profile);
-    const curriculum = this.computeCurriculumProgress(quizResults);
-    const calendar = this.computeMonthlyCalendar(quizResults, this.currentCalendarDate);
+      // 3. Compute stats
+      const stats = this.computeLifetimeStats(quizResults, profile);
+      const curriculum = this.computeCurriculumProgress(quizResults);
+      const calendar = this.computeMonthlyCalendar(quizResults, this.currentCalendarDate);
 
-    // 4. Render HTML components matching dark theme phone layout
-    container.innerHTML = `
-      <div class="dash-wrapper">
-        <!-- Back Navigation to Home -->
-        <button class="dash-back-btn" onclick="App.goHome()" title="Back to Home">
-          <span>←</span> <span>Home</span>
-        </button>
+      // 4. Render HTML components matching dark theme phone layout
+      container.innerHTML = `
+        <div class="dash-wrapper">
+          <!-- Back Navigation to Home -->
+          <button class="dash-back-btn" onclick="App.goHome()" title="Back to Home">
+            <span>←</span> <span>Home</span>
+          </button>
 
-        <!-- Welcome Greeting & Mascot Speech Bubble -->
-        ${this.renderWelcomeGreeting(profile, stats)}
+          <!-- Welcome Greeting & Mascot Speech Bubble -->
+          ${this.renderWelcomeGreeting(profile, stats)}
 
-        <!-- 4 Quick Stat Cards (Gold, Blue, Orange, Pink) -->
-        ${this.renderQuickStatCards(profile, stats)}
+          <!-- 4 Quick Stat Cards (Gold, Blue, Orange, Pink) -->
+          ${this.renderQuickStatCards(profile, stats)}
 
-        <!-- Academic Overview (Lifetime Stats Section 4 of Spec) -->
-        ${this.renderAcademicOverview(stats)}
+          <!-- Academic Overview (Lifetime Stats Section 4 of Spec) -->
+          ${this.renderAcademicOverview(stats)}
 
-        <!-- Course Progress Hero Card (Section 5 of Spec) -->
-        ${this.renderCourseProgressHero(curriculum)}
+          <!-- Course Progress Hero Card (Section 5 of Spec) -->
+          ${this.renderCourseProgressHero(curriculum)}
 
-        <!-- My Learning Journey: Expandable Term & Topic Cards -->
-        ${this.renderLearningJourney(curriculum)}
+          <!-- My Learning Journey: Expandable Term & Topic Cards -->
+          ${this.renderLearningJourney(curriculum)}
 
-        <!-- 2-Column Middle Row: Monthly Activity & Today's Challenge -->
-        <div class="dash-two-col-grid">
-          ${this.renderMonthlyActivity(calendar, stats)}
-          ${this.renderTodaysChallenge(profile, stats)}
+          <!-- 2-Column Middle Row: Monthly Activity & Today's Challenge -->
+          <div class="dash-two-col-grid">
+            ${this.renderMonthlyActivity(calendar, stats)}
+            ${this.renderTodaysChallenge(profile, stats)}
+          </div>
+
+          <!-- Learning Efficiency & Analytics -->
+          <div class="dash-efficiency-wrapper">
+            ${this.renderLearningEfficiency(stats, curriculum)}
+          </div>
+
+          <!-- Extra spacing before fixed bottom bar -->
+          <div style="height: 85px;"></div>
         </div>
 
-        <!-- Learning Efficiency & Analytics -->
-        <div class="dash-efficiency-wrapper">
-          ${this.renderLearningEfficiency(stats, curriculum)}
+        <!-- Bottom Navigation Bar -->
+        ${this.renderBottomNavBar()}
+      `;
+    } catch (err) {
+      console.error('[StudentDashboard] Error rendering dashboard:', err);
+      container.innerHTML = `
+        <div class="dash-wrapper" style="padding: 24px 16px; text-align: center;">
+          <button class="dash-back-btn" onclick="App.goHome()"><span>←</span> <span>Home</span></button>
+          <div style="margin: 40px auto; max-width: 320px; background: rgba(30, 20, 65, 0.95); border: 1.5px solid #8B5CF6; border-radius: 18px; padding: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.5);">
+            <div style="font-size: 2.6rem; margin-bottom: 12px;">📊</div>
+            <h3 style="color: #FFFFFF; font-family: var(--font-heading); margin: 0 0 8px 0; font-size: 1.2rem;">Student Dashboard</h3>
+            <p style="color: #C4B5FD; font-size: 0.88rem; margin: 0 0 16px 0;">Dashboard is ready. Tap below to reload your learning progress.</p>
+            <button class="dash-continue-btn" style="width: 100%;" onclick="StudentDashboard.render()">Load Dashboard</button>
+          </div>
         </div>
-
-        <!-- Extra spacing before fixed bottom bar -->
-        <div style="height: 85px;"></div>
-      </div>
-
-      <!-- Bottom Navigation Bar -->
-      ${this.renderBottomNavBar()}
-    `;
+      `;
+    }
   },
 
   /**
@@ -335,6 +350,33 @@ const StudentDashboard = {
   },
 
   /**
+   * Welcome Greeting Row & Mascot Speech Bubble
+   */
+  renderWelcomeGreeting(profile, stats) {
+    const name = profile.name || profile.displayName || profile.playerName || profile.nickname || 'Student';
+    const streak = stats.streak || 0;
+
+    let bubbleText = `Welcome! Complete quizzes daily to boost your science rank! ⭐`;
+    if (streak > 0) {
+      bubbleText = `You're on fire! 🔥 Keep the ${streak}-day streak going!`;
+    } else if (stats.accuracyPct !== null && stats.accuracyPct >= 85) {
+      bubbleText = `Superb! 🌟 You're excelling with ${stats.accuracyPct}% accuracy!`;
+    }
+
+    return `
+      <div class="dash-greeting-row">
+        <div class="dash-greeting-left">
+          <h1 class="dash-hello-title">Hello ${name}! <span class="dash-mascot-emoji">🐯</span></h1>
+        </div>
+        <div class="dash-speech-bubble">
+          <span>${bubbleText}</span>
+          <span class="dash-sparkle">✨</span>
+        </div>
+      </div>
+    `;
+  },
+
+  /**
    * 4 Quick Stat Cards (XP, Level, Streak, Quizzes Completed) in 2x2 grid
    */
   renderQuickStatCards(profile, stats) {
@@ -445,10 +487,18 @@ const StudentDashboard = {
    * Course Progress Hero Card matching the reference screenshot
    */
   renderCourseProgressHero(curriculum) {
-    const active = curriculum.activeTopic;
-    const activeTermData = curriculum.termsData.find(t => t.orderNo === active.termNum) || curriculum.termsData[0];
+    const active = curriculum.activeTopic || {
+      title: 'Physical vs. Chemical Change',
+      orderNo: 1,
+      termNum: 1,
+      termId: 'b0000000-0000-0000-0000-000000000001',
+      topicId: 'b0000000-0000-0000-0000-000000000101',
+      accuracy: 0,
+      qAnswered: 0
+    };
+    const activeTermData = (curriculum.termsData && curriculum.termsData.find(t => t.orderNo === active.termNum)) || (curriculum.termsData && curriculum.termsData[0]) || { totalTopics: 8 };
     const modulePct = active.accuracy || (active.qAnswered > 0 ? 50 : 0);
-    const overallPct = curriculum.overallPct;
+    const overallPct = curriculum.overallPct || 0;
 
     return `
       <div class="dash-course-progress-card">
@@ -462,12 +512,12 @@ const StudentDashboard = {
 
         <div class="dash-course-split">
           <!-- Left Topic Preview Box (Peach) -->
-          <div class="dash-topic-box-hero" onclick="StudentDashboard.practiceTopic('${active.termId}', '${active.topicId}', '${active.title.replace(/'/g, "\\'")}')">
-            <div class="topic-box-title">${active.title}</div>
+          <div class="dash-topic-box-hero" onclick="StudentDashboard.practiceTopic('${active.termId || ''}', '${active.topicId || ''}', '${(active.title || '').replace(/'/g, "\\'")}')">
+            <div class="topic-box-title">${active.title || 'Science Practice'}</div>
             <button class="topic-play-btn-circle" title="Start Quiz">
               <span>▶</span>
             </button>
-            <div class="topic-box-footer">Module ${active.orderNo} of ${activeTermData ? activeTermData.totalTopics : 8} • Term ${active.termNum}</div>
+            <div class="topic-box-footer">Module ${active.orderNo || 1} of ${activeTermData ? activeTermData.totalTopics : 8} • Term ${active.termNum || 1}</div>
           </div>
 
           <!-- Right Progress Bars & Continue Button -->
@@ -475,7 +525,7 @@ const StudentDashboard = {
             <!-- Module progress -->
             <div class="progress-bar-group">
               <div class="progress-label-row">
-                <span class="progress-name">Module - ${active.orderNo}</span>
+                <span class="progress-name">Module - ${active.orderNo || 1}</span>
                 <span class="progress-num">${modulePct}% completed</span>
               </div>
               <div class="dash-bar-track">
@@ -495,7 +545,7 @@ const StudentDashboard = {
             </div>
 
             <!-- Continue Button -->
-            <button class="dash-continue-btn" onclick="StudentDashboard.practiceTopic('${active.termId}', '${active.topicId}', '${active.title.replace(/'/g, "\\'")}')">
+            <button class="dash-continue-btn" onclick="StudentDashboard.practiceTopic('${active.termId || ''}', '${active.topicId || ''}', '${(active.title || '').replace(/'/g, "\\'")}')">
               Continue
             </button>
           </div>
@@ -508,7 +558,9 @@ const StudentDashboard = {
    * Section 5: My Learning Journey (Term Cards & Topic Breakdown)
    */
   renderLearningJourney(curriculum) {
-    const selectedTerm = curriculum.termsData.find(t => t.orderNo === this.selectedTermTab) || curriculum.termsData[0];
+    const terms = curriculum.termsData || [];
+    const selectedTerm = terms.find(t => t.orderNo === this.selectedTermTab) || terms[0] || { topics: [], completedCount: 0, totalTopics: 0, progressPct: 0 };
+    const topics = selectedTerm.topics || [];
 
     return `
       <div id="learningJourneySection" class="dash-section-box">
@@ -516,15 +568,15 @@ const StudentDashboard = {
           <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
             <div>
               <h2 class="dash-section-title">📖 MY LEARNING JOURNEY</h2>
-              <span class="dash-section-sub">${curriculum.completedCurriculumTopics} of ${curriculum.totalCurriculumTopics} topics completed (${curriculum.overallPct}%)</span>
+              <span class="dash-section-sub">${curriculum.completedCurriculumTopics || 0} of ${curriculum.totalCurriculumTopics || 0} topics completed (${curriculum.overallPct || 0}%)</span>
             </div>
-            <span class="dash-badge-curriculum">${curriculum.overallPct}% OVERALL</span>
+            <span class="dash-badge-curriculum">${curriculum.overallPct || 0}% OVERALL</span>
           </div>
         </div>
 
         <!-- Term Selection Tabs -->
         <div class="dash-term-tabs">
-          ${curriculum.termsData.map(t => `
+          ${terms.map(t => `
             <button class="dash-term-tab-btn ${t.orderNo === this.selectedTermTab ? 'active' : ''}" 
                     onclick="StudentDashboard.switchTermTab(${t.orderNo})">
               <div class="term-tab-title">TERM ${t.orderNo}</div>
@@ -536,7 +588,7 @@ const StudentDashboard = {
 
         <!-- Topic Breakdown for Selected Term -->
         <div class="dash-topics-list">
-          ${selectedTerm.topics.map(topic => `
+          ${topics.map(topic => `
             <div class="dash-topic-item-card">
               <div class="topic-item-left">
                 <div class="topic-item-title-row">
