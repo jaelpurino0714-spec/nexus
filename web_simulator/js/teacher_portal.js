@@ -14,6 +14,12 @@ const TeacherPortal = {
       modal.className = 'modal-overlay hidden';
       document.body.appendChild(modal);
     }
+    modal.style.overflowY = 'auto';
+    modal.style.overflowX = 'hidden';
+    modal.style.alignItems = 'flex-start';
+    modal.style.padding = '24px 12px';
+    modal.style.boxSizing = 'border-box';
+    modal.style.webkitOverflowScrolling = 'touch';
     return modal;
   },
 
@@ -52,7 +58,7 @@ const TeacherPortal = {
     }
 
     modal.innerHTML = `
-      <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); max-width: 580px; width: 90%; color: white;">
+      <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); max-width: 580px; width: 90%; color: white; margin: auto; max-height: 88vh; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
           <h3 style="margin: 0; color: #FFFFFF; font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800;">📁 My Games Workspace</h3>
           <button class="close-modal-btn" style="background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #A5A3C4;" onclick="TeacherPortal.closeModal('myGamesModal')">✕</button>
@@ -77,7 +83,7 @@ const TeacherPortal = {
     this.closeModal('myGamesModal');
     const modal = this.ensureModalContainer('gameBuilderModal');
     modal.innerHTML = `
-      <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); max-width: 600px; width: 90%; color: white;">
+      <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); max-width: 600px; width: 90%; color: white; margin: auto; max-height: 88vh; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: rgba(168, 85, 247, 0.5) transparent;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
           <h3 style="margin: 0; color: #FFFFFF; font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800;">✏️ Create Custom Science Game</h3>
           <button class="close-modal-btn" style="background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #A5A3C4;" onclick="TeacherPortal.closeModal('gameBuilderModal')">✕</button>
@@ -466,7 +472,7 @@ const TeacherPortal = {
     const modal = this.ensureModalContainer('customGameHostSetupModal');
 
     modal.innerHTML = `
-      <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); max-width: 480px; width: 90%; color: white;">
+      <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); max-width: 480px; width: 90%; color: white; margin: auto; max-height: 88vh; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
           <h3 style="margin: 0; color: #FFFFFF; font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800;">👑 Host Game: ${quiz.title}</h3>
           <button class="close-modal-btn" style="background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #A5A3C4;" onclick="TeacherPortal.closeModal('customGameHostSetupModal')">✕</button>
@@ -641,7 +647,7 @@ const TeacherPortal = {
     }
 
     modal.innerHTML = `
-      <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); max-width: 640px; width: 90%; color: white;">
+      <div class="modal-card" style="background: linear-gradient(135deg, rgba(22, 14, 45, 0.98) 0%, rgba(16, 10, 34, 0.98) 100%); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); max-width: 640px; width: 90%; color: white; margin: auto; max-height: 88vh; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
           <h3 style="margin: 0; color: #FFFFFF; font-family: var(--font-heading); font-size: 1.2rem; font-weight: 800;">📊 Class Performance & Game Analytics</h3>
           <button class="close-modal-btn" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); font-size: 1.1rem; cursor: pointer; color: #FFFFFF; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;" onclick="TeacherPortal.closeModal('teacherAnalyticsModal')">✕</button>

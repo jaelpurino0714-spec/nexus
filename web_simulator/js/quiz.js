@@ -117,7 +117,7 @@ const Quiz = {
       const btn = document.createElement('button');
       btn.className = `term-btn topic-item-btn`;
       btn.onclick = () => this.selectTopic(topicName, topicId);
-      
+
       const titleLength = topicName.length;
       let fontSize = '1.05rem';
       let lineHeight = '1.3';
@@ -210,7 +210,7 @@ const Quiz = {
           const parsed = JSON.parse(saved);
           if (parsed.timeLimit) this.customTimeLimitSec = parsed.timeLimit;
           if (parsed.questionCount) this.customQuestionCount = parsed.questionCount;
-        } catch (e) {}
+        } catch (e) { }
       }
       App.showScreen('playScreen');
     }
@@ -501,7 +501,7 @@ const Quiz = {
   renderCreatorQuestionStep() {
     const total = parseInt(document.getElementById('creatorTotalQuestions').value, 10) || 5;
     document.getElementById('creatorQuestionCounter').textContent = `Question ${this.creatorCurrentIndex + 1} of ${total}`;
-    
+
     // Load existing question if present
     const existing = this.customCreatedQuestions[this.creatorCurrentIndex] || {};
     const qTextEl = document.getElementById('creatorQuestionText');
@@ -646,7 +646,7 @@ const Quiz = {
     if (this.broadcastChannel) {
       try {
         this.broadcastChannel.postMessage({ type: 'LOBBY_UPDATE', data: lobbyObj });
-      } catch (e) {}
+      } catch (e) { }
     }
   },
 
@@ -670,7 +670,7 @@ const Quiz = {
         try {
           const updated = JSON.parse(e.newValue);
           this.handleLobbySyncUpdate(updated);
-        } catch (err) {}
+        } catch (err) { }
       }
     };
     window.addEventListener('storage', this.storageListener);
@@ -685,7 +685,7 @@ const Quiz = {
 
   stopLobbySync() {
     if (this.broadcastChannel) {
-      try { this.broadcastChannel.close(); } catch (e) {}
+      try { this.broadcastChannel.close(); } catch (e) { }
       this.broadcastChannel = null;
     }
     if (this.storageListener) {
@@ -800,9 +800,9 @@ const Quiz = {
   },
 
   renderLobbyScreen() {
-    const formattedCode = `${this.lobbyAccessCode.slice(0,3)} ${this.lobbyAccessCode.slice(3,6)} ${this.lobbyAccessCode.slice(6)}`;
+    const formattedCode = `${this.lobbyAccessCode.slice(0, 3)} ${this.lobbyAccessCode.slice(3, 6)} ${this.lobbyAccessCode.slice(6)}`;
     document.getElementById('lobbyCodeDisplay').textContent = formattedCode;
-    
+
     const roleBadge = document.getElementById('lobbyRoleBadge');
     const hostBox = document.getElementById('lobbyHostBox');
     const hostActions = document.getElementById('lobbyHostActions');
@@ -997,9 +997,9 @@ const Quiz = {
   },
 
   startHostTrackingDashboard() {
-    const formattedCode = `${this.lobbyAccessCode.slice(0,3)} ${this.lobbyAccessCode.slice(3,6)} ${this.lobbyAccessCode.slice(6)}`;
+    const formattedCode = `${this.lobbyAccessCode.slice(0, 3)} ${this.lobbyAccessCode.slice(3, 6)} ${this.lobbyAccessCode.slice(6)}`;
     document.getElementById('hostLiveCode').textContent = formattedCode;
-    
+
     App.showScreen('hostLiveDashboardScreen');
     this.renderHostLiveDashboard();
   },
@@ -1092,7 +1092,7 @@ const Quiz = {
         const arr = JSON.parse(raw);
         return new Set(arr);
       }
-    } catch (e) {}
+    } catch (e) { }
     return new Set();
   },
 
@@ -1100,7 +1100,7 @@ const Quiz = {
     try {
       const arr = Array.from(setObj);
       localStorage.setItem('nexus_playthrough_used_q_' + topicKey, JSON.stringify(arr));
-    } catch (e) {}
+    } catch (e) { }
   },
 
   getQuestionKey(q) {
@@ -1223,7 +1223,7 @@ const Quiz = {
   getOptionIcon(text, index) {
     if (!text) return ['🧪', '⚛️', '🔬', '⚡'][index % 4];
     const lower = text.toLowerCase();
-    
+
     if (lower.includes('heat') || lower.includes('fire') || lower.includes('temperature') || lower.includes('warm') || lower.includes('thermal') || lower.includes('burn') || lower.includes('combust')) {
       return '🔥';
     }
@@ -1254,7 +1254,7 @@ const Quiz = {
     if (lower.includes('chemical') || lower.includes('reaction') || lower.includes('atom') || lower.includes('element') || lower.includes('compound') || lower.includes('molecule')) {
       return '⚛️';
     }
-    
+
     const fallbacks = ['🧪', '⚛️', '🔬', '⚡'];
     return fallbacks[index % fallbacks.length];
   },
@@ -1758,7 +1758,7 @@ const Quiz = {
     const recCard = document.getElementById('recommendationBanner');
     if (percentage < 50) {
       recCard.classList.remove('hidden');
-      document.getElementById('recommendationText').innerHTML = 
+      document.getElementById('recommendationText').innerHTML =
         `Your score was below 50%. We recommend reviewing <b>${this.currentTopic}</b> before taking your post-test again!`;
     } else {
       recCard.classList.add('hidden');

@@ -4232,15 +4232,60 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  overflow: hidden;
-  padding: 14px;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  padding: 20px 14px;
   box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
 }
 
 .modal-overlay.hidden,
 .modal-overlay[style*="display: none"],
 .modal-overlay[style*="display:none"] {
   display: none !important;
+}
+
+/* Scrollable Modals for Builder & Portal Modals */
+#gameBuilderModal,
+#myGamesModal,
+#customGameHostSetupModal,
+#teacherAnalyticsModal {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  align-items: flex-start !important;
+  padding: 24px 12px !important;
+}
+
+#gameBuilderModal .modal-card,
+#myGamesModal .modal-card,
+#customGameHostSetupModal .modal-card,
+#teacherAnalyticsModal .modal-card {
+  max-height: 88vh;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  margin: auto !important;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.5) transparent;
+}
+
+#gameBuilderModal .modal-card::-webkit-scrollbar,
+.modal-card::-webkit-scrollbar {
+  width: 8px;
+}
+#gameBuilderModal .modal-card::-webkit-scrollbar-track,
+.modal-card::-webkit-scrollbar-track {
+  background: rgba(15, 10, 30, 0.6);
+  border-radius: 8px;
+}
+#gameBuilderModal .modal-card::-webkit-scrollbar-thumb,
+.modal-card::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.5);
+  border-radius: 8px;
+}
+#gameBuilderModal .modal-card::-webkit-scrollbar-thumb:hover,
+.modal-card::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.8);
 }
 
 #achievementDetailModal {
