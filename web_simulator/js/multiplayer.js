@@ -4,7 +4,7 @@
    and Broadcast (ephemeral sub-50ms game events) with Supabase Postgres.
    ========================================================================== */
 
-const Multiplayer = {
+var Multiplayer = window.Multiplayer = {
   compressImagePromise(src, maxDim = 480, quality = 0.6) {
     return new Promise((resolve) => {
       if (!src || typeof src !== 'string' || !src.startsWith('data:image')) {
@@ -1142,7 +1142,7 @@ const Multiplayer = {
     }
   },
 
-  hostRenderQuestion(index) {
+  async hostRenderQuestion(index) {
     App.showScreen('mpHostGameScreen');
     this.currentIndex = index;
     this.answeredCount = 0;
