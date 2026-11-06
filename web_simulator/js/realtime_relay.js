@@ -262,6 +262,8 @@ const RealtimeRelay = {
   // High-Level Message Senders
   sendJoin(player) {
     const p = player || this.userInfo || {};
+    const rawPhoto = p.photoUrl || p.photo_url || p.photo || null;
+    const safePhoto = (rawPhoto && rawPhoto.length < 2000) ? rawPhoto : null;
     this.publish('join', {
       type: 'PLAYER_JOIN',
       player: {
@@ -270,8 +272,8 @@ const RealtimeRelay = {
         name: p.name || p.playerName || p.display_name || 'Player',
         playerName: p.name || p.playerName || p.display_name || 'Player',
         display_name: p.name || p.playerName || p.display_name || 'Player',
-        photoUrl: p.photoUrl || p.photo_url || p.photo || null,
-        photo_url: p.photoUrl || p.photo_url || p.photo || null,
+        photoUrl: safePhoto,
+        photo_url: safePhoto,
         score: p.score || 0,
         correct_answers: p.correct_answers || 0,
         wrong_answers: p.wrong_answers || 0,
@@ -282,9 +284,24 @@ const RealtimeRelay = {
   },
 
   sendRosterSync(playersList) {
+    // Strip large photo URLs from roster sync to keep MQTT packet tiny (< 2KB)
+    const cleanPlayers = (playersList || []).map(p => ({
+      id: p.id || p.user_id,
+      user_id: p.user_id || p.id,
+      name: p.name || p.playerName || p.display_name || 'Player',
+      playerName: p.playerName || p.name || p.display_name || 'Player',
+      display_name: p.display_name || p.name || p.playerName || 'Player',
+      photoUrl: (p.photoUrl && p.photoUrl.length < 2000) ? p.photoUrl : null,
+      score: p.score || 0,
+      correct_answers: p.correct_answers || 0,
+      wrong_answers: p.wrong_answers || 0,
+      is_host: !!(p.is_host || p.isHost),
+      role: p.role || 'player'
+    }));
+
     this.publish('roster_sync', {
       type: 'ROSTER_SYNC',
-      players: playersList || []
+      players: cleanPlayers
     });
   },
 

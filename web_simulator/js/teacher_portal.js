@@ -206,7 +206,7 @@ const TeacherPortal = {
     const reader = new FileReader();
     reader.onload = (event) => {
       const rawDataUrl = event.target.result;
-      this.compressImage(rawDataUrl, 640, 0.7, (compressedDataUrl) => {
+      this.compressImage(rawDataUrl, 480, 0.65, (compressedDataUrl) => {
         this._setBuilderImage(compressedDataUrl, file.name);
       });
     };
@@ -228,7 +228,13 @@ const TeacherPortal = {
   onBuilderImageUrlEntered(url) {
     const trimmed = (url || '').trim();
     if (trimmed) {
-      this._setBuilderImage(trimmed, 'Web Link');
+      if (trimmed.startsWith('data:image')) {
+        this.compressImage(trimmed, 480, 0.65, (compressed) => {
+          this._setBuilderImage(compressed, 'Pasted Image');
+        });
+      } else {
+        this._setBuilderImage(trimmed, 'Web Link');
+      }
     } else {
       this.clearBuilderImage();
     }
@@ -451,11 +457,22 @@ const TeacherPortal = {
       return;
     }
 
+    // Ensure any data URL images in the draft are lean and compact
+    const sanitizedDrafts = (this._builderDrafts || []).map(q => {
+      let img = q.imageUrl || q.image_url || q.image || null;
+      return {
+        ...q,
+        imageUrl: img,
+        image_url: img,
+        image: img
+      };
+    });
+
     const quizObj = {
       id: 'quiz_' + Date.now(),
       title: title,
       term: term,
-      questions: this._builderDrafts,
+      questions: sanitizedDrafts,
       createdAt: new Date().toISOString()
     };
 

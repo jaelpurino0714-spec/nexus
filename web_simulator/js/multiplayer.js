@@ -5,6 +5,39 @@
    ========================================================================== */
 
 const Multiplayer = {
+  compressImagePromise(src, maxDim = 480, quality = 0.6) {
+    return new Promise((resolve) => {
+      if (!src || typeof src !== 'string' || !src.startsWith('data:image')) {
+        return resolve(src);
+      }
+      const img = new Image();
+      img.onload = () => {
+        try {
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        } catch (_) {
+          resolve(src);
+        }
+      };
+      img.onerror = () => resolve(src);
+      img.src = src;
+    });
+  },
   currentGame: null,
   currentPlayer: null,
   isHost: false,
@@ -1048,7 +1081,12 @@ const Multiplayer = {
 
       const q0 = this.questionsList[0] || {};
       const typeId0 = q0.question_type_id || (q0.question_type === 'true_false' || q0.type === 'true_false' ? 2 : (q0.question_type === 'identification' || q0.type === 'identification' ? 3 : 1));
-      const qBroadcastImg = q0.imageUrl || q0.image_url || q0.image || q0.photoUrl || q0.photo_url || q0.photo || null;
+      let qBroadcastImg = q0.imageUrl || q0.image_url || q0.image || q0.photoUrl || q0.photo_url || q0.photo || null;
+      if (qBroadcastImg && typeof qBroadcastImg === 'string' && qBroadcastImg.startsWith('data:image') && qBroadcastImg.length > 40000) {
+        try {
+          qBroadcastImg = await this.compressImagePromise(qBroadcastImg, 480, 0.6);
+        } catch (_) {}
+      }
 
       const choicesObj = {
         a: q0.choice_a || q0.option_a || (q0.options ? q0.options[0] : (typeId0 === 2 ? 'True' : '')),
@@ -1207,7 +1245,12 @@ const Multiplayer = {
     };
 
     // Send QUESTION_START Broadcast payload with full custom question info
-    const qBroadcastImg = q.imageUrl || q.image_url || q.image || q.photoUrl || q.photo_url || q.photo || null;
+    let qBroadcastImg = q.imageUrl || q.image_url || q.image || q.photoUrl || q.photo_url || q.photo || null;
+    if (qBroadcastImg && typeof qBroadcastImg === 'string' && qBroadcastImg.startsWith('data:image') && qBroadcastImg.length > 40000) {
+      try {
+        qBroadcastImg = await this.compressImagePromise(qBroadcastImg, 480, 0.6);
+      } catch (_) {}
+    }
     const currentQData = {
       id: q.id || `q_${index}`,
       question: q.question,

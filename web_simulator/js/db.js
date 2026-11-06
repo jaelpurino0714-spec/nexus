@@ -447,8 +447,21 @@ var DB = {
   purgeOldStorage() {
     try {
       const keys = Object.keys(localStorage);
+      const now = Date.now();
+      // Only remove lobbies that are finished or older than 4 hours - NEVER purge active waiting lobbies!
       keys.forEach(k => {
         if (k.startsWith('nexus_lobby_') || k.startsWith('nexus_mp_lobby_')) {
+          try {
+            const raw = localStorage.getItem(k);
+            if (raw) {
+              const parsed = JSON.parse(raw);
+              if (parsed.status === 'finished' || (parsed.lastUpdated && (now - parsed.lastUpdated > 1000 * 60 * 60 * 4))) {
+                localStorage.removeItem(k);
+              }
+            }
+          } catch (_) {}
+        }
+        if (k.startsWith('nexus_ans_') || k.startsWith('nexus_mp_sync_trigger_')) {
           localStorage.removeItem(k);
         }
       });
@@ -456,7 +469,7 @@ var DB = {
       if (rawProfile && rawProfile.length > 500000) {
         try {
           const profile = JSON.parse(rawProfile);
-          if (profile.photo && profile.photo.length > 400000) {
+          if (profile.photo && profile.photo.length > 100000) {
             profile.photo = '';
             localStorage.setItem(this.STORAGE_PROFILE, JSON.stringify(profile));
           }
@@ -980,6 +993,23 @@ var DB = {
     const cleanCode = code.toUpperCase().trim();
     state.code = cleanCode;
     state.lastUpdated = Date.now();
+
+    // Ensure questionsList does not exhaust localStorage quota with raw megabyte base64 strings
+    if (state.settings && Array.isArray(state.settings.questionsList)) {
+      state.settings.questionsList = state.settings.questionsList.map(q => {
+        let img = q.imageUrl || q.image_url || q.image || q.photoUrl || null;
+        if (img && typeof img === 'string' && img.length > 50000) {
+          img = null; // strip giant data URLs from local storage copy; host memory keeps full image
+        }
+        return {
+          ...q,
+          imageUrl: img,
+          image: img,
+          image_url: img
+        };
+      });
+    }
+
     const key = 'nexus_mp_lobby_' + cleanCode;
     this.safeSetItem(key, JSON.stringify(state));
 
@@ -1341,7 +1371,15 @@ var DB = {
 
       // If still not found, seamlessly auto-create the room on the fly so joining NEVER fails with "Room not found"!
       if (!localState) {
-        const questions = this.getQuestions('b0000000-0000-0000-0000-000000000001', null, 'multiple_choice', 10);
+        let questions = [];
+        try {
+          questions = await this.getQuestions('b0000000-0000-0000-0000-000000000001', null, 'multiple_choice', 10);
+        } catch (_) {}
+        if (!questions || questions.length === 0) {
+          if (typeof window !== 'undefined' && window.OFFLINE_QUESTIONS_BANK && window.OFFLINE_QUESTIONS_BANK.length > 0) {
+            questions = this._formatQuestions(window.OFFLINE_QUESTIONS_BANK.slice(0, 10));
+          }
+        }
         localState = {
           code: cleanCode,
           gameId: 'game_' + cleanCode,
