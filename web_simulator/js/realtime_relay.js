@@ -214,6 +214,32 @@ const RealtimeRelay = {
         }
         break;
 
+      case 'game_event': {
+        console.log('⚡ [Relay] Game event received:', payload);
+        if (this.callbacks.onGameEvent) {
+          try { this.callbacks.onGameEvent(payload); } catch (err) { console.warn(err); }
+        }
+        const ev = payload.eventType || payload.event || payload.type;
+        if (ev === 'GAME_START' && this.callbacks.onGameStart) {
+          try { this.callbacks.onGameStart(payload); } catch (err) { console.warn(err); }
+        } else if ((ev === 'QUESTION_START' || ev === 'NEXT_QUESTION') && this.callbacks.onNextQuestion) {
+          try { this.callbacks.onNextQuestion(payload); } catch (err) { console.warn(err); }
+        } else if (ev === 'QUESTION_START' && this.callbacks.onQuestionStart) {
+          try { this.callbacks.onQuestionStart(payload); } catch (err) { console.warn(err); }
+        } else if (ev === 'QUESTION_LOCK' && this.callbacks.onQuestionLock) {
+          try { this.callbacks.onQuestionLock(payload); } catch (err) { console.warn(err); }
+        } else if (ev === 'PLAYER_JOINED' && this.callbacks.onPlayerJoin) {
+          try { this.callbacks.onPlayerJoin(payload.player || payload); } catch (err) { console.warn(err); }
+        } else if (ev === 'PLAYER_ANSWERED' && this.callbacks.onPlayerAnswer) {
+          try { this.callbacks.onPlayerAnswer(payload); } catch (err) { console.warn(err); }
+        } else if (ev === 'SHOW_RESULTS' && this.callbacks.onAnswerReveal) {
+          try { this.callbacks.onAnswerReveal(payload); } catch (err) { console.warn(err); }
+        } else if (ev === 'GAME_FINISH' && this.callbacks.onGameFinish) {
+          try { this.callbacks.onGameFinish(payload); } catch (err) { console.warn(err); }
+        }
+        break;
+      }
+
       default:
         break;
     }
@@ -249,21 +275,35 @@ const RealtimeRelay = {
   },
 
   sendGameStart(gameData, questionsList) {
+    const q0 = (questionsList && questionsList[0]) || null;
+    const dur = (q0 && q0.time_limit) ? q0.time_limit : 20;
     this.publish('game_start', {
       type: 'GAME_START',
+      eventType: 'GAME_START',
       status: 'active',
       currentIndex: 0,
+      questionNumber: 1,
+      startedAt: new Date().toISOString(),
+      duration: dur,
       game: gameData,
+      question: q0,
+      customQuestion: q0,
       questionsList: questionsList || []
     });
   },
 
-  sendNextQuestion(questionIndex, questionObj, timeLimit) {
+  sendNextQuestion(questionIndex, questionObj, timeLimit, questionsList) {
     this.publish('next_question', {
       type: 'NEXT_QUESTION',
+      eventType: 'NEXT_QUESTION',
       currentIndex: questionIndex,
+      questionNumber: questionIndex + 1,
+      startedAt: new Date().toISOString(),
+      duration: timeLimit || 20,
+      timeLimit: timeLimit || 20,
       question: questionObj,
-      timeLimit: timeLimit || 20
+      customQuestion: questionObj,
+      questionsList: questionsList || []
     });
   },
 
@@ -311,3 +351,4 @@ const RealtimeRelay = {
 if (typeof window !== 'undefined') {
   window.RealtimeRelay = RealtimeRelay;
 }
+

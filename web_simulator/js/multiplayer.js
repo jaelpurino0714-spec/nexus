@@ -554,7 +554,14 @@ const Multiplayer = {
     const tag = document.getElementById('mpPlayerChannelTag');
     const botStartBtn = document.getElementById('mpBotStartMatchBtn');
 
-    if (badge) badge.textContent = `👤 ${nickname}`;
+    const cleanNick = nickname || 'Player';
+    this.currentPlayerNickname = cleanNick;
+    try {
+      sessionStorage.setItem('nexus_current_player_name', cleanNick);
+      localStorage.setItem('nexus_current_player_name', cleanNick);
+    } catch (_) {}
+
+    if (badge) badge.textContent = `👤 ${cleanNick}`;
     if (tag) tag.textContent = `PIN: ${game.room_code}`;
 
     if (botStartBtn) {
@@ -646,15 +653,19 @@ const Multiplayer = {
       const myId = (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('nexus_current_player_id')) || (typeof DB !== 'undefined' ? DB.getUserUUID() : ('u_' + Date.now()));
       const profile = (typeof DB !== 'undefined' && DB.getStudentProfile) ? DB.getStudentProfile() || {} : {};
       
+      const activePlayerName = name || this.currentPlayerNickname || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('nexus_current_player_name')) || profile.name || 'Player';
       RealtimeRelay.init(cleanPin, role, {
         id: myId,
         user_id: myId,
-        name: name || profile.name || 'Player',
-        playerName: name || profile.name || 'Player',
-        display_name: name || profile.name || 'Player',
+        name: activePlayerName,
+        playerName: activePlayerName,
+        display_name: activePlayerName,
         photoUrl: profile.photo || null,
         role: role
       }, {
+        onGameEvent: (payload) => {
+          this.handleBroadcastEvent(payload);
+        },
         onPlayerJoin: (player) => {
           if (this.isHost) {
             this.handleRemotePlayerJoin(player);
@@ -670,6 +681,11 @@ const Multiplayer = {
             this.onGameStart(payload);
           }
         },
+        onQuestionStart: (payload) => {
+          if (!this.isHost) {
+            this.onQuestionStart(payload);
+          }
+        },
         onNextQuestion: (payload) => {
           if (!this.isHost) {
             this.onNextQuestion(payload);
@@ -678,6 +694,11 @@ const Multiplayer = {
         onPlayerAnswer: (payload) => {
           if (this.isHost) {
             this.onPlayerAnswered(payload);
+          }
+        },
+        onQuestionLock: (payload) => {
+          if (!this.isHost) {
+            this.onQuestionLock(payload);
           }
         },
         onAnswerReveal: (payload) => {
@@ -981,8 +1002,54 @@ const Multiplayer = {
       const initialDuration = (this.questionsList[0] && this.questionsList[0].time_limit) ? this.questionsList[0].time_limit : ((this.currentGame && this.currentGame.time_limit) ? this.currentGame.time_limit : 20);
       const startIso = new Date().toISOString();
 
-      this.sendBroadcast('GAME_START', { questionNumber: 1, startedAt: startIso, duration: initialDuration });
-      this.sendBroadcast('QUESTION_START', { questionNumber: 1, startedAt: startIso, duration: initialDuration });
+      const q0 = this.questionsList[0] || {};
+      const typeId0 = q0.question_type_id || (q0.question_type === 'true_false' || q0.type === 'true_false' ? 2 : (q0.question_type === 'identification' || q0.type === 'identification' ? 3 : 1));
+      const qBroadcastImg = q0.imageUrl || q0.image_url || q0.image || q0.photoUrl || q0.photo_url || q0.photo || null;
+
+      const choicesObj = {
+        a: q0.choice_a || q0.option_a || (q0.options ? q0.options[0] : (typeId0 === 2 ? 'True' : '')),
+        b: q0.choice_b || q0.option_b || (q0.options ? q0.options[1] : (typeId0 === 2 ? 'False' : '')),
+        c: q0.choice_c || q0.option_c || (q0.options ? q0.options[2] : ''),
+        d: q0.choice_d || q0.option_d || (q0.options ? q0.options[3] : '')
+      };
+
+      const startPayload = {
+        questionNumber: 1,
+        currentIndex: 0,
+        startedAt: startIso,
+        duration: initialDuration,
+        questionId: q0.id || 'q_0',
+        questionText: q0.question || '',
+        imageUrl: qBroadcastImg,
+        questionTypeId: typeId0,
+        choices: choicesObj,
+        customQuestion: {
+          id: q0.id || 'q_0',
+          question: q0.question || '',
+          question_type_id: typeId0,
+          question_type: q0.question_type || q0.type,
+          choice_a: choicesObj.a,
+          choice_b: choicesObj.b,
+          choice_c: choicesObj.c,
+          choice_d: choicesObj.d,
+          correct_answer: q0.correct_answer || q0.correctAnswer || q0.answer,
+          imageUrl: qBroadcastImg,
+          image_url: qBroadcastImg,
+          image: qBroadcastImg,
+          photoUrl: qBroadcastImg,
+          time_limit: initialDuration
+        },
+        questionsList: this.questionsList,
+        serverTime: Date.now()
+      };
+
+      this.sendBroadcast('GAME_START', startPayload);
+      this.sendBroadcast('QUESTION_START', startPayload);
+
+      if (typeof RealtimeRelay !== 'undefined') {
+        if (RealtimeRelay.sendGameStart) RealtimeRelay.sendGameStart(this.currentGame, this.questionsList);
+        if (RealtimeRelay.sendNextQuestion) RealtimeRelay.sendNextQuestion(0, startPayload.customQuestion, initialDuration, this.questionsList);
+      }
 
       this.saveCurrentHostAnalytics();
       this.hostRenderQuestion(0);
@@ -1096,31 +1163,47 @@ const Multiplayer = {
     };
 
     // Send QUESTION_START Broadcast payload with full custom question info
-    const qBroadcastImg = q.imageUrl || q.image_url || q.image || null;
-    this.sendBroadcast('QUESTION_START', {
+    const qBroadcastImg = q.imageUrl || q.image_url || q.image || q.photoUrl || q.photo_url || q.photo || null;
+    const currentQData = {
+      id: q.id || `q_${index}`,
+      question: q.question,
+      question_type_id: typeId,
+      question_type: q.question_type || q.type,
+      choice_a: choicesObj.a,
+      choice_b: choicesObj.b,
+      choice_c: choicesObj.c,
+      choice_d: choicesObj.d,
+      correct_answer: q.correct_answer || q.correctAnswer || q.answer,
+      imageUrl: qBroadcastImg,
+      image_url: qBroadcastImg,
+      image: qBroadcastImg,
+      photoUrl: qBroadcastImg,
+      time_limit: this.questionDurationSec
+    };
+
+    const questionBroadcastPayload = {
       questionNumber: index + 1,
-      questionId: q.id,
+      currentIndex: index,
+      questionId: q.id || `q_${index}`,
       questionText: q.question,
       imageUrl: qBroadcastImg,
       questionTypeId: typeId,
       choices: choicesObj,
-      customQuestion: {
-        id: q.id,
-        question: q.question,
-        question_type_id: typeId,
-        question_type: q.question_type || q.type,
-        choice_a: choicesObj.a,
-        choice_b: choicesObj.b,
-        choice_c: choicesObj.c,
-        choice_d: choicesObj.d,
-        correct_answer: q.correct_answer || q.correctAnswer,
-        imageUrl: qBroadcastImg,
-        image: qBroadcastImg
-      },
+      customQuestion: currentQData,
+      question: currentQData,
+      questionsList: this.questionsList,
       startedAt: startedAt,
       duration: this.questionDurationSec,
+      timeLimit: this.questionDurationSec,
       serverTime: Date.now()
-    });
+    };
+
+    this.sendBroadcast('QUESTION_START', questionBroadcastPayload);
+    this.sendBroadcast('NEXT_QUESTION', questionBroadcastPayload);
+
+    if (typeof RealtimeRelay !== 'undefined' && RealtimeRelay.sendNextQuestion) {
+      RealtimeRelay.sendNextQuestion(index, currentQData, this.questionDurationSec, this.questionsList);
+    }
 
     this.startSynchronizedTimer('mpHostTimerValue', startedAt, this.questionDurationSec, () => {
       this.hostLockAnswers();
@@ -1347,8 +1430,12 @@ const Multiplayer = {
 
   async hostShowResults() {
     if (!this.currentGame) return;
+    await DB.updateMultiplayerGameStatus(this.currentGame.id, 'show_results');
     const leaderboard = await DB.getGameLeaderboard(this.currentGame.id, this.currentGame.room_code);
     this.sendBroadcast('SHOW_RESULTS', { questionNumber: this.currentIndex + 1, leaderboard });
+    if (typeof RealtimeRelay !== 'undefined' && RealtimeRelay.sendAnswerReveal) {
+      RealtimeRelay.sendAnswerReveal(this.currentIndex, null, { leaderboard });
+    }
     this.renderLeaderboardScreen('Current Standings 📊', leaderboard);
   },
 
@@ -1473,8 +1560,15 @@ const Multiplayer = {
 
   async onGameStart(data) {
     if (!this.isHost) {
+      if (data && data.questionsList && Array.isArray(data.questionsList) && data.questionsList.length > 0) {
+        this.questionsList = data.questionsList;
+      }
+      if (data && (data.customQuestion || data.question)) {
+        if (!this.questionsList) this.questionsList = [];
+        this.questionsList[0] = { ...(this.questionsList[0] || {}), ...(data.customQuestion || data.question) };
+      }
       App.showScreen('mpPlayerGameScreen');
-      const qIndex = (data && data.questionNumber) ? (data.questionNumber - 1) : 0;
+      const qIndex = (data && data.currentIndex !== undefined) ? data.currentIndex : ((data && data.questionNumber) ? (data.questionNumber - 1) : 0);
       if (!this.questionsList || this.questionsList.length === 0) {
         if (this.currentGame) {
           this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id, this.currentGame.room_code);
@@ -1535,27 +1629,43 @@ const Multiplayer = {
   },
 
   onQuestionStart(data) {
-    if (this.isHost) return;
-    const qIndex = (data.questionNumber || 1) - 1;
+    if (this.isHost || !data) return;
+    App.showScreen('mpPlayerGameScreen');
+    const qIndex = (data.currentIndex !== undefined) ? data.currentIndex : ((data.questionNumber || 1) - 1);
     const qKey = `${qIndex}_${data.startedAt || ''}`;
 
+    if (data.questionsList && Array.isArray(data.questionsList) && data.questionsList.length > 0) {
+      this.questionsList = data.questionsList;
+    }
+    if (data.question) {
+      if (!this.questionsList) this.questionsList = [];
+      this.questionsList[qIndex] = {
+        ...(this.questionsList[qIndex] || {}),
+        ...data.question
+      };
+    }
     if (data.customQuestion) {
       if (!this.questionsList) this.questionsList = [];
       this.questionsList[qIndex] = {
-        ...this.questionsList[qIndex],
+        ...(this.questionsList[qIndex] || {}),
         ...data.customQuestion
       };
     }
 
-    if (qKey !== this.lastRenderedQuestionKey) {
+    if (qKey !== this.lastRenderedQuestionKey || !this.questionsList || !this.questionsList[qIndex]) {
       this.lastRenderedQuestionKey = qKey;
       this.playerRenderQuestion(qIndex, {
         question_start_time: data.startedAt || new Date().toISOString(),
         serverTime: data.serverTime || Date.now(),
-        duration: data.duration,
-        questionTypeId: data.questionTypeId
+        duration: data.duration || (data.timeLimit || 20),
+        questionTypeId: data.questionTypeId || (data.customQuestion && data.customQuestion.question_type_id)
       });
     }
+  },
+
+  onNextQuestion(data) {
+    if (this.isHost || !data) return;
+    this.onQuestionStart(data);
   },
 
   async playerRenderQuestion(index, gameObj) {
@@ -1567,24 +1677,31 @@ const Multiplayer = {
       this.questionsList = await DB.getMultiplayerQuestions(this.currentGame.id, this.currentGame.room_code);
     }
 
-    const q = this.questionsList[index] || {};
+    const q = (this.questionsList && this.questionsList[index]) || (gameObj && (gameObj.customQuestion || gameObj.question)) || {};
 
     const banner = document.getElementById('mpPlayerFeedbackBanner');
     if (banner) banner.className = 'feedback-banner hidden';
 
-    document.getElementById('mpPlayerQCounter').textContent = `Question ${index + 1} of ${this.questionsList.length || 10}`;
-    document.getElementById('mpPlayerQuestionText').textContent = q.question || 'Question';
+    const totalQCount = (this.questionsList && this.questionsList.length) ? this.questionsList.length : (gameObj && gameObj.questionsList ? gameObj.questionsList.length : 10);
+    const counterEl = document.getElementById('mpPlayerQCounter');
+    if (counterEl) counterEl.textContent = `Question ${index + 1} of ${totalQCount}`;
+
+    const textEl = document.getElementById('mpPlayerQuestionText');
+    if (textEl) textEl.textContent = q.question || 'Science Question';
 
     const playerImgBox = document.getElementById('mpPlayerQuestionImageContainer');
     const playerImgEl = document.getElementById('mpPlayerQuestionImageEl');
-    const playerImgSrc = q.imageUrl || q.image_url || q.image;
+    const playerImgSrc = q.imageUrl || q.image_url || q.image || q.photoUrl || q.photo_url || q.photo || (gameObj && (gameObj.imageUrl || gameObj.image_url || gameObj.image)) || null;
+
     if (playerImgBox && playerImgEl) {
       if (playerImgSrc) {
         playerImgEl.src = playerImgSrc;
         playerImgBox.classList.remove('hidden');
+        playerImgBox.style.display = 'block';
       } else {
         playerImgEl.src = '';
         playerImgBox.classList.add('hidden');
+        playerImgBox.style.display = 'none';
       }
     }
 
@@ -1706,22 +1823,43 @@ const Multiplayer = {
     }
 
     const myProfile = DB.getStudentProfile() || {};
-    const myName = myProfile.name || 'Player';
-    const myId = DB.getUserUUID();
+    const myName = this.currentPlayerNickname || 
+                   (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('nexus_current_player_name')) || 
+                   (typeof localStorage !== 'undefined' && localStorage.getItem('nexus_current_player_name')) || 
+                   myProfile.name || 
+                   'Player';
+    const myId = (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('nexus_current_player_id')) || DB.getUserUUID();
 
     try {
       localStorage.setItem(`nexus_ans_${this.currentIndex}_${myName.toLowerCase().trim()}`, 'true');
     } catch (_) {}
 
+    const elapsedSec = this.questionStartedAt ? Math.max(0.1, (Date.now() - new Date(this.questionStartedAt).getTime()) / 1000) : 1;
+
+    // Evaluate answer against current question
+    let currentQ = (this.questionsList && this.questionsList[this.currentIndex]) || null;
+    let isCorrect = false;
+    if (currentQ) {
+      isCorrect = DB.evaluateAnswerCorrectness(currentQ, selectedChoice);
+    }
+    const qDuration = (currentQ && currentQ.time_limit) ? currentQ.time_limit : 20;
+    const timeRatio = Math.max(0.2, 1 - (elapsedSec / qDuration));
+    const pointsEarned = isCorrect ? Math.round(1000 * timeRatio) : 0;
+
+    // Send immediate response over Relay & Broadcast
     this.sendBroadcast('PLAYER_ANSWERED', {
       playerId: myId,
       user_id: myId,
       playerName: myName,
       display_name: myName,
-      pointsEarned: 0,
-      totalScore: 0,
-      isCorrect: false
+      pointsEarned: pointsEarned,
+      totalScore: pointsEarned,
+      isCorrect: isCorrect
     });
+
+    if (typeof RealtimeRelay !== 'undefined' && RealtimeRelay.sendPlayerAnswer) {
+      RealtimeRelay.sendPlayerAnswer(myId, myName, selectedChoice, isCorrect, pointsEarned, pointsEarned);
+    }
 
     const banner = document.getElementById('mpPlayerFeedbackBanner');
     const statusText = document.getElementById('mpPlayerFeedbackText');
@@ -1729,44 +1867,27 @@ const Multiplayer = {
 
     if (banner && statusText && subText) {
       banner.className = 'feedback-banner';
-      statusText.textContent = '⏳ Answer Submitted!';
-      subText.textContent = 'Validating score with server...';
+      if (isCorrect) {
+        statusText.textContent = '✅ Correct Answer!';
+        subText.textContent = `+${pointsEarned} points earned!`;
+        if (typeof App !== 'undefined' && App.playCorrectSound) App.playCorrectSound();
+      } else {
+        statusText.textContent = '❌ Incorrect Answer';
+        subText.textContent = '+0 points';
+        if (typeof App !== 'undefined' && App.playWrongSound) App.playWrongSound();
+      }
     }
 
-    const elapsedSec = this.questionStartedAt ? Math.max(0.1, (Date.now() - new Date(this.questionStartedAt).getTime()) / 1000) : 1;
-
     try {
-      const result = await DB.submitPlayerAnswer(
+      await DB.submitPlayerAnswer(
         this.currentGame ? this.currentGame.id : null,
-        DB.getUserUUID(),
+        myId,
         questionId,
         selectedChoice,
         elapsedSec
       );
-
-      this.sendBroadcast('PLAYER_ANSWERED', {
-        playerId: DB.getUserUUID(),
-        playerName: (DB.getStudentProfile() || {}).name || 'Player',
-        pointsEarned: result.points_earned || 0,
-        totalScore: result.total_score !== undefined ? result.total_score : (result.points_earned || 0),
-        isCorrect: result.is_correct || false
-      });
-
-      if (result.is_correct) {
-        if (typeof App !== 'undefined' && App.playCorrectSound) App.playCorrectSound();
-      } else {
-        if (typeof App !== 'undefined' && App.playWrongSound) App.playWrongSound();
-      }
-
-      if (banner && statusText && subText) {
-        statusText.textContent = result.is_correct ? '✅ Correct Answer!' : '❌ Incorrect Answer';
-        subText.textContent = `+${result.points_earned || 0} points earned!`;
-      }
     } catch (e) {
-      console.warn('Answer submit fallback:', e);
-      if (banner && statusText) {
-        statusText.textContent = '✅ Answer Recorded!';
-      }
+      console.warn('DB.submitPlayerAnswer non-blocking warning:', e);
     }
   },
 
@@ -2305,7 +2426,7 @@ const Multiplayer = {
         </div>
 
         ${this.isHost ? `
-          <button onclick="Multiplayer.kickPlayerFromLobby('${String(pId).replace(/'/g, "\\'")}', '${String(cleanName).replace(/'/g, "\\'")}')" 
+          <button id="mpKickPlayerBtn"
                   style="width: 100%; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #FCA5A5; font-weight: 700; font-size: 0.88rem; padding: 12px; border-radius: 14px; cursor: pointer; transition: all 0.2s;"
                   onmouseover="this.style.background='rgba(239, 68, 68, 0.35)';"
                   onmouseout="this.style.background='rgba(239, 68, 68, 0.2)';">
@@ -2317,6 +2438,11 @@ const Multiplayer = {
 
     modal.style.display = 'flex';
     modal.classList.remove('hidden');
+
+    const kickBtn = document.getElementById('mpKickPlayerBtn');
+    if (kickBtn) {
+      kickBtn.onclick = () => this.kickPlayerFromLobby(pId, cleanName);
+    }
 
     // Async fetch photo from Supabase profiles / multiplayer_players if missing
     if ((!imgSrc || imgSrc === defaultAvatar) && typeof DB !== 'undefined' && DB.canQuerySupabase && DB.canQuerySupabase() && typeof supabaseClient !== 'undefined' && supabaseClient) {
