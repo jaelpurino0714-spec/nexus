@@ -664,15 +664,15 @@ var Multiplayer = window.Multiplayer = {
           await this.playerRenderQuestion(currentIdx, game);
         } else if ((game.status === 'active' || game.status === 'starting' || game.status === 'in_progress') && isGameScreenActive) {
           const dbIndex = game.current_question_index || 0;
-          const qStartTime = game.question_start_time || '';
-          const qKey = `${dbIndex}_${qStartTime}`;
 
-          if (qKey !== this.lastRenderedQuestionKey || !this.questionsList || this.questionsList.length === 0 || !this.questionsList[dbIndex]) {
-            if (typeof RealtimeRelay !== 'undefined' && RealtimeRelay.sendSyncRequest) {
-              RealtimeRelay.sendSyncRequest();
-            }
-            this.lastRenderedQuestionKey = qKey;
-            if (!this.questionsList || this.questionsList.length === 0) {
+          // ONLY advance if the host advanced to a NEW question index (dbIndex > this.currentIndex)!
+          // NEVER re-render or repeat if the participant is on the current question or already answered it!
+          if (dbIndex > this.currentIndex) {
+            console.log(`📡 Host advanced to new question: ${dbIndex + 1}`);
+            this.currentIndex = dbIndex;
+            this.hasAnsweredCurrent = false;
+            this.lastRenderedQuestionKey = `q_${dbIndex}`;
+            if (!this.questionsList || this.questionsList.length === 0 || !this.questionsList[dbIndex]) {
               try {
                 this.questionsList = await DB.getMultiplayerQuestions(game.id, game.room_code);
               } catch (_) {}
@@ -798,7 +798,11 @@ var Multiplayer = window.Multiplayer = {
         },
         onSyncResponse: (payload) => {
           if (!this.isHost && payload) {
-            if (payload.status === 'active' || payload.status === 'in_progress') {
+            const newIndex = (payload.currentIndex !== undefined) ? payload.currentIndex : ((payload.questionNumber || 1) - 1);
+            // ONLY render if host moved to a NEW, HIGHER question index!
+            if (newIndex > this.currentIndex && (payload.status === 'active' || payload.status === 'in_progress')) {
+              this.currentIndex = newIndex;
+              this.hasAnsweredCurrent = false;
               this.onQuestionStart(payload);
             }
           }
@@ -1796,9 +1800,16 @@ var Multiplayer = window.Multiplayer = {
 
   onQuestionStart(data) {
     if (this.isHost || !data) return;
-    App.showScreen('mpPlayerGameScreen');
     const qIndex = (data.currentIndex !== undefined) ? data.currentIndex : ((data.questionNumber || 1) - 1);
-    const qKey = `${qIndex}_${data.startedAt || ''}`;
+
+    // If player has already answered this question or is already on it, NEVER repeat or re-render!
+    if (this.hasAnsweredCurrent && qIndex <= this.currentIndex) {
+      console.log(`🛡️ Participant already answered question ${qIndex + 1}. Ignoring duplicate start.`);
+      return;
+    }
+
+    App.showScreen('mpPlayerGameScreen');
+    const qKey = `q_${qIndex}`;
 
     if (data.questionsList && Array.isArray(data.questionsList) && data.questionsList.length > 0) {
       this.questionsList = data.questionsList;
@@ -1820,6 +1831,8 @@ var Multiplayer = window.Multiplayer = {
 
     if (qKey !== this.lastRenderedQuestionKey || !this.questionsList || !this.questionsList[qIndex]) {
       this.lastRenderedQuestionKey = qKey;
+      this.currentIndex = qIndex;
+      this.hasAnsweredCurrent = false;
       this.playerRenderQuestion(qIndex, {
         question_start_time: data.startedAt || new Date().toISOString(),
         serverTime: data.serverTime || Date.now(),
@@ -1831,7 +1844,13 @@ var Multiplayer = window.Multiplayer = {
 
   onNextQuestion(data) {
     if (this.isHost || !data) return;
-    this.onQuestionStart(data);
+    const qIndex = (data.currentIndex !== undefined) ? data.currentIndex : ((data.questionNumber || 1) - 1);
+    // Only advance when the Host moves to a strictly newer question index!
+    if (qIndex > this.currentIndex) {
+      this.currentIndex = qIndex;
+      this.hasAnsweredCurrent = false;
+      this.onQuestionStart(data);
+    }
   },
 
   async playerRenderQuestion(index, gameObj) {
@@ -2267,57 +2286,6 @@ var Multiplayer = window.Multiplayer = {
       this.sendBroadcast('PLAYER_LEFT', { playerId: userUuid });
     }
     this.goHome();
-  },
-
-  async hostShowResults() {
-    if (!this.currentGame) return;
-    await DB.updateMultiplayerGameStatus(this.currentGame.id, 'show_results');
-    const leaderboard = await DB.getGameLeaderboard(this.currentGame.id, this.currentGame.room_code);
-    this.sendBroadcast('SHOW_RESULTS', { questionNumber: this.currentIndex + 1, leaderboard });
-    this.renderLeaderboardScreen('Current Standings 📊', leaderboard);
-  },
-
-  async hostNextQuestion() {
-    if (this.currentIndex + 1 < this.questionsList.length) {
-      const nextIdx = this.currentIndex + 1;
-      await DB.updateMultiplayerGameStatus(this.currentGame.id, 'active', nextIdx);
-      this.hostRenderQuestion(nextIdx);
-    } else {
-      await DB.updateMultiplayerGameStatus(this.currentGame.id, 'finished');
-      const finalLeaderboard = await DB.getGameLeaderboard(this.currentGame.id, this.currentGame.room_code);
-
-      const totalQ = this.questionsList ? this.questionsList.length : 10;
-      const participantStandings = (finalLeaderboard || []).filter(p => {
-        if (p.is_host || p.isHost) return false;
-        if (this.currentGame && this.currentGame.host_id && (p.user_id === this.currentGame.host_id || p.id === this.currentGame.host_id)) return false;
-        return true;
-      });
-
-      const analyticsData = {
-        gameId: this.currentGame ? this.currentGame.id : 'game_' + Date.now(),
-        roomCode: this.currentGame ? (this.currentGame.room_code || this.currentGame.access_code) : '000000',
-        title: this.currentGame ? (this.currentGame.title || 'Science Host Quiz') : 'Science Host Quiz',
-        totalQuestions: totalQ,
-        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
-        participants: participantStandings.map(p => {
-          const correct = Number(p.correct_answers || p.correct || 0);
-          const points = Number(p.score || p.points || 0);
-          const pct = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
-          return {
-            name: p.display_name || p.playerName || p.name || 'Participant',
-            points: points,
-            correct: correct,
-            totalQuestions: totalQ,
-            correctRatio: `${correct}/${totalQ}`,
-            accuracyPct: pct
-          };
-        })
-      };
-
-      DB.saveHostedGameAnalytics(analyticsData);
-      this.sendBroadcast('GAME_FINISH', { finalLeaderboard });
-      this.renderLeaderboardScreen('🏆 Final Podium Leaderboard', finalLeaderboard);
-    }
   },
 
   renderLeaderboardScreen(title, standings) {
