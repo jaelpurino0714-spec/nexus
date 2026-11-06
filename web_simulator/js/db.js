@@ -1254,15 +1254,27 @@ var DB = {
     return gameData;
   },
 
-  async joinMultiplayerGame(roomCode) {
+  async joinMultiplayerGame(roomCode, nickname = null) {
     const cleanCode = (roomCode || '').toUpperCase().trim();
-    if (cleanCode.length < 5 || cleanCode.length > 8) {
-      throw new Error('Room code must be 5 to 8 characters long!');
+    if (cleanCode.length < 4 || cleanCode.length > 8) {
+      throw new Error('Room code must be 4 to 8 characters long!');
     }
 
     const userUuid = this.getUserUUID();
-    const profile = this.getActiveProfile();
+    const profile = this.getActiveProfile() || {};
     profile.id = userUuid;
+
+    // Use explicitly provided nickname or fall back to profile username/name
+    const displayName = (nickname && String(nickname).trim()) ? String(nickname).trim() : (profile.nickname || profile.username || profile.name || 'Player');
+
+    // Generate a unique player session ID so multi-tab tests on the same browser don't collide with host!
+    const myPlayerId = 'p_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 7);
+    try {
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.setItem('nexus_current_player_id', myPlayerId);
+        sessionStorage.setItem('nexus_current_player_name', displayName);
+      }
+    } catch (_) {}
 
     // Save student profile to Supabase first to satisfy profiles FK constraint
     try {
@@ -1378,7 +1390,8 @@ var DB = {
       throw new Error('This game session has ended!');
     }
 
-    const isHost = (game.host_id === userUuid);
+    // Joining player is NEVER a host - always a student player
+    const isHost = false;
 
     // Insert or Upsert Player into Supabase
     if (canQuerySupabase() && !game.isLocalOnly) {
@@ -1387,9 +1400,9 @@ var DB = {
         const payloadMp = {
           game_id: game.id,
           user_id: userUuid,
-          display_name: profile.name || 'Player',
+          display_name: displayName,
           photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null,
-          is_host: isHost
+          is_host: false
         };
         const { error: upErr } = await supabaseClient
           .from('multiplayer_players')
@@ -1402,9 +1415,9 @@ var DB = {
         try {
           await supabaseClient.from('multiplayer_players').insert({
             game_id: game.id,
-            display_name: profile.name || 'Player',
+            display_name: displayName,
             photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null,
-            is_host: isHost
+            is_host: false
           });
         } catch (err) {}
       }
@@ -1414,7 +1427,7 @@ var DB = {
         const payloadLobby = {
           lobby_id: game.id,
           student_id: userUuid,
-          student_name: profile.name || 'Player',
+          student_name: displayName,
           photo_url: (profile.photo && profile.photo.length < 5000) ? profile.photo : null
         };
         const { error: lErr } = await supabaseClient
@@ -1427,7 +1440,7 @@ var DB = {
       } catch (e) {}
     }
 
-    // Always update local lobby state for local/multi-tab sync
+    // Always update local lobby state for instant local/multi-tab sync
     let localState = this.getLocalLobbyState(cleanCode);
     if (!localState) {
       localState = {
@@ -1438,21 +1451,50 @@ var DB = {
         participants: []
       };
     }
-    if (!localState.participants) localState.participants = [];
-    const exists = localState.participants.some(p => (p.user_id === userUuid || p.id === userUuid || p.display_name === profile.name));
-    if (!exists) {
-      localState.participants.push({
-        user_id: userUuid,
-        id: userUuid,
-        display_name: profile.name || 'Player',
-        photo_url: profile.photo || null,
-        is_host: isHost,
-        score: 0,
-        correct_answers: 0,
-        wrong_answers: 0
-      });
-      this.saveLocalLobbyState(cleanCode, localState);
-    }
+    if (!Array.isArray(localState.participants)) localState.participants = [];
+
+    const participantObj = {
+      id: myPlayerId,
+      user_id: myPlayerId,
+      display_name: displayName,
+      playerName: displayName,
+      name: displayName,
+      photo_url: profile.photo || null,
+      photoUrl: profile.photo || null,
+      is_host: false,
+      role: 'player',
+      score: 0,
+      correct_answers: 0,
+      wrong_answers: 0,
+      joined_at: Date.now()
+    };
+
+    // Remove any stale non-host participant with exact same name to prevent duplicates
+    localState.participants = localState.participants.filter(p => {
+      if (p.is_host === true || p.role === 'host') return true;
+      return (p.display_name !== displayName && p.name !== displayName && p.id !== myPlayerId);
+    });
+
+    localState.participants.push(participantObj);
+    localState.lastUpdated = Date.now();
+    this.saveLocalLobbyState(cleanCode, localState);
+
+    // Cross-tab and Broadcast notification triggers for Host screen
+    try {
+      localStorage.setItem('nexus_mp_join_trigger_' + cleanCode, JSON.stringify({
+        player: participantObj,
+        timestamp: Date.now()
+      }));
+      localStorage.setItem('nexus_mp_sync_trigger_' + cleanCode, String(Date.now()));
+    } catch (_) {}
+
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        const bc = new BroadcastChannel('nexus_lobby_' + cleanCode);
+        bc.postMessage({ type: 'PLAYER_JOINED', player: participantObj, code: cleanCode });
+        setTimeout(() => { try { bc.close(); } catch (_) {} }, 300);
+      }
+    } catch (_) {}
 
     return game;
   },

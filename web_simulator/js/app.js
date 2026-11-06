@@ -18,6 +18,23 @@ const App = {
     this.initBgm();
     this.checkInitialAuth();
     this.initOfflinePromptListener();
+    this.checkUrlParams();
+  },
+
+  checkUrlParams() {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const pin = urlParams.get('pin') || urlParams.get('room') || urlParams.get('gamePin');
+      if (pin) {
+        setTimeout(() => {
+          if (typeof Multiplayer !== 'undefined' && Multiplayer.initJoinGameFlow) {
+            Multiplayer.initJoinGameFlow();
+            const pinInput = document.getElementById('mpPinInput');
+            if (pinInput) pinInput.value = pin.toUpperCase().trim();
+          }
+        }, 350);
+      }
+    } catch (_) {}
   },
 
   _suggestPromptShown: false,

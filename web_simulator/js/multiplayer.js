@@ -364,6 +364,23 @@ const Multiplayer = {
       qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(joinUrl)}`;
     }
 
+    // Set up instantaneous zero-delay BroadcastChannel for multi-tab player joins
+    const cleanCode = (game.room_code || '').toUpperCase().trim();
+    if (this.hostBroadcastChannel) {
+      try { this.hostBroadcastChannel.close(); } catch (_) {}
+    }
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        this.hostBroadcastChannel = new BroadcastChannel('nexus_lobby_' + cleanCode);
+        this.hostBroadcastChannel.onmessage = (event) => {
+          if (event.data && event.data.type === 'PLAYER_JOINED') {
+            console.log('⚡ Player join received via BroadcastChannel:', event.data.player);
+            this.syncHostRoster();
+          }
+        };
+      }
+    } catch (_) {}
+
     await this.subscribeToGameChannel(game.room_code || game.id, 'host', (DB.getStudentProfile() || {}).name || 'Host');
     await this.startHostLobbyPolling();
   },
@@ -380,13 +397,15 @@ const Multiplayer = {
     };
 
     await poll();
-    this.hostLobbyPollInterval = setInterval(poll, 1500);
+    this.hostLobbyPollInterval = setInterval(poll, 600);
   },
 
   isHostPlayer(p) {
     if (!p) return false;
+    // Explicit player role or explicit non-host flag can NEVER be the host!
+    if (p.role === 'player' || p.is_host === false || p.isHost === false) return false;
     if (p.is_host === true || p.isHost === true || p.role === 'host') return true;
-    if (p.display_name === 'Host' || p.playerName === 'Host' || p.name === 'Host') return true;
+    if (p.display_name === 'Host' || p.playerName === 'Host' || p.name === 'Host' || p.role === 'teacher') return true;
 
     if (this.currentGame && this.currentGame.host_id) {
       const hostId = String(this.currentGame.host_id).trim();
@@ -460,6 +479,32 @@ const Multiplayer = {
           });
         });
       } catch (e) {}
+    }
+
+    // Direct local lobby state check for zero-latency local/multi-tab discovery
+    if (this.currentGame && this.currentGame.room_code && typeof DB !== 'undefined' && DB.getLocalLobbyState) {
+      const localLobby = DB.getLocalLobbyState(this.currentGame.room_code);
+      if (localLobby && Array.isArray(localLobby.participants)) {
+        localLobby.participants.forEach(p => {
+          if (p && !this.isHostPlayer(p)) {
+            const name = p.display_name || p.playerName || p.name || 'Player';
+            const key = p.id || p.user_id || name;
+            if (key && !mergedMap.has(key)) {
+              mergedMap.set(key, {
+                id: key,
+                user_id: p.user_id || key,
+                playerName: name,
+                display_name: name,
+                photoUrl: p.photo_url || p.photoUrl || p.photo || null,
+                score: p.score || 0,
+                correct_answers: p.correct_answers || 0,
+                wrong_answers: p.wrong_answers || 0,
+                role: 'player'
+              });
+            }
+          }
+        });
+      }
     }
 
     // C. Preserve existing in-memory scores from this.playersList (e.g. from PLAYER_ANSWERED broadcasts)
@@ -2269,8 +2314,11 @@ const Multiplayer = {
 
 if (typeof window !== 'undefined') {
   window.addEventListener('storage', (e) => {
-    if (e.key && (e.key.startsWith('nexus_mp_sync_trigger_') || e.key.startsWith('nexus_mp_answer_trigger_') || e.key.startsWith('nexus_ans_') || e.key.startsWith('nexus_lobby_'))) {
+    if (e.key && (e.key.startsWith('nexus_mp_sync_trigger_') || e.key.startsWith('nexus_mp_join_trigger_') || e.key.startsWith('nexus_mp_answer_trigger_') || e.key.startsWith('nexus_ans_') || e.key.startsWith('nexus_lobby_'))) {
       if (typeof Multiplayer !== 'undefined' && Multiplayer.isHost && Multiplayer.currentGame) {
+        if (e.key.startsWith('nexus_mp_join_trigger_')) {
+          Multiplayer.syncHostRoster();
+        }
         if ((e.key.startsWith('nexus_mp_answer_trigger_') || e.key.startsWith('nexus_ans_')) && e.newValue) {
           try {
             if (e.key.startsWith('nexus_mp_answer_trigger_')) {
