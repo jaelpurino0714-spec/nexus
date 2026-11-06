@@ -1696,6 +1696,15 @@
           </div>
         </div>
 
+        <!-- POPUP UI: RANKINGS & TIERS (Pops up when rankings category is clicked) -->
+        <div id="rankingsPopupModal" class="modal-overlay hidden" onclick="Achievements.closeRankingsPopup()">
+          <div class="category-popup-card rankings-popup-card" onclick="event.stopPropagation()">
+            <div id="rankingsPopupContent">
+              <!-- Populated dynamically by Achievements.showRankingsHub() / showRankAchievements() -->
+            </div>
+          </div>
+        </div>
+
         <!-- Achievement Detail Popup Modal (Pops above category popup) -->
         <div id="achievementDetailModal" class="modal-overlay hidden" style="z-index: 60;" onclick="Achievements.closeModal()">
           <div class="modal-card achievement-modal-content" onclick="event.stopPropagation()">

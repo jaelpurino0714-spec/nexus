@@ -22,6 +22,7 @@ const Achievements = {
 
   categories: [
     { id: 'all', name: 'All', icon: '🌟', count: 84 },
+    { id: 'rankings', name: 'Achievement Rankings', icon: '👑', count: 84 },
     { id: 'speedster', name: 'Speedster', icon: '⚡', count: 14 },
     { id: 'live_competitor', name: 'Live Competitor', icon: '🏆', count: 14 },
     { id: 'experimenter', name: 'Experimenter', icon: '🔬', count: 14 },
@@ -1941,6 +1942,7 @@ const Achievements = {
   },
 
   categoryDescriptions: {
+    rankings: 'Browse achievements by rank: Bronze, Silver, Gold, Platinum',
     speedster: 'Quickness of answering',
     live_competitor: 'Live quiz participation & arena wins',
     experimenter: 'Experiment simulator utilization',
@@ -1950,6 +1952,7 @@ const Achievements = {
   },
 
   categoryColors: {
+    rankings: { border: '#F59E0B', glow: 'rgba(245, 158, 11, 0.45)', bg: 'rgba(245, 158, 11, 0.15)' },
     speedster: { border: '#FBBF24', glow: 'rgba(251, 191, 36, 0.35)', bg: 'rgba(251, 191, 36, 0.12)' },
     live_competitor: { border: '#EC4899', glow: 'rgba(236, 72, 153, 0.35)', bg: 'rgba(236, 72, 153, 0.12)' },
     experimenter: { border: '#38BDF8', glow: 'rgba(56, 189, 248, 0.35)', bg: 'rgba(56, 189, 248, 0.12)' },
@@ -1991,10 +1994,15 @@ const Achievements = {
     if (hub) hub.classList.remove('hidden');
 
     this.closeCategoryPopup();
+    this.closeRankingsPopup();
     this.renderCategoryCards();
   },
 
   openCategory(catId) {
+    if (catId === 'rankings') {
+      this.openRankingsPopup();
+      return;
+    }
     this.activeCategory = catId;
     const popup = document.getElementById('categoryPopupModal');
     if (popup) popup.classList.remove('hidden');
@@ -2008,6 +2016,17 @@ const Achievements = {
 
   closeCategoryPopup() {
     const popup = document.getElementById('categoryPopupModal');
+    if (popup) popup.classList.add('hidden');
+  },
+
+  openRankingsPopup() {
+    const popup = document.getElementById('rankingsPopupModal');
+    if (popup) popup.classList.remove('hidden');
+    this.showRankingsHub();
+  },
+
+  closeRankingsPopup() {
+    const popup = document.getElementById('rankingsPopupModal');
     if (popup) popup.classList.add('hidden');
   },
 
@@ -2100,15 +2119,26 @@ const Achievements = {
     const realCats = this.categories.filter(c => c.id !== 'all');
 
     container.innerHTML = realCats.map(cat => {
-      const catAchs = this.list.filter(a => a.category === cat.id);
-      const catUnlocked = catAchs.filter(a => unlocked.includes(a.id)).length;
-      const catPercent = Math.round((catUnlocked / catAchs.length) * 100);
-      const rank = this.getCategoryRank(cat.id, catUnlocked);
-      const desc = this.categoryDescriptions[cat.id] || 'Explore and unlock achievements';
-      const colors = this.categoryColors[cat.id] || { border: '#A855F7', glow: 'rgba(168, 85, 247, 0.3)', bg: 'rgba(168, 85, 247, 0.15)' };
+      let catAchs, catUnlocked, catPercent, rank, desc, colors;
+      if (cat.id === 'rankings') {
+        catAchs = this.list;
+        catUnlocked = unlocked.length;
+        catPercent = Math.round((catUnlocked / catAchs.length) * 100);
+        const overall = this.getOverallRank(catUnlocked);
+        rank = { icon: overall.current.icon, title: overall.current.title };
+        desc = this.categoryDescriptions[cat.id] || 'Browse achievements by rank: Bronze, Silver, Gold, Platinum';
+        colors = this.categoryColors[cat.id] || { border: '#F59E0B', glow: 'rgba(245, 158, 11, 0.45)', bg: 'rgba(245, 158, 11, 0.15)' };
+      } else {
+        catAchs = this.list.filter(a => a.category === cat.id);
+        catUnlocked = catAchs.filter(a => unlocked.includes(a.id)).length;
+        catPercent = Math.round((catUnlocked / catAchs.length) * 100);
+        rank = this.getCategoryRank(cat.id, catUnlocked);
+        desc = this.categoryDescriptions[cat.id] || 'Explore and unlock achievements';
+        colors = this.categoryColors[cat.id] || { border: '#A855F7', glow: 'rgba(168, 85, 247, 0.3)', bg: 'rgba(168, 85, 247, 0.15)' };
+      }
 
       return `
-        <div class="ach-category-card" onclick="Achievements.openCategory('${cat.id}')">
+        <div class="ach-category-card ${cat.id === 'rankings' ? 'featured-rankings-card' : ''}" onclick="Achievements.openCategory('${cat.id}')">
           <div class="ach-cat-card-top">
             <div class="ach-cat-card-icon-wrap" style="border-color: ${colors.border}; background: ${colors.bg}; box-shadow: 0 0 12px ${colors.glow};">
               <span class="ach-cat-card-icon">${cat.icon}</span>
@@ -2227,6 +2257,211 @@ const Achievements = {
 
       grid.appendChild(tile);
     });
+  },
+
+  // --------------------------------------------------------------------------
+  // RANKINGS & TIERS MODAL SHOWCASE
+  // --------------------------------------------------------------------------
+  showRankingsHub() {
+    const content = document.getElementById('rankingsPopupContent');
+    if (!content) return;
+
+    const unlocked = (typeof DB !== 'undefined' && DB.getUnlockedAchievements) ? DB.getUnlockedAchievements() : [];
+    const totalCount = this.list.length;
+    const unlockedCount = unlocked.length;
+    const overallPercent = Math.round((unlockedCount / totalCount) * 100);
+    const { current, next } = this.getOverallRank(unlockedCount);
+
+    const nextText = next
+      ? `${next.min - unlockedCount} more achievements to reach ${next.title}`
+      : 'Max Grandmaster Rank Reached! 🌟';
+
+    // Calculate counts per rarity tier
+    const rarityCounts = {
+      bronze: { total: 0, unlocked: 0, name: 'Bronze', label: 'Common Tier', icon: '🥉', color: '#CD7F32' },
+      silver: { total: 0, unlocked: 0, name: 'Silver', label: 'Uncommon Tier', icon: '🥈', color: '#CBD5E1' },
+      gold: { total: 0, unlocked: 0, name: 'Gold', label: 'Rare Tier', icon: '🥇', color: '#FBBF24' },
+      platinum: { total: 0, unlocked: 0, name: 'Platinum', label: 'Legendary Tier', icon: '💎', color: '#38BDF8' }
+    };
+
+    this.list.forEach(a => {
+      const rar = a.rarity;
+      if (rarityCounts[rar]) {
+        rarityCounts[rar].total++;
+        if (unlocked.includes(a.id)) rarityCounts[rar].unlocked++;
+      }
+    });
+
+    content.innerHTML = `
+      <div class="category-popup-header">
+        <div class="cat-popup-title-group">
+          <div class="cat-popup-icon-halo" style="border-color: #F59E0B; background: rgba(245, 158, 11, 0.15); box-shadow: 0 0 14px rgba(245, 158, 11, 0.3);">
+            <span>👑</span>
+          </div>
+          <div class="cat-popup-info-group">
+            <h3 class="cat-popup-title">Achievement Rankings</h3>
+            <div class="cat-popup-badges-row">
+              <span class="cat-popup-rank-badge" style="border-color: #F59E0B; color: #F59E0B;">${current.icon} ${current.title}</span>
+              <span class="cat-popup-count">${unlockedCount} / ${totalCount} (${overallPercent}%)</span>
+            </div>
+          </div>
+        </div>
+        <button class="cat-popup-close-btn" onclick="Achievements.closeRankingsPopup()" aria-label="Close">✕</button>
+      </div>
+
+      <div class="rankings-hub-scroll">
+        <!-- Master Rank Status Card -->
+        <div class="rank-master-status-card">
+          <div class="rank-master-status-top">
+            <div>
+              <div class="rank-master-subtitle">Overall Standing</div>
+              <div class="rank-master-current-title">${current.title}</div>
+            </div>
+            <div class="rank-master-percent-pill">${overallPercent}%</div>
+          </div>
+          <div class="ach-cat-card-progress-track" style="margin: 8px 0 6px 0;">
+            <div class="ach-cat-card-progress-fill" style="width: ${overallPercent}%; background: linear-gradient(90deg, #F59E0B, #EC4899); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);"></div>
+          </div>
+          <div class="rank-master-next-hint">${nextText}</div>
+        </div>
+
+        <div class="rank-section-heading">Tap a Rank Tier to View Achievements:</div>
+
+        <!-- 4 Interactive Rank Tier Cards -->
+        <div class="rank-tiers-list">
+          ${['bronze', 'silver', 'gold', 'platinum'].map(key => {
+            const tier = rarityCounts[key];
+            const pct = Math.round((tier.unlocked / tier.total) * 100);
+            return `
+              <div class="rank-tier-card rarity-${key}" onclick="Achievements.showRankAchievements('${key}')">
+                <div class="rank-tier-card-left">
+                  <div class="rank-tier-icon-wrap">${tier.icon}</div>
+                  <div class="rank-tier-info">
+                    <div class="rank-tier-name-row">
+                      <span class="rank-tier-name">${tier.name} Rank</span>
+                      <span class="rank-tier-label-chip">${tier.label}</span>
+                    </div>
+                    <div class="rank-tier-count-text">${tier.unlocked} of ${tier.total} Unlocked (${pct}%)</div>
+                    <div class="rank-tier-mini-track">
+                      <div class="rank-tier-mini-fill" style="width: ${pct}%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="rank-tier-card-arrow">➔</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  },
+
+  showRankAchievements(rankKey) {
+    const content = document.getElementById('rankingsPopupContent');
+    if (!content) return;
+
+    const unlocked = (typeof DB !== 'undefined' && DB.getUnlockedAchievements) ? DB.getUnlockedAchievements() : [];
+    const stats = this.getStats();
+
+    const rankMeta = {
+      bronze: { name: 'Bronze', label: 'Common Tier', icon: '🥉', color: '#CD7F32' },
+      silver: { name: 'Silver', label: 'Uncommon Tier', icon: '🥈', color: '#CBD5E1' },
+      gold: { name: 'Gold', label: 'Rare Tier', icon: '🥇', color: '#FBBF24' },
+      platinum: { name: 'Platinum', label: 'Legendary Tier', icon: '💎', color: '#38BDF8' }
+    };
+
+    const currentMeta = rankMeta[rankKey] || rankMeta.gold;
+    const filtered = this.list.filter(a => a.rarity === rankKey);
+    const countUnlocked = filtered.filter(a => unlocked.includes(a.id)).length;
+
+    // Calculate counts for switcher tabs
+    const rarityCounts = {};
+    ['bronze', 'silver', 'gold', 'platinum'].forEach(k => {
+      const items = this.list.filter(a => a.rarity === k);
+      const unl = items.filter(a => unlocked.includes(a.id)).length;
+      rarityCounts[k] = { unlocked: unl, total: items.length };
+    });
+
+    content.innerHTML = `
+      <div class="category-popup-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="rank-back-btn" onclick="Achievements.showRankingsHub()">← Ranks</button>
+          <div class="rank-active-pill" style="border-color: ${currentMeta.color}; color: ${currentMeta.color};">
+            ${currentMeta.icon} ${currentMeta.name} (${countUnlocked}/${filtered.length})
+          </div>
+        </div>
+        <button class="cat-popup-close-btn" onclick="Achievements.closeRankingsPopup()" aria-label="Close">✕</button>
+      </div>
+
+      <!-- Quick Rank Switcher Tabs -->
+      <div class="rank-switcher-tabs">
+        ${['bronze', 'silver', 'gold', 'platinum'].map(k => {
+          const meta = rankMeta[k];
+          const counts = rarityCounts[k];
+          const isActive = k === rankKey;
+          return `
+            <button class="rank-switcher-btn ${isActive ? 'active' : ''} rarity-${k}" 
+                    onclick="Achievements.showRankAchievements('${k}')">
+              <span>${meta.icon}</span>
+              <span>${meta.name}</span>
+              <span class="rank-switcher-count">${counts.unlocked}/${counts.total}</span>
+            </button>
+          `;
+        }).join('')}
+      </div>
+
+      <!-- 3-Column Achievements Grid for this Rank -->
+      <div id="rankAchievementsGrid" class="achievements-popup-grid">
+        <!-- Rendered tiles below -->
+      </div>
+    `;
+
+    const grid = document.getElementById('rankAchievementsGrid');
+    if (!grid) return;
+
+    filtered.forEach(ach => {
+      const isUnlocked = unlocked.includes(ach.id);
+      const progress = this.computeProgress(ach, stats);
+      const tile = document.createElement('div');
+      tile.className = `ach-tile ${isUnlocked ? 'unlocked' : 'locked'} rarity-${ach.rarity}`;
+      tile.onclick = () => this.showModal(ach, isUnlocked, progress);
+
+      const progressHtml = isUnlocked
+        ? `<div class="ach-tile-progress-text unlocked">Completed ✅</div>`
+        : `
+          <div class="ach-tile-progress-wrap">
+            <div class="ach-tile-progress-bar">
+              <div class="ach-tile-progress-fill rarity-${ach.rarity}" style="width: ${progress.percentage}%;"></div>
+            </div>
+            <div class="ach-tile-progress-text">${progress.percentage}% (${progress.current}/${progress.target})</div>
+          </div>
+        `;
+
+      if (isUnlocked) {
+        tile.innerHTML = `
+          <div class="ach-rarity-pill rarity-${ach.rarity}">${ach.rarity.toUpperCase()}</div>
+          <div class="ach-icon-wrapper unlocked-icon-box rarity-${ach.rarity}">
+            <span class="ach-emoji">${ach.icon}</span>
+          </div>
+          <div class="ach-name">${ach.name}</div>
+          ${progressHtml}
+        `;
+      } else {
+        tile.innerHTML = `
+          <div class="ach-rarity-pill rarity-${ach.rarity}">${ach.rarity.toUpperCase()}</div>
+          <div class="ach-icon-wrapper locked-icon-box rarity-${ach.rarity}">
+            <span class="ach-locked-preview">${ach.icon}</span>
+            <div class="ach-lock-overlay">🔒</div>
+          </div>
+          <div class="ach-name">${ach.name}</div>
+          ${progressHtml}
+        `;
+      }
+
+      grid.appendChild(tile);
+    });
+
+    grid.scrollTop = 0;
   },
 
   // Backwards compatibility alias
