@@ -709,7 +709,7 @@ const App = {
   },
 
   async checkInitialAuth() {
-    if (typeof supabaseClient !== 'undefined' && supabaseClient && supabaseClient.auth) {
+    if (typeof DB !== 'undefined' && DB.canQuerySupabase && DB.canQuerySupabase() && typeof supabaseClient !== 'undefined' && supabaseClient && supabaseClient.auth) {
       try {
         const { data: { session } } = await supabaseClient.auth.getSession();
         if (session && session.user) {
@@ -869,7 +869,8 @@ const App = {
 
     if (teacher) {
       if (badge) {
-        badge.style.display = 'none';
+        badge.style.display = 'inline-flex';
+        badge.textContent = 'TEACHER';
       }
       const teacherTitle = document.getElementById('teacherHomeTitle');
       if (teacherTitle) teacherTitle.textContent = `Welcome, ${teacher.name}!`;
@@ -883,18 +884,22 @@ const App = {
     }
 
     if (!profile) {
-      if (badge) badge.style.display = 'none';
+      if (badge) {
+        badge.style.display = 'inline-flex';
+        badge.textContent = 'GRADE 10';
+      }
       return;
-    }
-
-    if (badge) {
-      badge.style.display = 'none';
     }
 
     const nameVal = (profile.name && profile.name !== 'undefined' && profile.name.trim() !== '') ? profile.name : 'Student';
     const grade = (profile.gradeLevel && profile.gradeLevel !== 'undefined' && profile.gradeLevel.trim() !== '') ? profile.gradeLevel : 'Grade 10';
     const sectionVal = (profile.section && profile.section !== 'undefined' && profile.section.trim() !== '') ? profile.section : '';
     const subText = sectionVal ? `${grade} • Section ${sectionVal}` : `${grade} • Science`;
+
+    if (badge) {
+      badge.style.display = 'inline-flex';
+      badge.textContent = (grade || 'Grade 10').toUpperCase();
+    }
     
     const homeNameEl = document.getElementById('homeUserName');
     if (homeNameEl) homeNameEl.textContent = `Welcome, ${nameVal}!`;

@@ -438,7 +438,19 @@ const Multiplayer = {
     this.unsubscribeRealtime();
     this.currentChannelName = channelName;
 
-    if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+    // A. Local BroadcastChannel for seamless instant cross-tab sync without Supabase
+    if (typeof BroadcastChannel !== 'undefined') {
+      try {
+        this.localBroadcastChannel = new BroadcastChannel('nexus_game_' + cleanPin);
+        this.localBroadcastChannel.onmessage = (e) => {
+          if (e && e.data) {
+            this.handleBroadcastEvent(e.data);
+          }
+        };
+      } catch (err) {}
+    }
+
+    if (typeof DB !== 'undefined' && DB.canQuerySupabase && DB.canQuerySupabase() && typeof supabaseClient !== 'undefined' && supabaseClient) {
       try {
         const myUuid = DB.getUserUUID();
         const profile = DB.getStudentProfile() || {};
@@ -569,6 +581,12 @@ const Multiplayer = {
           event: 'game_event',
           payload: { eventType, ...payload }
         });
+      } catch (e) {}
+    }
+
+    if (this.localBroadcastChannel) {
+      try {
+        this.localBroadcastChannel.postMessage({ eventType, ...payload });
       } catch (e) {}
     }
   },
@@ -1843,6 +1861,10 @@ const Multiplayer = {
   },
 
   unsubscribeRealtime() {
+    if (this.localBroadcastChannel) {
+      try { this.localBroadcastChannel.close(); } catch(e) {}
+      this.localBroadcastChannel = null;
+    }
     if (this.realtimeChannel && typeof supabaseClient !== 'undefined' && supabaseClient) {
       try {
         this.realtimeChannel.untrack();
@@ -1927,7 +1949,7 @@ const Multiplayer = {
     modal.classList.remove('hidden');
 
     // Async fetch photo from Supabase profiles / multiplayer_players if missing
-    if ((!imgSrc || imgSrc === defaultAvatar) && typeof supabaseClient !== 'undefined' && supabaseClient) {
+    if ((!imgSrc || imgSrc === defaultAvatar) && typeof DB !== 'undefined' && DB.canQuerySupabase && DB.canQuerySupabase() && typeof supabaseClient !== 'undefined' && supabaseClient) {
       try {
         let fetchedPhoto = null;
         let fetchedName = null;

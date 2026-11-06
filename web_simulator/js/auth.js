@@ -141,6 +141,12 @@ const Auth = {
   },
 
   getClient() {
+    if (typeof DB !== 'undefined' && DB.canQuerySupabase && !DB.canQuerySupabase()) {
+      return null;
+    }
+    if (typeof canQuerySupabase === 'function' && !canQuerySupabase()) {
+      return null;
+    }
     if (typeof getSupabaseClient === 'function') {
       const c = getSupabaseClient();
       if (c) return c;

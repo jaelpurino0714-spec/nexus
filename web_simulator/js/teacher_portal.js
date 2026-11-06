@@ -579,7 +579,7 @@ const TeacherPortal = {
     customQuizzes = customQuizzes.filter(q => q.id !== quizId);
     localStorage.setItem('nexus_custom_quizzes', JSON.stringify(customQuizzes));
 
-    if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+    if (typeof DB !== 'undefined' && DB.canQuerySupabase && DB.canQuerySupabase() && typeof supabaseClient !== 'undefined' && supabaseClient) {
       try {
         await supabaseClient.from('custom_quizzes').delete().eq('id', quizId);
       } catch (e) {

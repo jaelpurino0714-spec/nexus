@@ -45,7 +45,7 @@ function getSupabaseClient() {
   if (typeof window !== 'undefined' && window.supabase && typeof window.supabase.createClient === 'function') {
     try {
       window._supabaseClientInstance = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+        auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
         realtime: {
           params: { eventsPerSecond: 10 },
           timeout: 10000,
@@ -68,6 +68,10 @@ if (typeof window !== 'undefined') {
 }
 
 var DB = {
+  canQuerySupabase() {
+    return canQuerySupabase();
+  },
+
   // UUID validator helper
   isValidUuid(val) {
     if (typeof val !== 'string') return false;
@@ -230,7 +234,7 @@ var DB = {
   },
 
   async getQuestionTypes() {
-    if (!supabaseClient) return [];
+    if (!canQuerySupabase()) return [];
     try {
       const { data, error } = await supabaseClient
         .from('question_types')
@@ -506,7 +510,7 @@ var DB = {
     if (!passcode) return false;
     const clean = passcode.trim();
     if (['123456', 'NEXUS10'].includes(clean)) return true;
-    if (!supabaseClient) return false;
+    if (!canQuerySupabase()) return false;
     try {
       const { data, error } = await supabaseClient
         .from('teacher_passcodes')
@@ -622,7 +626,7 @@ var DB = {
   // 3. TEACHER PASSCODES (SUPABASE TEACHER_PASSCODES TABLE)
   // --------------------------------------------------------------------------
   async isValidPasscode(passcode) {
-    if (!supabaseClient) return ['123456', 'NEXUS10'].includes(passcode.trim());
+    if (!canQuerySupabase()) return ['123456', 'NEXUS10'].includes(passcode.trim());
     try {
       const { data, error } = await supabaseClient
         .from('teacher_passcodes')
@@ -788,7 +792,7 @@ var DB = {
     this.safeSetItem('nexus_custom_quizzes', JSON.stringify(list));
 
     // 2. Sync to Supabase if client available
-    if (supabaseClient) {
+    if (canQuerySupabase()) {
       const userUuid = this.getUserUUID();
       try {
         await supabaseClient.from('custom_quizzes').upsert({
@@ -857,7 +861,7 @@ var DB = {
       return true;
     });
 
-    if (supabaseClient && currentUserId) {
+    if (canQuerySupabase() && currentUserId) {
       supabaseClient
         .from('custom_quizzes')
         .select('*')
@@ -1009,7 +1013,7 @@ var DB = {
           time_limit: config.timeLimit || 20
         };
       });
-    } else if (supabaseClient) {
+    } else if (canQuerySupabase()) {
       try {
         let qTypeId = null;
         if (config.answerMedium === 'true_false') qTypeId = 2;
@@ -1050,6 +1054,15 @@ var DB = {
       }
     }
 
+    // Always ensure questions are populated from local question bank if empty
+    if (!selectedQuestions || selectedQuestions.length === 0) {
+      const offlineQ = this.getQuestions(config.termId || 'b0000000-0000-0000-0000-000000000001', config.topicId, config.answerMedium, config.questionCount || 10);
+      selectedQuestions = (offlineQ && offlineQ.length > 0) ? offlineQ.slice(0, config.questionCount || 10) : [];
+      if (selectedQuestions.length === 0 && typeof QUESTIONS_BANK !== 'undefined' && QUESTIONS_BANK.length > 0) {
+        selectedQuestions = QUESTIONS_BANK.slice(0, config.questionCount || 10);
+      }
+    }
+
     const tLimit = Math.min(60, Math.max(10, config.timeLimit || 20));
     const formattedQuestions = this._formatQuestions(selectedQuestions).map(q => ({
       ...q,
@@ -1070,7 +1083,7 @@ var DB = {
       formattedQuestions: formattedQuestions
     };
 
-    if (supabaseClient) {
+    if (canQuerySupabase()) {
       try {
         // Save host profile to Supabase first so profiles FK constraint passes!
         await this.ensureProfileExistsInSupabase(userUuid, profile);
@@ -1208,7 +1221,7 @@ var DB = {
 
     let game = null;
 
-    if (supabaseClient) {
+    if (canQuerySupabase()) {
       try {
         // 1. Try multiplayer_games by room_code
         const { data: gData } = await supabaseClient
@@ -1252,6 +1265,7 @@ var DB = {
           room_code: cleanCode,
           status: localState.status || 'waiting',
           host_id: localState.hostId || null,
+          question_count: (localState.settings && localState.settings.questionCount) || 10,
           isLocalOnly: true
         };
       }
@@ -1268,7 +1282,7 @@ var DB = {
     const isHost = (game.host_id === userUuid);
 
     // Insert or Upsert Player into Supabase
-    if (supabaseClient && !game.isLocalOnly) {
+    if (canQuerySupabase() && !game.isLocalOnly) {
       // 1. Upsert / Insert into multiplayer_players
       try {
         const payloadMp = {
@@ -1348,7 +1362,7 @@ var DB = {
     const playerMap = new Map();
 
     // 1. Fetch from Supabase tables if connected
-    if (supabaseClient) {
+    if (canQuerySupabase()) {
       try {
         let targetGameIds = [];
         if (gameId) targetGameIds.push(gameId);
@@ -1471,7 +1485,16 @@ var DB = {
 
 
   async getMultiplayerQuestions(gameId, roomCode) {
-    if (!supabaseClient) return [];
+    if (roomCode) {
+      const localState = this.getLocalLobbyState(roomCode);
+      if (localState && localState.settings && localState.settings.questionsList && localState.settings.questionsList.length > 0) {
+        return localState.settings.questionsList;
+      }
+    }
+
+    if (!canQuerySupabase()) {
+      return this.getQuestions('b0000000-0000-0000-0000-000000000001', null, 'multiple_choice', 10);
+    }
 
     try {
       if (gameId) {
@@ -1567,7 +1590,7 @@ var DB = {
         q = Multiplayer.questionsList.find(item => item && (item.id === questionId || item.id == questionId));
       }
 
-      if (!q && supabaseClient && this.isValidUuid(questionId)) {
+      if (!q && canQuerySupabase() && this.isValidUuid(questionId)) {
         try {
           const { data: dbQ } = await supabaseClient
             .from('questions')
@@ -1594,7 +1617,7 @@ var DB = {
       const realGameId = await this._resolveRealGameId(gameId);
       let targetPlayer = null;
 
-      if (supabaseClient) {
+      if (canQuerySupabase()) {
         try {
           const { data: allPlayers } = await supabaseClient
             .from('multiplayer_players')
@@ -1824,7 +1847,7 @@ var DB = {
       }
     };
 
-    if (supabaseClient && validIds.length > 0) {
+    if (canQuerySupabase() && validIds.length > 0) {
       try {
         const { data: dbPlayers } = await supabaseClient
           .from('multiplayer_players')
@@ -1860,7 +1883,7 @@ var DB = {
     const validUserUuid = this.isValidUuid(userUuid) ? userUuid : null;
     const validGameUuid = this.isValidUuid(gameId) ? gameId : null;
 
-    if (supabaseClient) {
+    if (canQuerySupabase()) {
       if (validGameUuid && validUserUuid) {
         try {
           await supabaseClient
@@ -1884,7 +1907,7 @@ var DB = {
   async _resolveRealGameId(gameId) {
     if (!gameId) return null;
     if (this.isValidUuid(gameId)) return gameId;
-    if (supabaseClient) {
+    if (canQuerySupabase()) {
       try {
         const { data: g } = await supabaseClient
           .from('multiplayer_games')
@@ -1910,7 +1933,7 @@ var DB = {
     const answeredSet = new Set();
     const realGameId = await this._resolveRealGameId(gameId);
 
-    if (supabaseClient) {
+    if (canQuerySupabase()) {
       const gId = realGameId || gameId;
 
       let players = [];
@@ -2015,7 +2038,7 @@ var DB = {
       is_finished: (qlStatus === 'completed')
     };
 
-    if (supabaseClient) {
+    if (canQuerySupabase()) {
       try { await supabaseClient.from('multiplayer_games').update(payloadMp).eq('id', gameId); } catch (e) {}
       try { await supabaseClient.from('multiplayer_games').update(payloadMp).eq('room_code', gameId); } catch (e) {}
       try { await supabaseClient.from('quiz_lobbies').update(payloadQl).eq('id', gameId); } catch (e) {}
@@ -2038,7 +2061,7 @@ var DB = {
   },
 
   async saveQrCodeUrlToSupabase(gameId, qrUrl) {
-    if (!supabaseClient || !gameId) return;
+    if (!canQuerySupabase() || !gameId) return;
     try {
       await supabaseClient.from('multiplayer_games').update({ qr_code_url: qrUrl }).eq('id', gameId);
       await supabaseClient.from('quiz_lobbies').update({ host_photo_url: qrUrl }).eq('id', gameId);
@@ -2049,7 +2072,7 @@ var DB = {
     if (!roomCode) return null;
     const cleanCode = roomCode.toUpperCase().trim();
 
-    if (supabaseClient) {
+    if (canQuerySupabase()) {
       try {
         const { data: gData } = await supabaseClient
           .from('multiplayer_games')
@@ -2075,6 +2098,17 @@ var DB = {
           };
         }
       } catch (e) {}
+    }
+
+    const local = this.getLocalLobbyState(cleanCode);
+    if (local) {
+      return {
+        id: local.gameId || ('game_' + cleanCode),
+        room_code: cleanCode,
+        status: local.status || 'waiting',
+        host_id: local.hostId || null,
+        isLocalOnly: true
+      };
     }
 
     return null;
