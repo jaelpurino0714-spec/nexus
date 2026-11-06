@@ -1673,12 +1673,12 @@
           </div>
         </div>
 
-        <!-- VIEW 2: CATEGORY ACHIEVEMENTS DETAIL VIEW -->
+        <!-- VIEW 2: DEDICATED ACHIEVEMENTS VIEW (ONLY ACHIEVEMENTS) -->
         <div id="achievementsCategoryDetailView" class="sub-settings-container hidden">
-          <button class="back-link" onclick="Achievements.showCategoriesView()">← Categories</button>
-          
-          <!-- Category Header with Title, Category Rank, and Progress -->
-          <div id="selectedCategoryHeader"></div>
+          <div class="category-detail-top-nav">
+            <button class="category-back-btn" onclick="Achievements.showCategoriesView()">← Categories</button>
+            <div id="selectedCategoryNavInfo" class="category-nav-title-pill"></div>
+          </div>
 
           <!-- 3-Column Grid of 14 Achievements -->
           <div id="achievementsGrid" class="achievements-4col-grid">

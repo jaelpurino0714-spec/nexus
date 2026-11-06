@@ -3303,90 +3303,98 @@
   transition: width 0.4s ease;
 }
 
-/* Selected Category Header Banner (View 2) */
-.selected-cat-header-card {
-  background: linear-gradient(135deg, rgba(28, 18, 55, 0.98) 0%, rgba(18, 11, 40, 0.98) 100%);
-  border: 1.5px solid #A855F7;
-  border-radius: 20px;
-  padding: 16px 18px;
-  margin-top: 10px;
-  margin-bottom: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.selected-cat-header-top {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-}
-
-.selected-cat-icon-halo {
-  width: 52px;
-  height: 52px;
-  min-width: 52px;
-  border-radius: 16px;
-  border: 1.5px solid #A855F7;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.selected-cat-header-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.selected-cat-title {
-  font-family: var(--font-heading);
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: #FFFFFF;
-  margin: 0;
-}
-
-.selected-cat-desc {
-  font-size: 0.76rem;
-  color: #A5A3C4;
-  margin: 2px 0 6px 0;
-}
-
-.selected-cat-rank-pill {
-  display: inline-block;
-  font-size: 0.72rem;
-  font-weight: 800;
-  padding: 3px 8px;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.selected-cat-stats-row {
+/* Dedicated Category Detail View (View 2: Only Achievements) */
+.category-detail-top-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #CBD5E1;
-}
-
-.selected-cat-progress-track {
+  gap: 10px;
+  padding: 6px 2px 10px 2px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
-  overflow: hidden;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
-.selected-cat-progress-fill {
+.category-detail-top-nav .category-back-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #C084FC;
+  padding: 7px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.category-detail-top-nav .category-back-btn:hover {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: #A855F7;
+  color: #FFFFFF;
+  transform: translateX(-2px);
+}
+
+.category-nav-title-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, rgba(28, 18, 55, 0.95) 0%, rgba(18, 11, 40, 0.95) 100%);
+  border: 1.5px solid #A855F7;
+  padding: 6px 12px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
+  white-space: nowrap;
+  max-width: 65%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.category-nav-title-pill .cat-pill-icon {
+  font-size: 1rem;
+}
+
+.category-nav-title-pill .cat-pill-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.category-nav-title-pill .cat-pill-count {
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 2px 6px;
+  border-radius: 8px;
+  margin-left: 2px;
+}
+
+#achievementsCategoryDetailView {
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  border-radius: 6px;
-  transition: width 0.4s ease;
+  max-height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+#achievementsCategoryDetailView .achievements-4col-grid {
+  flex: 1;
+  max-height: calc(100vh - 160px);
+  min-height: 440px;
+  margin-top: 4px;
+  padding-bottom: 60px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Category Filter Tabs */

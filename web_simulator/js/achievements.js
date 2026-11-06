@@ -2005,6 +2005,9 @@ const Achievements = {
 
     this.renderSelectedCategoryHeader(catId);
     this.renderCategoryGrid(catId);
+
+    const grid = document.getElementById('achievementsGrid');
+    if (grid) grid.scrollTop = 0;
   },
 
   renderSummaryHeader() {
@@ -2131,39 +2134,22 @@ const Achievements = {
   },
 
   renderSelectedCategoryHeader(catId) {
-    const container = document.getElementById('selectedCategoryHeader');
-    if (!container) return;
+    const navInfo = document.getElementById('selectedCategoryNavInfo');
+    if (!navInfo) return;
 
     const cat = this.categories.find(c => c.id === catId) || this.categories[1];
     const catAchs = this.list.filter(a => a.category === catId);
     const unlocked = (typeof DB !== 'undefined' && DB.getUnlockedAchievements) ? DB.getUnlockedAchievements() : [];
     const catUnlocked = catAchs.filter(a => unlocked.includes(a.id)).length;
-    const catPercent = Math.round((catUnlocked / catAchs.length) * 100);
     const rank = this.getCategoryRank(catId, catUnlocked);
-    const desc = this.categoryDescriptions[catId] || '';
-    const colors = this.categoryColors[catId] || { border: '#A855F7', glow: 'rgba(168, 85, 247, 0.3)', bg: 'rgba(168, 85, 247, 0.15)' };
+    const colors = this.categoryColors[catId] || { border: '#A855F7', glow: 'rgba(168, 85, 247, 0.35)', bg: 'rgba(168, 85, 247, 0.12)' };
 
-    container.innerHTML = `
-      <div class="selected-cat-header-card" style="border-color: ${colors.border}; box-shadow: 0 0 20px ${colors.glow};">
-        <div class="selected-cat-header-top">
-          <div class="selected-cat-icon-halo" style="background: ${colors.bg}; border-color: ${colors.border};">
-            <span style="font-size: 2.2rem;">${cat.icon}</span>
-          </div>
-          <div class="selected-cat-header-info">
-            <h2 class="selected-cat-title">${cat.name}</h2>
-            <p class="selected-cat-desc">${desc}</p>
-            <div class="selected-cat-rank-pill" style="border-color: ${colors.border}; color: ${colors.border};">${rank.icon} Rank: <b>${rank.title}</b></div>
-          </div>
-        </div>
-
-        <div class="selected-cat-stats-row">
-          <span class="selected-cat-count-text">${catUnlocked} of ${catAchs.length} Unlocked</span>
-          <span class="selected-cat-percent-text">${catPercent}% Complete</span>
-        </div>
-        <div class="selected-cat-progress-track">
-          <div class="selected-cat-progress-fill" style="width: ${catPercent}%; background: ${colors.border};"></div>
-        </div>
-      </div>
+    navInfo.style.borderColor = colors.border;
+    navInfo.style.boxShadow = `0 0 14px ${colors.glow}`;
+    navInfo.innerHTML = `
+      <span class="cat-pill-icon">${cat.icon}</span>
+      <span class="cat-pill-name">${cat.name}</span>
+      <span class="cat-pill-count" style="color: ${colors.border};">${catUnlocked}/${catAchs.length}</span>
     `;
   },
 
