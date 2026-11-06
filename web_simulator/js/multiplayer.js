@@ -132,6 +132,9 @@ const Multiplayer = {
       this.questionsList = game.formattedQuestions || [];
 
       await this.enterHostLobbyScreen(game);
+      if (typeof Achievements !== 'undefined' && Achievements.recordLiveQuizEvent) {
+        Achievements.recordLiveQuizEvent('host');
+      }
     } catch (e) {
       console.error(e);
       if (errEl) {
@@ -184,6 +187,10 @@ const Multiplayer = {
       const game = await DB.joinMultiplayerGame(pinVal, nicknameVal);
       this.currentGame = game;
       this.isHost = false;
+
+      if (typeof Achievements !== 'undefined' && Achievements.recordLiveQuizEvent) {
+        Achievements.recordLiveQuizEvent('join', { roomCode: pinVal });
+      }
 
       if (game.status === 'active' || game.status === 'in_progress' || game.status === 'question') {
         App.showScreen('mpPlayerGameScreen');
@@ -1745,6 +1752,15 @@ const Multiplayer = {
           card.style.alignItems = 'center';
           card.style.justifyContent = 'space-between';
           if (isMe) card.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.4)';
+
+          if (isMe && (title.includes('Final') || title.includes('Podium'))) {
+            if (typeof Achievements !== 'undefined' && Achievements.recordLiveQuizEvent) {
+              Achievements.recordLiveQuizEvent('complete');
+              if (idx === 0) {
+                Achievements.recordLiveQuizEvent('win');
+              }
+            }
+          }
 
           const medals = ['🥇', '🥈', '🥉'];
           const rankTag = idx < 3 ? medals[idx] : `#${idx + 1}`;

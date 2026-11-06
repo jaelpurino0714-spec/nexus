@@ -660,22 +660,21 @@ var DB = {
   // --------------------------------------------------------------------------
   getUnlockedAchievements() {
     const profile = this.getStudentProfile();
-    const results = this.getQuizResults();
-    // A brand new account with 0 quiz attempts and 0 total points MUST always return 0 unlocked achievements
-    if (results.length === 0 && (!profile || !profile.totalPoints || profile.totalPoints === 0)) {
-      return [];
-    }
-
     const uuid = (profile && profile.id) ? profile.id : this.getUserUUID();
     const key = uuid ? `${this.STORAGE_ACHIEVEMENTS}_${uuid}` : this.STORAGE_ACHIEVEMENTS;
     const raw = localStorage.getItem(key);
-    if (!raw) return [];
-    try {
-      const list = JSON.parse(raw);
-      return Array.isArray(list) ? list : [];
-    } catch (e) {
+    if (raw) {
+      try {
+        const list = JSON.parse(raw);
+        if (Array.isArray(list)) return list;
+      } catch (e) {}
+    }
+
+    const results = this.getQuizResults();
+    if (results.length === 0 && (!profile || !profile.totalPoints || profile.totalPoints === 0)) {
       return [];
     }
+    return [];
   },
 
   saveUnlockedAchievement(achId) {

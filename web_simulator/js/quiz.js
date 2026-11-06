@@ -1539,6 +1539,17 @@ const Quiz = {
       if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${correctDisplay}</b>`;
     }
 
+    if (typeof Achievements !== 'undefined' && Achievements.recordQuestionAnswer) {
+      Achievements.recordQuestionAnswer({
+        isCorrect: isCorrect,
+        timeSpentSec: timeSpentSec,
+        streak: this.streak,
+        topic: this.currentTopic,
+        term: this.currentTerm,
+        questionId: q.id || `${this.currentTopic}_${this.currentIndex}`
+      });
+    }
+
     const nextBtn = document.getElementById('nextQuestionBtn');
     if (nextBtn) {
       const isLast = (this.currentIndex >= this.questionsList.length - 1);
@@ -1635,6 +1646,17 @@ const Quiz = {
     }
     if (statusTextEl) statusTextEl.textContent = `⏰ Time's Up! (Wrong - 0 pts)`;
     if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${correctDisplay}</b>`;
+
+    if (typeof Achievements !== 'undefined' && Achievements.recordQuestionAnswer) {
+      Achievements.recordQuestionAnswer({
+        isCorrect: false,
+        timeSpentSec: (this.customTimeLimitSec || 20),
+        streak: 0,
+        topic: this.currentTopic,
+        term: this.currentTerm,
+        questionId: q.id || `${this.currentTopic}_${this.currentIndex}`
+      });
+    }
 
     const nextBtn = document.getElementById('nextQuestionBtn');
     if (nextBtn) {

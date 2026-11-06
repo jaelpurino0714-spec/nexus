@@ -184,6 +184,10 @@ const Experiment = {
   },
 
   playStartExperimentSfx() {
+    if (typeof Achievements !== 'undefined' && Achievements.recordExperimentEvent) {
+      Achievements.recordExperimentEvent('trial', { topic: this.currentTopic });
+      Achievements.recordExperimentEvent('complete', { topic: this.currentTopic });
+    }
     try {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!AudioCtx) return;
@@ -248,8 +252,15 @@ const Experiment = {
     }
   },
 
+  playAchievementUnlockSfx() {
+    this.playStartExperimentSfx();
+  },
+
   openExperiment(topicName) {
     this.currentTopic = topicName;
+    if (typeof Achievements !== 'undefined' && Achievements.recordExperimentEvent) {
+      Achievements.recordExperimentEvent('open', { topic: topicName });
+    }
     const titleEl = document.getElementById('expDetailTitle');
     const topicTagEl = document.getElementById('expDetailTopicTag');
     if (titleEl) titleEl.textContent = topicName;

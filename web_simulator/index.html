@@ -1661,9 +1661,15 @@
         <div class="sub-settings-container">
           <button class="back-link" onclick="App.showScreen('settingsScreen')">← Settings</button>
           <h2>Achievements & Badges</h2>
-          <p class="subtitle">Tap any badge for unlock requirements</p>
+          <p class="subtitle">Tap any badge for unlock requirements & live progress preview</p>
 
-          <!-- PRD Requirement: 4-Column Grid, Icon top, Name/Desc below -->
+          <!-- Master Summary Header Card -->
+          <div id="achievementsHeaderSummary"></div>
+
+          <!-- Category Filter Tabs -->
+          <div id="achievementsCategoryTabs" class="ach-category-tabs"></div>
+
+          <!-- 4-Column Grid -->
           <div id="achievementsGrid" class="achievements-4col-grid">
             <!-- Populated dynamically by achievements.js -->
           </div>
@@ -1673,10 +1679,26 @@
         <div id="achievementDetailModal" class="modal-overlay hidden" onclick="Achievements.closeModal()">
           <div class="modal-card achievement-modal-content" onclick="event.stopPropagation()">
             <div id="modalAchIcon" class="ach-modal-icon">🏆</div>
+            <div id="modalAchCategory" class="modal-cat-tag">⚡ Speedster</div>
             <h3 id="modalAchName">Achievement Name</h3>
-            <span id="modalAchStatus" class="ach-status-badge">Locked</span>
-            <p id="modalAchDesc">Description</p>
-            <button class="secondary-btn" onclick="Achievements.closeModal()">Close</button>
+            <div class="modal-status-row">
+              <span id="modalAchRarity" class="ach-status-badge rarity-gold">Gold • Rare</span>
+              <span id="modalAchStatus" class="ach-status-badge locked">Locked 🔒</span>
+              <span id="modalAchXP" class="ach-status-badge xp-pill">+50 XP</span>
+            </div>
+            <p id="modalAchDesc" class="modal-ach-desc">Description</p>
+            
+            <div class="modal-progress-section">
+              <div class="modal-progress-label-row">
+                <span>Unlock Progress</span>
+                <span id="modalAchProgressText">0% Complete (0 / 10)</span>
+              </div>
+              <div class="modal-progress-track">
+                <div id="modalAchProgressBar" class="modal-progress-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <button class="secondary-btn" style="width: 100%; margin-top: 14px; border-radius: 12px; padding: 12px;" onclick="Achievements.closeModal()">Close</button>
           </div>
         </div>
       </section>

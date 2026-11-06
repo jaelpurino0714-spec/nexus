@@ -608,6 +608,9 @@ const CharacterSystem = {
   },
 
   onTapCharacterModalPet() {
+    if (typeof Achievements !== 'undefined' && Achievements.recordPetEvent) {
+      Achievements.recordPetEvent('interact');
+    }
     const bubble = document.getElementById('modalPetSpeechBubble');
     if (!bubble) return;
     const quotes = [
@@ -1071,6 +1074,9 @@ const CharacterSystem = {
   },
 
   onTapCharacter() {
+    if (typeof Achievements !== 'undefined' && Achievements.recordPetEvent) {
+      Achievements.recordPetEvent('interact');
+    }
     const bubble = document.getElementById('webFloatingSpeech');
     const avatar = document.getElementById('webFloatingAvatar');
 
@@ -1177,6 +1183,9 @@ const CharacterSystem = {
   },
 
   triggerEvolutionModal(oldStage, newStage, currentXP) {
+    if (typeof Achievements !== 'undefined' && Achievements.recordPetEvent) {
+      Achievements.recordPetEvent('evolution', { stage: newStage.stage || 2 });
+    }
     const modal = document.getElementById('evolutionModal');
     if (!modal) return;
 

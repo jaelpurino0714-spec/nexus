@@ -5,6 +5,8 @@ class AchievementModel {
   final String icon;
   final String requirementType;
   final int requirementValue;
+  final String category;
+  final String rarity;
   final bool isUnlocked;
   final DateTime? unlockedAt;
 
@@ -15,6 +17,8 @@ class AchievementModel {
     required this.icon,
     required this.requirementType,
     required this.requirementValue,
+    this.category = 'general',
+    this.rarity = 'bronze',
     this.isUnlocked = false,
     this.unlockedAt,
   });
@@ -22,11 +26,13 @@ class AchievementModel {
   factory AchievementModel.fromJson(Map<String, dynamic> json, {bool isUnlocked = false, DateTime? unlockedAt}) {
     return AchievementModel(
       id: json['id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      icon: json['icon'] as String,
-      requirementType: json['requirement_type'] as String,
-      requirementValue: (json['requirement_value'] as num).toInt(),
+      title: (json['title'] ?? json['name'] ?? '') as String,
+      description: (json['description'] ?? json['desc'] ?? '') as String,
+      icon: (json['icon'] ?? '🏆') as String,
+      requirementType: (json['requirement_type'] ?? json['statKey'] ?? '') as String,
+      requirementValue: ((json['requirement_value'] ?? json['target'] ?? 1) as num).toInt(),
+      category: (json['category'] ?? 'general') as String,
+      rarity: (json['rarity'] ?? 'bronze') as String,
       isUnlocked: isUnlocked,
       unlockedAt: unlockedAt,
     );
@@ -40,6 +46,8 @@ class AchievementModel {
       'icon': icon,
       'requirement_type': requirementType,
       'requirement_value': requirementValue,
+      'category': category,
+      'rarity': rarity,
     };
   }
 }

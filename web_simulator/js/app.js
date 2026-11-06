@@ -971,7 +971,7 @@ const Settings = {
 
       App.showScreen('settingsProfileSubScreen');
     } else if (subMenu === 'achievements') {
-      Achievements.renderGrid();
+      Achievements.render();
       App.showScreen('settingsAchievementsSubScreen');
     }
   },
