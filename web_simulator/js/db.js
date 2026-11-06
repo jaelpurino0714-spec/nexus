@@ -8,6 +8,35 @@ var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 var supabaseClient = null;
 
+// Circuit-breaker for unreachable / offline Supabase backend
+var _supabaseAvailable = false; // Default false until proven reachable
+var _supabaseChecked = false;
+
+// Check if cached offline in localStorage
+try {
+  const offlineUntil = localStorage.getItem('nexus_supabase_offline_until');
+  if (offlineUntil && Date.now() < parseInt(offlineUntil, 10)) {
+    _supabaseAvailable = false;
+    _supabaseChecked = true;
+  }
+} catch (e) {}
+
+function markSupabaseOffline(err) {
+  _supabaseAvailable = false;
+  _supabaseChecked = true;
+  try {
+    // Suppress network attempts for 30 minutes to prevent console error flood
+    localStorage.setItem('nexus_supabase_offline_until', String(Date.now() + 30 * 60 * 1000));
+  } catch (e) {}
+  console.info('[NEXUS DB] Supabase host unreachable. Operating in Offline Mode with local storage & questions bank.');
+}
+
+function canQuerySupabase() {
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) return false;
+  if (_supabaseAvailable === false) return false;
+  return !!supabaseClient;
+}
+
 function getSupabaseClient() {
   if (typeof window !== 'undefined' && window._supabaseClientInstance) {
     supabaseClient = window._supabaseClientInstance;
@@ -19,7 +48,7 @@ function getSupabaseClient() {
         auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
         realtime: {
           params: { eventsPerSecond: 10 },
-          timeout: 30000,
+          timeout: 10000,
           heartbeatIntervalMs: 15000
         }
       });
@@ -27,7 +56,7 @@ function getSupabaseClient() {
       supabaseClient = window._supabaseClientInstance;
       return window._supabaseClientInstance;
     } catch (e) {
-      console.warn('Error creating Supabase client:', e);
+      markSupabaseOffline(e);
     }
   }
   return null;
@@ -71,7 +100,7 @@ var DB = {
   },
 
   async ensureProfileExistsInSupabase(userUuid, profile = {}) {
-    if (!supabaseClient || !this.isValidUuid(userUuid)) return;
+    if (!canQuerySupabase() || !this.isValidUuid(userUuid)) return;
     try {
       const pName = profile.name || profile.displayName || profile.playerName || profile.full_name || 'User';
       const pEmail = profile.email || `${userUuid.substring(0, 8)}@nexus.app`;
@@ -85,7 +114,7 @@ var DB = {
         role: pRole
       }, { onConflict: 'id', ignoreDuplicates: true });
     } catch (e) {
-      console.warn('Error ensuring profile in Supabase:', e);
+      markSupabaseOffline(e);
     }
   },
 
@@ -152,7 +181,7 @@ var DB = {
   },
 
   async getTerms() {
-    if (supabaseClient && (typeof navigator === 'undefined' || navigator.onLine !== false)) {
+    if (canQuerySupabase()) {
       try {
         const { data, error } = await supabaseClient
           .from('terms')
@@ -166,14 +195,14 @@ var DB = {
           }));
         }
       } catch (e) {
-        console.warn('Error fetching terms from Supabase, using offline fallback:', e);
+        markSupabaseOffline(e);
       }
     }
     return this.OFFLINE_TERMS;
   },
 
   async getTopics(termId) {
-    if (supabaseClient && (typeof navigator === 'undefined' || navigator.onLine !== false)) {
+    if (canQuerySupabase()) {
       try {
         const { data, error } = await supabaseClient
           .from('topics')
@@ -184,7 +213,7 @@ var DB = {
           return data;
         }
       } catch (e) {
-        console.warn('Error fetching topics from Supabase, using offline fallback:', e);
+        markSupabaseOffline(e);
       }
     }
 
@@ -218,7 +247,7 @@ var DB = {
   async getQuestions(topicId, questionTypeId, quizType) {
     let rawQuestions = [];
 
-    if (supabaseClient && (typeof navigator === 'undefined' || navigator.onLine !== false)) {
+    if (canQuerySupabase()) {
       try {
         let query = supabaseClient
           .from('questions')
@@ -237,7 +266,7 @@ var DB = {
           rawQuestions = data;
         }
       } catch (e) {
-        console.warn('Supabase fetch failed, using offline fallback:', e);
+        markSupabaseOffline(e);
       }
     }
 
@@ -271,7 +300,7 @@ var DB = {
   async fetchQuestionsForTerm(termNumber) {
     let rawQuestions = [];
 
-    if (supabaseClient && (typeof navigator === 'undefined' || navigator.onLine !== false)) {
+    if (canQuerySupabase()) {
       try {
         const terms = await this.getTerms();
         const matchedTerm = terms.find(t => t.order_no === termNumber || t.order_index === termNumber);
@@ -299,7 +328,7 @@ var DB = {
           if (!qErr && questions && questions.length > 0) rawQuestions = questions;
         }
       } catch (e) {
-        console.warn('Error fetching questions for term from Supabase, fallback to offline:', e);
+        markSupabaseOffline(e);
       }
     }
 
@@ -515,7 +544,7 @@ var DB = {
 
     this.safeSetItem(this.STORAGE_PROFILE, JSON.stringify(profile));
 
-    if (supabaseClient && profile.id) {
+    if (canQuerySupabase() && profile.id) {
       try {
         await supabaseClient.from('profiles').upsert({
           id: profile.id,
@@ -541,13 +570,13 @@ var DB = {
           created_at: profile.createdAt || new Date().toISOString()
         });
       } catch (e) {
-        console.warn('Error saving profile to Supabase:', e);
+        markSupabaseOffline(e);
       }
     }
   },
 
   async fetchProfileFromSupabase(userId) {
-    if (!supabaseClient || !userId) return null;
+    if (!canQuerySupabase() || !userId) return null;
     try {
       const { data, error } = await supabaseClient
         .from('profiles')
@@ -624,7 +653,7 @@ var DB = {
     list.push(result);
     this.safeSetItem(key, JSON.stringify(list));
 
-    if (supabaseClient) {
+    if (canQuerySupabase()) {
       try {
         const studentUuid = this.getUserUUID();
         const profile = this.getStudentProfile();
@@ -650,7 +679,7 @@ var DB = {
           created_at: result.timestamp || new Date().toISOString()
         });
       } catch (e) {
-        console.warn('Error saving quiz attempt to Supabase:', e);
+        markSupabaseOffline(e);
       }
     }
   },

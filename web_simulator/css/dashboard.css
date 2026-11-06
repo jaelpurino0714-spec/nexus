@@ -27,125 +27,36 @@
   overflow-x: hidden;
 }
 
-/* 1. Top App Bar */
-.dash-top-bar {
-  display: flex;
+/* 1. Top Navigation / Back Button */
+.dash-back-btn {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 4px 2px 8px 2px;
-}
-
-.dash-brand-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.dash-logo-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%);
-  color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  box-shadow: 0 0 16px rgba(139, 92, 246, 0.45);
-}
-
-.dash-brand-name {
-  font-family: var(--font-heading);
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: #FFFFFF;
-  letter-spacing: -0.3px;
-  text-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
-}
-
-.dash-top-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.dash-icon-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
+  gap: 6px;
   background: rgba(30, 20, 65, 0.9);
   border: 1.5px solid rgba(139, 92, 246, 0.4);
   color: #C4B5FD;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  cursor: pointer;
-  position: relative;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-  transition: transform 0.2s ease, border-color 0.2s ease;
-}
-
-.dash-icon-btn:hover {
-  transform: translateY(-2px);
-  border-color: #A855F7;
-  color: #FFFFFF;
-}
-
-.dash-notif-dot {
-  position: absolute;
-  top: 7px;
-  right: 8px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #F43F5E;
-  border: 1.5px solid #130E2E;
-  box-shadow: 0 0 8px #F43F5E;
-}
-
-.dash-profile-chip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 3px 8px 3px 4px;
-  background: rgba(30, 20, 65, 0.9);
-  border: 1.5px solid rgba(139, 92, 246, 0.4);
+  padding: 8px 18px;
   border-radius: 9999px;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 700;
   cursor: pointer;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+  margin: 4px 0 2px 2px;
 }
 
-.dash-profile-chip:hover {
-  transform: translateY(-2px);
+.dash-back-btn:hover {
   border-color: #38BDF8;
+  color: #FFFFFF;
+  transform: translateX(-2px);
+  background: rgba(45, 30, 95, 0.95);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
 }
 
-.dash-chip-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid #8B5CF6;
-}
-
-.dash-chip-emoji {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: rgba(139, 92, 246, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-}
-
-.dash-chip-chevron {
-  font-size: 0.65rem;
-  color: #A5A3C4;
+.dash-efficiency-wrapper {
+  width: 100%;
 }
 
 /* 2. Greeting Row */
@@ -1051,143 +962,6 @@
 
 .dash-practice-pill-btn:hover {
   transform: scale(1.05);
-}
-
-/* Leaderboard Card */
-.dash-podium-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 10px;
-  margin: 8px 0 12px 0;
-}
-
-.podium-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  flex: 1;
-}
-
-.podium-col.rank-1 {
-  transform: translateY(-6px);
-}
-
-.podium-avatar-wrapper {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: rgba(30, 20, 65, 0.9);
-  border: 2px solid rgba(139, 92, 246, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  font-size: 1.4rem;
-}
-
-.gold-crown-halo {
-  border-color: #F59E0B;
-  box-shadow: 0 0 18px rgba(245, 158, 11, 0.5);
-  background: rgba(245, 158, 11, 0.15);
-}
-
-.podium-crown {
-  position: absolute;
-  top: -14px;
-  font-size: 1.1rem;
-  filter: drop-shadow(0 0 6px #F59E0B);
-}
-
-.podium-badge-icon {
-  position: absolute;
-  bottom: -4px;
-  right: -2px;
-  width: 17px;
-  height: 17px;
-  border-radius: 50%;
-  background: #64748B;
-  color: #FFFFFF;
-  font-size: 0.62rem;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1.5px solid #130E2E;
-}
-
-.gold-badge {
-  background: #F59E0B;
-  box-shadow: 0 0 6px #F59E0B;
-}
-
-.bronze-badge {
-  background: #B45309;
-}
-
-.podium-name {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #FFFFFF;
-  margin-top: 5px;
-  max-width: 75px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.podium-xp {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #C4B5FD;
-}
-
-.dash-user-leaderboard-row {
-  background: rgba(245, 158, 11, 0.15);
-  border: 1.5px solid rgba(245, 158, 11, 0.45);
-  border-radius: 14px;
-  padding: 8px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.user-row-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.user-row-rank {
-  font-family: var(--font-heading);
-  font-size: 0.92rem;
-  font-weight: 800;
-  color: #FDE68A;
-}
-
-.user-row-avatar-circle {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: rgba(245, 158, 11, 0.25);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.95rem;
-}
-
-.user-row-name {
-  font-size: 0.82rem;
-  font-weight: 800;
-  color: #FFFFFF;
-}
-
-.user-row-xp {
-  font-family: var(--font-heading);
-  font-size: 0.85rem;
-  font-weight: 800;
-  color: #FDE68A;
 }
 
 /* 8. Sticky Bottom Navigation Bar (Scoped inside container for phones) */

@@ -41,19 +41,20 @@ const StudentDashboard = {
     const stats = this.computeLifetimeStats(quizResults, profile);
     const curriculum = this.computeCurriculumProgress(quizResults);
     const calendar = this.computeMonthlyCalendar(quizResults, this.currentCalendarDate);
-    const leaderboard = await this.getLeaderboardData(profile, stats);
 
-    // 4. Render HTML components matching screenshot layout
+    // 4. Render HTML components matching dark theme phone layout
     container.innerHTML = `
       <div class="dash-wrapper">
-        <!-- Top App Bar -->
-        ${this.renderTopAppBar(profile)}
+        <!-- Back Navigation to Home -->
+        <button class="dash-back-btn" onclick="App.goHome()" title="Back to Home">
+          <span>←</span> <span>Home</span>
+        </button>
 
         <!-- Welcome Greeting & Mascot Speech Bubble -->
         ${this.renderWelcomeGreeting(profile, stats)}
 
         <!-- 4 Quick Stat Cards (Gold, Blue, Orange, Pink) -->
-        ${this.renderQuickStatCards(profile, stats, leaderboard)}
+        ${this.renderQuickStatCards(profile, stats)}
 
         <!-- Academic Overview (Lifetime Stats Section 4 of Spec) -->
         ${this.renderAcademicOverview(stats)}
@@ -70,10 +71,9 @@ const StudentDashboard = {
           ${this.renderTodaysChallenge(profile, stats)}
         </div>
 
-        <!-- 2-Column Bottom Row: Learning Efficiency & Leaderboard -->
-        <div class="dash-two-col-grid">
+        <!-- Learning Efficiency & Analytics -->
+        <div class="dash-efficiency-wrapper">
           ${this.renderLearningEfficiency(stats, curriculum)}
-          ${this.renderLeaderboardCard(leaderboard, profile, stats)}
         </div>
 
         <!-- Extra spacing before fixed bottom bar -->
@@ -335,135 +335,10 @@ const StudentDashboard = {
   },
 
   /**
-   * Leaderboard data query from Supabase or fallback
+   * 4 Quick Stat Cards (XP, Level, Streak, Quizzes Completed) in 2x2 grid
    */
-  async getLeaderboardData(profile, stats) {
-    const defaultPeers = [
-      { rank: 1, name: 'Raflu', xp: 2120, avatar: '👦', badge: '👑', isCrown: true },
-      { rank: 2, name: 'Sakshi', xp: 1900, avatar: '👧', badge: '🥈', isCrown: false },
-      { rank: 3, name: 'Palizya', xp: 1890, avatar: '👩', badge: '🥉', isCrown: false }
-    ];
-
-    let userXP = stats.currentXP || 0;
-    let userName = profile.name || profile.nickname || 'You';
-
-    // Query Supabase profiles if accessible
-    if (typeof supabaseClient !== 'undefined' && supabaseClient) {
-      try {
-        const { data, error } = await supabaseClient
-          .from('profiles')
-          .select('name, nickname, total_xp, character_xp, role')
-          .order('total_xp', { ascending: false })
-          .limit(10);
-        
-        if (!error && data && data.length >= 3) {
-          const formatted = data.slice(0, 3).map((item, idx) => ({
-            rank: idx + 1,
-            name: item.name || item.nickname || `Learner ${idx + 1}`,
-            xp: item.total_xp || item.character_xp || (2000 - idx * 100),
-            avatar: idx === 0 ? '👦' : (idx === 1 ? '👧' : '🧒'),
-            badge: idx === 0 ? '👑' : (idx === 1 ? '🥈' : '🥉'),
-            isCrown: idx === 0
-          }));
-          
-          // Calculate user's rank
-          let userRank = 4;
-          if (userXP > formatted[0].xp) userRank = 1;
-          else if (userXP > formatted[1].xp) userRank = 2;
-          else if (userXP > formatted[2].xp) userRank = 3;
-
-          return {
-            topThree: formatted,
-            userRank,
-            userName,
-            userXP
-          };
-        }
-      } catch (e) {
-        console.warn('Leaderboard Supabase query fallback:', e);
-      }
-    }
-
-    // Default peers synced with user XP
-    let userRank = 4;
-    if (userXP > 2120) userRank = 1;
-    else if (userXP > 1900) userRank = 2;
-    else if (userXP > 1890) userRank = 3;
-
-    return {
-      topThree: defaultPeers,
-      userRank,
-      userName,
-      userXP
-    };
-  },
-
-  /**
-   * Top App Bar matching reference screenshot
-   */
-  renderTopAppBar(profile) {
-    const avatarUrl = profile.avatarUrl || profile.photo;
-    return `
-      <div class="dash-top-bar">
-        <div class="dash-brand-group" onclick="App.goHome()" title="Back to Home">
-          <div class="dash-logo-icon">⚛</div>
-          <span class="dash-brand-name">Nexus</span>
-        </div>
-
-        <div class="dash-top-actions">
-          <button class="dash-icon-btn" onclick="App.goHome()" title="Back to Home" style="font-size: 0.8rem; font-weight: 700; width: auto; padding: 0 10px; border-radius: 9999px; gap: 4px;">
-            <span>←</span><span>Home</span>
-          </button>
-          <button class="dash-icon-btn" onclick="StudentDashboard.showNotificationToast('You have 0 unread alerts!')" title="Notifications">
-            <span>🔔</span>
-            <span class="dash-notif-dot"></span>
-          </button>
-          
-          <div class="dash-profile-chip" onclick="Settings.openSubMenu('profile')" title="View & Edit Profile">
-            ${avatarUrl 
-              ? `<img src="${avatarUrl}" class="dash-chip-avatar" alt="Avatar">`
-              : `<span class="dash-chip-emoji">👦</span>`
-            }
-            <span class="dash-chip-chevron">▼</span>
-          </div>
-        </div>
-      </div>
-    `;
-  },
-
-  /**
-   * Welcome Greeting & dynamic speech bubble
-   */
-  renderWelcomeGreeting(profile, stats) {
-    const name = profile.name || profile.nickname || 'Student';
-    const streak = stats.streak;
-
-    let bubbleText = `Welcome! Complete quizzes daily to boost your science rank! ⭐`;
-    if (streak > 0) {
-      bubbleText = `You're on fire! 🔥 Keep the ${streak}-day streak going!`;
-    } else if (stats.accuracyPct !== null && stats.accuracyPct >= 85) {
-      bubbleText = `Superb! 🌟 You're excelling with ${stats.accuracyPct}% accuracy!`;
-    }
-
-    return `
-      <div class="dash-greeting-row">
-        <div class="dash-greeting-left">
-          <h1 class="dash-hello-title">Hello ${name}! <span class="dash-mascot-emoji">🐯</span></h1>
-        </div>
-        <div class="dash-speech-bubble">
-          <span>${bubbleText}</span>
-          <span class="dash-sparkle">✨</span>
-        </div>
-      </div>
-    `;
-  },
-
-  /**
-   * 4 Quick Stat Cards (XP, Level, Streak, Rank) in 2x2 grid
-   */
-  renderQuickStatCards(profile, stats, leaderboard) {
+  renderQuickStatCards(profile, stats) {
     const xpFormatted = stats.currentXP.toLocaleString();
-    const rankText = `#${leaderboard.userRank}`;
 
     return `
       <div class="dash-stats-grid">
@@ -497,12 +372,12 @@ const StudentDashboard = {
           <span class="card-sparkle-deco" style="color:#F97316;">✦</span>
         </div>
 
-        <!-- Card 4: Pink / Rank -->
+        <!-- Card 4: Pink / Quizzes Completed -->
         <div class="dash-stat-card card-pink">
           <div class="stat-card-icon-box pink-icon-box">🏆</div>
           <div class="stat-card-text">
-            <div class="stat-main-val">${rankText}</div>
-            <div class="stat-sub-label">Rank (${stats.totalQuizzes} Quizzes)</div>
+            <div class="stat-main-val">${stats.totalQuizzes}</div>
+            <div class="stat-sub-label">Quizzes Completed</div>
           </div>
           <span class="card-sparkle-deco" style="color:#F43F5E;">✦</span>
         </div>
@@ -864,78 +739,6 @@ const StudentDashboard = {
             </div>
           </div>
         ` : ''}
-      </div>
-    `;
-  },
-
-  /**
-   * Leaderboard Preview matching reference screenshot
-   */
-  renderLeaderboardCard(leaderboard, profile, stats) {
-    const top = leaderboard.topThree;
-    const rank2 = top[1];
-    const rank1 = top[0];
-    const rank3 = top[2];
-
-    const userXP = stats.currentXP.toLocaleString();
-    const userName = profile.name || profile.nickname || 'You';
-
-    return `
-      <div class="dash-sub-card">
-        <div class="dash-card-header-row">
-          <div>
-            <div class="dash-card-title-group">
-              <span class="dash-card-icon">👥</span>
-              <h3 class="dash-card-title">Leaderboard</h3>
-            </div>
-            <span class="dash-section-sub" style="margin-top: 2px; display: block;">This Week's Top Learners</span>
-          </div>
-          <button class="dash-card-chevron-btn" title="View Full Leaderboard">›</button>
-        </div>
-
-        <!-- 3-Pillar Podium Row -->
-        <div class="dash-podium-row">
-          <!-- 2nd Place (Silver) -->
-          <div class="podium-col rank-2">
-            <div class="podium-avatar-wrapper">
-              <span class="podium-avatar-emoji">${rank2.avatar}</span>
-              <span class="podium-badge-icon">2</span>
-            </div>
-            <div class="podium-name">${rank2.name}</div>
-            <div class="podium-xp">${rank2.xp.toLocaleString()} XP</div>
-          </div>
-
-          <!-- 1st Place (Gold Crown) -->
-          <div class="podium-col rank-1">
-            <div class="podium-avatar-wrapper gold-crown-halo">
-              <span class="podium-crown">👑</span>
-              <span class="podium-avatar-emoji">${rank1.avatar}</span>
-              <span class="podium-badge-icon gold-badge">1</span>
-            </div>
-            <div class="podium-name">${rank1.name} ✨</div>
-            <div class="podium-xp" style="font-weight: 800;">${rank1.xp.toLocaleString()} XP</div>
-          </div>
-
-          <!-- 3rd Place (Bronze) -->
-          <div class="podium-col rank-3">
-            <div class="podium-avatar-wrapper">
-              <span class="podium-avatar-emoji">${rank3.avatar}</span>
-              <span class="podium-badge-icon bronze-badge">3</span>
-            </div>
-            <div class="podium-name">${rank3.name}</div>
-            <div class="podium-xp">${rank3.xp.toLocaleString()} XP</div>
-          </div>
-        </div>
-
-        <!-- User's Ranking Row At Bottom of Card -->
-        <div class="dash-user-leaderboard-row">
-          <div class="user-row-left">
-            <span class="user-row-rank">${leaderboard.userRank}</span>
-            <div class="user-row-avatar-circle">👦</div>
-            <span class="user-row-name">${userName}</span>
-          </div>
-          <div class="user-row-xp">${userXP} XP</div>
-        </div>
       </div>
     `;
   },
