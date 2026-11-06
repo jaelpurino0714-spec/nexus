@@ -1658,18 +1658,29 @@
 
       <!-- ================= 8.3 ACHIEVEMENTS SUB-MENU ================= -->
       <section id="settingsAchievementsSubScreen" class="screen">
-        <div class="sub-settings-container">
+        <!-- VIEW 1: CATEGORIES HUB -->
+        <div id="achievementsCategoriesHub" class="sub-settings-container">
           <button class="back-link" onclick="App.showScreen('settingsScreen')">← Settings</button>
           <h2>Achievements & Badges</h2>
-          <p class="subtitle">Tap any badge for unlock requirements & live progress preview</p>
+          <p class="subtitle">Choose a category to view milestones & ranking</p>
 
-          <!-- Master Summary Header Card -->
+          <!-- Master Summary Header Card with Overall Rank -->
           <div id="achievementsHeaderSummary"></div>
 
-          <!-- Category Filter Tabs -->
-          <div id="achievementsCategoryTabs" class="ach-category-tabs"></div>
+          <!-- Category Selection Cards (6 categories) -->
+          <div id="achievementsCategoryCardsGrid" class="ach-categories-menu-grid">
+            <!-- Populated dynamically by Achievements.renderCategoryCards() -->
+          </div>
+        </div>
 
-          <!-- 4-Column Grid -->
+        <!-- VIEW 2: CATEGORY ACHIEVEMENTS DETAIL VIEW -->
+        <div id="achievementsCategoryDetailView" class="sub-settings-container hidden">
+          <button class="back-link" onclick="Achievements.showCategoriesView()">← Categories</button>
+          
+          <!-- Category Header with Title, Category Rank, and Progress -->
+          <div id="selectedCategoryHeader"></div>
+
+          <!-- 3-Column Grid of 14 Achievements -->
           <div id="achievementsGrid" class="achievements-4col-grid">
             <!-- Populated dynamically by achievements.js -->
           </div>

@@ -3022,7 +3022,7 @@
 
 /* PRD Requirement: 4-Column Grid for Achievements */
 /* ==========================================================================
-   ACHIEVEMENTS SYSTEM V2.0 — 84 ACHIEVEMENTS WITH 4 RARITIES & LIVE PROGRESS
+   ACHIEVEMENTS SYSTEM V2.0 — 84 ACHIEVEMENTS WITH RANKING & CATEGORIES HUB
    ========================================================================== */
 .ach-summary-card {
   background: linear-gradient(135deg, rgba(30, 20, 60, 0.95) 0%, rgba(18, 12, 38, 0.98) 100%);
@@ -3032,38 +3032,53 @@
   padding: 16px 18px;
   margin-top: 14px;
   margin-bottom: 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.ach-summary-top {
+.ach-rank-banner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
+  gap: 10px;
 }
 
-.ach-summary-title-wrap {
+.ach-rank-left {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
+  flex: 1;
 }
 
-.ach-summary-icon {
+.ach-rank-badge-icon {
   font-size: 2.2rem;
   filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.5));
+  flex-shrink: 0;
 }
 
-.ach-summary-title {
+.ach-rank-text-wrap {
+  min-width: 0;
+  flex: 1;
+}
+
+.ach-rank-title {
   font-family: var(--font-heading);
   font-size: 1.05rem;
   font-weight: 800;
   color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.ach-summary-subtitle {
-  font-size: 0.8rem;
+.ach-rank-next {
+  font-size: 0.74rem;
   color: #C084FC;
   font-weight: 600;
   margin-top: 2px;
+  line-height: 1.25;
 }
 
 .ach-summary-percent-pill {
@@ -3075,6 +3090,7 @@
   padding: 6px 14px;
   border-radius: 20px;
   box-shadow: 0 0 14px rgba(168, 85, 247, 0.4);
+  flex-shrink: 0;
 }
 
 .ach-master-progress-bar {
@@ -3113,11 +3129,11 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 8px 10px;
+  padding: 8px 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   box-sizing: border-box;
   min-width: 0;
   overflow: hidden;
@@ -3139,8 +3155,6 @@
 .rarity-name {
   font-weight: 700;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .ach-rarity-chip .rarity-dot {
@@ -3162,6 +3176,217 @@
   margin-left: 6px;
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+/* Category Hub Menu Cards (Dedicated View 1) */
+.ach-categories-menu-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+  margin-bottom: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ach-category-card {
+  background: linear-gradient(135deg, rgba(28, 18, 55, 0.95) 0%, rgba(18, 11, 40, 0.98) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  border-radius: 18px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.ach-category-card:hover {
+  transform: translateY(-2px) scale(1.01);
+  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 6px 24px rgba(168, 85, 247, 0.25);
+}
+
+.ach-cat-card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.ach-cat-card-icon-wrap {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  border-radius: 14px;
+  border: 1.5px solid #A855F7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ach-cat-card-icon {
+  font-size: 1.8rem;
+}
+
+.ach-cat-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ach-cat-card-title {
+  font-family: var(--font-heading);
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 2px;
+}
+
+.ach-cat-card-desc {
+  font-size: 0.74rem;
+  color: #A5A3C4;
+  line-height: 1.25;
+}
+
+.ach-cat-card-arrow {
+  font-size: 1.1rem;
+  color: #38BDF8;
+  padding-left: 6px;
+  flex-shrink: 0;
+}
+
+.ach-cat-card-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.ach-cat-card-rank-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  width: 100%;
+}
+
+.ach-cat-card-rank-badge {
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  white-space: nowrap;
+}
+
+.ach-cat-card-count {
+  font-weight: 700;
+  color: #CBD5E1;
+  white-space: nowrap;
+}
+
+.ach-cat-card-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.ach-cat-card-progress-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+
+/* Selected Category Header Banner (View 2) */
+.selected-cat-header-card {
+  background: linear-gradient(135deg, rgba(28, 18, 55, 0.98) 0%, rgba(18, 11, 40, 0.98) 100%);
+  border: 1.5px solid #A855F7;
+  border-radius: 20px;
+  padding: 16px 18px;
+  margin-top: 10px;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.selected-cat-header-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.selected-cat-icon-halo {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  border-radius: 16px;
+  border: 1.5px solid #A855F7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.selected-cat-header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.selected-cat-title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.selected-cat-desc {
+  font-size: 0.76rem;
+  color: #A5A3C4;
+  margin: 2px 0 6px 0;
+}
+
+.selected-cat-rank-pill {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.selected-cat-stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #CBD5E1;
+}
+
+.selected-cat-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.selected-cat-progress-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.4s ease;
 }
 
 /* Category Filter Tabs */
