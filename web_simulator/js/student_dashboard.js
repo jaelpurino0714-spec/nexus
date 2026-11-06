@@ -411,6 +411,9 @@ const StudentDashboard = {
         </div>
 
         <div class="dash-top-actions">
+          <button class="dash-icon-btn" onclick="App.goHome()" title="Back to Home" style="font-size: 0.8rem; font-weight: 700; width: auto; padding: 0 10px; border-radius: 9999px; gap: 4px;">
+            <span>←</span><span>Home</span>
+          </button>
           <button class="dash-icon-btn" onclick="StudentDashboard.showNotificationToast('You have 0 unread alerts!')" title="Notifications">
             <span>🔔</span>
             <span class="dash-notif-dot"></span>
@@ -841,22 +844,22 @@ const StudentDashboard = {
 
         <!-- Strongest Topic & Needs Improvement -->
         ${strongest ? `
-          <div class="dash-topic-highlight-card" style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); border-radius: 14px; padding: 10px 14px; margin-top: 12px;">
-            <div style="font-size: 0.74rem; font-weight: 800; color: #10B981; text-transform: uppercase;">🌟 YOUR STRONGEST TOPIC</div>
-            <div style="font-size: 0.92rem; font-weight: 700; color: #111827; margin-top: 2px;">${strongest.title}</div>
-            <div style="font-size: 0.8rem; color: #059669; font-weight: 600;">${strongest.accuracy}% Accuracy (${strongest.qAnswered} Questions)</div>
+          <div class="dash-topic-highlight-card" style="background: rgba(16,185,129,0.12); border: 1.5px solid rgba(16,185,129,0.4); border-radius: 14px; padding: 10px 14px; margin-top: 10px;">
+            <div style="font-size: 0.72rem; font-weight: 800; color: #34D399; text-transform: uppercase; letter-spacing: 0.5px;">🌟 YOUR STRONGEST TOPIC</div>
+            <div style="font-size: 0.92rem; font-weight: 700; color: #FFFFFF; margin-top: 2px;">${strongest.title}</div>
+            <div style="font-size: 0.78rem; color: #6EE7B7; font-weight: 600;">${strongest.accuracy}% Accuracy (${strongest.qAnswered} Questions)</div>
           </div>
         ` : ''}
 
         ${reviewTopics.length > 0 ? `
-          <div class="dash-topic-highlight-card" style="background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.25); border-radius: 14px; padding: 10px 14px; margin-top: 8px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div class="dash-topic-highlight-card" style="background: rgba(249,115,22,0.12); border: 1.5px solid rgba(249,115,22,0.4); border-radius: 14px; padding: 10px 14px; margin-top: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
               <div>
-                <div style="font-size: 0.74rem; font-weight: 800; color: #F97316; text-transform: uppercase;">🎯 TOPICS TO REVIEW</div>
-                <div style="font-size: 0.88rem; font-weight: 700; color: #111827;">${reviewTopics[0].title} — ${reviewTopics[0].accuracy}%</div>
+                <div style="font-size: 0.72rem; font-weight: 800; color: #FB923C; text-transform: uppercase; letter-spacing: 0.5px;">🎯 TOPICS TO REVIEW</div>
+                <div style="font-size: 0.88rem; font-weight: 700; color: #FFFFFF;">${reviewTopics[0].title} — ${reviewTopics[0].accuracy}%</div>
               </div>
               <button class="dash-practice-pill-btn" onclick="StudentDashboard.practiceTopic('${reviewTopics[0].termId}', '${reviewTopics[0].topicId}', '${reviewTopics[0].title.replace(/'/g, "\\'")}')">
-                Practice These Topics
+                Practice
               </button>
             </div>
           </div>
@@ -1066,3 +1069,4 @@ const StudentDashboard = {
 };
 
 window.StudentDashboard = StudentDashboard;
+
