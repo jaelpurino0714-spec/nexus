@@ -619,11 +619,26 @@ var Multiplayer = window.Multiplayer = {
       }
 
       try {
-        const game = await DB.getMultiplayerGameByCode(this.currentGame.room_code);
-        if (!game) return;
-
         const isLobbyActive = App.currentScreen === 'mpPlayerLobbyScreen' || 
           (document.getElementById('mpPlayerLobbyScreen') && document.getElementById('mpPlayerLobbyScreen').classList.contains('active'));
+
+        // Periodically announce presence to Host while on the waiting screen so host NEVER misses joiner
+        if (isLobbyActive && typeof RealtimeRelay !== 'undefined' && RealtimeRelay.isConnected) {
+          const myId = (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('nexus_current_player_id')) || 
+                       (typeof DB !== 'undefined' ? DB.getUserUUID() : ('u_' + Date.now()));
+          const myName = this.currentPlayerNickname || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('nexus_current_player_name')) || 'Player';
+          RealtimeRelay.sendJoin({
+            id: myId,
+            user_id: myId,
+            name: myName,
+            playerName: myName,
+            display_name: myName,
+            role: 'player'
+          });
+        }
+
+        const game = await DB.getMultiplayerGameByCode(this.currentGame.room_code);
+        if (!game) return;
 
         const isGameScreenActive = App.currentScreen === 'mpPlayerGameScreen' ||
           (document.getElementById('mpPlayerGameScreen') && document.getElementById('mpPlayerGameScreen').classList.contains('active'));
@@ -1312,14 +1327,38 @@ var Multiplayer = window.Multiplayer = {
       try {
         const updatedPlayers = await DB.getMultiplayerPlayers(this.currentGame.id, this.currentGame.room_code);
         if (updatedPlayers && updatedPlayers.length > 0) {
-          this.playersList = updatedPlayers;
+          if (!this.playersList) this.playersList = [];
+          updatedPlayers.forEach(up => {
+            if (this.isHostPlayer(up)) return;
+            const upName = up.display_name || up.playerName || up.name || 'Player';
+            const existing = this.playersList.find(p =>
+              (up.id && (p.id === up.id || p.user_id === up.id)) ||
+              (up.user_id && (p.user_id === up.user_id || p.id === up.user_id)) ||
+              (upName && (p.playerName === upName || p.display_name === upName))
+            );
+            if (existing) {
+              if (up.score !== undefined && up.score > (existing.score || 0)) {
+                existing.score = up.score;
+              }
+              if (up.correct_answers !== undefined && up.correct_answers > (existing.correct_answers || 0)) {
+                existing.correct_answers = up.correct_answers;
+              }
+            } else {
+              this.playersList.push({
+                ...up,
+                playerName: upName,
+                display_name: upName,
+                role: 'player'
+              });
+            }
+          });
         }
 
         const currentQ = this.questionsList ? this.questionsList[questionIndex] : null;
         const qId = currentQ ? currentQ.id : null;
 
         const answeredList = await DB.getAnsweredPlayersForQuestion(this.currentGame.id, questionIndex, qId);
-        this.answeredPlayerSet = new Set();
+        if (!this.answeredPlayerSet) this.answeredPlayerSet = new Set();
         if (answeredList && answeredList.length > 0) {
           answeredList.forEach(item => {
             if (item) {
@@ -1352,6 +1391,7 @@ var Multiplayer = window.Multiplayer = {
       const pNameLower = String(pName).toLowerCase().trim();
 
       const hasAns = (
+        p.hasAnswered === true ||
         (this.answeredPlayerSet && (
           (pId && (this.answeredPlayerSet.has(String(pId).trim()) || this.answeredPlayerSet.has(String(pId).toLowerCase().trim()))) ||
           (pName && (this.answeredPlayerSet.has(String(pName).trim()) || this.answeredPlayerSet.has(pNameLower))) ||
@@ -1377,6 +1417,7 @@ var Multiplayer = window.Multiplayer = {
           const pNameLower = String(pName).toLowerCase().trim();
 
           const hasAnswered = (
+            p.hasAnswered === true ||
             (this.answeredPlayerSet && (
               (pId && (this.answeredPlayerSet.has(String(pId).trim()) || this.answeredPlayerSet.has(String(pId).toLowerCase().trim()))) ||
               (pName && (this.answeredPlayerSet.has(String(pName).trim()) || this.answeredPlayerSet.has(pNameLower))) ||
@@ -1398,8 +1439,9 @@ var Multiplayer = window.Multiplayer = {
           const defaultAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%232E1065'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='%23C084FC'>👤</text></svg>";
           const pPhoto = p.photoUrl || p.photo || defaultAvatar;
 
+          const ptsText = (p.score !== undefined && p.score > 0) ? ` (+${p.score} pts)` : '';
           const statusBadge = hasAnswered 
-            ? '<span style="color:#6EE7B7; background:rgba(16, 185, 129, 0.25); border:1px solid rgba(16, 185, 129, 0.4); padding:6px 14px; border-radius:20px; font-size:0.8rem; font-weight:700;">🟢 Answered</span>'
+            ? `<span style="color:#6EE7B7; background:rgba(16, 185, 129, 0.25); border:1.5px solid #10B981; padding:6px 14px; border-radius:20px; font-size:0.82rem; font-weight:800;">🟢 Answered${ptsText}</span>`
             : '<span style="color:#E9D5FF; background:rgba(124, 58, 237, 0.25); border:1px solid rgba(168, 85, 247, 0.4); padding:6px 14px; border-radius:20px; font-size:0.8rem; font-weight:700;">⏳ Thinking...</span>';
 
           card.innerHTML = `
@@ -1672,47 +1714,84 @@ var Multiplayer = window.Multiplayer = {
     const { playerId, playerName, user_id, display_name, pointsEarned, totalScore, isCorrect } = data;
 
     if (!this.answeredPlayerSet) this.answeredPlayerSet = new Set();
-    const keys = [playerId, playerName, user_id, display_name].filter(Boolean);
+    const cleanName = playerName || display_name || 'Player';
+    const keys = [playerId, user_id, cleanName, cleanName.toLowerCase(), String(cleanName).trim().toLowerCase()].filter(Boolean);
     keys.forEach(k => {
-      const str = String(k).trim();
-      this.answeredPlayerSet.add(str);
-      this.answeredPlayerSet.add(str.toLowerCase());
+      this.answeredPlayerSet.add(String(k).trim());
+      this.answeredPlayerSet.add(String(k).trim().toLowerCase());
     });
 
-    if (this.playersList && this.playersList.length > 0) {
-      let p = this.playersList.find(item => 
-        (playerId && (item.id === playerId || item.user_id === playerId)) ||
-        (playerName && (item.playerName === playerName || item.name === playerName || item.display_name === playerName))
-      );
-      if (!p && (playerName || playerId)) {
-        p = {
-          id: playerId || playerName,
-          user_id: playerId,
-          playerName: playerName || 'Player',
-          display_name: playerName || 'Player',
-          score: 0,
-          correct_answers: 0,
-          wrong_answers: 0,
-          role: 'player'
-        };
-        this.playersList.push(p);
-      }
+    if (!this.playersList) this.playersList = [];
 
-      if (p) {
-        if (totalScore !== undefined && totalScore !== null) {
-          p.score = Math.max(p.score || 0, totalScore);
-        } else if (pointsEarned !== undefined) {
-          p.score = (p.score || 0) + pointsEarned;
-        }
-        if (isCorrect !== undefined) {
-          p.correct_answers = (p.correct_answers || 0) + (isCorrect ? 1 : 0);
-          p.wrong_answers = (p.wrong_answers || 0) + (isCorrect ? 0 : 1);
-        }
-      }
+    let p = this.playersList.find(item => 
+      (playerId && (item.id === playerId || item.user_id === playerId)) ||
+      (cleanName && (
+        item.playerName === cleanName || 
+        item.name === cleanName || 
+        item.display_name === cleanName ||
+        (item.display_name && item.display_name.toLowerCase() === cleanName.toLowerCase()) ||
+        (item.playerName && item.playerName.toLowerCase() === cleanName.toLowerCase())
+      ))
+    );
+
+    if (!p) {
+      p = {
+        id: playerId || user_id || ('p_' + cleanName),
+        user_id: playerId || user_id,
+        playerName: cleanName,
+        display_name: cleanName,
+        score: 0,
+        correct_answers: 0,
+        wrong_answers: 0,
+        role: 'player'
+      };
+      this.playersList.push(p);
     }
 
+    if (p) {
+      p.hasAnswered = true;
+      if (totalScore !== undefined && totalScore !== null) {
+        p.score = Math.max(p.score || 0, totalScore);
+      } else if (pointsEarned !== undefined) {
+        p.score = (p.score || 0) + pointsEarned;
+      }
+      if (isCorrect !== undefined) {
+        p.correct_answers = (p.correct_answers || 0) + (isCorrect ? 1 : 0);
+        p.wrong_answers = (p.wrong_answers || 0) + (isCorrect ? 0 : 1);
+      }
+      p.lastPointsEarned = pointsEarned || 0;
+      p.lastAnswerCorrect = !!isCorrect;
+    }
+
+    // Immediately update Host UI
     this.refreshHostPlayerAnswerStatuses();
     this.saveCurrentHostAnalytics();
+
+    // Check if ALL active participants have answered
+    const activeParticipants = (this.playersList || []).filter(item => !this.isHostPlayer(item));
+    const allAnswered = activeParticipants.length > 0 && activeParticipants.every(item => {
+      const pId = item.id || item.user_id;
+      const pN = item.playerName || item.display_name || item.name || '';
+      return this.answeredPlayerSet.has(String(pId).trim()) || 
+             this.answeredPlayerSet.has(String(pId).toLowerCase().trim()) || 
+             this.answeredPlayerSet.has(String(pN).trim()) || 
+             this.answeredPlayerSet.has(String(pN).toLowerCase().trim());
+    });
+
+    if (allAnswered) {
+      console.log('🎉 All players answered! Automatically updating Host UI...');
+      const countEl = document.getElementById('mpHostAnswerCount');
+      if (countEl) {
+        countEl.innerHTML = `<span style="color:#34D399;">${activeParticipants.length} / ${activeParticipants.length} Answered (All In! 🚀)</span>`;
+      }
+      const nextBtn = document.getElementById('mpHostNextQBtn');
+      if (nextBtn) {
+        nextBtn.style.animation = 'pulse 1s infinite';
+        nextBtn.style.boxShadow = '0 0 25px rgba(168, 85, 247, 0.9)';
+      }
+      // Reveal correct answer on teacher host screen
+      this.hostShowAnswer();
+    }
   },
 
   onQuestionStart(data) {
@@ -1788,11 +1867,18 @@ var Multiplayer = window.Multiplayer = {
     const playerImgSrc = q.imageUrl || q.image_url || q.image || q.photoUrl || q.photo_url || q.photo || (gameObj && (gameObj.imageUrl || gameObj.image_url || gameObj.image)) || null;
 
     if (playerImgBox && playerImgEl) {
-      if (playerImgSrc && typeof playerImgSrc === 'string' && playerImgSrc.trim().length > 10) {
+      if (playerImgSrc && typeof playerImgSrc === 'string' && playerImgSrc.trim().length > 10 && !playerImgSrc.includes('fakepath')) {
+        playerImgEl.onload = () => {
+          playerImgEl.style.display = 'inline-block';
+          playerImgBox.classList.remove('hidden');
+          playerImgBox.style.display = 'block';
+        };
+        playerImgEl.onerror = () => {
+          playerImgEl.style.display = 'none';
+          playerImgBox.classList.add('hidden');
+          playerImgBox.style.display = 'none';
+        };
         playerImgEl.src = playerImgSrc;
-        playerImgEl.style.display = 'inline-block';
-        playerImgBox.classList.remove('hidden');
-        playerImgBox.style.display = 'block';
       } else {
         playerImgEl.src = '';
         playerImgEl.style.display = 'none';
@@ -1886,6 +1972,18 @@ var Multiplayer = window.Multiplayer = {
 
     this.startSynchronizedTimer('mpPlayerTimerValue', startedAt, this.questionDurationSec, () => {
       this.disablePlayerChoices();
+      const banner = document.getElementById('mpPlayerFeedbackBanner');
+      const statusText = document.getElementById('mpPlayerFeedbackText');
+      if (banner && statusText && !this.hasAnsweredCurrent) {
+        banner.className = 'feedback-banner';
+        statusText.textContent = '⏰ Time Limit Reached!';
+      }
+      // Joiner perspective: Automatically advance to the next question when timer runs out!
+      setTimeout(() => {
+        if (!this.isHost) {
+          this.playerAutoAdvanceNextQuestion();
+        }
+      }, 1500);
     });
   },
 
@@ -2010,24 +2108,41 @@ var Multiplayer = window.Multiplayer = {
     }
   },
 
+  playerAutoAdvanceNextQuestion() {
+    if (this.isHost) return;
+    const totalQ = (this.questionsList && this.questionsList.length) ? this.questionsList.length : 1;
+    if (this.currentIndex + 1 < totalQ) {
+      const nextIdx = this.currentIndex + 1;
+      const nextQ = this.questionsList[nextIdx];
+      console.log('⏱️ Timer expired - player auto-advancing to question', nextIdx + 1, 'of', totalQ);
+      this.playerRenderQuestion(nextIdx, {
+        question: nextQ,
+        customQuestion: nextQ,
+        duration: (nextQ && nextQ.time_limit) ? nextQ.time_limit : 20
+      });
+    } else {
+      console.log('⏱️ Final question timer expired - showing final leaderboard');
+      const standings = (this.playersList && this.playersList.length > 0) ? this.playersList : [];
+      this.renderLeaderboardScreen('🏆 Final Podium Leaderboard', standings);
+    }
+  },
+
   onQuestionLock(data) {
     this.disablePlayerChoices();
   },
 
   onShowResults(data) {
     if (!this.isHost) {
-      this.renderLeaderboardScreen('Question Results 📊', data.leaderboard || []);
-    }
-  },
-
-  onNextQuestion(data) {
-    if (!this.isHost) {
-      App.showScreen('mpPlayerGameScreen');
+      if (this.timerInterval) clearInterval(this.timerInterval);
+      this.hasAnsweredCurrent = true;
+      this.disablePlayerChoices();
+      this.renderLeaderboardScreen('Question Results 📊', data ? (data.leaderboard || []) : []);
     }
   },
 
   onGameFinish(data) {
-    this.renderLeaderboardScreen('🏆 Final Podium Leaderboard', data.finalLeaderboard || []);
+    if (this.timerInterval) clearInterval(this.timerInterval);
+    this.renderLeaderboardScreen('🏆 Final Podium Leaderboard', data ? (data.finalLeaderboard || []) : []);
   },
 
   // 10. Synchronized Timer (Calculated locally from question_started_at + duration - now)
@@ -2169,123 +2284,6 @@ var Multiplayer = window.Multiplayer = {
       this.sendBroadcast('GAME_FINISH', { finalLeaderboard });
       this.renderLeaderboardScreen('🏆 Final Podium Leaderboard', finalLeaderboard);
     }
-  },
-
-  saveCurrentHostAnalytics() {
-    if (!this.isHost || !this.currentGame) return;
-
-    const totalQ = (this.questionsList && this.questionsList.length > 0) ? this.questionsList.length : 10;
-    const mergedMap = new Map();
-
-    if (this.playersList && this.playersList.length > 0) {
-      this.playersList.forEach(p => {
-        if (!p) return;
-        const isHost = p.is_host || p.isHost || (this.currentGame && this.currentGame.host_id && (p.user_id === this.currentGame.host_id || p.id === this.currentGame.host_id));
-        if (isHost) return;
-
-        const name = p.display_name || p.playerName || p.name || 'Player';
-        const key = p.user_id || p.id || name.trim().toLowerCase();
-        mergedMap.set(key, {
-          name: name,
-          points: Number(p.score || p.points || 0),
-          correct: Number(p.correct_answers || p.correct || 0),
-          totalQuestions: totalQ,
-          correctRatio: `${Number(p.correct_answers || p.correct || 0)}/${totalQ}`,
-          accuracyPct: totalQ > 0 ? Math.round((Number(p.correct_answers || p.correct || 0) / totalQ) * 100) : 0
-        });
-      });
-    }
-
-    const analyticsData = {
-      gameId: this.currentGame ? this.currentGame.id : 'game_' + Date.now(),
-      roomCode: this.currentGame ? (this.currentGame.room_code || this.currentGame.access_code) : '000000',
-      title: this.currentGame ? (this.currentGame.title || 'Science Host Quiz') : 'Science Host Quiz',
-      totalQuestions: totalQ,
-      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
-      participants: Array.from(mergedMap.values())
-    };
-
-    DB.saveHostedGameAnalytics(analyticsData);
-  },
-
-  onQuestionLock(data) {
-    this.disablePlayerChoices();
-  },
-
-  onShowResults(data) {
-    if (!this.isHost) {
-      if (this.playerTimerInterval) clearInterval(this.playerTimerInterval);
-      this.hasAnsweredCurrent = true;
-      this.disablePlayerChoices();
-      this.renderLeaderboardScreen('Question Results 📊', data ? (data.leaderboard || []) : []);
-    }
-  },
-
-  onNextQuestion(data) {
-    if (!this.isHost) {
-      App.showScreen('mpPlayerGameScreen');
-    }
-  },
-
-  onGameFinish(data) {
-    this.renderLeaderboardScreen('🏆 Final Podium Leaderboard', data ? (data.finalLeaderboard || []) : []);
-  },
-
-  startSynchronizedTimer(timerElementId, startedAtIso, durationSec, onEndCallback) {
-    if (this.timerInterval) clearInterval(this.timerInterval);
-    const timerEl = document.getElementById(timerElementId);
-
-    const updateTimer = () => {
-      if (!startedAtIso || !durationSec) return;
-      const startTime = new Date(startedAtIso).getTime();
-      const elapsed = Math.floor((Date.now() - startTime) / 1000);
-      const remaining = Math.max(0, durationSec - elapsed);
-
-      if (timerEl) {
-        timerEl.textContent = `${remaining}s`;
-      }
-
-      if (remaining <= 0) {
-        clearInterval(this.timerInterval);
-        if (onEndCallback) onEndCallback();
-      }
-    };
-
-    updateTimer();
-    this.timerInterval = setInterval(updateTimer, 500);
-  },
-
-  startPlayerSynchronizedTimer(startedAtIso, durationSec) {
-    if (this.playerTimerInterval) clearInterval(this.playerTimerInterval);
-    const timerEl = document.getElementById('mpPlayerTimerVal');
-
-    const updateTimer = () => {
-      if (!startedAtIso || !durationSec) return;
-      const startTime = new Date(startedAtIso).getTime();
-      const elapsed = Math.floor((Date.now() - startTime) / 1000);
-      const remaining = Math.max(0, durationSec - elapsed);
-
-      if (timerEl) {
-        timerEl.textContent = `${remaining}s`;
-      }
-
-      if (remaining <= 0) {
-        clearInterval(this.playerTimerInterval);
-        if (!this.hasAnsweredCurrent) {
-          this.hasAnsweredCurrent = true;
-          this.disablePlayerChoices();
-          const banner = document.getElementById('mpPlayerFeedbackBanner');
-          const statusText = document.getElementById('mpPlayerFeedbackText');
-          if (banner && statusText) {
-            banner.className = 'feedback-banner';
-            statusText.textContent = '⏰ Time Limit Reached!';
-          }
-        }
-      }
-    };
-
-    updateTimer();
-    this.playerTimerInterval = setInterval(updateTimer, 500);
   },
 
   renderLeaderboardScreen(title, standings) {
