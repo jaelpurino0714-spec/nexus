@@ -329,19 +329,18 @@ const Multiplayer = {
       console.warn('Join lobby note:', e);
       if (errEl) {
         errEl.innerHTML = 
-          <div style="background: rgba(239, 68, 68, 0.12); border: 1.5px solid rgba(239, 68, 68, 0.4); border-radius: 14px; padding: 12px; margin-top: 4px;">
-            <div style="color: #F87171; font-weight: 800; font-size: 0.92rem; margin-bottom: 4px;">⚠️ Room "" Not Found</div>
-            <div style="color: #A5A3C4; font-size: 0.78rem; margin-bottom: 10px;">Make sure the host has started the lobby, or launch this room immediately:</div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              <button type="button" class="primary-btn" style="width: 100%; padding: 10px; border-radius: 12px; font-weight: 800; font-size: 0.85rem; background: linear-gradient(135deg, #7C3AED, #6366F1); cursor: pointer; border: none; color: white;" onclick="Multiplayer.startInstantPracticeLobby('')">
-                👑 Host Room "" & Start Now
-              </button>
-              <button type="button" class="secondary-btn" style="width: 100%; padding: 9px; border-radius: 12px; font-weight: 700; font-size: 0.82rem; background: rgba(124, 58, 237, 0.2); border: 1px solid rgba(139, 92, 246, 0.4); color: #E9D5FF; cursor: pointer;" onclick="Multiplayer.startPracticeMatch('')">
-                🤖 Play Solo with AI Classmates
-              </button>
-            </div>
-          </div>
-        ;
+          '<div style="background: rgba(239, 68, 68, 0.12); border: 1.5px solid rgba(239, 68, 68, 0.4); border-radius: 14px; padding: 12px; margin-top: 4px;">' +
+            '<div style="color: #F87171; font-weight: 800; font-size: 0.92rem; margin-bottom: 4px;">⚠️ Room "' + (pinVal || '') + '" Not Found</div>' +
+            '<div style="color: #A5A3C4; font-size: 0.78rem; margin-bottom: 10px;">Make sure the host has started the lobby, or launch this room immediately:</div>' +
+            '<div style="display: flex; flex-direction: column; gap: 8px;">' +
+              '<button type="button" class="primary-btn" style="width: 100%; padding: 10px; border-radius: 12px; font-weight: 800; font-size: 0.85rem; background: linear-gradient(135deg, #7C3AED, #6366F1); cursor: pointer; border: none; color: white;" onclick="Multiplayer.startInstantPracticeLobby(\'' + (pinVal || '') + '\')">' +
+                '👑 Host Room "' + (pinVal || '') + '" & Start Now' +
+              '</button>' +
+              '<button type="button" class="secondary-btn" style="width: 100%; padding: 9px; border-radius: 12px; font-weight: 700; font-size: 0.82rem; background: rgba(124, 58, 237, 0.2); border: 1px solid rgba(139, 92, 246, 0.4); color: #E9D5FF; cursor: pointer;" onclick="Multiplayer.startPracticeMatch(\'' + (pinVal || '') + '\')">' +
+                '🤖 Play Solo with AI Classmates' +
+              '</button>' +
+            '</div>' +
+          '</div>';
         errEl.classList.remove('hidden');
       }
     } finally {
@@ -2313,4 +2312,10 @@ if (typeof window !== 'undefined') {
       }
     }
   });
+}
+
+
+// Explicitly attach to window for global access
+if (typeof window !== 'undefined') {
+  window.Multiplayer = Multiplayer;
 }
