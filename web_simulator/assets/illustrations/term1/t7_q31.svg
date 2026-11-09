@@ -1,97 +1,48 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 280" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 250" width="100%" height="100%">
   <defs>
-    <linearGradient id="bgGrad_h31" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#080d1a"/>
-      <stop offset="50%" stop-color="#0c152e"/>
-      <stop offset="100%" stop-color="#121e42"/>
+    <linearGradient id="bgGrad_t7_31" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080c18"/>
+      <stop offset="50%" stop-color="#0d1428"/>
+      <stop offset="100%" stop-color="#121b36"/>
     </linearGradient>
-    <linearGradient id="cyanGrad_h31" x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id="primaryGrad_t7_31" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#06b6d4"/>
-      <stop offset="100%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#10b981"/>
     </linearGradient>
-    <linearGradient id="greenGrad_h31" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#10b981"/>
-      <stop offset="100%" stop-color="#34d399"/>
-    </linearGradient>
-    <linearGradient id="amberGrad_h31" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#f59e0b"/>
-      <stop offset="100%" stop-color="#fbbf24"/>
-    </linearGradient>
-    <linearGradient id="purpleGrad_h31" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#8b5cf6"/>
-      <stop offset="100%" stop-color="#c084fc"/>
-    </linearGradient>
-    <linearGradient id="redGrad_h31" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#ef4444"/>
-      <stop offset="100%" stop-color="#f87171"/>
-    </linearGradient>
-    <filter id="glow_h31" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3.5" result="blur" />
+    <filter id="glow_t7_31" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
   </defs>
 
-  <!-- Card Background -->
-  <rect width="540" height="280" rx="16" fill="url(#bgGrad_h31)" stroke="#06b6d4" stroke-width="1.3" stroke-opacity="0.4"/>
+  <!-- Background Canvas -->
+  <rect width="540" height="250" rx="16" fill="url(#bgGrad_t7_31)" stroke="#06b6d4" stroke-width="1.3" stroke-opacity="0.45"/>
 
-  <!-- Cyber Grid -->
-  <g opacity="0.06" stroke="#06b6d4" stroke-width="1">
-    <line x1="60" y1="0" x2="60" y2="280"/><line x1="140" y1="0" x2="140" y2="280"/>
-    <line x1="220" y1="0" x2="220" y2="280"/><line x1="300" y1="0" x2="300" y2="280"/>
-    <line x1="380" y1="0" x2="380" y2="280"/><line x1="460" y1="0" x2="460" y2="280"/>
+  <!-- Subtle Cyber Grid -->
+  <g opacity="0.04" stroke="#06b6d4" stroke-width="1">
+    <line x1="60" y1="0" x2="60" y2="250"/><line x1="140" y1="0" x2="140" y2="250"/>
+    <line x1="220" y1="0" x2="220" y2="250"/><line x1="300" y1="0" x2="300" y2="250"/>
+    <line x1="380" y1="0" x2="380" y2="250"/><line x1="460" y1="0" x2="460" y2="250"/>
     <line x1="0" y1="60" x2="540" y2="60"/><line x1="0" y1="120" x2="540" y2="120"/>
-    <line x1="0" y1="180" x2="540" y2="180"/><line x1="0" y1="240" x2="540" y2="240"/>
+    <line x1="0" y1="180" x2="540" y2="180"/>
   </g>
 
-  <!-- Header Ribbon -->
-  <rect x="20" y="14" width="500" height="34" rx="8" fill="#1e1b4b" fill-opacity="0.85" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.5"/>
-  <circle cx="36" cy="31" r="5" fill="#06b6d4" filter="url(#glow_h31)"/>
-  <text x="50" y="35" fill="#38bdf8" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" letter-spacing="0.5">TOPIC 7: HOMEOSTASIS • QUESTION 31</text>
+  <!-- Clean Top Header Banner -->
+  <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.4"/>
+  <circle cx="36" cy="28" r="5" fill="#06b6d4" filter="url(#glow_t7_31)"/>
+  <text x="50" y="32" fill="#06b6d4" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 7: HOMEOSTASIS • Q31</text>
   
-  <rect x="415" y="20" width="95" height="22" rx="11" fill="url(#purpleGrad_h31)"/>
-  <text x="462" y="35" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">UNDERSTANDING</text>
+  <rect x="425" y="17" width="85" height="22" rx="11" fill="url(#primaryGrad_t7_31)"/>
+  <text x="467" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">APPLYING</text>
 
-  <!-- Bespoke Question Illustration -->
+  <!-- Pure Scientific Illustration Area (Clean, Centered, No Answer Spoilers) -->
   <g transform="translate(0, 10)">
     
-  <!-- Pituitary &amp; ADH -->
-  <g transform="translate(60, 75)">
-    <circle cx="45" cy="40" r="30" fill="#312e81" stroke="#818cf8" stroke-width="2"/>
-    <text x="45" y="36" fill="#c7d2fe" font-family="sans-serif" font-size="9" font-weight="bold" text-anchor="middle">Pituitary</text>
-    <text x="45" y="49" fill="#a5b4fc" font-family="sans-serif" font-size="9" font-weight="bold" text-anchor="middle">+ ADH</text>
-
-    <path d="M 80,40 L 125,40" stroke="#818cf8" stroke-width="2.5" stroke-dasharray="3,2"/>
-    <text x="102" y="32" fill="#c7d2fe" font-family="sans-serif" font-size="8" font-weight="bold" text-anchor="middle">ADH</text>
+        <g transform="translate(70, 65)">
+          <rect x="0" y="0" width="400" height="90" rx="8" fill="#1e1b4b" stroke="#06b6d4" stroke-width="1.8"/>
+          <text x="200" y="30" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">Homeostatic Physiological Circuit</text>
+          <text x="200" y="58" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">Dehydration causes kidneys to:...</text>
+          <text x="200" y="78" fill="#fbbf24" font-size="10" font-weight="bold" text-anchor="middle">Target Variable: [ ? ]</text>
+        </g>
   </g>
-
-  <!-- Kidney Collecting Duct Graphic -->
-  <g transform="translate(195, 70)">
-    <rect x="0" y="0" width="130" height="120" rx="8" fill="#1e1b4b" stroke="#06b6d4" stroke-width="1.8"/>
-    <text x="65" y="20" fill="#38bdf8" font-family="sans-serif" font-size="9.5" font-weight="bold" text-anchor="middle">COLLECTING DUCT</text>
-
-    <!-- Aquaporin channels -->
-    <rect x="15" y="35" width="100" height="20" rx="4" fill="#0369a1"/>
-    <text x="65" y="49" fill="#e0f2fe" font-family="sans-serif" font-size="8.5" text-anchor="middle">Aquaporin Channels Opened</text>
-
-    <!-- Water back to blood -->
-    <path d="M 65,58 L 65,85" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
-    <polygon points="65,90 60,82 70,82" fill="#38bdf8"/>
-    <text x="65" y="105" fill="#38bdf8" font-family="sans-serif" font-size="9" font-weight="bold" text-anchor="middle">H₂O → Bloodstream</text>
-  </g>
-
-  <!-- Concentrated Urine Output -->
-  <g transform="translate(345, 85)">
-    <path d="M 10,15 L 70,15 L 55,75 L 25,75 Z" fill="#78350f" stroke="#f59e0b" stroke-width="2"/>
-    <text x="40" y="45" fill="#fef08a" font-family="sans-serif" font-size="9" font-weight="bold" text-anchor="middle">CONCENTRATED</text>
-    <text x="40" y="58" fill="#fde68a" font-family="sans-serif" font-size="8.5" text-anchor="middle">Low-Volume Urine</text>
-  </g>
-
-  <rect x="70" y="210" width="400" height="24" rx="6" fill="#1e1b4b" stroke="#38bdf8" stroke-width="1"/>
-  <text x="270" y="226" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="bold" text-anchor="middle">Kidneys reclaim maximal water to restore blood plasma osmolarity</text>
-
-  </g>
-
-  <!-- Bottom Concept Badge -->
-  <rect x="60" y="240" width="420" height="24" rx="6" fill="#1e1b4b" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.6"/>
-  <text x="270" y="256" fill="#93c5fd" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" text-anchor="middle">Osmoregulation: ADH Induces Water Reabsorption in Dehydration</text>
 </svg>

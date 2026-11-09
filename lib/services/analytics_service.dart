@@ -41,6 +41,7 @@ class AnalyticsService {
 
     double avgPct = totalPct / attempts.length;
     double accuracy = totalQuestions > 0 ? (totalCorrect / totalQuestions) * 100 : 0;
+    accuracy = accuracy.clamp(0.0, 100.0);
 
     String strongestTopic = 'N/A';
     String weakestTopic = 'N/A';

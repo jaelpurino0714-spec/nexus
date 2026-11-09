@@ -2382,15 +2382,36 @@
   background: linear-gradient(145deg, #09041a 0%, #0d0626 100%);
   border: 1.5px solid rgba(139, 92, 246, 0.4);
   border-radius: 24px;
-  padding: 22px 16px 18px 16px;
+  padding: 16px 14px 16px 14px;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 30px rgba(139, 92, 246, 0.15);
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 12px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   width: 100%;
   box-sizing: border-box;
+}
+
+.question-image-box {
+  text-align: center;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.question-image-box img {
+  max-height: 140px !important;
+  max-width: 100%;
+  border-radius: 12px;
+  object-fit: contain;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+  border: 1.5px solid rgba(139, 92, 246, 0.45);
+  background: rgba(15, 10, 30, 0.6);
+  display: block;
+  margin: 0 auto;
 }
 
 .atom-watermark {
@@ -2406,14 +2427,15 @@
 
 .gameplay-question-text {
   font-family: var(--font-heading);
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #FFFFFF;
   text-align: center;
-  line-height: 1.4;
-  margin: 0;
+  line-height: 1.35;
+  margin: 0 0 4px 0;
   position: relative;
   z-index: 2;
+  word-break: break-word;
 }
 
 .gameplay-question-text strong,
@@ -2430,8 +2452,9 @@
   gap: 10px;
   grid-auto-rows: 1fr;
   position: relative;
-  z-index: 2;
+  z-index: 5;
   width: 100%;
+  margin-top: 4px;
   box-sizing: border-box;
 }
 

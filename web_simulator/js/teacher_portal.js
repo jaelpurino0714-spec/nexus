@@ -621,12 +621,16 @@ const TeacherPortal = {
 
     let hostedGameSection = '';
     if (latestHostedGame) {
-      const totalQ = Math.max(1, Number(latestHostedGame.totalQuestions || 1));
+      let totalQ = Math.max(1, Number(latestHostedGame.totalQuestions || 1));
+      (latestHostedGame.participants || []).forEach(p => {
+        const c = Number(p.correct !== undefined ? p.correct : (p.correct_answers || 0));
+        if (c > totalQ) totalQ = c;
+      });
+
       const parts = (latestHostedGame.participants || []).map(p => {
         let correct = Number(p.correct !== undefined ? p.correct : (p.correct_answers || 0));
         correct = Math.min(totalQ, Math.max(0, correct));
-        const rawPct = Number(p.accuracyPct !== undefined ? p.accuracyPct : Math.round((correct / totalQ) * 100));
-        const accuracyPct = Math.min(100, Math.max(0, rawPct));
+        const accuracyPct = totalQ > 0 ? Math.min(100, Math.max(0, Math.round((correct / totalQ) * 100))) : 0;
         const correctRatio = `${correct}/${totalQ}`;
         return {
           ...p,

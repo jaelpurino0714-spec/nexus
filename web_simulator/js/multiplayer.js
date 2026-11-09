@@ -1581,11 +1581,16 @@ var Multiplayer = window.Multiplayer = {
       await DB.updateMultiplayerGameStatus(this.currentGame.id, 'finished');
       const finalLeaderboard = await DB.getGameLeaderboard(this.currentGame.id, this.currentGame.room_code);
 
-      const totalQ = this.questionsList ? this.questionsList.length : 10;
+      let totalQ = this.questionsList ? this.questionsList.length : 10;
       const participantStandings = (finalLeaderboard || []).filter(p => {
         if (p.is_host || p.isHost) return false;
         if (this.currentGame && this.currentGame.host_id && (p.user_id === this.currentGame.host_id || p.id === this.currentGame.host_id)) return false;
         return true;
+      });
+
+      participantStandings.forEach(p => {
+        const c = Number(p.correct_answers || p.correct || 0);
+        if (c > totalQ) totalQ = c;
       });
 
       const analyticsData = {
@@ -1620,7 +1625,7 @@ var Multiplayer = window.Multiplayer = {
   saveCurrentHostAnalytics() {
     if (!this.isHost || !this.currentGame) return;
 
-    const totalQ = (this.questionsList && this.questionsList.length > 0) ? this.questionsList.length : 10;
+    let totalQ = (this.questionsList && this.questionsList.length > 0) ? this.questionsList.length : 10;
     const mergedMap = new Map();
 
     // Add ALL players who connected to the lobby/game (including players with 0 points)
@@ -1634,6 +1639,8 @@ var Multiplayer = window.Multiplayer = {
         const key = p.user_id || p.id || name.trim().toLowerCase();
         const score = Number(p.score || p.points || 0);
         const correct = Number(p.correct_answers || p.correct || 0);
+
+        if (correct > totalQ) totalQ = correct;
 
         mergedMap.set(key, {
           name: name,
@@ -2741,7 +2748,14 @@ if (typeof window !== 'undefined') {
                 );
                 if (p) {
                   p.score = Math.max(p.score || 0, data.score || 0);
-                  if (data.correct) p.correct_answers = (p.correct_answers || 0) + data.correct;
+                  if (data.correct_answers !== undefined) {
+                    p.correct_answers = Math.max(p.correct_answers || 0, Number(data.correct_answers || 0));
+                  } else if (data.correct) {
+                    p.correct_answers = Math.max(p.correct_answers || 0, Number(data.correct || 0));
+                  }
+                  if (data.wrong_answers !== undefined) {
+                    p.wrong_answers = Math.max(p.wrong_answers || 0, Number(data.wrong_answers || 0));
+                  }
                 }
               }
             }

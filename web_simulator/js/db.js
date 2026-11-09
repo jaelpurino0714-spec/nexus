@@ -1954,6 +1954,8 @@ var DB = {
             displayName: displayName,
             score: finalTotalScore,
             correct: isCorrect ? 1 : 0,
+            correct_answers: p ? p.correct_answers : (isCorrect ? 1 : 0),
+            wrong_answers: p ? p.wrong_answers : (isCorrect ? 0 : 1),
             ts: Date.now()
           }));
         }
@@ -2296,12 +2298,17 @@ var DB = {
   saveHostedGameAnalytics(data) {
     if (!data) return;
     try {
-      const totalQ = Math.max(1, Number(data.totalQuestions || 1));
+      let totalQ = Math.max(1, Number(data.totalQuestions || 1));
       if (Array.isArray(data.participants)) {
+        data.participants.forEach(p => {
+          const c = Number(p.correct !== undefined ? p.correct : (p.correct_answers || 0));
+          if (c > totalQ) totalQ = c;
+        });
+        data.totalQuestions = totalQ;
         data.participants = data.participants.map(p => {
           let correct = Number(p.correct !== undefined ? p.correct : (p.correct_answers || 0));
           correct = Math.min(totalQ, Math.max(0, correct));
-          const rawPct = Math.round((correct / totalQ) * 100);
+          const rawPct = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
           const accuracyPct = Math.min(100, Math.max(0, rawPct));
           return {
             ...p,
@@ -2337,11 +2344,16 @@ var DB = {
     if (!data) data = this._lastHostedAnalytics || null;
 
     if (data && Array.isArray(data.participants)) {
-      const totalQ = Math.max(1, Number(data.totalQuestions || 1));
+      let totalQ = Math.max(1, Number(data.totalQuestions || 1));
+      data.participants.forEach(p => {
+        const c = Number(p.correct !== undefined ? p.correct : (p.correct_answers || 0));
+        if (c > totalQ) totalQ = c;
+      });
+      data.totalQuestions = totalQ;
       data.participants = data.participants.map(p => {
         let correct = Number(p.correct !== undefined ? p.correct : (p.correct_answers || 0));
         correct = Math.min(totalQ, Math.max(0, correct));
-        const rawPct = Math.round((correct / totalQ) * 100);
+        const rawPct = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
         const accuracyPct = Math.min(100, Math.max(0, rawPct));
         return {
           ...p,
@@ -2351,6 +2363,11 @@ var DB = {
           accuracyPct: accuracyPct
         };
       });
+
+      // Auto-repair persisted record if needed
+      try {
+        localStorage.setItem('nexus_latest_hosted_game_analytics', JSON.stringify(data));
+      } catch (e) {}
     }
 
     return data;
