@@ -94,20 +94,23 @@ for idx in range(1, len(sections), 2):
             if curr_q and curr_a and curr_b and curr_c and curr_d:
                 q_count_in_group += 1
                 qtype = forced_quiz if forced_quiz else ('pre_test' if q_count_in_group <= 15 else 'post_test')
-                exp_text = curr_exp if curr_exp else f"Option {curr_ans} is the correct answer."
-                records.append({
-                    'topic_num': topic_num,
-                    'topic_id': TOPICS[topic_num][0],
-                    'topic_title': TOPICS[topic_num][1],
-                    'quiz_type': qtype,
-                    'question': curr_q,
-                    'choice_a': curr_a,
-                    'choice_b': curr_b,
-                    'choice_c': curr_c,
-                    'choice_d': curr_d,
-                    'correct_answer': curr_ans,
-                    'explanation': exp_text
-                })
+                if qtype in ['pre_test', 'post_test']:
+                    qtype = None
+                if qtype is not None:
+                    exp_text = curr_exp if curr_exp else f"Option {curr_ans} is the correct answer."
+                    records.append({
+                        'topic_num': topic_num,
+                        'topic_id': TOPICS[topic_num][0],
+                        'topic_title': TOPICS[topic_num][1],
+                        'quiz_type': qtype,
+                        'question': curr_q,
+                        'choice_a': curr_a,
+                        'choice_b': curr_b,
+                        'choice_c': curr_c,
+                        'choice_d': curr_d,
+                        'correct_answer': curr_ans,
+                        'explanation': exp_text
+                    })
             curr_q = q_stem_m.group(1).strip()
             curr_a = None
             curr_b = None
@@ -165,20 +168,23 @@ for idx in range(1, len(sections), 2):
     if curr_q and curr_a and curr_b and curr_c and curr_d:
         q_count_in_group += 1
         qtype = forced_quiz if forced_quiz else ('pre_test' if q_count_in_group <= 15 else 'post_test')
-        exp_text = curr_exp if curr_exp else f"Option {curr_ans} is the correct answer."
-        records.append({
-            'topic_num': topic_num,
-            'topic_id': TOPICS[topic_num][0],
-            'topic_title': TOPICS[topic_num][1],
-            'quiz_type': qtype,
-            'question': curr_q,
-            'choice_a': curr_a,
-            'choice_b': curr_b,
-            'choice_c': curr_c,
-            'choice_d': curr_d,
-            'correct_answer': curr_ans,
-            'explanation': exp_text
-        })
+        if qtype in ['pre_test', 'post_test']:
+            qtype = None
+        if qtype is not None:
+            exp_text = curr_exp if curr_exp else f"Option {curr_ans} is the correct answer."
+            records.append({
+                'topic_num': topic_num,
+                'topic_id': TOPICS[topic_num][0],
+                'topic_title': TOPICS[topic_num][1],
+                'quiz_type': qtype,
+                'question': curr_q,
+                'choice_a': curr_a,
+                'choice_b': curr_b,
+                'choice_c': curr_c,
+                'choice_d': curr_d,
+                'correct_answer': curr_ans,
+                'explanation': exp_text
+            })
 
 out_path = r'd:\Nexus 2.0\insert_mcq_term1.sql'
 

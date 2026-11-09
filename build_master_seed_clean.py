@@ -200,54 +200,8 @@ parse_id_file('Identification term 3.pdf', {
 
 print(f"4. Identification files: {len(records)} items total.")
 
-# --- 5. Parse MCQ Term 1 ---
-with open('dump_nexus-MCQ-term-1 (1).pdf.txt', 'r', encoding='utf-8') as f:
-    text_mcq1 = re.sub(r'--- PAGE \d+ ---', '', f.read())
-
-group_splits1 = re.split(r'(^[ \t]*(?:GROUP|Group)\s*\d+[^\n]*)', text_mcq1, flags=re.MULTILINE)
-
-def get_t1_key(header):
-    h = header.lower()
-    if 'equation' in h and ('balancing' in h or 'group 5' in h): return 't1_balancing_equations'
-    if 'equation' in h: return 't1_chemical_equations'
-    if 'rate' in h: return 't1_rates_reactions'
-    if 'homeostasis' in h: return 't1_homeostasis'
-    if 'evolution' in h or 'mechanism' in h: return 't1_mechanisms_evolution'
-    if 'acid' in h or 'base' in h: return 't1_acids_bases'
-    if 'type' in h or 'reaction' in h: return 't1_chemical_reactions'
-    return 't1_physical_chemical'
-
-for idx in range(1, len(group_splits1), 2):
-    g_header = group_splits1[idx].strip()
-    g_body = group_splits1[idx+1]
-    top_key = get_t1_key(g_header)
-    
-    # Pattern A: Q1. ... Answer: X – ...
-    pat_a = re.findall(r'Q\d+[\.\)]\s*(.*?)\n\s*A\.\s*(.*?)\n\s*B\.\s*(.*?)\n\s*C\.\s*(.*?)\n\s*D\.\s*(.*?)\n\s*Answer:\s*([A-D])\s*[–\-]\s*(.*?)(?=\n\s*Q\d+|\n\s*GROUP|\n\s*Group|\Z)', g_body, re.DOTALL)
-    for b in pat_a:
-        add_q(top_key, 1, b[0], b[1], b[2], b[3], b[4], b[5].upper(), b[6])
-
-    # Pattern B: N. ... X — Explanation
-    pat_b = re.findall(r'(?:^|\n)\s*(\d+)[\.\)]\s*(.*?)\n\s*A\.\s*(.*?)\n\s*B\.\s*(.*?)\n\s*C\.\s*(.*?)\n\s*D\.\s*(.*?)\n\s*([A-D])\s*[—–\-]\s*(.*?)(?=\n\s*\d+[\.\)]|\n\s*GROUP|\n\s*Group|\Z)', g_body, re.DOTALL)
-    for b in pat_b:
-        add_q(top_key, b[1], b[2], b[3], b[4], b[5], b[6].upper(), b[7])
-        
-    if not pat_a and not pat_b:
-        q_blocks = re.findall(r'(?:^|\n)\s*(\d+)[\.\)]\s*(.*?)\n\s*A\.\s*(.*?)\n\s*B\.\s*(.*?)\n\s*C\.\s*(.*?)\n\s*D\.\s*(.*?)(?=\n\s*\d+[\.\)]|\n\s*GROUP|\n\s*Group|\Z)', g_body, re.DOTALL)
-        for b in q_blocks:
-            q_stem = b[1]
-            opts = [b[2], b[3], b[4], b[5]]
-            ans_let = 'A'
-            for opt_idx, opt_str in enumerate(opts):
-                if '✅' in opt_str or re.search(r'\s{3,}$', opt_str):
-                    ans_let = chr(65 + opt_idx)
-            ca = opts[0].replace('✅', '').strip()
-            cb = opts[1].replace('✅', '').strip()
-            cc = opts[2].replace('✅', '').strip()
-            cd = opts[3].replace('✅', '').strip()
-            add_q(top_key, 1, q_stem, ca, cb, cc, cd, ans_let, f'Option {ans_let} is the correct answer.')
-
-print(f"5. MCQ Term 1: {len(records)} items total.")
+# --- 5. Parse MCQ Term 1 (Excluded: All Term 1 Pre-Test and Post-Test MCQs removed) ---
+print(f"5. MCQ Term 1: 0 items (excluded).")
 
 # --- 6. Parse MCQ Term 2 ---
 with open('dump_nexus-MCQ-term-2.pdf.txt', 'r', encoding='utf-8') as f:

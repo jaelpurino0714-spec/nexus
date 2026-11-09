@@ -363,8 +363,11 @@ for idx in range(1, len(sections_mcq1), 2):
             if curr_q and curr_a and curr_b and curr_c and curr_d:
                 q_count_in_group += 1
                 qtype = forced_q if forced_q else ('pre_test' if q_count_in_group <= 15 else 'post_test')
-                exp_text = curr_exp if curr_exp else f"Option {curr_ans} is the correct answer."
-                add_q(top_k, 1, curr_q, curr_a, curr_b, curr_c, curr_d, curr_ans, exp_text, qtype)
+                if qtype in ['pre_test', 'post_test']:
+                    qtype = None
+                if qtype is not None:
+                    exp_text = curr_exp if curr_exp else f"Option {curr_ans} is the correct answer."
+                    add_q(top_k, 1, curr_q, curr_a, curr_b, curr_c, curr_d, curr_ans, exp_text, qtype)
             curr_q = q_stem_m.group(1).strip()
             curr_a = curr_b = curr_c = curr_d = None
             curr_ans = 'A'
@@ -419,8 +422,11 @@ for idx in range(1, len(sections_mcq1), 2):
     if curr_q and curr_a and curr_b and curr_c and curr_d:
         q_count_in_group += 1
         qtype = forced_q if forced_q else ('pre_test' if q_count_in_group <= 15 else 'post_test')
-        exp_text = curr_exp if curr_exp else f"Option {curr_ans} is the correct answer."
-        add_q(top_k, 1, curr_q, curr_a, curr_b, curr_c, curr_d, curr_ans, exp_text, qtype)
+        if qtype in ['pre_test', 'post_test']:
+            qtype = None
+        if qtype is not None:
+            exp_text = curr_exp if curr_exp else f"Option {curr_ans} is the correct answer."
+            add_q(top_k, 1, curr_q, curr_a, curr_b, curr_c, curr_d, curr_ans, exp_text, qtype)
 
 # --- 6. Parse MCQ Term 2 ---
 with open('dump_nexus-MCQ-term-2.pdf.txt', 'r', encoding='utf-8') as f:
