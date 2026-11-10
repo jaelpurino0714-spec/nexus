@@ -1550,7 +1550,17 @@ const Quiz = {
         correctDisplay = q.choice_a || q.option_a;
       }
       if (statusTextEl) statusTextEl.textContent = `❌ Incorrect!`;
-      if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${correctDisplay}</b>`;
+      let reasonHtml = '';
+      const expl = (q.explanation || q.rawExplanation || '').trim();
+      if (expl) {
+        reasonHtml = `
+          <div class="feedback-reason-card">
+            <div class="reason-header"><span class="reason-icon">💡</span> <b>REASON / INFO</b></div>
+            <div class="reason-text">${expl}</div>
+          </div>
+        `;
+      }
+      if (subTextEl) subTextEl.innerHTML = `<div class="feedback-correct-answer">Correct Answer: <b>${correctDisplay}</b></div>${reasonHtml}`;
     }
 
     if (typeof Achievements !== 'undefined' && Achievements.recordQuestionAnswer) {
@@ -1659,7 +1669,17 @@ const Quiz = {
       else if (App.playWrongSound) App.playWrongSound();
     }
     if (statusTextEl) statusTextEl.textContent = `⏰ Time's Up! (Wrong - 0 pts)`;
-    if (subTextEl) subTextEl.innerHTML = `Correct Answer: <b>${correctDisplay}</b>`;
+    let reasonHtml = '';
+    const expl = (q.explanation || q.rawExplanation || '').trim();
+    if (expl) {
+      reasonHtml = `
+        <div class="feedback-reason-card">
+          <div class="reason-header"><span class="reason-icon">💡</span> <b>REASON / INFO</b></div>
+          <div class="reason-text">${expl}</div>
+        </div>
+      `;
+    }
+    if (subTextEl) subTextEl.innerHTML = `<div class="feedback-correct-answer">Correct Answer: <b>${correctDisplay}</b></div>${reasonHtml}`;
 
     if (typeof Achievements !== 'undefined' && Achievements.recordQuestionAnswer) {
       Achievements.recordQuestionAnswer({

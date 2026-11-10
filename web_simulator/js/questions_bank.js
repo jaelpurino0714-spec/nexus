@@ -21649,7 +21649,7 @@ window.OFFLINE_QUESTIONS_BANK = [
     "choice_a": "Basic",
     "choice_b": "Strongly acidic",
     "choice_c": "Neutral",
-    "choice_d": "Acidic\nNEUTRALNEUTRAL",
+    "choice_d": "Acidic",
     "correct_answer": "C",
     "correct_index": 2,
     "explanation": "A pH of exactly 7 represents neutrality, where the concentration of H \u207a ions equals OH \u207b ions.",

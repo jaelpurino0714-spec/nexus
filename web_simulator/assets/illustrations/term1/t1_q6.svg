@@ -12,7 +12,7 @@
   </defs>
 
   <!-- Background Canvas -->
-  <rect width="540" height="250" rx="16" fill="url(#bg_t1_6)" stroke="#06b6d4" stroke-width="1.3" stroke-opacity="0.45"/>
+  <rect width="540" height="250" rx="16" fill="url(#bg_t1_6)" stroke="#06b6d4" stroke-width="1.5" stroke-opacity="0.5"/>
 
   <!-- Subtle Ambient Grid -->
   <g opacity="0.04" stroke="#06b6d4" stroke-width="1">
@@ -23,31 +23,36 @@
   </g>
 
   <!-- Top Glassmorphism Banner -->
-  <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.4"/>
-  <circle cx="36" cy="28" r="5" fill="#06b6d4" filter="url(#glow_t1_6)"/>
-  <text x="50" y="32" fill="#06b6d4" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 1: PHYSICAL &amp; CHEMICAL CHANGES • Q6</text>
+  <rect x="20" y="10" width="500" height="34" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#06b6d4" stroke-width="1.2" stroke-opacity="0.45"/>
+  <circle cx="36" cy="27" r="5.5" fill="#06b6d4" filter="url(#glow_t1_6)"/>
+  <text x="50" y="32" fill="#06b6d4" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="900" letter-spacing="0.5">TOPIC 1: PHYSICAL &amp; CHEMICAL CHANGES • Q6</text>
   
-  <rect x="390" y="17" width="120" height="22" rx="11" fill="#06b6d4"/>
-  <text x="450" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">EXPERIMENT</text>
+  <rect x="385" y="15" width="125" height="24" rx="12" fill="#06b6d4"/>
+  <text x="447" y="31" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="0.5">EXPERIMENT</text>
 
   <!-- Main Illustration Artwork -->
   
-    <g transform="translate(225, 45)">
-      <rect x="25" y="10" width="40" height="130" rx="20" fill="#1e293b" fill-opacity="0.4" stroke="#a78bfa" stroke-width="2.5"/>
-      <path d="M 27 50 L 63 50 L 63 125 A 18 18 0 0 1 27 125 Z" fill="#3b82f6" opacity="0.3"/>
-      <path d="M 27 110 L 63 110 L 63 125 A 18 18 0 0 1 27 125 Z" fill="#fbbf24" opacity="0.95"/>
-      <circle cx="38" cy="100" r="3" fill="#fde047"/><circle cx="48" cy="95" r="2.5" fill="#fde047"/><circle cx="54" cy="105" r="3" fill="#fde047"/><circle cx="42" cy="85" r="2" fill="#fde047"/>
-      <path d="M 45 65 L 45 80 M 40 75 L 45 80 L 50 75" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
-    </g>
-    <g transform="translate(45, 95)">
-      <rect x="0" y="0" width="135" height="52" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#a78bfa" stroke-width="1.5"/>
-      <text x="67" y="22" fill="#c4b5fd" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" text-anchor="middle">INSOLUBLE PRODUCT</text>
-      <text x="67" y="40" fill="#fde047" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle">Solid Precipitate (s) &#8595;</text>
-    </g>
-    <g transform="translate(365, 95)">
-      <rect x="0" y="0" width="130" height="52" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#a78bfa" stroke-width="1.5"/>
-      <text x="65" y="22" fill="#a5a3c4" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" text-anchor="middle">EVIDENCE OF REACTION</text>
-      <text x="65" y="40" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle">[ ? ]</text>
+    <g transform="translate(70, 48)">
+      <rect x="0" y="0" width="400" height="185" rx="14" fill="#0f172a" stroke="#fbbf24" stroke-width="2"/>
+      <text x="200" y="28" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="13.5" font-weight="900" text-anchor="middle">PRECIPITATE FORMATION (SOLID ↓)</text>
+
+      <g transform="translate(150, 42)">
+        <!-- Test Tube with Insoluble Precipitate -->
+        <rect x="30" y="5" width="40" height="75" rx="18" fill="#1e1b4b" stroke="#93c5fd" stroke-width="2"/>
+        <rect x="32" y="25" width="36" height="52" rx="16" fill="#0284c7" opacity="0.6"/>
+        <!-- Settled Solid Particles -->
+        <rect x="32" y="58" width="36" height="20" rx="8" fill="#fbbf24" opacity="0.95"/>
+        <circle cx="45" cy="45" r="3" fill="#fbbf24"/>
+        <circle cx="55" cy="50" r="2.5" fill="#fbbf24"/>
+        <circle cx="50" cy="38" r="2" fill="#fbbf24"/>
+      </g>
+
+      <g transform="translate(40, 130)">
+        <rect x="0" y="0" width="320" height="42" rx="8" fill="#1e1b4b" stroke="#fbbf24" stroke-width="1.2"/>
+        <text x="160" y="26" fill="#fef08a" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" text-anchor="middle">
+          Insoluble Solid Settles from Solution (↓)
+        </text>
+      </g>
     </g>
     
 </svg>

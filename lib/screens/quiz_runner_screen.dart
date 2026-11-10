@@ -556,12 +556,55 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                             Text(
                               'Correct Answer: ${currentQ.question.correctAnswer}',
                               style: const TextStyle(
-                                fontSize: 14,
+                                fontSize: 15,
                                 color: Color(0xFF38BDF8),
                                 fontWeight: FontWeight.w700,
                               ),
                               textAlign: TextAlign.center,
                             ),
+                            if (currentQ.question.explanation != null &&
+                                currentQ.question.explanation!.trim().isNotEmpty) ...[
+                              const SizedBox(height: 10),
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: const Color(0x990F172A),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: const Color(0x6638BDF8), width: 1.2),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: const [
+                                        Icon(Icons.lightbulb_outline, size: 16, color: Color(0xFF38BDF8)),
+                                        SizedBox(width: 6),
+                                        Text(
+                                          'REASON / INFO',
+                                          style: TextStyle(
+                                            fontSize: 11.5,
+                                            fontWeight: FontWeight.w800,
+                                            color: Color(0xFF38BDF8),
+                                            letterSpacing: 0.5,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      currentQ.question.explanation!.trim(),
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        color: Color(0xFFE2E8F0),
+                                        height: 1.4,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ],
                           const SizedBox(height: 14),
                           SizedBox(

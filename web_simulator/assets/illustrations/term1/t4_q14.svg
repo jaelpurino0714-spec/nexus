@@ -12,7 +12,7 @@
   </defs>
 
   <!-- Background Canvas -->
-  <rect width="540" height="250" rx="16" fill="url(#bg_t4_14)" stroke="#8b5cf6" stroke-width="1.3" stroke-opacity="0.45"/>
+  <rect width="540" height="250" rx="16" fill="url(#bg_t4_14)" stroke="#8b5cf6" stroke-width="1.5" stroke-opacity="0.5"/>
 
   <!-- Subtle Ambient Grid -->
   <g opacity="0.04" stroke="#8b5cf6" stroke-width="1">
@@ -23,31 +23,31 @@
   </g>
 
   <!-- Top Glassmorphism Banner -->
-  <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#8b5cf6" stroke-width="1" stroke-opacity="0.4"/>
-  <circle cx="36" cy="28" r="5" fill="#8b5cf6" filter="url(#glow_t4_14)"/>
-  <text x="50" y="32" fill="#8b5cf6" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 4: CHEMICAL EQUATIONS &amp; FORMULAS • Q14</text>
+  <rect x="20" y="10" width="500" height="34" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#8b5cf6" stroke-width="1.2" stroke-opacity="0.45"/>
+  <circle cx="36" cy="27" r="5.5" fill="#8b5cf6" filter="url(#glow_t4_14)"/>
+  <text x="50" y="32" fill="#8b5cf6" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="900" letter-spacing="0.5">TOPIC 4: CHEMICAL EQUATIONS &amp; FORMULAS • Q14</text>
   
-  <rect x="390" y="17" width="120" height="22" rx="11" fill="#8b5cf6"/>
-  <text x="450" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">EQUATION</text>
+  <rect x="385" y="15" width="125" height="24" rx="12" fill="#8b5cf6"/>
+  <text x="447" y="31" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="0.5">EQUATION</text>
 
   <!-- Main Illustration Artwork -->
   
-    <g transform="translate(60, 55)">
-      <rect x="0" y="0" width="420" height="130" rx="14" fill="#0f172a" stroke="#8b5cf6" stroke-width="1.8"/>
+    <g transform="translate(35, 48)">
+      <rect x="0" y="0" width="470" height="185" rx="14" fill="#0f172a" fill-opacity="0.95" stroke="#8b5cf6" stroke-width="2"/>
       
       <!-- Formula Display -->
-      <rect x="60" y="20" width="300" height="55" rx="8" fill="#1e1b4b" stroke="#6366f1" stroke-width="1.2"/>
-      <text x="210" y="58" fill="#ffffff" font-family="'Consolas', 'Courier New', monospace" font-size="28" font-weight="900" text-anchor="middle" letter-spacing="2">
+      <rect x="45" y="20" width="380" height="75" rx="10" fill="#1e1b4b" stroke="#6366f1" stroke-width="1.5"/>
+      <text x="235" y="70" fill="#ffffff" font-family="'Consolas', 'Courier New', monospace" font-size="36" font-weight="900" text-anchor="middle" letter-spacing="3">
         CO₂
       </text>
 
       <!-- Focus Pointer / Callout -->
-      <g transform="translate(135, 82)">
-        <polygon points="75,0 70,12 80,12" fill="#fbbf24"/>
-        <rect x="0" y="12" width="150" height="28" rx="6" fill="#312e81" stroke="#fbbf24" stroke-width="1.2"/>
-        <text x="75" y="30" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle">CARBON DIOXIDE</text>
+      <g transform="translate(135, 105)">
+        <polygon points="100,0 92,10 108,10" fill="#fbbf24"/>
+        <rect x="0" y="10" width="200" height="36" rx="8" fill="#312e81" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="100" y="34" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="900" text-anchor="middle">CARBON DIOXIDE</text>
       </g>
-      <text x="210" y="122" fill="#a5a3c4" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" text-anchor="middle">1 Carbon : 2 Oxygen atoms</text>
+      <text x="235" y="168" fill="#c4b5fd" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" text-anchor="middle">1 Carbon : 2 Oxygen atoms</text>
     </g>
     
 </svg>

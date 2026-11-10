@@ -12,7 +12,7 @@
   </defs>
 
   <!-- Background Canvas -->
-  <rect width="540" height="250" rx="16" fill="url(#bg_t1_28)" stroke="#06b6d4" stroke-width="1.3" stroke-opacity="0.45"/>
+  <rect width="540" height="250" rx="16" fill="url(#bg_t1_28)" stroke="#06b6d4" stroke-width="1.5" stroke-opacity="0.5"/>
 
   <!-- Subtle Ambient Grid -->
   <g opacity="0.04" stroke="#06b6d4" stroke-width="1">
@@ -23,35 +23,37 @@
   </g>
 
   <!-- Top Glassmorphism Banner -->
-  <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.4"/>
-  <circle cx="36" cy="28" r="5" fill="#06b6d4" filter="url(#glow_t1_28)"/>
-  <text x="50" y="32" fill="#06b6d4" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 1: PHYSICAL &amp; CHEMICAL CHANGES • Q28</text>
+  <rect x="20" y="10" width="500" height="34" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#06b6d4" stroke-width="1.2" stroke-opacity="0.45"/>
+  <circle cx="36" cy="27" r="5.5" fill="#06b6d4" filter="url(#glow_t1_28)"/>
+  <text x="50" y="32" fill="#06b6d4" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="900" letter-spacing="0.5">TOPIC 1: PHYSICAL &amp; CHEMICAL CHANGES • Q28</text>
   
-  <rect x="390" y="17" width="120" height="22" rx="11" fill="#06b6d4"/>
-  <text x="450" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">EXPERIMENT</text>
+  <rect x="385" y="15" width="125" height="24" rx="12" fill="#06b6d4"/>
+  <text x="447" y="31" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="0.5">EXPERIMENT</text>
 
   <!-- Main Illustration Artwork -->
   
-    <g transform="translate(200, 50)">
-      <rect x="15" y="60" width="110" height="90" rx="8" fill="#1e293b" fill-opacity="0.6" stroke="#38bdf8" stroke-width="2.5"/>
-      <path d="M 18 90 Q 70 85 122 90 L 122 145 Q 122 148 115 148 L 25 148 Q 18 148 18 145 Z" fill="#0284c7" opacity="0.8"/>
-      <circle cx="40" cy="115" r="4.5" fill="#ffffff" opacity="0.8"/>
-      <circle cx="65" cy="100" r="5.5" fill="#ffffff" opacity="0.8"/>
-      <circle cx="95" cy="120" r="4" fill="#ffffff" opacity="0.8"/>
-      <circle cx="80" cy="135" r="6" fill="#ffffff" opacity="0.8"/>
-      <path d="M 40 55 Q 30 35 45 15 Q 60 -5 50 -20" stroke="#bae6fd" stroke-width="2.5" fill="none" opacity="0.85" stroke-linecap="round"/>
-      <path d="M 70 50 Q 85 30 70 10 Q 55 -10 70 -25" stroke="#bae6fd" stroke-width="3" fill="none" opacity="0.9" stroke-linecap="round"/>
-      <path d="M 100 55 Q 110 35 95 15 Q 80 -5 90 -20" stroke="#bae6fd" stroke-width="2.5" fill="none" opacity="0.85" stroke-linecap="round"/>
-    </g>
-    <g transform="translate(45, 95)">
-      <rect x="0" y="0" width="125" height="52" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#38bdf8" stroke-width="1.5"/>
-      <text x="62" y="22" fill="#7dd3fc" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" text-anchor="middle">PHASE CHANGE</text>
-      <text x="62" y="40" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle">Liquid &#8594; Gas (100°C)</text>
-    </g>
-    <g transform="translate(370, 95)">
-      <rect x="0" y="0" width="125" height="52" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#38bdf8" stroke-width="1.5"/>
-      <text x="62" y="22" fill="#a5a3c4" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" text-anchor="middle">CHANGE TYPE</text>
-      <text x="62" y="40" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle">[ ? ]</text>
+    <g transform="translate(70, 48)">
+      <rect x="0" y="0" width="400" height="185" rx="14" fill="#0f172a" stroke="#06b6d4" stroke-width="2"/>
+      <text x="200" y="28" fill="#22d3ee" font-family="'Segoe UI', Roboto, sans-serif" font-size="13.5" font-weight="900" text-anchor="middle">BOILING &amp; EVAPORATION (PHYSICAL CHANGE)</text>
+
+      <g transform="translate(140, 45)">
+        <!-- Beaker with Boiling Water -->
+        <rect x="25" y="30" width="70" height="55" rx="6" fill="#0891b2" fill-opacity="0.8" stroke="#67e8f9" stroke-width="2"/>
+        <circle cx="45" cy="55" r="4" fill="#ffffff" opacity="0.7"/>
+        <circle cx="65" cy="45" r="5" fill="#ffffff" opacity="0.8"/>
+        <circle cx="55" cy="70" r="3.5" fill="#ffffff" opacity="0.6"/>
+        <!-- Rising Steam Waves -->
+        <path d="M 40 25 Q 30 15 40 5 Q 50 -5 40 -15" fill="none" stroke="#e0f2fe" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M 60 25 Q 70 15 60 5 Q 50 -5 60 -15" fill="none" stroke="#e0f2fe" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M 80 25 Q 70 15 80 5 Q 90 -5 80 -15" fill="none" stroke="#e0f2fe" stroke-width="2.5" stroke-linecap="round"/>
+      </g>
+
+      <g transform="translate(40, 135)">
+        <rect x="0" y="0" width="320" height="38" rx="8" fill="#1e1b4b" stroke="#06b6d4" stroke-width="1.2"/>
+        <text x="160" y="24" fill="#cffafe" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" text-anchor="middle">
+          H₂O(l)  →  H₂O(g)  [Physical State Transition]
+        </text>
+      </g>
     </g>
     
 </svg>

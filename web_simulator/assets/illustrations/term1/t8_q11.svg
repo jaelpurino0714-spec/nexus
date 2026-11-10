@@ -12,7 +12,7 @@
   </defs>
 
   <!-- Background Canvas -->
-  <rect width="540" height="250" rx="16" fill="url(#bg_t8_11)" stroke="#a855f7" stroke-width="1.3" stroke-opacity="0.45"/>
+  <rect width="540" height="250" rx="16" fill="url(#bg_t8_11)" stroke="#a855f7" stroke-width="1.5" stroke-opacity="0.5"/>
 
   <!-- Subtle Ambient Grid -->
   <g opacity="0.04" stroke="#a855f7" stroke-width="1">
@@ -23,30 +23,37 @@
   </g>
 
   <!-- Top Glassmorphism Banner -->
-  <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#a855f7" stroke-width="1" stroke-opacity="0.4"/>
-  <circle cx="36" cy="28" r="5" fill="#a855f7" filter="url(#glow_t8_11)"/>
-  <text x="50" y="32" fill="#a855f7" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 8: EVOLUTION AND BIODIVERSITY • Q11</text>
+  <rect x="20" y="10" width="500" height="34" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#a855f7" stroke-width="1.2" stroke-opacity="0.45"/>
+  <circle cx="36" cy="27" r="5.5" fill="#a855f7" filter="url(#glow_t8_11)"/>
+  <text x="50" y="32" fill="#a855f7" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="900" letter-spacing="0.5">TOPIC 8: EVOLUTION AND BIODIVERSITY • Q11</text>
   
-  <rect x="390" y="17" width="120" height="22" rx="11" fill="#a855f7"/>
-  <text x="450" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">EVOLUTION</text>
+  <rect x="385" y="15" width="125" height="24" rx="12" fill="#a855f7"/>
+  <text x="447" y="31" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="0.5">EVOLUTION</text>
 
   <!-- Main Illustration Artwork -->
   
-    <g transform="translate(110, 55)">
-      <!-- Light Bark & Light Moth -->
-      <g transform="translate(0, 0)">
-        <rect x="0" y="0" width="140" height="120" rx="10" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.8"/>
-        <text x="70" y="20" fill="#1e293b" font-family="'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="bold" text-anchor="middle">CLEAN BARK (LICHEN)</text>
-        <!-- Camouflaged Light Moth -->
-        <polygon points="70,45 35,85 70,75 105,85" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+    <g transform="translate(50, 48)">
+      <rect x="0" y="0" width="440" height="185" rx="14" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+      <text x="220" y="26" fill="#f8fafc" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="900" text-anchor="middle">PEPPERED MOTH: INDUSTRIAL MELANISM</text>
+
+      <!-- Clean Bark & Light Moth -->
+      <g transform="translate(30, 38)">
+        <rect x="0" y="0" width="175" height="95" rx="10" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1.5"/>
+        <text x="87" y="22" fill="#0f172a" font-size="11.5" font-weight="900" text-anchor="middle">CLEAN BARK (LICHEN)</text>
+        <polygon points="87,38 45,78 87,68 129,78" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+        <text x="87" y="90" fill="#334155" font-size="10.5" font-weight="bold" text-anchor="middle">Light Moth Camouflaged</text>
       </g>
-      <!-- Dark Soot Bark & Dark Moth -->
-      <g transform="translate(180, 0)">
-        <rect x="0" y="0" width="140" height="120" rx="10" fill="#0f172a" stroke="#475569" stroke-width="1.8"/>
-        <text x="70" y="20" fill="#fde047" font-family="'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="bold" text-anchor="middle">SOOT BARK (POLLUTED)</text>
-        <!-- Camouflaged Dark Moth -->
-        <polygon points="70,45 35,85 70,75 105,85" fill="#1e293b" stroke="#020617" stroke-width="1.5"/>
+
+      <!-- Soot Bark & Dark Moth -->
+      <g transform="translate(235, 38)">
+        <rect x="0" y="0" width="175" height="95" rx="10" fill="#0f172a" stroke="#475569" stroke-width="1.5"/>
+        <text x="87" y="22" fill="#fde047" font-size="11.5" font-weight="900" text-anchor="middle">SOOT BARK (POLLUTION)</text>
+        <polygon points="87,38 45,78 87,68 129,78" fill="#1e293b" stroke="#020617" stroke-width="2"/>
+        <text x="87" y="90" fill="#cbd5e1" font-size="10.5" font-weight="bold" text-anchor="middle">Dark Moth Camouflaged</text>
       </g>
+
+      <rect x="40" y="145" width="360" height="26" rx="6" fill="#1e1b4b" stroke="#94a3b8" stroke-width="1"/>
+      <text x="220" y="163" fill="#e2e8f0" font-size="12" font-weight="bold" text-anchor="middle">Environmental Shift Alters Camouflage &amp; Survival Fitness</text>
     </g>
     
 </svg>

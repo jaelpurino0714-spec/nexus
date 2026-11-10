@@ -12,7 +12,7 @@
   </defs>
 
   <!-- Background Canvas -->
-  <rect width="540" height="250" rx="16" fill="url(#bg_t8_28)" stroke="#a855f7" stroke-width="1.3" stroke-opacity="0.45"/>
+  <rect width="540" height="250" rx="16" fill="url(#bg_t8_28)" stroke="#a855f7" stroke-width="1.5" stroke-opacity="0.5"/>
 
   <!-- Subtle Ambient Grid -->
   <g opacity="0.04" stroke="#a855f7" stroke-width="1">
@@ -23,31 +23,39 @@
   </g>
 
   <!-- Top Glassmorphism Banner -->
-  <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#a855f7" stroke-width="1" stroke-opacity="0.4"/>
-  <circle cx="36" cy="28" r="5" fill="#a855f7" filter="url(#glow_t8_28)"/>
-  <text x="50" y="32" fill="#a855f7" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 8: EVOLUTION AND BIODIVERSITY • Q28</text>
+  <rect x="20" y="10" width="500" height="34" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#a855f7" stroke-width="1.2" stroke-opacity="0.45"/>
+  <circle cx="36" cy="27" r="5.5" fill="#a855f7" filter="url(#glow_t8_28)"/>
+  <text x="50" y="32" fill="#a855f7" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="900" letter-spacing="0.5">TOPIC 8: EVOLUTION AND BIODIVERSITY • Q28</text>
   
-  <rect x="390" y="17" width="120" height="22" rx="11" fill="#a855f7"/>
-  <text x="450" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">EVOLUTION</text>
+  <rect x="385" y="15" width="125" height="24" rx="12" fill="#a855f7"/>
+  <text x="447" y="31" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="0.5">EVOLUTION</text>
 
   <!-- Main Illustration Artwork -->
   
-    <g transform="translate(110, 55)">
-      <g transform="translate(0, 0)">
-        <rect x="0" y="0" width="140" height="120" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="1.8"/>
-        <text x="70" y="22" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" text-anchor="middle">SEED CRACKER</text>
-        <circle cx="50" cy="65" r="28" fill="#78350f"/>
-        <circle cx="42" cy="58" r="4.5" fill="#fde047"/><circle cx="42" cy="58" r="2" fill="#000000"/>
-        <polygon points="70,55 125,72 70,88" fill="#d97706" stroke="#451a03" stroke-width="2"/>
-        <line x1="70" y1="72" x2="125" y2="72" stroke="#451a03" stroke-width="1.8"/>
+    <g transform="translate(50, 48)">
+      <rect x="0" y="0" width="440" height="185" rx="14" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+      <text x="220" y="26" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="900" text-anchor="middle">DARWIN'S FINCHES: BEAK ADAPTATIONS</text>
+
+      <!-- Seed Cracker -->
+      <g transform="translate(30, 38)">
+        <rect x="0" y="0" width="175" height="95" rx="10" fill="#1e1b4b" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="87" y="22" fill="#fbbf24" font-size="12" font-weight="900" text-anchor="middle">SEED CRACKER (LARGE BEAK)</text>
+        <circle cx="55" cy="58" r="24" fill="#78350f"/>
+        <circle cx="48" cy="52" r="4.5" fill="#fde047"/><circle cx="48" cy="52" r="2" fill="#000000"/>
+        <polygon points="75,45 140,62 75,78" fill="#d97706" stroke="#451a03" stroke-width="2"/>
       </g>
-      <g transform="translate(180, 0)">
-        <rect x="0" y="0" width="140" height="120" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="1.8"/>
-        <text x="70" y="22" fill="#38bdf8" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" text-anchor="middle">INSECT PROBER</text>
-        <circle cx="45" cy="65" r="26" fill="#334155"/>
-        <circle cx="38" cy="58" r="4.5" fill="#ffffff"/><circle cx="38" cy="58" r="2" fill="#000000"/>
-        <polygon points="68,60 135,66 68,72" fill="#cbd5e1" stroke="#0f172a" stroke-width="1.5"/>
+
+      <!-- Insect Prober -->
+      <g transform="translate(235, 38)">
+        <rect x="0" y="0" width="175" height="95" rx="10" fill="#1e1b4b" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="87" y="22" fill="#38bdf8" font-size="12" font-weight="900" text-anchor="middle">INSECT PROBER (SLENDER BEAK)</text>
+        <circle cx="55" cy="58" r="22" fill="#334155"/>
+        <circle cx="48" cy="52" r="4.5" fill="#ffffff"/><circle cx="48" cy="52" r="2" fill="#000000"/>
+        <polygon points="75,55 150,60 75,65" fill="#cbd5e1" stroke="#0f172a" stroke-width="1.5"/>
       </g>
+
+      <rect x="40" y="145" width="360" height="26" rx="6" fill="#1e1b4b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="220" y="163" fill="#fef08a" font-size="12" font-weight="bold" text-anchor="middle">Natural Selection Favors Beaks Suited to Local Food Sources</text>
     </g>
     
 </svg>

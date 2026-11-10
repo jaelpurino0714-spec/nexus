@@ -12,7 +12,7 @@
   </defs>
 
   <!-- Background Canvas -->
-  <rect width="540" height="250" rx="16" fill="url(#bg_t8_8)" stroke="#a855f7" stroke-width="1.3" stroke-opacity="0.45"/>
+  <rect width="540" height="250" rx="16" fill="url(#bg_t8_8)" stroke="#a855f7" stroke-width="1.5" stroke-opacity="0.5"/>
 
   <!-- Subtle Ambient Grid -->
   <g opacity="0.04" stroke="#a855f7" stroke-width="1">
@@ -23,39 +23,47 @@
   </g>
 
   <!-- Top Glassmorphism Banner -->
-  <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#a855f7" stroke-width="1" stroke-opacity="0.4"/>
-  <circle cx="36" cy="28" r="5" fill="#a855f7" filter="url(#glow_t8_8)"/>
-  <text x="50" y="32" fill="#a855f7" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 8: EVOLUTION AND BIODIVERSITY • Q8</text>
+  <rect x="20" y="10" width="500" height="34" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#a855f7" stroke-width="1.2" stroke-opacity="0.45"/>
+  <circle cx="36" cy="27" r="5.5" fill="#a855f7" filter="url(#glow_t8_8)"/>
+  <text x="50" y="32" fill="#a855f7" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="900" letter-spacing="0.5">TOPIC 8: EVOLUTION AND BIODIVERSITY • Q8</text>
   
-  <rect x="390" y="17" width="120" height="22" rx="11" fill="#a855f7"/>
-  <text x="450" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">EVOLUTION</text>
+  <rect x="385" y="15" width="125" height="24" rx="12" fill="#a855f7"/>
+  <text x="447" y="31" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="0.5">EVOLUTION</text>
 
   <!-- Main Illustration Artwork -->
   
-    <g transform="translate(60, 55)">
-      <rect x="0" y="0" width="420" height="130" rx="12" fill="#0f172a" stroke="#a855f7" stroke-width="1.8"/>
-      <text x="210" y="24" fill="#c084fc" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" text-anchor="middle">HOMOLOGOUS BONE STRUCTURES (COMMON ANCESTRY)</text>
+    <g transform="translate(45, 48)">
+      <rect x="0" y="0" width="450" height="185" rx="14" fill="#0f172a" stroke="#a855f7" stroke-width="2"/>
+      <text x="225" y="26" fill="#c084fc" font-family="'Segoe UI', Roboto, sans-serif" font-size="12.5" font-weight="900" text-anchor="middle">HOMOLOGOUS STRUCTURES (COMMON ANCESTRY)</text>
 
-      <g transform="translate(30, 35)">
-        <text x="45" y="15" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle">Human Arm</text>
-        <rect x="35" y="22" width="20" height="25" rx="3" fill="#f43f5e"/><text x="45" y="38" fill="#ffffff" font-size="7" text-anchor="middle">H</text>
-        <rect x="30" y="50" width="12" height="25" rx="2" fill="#3b82f6"/><rect x="46" y="50" width="12" height="25" rx="2" fill="#06b6d4"/>
-        <rect x="25" y="78" width="40" height="10" rx="2" fill="#fbbf24"/>
+      <g transform="translate(30, 40)">
+        <!-- Human Arm -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="115" height="95" rx="8" fill="#1e1b4b" stroke="#475569" stroke-width="1.2"/>
+          <text x="57" y="20" fill="#ffffff" font-size="12" font-weight="900" text-anchor="middle">Human Arm</text>
+          <rect x="47" y="28" width="22" height="28" rx="4" fill="#f43f5e"/>
+          <rect x="40" y="60" width="14" height="25" rx="3" fill="#3b82f6"/><rect x="60" y="60" width="14" height="25" rx="3" fill="#06b6d4"/>
+        </g>
+        <!-- Bat Wing -->
+        <g transform="translate(135, 0)">
+          <rect x="0" y="0" width="115" height="95" rx="8" fill="#1e1b4b" stroke="#475569" stroke-width="1.2"/>
+          <text x="57" y="20" fill="#ffffff" font-size="12" font-weight="900" text-anchor="middle">Bat Wing</text>
+          <rect x="50" y="28" width="16" height="22" rx="3" fill="#f43f5e"/>
+          <line x1="30" y1="55" x2="15" y2="88" stroke="#fbbf24" stroke-width="3"/>
+          <line x1="57" y1="55" x2="57" y2="90" stroke="#fbbf24" stroke-width="3"/>
+          <line x1="85" y1="55" x2="100" y2="88" stroke="#fbbf24" stroke-width="3"/>
+        </g>
+        <!-- Whale Flipper -->
+        <g transform="translate(270, 0)">
+          <rect x="0" y="0" width="115" height="95" rx="8" fill="#1e1b4b" stroke="#475569" stroke-width="1.2"/>
+          <text x="57" y="20" fill="#ffffff" font-size="12" font-weight="900" text-anchor="middle">Whale Flipper</text>
+          <rect x="42" y="28" width="32" height="22" rx="6" fill="#f43f5e"/>
+          <rect x="36" y="54" width="18" height="24" rx="4" fill="#3b82f6"/><rect x="60" y="54" width="18" height="24" rx="4" fill="#06b6d4"/>
+        </g>
       </g>
-      <g transform="translate(160, 35)">
-        <text x="45" y="15" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle">Bat Wing</text>
-        <rect x="37" y="22" width="16" height="20" rx="3" fill="#f43f5e"/>
-        <rect x="34" y="45" width="10" height="30" rx="2" fill="#3b82f6"/><rect x="47" y="45" width="10" height="30" rx="2" fill="#06b6d4"/>
-        <line x1="25" y1="78" x2="10" y2="92" stroke="#fbbf24" stroke-width="2.5"/>
-        <line x1="40" y1="78" x2="35" y2="95" stroke="#fbbf24" stroke-width="2.5"/>
-        <line x1="55" y1="78" x2="65" y2="95" stroke="#fbbf24" stroke-width="2.5"/>
-      </g>
-      <g transform="translate(290, 35)">
-        <text x="45" y="15" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle">Whale Flipper</text>
-        <rect x="30" y="22" width="30" height="18" rx="4" fill="#f43f5e"/>
-        <rect x="30" y="43" width="13" height="20" rx="2" fill="#3b82f6"/><rect x="47" y="43" width="13" height="20" rx="2" fill="#06b6d4"/>
-        <rect x="22" y="66" width="46" height="20" rx="3" fill="#fbbf24"/>
-      </g>
+
+      <rect x="50" y="148" width="350" height="26" rx="6" fill="#1e1b4b" stroke="#a855f7" stroke-width="1"/>
+      <text x="225" y="166" fill="#e9d5ff" font-size="12" font-weight="bold" text-anchor="middle">Same Underlying Bone Plan Adapted for Different Functions</text>
     </g>
     
 </svg>
