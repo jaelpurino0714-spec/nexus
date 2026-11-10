@@ -5,6 +5,10 @@
       <stop offset="50%" stop-color="#0d1428"/>
       <stop offset="100%" stop-color="#121b36"/>
     </linearGradient>
+    <linearGradient id="heat_grad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
     <filter id="glow_t2_26" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="3" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
@@ -27,41 +31,32 @@
   <circle cx="36" cy="27" r="5.5" fill="#6366f1" filter="url(#glow_t2_26)"/>
   <text x="50" y="32" fill="#6366f1" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="900" letter-spacing="0.5">TOPIC 2: TYPES OF CHEMICAL REACTIONS • Q26</text>
   
-  <rect x="385" y="15" width="125" height="24" rx="12" fill="#6366f1"/>
-  <text x="447" y="31" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="0.5">REACTION TYPE</text>
+  <rect x="375" y="15" width="135" height="24" rx="12" fill="#6366f1"/>
+  <text x="442" y="31" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" text-anchor="middle" letter-spacing="0.5">OXIDATION</text>
 
   <!-- Main Illustration Artwork -->
-  
-    <defs>
-      <linearGradient id="flameOuter" x1="0%" y1="100%" x2="0%" y2="0%">
-        <stop offset="0%" stop-color="#b91c1c"/>
-        <stop offset="60%" stop-color="#ea580c"/>
-        <stop offset="100%" stop-color="#f59e0b"/>
-      </linearGradient>
-      <linearGradient id="flameInner" x1="0%" y1="100%" x2="0%" y2="0%">
-        <stop offset="0%" stop-color="#f59e0b"/>
-        <stop offset="50%" stop-color="#fde047"/>
-        <stop offset="100%" stop-color="#ffffff"/>
-      </linearGradient>
-    </defs>
+  <g transform="translate(25, 48)">
+    <rect x="0" y="0" width="490" height="185" rx="14" fill="#0f172a" fill-opacity="0.95" stroke="#6366f1" stroke-width="2"/>
 
-    <g transform="translate(195, 45)">
-      <!-- Flame Base / Logs -->
-      <rect x="25" y="140" width="100" height="18" rx="6" fill="#78350f" stroke="#451a03" stroke-width="2"/>
-      <rect x="35" y="125" width="80" height="18" rx="6" fill="#92400e" stroke="#451a03" stroke-width="2" transform="rotate(-8 75 135)"/>
+    <!-- Header banner -->
+    <rect x="20" y="14" width="450" height="26" rx="7" fill="#1e1b4b" stroke="#38bdf8" stroke-width="1.2"/>
+    <text x="245" y="31" fill="#38bdf8" font-family="'Segoe UI', Roboto, sans-serif" font-size="11.5" font-weight="900" text-anchor="middle">MAGNESIUM RIBBON COMBUSTION IN AIR</text>
 
-      <!-- Outer Flame -->
-      <path d="M 75 15 C 115 55, 140 95, 125 135 C 110 145, 40 145, 25 135 C 10 95, 35 55, 75 15 Z" fill="url(#flameOuter)" opacity="0.95"/>
-      <!-- Inner Flame -->
-      <path d="M 75 55 C 95 80, 110 110, 100 135 C 90 140, 60 140, 50 135 C 40 110, 55 80, 75 55 Z" fill="url(#flameInner)"/>
+    <!-- Specific Equation Display Box -->
+    <rect x="15" y="48" width="460" height="74" rx="10" fill="#1e293b" fill-opacity="0.95" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="245" y="93" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="900" text-anchor="middle">
+      2 Mg (s) + O<tspan font-size="14" dy="3">2</tspan><tspan font-size="20" dy="-3"> (g)  →  2 MgO (s) + Intense Light</tspan>
+    </text>
+
+    <!-- Subnote & Target -->
+    <g transform="translate(20, 134)">
+      <rect x="0" y="0" width="280" height="38" rx="8" fill="#1e1b4b" stroke="#475569" stroke-width="1"/>
+      <circle cx="18" cy="19" r="6" fill="#38bdf8"/>
+      <text x="32" y="24" fill="#cbd5e1" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700">Magnesium Combines with Oxygen Gas</text>
+      
+      <rect x="290" y="0" width="160" height="38" rx="8" fill="#312e81" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="370" y="24" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="900" text-anchor="middle">CLASSIFIED AS = [ ? ]</text>
     </g>
 
-    <!-- Bottom Energy Pill -->
-    <g transform="translate(80, 192)">
-      <rect x="0" y="0" width="380" height="38" rx="10" fill="#1e1b4b" fill-opacity="0.95" stroke="#f97316" stroke-width="1.8"/>
-      <text x="190" y="24" fill="#fed7aa" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="900" text-anchor="middle" letter-spacing="0.5">
-        Fuel  +  O₂  →  CO₂  +  H₂O  +  HEAT (ΔH &lt; 0)
-      </text>
-    </g>
-    
+  </g>
 </svg>

@@ -5,6 +5,10 @@
       <stop offset="50%" stop-color="#0d1428"/>
       <stop offset="100%" stop-color="#121b36"/>
     </linearGradient>
+    <linearGradient id="heat_grad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
     <filter id="glow_t2_18" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="3" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
@@ -27,35 +31,32 @@
   <circle cx="36" cy="27" r="5.5" fill="#6366f1" filter="url(#glow_t2_18)"/>
   <text x="50" y="32" fill="#6366f1" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="900" letter-spacing="0.5">TOPIC 2: TYPES OF CHEMICAL REACTIONS • Q18</text>
   
-  <rect x="385" y="15" width="125" height="24" rx="12" fill="#6366f1"/>
-  <text x="447" y="31" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="0.5">REACTION TYPE</text>
+  <rect x="375" y="15" width="135" height="24" rx="12" fill="#6366f1"/>
+  <text x="442" y="31" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" text-anchor="middle" letter-spacing="0.5">COMBUSTION</text>
 
   <!-- Main Illustration Artwork -->
-  
-    <g transform="translate(25, 48)">
-      <rect x="0" y="0" width="490" height="185" rx="14" fill="#0f172a" fill-opacity="0.95" stroke="#6366f1" stroke-width="2"/>
+  <g transform="translate(25, 48)">
+    <rect x="0" y="0" width="490" height="185" rx="14" fill="#0f172a" fill-opacity="0.95" stroke="#6366f1" stroke-width="2"/>
 
-      <!-- Reactants / Products Header Pills -->
-      <rect x="25" y="16" width="180" height="28" rx="8" fill="#1e1b4b" stroke="#38bdf8" stroke-width="1.2"/>
-      <text x="115" y="34" fill="#38bdf8" font-family="'Segoe UI', Roboto, sans-serif" font-size="11.5" font-weight="900" text-anchor="middle" letter-spacing="0.5">REACTANTS (BEFORE)</text>
+    <!-- Header banner -->
+    <rect x="20" y="14" width="450" height="26" rx="7" fill="#1e1b4b" stroke="#f43f5e" stroke-width="1.2"/>
+    <text x="245" y="31" fill="#f43f5e" font-family="'Segoe UI', Roboto, sans-serif" font-size="11.5" font-weight="900" text-anchor="middle">METHANE (HYDROCARBON) COMBUSTION WITH OXYGEN</text>
 
-      <rect x="285" y="16" width="180" height="28" rx="8" fill="#1e1b4b" stroke="#34d399" stroke-width="1.2"/>
-      <text x="375" y="34" fill="#34d399" font-family="'Segoe UI', Roboto, sans-serif" font-size="11.5" font-weight="900" text-anchor="middle" letter-spacing="0.5">PRODUCTS (AFTER)</text>
+    <!-- Specific Equation Display Box -->
+    <rect x="15" y="48" width="460" height="74" rx="10" fill="#1e293b" fill-opacity="0.95" stroke="#f43f5e" stroke-width="1.5"/>
+    <text x="245" y="93" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="18" font-weight="900" text-anchor="middle">
+      CH<tspan font-size="13" dy="3">4</tspan><tspan font-size="18" dy="-3"> + 2 O</tspan><tspan font-size="13" dy="3">2</tspan><tspan font-size="18" dy="-3">  →  CO</tspan><tspan font-size="13" dy="3">2</tspan><tspan font-size="18" dy="-3"> + 2 H</tspan><tspan font-size="13" dy="3">2</tspan><tspan font-size="18" dy="-3">O + HEAT (ΔH &lt; 0)</tspan>
+    </text>
 
-      <!-- Center Prominent Equation Box -->
-      <rect x="20" y="56" width="450" height="66" rx="10" fill="#1e293b" fill-opacity="0.9" stroke="#818cf8" stroke-width="1.5"/>
-      <text x="245" y="98" fill="#ffffff" font-family="'Consolas', 'Courier New', monospace" font-size="24" font-weight="900" text-anchor="middle" letter-spacing="1">
-        Reactants  →  Products
-      </text>
-
-      <!-- Sub-note and Unknown Target Badge -->
-      <g transform="translate(25, 134)">
-        <rect x="0" y="0" width="280" height="36" rx="8" fill="#1e1b4b" stroke="#475569" stroke-width="1"/>
-        <text x="15" y="23" fill="#cbd5e1" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700">Atomic rearrangement into new substances</text>
-        
-        <rect x="295" y="0" width="150" height="36" rx="8" fill="#312e81" stroke="#fbbf24" stroke-width="1.5"/>
-        <text x="370" y="24" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="900" text-anchor="middle">[ ? ]</text>
-      </g>
+    <!-- Subnote & Target -->
+    <g transform="translate(20, 134)">
+      <rect x="0" y="0" width="280" height="38" rx="8" fill="#1e1b4b" stroke="#475569" stroke-width="1"/>
+      <circle cx="18" cy="19" r="6" fill="#f43f5e"/>
+      <text x="32" y="24" fill="#cbd5e1" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700">Fuel + Oxygen Releases Thermal Energy</text>
+      
+      <rect x="290" y="0" width="160" height="38" rx="8" fill="#312e81" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="370" y="24" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="900" text-anchor="middle">REPRESENTS = [ ? ]</text>
     </g>
-    
+
+  </g>
 </svg>

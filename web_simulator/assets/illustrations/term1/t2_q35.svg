@@ -5,6 +5,10 @@
       <stop offset="50%" stop-color="#0d1428"/>
       <stop offset="100%" stop-color="#121b36"/>
     </linearGradient>
+    <linearGradient id="heat_grad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
     <filter id="glow_t2_35" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="3" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
@@ -27,74 +31,32 @@
   <circle cx="36" cy="27" r="5.5" fill="#6366f1" filter="url(#glow_t2_35)"/>
   <text x="50" y="32" fill="#6366f1" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="900" letter-spacing="0.5">TOPIC 2: TYPES OF CHEMICAL REACTIONS • Q35</text>
   
-  <rect x="385" y="15" width="125" height="24" rx="12" fill="#6366f1"/>
-  <text x="447" y="31" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="0.5">REACTION TYPE</text>
+  <rect x="375" y="15" width="135" height="24" rx="12" fill="#6366f1"/>
+  <text x="442" y="31" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" text-anchor="middle" letter-spacing="0.5">OCEAN ACIDITY</text>
 
   <!-- Main Illustration Artwork -->
-  
-    <defs>
-      <linearGradient id="liq_06b6d4_5140" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.8"/>
-        <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.95"/>
-      </linearGradient>
-      <linearGradient id="shine_06b6d4_5140" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
-        <stop offset="25%" stop-color="#ffffff" stop-opacity="0.08"/>
-        <stop offset="85%" stop-color="#ffffff" stop-opacity="0.0"/>
-        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.3"/>
-      </linearGradient>
-    </defs>
+  <g transform="translate(25, 48)">
+    <rect x="0" y="0" width="490" height="185" rx="14" fill="#0f172a" fill-opacity="0.95" stroke="#6366f1" stroke-width="2"/>
 
-    <!-- Center Laboratory Glassware -->
-    <g transform="translate(195, 48)">
-      <ellipse cx="75" cy="178" rx="68" ry="12" fill="#000000" opacity="0.6"/>
+    <!-- Header banner -->
+    <rect x="20" y="14" width="450" height="26" rx="7" fill="#1e1b4b" stroke="#06b6d4" stroke-width="1.2"/>
+    <text x="245" y="31" fill="#06b6d4" font-family="'Segoe UI', Roboto, sans-serif" font-size="11.5" font-weight="900" text-anchor="middle">ATMOSPHERIC CARBON DIOXIDE DISSOLVING IN OCEANS</text>
 
-      <!-- Liquid fill -->
-      <path d="M 12 70 Q 75 84 138 70 L 138 165 Q 138 175 125 175 L 25 175 Q 12 175 12 165 Z" fill="url(#liq_06b6d4_5140)"/>
-      <ellipse cx="75" cy="71" rx="63" ry="9" fill="#06b6d4" opacity="0.9"/>
-      <ellipse cx="75" cy="71" rx="55" ry="6" fill="#ffffff" opacity="0.25"/>
+    <!-- Specific Equation Display Box -->
+    <rect x="15" y="48" width="460" height="74" rx="10" fill="#1e293b" fill-opacity="0.95" stroke="#06b6d4" stroke-width="1.5"/>
+    <text x="245" y="93" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="18" font-weight="900" text-anchor="middle">
+      CO<tspan font-size="13" dy="3">2</tspan><tspan font-size="18" dy="-3"> (g) + H</tspan><tspan font-size="13" dy="3">2</tspan><tspan font-size="18" dy="-3">O (l)  ⇄  H</tspan><tspan font-size="13" dy="3">2</tspan><tspan font-size="18" dy="-3">CO</tspan><tspan font-size="13" dy="3">3</tspan><tspan font-size="18" dy="-3">  ⇄  H</tspan><tspan font-size="13" dy="-6">⁺</tspan><tspan font-size="18" dy="6"> + HCO</tspan><tspan font-size="13" dy="3">3</tspan><tspan font-size="13" dy="-9">⁻</tspan>
+    </text>
 
-      <!-- Bubbles -->
-      <circle cx="45" cy="140" r="5" fill="#ffffff" opacity="0.5"/>
-      <circle cx="58" cy="110" r="3.5" fill="#ffffff" opacity="0.6"/>
-      <circle cx="95" cy="130" r="5.5" fill="#ffffff" opacity="0.55"/>
-      <circle cx="108" cy="95" r="4" fill="#ffffff" opacity="0.7"/>
-      <circle cx="75" cy="150" r="4.5" fill="#ffffff" opacity="0.4"/>
-
-      <!-- Litmus paper strip -->
-      <g transform="rotate(8 75 75)">
-        <rect x="68" y="10" width="16" height="60" rx="3" fill="#fbbf24" stroke="#d97706" stroke-width="1"/>
-        <rect x="68" y="70" width="16" height="55" rx="3" fill="#06b6d4" stroke="#ffffff" stroke-width="1" opacity="0.95"/>
-      </g>
-
-      <!-- Glass Outline & Spout -->
-      <path d="M 0 32 L 10 35 L 10 165 Q 10 178 25 178 L 125 178 Q 140 178 140 165 L 140 35 L 142 32" 
-            fill="url(#shine_06b6d4_5140)" stroke="#93c5fd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-      <ellipse cx="75" cy="35" rx="65" ry="7" fill="none" stroke="#93c5fd" stroke-width="2.5"/>
-
-      <!-- Measurement tick marks -->
-      <g stroke="#ffffff" stroke-width="2" opacity="0.85" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" fill="#ffffff" font-weight="900">
-        <line x1="118" y1="62" x2="135" y2="62"/><text x="112" y="65" text-anchor="end">200ml</text>
-        <line x1="122" y1="92" x2="135" y2="92"/><text x="112" y="95" text-anchor="end">150ml</text>
-        <line x1="118" y1="122" x2="135" y2="122"/><text x="112" y="125" text-anchor="end">100ml</text>
-        <line x1="122" y1="148" x2="135" y2="148"/><text x="112" y="151" text-anchor="end">50ml</text>
-      </g>
+    <!-- Subnote & Target -->
+    <g transform="translate(20, 134)">
+      <rect x="0" y="0" width="280" height="38" rx="8" fill="#1e1b4b" stroke="#475569" stroke-width="1"/>
+      <circle cx="18" cy="19" r="6" fill="#06b6d4"/>
+      <text x="32" y="24" fill="#cbd5e1" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700">Higher [H⁺] Decreases Seawater pH</text>
+      
+      <rect x="290" y="0" width="160" height="38" rx="8" fill="#312e81" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="370" y="24" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="900" text-anchor="middle">EFFECT = [ ? ]</text>
     </g>
 
-    <!-- Left Info Card -->
-    <g transform="translate(25, 75)">
-      <rect x="0" y="0" width="155" height="75" rx="12" fill="#1e1b4b" fill-opacity="0.95" stroke="#10b981" stroke-width="2"/>
-      <text x="77" y="28" fill="#93c5fd" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="800" text-anchor="middle">Acid + Base → Salt + H₂O</text>
-      <rect x="20" y="38" width="115" height="28" rx="6" fill="#0f172a" stroke="#06b6d4" stroke-width="1.2"/>
-      <text x="77" y="57" fill="#06b6d4" font-family="'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="900" text-anchor="middle">Neutralization</text>
-    </g>
-
-    <!-- Right Result Card -->
-    <g transform="translate(360, 75)">
-      <rect x="0" y="0" width="155" height="75" rx="12" fill="#1e1b4b" fill-opacity="0.95" stroke="#10b981" stroke-width="2"/>
-      <text x="77" y="28" fill="#c4b5fd" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="800" text-anchor="middle">INDICATOR RESULT</text>
-      <rect x="20" y="38" width="115" height="28" rx="6" fill="#0f172a" stroke="#fbbf24" stroke-width="1.2"/>
-      <text x="77" y="57" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="900" text-anchor="middle">[ ? ]</text>
-    </g>
-    
+  </g>
 </svg>
