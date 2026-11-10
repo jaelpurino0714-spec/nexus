@@ -1365,9 +1365,11 @@ const Quiz = {
         opts = ['Option A', 'Option B', 'Option C', 'Option D'];
       }
 
-      // If options contain long phrases/sentences, expand width to full width (1 column) to prevent vertical stretching & overlapping
+      // If options contain long phrases/sentences, expand width to full width (1 column) to prevent vertical stretching & word splitting
       const maxOptLen = Math.max(...opts.map(o => String(o || '').trim().length));
-      const hasLongOption = maxOptLen > 22 || opts.some(o => String(o || '').trim().split(/\s+/).length > 3);
+      const maxWordLen = Math.max(...opts.flatMap(o => String(o || '').trim().split(/\s+/).map(w => w.length)));
+      const hasMultiWords = opts.some(o => String(o || '').trim().split(/\s+/).length >= 2);
+      const hasLongOption = maxOptLen >= 11 || maxWordLen >= 9 || hasMultiWords;
       if (hasLongOption) {
         container.classList.add('has-long-options');
       } else {
@@ -1378,7 +1380,7 @@ const Quiz = {
         const textStr = String(optText || '').trim();
         const btn = document.createElement('button');
         btn.className = 'answer-option-btn';
-        if (textStr.length > 22 || textStr.split(/\s+/).length > 3) {
+        if (textStr.length >= 11 || textStr.split(/\s+/).some(w => w.length >= 9) || textStr.split(/\s+/).length >= 2) {
           btn.classList.add('long-option');
         }
         btn.innerHTML = `

@@ -2537,9 +2537,10 @@
 .option-badge-pill {
   background: rgba(30, 16, 68, 0.9);
   border: 1.5px solid rgba(168, 85, 247, 0.5);
-  border-radius: 8px;
-  width: 26px;
-  height: 26px;
+  border-radius: 7px;
+  width: 22px;
+  height: 22px;
+  margin-left: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2547,7 +2548,7 @@
 }
 
 .badge-letter {
-  font-size: 0.86rem;
+  font-size: 0.80rem;
   font-weight: 800;
   color: #d946ef;
 }

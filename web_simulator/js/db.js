@@ -166,7 +166,9 @@ var DB = {
       { id: 'b0000000-0000-0000-0000-000000000105', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Balancing Chemical Equations', order_no: 5 },
       { id: 'b0000000-0000-0000-0000-000000000106', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Rates of Reactions', order_no: 6 },
       { id: 'b0000000-0000-0000-0000-000000000107', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Homeostasis', order_no: 7 },
-      { id: 'b0000000-0000-0000-0000-000000000108', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Mechanisms of Evolution', order_no: 8 }
+      { id: 'b0000000-0000-0000-0000-000000000108', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Mechanisms of Evolution', order_no: 8 },
+      { id: 'b0000000-0000-0000-0000-000000000109', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Biodiversity & Ecosystems', order_no: 9 },
+      { id: 'b0000000-0000-0000-0000-000000000110', term_id: 'b0000000-0000-0000-0000-000000000001', title: 'Heredity & Genetics', order_no: 10 }
     ],
     'b0000000-0000-0000-0000-000000000002': [
       { id: 'b0000000-0000-0000-0000-000000000201', term_id: 'b0000000-0000-0000-0000-000000000002', title: "Ecosystem's Carrying Capacity and Population Growth", order_no: 1 },
