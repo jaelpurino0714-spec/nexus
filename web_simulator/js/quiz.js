@@ -1298,18 +1298,23 @@ const Quiz = {
       qImgEl.onload = null;
 
       if (qImgSrc) {
+        qImgBox.classList.add('hidden');
+        qImgEl.style.display = 'none';
         qImgEl.onerror = () => {
           // If image fails to load or 404s, gracefully hide container so no broken image icon appears
           qImgBox.classList.add('hidden');
+          qImgEl.style.display = 'none';
           if (atomWatermark) atomWatermark.style.display = '';
         };
         qImgEl.onload = () => {
+          qImgEl.style.display = 'block';
           qImgBox.classList.remove('hidden');
           if (atomWatermark) atomWatermark.style.display = 'none';
         };
         qImgEl.src = qImgSrc;
       } else {
         qImgEl.src = '';
+        qImgEl.style.display = 'none';
         qImgBox.classList.add('hidden');
         if (atomWatermark) atomWatermark.style.display = '';
       }
