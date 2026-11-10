@@ -12,10 +12,10 @@
   </defs>
 
   <!-- Background Canvas -->
-  <rect width="540" height="250" rx="16" fill="url(#bg_t7_1)" stroke="#06b6d4" stroke-width="1.3" stroke-opacity="0.45"/>
+  <rect width="540" height="250" rx="16" fill="url(#bg_t7_1)" stroke="#10b981" stroke-width="1.3" stroke-opacity="0.45"/>
 
   <!-- Subtle Ambient Grid -->
-  <g opacity="0.04" stroke="#06b6d4" stroke-width="1">
+  <g opacity="0.04" stroke="#10b981" stroke-width="1">
     <line x1="90" y1="0" x2="90" y2="250"/><line x1="180" y1="0" x2="180" y2="250"/>
     <line x1="270" y1="0" x2="270" y2="250"/><line x1="360" y1="0" x2="360" y2="250"/>
     <line x1="450" y1="0" x2="450" y2="250"/>
@@ -23,37 +23,28 @@
   </g>
 
   <!-- Top Glassmorphism Banner -->
-  <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.4"/>
-  <circle cx="36" cy="28" r="5" fill="#06b6d4" filter="url(#glow_t7_1)"/>
-  <text x="50" y="32" fill="#06b6d4" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 7: HOMEOSTASIS &amp; REGULATION • Q1</text>
+  <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#10b981" stroke-width="1" stroke-opacity="0.4"/>
+  <circle cx="36" cy="28" r="5" fill="#10b981" filter="url(#glow_t7_1)"/>
+  <text x="50" y="32" fill="#10b981" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 7: HOMEOSTASIS AND REGULATION • Q1</text>
   
-  <rect x="425" y="17" width="85" height="22" rx="11" fill="#06b6d4"/>
-  <text x="467" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">FEEDBACK</text>
+  <rect x="390" y="17" width="120" height="22" rx="11" fill="#10b981"/>
+  <text x="450" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">HOMEOSTASIS</text>
 
   <!-- Main Illustration Artwork -->
   
     <g transform="translate(100, 50)">
       <rect x="0" y="0" width="340" height="140" rx="14" fill="#0f172a" stroke="#ec4899" stroke-width="1.8"/>
-
-      <!-- Circular Feedback Loop Nodes -->
       <rect x="25" y="15" width="85" height="30" rx="6" fill="#1e1b4b" stroke="#f472b6" stroke-width="1.2"/>
       <text x="67" y="34" fill="#f472b6" font-size="9" font-weight="bold" text-anchor="middle">1. STIMULUS</text>
-
       <path d="M 115 30 L 155 30 M 150 25 L 155 30 L 150 35" stroke="#f472b6" stroke-width="2"/>
-
       <rect x="160" y="15" width="95" height="30" rx="6" fill="#1e1b4b" stroke="#38bdf8" stroke-width="1.2"/>
       <text x="207" y="34" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="middle">2. RECEPTOR</text>
-
       <path d="M 260 30 L 300 65 M 300 58 L 300 65 L 293 65" stroke="#38bdf8" stroke-width="2"/>
-
       <rect x="230" y="70" width="95" height="30" rx="6" fill="#1e1b4b" stroke="#fbbf24" stroke-width="1.2"/>
       <text x="277" y="89" fill="#fbbf24" font-size="8.5" font-weight="bold" text-anchor="middle">3. CONTROL CTR</text>
-
       <path d="M 270 105 L 210 120 M 215 115 L 210 120 L 217 124" stroke="#fbbf24" stroke-width="2"/>
-
       <rect x="100" y="100" width="95" height="30" rx="6" fill="#1e1b4b" stroke="#34d399" stroke-width="1.2"/>
       <text x="147" y="119" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle">4. EFFECTOR</text>
-
       <path d="M 95 115 L 50 55 M 48 62 L 50 55 L 56 59" stroke="#34d399" stroke-width="2"/>
     </g>
     

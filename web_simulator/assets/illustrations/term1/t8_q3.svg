@@ -25,35 +25,27 @@
   <!-- Top Glassmorphism Banner -->
   <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#a855f7" stroke-width="1" stroke-opacity="0.4"/>
   <circle cx="36" cy="28" r="5" fill="#a855f7" filter="url(#glow_t8_3)"/>
-  <text x="50" y="32" fill="#a855f7" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 8: EVOLUTION &amp; BIODIVERSITY • Q3</text>
+  <text x="50" y="32" fill="#a855f7" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 8: EVOLUTION AND BIODIVERSITY • Q3</text>
   
-  <rect x="425" y="17" width="85" height="22" rx="11" fill="#a855f7"/>
-  <text x="467" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">ADAPTATION</text>
+  <rect x="390" y="17" width="120" height="22" rx="11" fill="#a855f7"/>
+  <text x="450" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">EVOLUTION</text>
 
   <!-- Main Illustration Artwork -->
   
     <g transform="translate(110, 55)">
-      <!-- Seed Cracker Finch (Thick heavy beak) -->
       <g transform="translate(0, 0)">
         <rect x="0" y="0" width="140" height="120" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="1.8"/>
         <text x="70" y="22" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" text-anchor="middle">SEED CRACKER</text>
-        <!-- Bird head profile -->
         <circle cx="50" cy="65" r="28" fill="#78350f"/>
-        <circle cx="42" cy="58" r="4.5" fill="#fde047"/>
-        <circle cx="42" cy="58" r="2" fill="#000000"/>
-        <!-- Heavy triangular beak -->
+        <circle cx="42" cy="58" r="4.5" fill="#fde047"/><circle cx="42" cy="58" r="2" fill="#000000"/>
         <polygon points="70,55 125,72 70,88" fill="#d97706" stroke="#451a03" stroke-width="2"/>
         <line x1="70" y1="72" x2="125" y2="72" stroke="#451a03" stroke-width="1.8"/>
       </g>
-
-      <!-- Insect Probing Finch (Slender needle beak) -->
       <g transform="translate(180, 0)">
         <rect x="0" y="0" width="140" height="120" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="1.8"/>
         <text x="70" y="22" fill="#38bdf8" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" text-anchor="middle">INSECT PROBER</text>
         <circle cx="45" cy="65" r="26" fill="#334155"/>
-        <circle cx="38" cy="58" r="4.5" fill="#ffffff"/>
-        <circle cx="38" cy="58" r="2" fill="#000000"/>
-        <!-- Slender sharp beak -->
+        <circle cx="38" cy="58" r="4.5" fill="#ffffff"/><circle cx="38" cy="58" r="2" fill="#000000"/>
         <polygon points="68,60 135,66 68,72" fill="#cbd5e1" stroke="#0f172a" stroke-width="1.5"/>
       </g>
     </g>

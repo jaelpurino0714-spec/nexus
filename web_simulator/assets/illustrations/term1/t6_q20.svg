@@ -12,10 +12,10 @@
   </defs>
 
   <!-- Background Canvas -->
-  <rect width="540" height="250" rx="16" fill="url(#bg_t6_20)" stroke="#ec4899" stroke-width="1.3" stroke-opacity="0.45"/>
+  <rect width="540" height="250" rx="16" fill="url(#bg_t6_20)" stroke="#f59e0b" stroke-width="1.3" stroke-opacity="0.45"/>
 
   <!-- Subtle Ambient Grid -->
-  <g opacity="0.04" stroke="#ec4899" stroke-width="1">
+  <g opacity="0.04" stroke="#f59e0b" stroke-width="1">
     <line x1="90" y1="0" x2="90" y2="250"/><line x1="180" y1="0" x2="180" y2="250"/>
     <line x1="270" y1="0" x2="270" y2="250"/><line x1="360" y1="0" x2="360" y2="250"/>
     <line x1="450" y1="0" x2="450" y2="250"/>
@@ -23,51 +23,35 @@
   </g>
 
   <!-- Top Glassmorphism Banner -->
-  <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#ec4899" stroke-width="1" stroke-opacity="0.4"/>
-  <circle cx="36" cy="28" r="5" fill="#ec4899" filter="url(#glow_t6_20)"/>
-  <text x="50" y="32" fill="#ec4899" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 6: CHEMICAL REACTION RATES • Q20</text>
+  <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.4"/>
+  <circle cx="36" cy="28" r="5" fill="#f59e0b" filter="url(#glow_t6_20)"/>
+  <text x="50" y="32" fill="#f59e0b" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 6: FACTORS AFFECTING REACTION RATES • Q20</text>
   
-  <rect x="425" y="17" width="85" height="22" rx="11" fill="#ec4899"/>
-  <text x="467" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">COMBUSTION</text>
+  <rect x="390" y="17" width="120" height="22" rx="11" fill="#f59e0b"/>
+  <text x="450" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">REACTION RATE</text>
 
   <!-- Main Illustration Artwork -->
   
-    <defs>
-      <linearGradient id="flmOut" x1="0%" y1="100%" x2="0%" y2="0%">
-        <stop offset="0%" stop-color="#b91c1c"/>
-        <stop offset="60%" stop-color="#f97316"/>
-        <stop offset="100%" stop-color="#fbbf24"/>
-      </linearGradient>
-      <linearGradient id="flmIn" x1="0%" y1="100%" x2="0%" y2="0%">
-        <stop offset="0%" stop-color="#f97316"/>
-        <stop offset="70%" stop-color="#fde047"/>
-        <stop offset="100%" stop-color="#ffffff"/>
-      </linearGradient>
-    </defs>
-
-    <g transform="translate(200, 50)">
-      <ellipse cx="70" cy="165" rx="65" ry="10" fill="#000000" opacity="0.6"/>
-      <g transform="rotate(15 70 155)"><rect x="20" y="148" width="100" height="15" rx="4" fill="#78350f" stroke="#451a03" stroke-width="1.5"/></g>
-      <g transform="rotate(-15 70 155)"><rect x="20" y="148" width="100" height="15" rx="4" fill="#92400e" stroke="#451a03" stroke-width="1.5"/></g>
-
-      <path d="M 30 150 C 15 110, 45 70, 70 20 C 95 65, 125 105, 110 150 C 95 160, 45 160, 30 150 Z" 
-            fill="url(#flmOut)"/>
-      <path d="M 48 150 C 40 120, 60 90, 70 55 C 80 85, 100 115, 92 150 Z" fill="url(#flmIn)"/>
-      <circle cx="55" cy="40" r="2.5" fill="#fde047"/>
-      <circle cx="90" cy="30" r="2" fill="#fde047"/>
-      <circle cx="75" cy="10" r="1.8" fill="#fef08a"/>
-    </g>
-
-    <g transform="translate(45, 95)">
-      <rect x="0" y="0" width="125" height="52" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#f97316" stroke-width="1.5"/>
-      <text x="62" y="22" fill="#fdba74" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" text-anchor="middle">THERMAL REACTION</text>
-      <text x="62" y="40" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle">Releases Heat 🔥</text>
-    </g>
-
-    <g transform="translate(370, 95)">
-      <rect x="0" y="0" width="125" height="52" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#f97316" stroke-width="1.5"/>
-      <text x="62" y="22" fill="#a5a3c4" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" text-anchor="middle">REACTION TYPE</text>
-      <text x="62" y="40" fill="#38bdf8" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle">[ ? ]</text>
+    <g transform="translate(80, 55)">
+      <g transform="translate(0, 0)">
+        <rect x="0" y="0" width="160" height="120" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="1.8"/>
+        <text x="80" y="22" fill="#38bdf8" font-family="'Segoe UI', Roboto, sans-serif" font-size="9.5" font-weight="bold" text-anchor="middle">LOW TEMP (SLOW)</text>
+        <circle cx="40" cy="50" r="6" fill="#38bdf8"/>
+        <circle cx="120" cy="60" r="6" fill="#38bdf8"/>
+        <circle cx="70" cy="90" r="6" fill="#38bdf8"/>
+        <circle cx="130" cy="95" r="6" fill="#38bdf8"/>
+      </g>
+      <g transform="translate(220, 0)">
+        <rect x="0" y="0" width="160" height="120" rx="10" fill="#0f172a" stroke="#ef4444" stroke-width="1.8"/>
+        <text x="80" y="22" fill="#ef4444" font-family="'Segoe UI', Roboto, sans-serif" font-size="9.5" font-weight="bold" text-anchor="middle">HIGH TEMP (FAST 🔥)</text>
+        <circle cx="45" cy="55" r="6" fill="#f87171"/>
+        <line x1="25" y1="55" x2="40" y2="55" stroke="#fca5a5" stroke-width="2"/>
+        <circle cx="115" cy="55" r="6" fill="#f87171"/>
+        <line x1="135" y1="55" x2="120" y2="55" stroke="#fca5a5" stroke-width="2"/>
+        <polygon points="80,50 83,57 90,57 85,62 87,69 80,65 73,69 75,62 70,57 77,57" fill="#fbbf24"/>
+        <circle cx="65" cy="95" r="6" fill="#f87171"/>
+        <circle cx="125" cy="95" r="6" fill="#f87171"/>
+      </g>
     </g>
     
 </svg>

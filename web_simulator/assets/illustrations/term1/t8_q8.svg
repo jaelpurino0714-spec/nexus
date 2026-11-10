@@ -25,25 +25,23 @@
   <!-- Top Glassmorphism Banner -->
   <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#a855f7" stroke-width="1" stroke-opacity="0.4"/>
   <circle cx="36" cy="28" r="5" fill="#a855f7" filter="url(#glow_t8_8)"/>
-  <text x="50" y="32" fill="#a855f7" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 8: EVOLUTION &amp; BIODIVERSITY • Q8</text>
+  <text x="50" y="32" fill="#a855f7" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 8: EVOLUTION AND BIODIVERSITY • Q8</text>
   
-  <rect x="425" y="17" width="85" height="22" rx="11" fill="#a855f7"/>
-  <text x="467" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">HOMOLOGY</text>
+  <rect x="390" y="17" width="120" height="22" rx="11" fill="#a855f7"/>
+  <text x="450" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">EVOLUTION</text>
 
   <!-- Main Illustration Artwork -->
   
     <g transform="translate(60, 55)">
       <rect x="0" y="0" width="420" height="130" rx="12" fill="#0f172a" stroke="#a855f7" stroke-width="1.8"/>
-      <text x="210" y="24" fill="#c084fc" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" text-anchor="middle">COMPARATIVE ANATOMY: COMMON SKELETAL PLAN</text>
+      <text x="210" y="24" fill="#c084fc" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" text-anchor="middle">HOMOLOGOUS BONE STRUCTURES (COMMON ANCESTRY)</text>
 
-      <!-- 3 Limbs: Human Arm, Bat Wing, Whale Flipper -->
       <g transform="translate(30, 35)">
         <text x="45" y="15" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle">Human Arm</text>
         <rect x="35" y="22" width="20" height="25" rx="3" fill="#f43f5e"/><text x="45" y="38" fill="#ffffff" font-size="7" text-anchor="middle">H</text>
         <rect x="30" y="50" width="12" height="25" rx="2" fill="#3b82f6"/><rect x="46" y="50" width="12" height="25" rx="2" fill="#06b6d4"/>
         <rect x="25" y="78" width="40" height="10" rx="2" fill="#fbbf24"/>
       </g>
-
       <g transform="translate(160, 35)">
         <text x="45" y="15" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle">Bat Wing</text>
         <rect x="37" y="22" width="16" height="20" rx="3" fill="#f43f5e"/>
@@ -52,7 +50,6 @@
         <line x1="40" y1="78" x2="35" y2="95" stroke="#fbbf24" stroke-width="2.5"/>
         <line x1="55" y1="78" x2="65" y2="95" stroke="#fbbf24" stroke-width="2.5"/>
       </g>
-
       <g transform="translate(290, 35)">
         <text x="45" y="15" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle">Whale Flipper</text>
         <rect x="30" y="22" width="30" height="18" rx="4" fill="#f43f5e"/>
