@@ -1287,14 +1287,17 @@ const Quiz = {
     // Render Question Image if present
     const qImgBox = document.getElementById('questionImageContainer');
     const qImgEl = document.getElementById('questionImageEl');
+    const atomWatermark = document.querySelector('.atom-watermark');
     const qImgSrc = q.imageUrl || q.image_url || q.image;
     if (qImgBox && qImgEl) {
       if (qImgSrc) {
         qImgEl.src = qImgSrc;
         qImgBox.classList.remove('hidden');
+        if (atomWatermark) atomWatermark.style.display = 'none';
       } else {
         qImgEl.src = '';
         qImgBox.classList.add('hidden');
+        if (atomWatermark) atomWatermark.style.display = '';
       }
     }
 
@@ -1305,6 +1308,7 @@ const Quiz = {
     // Render Answer Options according to question format
     const container = document.getElementById('answersContainer');
     container.innerHTML = '';
+    container.classList.remove('has-long-options');
 
     if (this.currentQuestionFormat === 'true_false') {
       const tfData = [
@@ -1360,14 +1364,28 @@ const Quiz = {
       if (opts.length === 0) {
         opts = ['Option A', 'Option B', 'Option C', 'Option D'];
       }
+
+      // If options contain long phrases/sentences, expand width to full width (1 column) to prevent vertical stretching & overlapping
+      const maxOptLen = Math.max(...opts.map(o => String(o || '').trim().length));
+      const hasLongOption = maxOptLen > 22 || opts.some(o => String(o || '').trim().split(/\s+/).length > 3);
+      if (hasLongOption) {
+        container.classList.add('has-long-options');
+      } else {
+        container.classList.remove('has-long-options');
+      }
+
       opts.forEach((optText, index) => {
+        const textStr = String(optText || '').trim();
         const btn = document.createElement('button');
         btn.className = 'answer-option-btn';
+        if (textStr.length > 22 || textStr.split(/\s+/).length > 3) {
+          btn.classList.add('long-option');
+        }
         btn.innerHTML = `
           <span class="option-badge-pill">
             <span class="badge-letter">${prefixes[index] || 'A'}</span>
           </span>
-          <span class="option-text">${optText}</span>
+          <span class="option-text">${textStr}</span>
         `;
         btn.onclick = () => this.handleAnswer(index);
         container.appendChild(btn);

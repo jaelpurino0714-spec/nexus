@@ -424,7 +424,8 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                     LayoutBuilder(
                       builder: (context, constraints) {
                         bool isMobile = constraints.maxWidth < 520;
-                        if (isMobile) {
+                        bool hasLongOptions = currentQ.shuffledOptions.any((opt) => opt.trim().length > 22 || opt.trim().split(RegExp(r'\s+')).length > 3);
+                        if (isMobile || hasLongOptions) {
                           return Column(
                             children: [
                               _buildOptionButton(
