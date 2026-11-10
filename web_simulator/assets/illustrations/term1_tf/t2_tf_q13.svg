@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 250" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg_tf_2_13" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080c18"/>
+      <stop offset="50%" stop-color="#0d1428"/>
+      <stop offset="100%" stop-color="#121b36"/>
+    </linearGradient>
+    <filter id="glow_tf_2_13" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="540" height="250" rx="16" fill="url(#bg_tf_2_13)" stroke="#06b6d4" stroke-width="1.5" stroke-opacity="0.45"/>
+
+  <!-- Subtle Ambient Grid -->
+  <g opacity="0.04" stroke="#06b6d4" stroke-width="1">
+    <line x1="90" y1="0" x2="90" y2="250"/><line x1="180" y1="0" x2="180" y2="250"/>
+    <line x1="270" y1="0" x2="270" y2="250"/><line x1="360" y1="0" x2="360" y2="250"/>
+    <line x1="450" y1="0" x2="450" y2="250"/>
+    <line x1="0" y1="65" x2="540" y2="65"/><line x1="0" y1="130" x2="540" y2="130"/><line x1="0" y1="195" x2="540" y2="195"/>
+  </g>
+
+  <!-- Top Glassmorphism Banner -->
+  <rect x="20" y="10" width="500" height="34" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#06b6d4" stroke-width="1.2" stroke-opacity="0.45"/>
+  <circle cx="36" cy="27" r="5.5" fill="#06b6d4" filter="url(#glow_tf_2_13)"/>
+  <text x="50" y="32" fill="#06b6d4" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="900" letter-spacing="0.5">TOPIC 2: ACIDS, BASES &amp; SALTS • Q13</text>
+  
+  <rect x="365" y="15" width="145" height="24" rx="12" fill="#06b6d4"/>
+  <text x="437" y="31" fill="#080c18" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" text-anchor="middle" letter-spacing="0.5">NEUTRALIZATION</text>
+
+  <!-- Main Illustration Content -->
+  
+  <rect x="40" y="60" width="460" height="165" rx="14" fill="#0f172a" fill-opacity="0.8" stroke="#06b6d4" stroke-width="1.2"/>
+  <rect x="60" y="80" width="420" height="50" rx="10" fill="#1e1b4b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="270" y="111" fill="#38bdf8" font-family="'Courier New', monospace" font-size="15" font-weight="900" text-anchor="middle">ACID + BASE  →  SALT + WATER</text>
+  <text x="270" y="152" fill="#e2e8f0" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="800" text-anchor="middle">HCl + NaOH  →  NaCl + H₂O</text>
+  <rect x="130" y="170" width="280" height="32" rx="8" fill="#020617" stroke="#22c55e" stroke-width="1"/>
+  <text x="270" y="191" fill="#4ade80" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="800" text-anchor="middle">H⁺ + OH⁻  →  H₂O (Neutralization)</text>
+            
+</svg>

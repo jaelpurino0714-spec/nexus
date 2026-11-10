@@ -22911,7 +22911,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Decomposition reactions form entirely new chemical substances.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q1.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q1.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q1.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q1.svg"
   },
   {
     "id": "off_t1_tf_1_2",
@@ -22928,7 +22932,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Crushing changes physical dimensions only; composition remains H2O.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q2.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q2.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q2.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q2.svg"
   },
   {
     "id": "off_t1_tf_1_3",
@@ -22945,7 +22953,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Chemical bonds break and reform to yield novel molecular structures.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q3.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q3.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q3.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q3.svg"
   },
   {
     "id": "off_t1_tf_1_4",
@@ -22962,7 +22974,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Photosynthesis is a complex chemical conversion producing glucose.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q4.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q4.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q4.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q4.svg"
   },
   {
     "id": "off_t1_tf_1_5",
@@ -22979,7 +22995,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Carbon dioxide gas bubbles form as a primary product.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q5.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q5.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q5.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q5.svg"
   },
   {
     "id": "off_t1_tf_1_6",
@@ -22996,7 +23016,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Curdling is solid protein precipitation, not gas evolution.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q6.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q6.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q6.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q6.svg"
   },
   {
     "id": "off_t1_tf_1_7",
@@ -23013,7 +23037,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Exothermic reactions release thermal heat energy to surroundings.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q7.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q7.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q7.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q7.svg"
   },
   {
     "id": "off_t1_tf_1_8",
@@ -23030,7 +23058,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Cutting alters size/shape only, keeping chemical composition intact.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q8.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q8.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q8.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q8.svg"
   },
   {
     "id": "off_t1_tf_1_9",
@@ -23047,7 +23079,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Precipitates are insoluble solid products settling out of solution.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q9.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q9.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q9.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q9.svg"
   },
   {
     "id": "off_t1_tf_1_10",
@@ -23064,7 +23100,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Reactants are always written on the left side of the reaction arrow.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q10.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q10.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q10.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q10.svg"
   },
   {
     "id": "off_t1_tf_1_11",
@@ -23081,7 +23121,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Products appear on the right side of the reaction arrow.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q11.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q11.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q11.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q11.svg"
   },
   {
     "id": "off_t1_tf_1_12",
@@ -23098,7 +23142,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "(aq) specifies an aqueous solution dissolved in water.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q12.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q12.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q12.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q12.svg"
   },
   {
     "id": "off_t1_tf_1_13",
@@ -23115,7 +23163,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Delta denotes that heating is supplied to drive the reaction.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q13.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q13.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q13.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q13.svg"
   },
   {
     "id": "off_t1_tf_1_14",
@@ -23132,7 +23184,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "A downward arrow indicates a solid precipitate settling out.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q14.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q14.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q14.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q14.svg"
   },
   {
     "id": "off_t1_tf_1_15",
@@ -23149,7 +23205,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "It separates multiple reactants or products in the equation.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q15.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q15.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q15.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q15.svg"
   },
   {
     "id": "off_t1_tf_1_16",
@@ -23166,7 +23226,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Two or more reactants merge into a single product compound.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q16.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q16.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q16.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q16.svg"
   },
   {
     "id": "off_t1_tf_1_17",
@@ -23183,7 +23247,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "This is a combination (synthesis) reaction forming one salt.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q17.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q17.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q17.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q17.svg"
   },
   {
     "id": "off_t1_tf_1_18",
@@ -23200,7 +23268,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "One complex reactant splits into two or more simpler products.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q18.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q18.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q18.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q18.svg"
   },
   {
     "id": "off_t1_tf_1_19",
@@ -23217,7 +23289,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "This formula represents decomposition, not combination.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q19.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q19.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q19.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q19.svg"
   },
   {
     "id": "off_t1_tf_1_20",
@@ -23234,7 +23310,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "A + BC \u2192 AC + B typifies single replacement mechanics.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q20.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q20.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q20.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q20.svg"
   },
   {
     "id": "off_t1_tf_1_21",
@@ -23251,7 +23331,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "They involve mutual exchange of ions between two compounds.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q21.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q21.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q21.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q21.svg"
   },
   {
     "id": "off_t1_tf_1_22",
@@ -23268,7 +23352,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "The silver and sodium cations exchange anions to form AgCl precipitate.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q22.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q22.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q22.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q22.svg"
   },
   {
     "id": "off_t1_tf_1_23",
@@ -23285,7 +23373,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Combustion requires an oxidizing agent, typically oxygen.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q23.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q23.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q23.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q23.svg"
   },
   {
     "id": "off_t1_tf_1_24",
@@ -23302,7 +23394,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "They produce carbon dioxide and water vapor, not salt.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q24.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q24.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q24.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q24.svg"
   },
   {
     "id": "off_t1_tf_1_25",
@@ -23319,7 +23415,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Acids reacting with bases neutralize to form ionic salts and water.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q25.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q25.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q25.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q25.svg"
   },
   {
     "id": "off_t1_tf_1_26",
@@ -23336,7 +23436,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "It is classified as a double displacement (acid-base) reaction.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q26.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q26.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q26.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q26.svg"
   },
   {
     "id": "off_t1_tf_1_27",
@@ -23353,7 +23457,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Phase changes alter state without changing molecular structure.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q27.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q27.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q27.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q27.svg"
   },
   {
     "id": "off_t1_tf_1_28",
@@ -23370,7 +23478,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Dissolution is a physical process; salt can be recovered via evaporation.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q28.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q28.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q28.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q28.svg"
   },
   {
     "id": "off_t1_tf_1_29",
@@ -23387,7 +23499,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Products are located on the right side of the reaction arrow.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q29.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q29.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q29.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q29.svg"
   },
   {
     "id": "off_t1_tf_1_30",
@@ -23404,7 +23520,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "This describes complete hydrocarbon combustion.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q30.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q30.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q30.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q30.svg"
   },
   {
     "id": "off_t1_tf_1_31",
@@ -23421,7 +23541,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "The reaction arrow separates reactants from produced products.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q31.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q31.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q31.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q31.svg"
   },
   {
     "id": "off_t1_tf_1_32",
@@ -23438,7 +23562,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Hydrogen peroxide breaks down, making it decomposition.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q32.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q32.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q32.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q32.svg"
   },
   {
     "id": "off_t1_tf_1_33",
@@ -23455,7 +23583,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Positive and negative ions switch pairing partners.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q33.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q33.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q33.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q33.svg"
   },
   {
     "id": "off_t1_tf_1_34",
@@ -23472,7 +23604,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Two elemental reactants combine to form one compound.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q34.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q34.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q34.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q34.svg"
   },
   {
     "id": "off_t1_tf_1_35",
@@ -23489,7 +23625,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "An upward arrow denotes gas evolution.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q35.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q35.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q35.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q35.svg"
   },
   {
     "id": "off_t1_tf_1_36",
@@ -23506,7 +23646,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Remember OIL RIG (Oxidation Is Loss, Reduction Is Gain).",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q36.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q36.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q36.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q36.svg"
   },
   {
     "id": "off_t1_tf_1_37",
@@ -23523,7 +23667,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Reduction is the gain of electrons or gain of hydrogen.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q37.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q37.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q37.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q37.svg"
   },
   {
     "id": "off_t1_tf_1_38",
@@ -23540,7 +23688,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Oxidation degrades structural metals over time.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q38.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q38.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q38.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q38.svg"
   },
   {
     "id": "off_t1_tf_1_39",
@@ -23557,7 +23709,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Endothermic changes absorb thermal energy from surroundings.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q39.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q39.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q39.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q39.svg"
   },
   {
     "id": "off_t1_tf_1_40",
@@ -23574,7 +23730,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "This upholds the fundamental Law of Conservation of Mass.",
     "bloom_taxonomy": "EVALUATING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q40.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q40.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q40.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q40.svg"
   },
   {
     "id": "off_t1_tf_2_1",
@@ -23591,7 +23751,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Sour taste and litmus color change are classic acid traits.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q1.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q1.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q1.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q1.svg"
   },
   {
     "id": "off_t1_tf_2_2",
@@ -23608,7 +23772,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Bases turn red litmus paper blue.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q2.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q2.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q2.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q2.svg"
   },
   {
     "id": "off_t1_tf_2_3",
@@ -23625,7 +23793,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "pH 7 represents equal hydrogen and hydroxide ion concentrations.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q3.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q3.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q3.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q3.svg"
   },
   {
     "id": "off_t1_tf_2_4",
@@ -23642,7 +23814,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Phenolphthalein is colorless in acids and turns pink in bases.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q4.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q4.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q4.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q4.svg"
   },
   {
     "id": "off_t1_tf_2_5",
@@ -23659,7 +23835,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Arrhenius acids dissociate to yield hydrogen ions.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q5.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q5.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q5.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q5.svg"
   },
   {
     "id": "off_t1_tf_2_6",
@@ -23676,7 +23856,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Bases release hydroxide ions (OH \u207b ).",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q6.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q6.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q6.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q6.svg"
   },
   {
     "id": "off_t1_tf_2_7",
@@ -23693,7 +23877,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "NaCl is a neutral ionic salt.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q7.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q7.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q7.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q7.svg"
   },
   {
     "id": "off_t1_tf_2_8",
@@ -23710,7 +23898,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Stomach gastric acid is hydrochloric acid (HCl).",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q8.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q8.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q8.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q8.svg"
   },
   {
     "id": "off_t1_tf_2_9",
@@ -23727,7 +23919,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "NaOH is caustic soda or lye.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q9.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q9.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q9.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q9.svg"
   },
   {
     "id": "off_t1_tf_2_10",
@@ -23744,7 +23940,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Methyl orange is red in acids and yellow in bases.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q10.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q10.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q10.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q10.svg"
   },
   {
     "id": "off_t1_tf_2_11",
@@ -23761,7 +23961,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Turmeric changes color in basic solutions.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q11.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q11.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q11.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q11.svg"
   },
   {
     "id": "off_t1_tf_2_12",
@@ -23778,7 +23982,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "pH 7 is strictly neutral.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q12.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q12.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q12.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q12.svg"
   },
   {
     "id": "off_t1_tf_2_13",
@@ -23795,7 +24003,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Acetic acid gives vinegar its sour flavor.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q13.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q13.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q13.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q13.svg"
   },
   {
     "id": "off_t1_tf_2_14",
@@ -23812,7 +24024,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "It contains magnesium hydroxide, Mg(OH) \u2082 .",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q14.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q14.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q14.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q14.svg"
   },
   {
     "id": "off_t1_tf_2_15",
@@ -23829,7 +24045,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Bases do not alter blue litmus paper color.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q15.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q15.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q15.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q15.svg"
   },
   {
     "id": "off_t1_tf_2_16",
@@ -23846,7 +24066,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "All exhibit characteristic acid properties.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q16.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q16.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q16.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q16.svg"
   },
   {
     "id": "off_t1_tf_2_17",
@@ -23863,7 +24087,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "They act as alkaline bases.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q17.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q17.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q17.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q17.svg"
   },
   {
     "id": "off_t1_tf_2_18",
@@ -23880,7 +24108,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Antacids are mild bases that neutralize stomach acid.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q18.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q18.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q18.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q18.svg"
   },
   {
     "id": "off_t1_tf_2_19",
@@ -23897,7 +24129,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Any pH value below 7 is acidic.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q19.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q19.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q19.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q19.svg"
   },
   {
     "id": "off_t1_tf_2_20",
@@ -23914,7 +24150,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "pH values above 7 are basic or alkaline.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q20.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q20.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q20.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q20.svg"
   },
   {
     "id": "off_t1_tf_2_21",
@@ -23931,7 +24171,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "It is closest to neutral pH 7.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q21.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q21.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q21.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q21.svg"
   },
   {
     "id": "off_t1_tf_2_22",
@@ -23948,7 +24192,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "This is the standard neutralization reaction formula.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q22.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q22.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q22.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q22.svg"
   },
   {
     "id": "off_t1_tf_2_23",
@@ -23965,7 +24213,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "This color change indicates basic conditions.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q23.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q23.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q23.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q23.svg"
   },
   {
     "id": "off_t1_tf_2_24",
@@ -23982,7 +24234,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "They are olfactory indicators changing scent.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q24.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q24.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q24.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q24.svg"
   },
   {
     "id": "off_t1_tf_2_25",
@@ -23999,7 +24255,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Low pH accelerates tooth decay.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q25.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q25.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q25.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q25.svg"
   },
   {
     "id": "off_t1_tf_2_26",
@@ -24016,7 +24276,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "It forms a basic alkaline solution.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q26.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q26.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q26.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q26.svg"
   },
   {
     "id": "off_t1_tf_2_27",
@@ -24033,7 +24297,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "NH \u2084 Cl is an acidic salt.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q27.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q27.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q27.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q27.svg"
   },
   {
     "id": "off_t1_tf_2_28",
@@ -24050,7 +24318,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Water is required for HCl to release hydrogen ions.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q28.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q28.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q28.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q28.svg"
   },
   {
     "id": "off_t1_tf_2_29",
@@ -24067,7 +24339,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "The pH scale is logarithmic.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q29.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q29.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q29.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q29.svg"
   },
   {
     "id": "off_t1_tf_2_30",
@@ -24084,7 +24360,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "pH 12 is the strongest base.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q30.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q30.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q30.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q30.svg"
   },
   {
     "id": "off_t1_tf_2_31",
@@ -24101,7 +24381,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "HCl and NaOH neutralize completely.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q31.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q31.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q31.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q31.svg"
   },
   {
     "id": "off_t1_tf_2_32",
@@ -24118,7 +24402,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Electrolytes permit current flow.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q32.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q32.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q32.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q32.svg"
   },
   {
     "id": "off_t1_tf_2_33",
@@ -24135,7 +24423,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Always add acid to water to prevent dangerous splattering.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q33.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q33.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q33.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q33.svg"
   },
   {
     "id": "off_t1_tf_2_34",
@@ -24152,7 +24444,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "It imparts vinegar's characteristics.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q34.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q34.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q34.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q34.svg"
   },
   {
     "id": "off_t1_tf_2_35",
@@ -24169,7 +24465,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "It releases carbon dioxide gas.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q35.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q35.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q35.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q35.svg"
   },
   {
     "id": "off_t1_tf_2_36",
@@ -24186,7 +24486,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Buffers stabilize pH levels effectively.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q36.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q36.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q36.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q36.svg"
   },
   {
     "id": "off_t1_tf_2_37",
@@ -24203,7 +24507,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Alkalis form hydroxide ions in aqueous solution.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q37.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q37.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q37.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q37.svg"
   },
   {
     "id": "off_t1_tf_2_38",
@@ -24220,7 +24528,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Stoichiometric endpoints reveal concentration.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q38.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q38.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q38.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q38.svg"
   },
   {
     "id": "off_t1_tf_2_39",
@@ -24237,7 +24549,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Natural rainwater is slightly acidic around pH 5.6 due to dissolved CO \u2082 .",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q39.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q39.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q39.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q39.svg"
   },
   {
     "id": "off_t1_tf_2_40",
@@ -24254,7 +24570,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Salt ions react with water depending on parent acid/base strength.",
     "bloom_taxonomy": "EVALUATING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t2_tf_q40.svg",
+    "image_url": "assets/illustrations/term1_tf/t2_tf_q40.svg",
+    "image": "assets/illustrations/term1_tf/t2_tf_q40.svg",
+    "illustration": "assets/illustrations/term1_tf/t2_tf_q40.svg"
   },
   {
     "id": "off_t1_tf_3_1",
@@ -24271,7 +24591,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Starting materials occupy the left side.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q1.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q1.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q1.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q1.svg"
   },
   {
     "id": "off_t1_tf_3_2",
@@ -24288,7 +24612,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Products are written on the right side.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q2.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q2.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q2.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q2.svg"
   },
   {
     "id": "off_t1_tf_3_3",
@@ -24305,7 +24633,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Aqueous solutions are water-based.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q3.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q3.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q3.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q3.svg"
   },
   {
     "id": "off_t1_tf_3_4",
@@ -24322,7 +24654,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "(s) stands for solid state.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q4.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q4.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q4.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q4.svg"
   },
   {
     "id": "off_t1_tf_3_5",
@@ -24339,7 +24675,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "(g) denotes gases.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q5.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q5.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q5.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q5.svg"
   },
   {
     "id": "off_t1_tf_3_6",
@@ -24356,7 +24696,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Mass is conserved, neither created nor destroyed.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q6.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q6.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q6.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q6.svg"
   },
   {
     "id": "off_t1_tf_3_7",
@@ -24373,7 +24717,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "It shows reaction direction.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q7.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q7.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q7.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q7.svg"
   },
   {
     "id": "off_t1_tf_3_8",
@@ -24390,7 +24738,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Combines reactants or products.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q8.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q8.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q8.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q8.svg"
   },
   {
     "id": "off_t1_tf_3_9",
@@ -24407,7 +24759,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Conforms to conservation laws.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q9.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q9.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q9.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q9.svg"
   },
   {
     "id": "off_t1_tf_3_10",
@@ -24424,7 +24780,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Correct equation is 2H \u2082  + O \u2082  \u2192 2H \u2082 O.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q10.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q10.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q10.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q10.svg"
   },
   {
     "id": "off_t1_tf_3_11",
@@ -24441,7 +24801,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "(l) stands for liquid.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q11.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q11.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q11.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q11.svg"
   },
   {
     "id": "off_t1_tf_3_12",
@@ -24458,7 +24822,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Multiplies entire formulas.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q12.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q12.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q12.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q12.svg"
   },
   {
     "id": "off_t1_tf_3_13",
@@ -24475,7 +24843,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Subscripts indicate atoms within a molecule.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q13.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q13.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q13.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q13.svg"
   },
   {
     "id": "off_t1_tf_3_14",
@@ -24492,7 +24864,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "One carbon and two oxygens.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q14.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q14.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q14.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q14.svg"
   },
   {
     "id": "off_t1_tf_3_15",
@@ -24509,7 +24885,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Two Cl atoms per calcium.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q15.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q15.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q15.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q15.svg"
   },
   {
     "id": "off_t1_tf_3_16",
@@ -24526,7 +24906,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Changing subscripts alters substance identity.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q16.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q16.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q16.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q16.svg"
   },
   {
     "id": "off_t1_tf_3_17",
@@ -24543,7 +24927,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "The 3 is a coefficient.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q17.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q17.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q17.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q17.svg"
   },
   {
     "id": "off_t1_tf_3_18",
@@ -24560,7 +24948,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Atom counts match on both sides.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q18.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q18.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q18.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q18.svg"
   },
   {
     "id": "off_t1_tf_3_19",
@@ -24577,7 +24969,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "2 molecules \u00d7 2 hydrogens = 4.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q19.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q19.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q19.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q19.svg"
   },
   {
     "id": "off_t1_tf_3_20",
@@ -24594,7 +24990,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "4 \u00d7 3 = 12 oxygen atoms.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q20.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q20.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q20.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q20.svg"
   },
   {
     "id": "off_t1_tf_3_21",
@@ -24611,7 +25011,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Subscript 2 in MgCl \u2082  indicates two chlorine atoms.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q21.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q21.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q21.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q21.svg"
   },
   {
     "id": "off_t1_tf_3_22",
@@ -24628,7 +25032,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Atom inventories guide coefficient adjustments.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q22.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q22.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q22.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q22.svg"
   },
   {
     "id": "off_t1_tf_3_23",
@@ -24645,7 +25053,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Equations are balanced to obey mass conservation.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q23.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q23.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q23.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q23.svg"
   },
   {
     "id": "off_t1_tf_3_24",
@@ -24662,7 +25074,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Total matter is conserved even if gas escapes.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q24.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q24.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q24.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q24.svg"
   },
   {
     "id": "off_t1_tf_3_25",
@@ -24679,7 +25095,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Both elements require coefficient adjustment.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q25.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q25.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q25.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q25.svg"
   },
   {
     "id": "off_t1_tf_3_26",
@@ -24696,7 +25116,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "5 molecules \u00d7 6 carbons = 30.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q26.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q26.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q26.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q26.svg"
   },
   {
     "id": "off_t1_tf_3_27",
@@ -24713,7 +25137,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Changing subscripts alters chemical identity.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q27.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q27.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q27.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q27.svg"
   },
   {
     "id": "off_t1_tf_3_28",
@@ -24730,7 +25158,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Atom counts are equal on both sides.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q28.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q28.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q28.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q28.svg"
   },
   {
     "id": "off_t1_tf_3_29",
@@ -24747,7 +25179,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "2 nitrogens and 6 hydrogens match on both sides.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q29.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q29.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q29.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q29.svg"
   },
   {
     "id": "off_t1_tf_3_30",
@@ -24764,7 +25200,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Correct balanced equation is 4Al + 3O \u2082  \u2192 2Al \u2082 O \u2083 .",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q30.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q30.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q30.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q30.svg"
   },
   {
     "id": "off_t1_tf_3_31",
@@ -24781,7 +25221,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Atom counts match across reactants and products.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q31.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q31.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q31.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q31.svg"
   },
   {
     "id": "off_t1_tf_3_32",
@@ -24798,7 +25242,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "7 O \u2082  molecules contain 14 oxygen atoms.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q32.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q32.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q32.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q32.svg"
   },
   {
     "id": "off_t1_tf_3_33",
@@ -24815,7 +25263,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Reactant masses equal product mass.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q33.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q33.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q33.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q33.svg"
   },
   {
     "id": "off_t1_tf_3_34",
@@ -24832,7 +25284,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Chemical reactions shuffle existing atoms.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q34.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q34.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q34.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q34.svg"
   },
   {
     "id": "off_t1_tf_3_35",
@@ -24849,7 +25305,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Changing subscripts alters the chemical formula entirely.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q35.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q35.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q35.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q35.svg"
   },
   {
     "id": "off_t1_tf_3_36",
@@ -24866,7 +25326,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "(s), (l), (g), and (aq) clarify physical phases.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q36.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q36.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q36.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q36.svg"
   },
   {
     "id": "off_t1_tf_3_37",
@@ -24883,7 +25347,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Skeleton equations lack balancing coefficients.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q37.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q37.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q37.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q37.svg"
   },
   {
     "id": "off_t1_tf_3_38",
@@ -24900,7 +25368,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "They define stoichiometric proportions.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q38.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q38.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q38.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q38.svg"
   },
   {
     "id": "off_t1_tf_3_39",
@@ -24917,7 +25389,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Enthalpy changes are specified alongside equations.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q39.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q39.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q39.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q39.svg"
   },
   {
     "id": "off_t1_tf_3_40",
@@ -24934,7 +25410,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Double-checking ensures absolute conservation compliance.",
     "bloom_taxonomy": "EVALUATING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q40.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q40.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q40.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q40.svg"
   },
   {
     "id": "off_t1_tf_4_1",
@@ -24951,7 +25431,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Rate measures reactant consumption or product formation speed.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q1.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q1.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q1.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q1.svg"
   },
   {
     "id": "off_t1_tf_4_2",
@@ -24968,7 +25452,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Higher temperatures increase kinetic energy and reaction speed.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q2.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q2.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q2.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q2.svg"
   },
   {
     "id": "off_t1_tf_4_3",
@@ -24985,7 +25473,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Catalysts lower activation energy barriers.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q3.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q3.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q3.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q3.svg"
   },
   {
     "id": "off_t1_tf_4_4",
@@ -25002,7 +25494,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Endothermic reactions absorb heat.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q4.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q4.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q4.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q4.svg"
   },
   {
     "id": "off_t1_tf_4_5",
@@ -25019,7 +25515,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Combustion and neutralization release thermal energy.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q5.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q5.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q5.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q5.svg"
   },
   {
     "id": "off_t1_tf_4_6",
@@ -25036,7 +25536,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "More surface contact enables frequent collisions.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q6.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q6.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q6.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q6.svg"
   },
   {
     "id": "off_t1_tf_4_7",
@@ -25053,7 +25557,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "It consists of fuel, oxygen, and heat.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q7.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q7.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q7.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q7.svg"
   },
   {
     "id": "off_t1_tf_4_8",
@@ -25070,7 +25578,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Low temperatures retard microbial spoilage rates.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q8.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q8.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q8.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q8.svg"
   },
   {
     "id": "off_t1_tf_4_9",
@@ -25087,7 +25599,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Inhibitors slow down or prevent reactions.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q9.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q9.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q9.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q9.svg"
   },
   {
     "id": "off_t1_tf_4_10",
@@ -25104,7 +25620,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Combustion releases heat and light.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q10.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q10.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q10.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q10.svg"
   },
   {
     "id": "off_t1_tf_4_11",
@@ -25121,7 +25641,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Particles must overcome this barrier.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q11.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q11.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q11.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q11.svg"
   },
   {
     "id": "off_t1_tf_4_12",
@@ -25138,7 +25662,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Only effective collisions with proper energy and orientation react.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q12.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q12.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q12.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q12.svg"
   },
   {
     "id": "off_t1_tf_4_13",
@@ -25155,7 +25683,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Increased surface area accelerates dissolution.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q13.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q13.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q13.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q13.svg"
   },
   {
     "id": "off_t1_tf_4_14",
@@ -25172,7 +25704,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Powdered charcoal has much greater surface area.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q14.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q14.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q14.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q14.svg"
   },
   {
     "id": "off_t1_tf_4_15",
@@ -25189,7 +25725,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Reduced kinetic energy slows collision frequency.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q15.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q15.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q15.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q15.svg"
   },
   {
     "id": "off_t1_tf_4_16",
@@ -25206,7 +25746,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Greater surface area exposed accelerates acid reaction.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q16.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q16.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q16.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q16.svg"
   },
   {
     "id": "off_t1_tf_4_17",
@@ -25223,7 +25767,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "More particles per unit volume increase collision probability.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q17.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q17.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q17.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q17.svg"
   },
   {
     "id": "off_t1_tf_4_18",
@@ -25240,7 +25788,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "They expedite biochemical reactions safely.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q18.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q18.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q18.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q18.svg"
   },
   {
     "id": "off_t1_tf_4_19",
@@ -25257,7 +25809,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Water primarily cools fuel below ignition temperature.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q19.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q19.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q19.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q19.svg"
   },
   {
     "id": "off_t1_tf_4_20",
@@ -25274,7 +25830,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Smothering restricts oxygen supply.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q20.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q20.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q20.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q20.svg"
   },
   {
     "id": "off_t1_tf_4_21",
@@ -25291,7 +25851,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Paint acts as a protective barrier shield.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q21.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q21.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q21.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q21.svg"
   },
   {
     "id": "off_t1_tf_4_22",
@@ -25308,7 +25872,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Microorganisms require water to proliferate.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q22.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q22.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q22.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q22.svg"
   },
   {
     "id": "off_t1_tf_4_23",
@@ -25325,7 +25893,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Canning uses heat to destroy microbes and seals containers.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q23.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q23.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q23.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q23.svg"
   },
   {
     "id": "off_t1_tf_4_24",
@@ -25342,7 +25914,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Stirring promotes frequent particle contact.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q24.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q24.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q24.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q24.svg"
   },
   {
     "id": "off_t1_tf_4_25",
@@ -25359,7 +25935,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Solar energy drives glucose synthesis.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q25.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q25.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q25.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q25.svg"
   },
   {
     "id": "off_t1_tf_4_26",
@@ -25376,7 +25956,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "It also increases particles exceeding activation energy.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q26.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q26.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q26.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q26.svg"
   },
   {
     "id": "off_t1_tf_4_27",
@@ -25393,7 +25977,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "This lowers the energy hurdle for reactions.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q27.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q27.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q27.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q27.svg"
   },
   {
     "id": "off_t1_tf_4_28",
@@ -25410,7 +25998,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Photosynthesis absorbs energy, making it endothermic.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q28.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q28.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q28.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q28.svg"
   },
   {
     "id": "off_t1_tf_4_29",
@@ -25427,7 +26019,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Rapid gas and energy release characterize explosions.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q29.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q29.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q29.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q29.svg"
   },
   {
     "id": "off_t1_tf_4_30",
@@ -25444,7 +26040,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Lack of reactants halts further reaction.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q30.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q30.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q30.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q30.svg"
   },
   {
     "id": "off_t1_tf_4_31",
@@ -25461,7 +26061,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Precious metal catalysts convert toxic gases safely.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q31.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q31.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q31.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q31.svg"
   },
   {
     "id": "off_t1_tf_4_32",
@@ -25478,7 +26082,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Higher oxygen concentration boosts combustion frequency.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q32.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q32.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q32.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q32.svg"
   },
   {
     "id": "off_t1_tf_4_33",
@@ -25495,7 +26103,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Zinc corrodes preferentially to protect underlying iron.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q33.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q33.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q33.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q33.svg"
   },
   {
     "id": "off_t1_tf_4_34",
@@ -25512,7 +26124,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Photons supply energy for photochemical activation.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q34.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q34.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q34.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q34.svg"
   },
   {
     "id": "off_t1_tf_4_35",
@@ -25529,7 +26145,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Higher pressure compresses gases, increasing collision rates.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q35.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q35.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q35.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q35.svg"
   },
   {
     "id": "off_t1_tf_4_36",
@@ -25546,7 +26166,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Solid catalysts interacting with liquid/gas reactants are heterogeneous.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q36.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q36.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q36.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q36.svg"
   },
   {
     "id": "off_t1_tf_4_37",
@@ -25563,7 +26187,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Homogeneous catalysts share the same phase as reactants.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q37.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q37.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q37.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q37.svg"
   },
   {
     "id": "off_t1_tf_4_38",
@@ -25580,7 +26208,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "They map reactant, transition state, and product energy levels.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q38.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q38.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q38.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q38.svg"
   },
   {
     "id": "off_t1_tf_4_39",
@@ -25597,7 +26229,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Half-life defines reaction speed dynamics.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q39.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q39.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q39.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q39.svg"
   },
   {
     "id": "off_t1_tf_4_40",
@@ -25614,7 +26250,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Safety and yield optimization depend on rate control.",
     "bloom_taxonomy": "EVALUATING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t4_tf_q40.svg",
+    "image_url": "assets/illustrations/term1_tf/t4_tf_q40.svg",
+    "image": "assets/illustrations/term1_tf/t4_tf_q40.svg",
+    "illustration": "assets/illustrations/term1_tf/t4_tf_q40.svg"
   },
   {
     "id": "off_t1_tf_5_1",
@@ -25631,7 +26271,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Dynamic balance is preserved despite external changes.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q1.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q1.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q1.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q1.svg"
   },
   {
     "id": "off_t1_tf_5_2",
@@ -25648,7 +26292,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Small fluctuations occur within normal physiological ranges.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q2.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q2.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q2.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q2.svg"
   },
   {
     "id": "off_t1_tf_5_3",
@@ -25665,7 +26313,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Nervous regulates fast; endocrine regulates long-term.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q3.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q3.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q3.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q3.svg"
   },
   {
     "id": "off_t1_tf_5_4",
@@ -25682,7 +26334,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Sweating is negative feedback cooling body temperature.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q4.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q4.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q4.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q4.svg"
   },
   {
     "id": "off_t1_tf_5_5",
@@ -25699,7 +26355,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Set points represent ideal physiological targets.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q5.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q5.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q5.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q5.svg"
   },
   {
     "id": "off_t1_tf_5_6",
@@ -25716,7 +26376,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Receptors detect changes; effectors execute responses.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q6.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q6.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q6.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q6.svg"
   },
   {
     "id": "off_t1_tf_5_7",
@@ -25733,7 +26397,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "They carry out restorative actions.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q7.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q7.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q7.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q7.svg"
   },
   {
     "id": "off_t1_tf_5_8",
@@ -25750,7 +26418,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Negative feedback reverses changes to restore balance.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q8.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q8.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q8.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q8.svg"
   },
   {
     "id": "off_t1_tf_5_9",
@@ -25767,7 +26439,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Vital parameters requiring strict homeostatic bounds.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q9.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q9.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q9.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q9.svg"
   },
   {
     "id": "off_t1_tf_5_10",
@@ -25784,7 +26460,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Height changes during growth and is not a regulated set point.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q10.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q10.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q10.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q10.svg"
   },
   {
     "id": "off_t1_tf_5_11",
@@ -25801,7 +26481,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "It coordinates thermal regulation responses.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q11.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q11.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q11.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q11.svg"
   },
   {
     "id": "off_t1_tf_5_12",
@@ -25818,7 +26502,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Vessels constrict to conserve body heat.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q12.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q12.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q12.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q12.svg"
   },
   {
     "id": "off_t1_tf_5_13",
@@ -25835,7 +26523,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Endocrine glands secrete regulatory hormones.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q13.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q13.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q13.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q13.svg"
   },
   {
     "id": "off_t1_tf_5_14",
@@ -25852,7 +26544,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "They act antagonistically to maintain stable blood sugar.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q14.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q14.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q14.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q14.svg"
   },
   {
     "id": "off_t1_tf_5_15",
@@ -25869,7 +26565,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Pancreas releases insulin when blood sugar rises.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q15.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q15.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q15.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q15.svg"
   },
   {
     "id": "off_t1_tf_5_16",
@@ -25886,7 +26586,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Glucagon stimulates glycogen breakdown to raise glucose.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q16.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q16.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q16.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q16.svg"
   },
   {
     "id": "off_t1_tf_5_17",
@@ -25903,7 +26607,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Osmoregulation is managed via urine concentration.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q17.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q17.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q17.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q17.svg"
   },
   {
     "id": "off_t1_tf_5_18",
@@ -25920,7 +26628,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Muscle contractions generate metabolic heat.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q18.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q18.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q18.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q18.svg"
   },
   {
     "id": "off_t1_tf_5_19",
@@ -25937,7 +26649,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Body weight fluctuates naturally and isn't a rigid set point.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q19.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q19.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q19.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q19.svg"
   },
   {
     "id": "off_t1_tf_5_20",
@@ -25954,7 +26670,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Their opposing actions maintain glucose equilibrium.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q20.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q20.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q20.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q20.svg"
   },
   {
     "id": "off_t1_tf_5_21",
@@ -25971,7 +26691,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Positive feedback drives processes to completion.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q21.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q21.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q21.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q21.svg"
   },
   {
     "id": "off_t1_tf_5_22",
@@ -25988,7 +26712,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Clotting factors cascade until wound sealing completes.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q22.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q22.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q22.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q22.svg"
   },
   {
     "id": "off_t1_tf_5_23",
@@ -26005,7 +26733,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Active cellular processes constantly regulate conditions.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q23.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q23.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q23.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q23.svg"
   },
   {
     "id": "off_t1_tf_5_24",
@@ -26022,7 +26754,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "pH changes alter enzyme conformation and activity.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q24.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q24.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q24.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q24.svg"
   },
   {
     "id": "off_t1_tf_5_25",
@@ -26039,7 +26775,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Faster breathing supplies oxygen and clears CO \u2082 .",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q25.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q25.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q25.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q25.svg"
   },
   {
     "id": "off_t1_tf_5_26",
@@ -26056,7 +26796,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "This represents the standard homeostatic reflex arc.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q26.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q26.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q26.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q26.svg"
   },
   {
     "id": "off_t1_tf_5_27",
@@ -26073,7 +26817,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "It is positive feedback intensifying until delivery.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q27.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q27.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q27.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q27.svg"
   },
   {
     "id": "off_t1_tf_5_28",
@@ -26090,7 +26838,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Cells fail when conditions exceed survivable limits.",
     "bloom_taxonomy": "EVALUATING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q28.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q28.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q28.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q28.svg"
   },
   {
     "id": "off_t1_tf_5_29",
@@ -26107,7 +26859,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Antidiuretic hormone conserves water via negative feedback.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q29.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q29.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q29.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q29.svg"
   },
   {
     "id": "off_t1_tf_5_30",
@@ -26124,7 +26880,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Baroreceptors initiate negative feedback to reduce pressure.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q30.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q30.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q30.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q30.svg"
   },
   {
     "id": "off_t1_tf_5_31",
@@ -26141,7 +26901,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Dynamic equilibrium allows controlled fluctuations within limits.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q31.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q31.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q31.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q31.svg"
   },
   {
     "id": "off_t1_tf_5_32",
@@ -26158,7 +26922,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "It stems from insulin deficiency or insulin resistance.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q32.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q32.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q32.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q32.svg"
   },
   {
     "id": "off_t1_tf_5_33",
@@ -26175,7 +26943,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Cellular machinery requires stable internal conditions.",
     "bloom_taxonomy": "EVALUATING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q33.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q33.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q33.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q33.svg"
   },
   {
     "id": "off_t1_tf_5_34",
@@ -26192,7 +26964,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Water and solute concentrations are strictly balanced.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q34.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q34.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q34.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q34.svg"
   },
   {
     "id": "off_t1_tf_5_35",
@@ -26209,7 +26985,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "The liver stores and releases glucose as glycogen.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q35.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q35.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q35.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q35.svg"
   },
   {
     "id": "off_t1_tf_5_36",
@@ -26226,7 +27006,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Immune responses elevate thermal set points during infection.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q36.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q36.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q36.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q36.svg"
   },
   {
     "id": "off_t1_tf_5_37",
@@ -26243,7 +27027,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Ectotherms rely on external environmental heat sources.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q37.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q37.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q37.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q37.svg"
   },
   {
     "id": "off_t1_tf_5_38",
@@ -26260,7 +27048,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Hormonal and neural signals coordinate systemic responses.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q38.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q38.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q38.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q38.svg"
   },
   {
     "id": "off_t1_tf_5_39",
@@ -26277,7 +27069,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Nephrons filter wastes and regulate water reabsorption.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q39.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q39.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q39.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q39.svg"
   },
   {
     "id": "off_t1_tf_5_40",
@@ -26294,7 +27090,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Multiple organ systems cooperate to sustain internal stability.",
     "bloom_taxonomy": "EVALUATING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t5_tf_q40.svg",
+    "image_url": "assets/illustrations/term1_tf/t5_tf_q40.svg",
+    "image": "assets/illustrations/term1_tf/t5_tf_q40.svg",
+    "illustration": "assets/illustrations/term1_tf/t5_tf_q40.svg"
   },
   {
     "id": "off_t1_tf_6_1",
@@ -26311,7 +27111,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Populations evolve through generational allele frequency shifts.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q1.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q1.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q1.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q1.svg"
   },
   {
     "id": "off_t1_tf_6_2",
@@ -26328,7 +27132,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Individuals develop, but populations evolve across generations.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q2.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q2.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q2.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q2.svg"
   },
   {
     "id": "off_t1_tf_6_3",
@@ -26345,7 +27153,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Darwin published natural selection theory in 1859.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q3.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q3.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q3.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q3.svg"
   },
   {
     "id": "off_t1_tf_6_4",
@@ -26362,7 +27174,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Mendel pioneered genetics and heredity inheritance laws.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q4.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q4.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q4.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q4.svg"
   },
   {
     "id": "off_t1_tf_6_5",
@@ -26379,7 +27195,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Better adaptation enhances survival and reproductive success.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q5.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q5.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q5.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q5.svg"
   },
   {
     "id": "off_t1_tf_6_6",
@@ -26396,7 +27216,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Fitness is measured by reproductive success, not brute strength.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q6.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q6.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q6.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q6.svg"
   },
   {
     "id": "off_t1_tf_6_7",
@@ -26413,7 +27237,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Adaptations optimize organisms for specific environments.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q7.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q7.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q7.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q7.svg"
   },
   {
     "id": "off_t1_tf_6_8",
@@ -26430,7 +27258,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Variation describes inherited trait differences.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q8.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q8.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q8.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q8.svg"
   },
   {
     "id": "off_t1_tf_6_9",
@@ -26447,7 +27279,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Genetic inheritance underpins evolutionary progression.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q9.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q9.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q9.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q9.svg"
   },
   {
     "id": "off_t1_tf_6_10",
@@ -26464,7 +27300,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Fossils provide historical evidence of past life forms.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q10.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q10.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q10.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q10.svg"
   },
   {
     "id": "off_t1_tf_6_11",
@@ -26481,7 +27321,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "They share common ancestry but may have different functions.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q11.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q11.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q11.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q11.svg"
   },
   {
     "id": "off_t1_tf_6_12",
@@ -26498,7 +27342,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "They share common underlying skeletal architecture.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q12.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q12.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q12.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q12.svg"
   },
   {
     "id": "off_t1_tf_6_13",
@@ -26515,7 +27363,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Examples include human appendix and tailbone remnants.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q13.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q13.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q13.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q13.svg"
   },
   {
     "id": "off_t1_tf_6_14",
@@ -26532,7 +27384,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Biogeography studies geographical distribution of organisms.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q14.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q14.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q14.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q14.svg"
   },
   {
     "id": "off_t1_tf_6_15",
@@ -26549,7 +27405,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Industrial melanism shifted moth coloration frequencies.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q15.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q15.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q15.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q15.svg"
   },
   {
     "id": "off_t1_tf_6_16",
@@ -26566,7 +27426,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Artificial selection is controlled by human breeding practices.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q16.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q16.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q16.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q16.svg"
   },
   {
     "id": "off_t1_tf_6_17",
@@ -26583,7 +27447,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Mountains or rivers prevent interbreeding.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q17.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q17.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q17.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q17.svg"
   },
   {
     "id": "off_t1_tf_6_18",
@@ -26600,7 +27468,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "They are analogous structures with independent evolutionary origins.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q18.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q18.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q18.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q18.svg"
   },
   {
     "id": "off_t1_tf_6_19",
@@ -26617,7 +27489,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Similar functions do not imply recent common ancestry.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q19.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q19.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q19.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q19.svg"
   },
   {
     "id": "off_t1_tf_6_20",
@@ -26634,7 +27510,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Halting gene flow allows independent population divergence.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q20.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q20.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q20.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q20.svg"
   },
   {
     "id": "off_t1_tf_6_21",
@@ -26651,7 +27531,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Stratigraphic superposition dictates older layers lie below.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q21.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q21.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q21.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q21.svg"
   },
   {
     "id": "off_t1_tf_6_22",
@@ -26668,7 +27552,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Natural selection favored longer-necked genetic variants.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q22.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q22.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q22.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q22.svg"
   },
   {
     "id": "off_t1_tf_6_23",
@@ -26685,7 +27573,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Humans intentionally select desirable traits.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q23.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q23.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q23.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q23.svg"
   },
   {
     "id": "off_t1_tf_6_24",
@@ -26702,7 +27594,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Comparative embryology highlights evolutionary ties.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q24.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q24.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q24.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q24.svg"
   },
   {
     "id": "off_t1_tf_6_25",
@@ -26719,7 +27615,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Isolation can also involve behavioral or temporal differences.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q25.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q25.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q25.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q25.svg"
   },
   {
     "id": "off_t1_tf_6_26",
@@ -26736,7 +27636,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Endemic species exhibit restricted geographic ranges.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q26.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q26.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q26.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q26.svg"
   },
   {
     "id": "off_t1_tf_6_27",
@@ -26753,7 +27657,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "This outlines standard speciation evolutionary stages.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q27.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q27.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q27.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q27.svg"
   },
   {
     "id": "off_t1_tf_6_28",
@@ -26770,7 +27678,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Mutations generate random variation; selection filters adaptations.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q28.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q28.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q28.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q28.svg"
   },
   {
     "id": "off_t1_tf_6_29",
@@ -26787,7 +27699,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Comparative anatomy links cetaceans to terrestrial ancestors.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q29.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q29.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q29.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q29.svg"
   },
   {
     "id": "off_t1_tf_6_30",
@@ -26804,7 +27720,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Scientific theories are robustly tested, heavily evidenced frameworks.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q30.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q30.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q30.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q30.svg"
   },
   {
     "id": "off_t1_tf_6_31",
@@ -26821,7 +27741,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Genetic homology confirms common descent relationships.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q31.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q31.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q31.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q31.svg"
   },
   {
     "id": "off_t1_tf_6_32",
@@ -26838,7 +27762,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Drift affects small populations significantly through chance events.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q32.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q32.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q32.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q32.svg"
   },
   {
     "id": "off_t1_tf_6_33",
@@ -26855,7 +27783,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Bottlenecks severely reduce genetic diversity.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q33.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q33.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q33.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q33.svg"
   },
   {
     "id": "off_t1_tf_6_34",
@@ -26872,7 +27804,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Subsets of populations carry limited initial allele pools.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q34.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q34.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q34.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q34.svg"
   },
   {
     "id": "off_t1_tf_6_35",
@@ -26889,7 +27825,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Flowers and pollinators frequently coevolve reciprocally.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q35.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q35.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q35.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q35.svg"
   },
   {
     "id": "off_t1_tf_6_36",
@@ -26906,7 +27846,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Punctuated equilibrium features rapid bursts separated by stability.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q36.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q36.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q36.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q36.svg"
   },
   {
     "id": "off_t1_tf_6_37",
@@ -26923,7 +27867,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Surviving lineages diversify rapidly into vacant niches.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q37.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q37.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q37.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q37.svg"
   },
   {
     "id": "off_t1_tf_6_38",
@@ -26940,7 +27888,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Similar selective pressures shape analogous adaptations.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q38.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q38.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q38.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q38.svg"
   },
   {
     "id": "off_t1_tf_6_39",
@@ -26957,7 +27909,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Adaptive radiation leads to divergent descendant species.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q39.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q39.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q39.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q39.svg"
   },
   {
     "id": "off_t1_tf_6_40",
@@ -26974,7 +27930,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Neo-Darwinism merges Mendelian genetics with evolutionary biology.",
     "bloom_taxonomy": "EVALUATING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t6_tf_q40.svg",
+    "image_url": "assets/illustrations/term1_tf/t6_tf_q40.svg",
+    "image": "assets/illustrations/term1_tf/t6_tf_q40.svg",
+    "illustration": "assets/illustrations/term1_tf/t6_tf_q40.svg"
   },
   {
     "id": "off_t1_tf_7_1",
@@ -26991,7 +27951,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Biotic and abiotic factors comprise any ecosystem.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q1.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q1.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q1.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q1.svg"
   },
   {
     "id": "off_t1_tf_7_2",
@@ -27008,7 +27972,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Plants and animals are living biotic components.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q2.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q2.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q2.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q2.svg"
   },
   {
     "id": "off_t1_tf_7_3",
@@ -27025,7 +27993,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Biodiversity spans multiple levels of biological organization.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q3.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q3.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q3.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q3.svg"
   },
   {
     "id": "off_t1_tf_7_4",
@@ -27042,7 +28014,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Autotrophs form the base of trophic webs.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q4.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q4.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q4.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q4.svg"
   },
   {
     "id": "off_t1_tf_7_5",
@@ -27059,7 +28035,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Herbivores feed directly on primary producers.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q5.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q5.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q5.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q5.svg"
   },
   {
     "id": "off_t1_tf_7_6",
@@ -27076,7 +28056,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Fungi and bacteria return nutrients to soil.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q6.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q6.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q6.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q6.svg"
   },
   {
     "id": "off_t1_tf_7_7",
@@ -27093,7 +28077,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Energy flows directionally and dissipates as heat.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q7.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q7.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q7.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q7.svg"
   },
   {
     "id": "off_t1_tf_7_8",
@@ -27110,7 +28098,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Ecological efficiency limits higher consumer biomass.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q8.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q8.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q8.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q8.svg"
   },
   {
     "id": "off_t1_tf_7_9",
@@ -27127,7 +28119,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Food webs depict multiple trophic interactions.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q9.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q9.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q9.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q9.svg"
   },
   {
     "id": "off_t1_tf_7_10",
@@ -27144,7 +28140,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Resource limits establish carrying capacities.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q10.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q10.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q10.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q10.svg"
   },
   {
     "id": "off_t1_tf_7_11",
@@ -27161,7 +28161,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Both organisms derive mutual advantages.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q11.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q11.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q11.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q11.svg"
   },
   {
     "id": "off_t1_tf_7_12",
@@ -27178,7 +28182,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Parasitism benefits one while harming the host.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q12.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q12.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q12.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q12.svg"
   },
   {
     "id": "off_t1_tf_7_13",
@@ -27195,7 +28203,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "One organism gains without harming or helping the other.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q13.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q13.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q13.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q13.svg"
   },
   {
     "id": "off_t1_tf_7_14",
@@ -27212,7 +28224,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Keystone species exert disproportionately large ecosystem control.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q14.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q14.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q14.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q14.svg"
   },
   {
     "id": "off_t1_tf_7_15",
@@ -27229,7 +28245,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Initial colonization lacks preexisting soil.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q15.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q15.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q15.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q15.svg"
   },
   {
     "id": "off_t1_tf_7_16",
@@ -27246,7 +28266,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Recovery occurs following fires or floods.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q16.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q16.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q16.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q16.svg"
   },
   {
     "id": "off_t1_tf_7_17",
@@ -27263,7 +28287,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Pioneer species are initial colonizers of barren environments.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q17.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q17.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q17.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q17.svg"
   },
   {
     "id": "off_t1_tf_7_18",
@@ -27280,7 +28308,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Non-native species outcompete local flora and fauna.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q18.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q18.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q18.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q18.svg"
   },
   {
     "id": "off_t1_tf_7_19",
@@ -27297,7 +28329,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "These processes exchange carbon dioxide in ecosystems.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q19.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q19.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q19.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q19.svg"
   },
   {
     "id": "off_t1_tf_7_20",
@@ -27314,7 +28350,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Nitrogen fixation by bacteria is required for plant uptake.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q20.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q20.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q20.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q20.svg"
   },
   {
     "id": "off_t1_tf_7_21",
@@ -27331,7 +28371,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Persistent pollutants accumulate up food chains.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q21.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q21.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q21.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q21.svg"
   },
   {
     "id": "off_t1_tf_7_22",
@@ -27348,7 +28392,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Fragmentation isolates populations and disrupts migration.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q22.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q22.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q22.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q22.svg"
   },
   {
     "id": "off_t1_tf_7_23",
@@ -27365,7 +28413,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Nutrient pollution depletes dissolved oxygen in water bodies.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q23.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q23.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q23.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q23.svg"
   },
   {
     "id": "off_t1_tf_7_24",
@@ -27382,7 +28434,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Niches define how species interact within ecosystems.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q24.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q24.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q24.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q24.svg"
   },
   {
     "id": "off_t1_tf_7_25",
@@ -27399,7 +28455,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Complete competitors cannot coexist indefinitely.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q25.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q25.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q25.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q25.svg"
   },
   {
     "id": "off_t1_tf_7_26",
@@ -27416,7 +28476,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Temperature and precipitation characterize major biomes.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q26.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q26.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q26.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q26.svg"
   },
   {
     "id": "off_t1_tf_7_27",
@@ -27433,7 +28497,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Industrial emissions form acidic atmospheric compounds.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q27.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q27.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q27.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q27.svg"
   },
   {
     "id": "off_t1_tf_7_28",
@@ -27450,7 +28518,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Ozone shields Earth from dangerous UV rays.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q28.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q28.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q28.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q28.svg"
   },
   {
     "id": "off_t1_tf_7_29",
@@ -27467,7 +28539,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Natural greenhouse gases maintain habitable surface temperatures.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q29.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q29.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q29.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q29.svg"
   },
   {
     "id": "off_t1_tf_7_30",
@@ -27484,7 +28560,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Trees absorb CO \u2082 ; removing forests releases stored carbon.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q30.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q30.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q30.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q30.svg"
   },
   {
     "id": "off_t1_tf_7_31",
@@ -27501,7 +28581,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Sustainability ensures long-term ecological balance.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q31.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q31.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q31.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q31.svg"
   },
   {
     "id": "off_t1_tf_7_32",
@@ -27518,7 +28602,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Management strategies safeguard endangered species and habitats.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q32.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q32.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q32.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q32.svg"
   },
   {
     "id": "off_t1_tf_7_33",
@@ -27535,7 +28623,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "High biodiversity increases ecological resilience and stability.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q33.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q33.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q33.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q33.svg"
   },
   {
     "id": "off_t1_tf_7_34",
@@ -27552,7 +28644,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Sensitive species signal ecosystem stress or pollution.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q34.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q34.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q34.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q34.svg"
   },
   {
     "id": "off_t1_tf_7_35",
@@ -27569,7 +28665,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Environmental resistance eventually limits exponential growth.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q35.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q35.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q35.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q35.svg"
   },
   {
     "id": "off_t1_tf_7_36",
@@ -27586,7 +28686,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Populations level off near carrying capacity.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q36.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q36.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q36.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q36.svg"
   },
   {
     "id": "off_t1_tf_7_37",
@@ -27603,7 +28707,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Predator numbers track prey availability over time.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q37.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q37.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q37.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q37.svg"
   },
   {
     "id": "off_t1_tf_7_38",
@@ -27620,7 +28728,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Footprints quantify resource consumption and waste absorption.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q38.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q38.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q38.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q38.svg"
   },
   {
     "id": "off_t1_tf_7_39",
@@ -27637,7 +28749,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Active management helps restore degraded habitats.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q39.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q39.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q39.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q39.svg"
   },
   {
     "id": "off_t1_tf_7_40",
@@ -27654,7 +28770,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Ethical principles shape responsible environmental stewardship.",
     "bloom_taxonomy": "EVALUATING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t7_tf_q40.svg",
+    "image_url": "assets/illustrations/term1_tf/t7_tf_q40.svg",
+    "image": "assets/illustrations/term1_tf/t7_tf_q40.svg",
+    "illustration": "assets/illustrations/term1_tf/t7_tf_q40.svg"
   },
   {
     "id": "off_t1_tf_8_1",
@@ -27671,7 +28791,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Genetics examines how traits transmit across generations.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q1.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q1.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q1.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q1.svg"
   },
   {
     "id": "off_t1_tf_8_2",
@@ -27688,7 +28812,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Genes serve as hereditary units of biological information.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q2.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q2.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q2.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q2.svg"
   },
   {
     "id": "off_t1_tf_8_3",
@@ -27705,7 +28833,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Alleles determine distinct trait variations.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q3.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q3.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q3.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q3.svg"
   },
   {
     "id": "off_t1_tf_8_4",
@@ -27722,7 +28854,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Phenotype refers to observable traits; genotype is genetic makeup.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q4.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q4.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q4.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q4.svg"
   },
   {
     "id": "off_t1_tf_8_5",
@@ -27739,7 +28875,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "E.g., AA or aa represent homozygous genotypes.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q5.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q5.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q5.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q5.svg"
   },
   {
     "id": "off_t1_tf_8_6",
@@ -27756,7 +28896,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Heterozygous means having two different alleles (e.g., Aa).",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q6.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q6.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q6.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q6.svg"
   },
   {
     "id": "off_t1_tf_8_7",
@@ -27773,7 +28917,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Dominant traits express themselves phenotypically when present.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q7.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q7.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q7.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q7.svg"
   },
   {
     "id": "off_t1_tf_8_8",
@@ -27790,7 +28938,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Punnett squares calculate expected genotype/phenotype ratios.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q8.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q8.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q8.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q8.svg"
   },
   {
     "id": "off_t1_tf_8_9",
@@ -27807,7 +28959,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Mendel discovered segregation and independent assortment via peas.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q9.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q9.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q9.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q9.svg"
   },
   {
     "id": "off_t1_tf_8_10",
@@ -27824,7 +28980,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Each gamete receives only one allele per gene.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q10.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q10.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q10.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q10.svg"
   },
   {
     "id": "off_t1_tf_8_11",
@@ -27841,7 +29001,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Unlinked genes segregate independently of one another.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q11.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q11.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q11.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q11.svg"
   },
   {
     "id": "off_t1_tf_8_12",
@@ -27858,7 +29022,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "The double helix model explains DNA replication and storage.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q12.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q12.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q12.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q12.svg"
   },
   {
     "id": "off_t1_tf_8_13",
@@ -27875,7 +29043,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Nucleotides serve as nucleic acid building blocks.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q13.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q13.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q13.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q13.svg"
   },
   {
     "id": "off_t1_tf_8_14",
@@ -27892,7 +29064,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Adenine pairs with thymine, and guanine pairs with cytosine.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q14.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q14.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q14.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q14.svg"
   },
   {
     "id": "off_t1_tf_8_15",
@@ -27909,7 +29085,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Uracil replaces thymine in RNA transcripts.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q15.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q15.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q15.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q15.svg"
   },
   {
     "id": "off_t1_tf_8_16",
@@ -27926,7 +29106,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "mRNA transcribes genetic instructions from DNA.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q16.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q16.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q16.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q16.svg"
   },
   {
     "id": "off_t1_tf_8_17",
@@ -27943,7 +29127,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Ribosomes translate codon sequences into polypeptide chains.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q17.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q17.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q17.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q17.svg"
   },
   {
     "id": "off_t1_tf_8_18",
@@ -27960,7 +29148,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Mutations introduce genetic variation.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q18.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q18.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q18.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q18.svg"
   },
   {
     "id": "off_t1_tf_8_19",
@@ -27977,7 +29169,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Codominance expresses both alleles fully (e.g., AB blood type).",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q19.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q19.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q19.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q19.svg"
   },
   {
     "id": "off_t1_tf_8_20",
@@ -27994,7 +29190,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "E.g., red and white flowers producing pink offspring.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q20.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q20.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q20.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q20.svg"
   },
   {
     "id": "off_t1_tf_8_21",
@@ -28011,7 +29211,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Polygenic traits result from multiple interacting genes.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q21.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q21.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q21.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q21.svg"
   },
   {
     "id": "off_t1_tf_8_22",
@@ -28028,7 +29232,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Somatic cells contain 23 pairs of chromosomes.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q22.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q22.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q22.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q22.svg"
   },
   {
     "id": "off_t1_tf_8_23",
@@ -28045,7 +29253,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Males typically inherit XY chromosomes, females XX.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q23.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q23.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q23.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q23.svg"
   },
   {
     "id": "off_t1_tf_8_24",
@@ -28062,7 +29274,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Pedigrees map familial genetic lineages.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q24.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q24.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q24.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q24.svg"
   },
   {
     "id": "off_t1_tf_8_25",
@@ -28079,7 +29295,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Karyotypes identify chromosomal abnormalities.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q25.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q25.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q25.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q25.svg"
   },
   {
     "id": "off_t1_tf_8_26",
@@ -28096,7 +29316,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Mitosis produces two identical diploid somatic cells.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q26.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q26.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q26.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q26.svg"
   },
   {
     "id": "off_t1_tf_8_27",
@@ -28113,7 +29337,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Meiosis generates haploid sperm and egg cells.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q27.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q27.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q27.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q27.svg"
   },
   {
     "id": "off_t1_tf_8_28",
@@ -28130,7 +29358,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Homologous chromosome segments exchange genetic material.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q28.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q28.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q28.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q28.svg"
   },
   {
     "id": "off_t1_tf_8_29",
@@ -28147,7 +29379,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Cloning produces genetically identical genetic copies.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q29.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q29.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q29.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q29.svg"
   },
   {
     "id": "off_t1_tf_8_30",
@@ -28164,7 +29400,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Recombinant DNA enables genetic engineering applications.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q30.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q30.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q30.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q30.svg"
   },
   {
     "id": "off_t1_tf_8_31",
@@ -28181,7 +29421,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Epigenetics changes gene expression without altering DNA sequences.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q31.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q31.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q31.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q31.svg"
   },
   {
     "id": "off_t1_tf_8_32",
@@ -28198,7 +29442,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Inheritance patterns differ between males and females.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q32.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q32.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q32.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q32.svg"
   },
   {
     "id": "off_t1_tf_8_33",
@@ -28215,7 +29463,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "It affects blood clotting factor production.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q33.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q33.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q33.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q33.svg"
   },
   {
     "id": "off_t1_tf_8_34",
@@ -28232,7 +29484,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Presence of three chromosome 21 copies causes the syndrome.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q34.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q34.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q34.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q34.svg"
   },
   {
     "id": "off_t1_tf_8_35",
@@ -28249,7 +29505,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Electric fields move smaller DNA fragments faster through gel.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q35.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q35.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q35.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q35.svg"
   },
   {
     "id": "off_t1_tf_8_36",
@@ -28266,7 +29526,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "PCR replicates micro-quantities of DNA exponentially.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q36.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q36.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q36.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q36.svg"
   },
   {
     "id": "off_t1_tf_8_37",
@@ -28283,7 +29547,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Transgenic techniques introduce targeted foreign genes.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q37.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q37.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q37.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q37.svg"
   },
   {
     "id": "off_t1_tf_8_38",
@@ -28300,7 +29568,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Therapeutic gene delivery aims to cure genetic disorders.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q38.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q38.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q38.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q38.svg"
   },
   {
     "id": "off_t1_tf_8_39",
@@ -28317,7 +29589,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Safety, equity, and ethical limits govern genetic research.",
     "bloom_taxonomy": "EVALUATING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q39.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q39.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q39.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q39.svg"
   },
   {
     "id": "off_t1_tf_8_40",
@@ -28334,7 +29610,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Sequencing human DNA revolutionized modern medical genetics.",
     "bloom_taxonomy": "EVALUATING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t8_tf_q40.svg",
+    "image_url": "assets/illustrations/term1_tf/t8_tf_q40.svg",
+    "image": "assets/illustrations/term1_tf/t8_tf_q40.svg",
+    "illustration": "assets/illustrations/term1_tf/t8_tf_q40.svg"
   },
   {
     "id": "off_t1_tf_102_21",
@@ -28351,7 +29631,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "They involve mutual exchange of ions between two compounds.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q21.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q21.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q21.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q21.svg"
   },
   {
     "id": "off_t1_tf_102_22",
@@ -28368,7 +29652,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "The silver and sodium cations exchange anions to form AgCl precipitate.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q22.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q22.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q22.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q22.svg"
   },
   {
     "id": "off_t1_tf_102_23",
@@ -28385,7 +29673,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Combustion requires an oxidizing agent, typically oxygen.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q23.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q23.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q23.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q23.svg"
   },
   {
     "id": "off_t1_tf_102_24",
@@ -28402,7 +29694,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "They produce carbon dioxide and water vapor, not salt.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q24.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q24.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q24.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q24.svg"
   },
   {
     "id": "off_t1_tf_102_25",
@@ -28419,7 +29715,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Acids reacting with bases neutralize to form ionic salts and water.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q25.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q25.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q25.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q25.svg"
   },
   {
     "id": "off_t1_tf_102_26",
@@ -28436,7 +29736,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "It is classified as a double displacement (acid-base) reaction.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q26.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q26.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q26.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q26.svg"
   },
   {
     "id": "off_t1_tf_102_27",
@@ -28453,7 +29757,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Phase changes alter state without changing molecular structure.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q27.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q27.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q27.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q27.svg"
   },
   {
     "id": "off_t1_tf_102_28",
@@ -28470,7 +29778,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Dissolution is a physical process; salt can be recovered via evaporation.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q28.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q28.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q28.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q28.svg"
   },
   {
     "id": "off_t1_tf_102_29",
@@ -28487,7 +29799,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Products are located on the right side of the reaction arrow.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q29.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q29.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q29.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q29.svg"
   },
   {
     "id": "off_t1_tf_102_30",
@@ -28504,7 +29820,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "This describes complete hydrocarbon combustion.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q30.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q30.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q30.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q30.svg"
   },
   {
     "id": "off_t1_tf_102_31",
@@ -28521,7 +29841,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "The reaction arrow separates reactants from produced products.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q31.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q31.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q31.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q31.svg"
   },
   {
     "id": "off_t1_tf_102_32",
@@ -28538,7 +29862,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Hydrogen peroxide breaks down, making it decomposition.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q32.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q32.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q32.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q32.svg"
   },
   {
     "id": "off_t1_tf_102_33",
@@ -28555,7 +29883,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Positive and negative ions switch pairing partners.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q33.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q33.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q33.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q33.svg"
   },
   {
     "id": "off_t1_tf_102_34",
@@ -28572,7 +29904,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Two elemental reactants combine to form one compound.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q34.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q34.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q34.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q34.svg"
   },
   {
     "id": "off_t1_tf_102_35",
@@ -28589,7 +29925,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "An upward arrow denotes gas evolution.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q35.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q35.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q35.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q35.svg"
   },
   {
     "id": "off_t1_tf_102_36",
@@ -28606,7 +29946,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Remember OIL RIG (Oxidation Is Loss, Reduction Is Gain).",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q36.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q36.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q36.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q36.svg"
   },
   {
     "id": "off_t1_tf_102_37",
@@ -28623,7 +29967,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Reduction is the gain of electrons or gain of hydrogen.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q37.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q37.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q37.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q37.svg"
   },
   {
     "id": "off_t1_tf_102_38",
@@ -28640,7 +29988,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Oxidation degrades structural metals over time.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q38.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q38.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q38.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q38.svg"
   },
   {
     "id": "off_t1_tf_102_39",
@@ -28657,7 +30009,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Endothermic changes absorb thermal energy from surroundings.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q39.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q39.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q39.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q39.svg"
   },
   {
     "id": "off_t1_tf_102_40",
@@ -28674,7 +30030,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "This upholds the fundamental Law of Conservation of Mass.",
     "bloom_taxonomy": "EVALUATING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t1_tf_q40.svg",
+    "image_url": "assets/illustrations/term1_tf/t1_tf_q40.svg",
+    "image": "assets/illustrations/term1_tf/t1_tf_q40.svg",
+    "illustration": "assets/illustrations/term1_tf/t1_tf_q40.svg"
   },
   {
     "id": "off_t1_tf_105_21",
@@ -28691,7 +30051,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Subscript 2 in MgCl \u2082  indicates two chlorine atoms.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q21.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q21.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q21.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q21.svg"
   },
   {
     "id": "off_t1_tf_105_22",
@@ -28708,7 +30072,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Atom inventories guide coefficient adjustments.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q22.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q22.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q22.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q22.svg"
   },
   {
     "id": "off_t1_tf_105_23",
@@ -28725,7 +30093,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Equations are balanced to obey mass conservation.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q23.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q23.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q23.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q23.svg"
   },
   {
     "id": "off_t1_tf_105_24",
@@ -28742,7 +30114,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Total matter is conserved even if gas escapes.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q24.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q24.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q24.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q24.svg"
   },
   {
     "id": "off_t1_tf_105_25",
@@ -28759,7 +30135,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Both elements require coefficient adjustment.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q25.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q25.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q25.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q25.svg"
   },
   {
     "id": "off_t1_tf_105_26",
@@ -28776,7 +30156,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "5 molecules \u00d7 6 carbons = 30.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q26.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q26.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q26.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q26.svg"
   },
   {
     "id": "off_t1_tf_105_27",
@@ -28793,7 +30177,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Changing subscripts alters chemical identity.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q27.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q27.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q27.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q27.svg"
   },
   {
     "id": "off_t1_tf_105_28",
@@ -28810,7 +30198,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Atom counts are equal on both sides.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q28.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q28.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q28.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q28.svg"
   },
   {
     "id": "off_t1_tf_105_29",
@@ -28827,7 +30219,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "2 nitrogens and 6 hydrogens match on both sides.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q29.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q29.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q29.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q29.svg"
   },
   {
     "id": "off_t1_tf_105_30",
@@ -28844,7 +30240,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Correct balanced equation is 4Al + 3O \u2082  \u2192 2Al \u2082 O \u2083 .",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q30.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q30.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q30.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q30.svg"
   },
   {
     "id": "off_t1_tf_105_31",
@@ -28861,7 +30261,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Atom counts match across reactants and products.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q31.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q31.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q31.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q31.svg"
   },
   {
     "id": "off_t1_tf_105_32",
@@ -28878,7 +30282,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "7 O \u2082  molecules contain 14 oxygen atoms.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q32.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q32.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q32.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q32.svg"
   },
   {
     "id": "off_t1_tf_105_33",
@@ -28895,7 +30303,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Reactant masses equal product mass.",
     "bloom_taxonomy": "APPLYING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q33.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q33.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q33.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q33.svg"
   },
   {
     "id": "off_t1_tf_105_34",
@@ -28912,7 +30324,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Chemical reactions shuffle existing atoms.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q34.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q34.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q34.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q34.svg"
   },
   {
     "id": "off_t1_tf_105_35",
@@ -28929,7 +30345,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Changing subscripts alters the chemical formula entirely.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q35.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q35.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q35.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q35.svg"
   },
   {
     "id": "off_t1_tf_105_36",
@@ -28946,7 +30366,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "(s), (l), (g), and (aq) clarify physical phases.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q36.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q36.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q36.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q36.svg"
   },
   {
     "id": "off_t1_tf_105_37",
@@ -28963,7 +30387,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 1,
     "explanation": "Skeleton equations lack balancing coefficients.",
     "bloom_taxonomy": "UNDERSTANDING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q37.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q37.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q37.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q37.svg"
   },
   {
     "id": "off_t1_tf_105_38",
@@ -28980,7 +30408,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "They define stoichiometric proportions.",
     "bloom_taxonomy": "ANALYZING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q38.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q38.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q38.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q38.svg"
   },
   {
     "id": "off_t1_tf_105_39",
@@ -28997,7 +30429,11 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Enthalpy changes are specified alongside equations.",
     "bloom_taxonomy": "REMEMBERING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q39.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q39.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q39.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q39.svg"
   },
   {
     "id": "off_t1_tf_105_40",
@@ -29014,6 +30450,10 @@ window.OFFLINE_QUESTIONS_BANK = [
     "correct_index": 0,
     "explanation": "Double-checking ensures absolute conservation compliance.",
     "bloom_taxonomy": "EVALUATING",
-    "is_active": true
+    "is_active": true,
+    "imageUrl": "assets/illustrations/term1_tf/t3_tf_q40.svg",
+    "image_url": "assets/illustrations/term1_tf/t3_tf_q40.svg",
+    "image": "assets/illustrations/term1_tf/t3_tf_q40.svg",
+    "illustration": "assets/illustrations/term1_tf/t3_tf_q40.svg"
   }
 ];

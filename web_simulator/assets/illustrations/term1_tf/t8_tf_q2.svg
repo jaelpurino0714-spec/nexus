@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 250" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg_tf_8_2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080c18"/>
+      <stop offset="50%" stop-color="#0d1428"/>
+      <stop offset="100%" stop-color="#121b36"/>
+    </linearGradient>
+    <filter id="glow_tf_8_2" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="540" height="250" rx="16" fill="url(#bg_tf_8_2)" stroke="#d946ef" stroke-width="1.5" stroke-opacity="0.45"/>
+
+  <!-- Subtle Ambient Grid -->
+  <g opacity="0.04" stroke="#d946ef" stroke-width="1">
+    <line x1="90" y1="0" x2="90" y2="250"/><line x1="180" y1="0" x2="180" y2="250"/>
+    <line x1="270" y1="0" x2="270" y2="250"/><line x1="360" y1="0" x2="360" y2="250"/>
+    <line x1="450" y1="0" x2="450" y2="250"/>
+    <line x1="0" y1="65" x2="540" y2="65"/><line x1="0" y1="130" x2="540" y2="130"/><line x1="0" y1="195" x2="540" y2="195"/>
+  </g>
+
+  <!-- Top Glassmorphism Banner -->
+  <rect x="20" y="10" width="500" height="34" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#d946ef" stroke-width="1.2" stroke-opacity="0.45"/>
+  <circle cx="36" cy="27" r="5.5" fill="#d946ef" filter="url(#glow_tf_8_2)"/>
+  <text x="50" y="32" fill="#d946ef" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="900" letter-spacing="0.5">TOPIC 8: HEREDITY &amp; GENETICS • Q2</text>
+  
+  <rect x="365" y="15" width="145" height="24" rx="12" fill="#d946ef"/>
+  <text x="437" y="31" fill="#080c18" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" text-anchor="middle" letter-spacing="0.5">DNA &amp; CHROMOSOME</text>
+
+  <!-- Main Illustration Content -->
+  
+  <rect x="40" y="60" width="460" height="165" rx="14" fill="#0f172a" fill-opacity="0.8" stroke="#d946ef" stroke-width="1.2"/>
+  <text x="270" y="84" fill="#e879f9" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="900" text-anchor="middle">DNA DOUBLE HELIX &amp; CHROMOSOME STRUCTURE</text>
+  <path d="M 80 130 Q 140 100 200 130 T 320 130 T 440 130" fill="none" stroke="#38bdf8" stroke-width="3"/>
+  <path d="M 80 130 Q 140 160 200 130 T 320 130 T 440 130" fill="none" stroke="#ec4899" stroke-width="3"/>
+  
+  <line x1="140" y1="108" x2="140" y2="152" stroke="#facc15" stroke-width="2.5"/>
+  <line x1="200" y1="120" x2="200" y2="140" stroke="#4ade80" stroke-width="2.5"/>
+  <line x1="260" y1="108" x2="260" y2="152" stroke="#facc15" stroke-width="2.5"/>
+  <line x1="320" y1="120" x2="320" y2="140" stroke="#4ade80" stroke-width="2.5"/>
+  <line x1="380" y1="108" x2="380" y2="152" stroke="#facc15" stroke-width="2.5"/>
+
+  <rect x="110" y="168" width="320" height="30" rx="8" fill="#1e1b4b" stroke="#c084fc" stroke-width="1"/>
+  <text x="270" y="188" fill="#f5d0fe" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="800" text-anchor="middle">Complementary Base Pairing: Adenine-Thymine (A-T) • Guanine-Cytosine (G-C)</text>
+            
+</svg>

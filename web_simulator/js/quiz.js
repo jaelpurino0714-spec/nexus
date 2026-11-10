@@ -1288,12 +1288,26 @@ const Quiz = {
     const qImgBox = document.getElementById('questionImageContainer');
     const qImgEl = document.getElementById('questionImageEl');
     const atomWatermark = document.querySelector('.atom-watermark');
-    const qImgSrc = q.imageUrl || q.image_url || q.image;
+    let qImgSrc = q.imageUrl || q.image_url || q.image || q.illustration;
+    if (qImgSrc && (qImgSrc === 'null' || qImgSrc === 'undefined' || String(qImgSrc).trim() === '')) {
+      qImgSrc = null;
+    }
+
     if (qImgBox && qImgEl) {
+      qImgEl.onerror = null;
+      qImgEl.onload = null;
+
       if (qImgSrc) {
+        qImgEl.onerror = () => {
+          // If image fails to load or 404s, gracefully hide container so no broken image icon appears
+          qImgBox.classList.add('hidden');
+          if (atomWatermark) atomWatermark.style.display = '';
+        };
+        qImgEl.onload = () => {
+          qImgBox.classList.remove('hidden');
+          if (atomWatermark) atomWatermark.style.display = 'none';
+        };
         qImgEl.src = qImgSrc;
-        qImgBox.classList.remove('hidden');
-        if (atomWatermark) atomWatermark.style.display = 'none';
       } else {
         qImgEl.src = '';
         qImgBox.classList.add('hidden');
