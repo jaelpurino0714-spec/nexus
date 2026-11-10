@@ -1,13 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 250" width="100%" height="100%">
   <defs>
-    <linearGradient id="bgGrad_t8_6" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="bg_t8_6" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#080c18"/>
       <stop offset="50%" stop-color="#0d1428"/>
       <stop offset="100%" stop-color="#121b36"/>
-    </linearGradient>
-    <linearGradient id="primaryGrad_t8_6" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#14b8a6"/>
-      <stop offset="100%" stop-color="#22c55e"/>
     </linearGradient>
     <filter id="glow_t8_6" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="3" result="blur" />
@@ -16,33 +12,49 @@
   </defs>
 
   <!-- Background Canvas -->
-  <rect width="540" height="250" rx="16" fill="url(#bgGrad_t8_6)" stroke="#14b8a6" stroke-width="1.3" stroke-opacity="0.45"/>
+  <rect width="540" height="250" rx="16" fill="url(#bg_t8_6)" stroke="#a855f7" stroke-width="1.3" stroke-opacity="0.45"/>
 
-  <!-- Subtle Cyber Grid -->
-  <g opacity="0.04" stroke="#14b8a6" stroke-width="1">
-    <line x1="60" y1="0" x2="60" y2="250"/><line x1="140" y1="0" x2="140" y2="250"/>
-    <line x1="220" y1="0" x2="220" y2="250"/><line x1="300" y1="0" x2="300" y2="250"/>
-    <line x1="380" y1="0" x2="380" y2="250"/><line x1="460" y1="0" x2="460" y2="250"/>
-    <line x1="0" y1="60" x2="540" y2="60"/><line x1="0" y1="120" x2="540" y2="120"/>
-    <line x1="0" y1="180" x2="540" y2="180"/>
+  <!-- Subtle Ambient Grid -->
+  <g opacity="0.04" stroke="#a855f7" stroke-width="1">
+    <line x1="90" y1="0" x2="90" y2="250"/><line x1="180" y1="0" x2="180" y2="250"/>
+    <line x1="270" y1="0" x2="270" y2="250"/><line x1="360" y1="0" x2="360" y2="250"/>
+    <line x1="450" y1="0" x2="450" y2="250"/>
+    <line x1="0" y1="65" x2="540" y2="65"/><line x1="0" y1="130" x2="540" y2="130"/><line x1="0" y1="195" x2="540" y2="195"/>
   </g>
 
-  <!-- Clean Top Header Banner -->
-  <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#14b8a6" stroke-width="1" stroke-opacity="0.4"/>
-  <circle cx="36" cy="28" r="5" fill="#14b8a6" filter="url(#glow_t8_6)"/>
-  <text x="50" y="32" fill="#14b8a6" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 8: MECHANISMS OF EVOLUTION • Q6</text>
+  <!-- Top Glassmorphism Banner -->
+  <rect x="20" y="12" width="500" height="32" rx="8" fill="#1e1b4b" fill-opacity="0.8" stroke="#a855f7" stroke-width="1" stroke-opacity="0.4"/>
+  <circle cx="36" cy="28" r="5" fill="#a855f7" filter="url(#glow_t8_6)"/>
+  <text x="50" y="32" fill="#a855f7" font-family="'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="900" letter-spacing="0.5">TOPIC 8: EVOLUTION &amp; BIODIVERSITY • Q6</text>
   
-  <rect x="425" y="17" width="85" height="22" rx="11" fill="url(#primaryGrad_t8_6)"/>
-  <text x="467" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">APPLYING</text>
+  <rect x="425" y="17" width="85" height="22" rx="11" fill="#a855f7"/>
+  <text x="467" y="32" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="0.5">EVOLUTION</text>
 
-  <!-- Pure Scientific Illustration Area (Clean, Centered, No Answer Spoilers) -->
-  <g transform="translate(0, 10)">
+  <!-- Main Illustration Artwork -->
+  
+    <g transform="translate(180, 50)">
+      <!-- Rock Strata Layers -->
+      <rect x="10" y="20" width="160" height="30" rx="4" fill="#57534e"/>
+      <rect x="10" y="55" width="160" height="40" rx="4" fill="#78716c"/>
+      <rect x="10" y="100" width="160" height="50" rx="4" fill="#44403c"/>
+
+      <!-- Spiral Ammonite Fossil in center stratum -->
+      <g transform="translate(90, 75)" stroke="#f5d0fe" stroke-width="2.5" fill="none">
+        <path d="M 0 0 Q 8 -10 18 -6 Q 28 -2 26 12 Q 22 26 6 24 Q -14 20 -16 -4 Q -16 -24 6 -28 Q 28 -30 38 -6 Q 44 18 20 38 Q -10 46 -30 20 Q -42 -10 -16 -42"/>
+        <circle cx="0" cy="0" r="3" fill="#f5d0fe"/>
+      </g>
+    </g>
+
+    <g transform="translate(45, 95)">
+      <rect x="0" y="0" width="115" height="52" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#a855f7" stroke-width="1.5"/>
+      <text x="57" y="22" fill="#d8b4fe" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" text-anchor="middle">GEOLOGICAL RECORD</text>
+      <text x="57" y="40" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle">Fossil Evidence</text>
+    </g>
+
+    <g transform="translate(370, 95)">
+      <rect x="0" y="0" width="125" height="52" rx="10" fill="#1e1b4b" fill-opacity="0.85" stroke="#a855f7" stroke-width="1.5"/>
+      <text x="62" y="22" fill="#a5a3c4" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" text-anchor="middle">EVOLUTIONARY TOPIC</text>
+      <text x="62" y="40" fill="#fbbf24" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle">[ ? ]</text>
+    </g>
     
-        <g transform="translate(70, 65)">
-          <rect x="0" y="0" width="400" height="90" rx="8" fill="#1e1b4b" stroke="#14b8a6" stroke-width="1.8"/>
-          <text x="200" y="30" fill="#2dd4bf" font-size="11" font-weight="bold" text-anchor="middle">Evolutionary Adaptation Model</text>
-          <text x="200" y="58" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">Useful traits passed from parents to offspring is ...</text>
-          <text x="200" y="78" fill="#fbbf24" font-size="10" font-weight="bold" text-anchor="middle">Mechanistic Factor: [ ? ]</text>
-        </g>
-  </g>
 </svg>
