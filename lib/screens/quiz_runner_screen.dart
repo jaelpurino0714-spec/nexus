@@ -734,15 +734,15 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
           splashColor: const Color(0xFF00F2FE).withOpacity(0.15),
           highlightColor: const Color(0xFFA855F7).withOpacity(0.08),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: const EdgeInsets.only(left: 8, right: 10, top: 10, bottom: 10),
             child: Row(
               children: [
                 Container(
-                  width: 38,
-                  height: 38,
+                  width: 30,
+                  height: 30,
                   decoration: BoxDecoration(
                     color: badgeBg,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: badgeBorder, width: 1.5),
                   ),
                   child: Center(
@@ -751,22 +751,23 @@ class _QuizRunnerScreenState extends ConsumerState<QuizRunnerScreen> {
                       style: TextStyle(
                         fontWeight: FontWeight.w900,
                         color: badgeLetterColor,
-                        fontSize: 16,
+                        fontSize: 14,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     text,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: textColor,
-                      height: 1.3,
+                      height: 1.25,
                     ),
                     maxLines: 4,
+                    softWrap: true,
                     overflow: TextOverflow.visible,
                   ),
                 ),
